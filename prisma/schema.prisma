@@ -1,13 +1,300 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Get a free hosted Postgres database in seconds: `npx create-db`
-
 generator client {
-  provider = "prisma-client"
-  output   = "../app/generated/prisma"
+  provider = "prisma-client-js"
+  output   = "../prisma/generated/prisma"
 }
 
 datasource db {
   provider = "postgresql"
+}
+
+enum Role {
+  STUDENT
+  LECTURER
+  DEAN
+  ADMIN
+  COUNCIL
+  LEADER
+}
+
+enum Gender {
+  MALE
+  FEMALE
+  OTHER
+}
+
+enum ProjectStatus {
+  DRAFT
+  SUBMITTED
+  DEAN_APPROVED
+  DEAN_REVISION
+  ADMIN_REVIEW
+  COUNCIL_EVALUATING
+  APPROVED
+  IN_PROGRESS
+  COMPLETED
+  REJECTED
+  SUSPENDED
+}
+
+enum ReviewDecision {
+  PASS
+  NEED_REVISION
+  FAIL
+}
+
+enum RequestStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum RegistrationStatus {
+  PENDING
+  APPROVED
+  CANCELED
+  REJECTED
+}
+
+model Department {
+  id          String      @id @default(cuid())
+  code        String      @unique
+  name        String
+  description String?
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  majors      Major[]
+  users       User[]
+  callRounds  CallRound[] @relation("CallRoundDepartments")
+}
+
+model Major {
+  id           String      @id @default(cuid())
+  code         String      @unique
+  name         String
+  description  String?
+  departmentId String
+  department   Department  @relation(fields: [departmentId], references: [id], onDelete: Cascade)
+  classes      Class[]
+  users        User[]
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+  callRounds   CallRound[] @relation("CallRoundMajors")
+}
+
+model Class {
+  id          String      @id @default(cuid())
+  code        String      @unique
+  name        String
+  majorId     String
+  major       Major       @relation(fields: [majorId], references: [id], onDelete: Cascade)
+  users       User[]
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  callRounds  CallRound[] @relation("CallRoundClasses")
+}
+
+model User {
+  id                      String                @id @default(cuid())
+  code                    String?               @unique
+  name                    String
+  email                   String                @unique
+  dateOfBirth             DateTime?
+  gender                  Gender?
+  phone                   String?
+  address                 String?
+  role                    Role                  @default(LECTURER)
+  department              String?               // Legacy field, keep for backward compatibility
+  departmentId            String?
+  departmentRef           Department?           @relation(fields: [departmentId], references: [id])
+  majorId                 String?
+  major                   Major?                @relation(fields: [majorId], references: [id])
+  classId                 String?
+  class                   Class?                @relation(fields: [classId], references: [id])
+  createdAt               DateTime              @default(now())
+  updatedAt               DateTime              @updatedAt
+  leadProjects            Project[]             @relation("ProjectLeader")
+  deanReviews             Project[]             @relation("DeanReviewer")
+  councilEvaluations      CouncilEvaluation[]
+  registrations           ProjectRegistration[]
+  instructedRegistrations ProjectRegistration[] @relation("ProjectRegistrationInstructor")
+  instructedProjects      Project[]             @relation("ProjectInstructor")
+
+  facultyReviews ProjectRegistration[] @relation("FacultyReviewer")
+}
+
+model CallRound {
+  id            String                @id @default(cuid())
+  name          String
+  startDate     DateTime
+  endDate       DateTime
+  isActive      Boolean               @default(true)
+  templateId    String?
+  createdAt     DateTime              @default(now())
+  updatedAt     DateTime              @updatedAt
+  projects      Project[]
+  registrations ProjectRegistration[]
+  template      ProgressReportTemplate? @relation(fields: [templateId], references: [id])
+  departments   Department[]            @relation("CallRoundDepartments")
+  majors        Major[]                 @relation("CallRoundMajors")
+  classes       Class[]                 @relation("CallRoundClasses")
+}
+
+model ProjectType {
+  id        String    @id @default(cuid())
+  name      String    @unique
+  budgetCap Decimal?  @db.Decimal(12, 2)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  projects  Project[]
+}
+
+model Project {
+  id                 String                @id @default(cuid())
+  code               String?               @unique
+  title              String
+  objective          String
+  expectedOutput     String?
+  proposalFileUrl    String?
+  budgetRequested    Decimal?              @db.Decimal(12, 2)
+  budgetApproved     Decimal?              @db.Decimal(12, 2)
+  status             ProjectStatus         @default(DRAFT)
+  overdueReportCount Int                   @default(0)
+  budgetSuspended    Boolean               @default(false)
+  leaderId           String
+  deanReviewerId     String?
+  callRoundId        String?
+  projectTypeId      String?
+  createdAt          DateTime              @default(now())
+  updatedAt          DateTime              @updatedAt
+  leader             User                  @relation("ProjectLeader", fields: [leaderId], references: [id])
+  deanReviewer       User?                 @relation("DeanReviewer", fields: [deanReviewerId], references: [id])
+  callRound          CallRound?            @relation(fields: [callRoundId], references: [id])
+  projectType        ProjectType?          @relation(fields: [projectTypeId], references: [id])
+  progressReports    ProgressReport[]
+  councilEvaluations CouncilEvaluation[]
+  disbursements      FundingDisbursement[]
+  extensionRequests  ExtensionRequest[]
+  instructorId       String?
+  instructor         User?                 @relation("ProjectInstructor", fields: [instructorId], references: [id])
+}
+
+model ProgressReportTemplate {
+  id          String       @id @default(cuid())
+  name        String
+  description String?
+  isActive    Boolean      @default(true)
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  items       ProgressReportTemplateItem[]
+  callRounds  CallRound[]
+}
+
+model ProgressReportTemplateItem {
+  id               String                   @id @default(cuid())
+  templateId       String
+  weekNumber       Int
+  weekLabel        String
+  taskDescription  String
+  contentGuideline String?
+  expectedResult   String?
+  orderIndex       Int
+  createdAt        DateTime                 @default(now())
+  updatedAt        DateTime                 @updatedAt
+  template         ProgressReportTemplate   @relation(fields: [templateId], references: [id], onDelete: Cascade)
+
+  @@unique([templateId, weekNumber])
+  @@index([templateId, orderIndex])
+}
+
+model ProgressReport {
+  id               String    @id @default(cuid())
+  projectId        String
+  week             Int?
+  fromDate         DateTime?
+  toDate           DateTime?
+  tasks            String?
+  performedContent String?
+  results          String?
+  reportContent    String?
+
+  periodLabel  String
+  summary      String
+  fileUrl      String?
+  mentorReview String?
+  mentorScore  Float?
+  submittedAt  DateTime @default(now())
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  project      Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+}
+
+model CouncilEvaluation {
+  id              String         @id @default(cuid())
+  projectId       String
+  councilMemberId String
+  score           Int
+  decision        ReviewDecision
+  comment         String?
+  evaluatedAt     DateTime       @default(now())
+  createdAt       DateTime       @default(now())
+  project         Project        @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  councilMember   User           @relation(fields: [councilMemberId], references: [id])
+}
+
+model FundingDisbursement {
+  id             String   @id @default(cuid())
+  projectId      String
+  amount         Decimal  @db.Decimal(12, 2)
+  disbursedAt    DateTime
+  voucherNo      String?
+  voucherFileUrl String?
+  createdAt      DateTime @default(now())
+  project        Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+}
+
+model ExtensionRequest {
+  id              String        @id @default(cuid())
+  projectId       String
+  requestedMonths Int
+  reason          String
+  status          RequestStatus @default(PENDING)
+  submittedAt     DateTime      @default(now())
+  reviewedAt      DateTime?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  project         Project       @relation(fields: [projectId], references: [id], onDelete: Cascade)
+}
+
+model ProjectRegistration {
+  id               String             @id @default(cuid())
+  userId           String
+  callRoundId      String?
+  title            String
+  objective        String
+  expectedOutput   String?
+  status           RegistrationStatus @default(PENDING)
+  cancelReason     String?
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
+  user             User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  instructorId     String?
+  instructorStatus InstructorStatus   @default(PENDING)
+  instructor       User?              @relation("ProjectRegistrationInstructor", fields: [instructorId], references: [id])
+  callRound        CallRound?         @relation(fields: [callRoundId], references: [id])
+
+  facultyStatus     FacultyStatus @default(PENDING)
+  facultyReviewerId String?
+  facultyReviewer   User?         @relation("FacultyReviewer", fields: [facultyReviewerId], references: [id])
+}
+
+enum InstructorStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+}
+
+enum FacultyStatus {
+  PENDING
+  APPROVED
+  REJECTED
 }

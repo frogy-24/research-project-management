@@ -1,36 +1,53 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# URMS - University Research Management System
 
-## Getting Started
+Hệ thống quản lý nghiên cứu khoa học đại học (MVP) xây dựng bằng Next.js App Router + Prisma + TanStack Query.
 
-First, run the development server:
+## Chức năng MVP đã triển khai
+
+- Quản lý đề tài nghiên cứu: tạo mới, xem danh sách, xóa.
+- Theo dõi trạng thái đề tài theo luồng nghiệp vụ (`DRAFT`, `SUBMITTED`, `DEAN_APPROVED`, ...).
+- Ràng buộc nghiệp vụ chính: không cho đăng ký đề tài mới nếu chủ nhiệm đang có đề tài nợ quá hạn ở trạng thái triển khai/đình chỉ.
+- API chuẩn hóa response lỗi thành `{ success, error, fields? }`.
+
+## Kiến trúc chính
+
+- `types/`: Zod schema và Type tập trung (`project.schema.ts`, `user.schema.ts`, `api.schema.ts`).
+- `api/`: client API bằng Axios (`projects.ts`, `users.ts`).
+- `hooks/`: React Query hooks (`useProjects.ts`, `useUsers.ts`).
+- `app/api/`: Route Handlers cho `projects` và `users`.
+- `components/projects/`: UI nghiệp vụ (`project-form.tsx`, `project-list.tsx`).
+- `prisma/schema.prisma`: Data model URMS.
+
+## Cài đặt và chạy
+
+1. Cài dependency:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+pnpm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Cấu hình biến môi trường trong file `.env`:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+DATABASE_URL="postgresql://USER:PASSWORD@HOST:5432/DB_NAME"
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+3. Generate Prisma client:
 
-## Learn More
+```bash
+pnpm prisma generate
+```
 
-To learn more about Next.js, take a look at the following resources:
+4. Chạy migration (nếu cần):
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+pnpm prisma migrate dev
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+5. Chạy ứng dụng:
 
-## Deploy on Vercel
+```bash
+pnpm dev
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Mở `http://localhost:3000` để sử dụng.
