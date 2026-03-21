@@ -20,7 +20,8 @@ const statusOptions = ProjectStatusEnum.options;
 type CreateProjectFormInput = z.input<typeof createProjectSchema>;
 
 export function ProjectForm({ onSuccess }: ProjectFormProps) {
-  const { data: users = [] } = useUsers();
+  const { data: usersData } = useUsers();
+  const users = usersData?.data ?? [];
   const createMutation = useCreateProject();
 
   const form = useForm<CreateProjectFormInput>({

@@ -4,6 +4,22 @@ import { userSchema, type User } from "@/types/user.schema";
 type ApiSuccess<T> = {
   success: true;
   data: T;
+  pagination?: {
+    page: number;
+    limit: number;
+    total: number;
+    totalPages: number;
+  };
+};
+
+export type PaginatedUsers = {
+  data: User[];
+  pagination: {
+    page: number;
+    limit: number;
+    total: number;
+    totalPages: number;
+  };
 };
 
 const userListSchema = userSchema.array();
@@ -14,10 +30,21 @@ export const userApi = {
     departmentId?: string;
     majorId?: string;
     classId?: string;
+    gender?: string;
     search?: string;
-  }): Promise<User[]> => {
+    page?: number;
+    limit?: number;
+  }): Promise<PaginatedUsers> => {
     const response = await api.get<ApiSuccess<User[]>>("/users", { params });
-    return userListSchema.parse(response.data.data);
+    return {
+      data: userListSchema.parse(response.data.data),
+      pagination: response.data.pagination || {
+        page: 1,
+        limit: 20,
+        total: response.data.data.length,
+        totalPages: 1,
+      },
+    };
   },
   create: async (data: any): Promise<User> => {
     const response = await api.post<User>("/users", data);

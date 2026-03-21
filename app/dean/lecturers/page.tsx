@@ -1,5 +1,4 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { UserCog } from "lucide-react";
+import { LecturerManagement } from "@/components/dean/lecturer-management";
 
 export default function DeanLecturersPage() {
   return (
@@ -11,22 +10,7 @@ export default function DeanLecturersPage() {
         </div>
       </div>
 
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <UserCog className="h-5 w-5 text-primary" />
-            Danh sách Giảng viên thuộc Khoa
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="flex h-[400px] items-center justify-center border-2 border-dashed rounded-lg">
-            <p className="text-muted-foreground text-center">
-              Tính năng Quản lý Giảng viên đang được phát triển.<br />
-              Vui lòng quay lại sau.
-            </p>
-          </div>
-        </CardContent>
-      </Card>
+      <LecturerManagement />
     </div>
   );
 }

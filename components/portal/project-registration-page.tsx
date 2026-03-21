@@ -65,7 +65,9 @@ export function ProjectRegistrationPage({ title }: ProjectRegistrationPageProps)
   const [objective, setObjective] = useState("");
   const [expectedOutput, setExpectedOutput] = useState("");
   const [instructorId, setInstructorId] = useState("");
-  const { data: users = [] } = useUsers();
+  const [selectedCallRoundId, setSelectedCallRoundId] = useState<string>("");
+  const { data: usersData } = useUsers();
+  const users = usersData?.data ?? [];
   const { data: session } = useAuthSession();
   const [cancelReasonById, setCancelReasonById] = useState<Record<string, string>>({});
   
@@ -74,10 +76,30 @@ export function ProjectRegistrationPage({ title }: ProjectRegistrationPageProps)
   const createMutation = useCreateMyProjectRegistration();
   const cancelMutation = useCancelMyProjectRegistration();
 
-  // Find active call round
+  // Filter call rounds that are currently open for registration
+  const availableCallRounds = React.useMemo(() => {
+    const now = new Date();
+    return (callRounds as CallRoundWithTemplate[]).filter((round) => {
+      if (!round.isActive) return false;
+      const start = new Date(round.registrationStartDate);
+      const end = new Date(round.registrationEndDate);
+      return now >= start && now <= end;
+    });
+  }, [callRounds]);
+
+  // Auto-select if only one available, or find selected
   const activeCallRound = React.useMemo(() => {
-    return (callRounds as CallRoundWithTemplate[]).find((round) => round.isActive);
-  }, [callRounds]) as CallRoundWithTemplate | undefined;
+    if (availableCallRounds.length === 0) return undefined;
+    if (availableCallRounds.length === 1) return availableCallRounds[0];
+    return availableCallRounds.find((r) => r.id === selectedCallRoundId) ?? undefined;
+  }, [availableCallRounds, selectedCallRoundId]);
+
+  // Auto-select when only one round available
+  React.useEffect(() => {
+    if (availableCallRounds.length === 1 && selectedCallRoundId !== availableCallRounds[0].id) {
+      setSelectedCallRoundId(availableCallRounds[0].id);
+    }
+  }, [availableCallRounds, selectedCallRoundId]);
 
   const sortedRegistrations = React.useMemo(() => {
     return [...registrations].sort((a, b) => {
@@ -90,22 +112,39 @@ export function ProjectRegistrationPage({ title }: ProjectRegistrationPageProps)
   }, [registrations]);
 
   const handleCreate = () => {
+    if (!activeCallRound) {
+      toast.error("Vui lòng chọn đợt đăng ký");
+      return;
+    }
+    if (!projectTitle.trim()) {
+      toast.error("Vui lòng nhập tên đề tài");
+      return;
+    }
+    if (!objective.trim()) {
+      toast.error("Vui lòng nhập mục tiêu nghiên cứu");
+      return;
+    }
+
     createMutation.mutate(
       {
         title: projectTitle,
         objective,
         expectedOutput: expectedOutput.trim() ? expectedOutput : null,
         instructorId: instructorId && instructorId !== "none" ? instructorId : undefined,
+        callRoundId: activeCallRound.id,
       },
       {
         onSuccess: () => {
           toast.success("Đăng ký đề tài thành công");
           setProjectTitle("");
           setObjective("");
-          setExpectedOutput(""); setInstructorId("");
+          setExpectedOutput("");
+          setInstructorId("");
         },
-        onError: () => {
-          toast.error("Không thể đăng ký đề tài");
+        onError: (err: unknown) => {
+          const msg =
+            err instanceof Error ? err.message : "Không thể đăng ký đề tài";
+          toast.error(msg);
         },
       }
     );
@@ -144,27 +183,41 @@ export function ProjectRegistrationPage({ title }: ProjectRegistrationPageProps)
         </p>
       </div>
 
-      {/* Call Round Status Alert */}
-      {activeCallRound ? (
-        <Alert className="border-primary/50 bg-primary/5">
-          <CalendarClock className="h-4 w-4" />
-          <AlertTitle>Đợt đăng ký hiện tại: {activeCallRound.name}</AlertTitle>
-          <AlertDescription>
-            Thời gian: {new Date(activeCallRound.startDate).toLocaleDateString("vi-VN")} -{" "}
-            {new Date(activeCallRound.endDate).toLocaleDateString("vi-VN")}
-            {activeCallRound.template && (
-              <span className="block mt-1 text-xs">
-                Template tiến độ: {activeCallRound.template.name}
-              </span>
-            )}
-          </AlertDescription>
-        </Alert>
-      ) : (
+      {/* Call Round Status */}
+      {availableCallRounds.length === 0 ? (
         <Alert variant="destructive">
           <AlertCircle className="h-4 w-4" />
           <AlertTitle>Chưa mở đợt đăng ký</AlertTitle>
           <AlertDescription>
             Hiện tại chưa có đợt đăng ký nào đang mở. Vui lòng liên hệ quản trị viên để biết thêm chi tiết.
+          </AlertDescription>
+        </Alert>
+      ) : availableCallRounds.length > 1 ? (
+        <Alert className="border-primary/50 bg-primary/5">
+          <CalendarClock className="h-4 w-4" />
+          <AlertTitle>Có {availableCallRounds.length} đợt đăng ký đang mở</AlertTitle>
+          <AlertDescription>
+            <div className="mt-2 space-y-1">
+              {availableCallRounds.map((round) => (
+                <div key={round.id} className="text-xs">
+                  <strong>{round.name}</strong>: {new Date(round.registrationStartDate).toLocaleDateString("vi-VN")} – {new Date(round.registrationEndDate).toLocaleDateString("vi-VN")}
+                </div>
+              ))}
+            </div>
+          </AlertDescription>
+        </Alert>
+      ) : (
+        <Alert className="border-primary/50 bg-primary/5">
+          <CalendarClock className="h-4 w-4" />
+          <AlertTitle>Đợt đăng ký hiện tại: {availableCallRounds[0].name}</AlertTitle>
+          <AlertDescription>
+            Thời gian đăng ký: {new Date(availableCallRounds[0].registrationStartDate).toLocaleDateString("vi-VN")} –{" "}
+            {new Date(availableCallRounds[0].registrationEndDate).toLocaleDateString("vi-VN")}
+            {availableCallRounds[0].template && (
+              <span className="block mt-1 text-xs">
+                Template tiến độ: {availableCallRounds[0].template.name}
+              </span>
+            )}
           </AlertDescription>
         </Alert>
       )}
@@ -182,6 +235,35 @@ export function ProjectRegistrationPage({ title }: ProjectRegistrationPageProps)
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-5 pt-6">
+              {/* Call Round Selector - only shown when multiple available */}
+              {availableCallRounds.length > 1 && (
+                <div className="space-y-2">
+                  <Label className="text-muted-foreground">
+                    Chọn đợt đăng ký <span className="text-destructive">*</span>
+                  </Label>
+                  <Select value={selectedCallRoundId} onValueChange={setSelectedCallRoundId}>
+                    <SelectTrigger className="bg-background">
+                      <SelectValue placeholder="-- Chọn đợt đăng ký --" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {availableCallRounds.map((round) => (
+                        <SelectItem key={round.id} value={round.id}>
+                          <div className="flex flex-col">
+                            <span>{round.name}</span>
+                            <span className="text-xs text-muted-foreground">
+                              {new Date(round.registrationStartDate).toLocaleDateString("vi-VN")} – {new Date(round.registrationEndDate).toLocaleDateString("vi-VN")}
+                            </span>
+                          </div>
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  {!activeCallRound && selectedCallRoundId === "" && (
+                    <p className="text-xs text-muted-foreground">Vui lòng chọn đợt đăng ký để tiếp tục.</p>
+                  )}
+                </div>
+              )}
+
               <div className="space-y-2">
                 <Label className="text-muted-foreground">Tên đề tài <span className="text-destructive">*</span></Label>
                 <Input

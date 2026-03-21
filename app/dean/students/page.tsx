@@ -1,5 +1,4 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { UserRound } from "lucide-react";
+import { StudentManagement } from "@/components/dean/student-management";
 
 export default function DeanStudentsPage() {
   return (
@@ -11,22 +10,7 @@ export default function DeanStudentsPage() {
         </div>
       </div>
 
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <UserRound className="h-5 w-5 text-primary" />
-            Danh sách Sinh viên thuộc Khoa
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="flex h-[400px] items-center justify-center border-2 border-dashed rounded-lg">
-            <p className="text-muted-foreground text-center">
-              Tính năng Quản lý Sinh viên đang được phát triển.<br />
-              Vui lòng quay lại sau.
-            </p>
-          </div>
-        </CardContent>
-      </Card>
+      <StudentManagement />
     </div>
   );
 }

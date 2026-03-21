@@ -34,13 +34,7 @@ import { toast } from "sonner";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export function ClassManagement() {
-  const { data: classes = [], isLoading: isLoadingClasses } = useClasses();
-  const { data: majors = [], isLoading: isLoadingMajors } = useMajors();
-  
-  const createMutation = useCreateClass();
-  const updateMutation = useUpdateClass();
-  const deleteMutation = useDeleteClass();
-
+  const [searchTerm, setSearchTerm] = useState("");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [formData, setFormData] = useState({
@@ -48,7 +42,18 @@ export function ClassManagement() {
     name: "",
     majorId: "",
   });
-  const [searchTerm, setSearchTerm] = useState("");
+  
+  const { data: classesData, isLoading: isLoadingClasses } = useClasses({
+    limit: 1000, // Admin loads all
+  });
+  const classes = classesData?.data ?? [];
+  
+  const { data: majorsData } = useMajors();
+  const majors = majorsData?.data ?? [];
+  
+  const createMutation = useCreateClass();
+  const updateMutation = useUpdateClass();
+  const deleteMutation = useDeleteClass();
 
   const handleOpenDialog = (classObj?: any) => {
     if (classObj) {

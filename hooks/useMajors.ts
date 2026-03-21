@@ -1,44 +1,35 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+// hooks/useMajors.ts
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { majorApi, type CreateMajorPayload, type UpdateMajorPayload, type PaginatedMajors } from "@/api/majors";
 
-export function useMajors() {
-  return useQuery({
-    queryKey: ['majors'],
-    queryFn: async () => {
-      const response = await fetch('/api/majors');
-      const data = await response.json();
-      if (!response.ok) throw new Error(data.error || 'Failed to fetch majors');
-      return data.data;
-    },
+interface UseMajorsParams {
+  departmentId?: string;
+  search?: string;
+  page?: number;
+  limit?: number;
+}
+
+export function useMajors(params: UseMajorsParams = {}) {
+  return useQuery<PaginatedMajors>({
+    queryKey: ["majors", params],
+    queryFn: () => majorApi.getAll(params),
   });
 }
 
 export function useMajor(id: string) {
   return useQuery({
-    queryKey: ['majors', id],
-    queryFn: async () => {
-      const response = await fetch(`/api/majors/${id}`);
-      const data = await response.json();
-      if (!response.ok) throw new Error(data.error || 'Failed to fetch major');
-      return data;
-    },
+    queryKey: ["majors", id],
+    queryFn: () => majorApi.getById(id),
+    enabled: !!id,
   });
 }
 
 export function useCreateMajor() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async (data: any) => {
-      const response = await fetch('/api/majors', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
-      });
-      const result = await response.json();
-      if (!response.ok) throw new Error(result.error || 'Failed to create major');
-      return result;
-    },
+    mutationFn: (data: CreateMajorPayload) => majorApi.create(data),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['majors'] });
+      queryClient.invalidateQueries({ queryKey: ["majors"] });
     },
   });
 }
@@ -46,18 +37,10 @@ export function useCreateMajor() {
 export function useUpdateMajor() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async ({ id, ...data }: { id: string } & any) => {
-      const response = await fetch(`/api/majors/${id}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
-      });
-      const result = await response.json();
-      if (!response.ok) throw new Error(result.error || 'Failed to update major');
-      return result;
-    },
+    mutationFn: ({ id, ...data }: { id: string } & UpdateMajorPayload) =>
+      majorApi.update(id, data),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['majors'] });
+      queryClient.invalidateQueries({ queryKey: ["majors"] });
     },
   });
 }
@@ -65,16 +48,9 @@ export function useUpdateMajor() {
 export function useDeleteMajor() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async (id: string) => {
-      const response = await fetch(`/api/majors/${id}`, {
-        method: 'DELETE',
-      });
-      const result = await response.json();
-      if (!response.ok) throw new Error(result.error || 'Failed to delete major');
-      return result;
-    },
+    mutationFn: (id: string) => majorApi.delete(id),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['majors'] });
+      queryClient.invalidateQueries({ queryKey: ["majors"] });
     },
   });
 }

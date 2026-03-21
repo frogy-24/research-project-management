@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { getActorRole, getActorUserId } from "@/lib/project-permissions";
 import { reviewProgressReportSchema } from "@/types/progress-report.schema";
+import { notifyProgressReportReviewed } from "@/lib/notification-service";
 
 type Params = {
   params: Promise<{ id: string }>;
@@ -49,6 +50,20 @@ export async function PATCH(request: Request, { params }: Params) {
         mentorScore: parsed.data.mentorScore,
       },
     });
+
+    // Send notification to project leader
+    try {
+      await notifyProgressReportReviewed(
+        id,
+        report.projectId,
+        report.project,
+        report.periodLabel,
+        parsed.data.mentorScore ?? undefined
+      );
+    } catch (error) {
+      console.error("Failed to send notification:", error);
+      // Don't fail the request if notification fails
+    }
 
     return NextResponse.json({ success: true, data: updated });
   } catch (error) {

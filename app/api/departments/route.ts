@@ -1,9 +1,15 @@
 import { NextResponse } from "next/server";
 import { departmentSchema } from "@/types/organization.schema";
 import prisma from "@/lib/prisma";
+import { getAuthUser, isAdmin } from "@/lib/auth-helpers";
 
 export async function GET(request: Request) {
   try {
+    const authUser = await getAuthUser();
+    if (!authUser) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
     const { searchParams } = new URL(request.url);
     const page = parseInt(searchParams.get("page") || "1");
     const limit = parseInt(searchParams.get("limit") || "10");
@@ -11,14 +17,30 @@ export async function GET(request: Request) {
 
     const skip = (page - 1) * limit;
 
-    const whereClause = search
-      ? {
-          OR: [
-            { name: { contains: search, mode: "insensitive" as const } },
-            { code: { contains: search, mode: "insensitive" as const } },
-          ],
-        }
-      : {};
+    // DEAN can only see their own department
+    let whereClause: any = {};
+
+    if (authUser.role === "DEAN" && authUser.departmentId) {
+      // Dean sees only their department
+      whereClause.id = authUser.departmentId;
+    } else if (search) {
+      whereClause = {
+        OR: [
+          { name: { contains: search, mode: "insensitive" as const } },
+          { code: { contains: search, mode: "insensitive" as const } },
+        ],
+      };
+    }
+
+    // If ADMIN with search, apply search on top
+    if (isAdmin(authUser) && search) {
+      whereClause = {
+        OR: [
+          { name: { contains: search, mode: "insensitive" as const } },
+          { code: { contains: search, mode: "insensitive" as const } },
+        ],
+      };
+    }
 
     const [departments, total] = await Promise.all([
       prisma.department.findMany({
@@ -50,6 +72,19 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
   try {
+    const authUser = await getAuthUser();
+    if (!authUser) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    // Only ADMIN can create departments
+    if (!isAdmin(authUser)) {
+      return NextResponse.json(
+        { error: "Forbidden: Only administrators can create departments" },
+        { status: 403 }
+      );
+    }
+
     const body = await request.json();
     const validatedData = departmentSchema.parse(body);
 

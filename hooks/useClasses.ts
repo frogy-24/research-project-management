@@ -1,44 +1,36 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+// hooks/useClasses.ts
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { classApi, type CreateClassPayload, type UpdateClassPayload, type PaginatedClasses } from "@/api/classes";
 
-export function useClasses() {
-  return useQuery({
-    queryKey: ['classes'],
-    queryFn: async () => {
-      const response = await fetch('/api/classes');
-      const data = await response.json();
-      if (!response.ok) throw new Error(data.error || 'Failed to fetch classes');
-      return data.data;
-    },
+interface UseClassesParams {
+  majorId?: string;
+  departmentId?: string;
+  search?: string;
+  page?: number;
+  limit?: number;
+}
+
+export function useClasses(params: UseClassesParams = {}) {
+  return useQuery<PaginatedClasses>({
+    queryKey: ["classes", params],
+    queryFn: () => classApi.getAll(params),
   });
 }
 
 export function useClass(id: string) {
   return useQuery({
-    queryKey: ['classes', id],
-    queryFn: async () => {
-      const response = await fetch(`/api/classes/${id}`);
-      const data = await response.json();
-      if (!response.ok) throw new Error(data.error || 'Failed to fetch class');
-      return data;
-    },
+    queryKey: ["classes", id],
+    queryFn: () => classApi.getById(id),
+    enabled: !!id,
   });
 }
 
 export function useCreateClass() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async (data: any) => {
-      const response = await fetch('/api/classes', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
-      });
-      const result = await response.json();
-      if (!response.ok) throw new Error(result.error || 'Failed to create class');
-      return result;
-    },
+    mutationFn: (data: CreateClassPayload) => classApi.create(data),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['classes'] });
+      queryClient.invalidateQueries({ queryKey: ["classes"] });
     },
   });
 }
@@ -46,18 +38,10 @@ export function useCreateClass() {
 export function useUpdateClass() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async ({ id, ...data }: { id: string } & any) => {
-      const response = await fetch(`/api/classes/${id}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
-      });
-      const result = await response.json();
-      if (!response.ok) throw new Error(result.error || 'Failed to update class');
-      return result;
-    },
+    mutationFn: ({ id, ...data }: { id: string } & UpdateClassPayload) =>
+      classApi.update(id, data),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['classes'] });
+      queryClient.invalidateQueries({ queryKey: ["classes"] });
     },
   });
 }
@@ -65,16 +49,9 @@ export function useUpdateClass() {
 export function useDeleteClass() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async (id: string) => {
-      const response = await fetch(`/api/classes/${id}`, {
-        method: 'DELETE',
-      });
-      const result = await response.json();
-      if (!response.ok) throw new Error(result.error || 'Failed to delete class');
-      return result;
-    },
+    mutationFn: (id: string) => classApi.delete(id),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['classes'] });
+      queryClient.invalidateQueries({ queryKey: ["classes"] });
     },
   });
 }

@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { userApi } from "@/api/users";
+import { userApi, type PaginatedUsers } from "@/api/users";
 import type { User } from "@/types/user.schema";
 
 export const useUsers = (params?: {
@@ -7,9 +7,12 @@ export const useUsers = (params?: {
   departmentId?: string;
   majorId?: string;
   classId?: string;
+  gender?: string;
   search?: string;
+  page?: number;
+  limit?: number;
 }) => {
-  return useQuery<User[]>({
+  return useQuery<PaginatedUsers>({
     queryKey: ["users", params],
     queryFn: () => userApi.getAll(params),
   });

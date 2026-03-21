@@ -23,6 +23,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { useAuthSession, useLogout } from "@/hooks/useAuth";
 import { getDashboardRoute } from "@/lib/role-routes";
+import { NotificationBell } from "@/components/layout/notification-bell";
 import {
   Sidebar,
   SidebarContent,
@@ -109,6 +110,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                 <div className="font-medium text-sm text-muted-foreground flex-1">
                   {roleLabelMap[session.role] || "Dashboard"}
                 </div>
+                <NotificationBell />
                 <UserMenu session={session} />
               </div>
             </header>
@@ -227,6 +229,11 @@ function AppSidebar({ session }: { session: AuthSession }) {
         title: "Duyệt đề tài Khoa",
         url: "/dean/approvals",
         icon: FolderKanban,
+      },
+      {
+        title: "Đợt Đăng Ký",
+        url: "/dean/call-rounds",
+        icon: Activity,
       },
       {
         title: "Quản lý Lớp",

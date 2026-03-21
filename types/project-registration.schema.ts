@@ -21,16 +21,20 @@ export const projectRegistrationSchema = z.object({
   }).nullable().optional(),
 });
 
-export const createProjectRegistrationSchema = projectRegistrationSchema.omit({
-  id: true,
-  userId: true,
-  status: true,
-  instructorStatus: true,
-  cancelReason: true,
-  createdAt: true,
-  updatedAt: true,
-  instructor: true,
-});
+export const createProjectRegistrationSchema = projectRegistrationSchema
+  .omit({
+    id: true,
+    userId: true,
+    status: true,
+    instructorStatus: true,
+    cancelReason: true,
+    createdAt: true,
+    updatedAt: true,
+    instructor: true,
+  })
+  .extend({
+    callRoundId: z.string().optional(),
+  });
 
 export const cancelProjectRegistrationSchema = z.object({
   cancelReason: z.string().min(1, "Cancel reason is required"),

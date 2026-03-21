@@ -1,27 +1,39 @@
 import { NextResponse } from "next/server";
 import { majorSchema } from "@/types/organization.schema";
 import prisma from "@/lib/prisma";
+import { getAuthUser, getDepartmentFilter, isAdmin } from "@/lib/auth-helpers";
 
 export async function GET(request: Request) {
   try {
+    const authUser = await getAuthUser();
+
+    if (!authUser) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
     const { searchParams } = new URL(request.url);
     const page = parseInt(searchParams.get("page") || "1");
-    const limit = parseInt(searchParams.get("limit") || "10");
+    const limit = parseInt(searchParams.get("limit") || "100");
     const search = searchParams.get("search") || "";
     const departmentId = searchParams.get("departmentId") || "";
 
     const skip = (page - 1) * limit;
 
     const whereClause: any = {};
-    
+
     if (search) {
       whereClause.OR = [
         { name: { contains: search, mode: "insensitive" as const } },
         { code: { contains: search, mode: "insensitive" as const } },
       ];
     }
-    
-    if (departmentId) {
+
+    // Role-based filtering: DEAN sees only their department's majors
+    const departmentFilter = getDepartmentFilter(authUser);
+    if (departmentFilter && !isAdmin(authUser)) {
+      whereClause.departmentId = departmentFilter;
+    } else if (departmentId) {
+      // ADMIN can filter by specific department
       whereClause.departmentId = departmentId;
     }
 
@@ -58,8 +70,23 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
   try {
+    const authUser = await getAuthUser();
+    if (!authUser) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
     const body = await request.json();
     const validatedData = majorSchema.parse(body);
+
+    // DEAN can only create majors in their own department
+    if (authUser.role === "DEAN") {
+      if (validatedData.departmentId !== authUser.departmentId) {
+        return NextResponse.json(
+          { error: "Forbidden: You can only create majors in your department" },
+          { status: 403 }
+        );
+      }
+    }
 
     const existingMajor = await prisma.major.findFirst({
       where: {

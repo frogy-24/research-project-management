@@ -48,6 +48,12 @@ enum RequestStatus {
   REJECTED
 }
 
+enum CallRoundApprovalStatus {
+  PENDING_APPROVAL  // Trưởng khoa tạo, chờ admin duyệt
+  APPROVED          // Admin đã duyệt (hoặc admin tự tạo)
+  REJECTED          // Admin từ chối
+}
+
 enum RegistrationStatus {
   PENDING
   APPROVED
@@ -98,6 +104,7 @@ model User {
   code                    String?               @unique
   name                    String
   email                   String                @unique
+  password                String?
   dateOfBirth             DateTime?
   gender                  Gender?
   phone                   String?
@@ -118,25 +125,59 @@ model User {
   registrations           ProjectRegistration[]
   instructedRegistrations ProjectRegistration[] @relation("ProjectRegistrationInstructor")
   instructedProjects      Project[]             @relation("ProjectInstructor")
-
-  facultyReviews ProjectRegistration[] @relation("FacultyReviewer")
+  facultyReviews          ProjectRegistration[] @relation("FacultyReviewer")
+  notifications           Notification[]
 }
 
 model CallRound {
-  id            String                @id @default(cuid())
-  name          String
-  startDate     DateTime
-  endDate       DateTime
-  isActive      Boolean               @default(true)
-  templateId    String?
-  createdAt     DateTime              @default(now())
-  updatedAt     DateTime              @updatedAt
-  projects      Project[]
-  registrations ProjectRegistration[]
-  template      ProgressReportTemplate? @relation(fields: [templateId], references: [id])
-  departments   Department[]            @relation("CallRoundDepartments")
-  majors        Major[]                 @relation("CallRoundMajors")
-  classes       Class[]                 @relation("CallRoundClasses")
+  id                     String                  @id @default(cuid())
+  name                   String
+  description            String?                 // Mô tả chi tiết về đợt đăng ký
+  
+  // Thời gian đăng ký
+  registrationStartDate  DateTime                // Thời gian bắt đầu đăng ký
+  registrationEndDate    DateTime                // Thời gian kết thúc đăng ký
+  
+  // Thời gian thực hiện đề tài
+  projectStartDate       DateTime?               // Thời gian bắt đầu thực hiện đề tài
+  projectEndDate         DateTime?               // Thời gian dự kiến kết thúc đề tài
+  
+  // Các mốc thời gian khác
+  reviewDeadline         DateTime?               // Hạn chót duyệt đề tài
+  reportingStartDate     DateTime?               // Thời gian bắt đầu báo cáo tiến độ
+  
+  // Legacy fields (keep for backward compatibility)
+  startDate              DateTime                // Maps to registrationStartDate
+  endDate                DateTime                // Maps to registrationEndDate
+  
+  // Thông tin bổ sung
+  maxProjects            Int?                    // Số lượng đề tài tối đa được chấp nhận
+  budgetLimit            Decimal?                @db.Decimal(12, 2) // Ngân sách tối đa cho đợt
+  requirements           String?                 // Yêu cầu, điều kiện đăng ký
+  guidelines             String?                 // Hướng dẫn đăng ký
+  contactInfo            String?                 // Thông tin liên hệ
+  
+  isActive               Boolean                 @default(true)
+  isLocked               Boolean                 @default(false) // Khóa chỉnh sửa
+  
+  // Approval workflow: DEAN creates -> PENDING_APPROVAL, ADMIN creates -> APPROVED
+  approvalStatus         CallRoundApprovalStatus @default(APPROVED)
+  createdById            String?                 // ID người tạo
+  createdByRole          Role?                   // Role người tạo
+  approvedById           String?                 // ID admin duyệt
+  approvalNote           String?                 // Ghi chú khi duyệt/từ chối
+  approvedAt             DateTime?               // Thời điểm duyệt
+  
+  templateId             String?
+  createdAt              DateTime                @default(now())
+  updatedAt              DateTime                @updatedAt
+  
+  projects               Project[]
+  registrations          ProjectRegistration[]
+  template               ProgressReportTemplate? @relation(fields: [templateId], references: [id])
+  departments            Department[]            @relation("CallRoundDepartments")
+  majors                 Major[]                 @relation("CallRoundMajors")
+  classes                Class[]                 @relation("CallRoundClasses")
 }
 
 model ProjectType {
@@ -297,4 +338,36 @@ enum FacultyStatus {
   PENDING
   APPROVED
   REJECTED
+}
+
+enum NotificationType {
+  PROJECT_STATUS_CHANGE
+  REGISTRATION_STATUS_CHANGE
+  PROGRESS_REPORT_SUBMITTED
+  PROGRESS_REPORT_REVIEWED
+  EXTENSION_REQUEST_SUBMITTED
+  EXTENSION_REQUEST_REVIEWED
+  CALL_ROUND_APPROVED
+  CALL_ROUND_REJECTED
+  INSTRUCTOR_ASSIGNED
+  DEAN_REVIEW_ASSIGNED
+  COUNCIL_EVALUATION_SUBMITTED
+  FUNDING_DISBURSED
+}
+
+model Notification {
+  id           String           @id @default(cuid())
+  userId       String
+  type         NotificationType
+  title        String
+  message      String
+  link         String?          // URL to navigate to when clicked
+  isRead       Boolean          @default(false)
+  metadata     Json?            // Additional data like projectId, registrationId, etc.
+  createdAt    DateTime         @default(now())
+  readAt       DateTime?
+  user         User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@index([userId, isRead])
+  @@index([userId, createdAt])
 }

@@ -153,6 +153,7 @@ exports.Prisma.UserScalarFieldEnum = {
   code: 'code',
   name: 'name',
   email: 'email',
+  password: 'password',
   dateOfBirth: 'dateOfBirth',
   gender: 'gender',
   phone: 'phone',
@@ -169,9 +170,28 @@ exports.Prisma.UserScalarFieldEnum = {
 exports.Prisma.CallRoundScalarFieldEnum = {
   id: 'id',
   name: 'name',
+  description: 'description',
+  registrationStartDate: 'registrationStartDate',
+  registrationEndDate: 'registrationEndDate',
+  projectStartDate: 'projectStartDate',
+  projectEndDate: 'projectEndDate',
+  reviewDeadline: 'reviewDeadline',
+  reportingStartDate: 'reportingStartDate',
   startDate: 'startDate',
   endDate: 'endDate',
+  maxProjects: 'maxProjects',
+  budgetLimit: 'budgetLimit',
+  requirements: 'requirements',
+  guidelines: 'guidelines',
+  contactInfo: 'contactInfo',
   isActive: 'isActive',
+  isLocked: 'isLocked',
+  approvalStatus: 'approvalStatus',
+  createdById: 'createdById',
+  createdByRole: 'createdByRole',
+  approvedById: 'approvedById',
+  approvalNote: 'approvalNote',
+  approvedAt: 'approvedAt',
   templateId: 'templateId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -298,9 +318,27 @@ exports.Prisma.ProjectRegistrationScalarFieldEnum = {
   facultyReviewerId: 'facultyReviewerId'
 };
 
+exports.Prisma.NotificationScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  type: 'type',
+  title: 'title',
+  message: 'message',
+  link: 'link',
+  isRead: 'isRead',
+  metadata: 'metadata',
+  createdAt: 'createdAt',
+  readAt: 'readAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
+};
+
+exports.Prisma.NullableJsonNullValueInput = {
+  DbNull: Prisma.DbNull,
+  JsonNull: Prisma.JsonNull
 };
 
 exports.Prisma.QueryMode = {
@@ -311,6 +349,12 @@ exports.Prisma.QueryMode = {
 exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
+};
+
+exports.Prisma.JsonNullValueFilter = {
+  DbNull: Prisma.DbNull,
+  JsonNull: Prisma.JsonNull,
+  AnyNull: Prisma.AnyNull
 };
 exports.Gender = exports.$Enums.Gender = {
   MALE: 'MALE',
@@ -325,6 +369,12 @@ exports.Role = exports.$Enums.Role = {
   ADMIN: 'ADMIN',
   COUNCIL: 'COUNCIL',
   LEADER: 'LEADER'
+};
+
+exports.CallRoundApprovalStatus = exports.$Enums.CallRoundApprovalStatus = {
+  PENDING_APPROVAL: 'PENDING_APPROVAL',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED'
 };
 
 exports.ProjectStatus = exports.$Enums.ProjectStatus = {
@@ -372,6 +422,21 @@ exports.FacultyStatus = exports.$Enums.FacultyStatus = {
   REJECTED: 'REJECTED'
 };
 
+exports.NotificationType = exports.$Enums.NotificationType = {
+  PROJECT_STATUS_CHANGE: 'PROJECT_STATUS_CHANGE',
+  REGISTRATION_STATUS_CHANGE: 'REGISTRATION_STATUS_CHANGE',
+  PROGRESS_REPORT_SUBMITTED: 'PROGRESS_REPORT_SUBMITTED',
+  PROGRESS_REPORT_REVIEWED: 'PROGRESS_REPORT_REVIEWED',
+  EXTENSION_REQUEST_SUBMITTED: 'EXTENSION_REQUEST_SUBMITTED',
+  EXTENSION_REQUEST_REVIEWED: 'EXTENSION_REQUEST_REVIEWED',
+  CALL_ROUND_APPROVED: 'CALL_ROUND_APPROVED',
+  CALL_ROUND_REJECTED: 'CALL_ROUND_REJECTED',
+  INSTRUCTOR_ASSIGNED: 'INSTRUCTOR_ASSIGNED',
+  DEAN_REVIEW_ASSIGNED: 'DEAN_REVIEW_ASSIGNED',
+  COUNCIL_EVALUATION_SUBMITTED: 'COUNCIL_EVALUATION_SUBMITTED',
+  FUNDING_DISBURSED: 'FUNDING_DISBURSED'
+};
+
 exports.Prisma.ModelName = {
   Department: 'Department',
   Major: 'Major',
@@ -386,7 +451,8 @@ exports.Prisma.ModelName = {
   CouncilEvaluation: 'CouncilEvaluation',
   FundingDisbursement: 'FundingDisbursement',
   ExtensionRequest: 'ExtensionRequest',
-  ProjectRegistration: 'ProjectRegistration'
+  ProjectRegistration: 'ProjectRegistration',
+  Notification: 'Notification'
 };
 
 /**

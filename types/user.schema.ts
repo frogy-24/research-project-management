@@ -22,6 +22,12 @@ export const userSchema = z.object({
   address: z.string().nullable().optional(),
   role: RoleEnum,
   department: z.string().nullable().optional(),
+  departmentId: z.string().nullable().optional(),
+  majorId: z.string().nullable().optional(),
+  classId: z.string().nullable().optional(),
+  departmentRef: z.any().optional(),
+  major: z.any().optional(),
+  class: z.any().optional(),
   createdAt: z.coerce.date(),
   updatedAt: z.coerce.date(),
 });

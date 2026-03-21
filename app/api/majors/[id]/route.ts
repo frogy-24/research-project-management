@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { updateMajorSchema } from "@/types/organization.schema";
 import prisma from "@/lib/prisma";
+import { getAuthUser, canManageDepartment } from "@/lib/auth-helpers";
 
 export async function GET(
   request: Request,
@@ -37,21 +38,53 @@ export async function PUT(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const authUser = await getAuthUser();
+    if (!authUser) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
     const { id } = await params;
+
+    // Get existing major to check department
+    const existingMajor = await prisma.major.findUnique({
+      where: { id },
+      select: { departmentId: true },
+    });
+
+    if (!existingMajor) {
+      return NextResponse.json({ error: "Major not found" }, { status: 404 });
+    }
+
+    // DEAN can only update majors in their own department
+    if (!canManageDepartment(authUser, existingMajor.departmentId)) {
+      return NextResponse.json(
+        { error: "Forbidden: You can only manage majors in your department" },
+        { status: 403 }
+      );
+    }
+
     const body = await request.json();
     const validatedData = updateMajorSchema.parse(body);
 
-    const existingMajor = await prisma.major.findFirst({
+    // If DEAN tries to move major to another department, deny it
+    if (authUser.role === "DEAN" && validatedData.departmentId !== authUser.departmentId) {
+      return NextResponse.json(
+        { error: "Forbidden: You cannot move majors to another department" },
+        { status: 403 }
+      );
+    }
+
+    const duplicateMajor = await prisma.major.findFirst({
       where: {
         OR: [
           { code: validatedData.code },
           { name: validatedData.name },
         ],
-        id: { not: id }, // Exclude current major from check
+        id: { not: id },
       },
     });
 
-    if (existingMajor) {
+    if (duplicateMajor) {
       return NextResponse.json(
         { error: "Mã ngành hoặc tên ngành đã tồn tại" },
         { status: 400 }
@@ -98,7 +131,31 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const authUser = await getAuthUser();
+    if (!authUser) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
     const { id } = await params;
+
+    // Get existing major to check department
+    const existingMajor = await prisma.major.findUnique({
+      where: { id },
+      select: { departmentId: true },
+    });
+
+    if (!existingMajor) {
+      return NextResponse.json({ error: "Major not found" }, { status: 404 });
+    }
+
+    // DEAN can only delete majors in their own department
+    if (!canManageDepartment(authUser, existingMajor.departmentId)) {
+      return NextResponse.json(
+        { error: "Forbidden: You can only delete majors in your department" },
+        { status: 403 }
+      );
+    }
+
     // Check if major has related records
     const [classes, users, callRounds] = await Promise.all([
       prisma.class.count({ where: { majorId: id } }),
@@ -114,13 +171,13 @@ export async function DELETE(
 
     if (classes > 0 || users > 0 || callRounds > 0) {
       return NextResponse.json(
-        { 
+        {
           error: "Không thể xóa ngành vì đang có dữ liệu liên quan",
           details: {
             classes,
             users,
             callRounds,
-          }
+          },
         },
         { status: 400 }
       );

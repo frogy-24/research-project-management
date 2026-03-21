@@ -1,0 +1,434 @@
+'use client';
+
+import { useState } from 'react';
+import { Search, BookUser, ChevronLeft, ChevronRight, Plus, Pencil, Trash2 } from 'lucide-react';
+import { useDebounce } from '@/hooks/useDebounce';
+import { useUsers, useCreateUser, useUpdateUser, useDeleteUser } from '@/hooks/useUsers';
+import { useMajors } from '@/hooks/useMajors';
+import { useMe } from '@/hooks/useMe';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { Label } from '@/components/ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Pagination, PaginationContent, PaginationItem, PaginationLink } from '@/components/ui/pagination';
+import { toast } from 'sonner';
+
+interface LecturerFormData {
+    code: string;
+    name: string;
+    email: string;
+    gender: string;
+    phone: string;
+    address: string;
+    majorId: string;
+}
+
+const defaultForm: LecturerFormData = {
+    code: '',
+    name: '',
+    email: '',
+    gender: '',
+    phone: '',
+    address: '',
+    majorId: '',
+};
+
+export function LecturerManagement() {
+    const [searchTerm, setSearchTerm] = useState('');
+    const debouncedSearch = useDebounce(searchTerm, 400);
+    const [majorFilter, setMajorFilter] = useState<string>('ALL');
+    const [genderFilter, setGenderFilter] = useState<string>('ALL');
+    const [currentPage, setCurrentPage] = useState(1);
+    const limit = 20;
+
+    const [isDialogOpen, setIsDialogOpen] = useState(false);
+    const [editingId, setEditingId] = useState<string | null>(null);
+    const [formData, setFormData] = useState<LecturerFormData>(defaultForm);
+
+    // Get current user (dean) info to get their departmentId
+    const { data: me } = useMe();
+    const myDepartmentId = (me as any)?.departmentId ?? undefined;
+
+    // Fetch lecturers – API tự lọc theo departmentId của dean qua session
+    const { data: lecturersData, isLoading: isLoadingLecturers } = useUsers({
+        role: 'LECTURER',
+        search: debouncedSearch,
+        majorId: majorFilter === 'ALL' ? undefined : majorFilter,
+        gender: genderFilter === 'ALL' ? undefined : genderFilter,
+        page: currentPage,
+        limit,
+    } as any);
+
+    const lecturers = lecturersData?.data ?? [];
+    const pagination = lecturersData?.pagination;
+
+    // Fetch majors – API tự lọc theo departmentId của dean
+    const { data: majorsData } = useMajors({ limit: 1000 });
+    const majors = majorsData?.data ?? [];
+
+    const createMutation = useCreateUser();
+    const updateMutation = useUpdateUser();
+    const deleteMutation = useDeleteUser();
+
+    const getPageNumbers = () => {
+        if (!pagination) return [];
+        const { page, totalPages } = pagination;
+        const pages: (number | string)[] = [];
+        if (totalPages <= 7) {
+            for (let i = 1; i <= totalPages; i++) pages.push(i);
+        } else {
+            pages.push(1);
+            if (page > 3) pages.push('...');
+            for (let i = Math.max(2, page - 1); i <= Math.min(totalPages - 1, page + 1); i++) {
+                pages.push(i);
+            }
+            if (page < totalPages - 2) pages.push('...');
+            pages.push(totalPages);
+        }
+        return pages;
+    };
+
+    const handleOpenCreate = () => {
+        setEditingId(null);
+        setFormData(defaultForm);
+        setIsDialogOpen(true);
+    };
+
+    const handleOpenEdit = (lecturer: any) => {
+        setEditingId(lecturer.id);
+        setFormData({
+            code: lecturer.code ?? '',
+            name: lecturer.name ?? '',
+            email: lecturer.email ?? '',
+            gender: lecturer.gender ?? '',
+            phone: lecturer.phone ?? '',
+            address: lecturer.address ?? '',
+            majorId: lecturer.majorId ?? '',
+        });
+        setIsDialogOpen(true);
+    };
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        try {
+            const payload = {
+                ...formData,
+                role: 'LECTURER',
+                departmentId: myDepartmentId,
+                gender: formData.gender || undefined,
+                phone: formData.phone || undefined,
+                address: formData.address || undefined,
+                majorId: formData.majorId || undefined,
+            };
+
+            if (editingId) {
+                await updateMutation.mutateAsync({ id: editingId, ...payload });
+                toast.success('Cập nhật giảng viên thành công');
+            } else {
+                await createMutation.mutateAsync(payload);
+                toast.success('Thêm giảng viên thành công');
+            }
+            setIsDialogOpen(false);
+        } catch (error: any) {
+            toast.error(error?.response?.data?.error ?? error.message ?? 'Có lỗi xảy ra');
+        }
+    };
+
+    const handleDelete = async (id: string) => {
+        if (!confirm('Bạn có chắc chắn muốn xóa giảng viên này?')) return;
+        try {
+            await deleteMutation.mutateAsync(id);
+            toast.success('Xóa giảng viên thành công');
+        } catch (error: any) {
+            toast.error(error?.response?.data?.error ?? 'Không thể xóa giảng viên');
+        }
+    };
+
+    const isSubmitting = createMutation.isPending || updateMutation.isPending;
+
+    return (
+        <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
+                <CardTitle className="text-xl font-bold flex items-center gap-2">
+                    <BookUser className="h-5 w-5 text-primary" />
+                    Danh sách Giảng viên thuộc Khoa
+                </CardTitle>
+                <Button onClick={handleOpenCreate}>
+                    <Plus className="mr-2 h-4 w-4" />
+                    Thêm Giảng viên
+                </Button>
+            </CardHeader>
+            <CardContent>
+                <div className="flex gap-4 mb-4 flex-wrap">
+                    <div className="relative flex-1 min-w-[250px]">
+                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                        <Input
+                            placeholder="Tìm kiếm theo tên, email hoặc mã số..."
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                            className="pl-10"
+                        />
+                    </div>
+                    <Select value={majorFilter} onValueChange={setMajorFilter}>
+                        <SelectTrigger className="w-[200px]">
+                            <SelectValue placeholder="Lọc theo ngành" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="ALL">Tất cả ngành</SelectItem>
+                            {majors.map((major) => (
+                                <SelectItem key={major.id} value={major.id}>
+                                    {major.name}
+                                </SelectItem>
+                            ))}
+                        </SelectContent>
+                    </Select>
+                    <Select value={genderFilter} onValueChange={setGenderFilter}>
+                        <SelectTrigger className="w-[150px]">
+                            <SelectValue placeholder="Giới tính" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="ALL">Tất cả</SelectItem>
+                            <SelectItem value="MALE">Nam</SelectItem>
+                            <SelectItem value="FEMALE">Nữ</SelectItem>
+                            <SelectItem value="OTHER">Khác</SelectItem>
+                        </SelectContent>
+                    </Select>
+                </div>
+
+                <div className="rounded-md border">
+                    <Table>
+                        <TableHeader>
+                            <TableRow>
+                                <TableHead>Mã GV</TableHead>
+                                <TableHead>Họ và tên</TableHead>
+                                <TableHead>Email</TableHead>
+                                <TableHead>Giới tính</TableHead>
+                                <TableHead>Ngành</TableHead>
+                                <TableHead>Số điện thoại</TableHead>
+                                <TableHead className="text-right">Thao tác</TableHead>
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                            {isLoadingLecturers ? (
+                                <TableRow>
+                                    <TableCell colSpan={7} className="text-center py-8">
+                                        Đang tải dữ liệu...
+                                    </TableCell>
+                                </TableRow>
+                            ) : lecturers.length === 0 ? (
+                                <TableRow>
+                                    <TableCell colSpan={7} className="text-center py-8 text-muted-foreground">
+                                        Không tìm thấy giảng viên nào.
+                                    </TableCell>
+                                </TableRow>
+                            ) : (
+                                lecturers.map((lecturer: any) => (
+                                    <TableRow key={lecturer.id}>
+                                        <TableCell className="font-medium">{lecturer.code ?? '-'}</TableCell>
+                                        <TableCell>{lecturer.name}</TableCell>
+                                        <TableCell>{lecturer.email}</TableCell>
+                                        <TableCell>
+                                            {lecturer.gender === 'MALE'
+                                                ? 'Nam'
+                                                : lecturer.gender === 'FEMALE'
+                                                  ? 'Nữ'
+                                                  : 'Khác'}
+                                        </TableCell>
+                                        <TableCell>{lecturer.major?.name ?? '-'}</TableCell>
+                                        <TableCell>{lecturer.phone ?? '-'}</TableCell>
+                                        <TableCell className="text-right">
+                                            <div className="flex justify-end gap-1">
+                                                <Button
+                                                    variant="ghost"
+                                                    size="icon"
+                                                    onClick={() => handleOpenEdit(lecturer)}
+                                                >
+                                                    <Pencil className="h-4 w-4" />
+                                                </Button>
+                                                <Button
+                                                    variant="ghost"
+                                                    size="icon"
+                                                    className="text-destructive"
+                                                    onClick={() => handleDelete(lecturer.id)}
+                                                >
+                                                    <Trash2 className="h-4 w-4" />
+                                                </Button>
+                                            </div>
+                                        </TableCell>
+                                    </TableRow>
+                                ))
+                            )}
+                        </TableBody>
+                    </Table>
+                </div>
+
+                {pagination && pagination.totalPages > 1 && (
+                    <div className="mt-4">
+                        <Pagination>
+                            <PaginationContent>
+                                <PaginationItem>
+                                    <Button
+                                        variant="outline"
+                                        size="sm"
+                                        onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                                        disabled={currentPage === 1}
+                                    >
+                                        <ChevronLeft className="h-4 w-4 mr-1" />
+                                        Trước
+                                    </Button>
+                                </PaginationItem>
+
+                                {getPageNumbers().map((pageNum, idx) => (
+                                    <PaginationItem key={idx}>
+                                        {pageNum === '...' ? (
+                                            <span className="px-3">...</span>
+                                        ) : (
+                                            <PaginationLink
+                                                size="default"
+                                                onClick={() => setCurrentPage(pageNum as number)}
+                                                isActive={currentPage === pageNum}
+                                                className="cursor-pointer"
+                                            >
+                                                {pageNum}
+                                            </PaginationLink>
+                                        )}
+                                    </PaginationItem>
+                                ))}
+
+                                <PaginationItem>
+                                    <Button
+                                        variant="outline"
+                                        size="sm"
+                                        onClick={() => setCurrentPage((p) => Math.min(pagination.totalPages, p + 1))}
+                                        disabled={currentPage === pagination.totalPages}
+                                    >
+                                        Sau
+                                        <ChevronRight className="h-4 w-4 ml-1" />
+                                    </Button>
+                                </PaginationItem>
+                            </PaginationContent>
+                        </Pagination>
+                    </div>
+                )}
+
+                {pagination && (
+                    <div className="mt-4 text-sm text-muted-foreground text-center">
+                        Hiển thị {(currentPage - 1) * limit + 1} – {Math.min(currentPage * limit, pagination.total)} /
+                        Tổng số: <Badge variant="secondary">{pagination.total}</Badge> giảng viên
+                    </div>
+                )}
+            </CardContent>
+
+            {/* Create / Edit Dialog */}
+            <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+                <DialogContent className="max-w-lg sm:max-w-1/2">
+                    <DialogHeader>
+                        <DialogTitle>{editingId ? 'Chỉnh sửa Giảng viên' : 'Thêm Giảng viên mới'}</DialogTitle>
+                    </DialogHeader>
+                    <form onSubmit={handleSubmit} className="space-y-4 py-2">
+                        <div className="grid grid-cols-2 gap-4">
+                            <div className="space-y-2">
+                                <Label htmlFor="lec-code">Mã giảng viên</Label>
+                                <Input
+                                    id="lec-code"
+                                    value={formData.code}
+                                    onChange={(e) => setFormData({ ...formData, code: e.target.value })}
+                                    placeholder="VD: GV001"
+                                />
+                            </div>
+                            <div className="space-y-2">
+                                <Label htmlFor="lec-gender">Giới tính</Label>
+                                <Select
+                                    value={formData.gender}
+                                    onValueChange={(v) => setFormData({ ...formData, gender: v })}
+                                >
+                                    <SelectTrigger id="lec-gender">
+                                        <SelectValue placeholder="Chọn giới tính" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value="MALE">Nam</SelectItem>
+                                        <SelectItem value="FEMALE">Nữ</SelectItem>
+                                        <SelectItem value="OTHER">Khác</SelectItem>
+                                    </SelectContent>
+                                </Select>
+                            </div>
+                        </div>
+                        <div className="space-y-2">
+                            <Label htmlFor="lec-name">
+                                Họ và tên <span className="text-destructive">*</span>
+                            </Label>
+                            <Input
+                                id="lec-name"
+                                value={formData.name}
+                                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                                placeholder="Nguyễn Văn B"
+                                required
+                            />
+                        </div>
+                        <div className="space-y-2">
+                            <Label htmlFor="lec-email">
+                                Email <span className="text-destructive">*</span>
+                            </Label>
+                            <Input
+                                id="lec-email"
+                                type="email"
+                                value={formData.email}
+                                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                                placeholder="giangvien@example.com"
+                                required
+                            />
+                        </div>
+                        <div className="space-y-2">
+                            <Label htmlFor="lec-major">Ngành phụ trách</Label>
+                            <Select
+                                value={formData.majorId}
+                                onValueChange={(v) => setFormData({ ...formData, majorId: v })}
+                            >
+                                <SelectTrigger id="lec-major">
+                                    <SelectValue placeholder="Chọn ngành" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    {majors.map((major) => (
+                                        <SelectItem key={major.id} value={major.id}>
+                                            {major.name}
+                                        </SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
+                        </div>
+                        <div className="space-y-2">
+                            <Label htmlFor="lec-phone">Số điện thoại</Label>
+                            <Input
+                                id="lec-phone"
+                                value={formData.phone}
+                                onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                                placeholder="0901234567"
+                            />
+                        </div>
+                        <div className="space-y-2">
+                            <Label htmlFor="lec-address">Địa chỉ</Label>
+                            <Input
+                                id="lec-address"
+                                value={formData.address}
+                                onChange={(e) => setFormData({ ...formData, address: e.target.value })}
+                                placeholder="TP. Hồ Chí Minh"
+                            />
+                        </div>
+                        <DialogFooter>
+                            <Button type="button" variant="outline" onClick={() => setIsDialogOpen(false)}>
+                                Hủy
+                            </Button>
+                            <Button type="submit" disabled={isSubmitting}>
+                                {isSubmitting ? 'Đang lưu...' : editingId ? 'Cập nhật' : 'Thêm mới'}
+                            </Button>
+                        </DialogFooter>
+                    </form>
+                </DialogContent>
+            </Dialog>
+        </Card>
+    );
+}

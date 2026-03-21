@@ -1,13 +1,28 @@
 import { NextResponse } from "next/server";
 import { updateDepartmentSchema } from "@/types/organization.schema";
 import prisma from "@/lib/prisma";
+import { getAuthUser, isAdmin } from "@/lib/auth-helpers";
 
 export async function GET(
   request: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const authUser = await getAuthUser();
+    if (!authUser) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
     const { id } = await params;
+
+    // DEAN can only access their own department
+    if (authUser.role === "DEAN" && authUser.departmentId !== id) {
+      return NextResponse.json(
+        { error: "Forbidden: You can only access your own department" },
+        { status: 403 }
+      );
+    }
+
     const department = await prisma.department.findUnique({
       where: { id },
     });
@@ -34,6 +49,19 @@ export async function PUT(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const authUser = await getAuthUser();
+    if (!authUser) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    // Only ADMIN can update departments
+    if (!isAdmin(authUser)) {
+      return NextResponse.json(
+        { error: "Forbidden: Only administrators can update departments" },
+        { status: 403 }
+      );
+    }
+
     const { id } = await params;
     const body = await request.json();
     const validatedData = updateDepartmentSchema.parse(body);
@@ -81,6 +109,19 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const authUser = await getAuthUser();
+    if (!authUser) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    // Only ADMIN can delete departments
+    if (!isAdmin(authUser)) {
+      return NextResponse.json(
+        { error: "Forbidden: Only administrators can delete departments" },
+        { status: 403 }
+      );
+    }
+
     const { id } = await params;
     // Check if department has related records
     const [majors, users, callRounds] = await Promise.all([
@@ -97,13 +138,13 @@ export async function DELETE(
 
     if (majors > 0 || users > 0 || callRounds > 0) {
       return NextResponse.json(
-        { 
+        {
           error: "Không thể xóa khoa vì đang có dữ liệu liên quan",
           details: {
             majors,
             users,
             callRounds,
-          }
+          },
         },
         { status: 400 }
       );

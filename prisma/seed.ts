@@ -1,374 +1,306 @@
 import { Role, ProjectStatus, Gender } from './generated/prisma';
 import prisma from '../lib/prisma';
+import { seedTemplates } from './seed-templates';
 
-async function seedTemplates() {
-  console.log('📋 Seeding Progress Report Templates...');
-  
-  // Xóa dữ liệu template cũ (nếu có)
+/**
+ * Xóa toàn bộ dữ liệu trong database
+ * Thứ tự xóa phải tuân theo foreign key constraints
+ */
+async function clearDatabase() {
+  console.log('🗑️  Clearing database...\n');
+
+  // Xóa theo thứ tự ngược với foreign key dependencies
+  await prisma.progressReport.deleteMany();
   await prisma.progressReportTemplateItem.deleteMany();
   await prisma.progressReportTemplate.deleteMany();
+  await prisma.councilEvaluation.deleteMany();
+  await prisma.fundingDisbursement.deleteMany();
+  await prisma.extensionRequest.deleteMany();
+  await prisma.projectRegistration.deleteMany();
+  await prisma.project.deleteMany();
+  await prisma.projectType.deleteMany();
+  await prisma.callRound.deleteMany();
+  await prisma.user.deleteMany();
+  await prisma.class.deleteMany();
+  await prisma.major.deleteMany();
+  await prisma.department.deleteMany();
 
-  // Template 1: Đề tài nghiên cứu khoa học sinh viên
-  const template1 = await prisma.progressReportTemplate.create({
-    data: {
-      name: 'Biểu mẫu NCKH Sinh viên - 12 tuần',
-      description: 'Biểu mẫu tiêu chuẩn cho đề tài nghiên cứu khoa học sinh viên, theo dõi tiến độ 12 tuần',
-      isActive: true,
-      items: {
-        create: [
-          {
-            weekNumber: 1,
-            weekLabel: 'Tuần 1-2',
-            taskDescription: 'Nghiên cứu tài liệu, xác định phạm vi đề tài',
-            contentGuideline: '- Tổng hợp các tài liệu liên quan\n- Xác định vấn đề nghiên cứu\n- Làm rõ mục tiêu và phạm vi',
-            expectedResult: 'Bản tổng hợp tài liệu tham khảo, outline nghiên cứu ban đầu',
-            orderIndex: 0,
-          },
-          {
-            weekNumber: 3,
-            weekLabel: 'Tuần 3-4',
-            taskDescription: 'Xây dựng khung lý thuyết và phương pháp nghiên cứu',
-            contentGuideline: '- Tổng quan các nghiên cứu liên quan\n- Xây dựng khung lý thuyết\n- Lựa chọn phương pháp nghiên cứu phù hợp',
-            expectedResult: 'Chương 1, 2 hoàn chỉnh (Tổng quan, Cơ sở lý thuyết)',
-            orderIndex: 1,
-          },
-          {
-            weekNumber: 5,
-            weekLabel: 'Tuần 5-6',
-            taskDescription: 'Thiết kế nghiên cứu, chuẩn bị công cụ thu thập dữ liệu',
-            contentGuideline: '- Thiết kế mô hình/kiến trúc hệ thống\n- Chuẩn bị bảng hỏi/công cụ đo lường\n- Pilot test',
-            expectedResult: 'Thiết kế chi tiết, công cụ thu thập dữ liệu hoàn chỉnh',
-            orderIndex: 2,
-          },
-          {
-            weekNumber: 7,
-            weekLabel: 'Tuần 7-8',
-            taskDescription: 'Thu thập dữ liệu/Triển khai thực nghiệm',
-            contentGuideline: '- Tiến hành khảo sát/phỏng vấn/thí nghiệm\n- Ghi chép dữ liệu chi tiết\n- Backup dữ liệu',
-            expectedResult: 'Dữ liệu thô đã thu thập, nhật ký nghiên cứu',
-            orderIndex: 3,
-          },
-          {
-            weekNumber: 9,
-            weekLabel: 'Tuần 9-10',
-            taskDescription: 'Phân tích dữ liệu, rút ra kết quả',
-            contentGuideline: '- Làm sạch và mã hóa dữ liệu\n- Phân tích thống kê/chạy mô hình\n- Trực quan hóa kết quả',
-            expectedResult: 'Bảng biểu, đồ thị phân tích, kết quả thống kê ban đầu',
-            orderIndex: 4,
-          },
-          {
-            weekNumber: 11,
-            weekLabel: 'Tuần 11',
-            taskDescription: 'Viết chương kết quả và thảo luận',
-            contentGuideline: '- Trình bày kết quả nghiên cứu\n- So sánh với các nghiên cứu trước\n- Thảo luận ý nghĩa và hạn chế',
-            expectedResult: 'Chương 3, 4 hoàn chỉnh (Kết quả và Thảo luận)',
-            orderIndex: 5,
-          },
-          {
-            weekNumber: 12,
-            weekLabel: 'Tuần 12',
-            taskDescription: 'Hoàn thiện báo cáo, chuẩn bị bảo vệ',
-            contentGuideline: '- Viết phần kết luận và kiến nghị\n- Hoàn thiện toàn bộ báo cáo\n- Chuẩn bị slide thuyết trình\n- Luyện tập bảo vệ',
-            expectedResult: 'Báo cáo hoàn chỉnh, slide thuyết trình, sẵn sàng bảo vệ',
-            orderIndex: 6,
-          },
-        ],
-      },
-    },
-    include: { items: true },
-  });
-
-  // Template 2: Đề tài phát triển phần mềm
-  const template2 = await prisma.progressReportTemplate.create({
-    data: {
-      name: 'Biểu mẫu Phát triển Phần mềm - 10 tuần',
-      description: 'Biểu mẫu cho đề tài phát triển ứng dụng/hệ thống phần mềm',
-      isActive: true,
-      items: {
-        create: [
-          {
-            weekNumber: 1,
-            weekLabel: 'Tuần 1-2',
-            taskDescription: 'Phân tích yêu cầu và thiết kế tổng thể',
-            contentGuideline: '- Thu thập yêu cầu chức năng và phi chức năng\n- Phân tích use case\n- Thiết kế kiến trúc tổng thể',
-            expectedResult: 'Tài liệu đặc tả yêu cầu, sơ đồ use case, kiến trúc hệ thống',
-            orderIndex: 0,
-          },
-          {
-            weekNumber: 3,
-            weekLabel: 'Tuần 3-4',
-            taskDescription: 'Thiết kế chi tiết và chuẩn bị môi trường',
-            contentGuideline: '- Thiết kế database schema\n- Thiết kế giao diện (wireframe/mockup)\n- Setup môi trường dev',
-            expectedResult: 'ERD, mockup UI, repository code đã khởi tạo với tech stack',
-            orderIndex: 1,
-          },
-          {
-            weekNumber: 5,
-            weekLabel: 'Tuần 5-6',
-            taskDescription: 'Phát triển Module 1 (Core features)',
-            contentGuideline: '- Implement các chức năng cốt lõi\n- Viết unit tests\n- Code review định kỳ',
-            expectedResult: 'Module 1 hoàn thành, pass unit tests, demo được',
-            orderIndex: 2,
-          },
-          {
-            weekNumber: 7,
-            weekLabel: 'Tuần 7',
-            taskDescription: 'Phát triển Module 2 (Extended features)',
-            contentGuideline: '- Implement các chức năng mở rộng\n- Integration testing\n- Refactoring nếu cần',
-            expectedResult: 'Module 2 hoàn thành, tích hợp với Module 1',
-            orderIndex: 3,
-          },
-          {
-            weekNumber: 8,
-            weekLabel: 'Tuần 8',
-            taskDescription: 'Tối ưu hóa và bảo mật',
-            contentGuideline: '- Performance tuning\n- Security hardening\n- Load testing',
-            expectedResult: 'Hệ thống tối ưu, đã kiểm tra bảo mật, benchmark report',
-            orderIndex: 4,
-          },
-          {
-            weekNumber: 9,
-            weekLabel: 'Tuần 9',
-            taskDescription: 'Testing tổng thể và sửa lỗi',
-            contentGuideline: '- UAT (User Acceptance Testing)\n- Bug fixing\n- Viết test cases',
-            expectedResult: 'Bug report, test coverage > 80%, ổn định',
-            orderIndex: 5,
-          },
-          {
-            weekNumber: 10,
-            weekLabel: 'Tuần 10',
-            taskDescription: 'Hoàn thiện tài liệu và triển khai',
-            contentGuideline: '- Viết user manual\n- Deployment lên server\n- Chuẩn bị video demo và slide',
-            expectedResult: 'Sản phẩm deployed, tài liệu hoàn chỉnh, video demo, sẵn sàng bảo vệ',
-            orderIndex: 6,
-          },
-        ],
-      },
-    },
-    include: { items: true },
-  });
-
-  // Template 3: Template không active (để test)
-  const template3 = await prisma.progressReportTemplate.create({
-    data: {
-      name: 'Biểu mẫu Cũ - Ngừng sử dụng',
-      description: 'Template này không còn sử dụng nữa',
-      isActive: false,
-      items: {
-        create: [
-          {
-            weekNumber: 1,
-            weekLabel: 'Tuần 1',
-            taskDescription: 'Giai đoạn 1',
-            contentGuideline: 'Nội dung giai đoạn 1',
-            expectedResult: 'Kết quả mong đợi',
-            orderIndex: 0,
-          },
-        ],
-      },
-    },
-    include: { items: true },
-  });
-
-  console.log(`✅ Created ${template1.name} (${template1.items.length} items)`);
-  console.log(`✅ Created ${template2.name} (${template2.items.length} items)`);
-  console.log(`✅ Created ${template3.name} (${template3.items.length} items)`);
+  console.log('✅ Database cleared successfully!\n');
 }
 
+/**
+ * Seed Organization data - 5 khoa
+ */
 async function seedOrganization() {
-  console.log('🌱 Seeding Organization data...');
+  console.log('🏢 Seeding Organization data (5 Departments)...');
 
-  // 1. Create Departments
-  const itDept = await prisma.department.upsert({
-    where: { code: 'IT' },
-    update: {},
-    create: {
-      code: 'IT',
-      name: 'Khoa Công nghệ thông tin',
-      description: 'Khoa đào tạo về CNTT, Phần mềm, Mạng máy tính',
-    },
-  });
-
-  const businessDept = await prisma.department.upsert({
-    where: { code: 'BUS' },
-    update: {},
-    create: {
-      code: 'BUS',
-      name: 'Khoa Kinh tế',
-      description: 'Khoa đào tạo về Quản trị kinh doanh, Kế toán',
-    },
-  });
-
-  console.log('✅ Departments created');
-
-  // 2. Create Majors
-  const softwareMajor = await prisma.major.upsert({
-    where: { code: 'SE' },
-    update: {},
-    create: {
-      code: 'SE',
-      name: 'Kỹ thuật phần mềm',
-      departmentId: itDept.id,
-    },
-  });
-
-  const networkMajor = await prisma.major.upsert({
-    where: { code: 'NET' },
-    update: {},
-    create: {
-      code: 'NET',
-      name: 'Mạng máy tính',
-      departmentId: itDept.id,
-    },
-  });
-
-  const marketingMajor = await prisma.major.upsert({
-    where: { code: 'MKT' },
-    update: {},
-    create: {
-      code: 'MKT',
-      name: 'Marketing',
-      departmentId: businessDept.id,
-    },
-  });
-
-  console.log('✅ Majors created');
-
-  // 3. Create Classes
-  const seClass = await prisma.class.upsert({
-    where: { code: 'SE01' },
-    update: {},
-    create: {
-      code: 'SE01',
-      name: 'Lớp Kỹ thuật phần mềm 01',
-      majorId: softwareMajor.id,
-    },
-  });
-
-  const netClass = await prisma.class.upsert({
-    where: { code: 'NET01' },
-    update: {},
-    create: {
-      code: 'NET01',
-      name: 'Lớp Mạng máy tính 01',
-      majorId: networkMajor.id,
-    },
-  });
-
-  console.log('✅ Classes created');
-
-  // 4. Update existing users with organization info
-  const student = await prisma.user.findFirst({
-    where: { role: Role.STUDENT },
-  });
-
-  if (student) {
-    await prisma.user.update({
-      where: { id: student.id },
+  // Tạo 5 khoa
+  const departments = await Promise.all([
+    prisma.department.create({
       data: {
-        departmentId: itDept.id,
-        majorId: softwareMajor.id,
-        classId: seClass.id,
+        code: 'IT',
+        name: 'Khoa Công nghệ thông tin',
+        description: 'Khoa đào tạo về CNTT, Phần mềm, Mạng máy tính',
       },
-    });
-    console.log(`✅ Updated student ${student.name} with organization info`);
-  }
-
-  const lecturer = await prisma.user.findFirst({
-    where: { role: Role.LECTURER },
-  });
-
-  if (lecturer) {
-    await prisma.user.update({
-      where: { id: lecturer.id },
+    }),
+    prisma.department.create({
       data: {
-        departmentId: itDept.id,
+        code: 'BUS',
+        name: 'Khoa Kinh tế',
+        description: 'Khoa đào tạo về Quản trị kinh doanh, Kế toán',
       },
-    });
-    console.log(`✅ Updated lecturer ${lecturer.name} with organization info`);
-  }
-}
+    }),
+    prisma.department.create({
+      data: {
+        code: 'ENG',
+        name: 'Khoa Kỹ thuật',
+        description: 'Khoa đào tạo về Cơ khí, Điện, Tự động hóa',
+      },
+    }),
+    prisma.department.create({
+      data: {
+        code: 'SCI',
+        name: 'Khoa Khoa học tự nhiên',
+        description: 'Khoa đào tạo về Toán, Lý, Hóa',
+      },
+    }),
+    prisma.department.create({
+      data: {
+        code: 'LAN',
+        name: 'Khoa Ngoại ngữ',
+        description: 'Khoa đào tạo về Tiếng Anh, Tiếng Nhật, Tiếng Trung',
+      },
+    }),
+  ]);
 
-async function seedUsersAndProjects() {
-  console.log('👥 Seeding Users and Projects...');
+  console.log(`✅ Created ${departments.length} departments`);
+
+  // Tạo ngành cho mỗi khoa
+  const majors = [];
   
-  // Student
-  const student = await prisma.user.upsert({
-    where: { email: 'student1@university.edu.vn' },
-    update: {},
-    create: {
-      email: 'student1@university.edu.vn',
-      name: 'Nguyễn Văn Sinh Viên',
-      role: Role.STUDENT,
-      code: 'SV001',
-    },
-  });
+  // Khoa CNTT - 3 ngành
+  majors.push(
+    await prisma.major.create({
+      data: { code: 'SE', name: 'Kỹ thuật phần mềm', departmentId: departments[0].id },
+    }),
+    await prisma.major.create({
+      data: { code: 'NET', name: 'Mạng máy tính và truyền thông', departmentId: departments[0].id },
+    }),
+    await prisma.major.create({
+      data: { code: 'AI', name: 'Trí tuệ nhân tạo', departmentId: departments[0].id },
+    })
+  );
 
-  // Lecturer to be instructor
-  const lecturer = await prisma.user.upsert({
-    where: { email: 'lecturer1@university.edu.vn' },
-    update: {},
-    create: {
-      email: 'lecturer1@university.edu.vn',
-      name: 'Trần Văn Giảng Viên',
-      role: Role.LECTURER,
-      code: 'GV001',
-    },
-  });
+  // Khoa Kinh tế - 2 ngành
+  majors.push(
+    await prisma.major.create({
+      data: { code: 'BA', name: 'Quản trị kinh doanh', departmentId: departments[1].id },
+    }),
+    await prisma.major.create({
+      data: { code: 'ACC', name: 'Kế toán', departmentId: departments[1].id },
+    })
+  );
 
-  // Lecturer level 2 to be instructor
-  const seniorLecturer = await prisma.user.upsert({
-    where: { email: 'senior_lecturer1@university.edu.vn' },
-    update: {},
-    create: {
-      email: 'senior_lecturer1@university.edu.vn',
-      name: 'Phạm Văn Giảng Viên Cao Cấp',
-      role: Role.LECTURER,
-      code: 'GV002',
-    },
-  });
+  // Khoa Kỹ thuật - 2 ngành
+  majors.push(
+    await prisma.major.create({
+      data: { code: 'ME', name: 'Kỹ thuật cơ khí', departmentId: departments[2].id },
+    }),
+    await prisma.major.create({
+      data: { code: 'EE', name: 'Kỹ thuật điện', departmentId: departments[2].id },
+    })
+  );
 
-  // A Project for the student
-  await prisma.project.create({
-    data: {
-      title: 'Hệ thống ứng dụng AI trong quản lý giáo dục (SV)',
-      objective: 'Nghiên cứu và áp dụng AI',
-      expectedOutput: 'Phần mềm Web',
-      status: ProjectStatus.IN_PROGRESS,
-      leaderId: student.id,
-      instructorId: lecturer.id,
+  // Khoa Khoa học tự nhiên - 2 ngành
+  majors.push(
+    await prisma.major.create({
+      data: { code: 'MATH', name: 'Toán học', departmentId: departments[3].id },
+    }),
+    await prisma.major.create({
+      data: { code: 'PHY', name: 'Vật lý', departmentId: departments[3].id },
+    })
+  );
+
+  // Khoa Ngoại ngữ - 2 ngành
+  majors.push(
+    await prisma.major.create({
+      data: { code: 'ENG', name: 'Ngôn ngữ Anh', departmentId: departments[4].id },
+    }),
+    await prisma.major.create({
+      data: { code: 'JAP', name: 'Ngôn ngữ Nhật', departmentId: departments[4].id },
+    })
+  );
+
+  console.log(`✅ Created ${majors.length} majors`);
+
+  // Tạo 5 lớp cho mỗi khoa (mỗi ngành có vài lớp)
+  const classes = [];
+  let classCounter = 1;
+
+  for (const major of majors) {
+    // Mỗi ngành tạo 2-3 lớp
+    const numClasses = Math.random() > 0.5 ? 2 : 3;
+    for (let i = 0; i < numClasses; i++) {
+      const year = 20 + Math.floor(Math.random() * 5); // 2020-2024
+      classes.push(
+        await prisma.class.create({
+          data: {
+            code: `${major.code}${String(classCounter).padStart(2, '0')}`,
+            name: `Lớp ${major.name} ${String(classCounter).padStart(2, '0')}`,
+            majorId: major.id,
+          },
+        })
+      );
+      classCounter++;
     }
-  });
+  }
 
-  // A Project for the lecturer
-  await prisma.project.create({
-    data: {
-      title: 'Nghiên cứu vật liệu mới (GV)',
-      objective: 'Tìm hiểu vật liệu',
-      expectedOutput: 'Bài báo ISI',
-      status: ProjectStatus.IN_PROGRESS,
-      leaderId: lecturer.id,
-      instructorId: seniorLecturer.id,
-    }
-  });
+  console.log(`✅ Created ${classes.length} classes\n`);
 
-  console.log('✅ Users and Projects seeded!');
+  return { departments, majors, classes };
 }
 
+/**
+ * Seed Users - Mỗi khoa 10 giảng viên, mỗi lớp 15-20 sinh viên
+ */
+async function seedUsers(orgData: {
+  departments: any[];
+  majors: any[];
+  classes: any[];
+}) {
+  console.log('👥 Seeding Users...');
+
+  const { departments, majors, classes } = orgData;
+  const allUsers = [];
+
+  // Tạo Admin
+  const admin = await prisma.user.create({
+    data: {
+      email: 'admin@university.edu',
+      password: '123456',
+      name: 'Quản trị viên hệ thống',
+      role: Role.ADMIN,
+      code: 'ADMIN001',
+      gender: Gender.MALE,
+    },
+  });
+  allUsers.push(admin);
+  console.log('✅ Created 1 ADMIN');
+
+  // Tạo Dean cho mỗi khoa (5 Dean)
+  const deans = [];
+  for (let i = 0; i < departments.length; i++) {
+    const dean = await prisma.user.create({
+      data: {
+        email: `dean.${departments[i].code.toLowerCase()}@university.edu`,
+        password: '123456',
+        name: `Trưởng khoa ${departments[i].name}`,
+        role: Role.DEAN,
+        code: `DEAN${String(i + 1).padStart(3, '0')}`,
+        departmentId: departments[i].id,
+        gender: i % 2 === 0 ? Gender.MALE : Gender.FEMALE,
+        phone: `090${String(1000000 + i).substring(1)}`,
+      },
+    });
+    deans.push(dean);
+    allUsers.push(dean);
+  }
+  console.log(`✅ Created ${deans.length} DEANs`);
+
+  // Tạo 10 giảng viên cho mỗi khoa
+  const lecturers = [];
+  const firstNames = ['Nguyễn', 'Trần', 'Lê', 'Phạm', 'Hoàng', 'Phan', 'Vũ', 'Đặng', 'Bùi', 'Đỗ'];
+  const middleNames = ['Văn', 'Thị', 'Hữu', 'Minh', 'Thanh', 'Đức', 'Quốc', 'Anh', 'Hồng', 'Mai'];
+  const lastNames = ['An', 'Bình', 'Chi', 'Dũng', 'Hà', 'Kiên', 'Linh', 'Nam', 'Phương', 'Sơn'];
+
+  for (let deptIdx = 0; deptIdx < departments.length; deptIdx++) {
+    for (let i = 0; i < 10; i++) {
+      const lecturerNum = deptIdx * 10 + i + 1;
+      const lecturer = await prisma.user.create({
+        data: {
+          email: `gv${String(lecturerNum).padStart(3, '0')}@university.edu`,
+          password: '123456',
+          name: `${firstNames[i]} ${middleNames[i % 10]} ${lastNames[i % 10]}`,
+          role: Role.LECTURER,
+          code: `GV${String(lecturerNum).padStart(3, '0')}`,
+          departmentId: departments[deptIdx].id,
+          gender: i % 2 === 0 ? Gender.MALE : Gender.FEMALE,
+          phone: `091${String(1000000 + lecturerNum).substring(1)}`,
+          address: `${i + 1} Nguyễn Văn Cừ, Q.5, TP.HCM`,
+        },
+      });
+      lecturers.push(lecturer);
+      allUsers.push(lecturer);
+    }
+  }
+  console.log(`✅ Created ${lecturers.length} LECTURERs (10 per department)`);
+
+  // Tạo sinh viên cho mỗi lớp (15-20 sinh viên/lớp)
+  const students = [];
+  const studentFirstNames = ['Nguyễn', 'Trần', 'Lê', 'Phạm', 'Hoàng', 'Phan', 'Vũ', 'Đặng', 'Bùi', 'Đỗ', 'Lý', 'Dương', 'Võ', 'Hồ', 'Đinh'];
+  const studentLastNames = ['An', 'Bảo', 'Chi', 'Dung', 'Hà', 'Khoa', 'Linh', 'Minh', 'Nam', 'Phong', 'Quân', 'Trang', 'Uyên', 'Vân', 'Yến'];
+
+  let studentCounter = 1;
+  for (const classObj of classes) {
+    // Lấy major để biết department
+    const major = majors.find((m) => m.id === classObj.majorId);
+    const numStudents = 15 + Math.floor(Math.random() * 6); // 15-20 sinh viên
+
+    for (let i = 0; i < numStudents; i++) {
+      const firstName = studentFirstNames[Math.floor(Math.random() * studentFirstNames.length)];
+      const lastName = studentLastNames[Math.floor(Math.random() * studentLastNames.length)];
+      
+      const student = await prisma.user.create({
+        data: {
+          email: `sv${String(studentCounter).padStart(4, '0')}@university.edu`,
+          password: '123456',
+          name: `${firstName} Văn ${lastName}`,
+          role: Role.STUDENT,
+          code: `SV${String(studentCounter).padStart(4, '0')}`,
+          departmentId: major.departmentId,
+          majorId: major.id,
+          classId: classObj.id,
+          gender: i % 2 === 0 ? Gender.MALE : Gender.FEMALE,
+          phone: `092${String(1000000 + studentCounter).substring(1)}`,
+        },
+      });
+      students.push(student);
+      allUsers.push(student);
+      studentCounter++;
+    }
+  }
+  console.log(`✅ Created ${students.length} STUDENTs (15-20 per class)\n`);
+
+  return { admin, deans, lecturers, students, allUsers };
+}
+
+/**
+ * Main seed function
+ */
 async function main() {
   console.log('🌱 Starting database seed...\n');
+  console.log('=' .repeat(60));
+  console.log('\n');
 
-  // await seedTemplates();
-  await seedOrganization();
-  await seedUsersAndProjects();
+  // Step 1: Clear all existing data
+  await clearDatabase();
 
+  // Step 2: Seed organization structure (5 khoa, nhiều ngành, nhiều lớp)
+  const orgData = await seedOrganization();
 
-  console.log('\n🎉 Seed completed successfully!');
+  // Step 3: Seed users (mỗi khoa 10 GV, mỗi lớp 15-20 SV)
+  const users = await seedUsers(orgData);
+
+  // Step 4: Seed progress report templates
+  seedTemplates();
+
+  console.log('\n🎉 Seed completed successfully!\n');
+ 
 }
 
 main()
   .catch((e) => {
-    console.error(e);
+    console.error('\n❌ Seed failed:', e);
     process.exit(1);
   })
   .finally(async () => {

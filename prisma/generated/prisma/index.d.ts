@@ -83,6 +83,11 @@ export type ExtensionRequest = $Result.DefaultSelection<Prisma.$ExtensionRequest
  * 
  */
 export type ProjectRegistration = $Result.DefaultSelection<Prisma.$ProjectRegistrationPayload>
+/**
+ * Model Notification
+ * 
+ */
+export type Notification = $Result.DefaultSelection<Prisma.$NotificationPayload>
 
 /**
  * Enums
@@ -144,6 +149,15 @@ export const RequestStatus: {
 export type RequestStatus = (typeof RequestStatus)[keyof typeof RequestStatus]
 
 
+export const CallRoundApprovalStatus: {
+  PENDING_APPROVAL: 'PENDING_APPROVAL',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED'
+};
+
+export type CallRoundApprovalStatus = (typeof CallRoundApprovalStatus)[keyof typeof CallRoundApprovalStatus]
+
+
 export const RegistrationStatus: {
   PENDING: 'PENDING',
   APPROVED: 'APPROVED',
@@ -171,6 +185,24 @@ export const FacultyStatus: {
 
 export type FacultyStatus = (typeof FacultyStatus)[keyof typeof FacultyStatus]
 
+
+export const NotificationType: {
+  PROJECT_STATUS_CHANGE: 'PROJECT_STATUS_CHANGE',
+  REGISTRATION_STATUS_CHANGE: 'REGISTRATION_STATUS_CHANGE',
+  PROGRESS_REPORT_SUBMITTED: 'PROGRESS_REPORT_SUBMITTED',
+  PROGRESS_REPORT_REVIEWED: 'PROGRESS_REPORT_REVIEWED',
+  EXTENSION_REQUEST_SUBMITTED: 'EXTENSION_REQUEST_SUBMITTED',
+  EXTENSION_REQUEST_REVIEWED: 'EXTENSION_REQUEST_REVIEWED',
+  CALL_ROUND_APPROVED: 'CALL_ROUND_APPROVED',
+  CALL_ROUND_REJECTED: 'CALL_ROUND_REJECTED',
+  INSTRUCTOR_ASSIGNED: 'INSTRUCTOR_ASSIGNED',
+  DEAN_REVIEW_ASSIGNED: 'DEAN_REVIEW_ASSIGNED',
+  COUNCIL_EVALUATION_SUBMITTED: 'COUNCIL_EVALUATION_SUBMITTED',
+  FUNDING_DISBURSED: 'FUNDING_DISBURSED'
+};
+
+export type NotificationType = (typeof NotificationType)[keyof typeof NotificationType]
+
 }
 
 export type Role = $Enums.Role
@@ -193,6 +225,10 @@ export type RequestStatus = $Enums.RequestStatus
 
 export const RequestStatus: typeof $Enums.RequestStatus
 
+export type CallRoundApprovalStatus = $Enums.CallRoundApprovalStatus
+
+export const CallRoundApprovalStatus: typeof $Enums.CallRoundApprovalStatus
+
 export type RegistrationStatus = $Enums.RegistrationStatus
 
 export const RegistrationStatus: typeof $Enums.RegistrationStatus
@@ -204,6 +240,10 @@ export const InstructorStatus: typeof $Enums.InstructorStatus
 export type FacultyStatus = $Enums.FacultyStatus
 
 export const FacultyStatus: typeof $Enums.FacultyStatus
+
+export type NotificationType = $Enums.NotificationType
+
+export const NotificationType: typeof $Enums.NotificationType
 
 /**
  * ##  Prisma Client ʲˢ
@@ -465,6 +505,16 @@ export class PrismaClient<
     * ```
     */
   get projectRegistration(): Prisma.ProjectRegistrationDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.notification`: Exposes CRUD operations for the **Notification** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Notifications
+    * const notifications = await prisma.notification.findMany()
+    * ```
+    */
+  get notification(): Prisma.NotificationDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -912,7 +962,8 @@ export namespace Prisma {
     CouncilEvaluation: 'CouncilEvaluation',
     FundingDisbursement: 'FundingDisbursement',
     ExtensionRequest: 'ExtensionRequest',
-    ProjectRegistration: 'ProjectRegistration'
+    ProjectRegistration: 'ProjectRegistration',
+    Notification: 'Notification'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -928,7 +979,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "department" | "major" | "class" | "user" | "callRound" | "projectType" | "project" | "progressReportTemplate" | "progressReportTemplateItem" | "progressReport" | "councilEvaluation" | "fundingDisbursement" | "extensionRequest" | "projectRegistration"
+      modelProps: "department" | "major" | "class" | "user" | "callRound" | "projectType" | "project" | "progressReportTemplate" | "progressReportTemplateItem" | "progressReport" | "councilEvaluation" | "fundingDisbursement" | "extensionRequest" | "projectRegistration" | "notification"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1968,6 +2019,80 @@ export namespace Prisma {
           }
         }
       }
+      Notification: {
+        payload: Prisma.$NotificationPayload<ExtArgs>
+        fields: Prisma.NotificationFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.NotificationFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificationPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.NotificationFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificationPayload>
+          }
+          findFirst: {
+            args: Prisma.NotificationFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificationPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.NotificationFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificationPayload>
+          }
+          findMany: {
+            args: Prisma.NotificationFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificationPayload>[]
+          }
+          create: {
+            args: Prisma.NotificationCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificationPayload>
+          }
+          createMany: {
+            args: Prisma.NotificationCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.NotificationCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificationPayload>[]
+          }
+          delete: {
+            args: Prisma.NotificationDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificationPayload>
+          }
+          update: {
+            args: Prisma.NotificationUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificationPayload>
+          }
+          deleteMany: {
+            args: Prisma.NotificationDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.NotificationUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.NotificationUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificationPayload>[]
+          }
+          upsert: {
+            args: Prisma.NotificationUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificationPayload>
+          }
+          aggregate: {
+            args: Prisma.NotificationAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateNotification>
+          }
+          groupBy: {
+            args: Prisma.NotificationGroupByArgs<ExtArgs>
+            result: $Utils.Optional<NotificationGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.NotificationCountArgs<ExtArgs>
+            result: $Utils.Optional<NotificationCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -2090,6 +2215,7 @@ export namespace Prisma {
     fundingDisbursement?: FundingDisbursementOmit
     extensionRequest?: ExtensionRequestOmit
     projectRegistration?: ProjectRegistrationOmit
+    notification?: NotificationOmit
   }
 
   /* Types for Logging */
@@ -2315,6 +2441,7 @@ export namespace Prisma {
     instructedRegistrations: number
     instructedProjects: number
     facultyReviews: number
+    notifications: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2325,6 +2452,7 @@ export namespace Prisma {
     instructedRegistrations?: boolean | UserCountOutputTypeCountInstructedRegistrationsArgs
     instructedProjects?: boolean | UserCountOutputTypeCountInstructedProjectsArgs
     facultyReviews?: boolean | UserCountOutputTypeCountFacultyReviewsArgs
+    notifications?: boolean | UserCountOutputTypeCountNotificationsArgs
   }
 
   // Custom InputTypes
@@ -2385,6 +2513,13 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountFacultyReviewsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: ProjectRegistrationWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountNotificationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: NotificationWhereInput
   }
 
 
@@ -6056,6 +6191,7 @@ export namespace Prisma {
     code: string | null
     name: string | null
     email: string | null
+    password: string | null
     dateOfBirth: Date | null
     gender: $Enums.Gender | null
     phone: string | null
@@ -6074,6 +6210,7 @@ export namespace Prisma {
     code: string | null
     name: string | null
     email: string | null
+    password: string | null
     dateOfBirth: Date | null
     gender: $Enums.Gender | null
     phone: string | null
@@ -6092,6 +6229,7 @@ export namespace Prisma {
     code: number
     name: number
     email: number
+    password: number
     dateOfBirth: number
     gender: number
     phone: number
@@ -6112,6 +6250,7 @@ export namespace Prisma {
     code?: true
     name?: true
     email?: true
+    password?: true
     dateOfBirth?: true
     gender?: true
     phone?: true
@@ -6130,6 +6269,7 @@ export namespace Prisma {
     code?: true
     name?: true
     email?: true
+    password?: true
     dateOfBirth?: true
     gender?: true
     phone?: true
@@ -6148,6 +6288,7 @@ export namespace Prisma {
     code?: true
     name?: true
     email?: true
+    password?: true
     dateOfBirth?: true
     gender?: true
     phone?: true
@@ -6239,6 +6380,7 @@ export namespace Prisma {
     code: string | null
     name: string
     email: string
+    password: string | null
     dateOfBirth: Date | null
     gender: $Enums.Gender | null
     phone: string | null
@@ -6274,6 +6416,7 @@ export namespace Prisma {
     code?: boolean
     name?: boolean
     email?: boolean
+    password?: boolean
     dateOfBirth?: boolean
     gender?: boolean
     phone?: boolean
@@ -6295,6 +6438,7 @@ export namespace Prisma {
     instructedRegistrations?: boolean | User$instructedRegistrationsArgs<ExtArgs>
     instructedProjects?: boolean | User$instructedProjectsArgs<ExtArgs>
     facultyReviews?: boolean | User$facultyReviewsArgs<ExtArgs>
+    notifications?: boolean | User$notificationsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -6303,6 +6447,7 @@ export namespace Prisma {
     code?: boolean
     name?: boolean
     email?: boolean
+    password?: boolean
     dateOfBirth?: boolean
     gender?: boolean
     phone?: boolean
@@ -6324,6 +6469,7 @@ export namespace Prisma {
     code?: boolean
     name?: boolean
     email?: boolean
+    password?: boolean
     dateOfBirth?: boolean
     gender?: boolean
     phone?: boolean
@@ -6345,6 +6491,7 @@ export namespace Prisma {
     code?: boolean
     name?: boolean
     email?: boolean
+    password?: boolean
     dateOfBirth?: boolean
     gender?: boolean
     phone?: boolean
@@ -6358,7 +6505,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "name" | "email" | "dateOfBirth" | "gender" | "phone" | "address" | "role" | "department" | "departmentId" | "majorId" | "classId" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "name" | "email" | "password" | "dateOfBirth" | "gender" | "phone" | "address" | "role" | "department" | "departmentId" | "majorId" | "classId" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     departmentRef?: boolean | User$departmentRefArgs<ExtArgs>
     major?: boolean | User$majorArgs<ExtArgs>
@@ -6370,6 +6517,7 @@ export namespace Prisma {
     instructedRegistrations?: boolean | User$instructedRegistrationsArgs<ExtArgs>
     instructedProjects?: boolean | User$instructedProjectsArgs<ExtArgs>
     facultyReviews?: boolean | User$facultyReviewsArgs<ExtArgs>
+    notifications?: boolean | User$notificationsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -6396,12 +6544,14 @@ export namespace Prisma {
       instructedRegistrations: Prisma.$ProjectRegistrationPayload<ExtArgs>[]
       instructedProjects: Prisma.$ProjectPayload<ExtArgs>[]
       facultyReviews: Prisma.$ProjectRegistrationPayload<ExtArgs>[]
+      notifications: Prisma.$NotificationPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
       code: string | null
       name: string
       email: string
+      password: string | null
       dateOfBirth: Date | null
       gender: $Enums.Gender | null
       phone: string | null
@@ -6817,6 +6967,7 @@ export namespace Prisma {
     instructedRegistrations<T extends User$instructedRegistrationsArgs<ExtArgs> = {}>(args?: Subset<T, User$instructedRegistrationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProjectRegistrationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     instructedProjects<T extends User$instructedProjectsArgs<ExtArgs> = {}>(args?: Subset<T, User$instructedProjectsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProjectPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     facultyReviews<T extends User$facultyReviewsArgs<ExtArgs> = {}>(args?: Subset<T, User$facultyReviewsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProjectRegistrationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    notifications<T extends User$notificationsArgs<ExtArgs> = {}>(args?: Subset<T, User$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -6850,6 +7001,7 @@ export namespace Prisma {
     readonly code: FieldRef<"User", 'String'>
     readonly name: FieldRef<"User", 'String'>
     readonly email: FieldRef<"User", 'String'>
+    readonly password: FieldRef<"User", 'String'>
     readonly dateOfBirth: FieldRef<"User", 'DateTime'>
     readonly gender: FieldRef<"User", 'Gender'>
     readonly phone: FieldRef<"User", 'String'>
@@ -7487,6 +7639,30 @@ export namespace Prisma {
   }
 
   /**
+   * User.notifications
+   */
+  export type User$notificationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Notification
+     */
+    select?: NotificationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Notification
+     */
+    omit?: NotificationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationInclude<ExtArgs> | null
+    where?: NotificationWhereInput
+    orderBy?: NotificationOrderByWithRelationInput | NotificationOrderByWithRelationInput[]
+    cursor?: NotificationWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: NotificationScalarFieldEnum | NotificationScalarFieldEnum[]
+  }
+
+  /**
    * User without action
    */
   export type UserDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -7511,16 +7687,47 @@ export namespace Prisma {
 
   export type AggregateCallRound = {
     _count: CallRoundCountAggregateOutputType | null
+    _avg: CallRoundAvgAggregateOutputType | null
+    _sum: CallRoundSumAggregateOutputType | null
     _min: CallRoundMinAggregateOutputType | null
     _max: CallRoundMaxAggregateOutputType | null
+  }
+
+  export type CallRoundAvgAggregateOutputType = {
+    maxProjects: number | null
+    budgetLimit: Decimal | null
+  }
+
+  export type CallRoundSumAggregateOutputType = {
+    maxProjects: number | null
+    budgetLimit: Decimal | null
   }
 
   export type CallRoundMinAggregateOutputType = {
     id: string | null
     name: string | null
+    description: string | null
+    registrationStartDate: Date | null
+    registrationEndDate: Date | null
+    projectStartDate: Date | null
+    projectEndDate: Date | null
+    reviewDeadline: Date | null
+    reportingStartDate: Date | null
     startDate: Date | null
     endDate: Date | null
+    maxProjects: number | null
+    budgetLimit: Decimal | null
+    requirements: string | null
+    guidelines: string | null
+    contactInfo: string | null
     isActive: boolean | null
+    isLocked: boolean | null
+    approvalStatus: $Enums.CallRoundApprovalStatus | null
+    createdById: string | null
+    createdByRole: $Enums.Role | null
+    approvedById: string | null
+    approvalNote: string | null
+    approvedAt: Date | null
     templateId: string | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -7529,9 +7736,28 @@ export namespace Prisma {
   export type CallRoundMaxAggregateOutputType = {
     id: string | null
     name: string | null
+    description: string | null
+    registrationStartDate: Date | null
+    registrationEndDate: Date | null
+    projectStartDate: Date | null
+    projectEndDate: Date | null
+    reviewDeadline: Date | null
+    reportingStartDate: Date | null
     startDate: Date | null
     endDate: Date | null
+    maxProjects: number | null
+    budgetLimit: Decimal | null
+    requirements: string | null
+    guidelines: string | null
+    contactInfo: string | null
     isActive: boolean | null
+    isLocked: boolean | null
+    approvalStatus: $Enums.CallRoundApprovalStatus | null
+    createdById: string | null
+    createdByRole: $Enums.Role | null
+    approvedById: string | null
+    approvalNote: string | null
+    approvedAt: Date | null
     templateId: string | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -7540,9 +7766,28 @@ export namespace Prisma {
   export type CallRoundCountAggregateOutputType = {
     id: number
     name: number
+    description: number
+    registrationStartDate: number
+    registrationEndDate: number
+    projectStartDate: number
+    projectEndDate: number
+    reviewDeadline: number
+    reportingStartDate: number
     startDate: number
     endDate: number
+    maxProjects: number
+    budgetLimit: number
+    requirements: number
+    guidelines: number
+    contactInfo: number
     isActive: number
+    isLocked: number
+    approvalStatus: number
+    createdById: number
+    createdByRole: number
+    approvedById: number
+    approvalNote: number
+    approvedAt: number
     templateId: number
     createdAt: number
     updatedAt: number
@@ -7550,12 +7795,41 @@ export namespace Prisma {
   }
 
 
+  export type CallRoundAvgAggregateInputType = {
+    maxProjects?: true
+    budgetLimit?: true
+  }
+
+  export type CallRoundSumAggregateInputType = {
+    maxProjects?: true
+    budgetLimit?: true
+  }
+
   export type CallRoundMinAggregateInputType = {
     id?: true
     name?: true
+    description?: true
+    registrationStartDate?: true
+    registrationEndDate?: true
+    projectStartDate?: true
+    projectEndDate?: true
+    reviewDeadline?: true
+    reportingStartDate?: true
     startDate?: true
     endDate?: true
+    maxProjects?: true
+    budgetLimit?: true
+    requirements?: true
+    guidelines?: true
+    contactInfo?: true
     isActive?: true
+    isLocked?: true
+    approvalStatus?: true
+    createdById?: true
+    createdByRole?: true
+    approvedById?: true
+    approvalNote?: true
+    approvedAt?: true
     templateId?: true
     createdAt?: true
     updatedAt?: true
@@ -7564,9 +7838,28 @@ export namespace Prisma {
   export type CallRoundMaxAggregateInputType = {
     id?: true
     name?: true
+    description?: true
+    registrationStartDate?: true
+    registrationEndDate?: true
+    projectStartDate?: true
+    projectEndDate?: true
+    reviewDeadline?: true
+    reportingStartDate?: true
     startDate?: true
     endDate?: true
+    maxProjects?: true
+    budgetLimit?: true
+    requirements?: true
+    guidelines?: true
+    contactInfo?: true
     isActive?: true
+    isLocked?: true
+    approvalStatus?: true
+    createdById?: true
+    createdByRole?: true
+    approvedById?: true
+    approvalNote?: true
+    approvedAt?: true
     templateId?: true
     createdAt?: true
     updatedAt?: true
@@ -7575,9 +7868,28 @@ export namespace Prisma {
   export type CallRoundCountAggregateInputType = {
     id?: true
     name?: true
+    description?: true
+    registrationStartDate?: true
+    registrationEndDate?: true
+    projectStartDate?: true
+    projectEndDate?: true
+    reviewDeadline?: true
+    reportingStartDate?: true
     startDate?: true
     endDate?: true
+    maxProjects?: true
+    budgetLimit?: true
+    requirements?: true
+    guidelines?: true
+    contactInfo?: true
     isActive?: true
+    isLocked?: true
+    approvalStatus?: true
+    createdById?: true
+    createdByRole?: true
+    approvedById?: true
+    approvalNote?: true
+    approvedAt?: true
     templateId?: true
     createdAt?: true
     updatedAt?: true
@@ -7622,6 +7934,18 @@ export namespace Prisma {
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
+     * Select which fields to average
+    **/
+    _avg?: CallRoundAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: CallRoundSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
      * Select which fields to find the minimum value
     **/
     _min?: CallRoundMinAggregateInputType
@@ -7652,6 +7976,8 @@ export namespace Prisma {
     take?: number
     skip?: number
     _count?: CallRoundCountAggregateInputType | true
+    _avg?: CallRoundAvgAggregateInputType
+    _sum?: CallRoundSumAggregateInputType
     _min?: CallRoundMinAggregateInputType
     _max?: CallRoundMaxAggregateInputType
   }
@@ -7659,13 +7985,34 @@ export namespace Prisma {
   export type CallRoundGroupByOutputType = {
     id: string
     name: string
+    description: string | null
+    registrationStartDate: Date
+    registrationEndDate: Date
+    projectStartDate: Date | null
+    projectEndDate: Date | null
+    reviewDeadline: Date | null
+    reportingStartDate: Date | null
     startDate: Date
     endDate: Date
+    maxProjects: number | null
+    budgetLimit: Decimal | null
+    requirements: string | null
+    guidelines: string | null
+    contactInfo: string | null
     isActive: boolean
+    isLocked: boolean
+    approvalStatus: $Enums.CallRoundApprovalStatus
+    createdById: string | null
+    createdByRole: $Enums.Role | null
+    approvedById: string | null
+    approvalNote: string | null
+    approvedAt: Date | null
     templateId: string | null
     createdAt: Date
     updatedAt: Date
     _count: CallRoundCountAggregateOutputType | null
+    _avg: CallRoundAvgAggregateOutputType | null
+    _sum: CallRoundSumAggregateOutputType | null
     _min: CallRoundMinAggregateOutputType | null
     _max: CallRoundMaxAggregateOutputType | null
   }
@@ -7687,9 +8034,28 @@ export namespace Prisma {
   export type CallRoundSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     name?: boolean
+    description?: boolean
+    registrationStartDate?: boolean
+    registrationEndDate?: boolean
+    projectStartDate?: boolean
+    projectEndDate?: boolean
+    reviewDeadline?: boolean
+    reportingStartDate?: boolean
     startDate?: boolean
     endDate?: boolean
+    maxProjects?: boolean
+    budgetLimit?: boolean
+    requirements?: boolean
+    guidelines?: boolean
+    contactInfo?: boolean
     isActive?: boolean
+    isLocked?: boolean
+    approvalStatus?: boolean
+    createdById?: boolean
+    createdByRole?: boolean
+    approvedById?: boolean
+    approvalNote?: boolean
+    approvedAt?: boolean
     templateId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -7705,9 +8071,28 @@ export namespace Prisma {
   export type CallRoundSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     name?: boolean
+    description?: boolean
+    registrationStartDate?: boolean
+    registrationEndDate?: boolean
+    projectStartDate?: boolean
+    projectEndDate?: boolean
+    reviewDeadline?: boolean
+    reportingStartDate?: boolean
     startDate?: boolean
     endDate?: boolean
+    maxProjects?: boolean
+    budgetLimit?: boolean
+    requirements?: boolean
+    guidelines?: boolean
+    contactInfo?: boolean
     isActive?: boolean
+    isLocked?: boolean
+    approvalStatus?: boolean
+    createdById?: boolean
+    createdByRole?: boolean
+    approvedById?: boolean
+    approvalNote?: boolean
+    approvedAt?: boolean
     templateId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -7717,9 +8102,28 @@ export namespace Prisma {
   export type CallRoundSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     name?: boolean
+    description?: boolean
+    registrationStartDate?: boolean
+    registrationEndDate?: boolean
+    projectStartDate?: boolean
+    projectEndDate?: boolean
+    reviewDeadline?: boolean
+    reportingStartDate?: boolean
     startDate?: boolean
     endDate?: boolean
+    maxProjects?: boolean
+    budgetLimit?: boolean
+    requirements?: boolean
+    guidelines?: boolean
+    contactInfo?: boolean
     isActive?: boolean
+    isLocked?: boolean
+    approvalStatus?: boolean
+    createdById?: boolean
+    createdByRole?: boolean
+    approvedById?: boolean
+    approvalNote?: boolean
+    approvedAt?: boolean
     templateId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -7729,15 +8133,34 @@ export namespace Prisma {
   export type CallRoundSelectScalar = {
     id?: boolean
     name?: boolean
+    description?: boolean
+    registrationStartDate?: boolean
+    registrationEndDate?: boolean
+    projectStartDate?: boolean
+    projectEndDate?: boolean
+    reviewDeadline?: boolean
+    reportingStartDate?: boolean
     startDate?: boolean
     endDate?: boolean
+    maxProjects?: boolean
+    budgetLimit?: boolean
+    requirements?: boolean
+    guidelines?: boolean
+    contactInfo?: boolean
     isActive?: boolean
+    isLocked?: boolean
+    approvalStatus?: boolean
+    createdById?: boolean
+    createdByRole?: boolean
+    approvedById?: boolean
+    approvalNote?: boolean
+    approvedAt?: boolean
     templateId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type CallRoundOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "startDate" | "endDate" | "isActive" | "templateId" | "createdAt" | "updatedAt", ExtArgs["result"]["callRound"]>
+  export type CallRoundOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "description" | "registrationStartDate" | "registrationEndDate" | "projectStartDate" | "projectEndDate" | "reviewDeadline" | "reportingStartDate" | "startDate" | "endDate" | "maxProjects" | "budgetLimit" | "requirements" | "guidelines" | "contactInfo" | "isActive" | "isLocked" | "approvalStatus" | "createdById" | "createdByRole" | "approvedById" | "approvalNote" | "approvedAt" | "templateId" | "createdAt" | "updatedAt", ExtArgs["result"]["callRound"]>
   export type CallRoundInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     projects?: boolean | CallRound$projectsArgs<ExtArgs>
     registrations?: boolean | CallRound$registrationsArgs<ExtArgs>
@@ -7767,9 +8190,28 @@ export namespace Prisma {
     scalars: $Extensions.GetPayloadResult<{
       id: string
       name: string
+      description: string | null
+      registrationStartDate: Date
+      registrationEndDate: Date
+      projectStartDate: Date | null
+      projectEndDate: Date | null
+      reviewDeadline: Date | null
+      reportingStartDate: Date | null
       startDate: Date
       endDate: Date
+      maxProjects: number | null
+      budgetLimit: Prisma.Decimal | null
+      requirements: string | null
+      guidelines: string | null
+      contactInfo: string | null
       isActive: boolean
+      isLocked: boolean
+      approvalStatus: $Enums.CallRoundApprovalStatus
+      createdById: string | null
+      createdByRole: $Enums.Role | null
+      approvedById: string | null
+      approvalNote: string | null
+      approvedAt: Date | null
       templateId: string | null
       createdAt: Date
       updatedAt: Date
@@ -8204,9 +8646,28 @@ export namespace Prisma {
   interface CallRoundFieldRefs {
     readonly id: FieldRef<"CallRound", 'String'>
     readonly name: FieldRef<"CallRound", 'String'>
+    readonly description: FieldRef<"CallRound", 'String'>
+    readonly registrationStartDate: FieldRef<"CallRound", 'DateTime'>
+    readonly registrationEndDate: FieldRef<"CallRound", 'DateTime'>
+    readonly projectStartDate: FieldRef<"CallRound", 'DateTime'>
+    readonly projectEndDate: FieldRef<"CallRound", 'DateTime'>
+    readonly reviewDeadline: FieldRef<"CallRound", 'DateTime'>
+    readonly reportingStartDate: FieldRef<"CallRound", 'DateTime'>
     readonly startDate: FieldRef<"CallRound", 'DateTime'>
     readonly endDate: FieldRef<"CallRound", 'DateTime'>
+    readonly maxProjects: FieldRef<"CallRound", 'Int'>
+    readonly budgetLimit: FieldRef<"CallRound", 'Decimal'>
+    readonly requirements: FieldRef<"CallRound", 'String'>
+    readonly guidelines: FieldRef<"CallRound", 'String'>
+    readonly contactInfo: FieldRef<"CallRound", 'String'>
     readonly isActive: FieldRef<"CallRound", 'Boolean'>
+    readonly isLocked: FieldRef<"CallRound", 'Boolean'>
+    readonly approvalStatus: FieldRef<"CallRound", 'CallRoundApprovalStatus'>
+    readonly createdById: FieldRef<"CallRound", 'String'>
+    readonly createdByRole: FieldRef<"CallRound", 'Role'>
+    readonly approvedById: FieldRef<"CallRound", 'String'>
+    readonly approvalNote: FieldRef<"CallRound", 'String'>
+    readonly approvedAt: FieldRef<"CallRound", 'DateTime'>
     readonly templateId: FieldRef<"CallRound", 'String'>
     readonly createdAt: FieldRef<"CallRound", 'DateTime'>
     readonly updatedAt: FieldRef<"CallRound", 'DateTime'>
@@ -19590,6 +20051,1130 @@ export namespace Prisma {
 
 
   /**
+   * Model Notification
+   */
+
+  export type AggregateNotification = {
+    _count: NotificationCountAggregateOutputType | null
+    _min: NotificationMinAggregateOutputType | null
+    _max: NotificationMaxAggregateOutputType | null
+  }
+
+  export type NotificationMinAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    type: $Enums.NotificationType | null
+    title: string | null
+    message: string | null
+    link: string | null
+    isRead: boolean | null
+    createdAt: Date | null
+    readAt: Date | null
+  }
+
+  export type NotificationMaxAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    type: $Enums.NotificationType | null
+    title: string | null
+    message: string | null
+    link: string | null
+    isRead: boolean | null
+    createdAt: Date | null
+    readAt: Date | null
+  }
+
+  export type NotificationCountAggregateOutputType = {
+    id: number
+    userId: number
+    type: number
+    title: number
+    message: number
+    link: number
+    isRead: number
+    metadata: number
+    createdAt: number
+    readAt: number
+    _all: number
+  }
+
+
+  export type NotificationMinAggregateInputType = {
+    id?: true
+    userId?: true
+    type?: true
+    title?: true
+    message?: true
+    link?: true
+    isRead?: true
+    createdAt?: true
+    readAt?: true
+  }
+
+  export type NotificationMaxAggregateInputType = {
+    id?: true
+    userId?: true
+    type?: true
+    title?: true
+    message?: true
+    link?: true
+    isRead?: true
+    createdAt?: true
+    readAt?: true
+  }
+
+  export type NotificationCountAggregateInputType = {
+    id?: true
+    userId?: true
+    type?: true
+    title?: true
+    message?: true
+    link?: true
+    isRead?: true
+    metadata?: true
+    createdAt?: true
+    readAt?: true
+    _all?: true
+  }
+
+  export type NotificationAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Notification to aggregate.
+     */
+    where?: NotificationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Notifications to fetch.
+     */
+    orderBy?: NotificationOrderByWithRelationInput | NotificationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: NotificationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Notifications from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Notifications.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Notifications
+    **/
+    _count?: true | NotificationCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: NotificationMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: NotificationMaxAggregateInputType
+  }
+
+  export type GetNotificationAggregateType<T extends NotificationAggregateArgs> = {
+        [P in keyof T & keyof AggregateNotification]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateNotification[P]>
+      : GetScalarType<T[P], AggregateNotification[P]>
+  }
+
+
+
+
+  export type NotificationGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: NotificationWhereInput
+    orderBy?: NotificationOrderByWithAggregationInput | NotificationOrderByWithAggregationInput[]
+    by: NotificationScalarFieldEnum[] | NotificationScalarFieldEnum
+    having?: NotificationScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: NotificationCountAggregateInputType | true
+    _min?: NotificationMinAggregateInputType
+    _max?: NotificationMaxAggregateInputType
+  }
+
+  export type NotificationGroupByOutputType = {
+    id: string
+    userId: string
+    type: $Enums.NotificationType
+    title: string
+    message: string
+    link: string | null
+    isRead: boolean
+    metadata: JsonValue | null
+    createdAt: Date
+    readAt: Date | null
+    _count: NotificationCountAggregateOutputType | null
+    _min: NotificationMinAggregateOutputType | null
+    _max: NotificationMaxAggregateOutputType | null
+  }
+
+  type GetNotificationGroupByPayload<T extends NotificationGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<NotificationGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof NotificationGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], NotificationGroupByOutputType[P]>
+            : GetScalarType<T[P], NotificationGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type NotificationSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    type?: boolean
+    title?: boolean
+    message?: boolean
+    link?: boolean
+    isRead?: boolean
+    metadata?: boolean
+    createdAt?: boolean
+    readAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["notification"]>
+
+  export type NotificationSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    type?: boolean
+    title?: boolean
+    message?: boolean
+    link?: boolean
+    isRead?: boolean
+    metadata?: boolean
+    createdAt?: boolean
+    readAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["notification"]>
+
+  export type NotificationSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    type?: boolean
+    title?: boolean
+    message?: boolean
+    link?: boolean
+    isRead?: boolean
+    metadata?: boolean
+    createdAt?: boolean
+    readAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["notification"]>
+
+  export type NotificationSelectScalar = {
+    id?: boolean
+    userId?: boolean
+    type?: boolean
+    title?: boolean
+    message?: boolean
+    link?: boolean
+    isRead?: boolean
+    metadata?: boolean
+    createdAt?: boolean
+    readAt?: boolean
+  }
+
+  export type NotificationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "type" | "title" | "message" | "link" | "isRead" | "metadata" | "createdAt" | "readAt", ExtArgs["result"]["notification"]>
+  export type NotificationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type NotificationIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type NotificationIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $NotificationPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Notification"
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      userId: string
+      type: $Enums.NotificationType
+      title: string
+      message: string
+      link: string | null
+      isRead: boolean
+      metadata: Prisma.JsonValue | null
+      createdAt: Date
+      readAt: Date | null
+    }, ExtArgs["result"]["notification"]>
+    composites: {}
+  }
+
+  type NotificationGetPayload<S extends boolean | null | undefined | NotificationDefaultArgs> = $Result.GetResult<Prisma.$NotificationPayload, S>
+
+  type NotificationCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<NotificationFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: NotificationCountAggregateInputType | true
+    }
+
+  export interface NotificationDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Notification'], meta: { name: 'Notification' } }
+    /**
+     * Find zero or one Notification that matches the filter.
+     * @param {NotificationFindUniqueArgs} args - Arguments to find a Notification
+     * @example
+     * // Get one Notification
+     * const notification = await prisma.notification.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends NotificationFindUniqueArgs>(args: SelectSubset<T, NotificationFindUniqueArgs<ExtArgs>>): Prisma__NotificationClient<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Notification that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {NotificationFindUniqueOrThrowArgs} args - Arguments to find a Notification
+     * @example
+     * // Get one Notification
+     * const notification = await prisma.notification.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends NotificationFindUniqueOrThrowArgs>(args: SelectSubset<T, NotificationFindUniqueOrThrowArgs<ExtArgs>>): Prisma__NotificationClient<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Notification that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NotificationFindFirstArgs} args - Arguments to find a Notification
+     * @example
+     * // Get one Notification
+     * const notification = await prisma.notification.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends NotificationFindFirstArgs>(args?: SelectSubset<T, NotificationFindFirstArgs<ExtArgs>>): Prisma__NotificationClient<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Notification that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NotificationFindFirstOrThrowArgs} args - Arguments to find a Notification
+     * @example
+     * // Get one Notification
+     * const notification = await prisma.notification.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends NotificationFindFirstOrThrowArgs>(args?: SelectSubset<T, NotificationFindFirstOrThrowArgs<ExtArgs>>): Prisma__NotificationClient<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Notifications that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NotificationFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Notifications
+     * const notifications = await prisma.notification.findMany()
+     * 
+     * // Get first 10 Notifications
+     * const notifications = await prisma.notification.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const notificationWithIdOnly = await prisma.notification.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends NotificationFindManyArgs>(args?: SelectSubset<T, NotificationFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Notification.
+     * @param {NotificationCreateArgs} args - Arguments to create a Notification.
+     * @example
+     * // Create one Notification
+     * const Notification = await prisma.notification.create({
+     *   data: {
+     *     // ... data to create a Notification
+     *   }
+     * })
+     * 
+     */
+    create<T extends NotificationCreateArgs>(args: SelectSubset<T, NotificationCreateArgs<ExtArgs>>): Prisma__NotificationClient<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Notifications.
+     * @param {NotificationCreateManyArgs} args - Arguments to create many Notifications.
+     * @example
+     * // Create many Notifications
+     * const notification = await prisma.notification.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends NotificationCreateManyArgs>(args?: SelectSubset<T, NotificationCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Notifications and returns the data saved in the database.
+     * @param {NotificationCreateManyAndReturnArgs} args - Arguments to create many Notifications.
+     * @example
+     * // Create many Notifications
+     * const notification = await prisma.notification.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Notifications and only return the `id`
+     * const notificationWithIdOnly = await prisma.notification.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends NotificationCreateManyAndReturnArgs>(args?: SelectSubset<T, NotificationCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Notification.
+     * @param {NotificationDeleteArgs} args - Arguments to delete one Notification.
+     * @example
+     * // Delete one Notification
+     * const Notification = await prisma.notification.delete({
+     *   where: {
+     *     // ... filter to delete one Notification
+     *   }
+     * })
+     * 
+     */
+    delete<T extends NotificationDeleteArgs>(args: SelectSubset<T, NotificationDeleteArgs<ExtArgs>>): Prisma__NotificationClient<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Notification.
+     * @param {NotificationUpdateArgs} args - Arguments to update one Notification.
+     * @example
+     * // Update one Notification
+     * const notification = await prisma.notification.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends NotificationUpdateArgs>(args: SelectSubset<T, NotificationUpdateArgs<ExtArgs>>): Prisma__NotificationClient<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Notifications.
+     * @param {NotificationDeleteManyArgs} args - Arguments to filter Notifications to delete.
+     * @example
+     * // Delete a few Notifications
+     * const { count } = await prisma.notification.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends NotificationDeleteManyArgs>(args?: SelectSubset<T, NotificationDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Notifications.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NotificationUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Notifications
+     * const notification = await prisma.notification.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends NotificationUpdateManyArgs>(args: SelectSubset<T, NotificationUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Notifications and returns the data updated in the database.
+     * @param {NotificationUpdateManyAndReturnArgs} args - Arguments to update many Notifications.
+     * @example
+     * // Update many Notifications
+     * const notification = await prisma.notification.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Notifications and only return the `id`
+     * const notificationWithIdOnly = await prisma.notification.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends NotificationUpdateManyAndReturnArgs>(args: SelectSubset<T, NotificationUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Notification.
+     * @param {NotificationUpsertArgs} args - Arguments to update or create a Notification.
+     * @example
+     * // Update or create a Notification
+     * const notification = await prisma.notification.upsert({
+     *   create: {
+     *     // ... data to create a Notification
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Notification we want to update
+     *   }
+     * })
+     */
+    upsert<T extends NotificationUpsertArgs>(args: SelectSubset<T, NotificationUpsertArgs<ExtArgs>>): Prisma__NotificationClient<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Notifications.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NotificationCountArgs} args - Arguments to filter Notifications to count.
+     * @example
+     * // Count the number of Notifications
+     * const count = await prisma.notification.count({
+     *   where: {
+     *     // ... the filter for the Notifications we want to count
+     *   }
+     * })
+    **/
+    count<T extends NotificationCountArgs>(
+      args?: Subset<T, NotificationCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], NotificationCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Notification.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NotificationAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends NotificationAggregateArgs>(args: Subset<T, NotificationAggregateArgs>): Prisma.PrismaPromise<GetNotificationAggregateType<T>>
+
+    /**
+     * Group by Notification.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NotificationGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends NotificationGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: NotificationGroupByArgs['orderBy'] }
+        : { orderBy?: NotificationGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, NotificationGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetNotificationGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Notification model
+   */
+  readonly fields: NotificationFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Notification.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__NotificationClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Notification model
+   */
+  interface NotificationFieldRefs {
+    readonly id: FieldRef<"Notification", 'String'>
+    readonly userId: FieldRef<"Notification", 'String'>
+    readonly type: FieldRef<"Notification", 'NotificationType'>
+    readonly title: FieldRef<"Notification", 'String'>
+    readonly message: FieldRef<"Notification", 'String'>
+    readonly link: FieldRef<"Notification", 'String'>
+    readonly isRead: FieldRef<"Notification", 'Boolean'>
+    readonly metadata: FieldRef<"Notification", 'Json'>
+    readonly createdAt: FieldRef<"Notification", 'DateTime'>
+    readonly readAt: FieldRef<"Notification", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Notification findUnique
+   */
+  export type NotificationFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Notification
+     */
+    select?: NotificationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Notification
+     */
+    omit?: NotificationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationInclude<ExtArgs> | null
+    /**
+     * Filter, which Notification to fetch.
+     */
+    where: NotificationWhereUniqueInput
+  }
+
+  /**
+   * Notification findUniqueOrThrow
+   */
+  export type NotificationFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Notification
+     */
+    select?: NotificationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Notification
+     */
+    omit?: NotificationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationInclude<ExtArgs> | null
+    /**
+     * Filter, which Notification to fetch.
+     */
+    where: NotificationWhereUniqueInput
+  }
+
+  /**
+   * Notification findFirst
+   */
+  export type NotificationFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Notification
+     */
+    select?: NotificationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Notification
+     */
+    omit?: NotificationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationInclude<ExtArgs> | null
+    /**
+     * Filter, which Notification to fetch.
+     */
+    where?: NotificationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Notifications to fetch.
+     */
+    orderBy?: NotificationOrderByWithRelationInput | NotificationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Notifications.
+     */
+    cursor?: NotificationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Notifications from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Notifications.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Notifications.
+     */
+    distinct?: NotificationScalarFieldEnum | NotificationScalarFieldEnum[]
+  }
+
+  /**
+   * Notification findFirstOrThrow
+   */
+  export type NotificationFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Notification
+     */
+    select?: NotificationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Notification
+     */
+    omit?: NotificationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationInclude<ExtArgs> | null
+    /**
+     * Filter, which Notification to fetch.
+     */
+    where?: NotificationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Notifications to fetch.
+     */
+    orderBy?: NotificationOrderByWithRelationInput | NotificationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Notifications.
+     */
+    cursor?: NotificationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Notifications from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Notifications.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Notifications.
+     */
+    distinct?: NotificationScalarFieldEnum | NotificationScalarFieldEnum[]
+  }
+
+  /**
+   * Notification findMany
+   */
+  export type NotificationFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Notification
+     */
+    select?: NotificationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Notification
+     */
+    omit?: NotificationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationInclude<ExtArgs> | null
+    /**
+     * Filter, which Notifications to fetch.
+     */
+    where?: NotificationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Notifications to fetch.
+     */
+    orderBy?: NotificationOrderByWithRelationInput | NotificationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Notifications.
+     */
+    cursor?: NotificationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Notifications from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Notifications.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Notifications.
+     */
+    distinct?: NotificationScalarFieldEnum | NotificationScalarFieldEnum[]
+  }
+
+  /**
+   * Notification create
+   */
+  export type NotificationCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Notification
+     */
+    select?: NotificationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Notification
+     */
+    omit?: NotificationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Notification.
+     */
+    data: XOR<NotificationCreateInput, NotificationUncheckedCreateInput>
+  }
+
+  /**
+   * Notification createMany
+   */
+  export type NotificationCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Notifications.
+     */
+    data: NotificationCreateManyInput | NotificationCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Notification createManyAndReturn
+   */
+  export type NotificationCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Notification
+     */
+    select?: NotificationSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Notification
+     */
+    omit?: NotificationOmit<ExtArgs> | null
+    /**
+     * The data used to create many Notifications.
+     */
+    data: NotificationCreateManyInput | NotificationCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Notification update
+   */
+  export type NotificationUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Notification
+     */
+    select?: NotificationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Notification
+     */
+    omit?: NotificationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Notification.
+     */
+    data: XOR<NotificationUpdateInput, NotificationUncheckedUpdateInput>
+    /**
+     * Choose, which Notification to update.
+     */
+    where: NotificationWhereUniqueInput
+  }
+
+  /**
+   * Notification updateMany
+   */
+  export type NotificationUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Notifications.
+     */
+    data: XOR<NotificationUpdateManyMutationInput, NotificationUncheckedUpdateManyInput>
+    /**
+     * Filter which Notifications to update
+     */
+    where?: NotificationWhereInput
+    /**
+     * Limit how many Notifications to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Notification updateManyAndReturn
+   */
+  export type NotificationUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Notification
+     */
+    select?: NotificationSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Notification
+     */
+    omit?: NotificationOmit<ExtArgs> | null
+    /**
+     * The data used to update Notifications.
+     */
+    data: XOR<NotificationUpdateManyMutationInput, NotificationUncheckedUpdateManyInput>
+    /**
+     * Filter which Notifications to update
+     */
+    where?: NotificationWhereInput
+    /**
+     * Limit how many Notifications to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Notification upsert
+   */
+  export type NotificationUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Notification
+     */
+    select?: NotificationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Notification
+     */
+    omit?: NotificationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Notification to update in case it exists.
+     */
+    where: NotificationWhereUniqueInput
+    /**
+     * In case the Notification found by the `where` argument doesn't exist, create a new Notification with this data.
+     */
+    create: XOR<NotificationCreateInput, NotificationUncheckedCreateInput>
+    /**
+     * In case the Notification was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<NotificationUpdateInput, NotificationUncheckedUpdateInput>
+  }
+
+  /**
+   * Notification delete
+   */
+  export type NotificationDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Notification
+     */
+    select?: NotificationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Notification
+     */
+    omit?: NotificationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationInclude<ExtArgs> | null
+    /**
+     * Filter which Notification to delete.
+     */
+    where: NotificationWhereUniqueInput
+  }
+
+  /**
+   * Notification deleteMany
+   */
+  export type NotificationDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Notifications to delete
+     */
+    where?: NotificationWhereInput
+    /**
+     * Limit how many Notifications to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Notification without action
+   */
+  export type NotificationDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Notification
+     */
+    select?: NotificationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Notification
+     */
+    omit?: NotificationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -19645,6 +21230,7 @@ export namespace Prisma {
     code: 'code',
     name: 'name',
     email: 'email',
+    password: 'password',
     dateOfBirth: 'dateOfBirth',
     gender: 'gender',
     phone: 'phone',
@@ -19664,9 +21250,28 @@ export namespace Prisma {
   export const CallRoundScalarFieldEnum: {
     id: 'id',
     name: 'name',
+    description: 'description',
+    registrationStartDate: 'registrationStartDate',
+    registrationEndDate: 'registrationEndDate',
+    projectStartDate: 'projectStartDate',
+    projectEndDate: 'projectEndDate',
+    reviewDeadline: 'reviewDeadline',
+    reportingStartDate: 'reportingStartDate',
     startDate: 'startDate',
     endDate: 'endDate',
+    maxProjects: 'maxProjects',
+    budgetLimit: 'budgetLimit',
+    requirements: 'requirements',
+    guidelines: 'guidelines',
+    contactInfo: 'contactInfo',
     isActive: 'isActive',
+    isLocked: 'isLocked',
+    approvalStatus: 'approvalStatus',
+    createdById: 'createdById',
+    createdByRole: 'createdByRole',
+    approvedById: 'approvedById',
+    approvalNote: 'approvalNote',
+    approvedAt: 'approvedAt',
     templateId: 'templateId',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
@@ -19823,12 +21428,36 @@ export namespace Prisma {
   export type ProjectRegistrationScalarFieldEnum = (typeof ProjectRegistrationScalarFieldEnum)[keyof typeof ProjectRegistrationScalarFieldEnum]
 
 
+  export const NotificationScalarFieldEnum: {
+    id: 'id',
+    userId: 'userId',
+    type: 'type',
+    title: 'title',
+    message: 'message',
+    link: 'link',
+    isRead: 'isRead',
+    metadata: 'metadata',
+    createdAt: 'createdAt',
+    readAt: 'readAt'
+  };
+
+  export type NotificationScalarFieldEnum = (typeof NotificationScalarFieldEnum)[keyof typeof NotificationScalarFieldEnum]
+
+
   export const SortOrder: {
     asc: 'asc',
     desc: 'desc'
   };
 
   export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
+
+
+  export const NullableJsonNullValueInput: {
+    DbNull: typeof DbNull,
+    JsonNull: typeof JsonNull
+  };
+
+  export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
 
 
   export const QueryMode: {
@@ -19845,6 +21474,15 @@ export namespace Prisma {
   };
 
   export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
+
+
+  export const JsonNullValueFilter: {
+    DbNull: typeof DbNull,
+    JsonNull: typeof JsonNull,
+    AnyNull: typeof AnyNull
+  };
+
+  export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
 
 
   /**
@@ -19909,9 +21547,16 @@ export namespace Prisma {
 
 
   /**
-   * Reference to a field of type 'Boolean'
+   * Reference to a field of type 'Int'
    */
-  export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
+  export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
+    
+
+
+  /**
+   * Reference to a field of type 'Int[]'
+   */
+  export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
     
 
 
@@ -19930,6 +21575,27 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'Boolean'
+   */
+  export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
+    
+
+
+  /**
+   * Reference to a field of type 'CallRoundApprovalStatus'
+   */
+  export type EnumCallRoundApprovalStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CallRoundApprovalStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'CallRoundApprovalStatus[]'
+   */
+  export type ListEnumCallRoundApprovalStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CallRoundApprovalStatus[]'>
+    
+
+
+  /**
    * Reference to a field of type 'ProjectStatus'
    */
   export type EnumProjectStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ProjectStatus'>
@@ -19940,20 +21606,6 @@ export namespace Prisma {
    * Reference to a field of type 'ProjectStatus[]'
    */
   export type ListEnumProjectStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ProjectStatus[]'>
-    
-
-
-  /**
-   * Reference to a field of type 'Int'
-   */
-  export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
-    
-
-
-  /**
-   * Reference to a field of type 'Int[]'
-   */
-  export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
     
 
 
@@ -20038,6 +21690,34 @@ export namespace Prisma {
    * Reference to a field of type 'FacultyStatus[]'
    */
   export type ListEnumFacultyStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'FacultyStatus[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'NotificationType'
+   */
+  export type EnumNotificationTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'NotificationType'>
+    
+
+
+  /**
+   * Reference to a field of type 'NotificationType[]'
+   */
+  export type ListEnumNotificationTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'NotificationType[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'Json'
+   */
+  export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
+    
+
+
+  /**
+   * Reference to a field of type 'QueryMode'
+   */
+  export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>
     
   /**
    * Deep Input Types
@@ -20258,6 +21938,7 @@ export namespace Prisma {
     code?: StringNullableFilter<"User"> | string | null
     name?: StringFilter<"User"> | string
     email?: StringFilter<"User"> | string
+    password?: StringNullableFilter<"User"> | string | null
     dateOfBirth?: DateTimeNullableFilter<"User"> | Date | string | null
     gender?: EnumGenderNullableFilter<"User"> | $Enums.Gender | null
     phone?: StringNullableFilter<"User"> | string | null
@@ -20279,6 +21960,7 @@ export namespace Prisma {
     instructedRegistrations?: ProjectRegistrationListRelationFilter
     instructedProjects?: ProjectListRelationFilter
     facultyReviews?: ProjectRegistrationListRelationFilter
+    notifications?: NotificationListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -20286,6 +21968,7 @@ export namespace Prisma {
     code?: SortOrderInput | SortOrder
     name?: SortOrder
     email?: SortOrder
+    password?: SortOrderInput | SortOrder
     dateOfBirth?: SortOrderInput | SortOrder
     gender?: SortOrderInput | SortOrder
     phone?: SortOrderInput | SortOrder
@@ -20307,6 +21990,7 @@ export namespace Prisma {
     instructedRegistrations?: ProjectRegistrationOrderByRelationAggregateInput
     instructedProjects?: ProjectOrderByRelationAggregateInput
     facultyReviews?: ProjectRegistrationOrderByRelationAggregateInput
+    notifications?: NotificationOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -20317,6 +22001,7 @@ export namespace Prisma {
     OR?: UserWhereInput[]
     NOT?: UserWhereInput | UserWhereInput[]
     name?: StringFilter<"User"> | string
+    password?: StringNullableFilter<"User"> | string | null
     dateOfBirth?: DateTimeNullableFilter<"User"> | Date | string | null
     gender?: EnumGenderNullableFilter<"User"> | $Enums.Gender | null
     phone?: StringNullableFilter<"User"> | string | null
@@ -20338,6 +22023,7 @@ export namespace Prisma {
     instructedRegistrations?: ProjectRegistrationListRelationFilter
     instructedProjects?: ProjectListRelationFilter
     facultyReviews?: ProjectRegistrationListRelationFilter
+    notifications?: NotificationListRelationFilter
   }, "id" | "code" | "email">
 
   export type UserOrderByWithAggregationInput = {
@@ -20345,6 +22031,7 @@ export namespace Prisma {
     code?: SortOrderInput | SortOrder
     name?: SortOrder
     email?: SortOrder
+    password?: SortOrderInput | SortOrder
     dateOfBirth?: SortOrderInput | SortOrder
     gender?: SortOrderInput | SortOrder
     phone?: SortOrderInput | SortOrder
@@ -20369,6 +22056,7 @@ export namespace Prisma {
     code?: StringNullableWithAggregatesFilter<"User"> | string | null
     name?: StringWithAggregatesFilter<"User"> | string
     email?: StringWithAggregatesFilter<"User"> | string
+    password?: StringNullableWithAggregatesFilter<"User"> | string | null
     dateOfBirth?: DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
     gender?: EnumGenderNullableWithAggregatesFilter<"User"> | $Enums.Gender | null
     phone?: StringNullableWithAggregatesFilter<"User"> | string | null
@@ -20388,9 +22076,28 @@ export namespace Prisma {
     NOT?: CallRoundWhereInput | CallRoundWhereInput[]
     id?: StringFilter<"CallRound"> | string
     name?: StringFilter<"CallRound"> | string
+    description?: StringNullableFilter<"CallRound"> | string | null
+    registrationStartDate?: DateTimeFilter<"CallRound"> | Date | string
+    registrationEndDate?: DateTimeFilter<"CallRound"> | Date | string
+    projectStartDate?: DateTimeNullableFilter<"CallRound"> | Date | string | null
+    projectEndDate?: DateTimeNullableFilter<"CallRound"> | Date | string | null
+    reviewDeadline?: DateTimeNullableFilter<"CallRound"> | Date | string | null
+    reportingStartDate?: DateTimeNullableFilter<"CallRound"> | Date | string | null
     startDate?: DateTimeFilter<"CallRound"> | Date | string
     endDate?: DateTimeFilter<"CallRound"> | Date | string
+    maxProjects?: IntNullableFilter<"CallRound"> | number | null
+    budgetLimit?: DecimalNullableFilter<"CallRound"> | Decimal | DecimalJsLike | number | string | null
+    requirements?: StringNullableFilter<"CallRound"> | string | null
+    guidelines?: StringNullableFilter<"CallRound"> | string | null
+    contactInfo?: StringNullableFilter<"CallRound"> | string | null
     isActive?: BoolFilter<"CallRound"> | boolean
+    isLocked?: BoolFilter<"CallRound"> | boolean
+    approvalStatus?: EnumCallRoundApprovalStatusFilter<"CallRound"> | $Enums.CallRoundApprovalStatus
+    createdById?: StringNullableFilter<"CallRound"> | string | null
+    createdByRole?: EnumRoleNullableFilter<"CallRound"> | $Enums.Role | null
+    approvedById?: StringNullableFilter<"CallRound"> | string | null
+    approvalNote?: StringNullableFilter<"CallRound"> | string | null
+    approvedAt?: DateTimeNullableFilter<"CallRound"> | Date | string | null
     templateId?: StringNullableFilter<"CallRound"> | string | null
     createdAt?: DateTimeFilter<"CallRound"> | Date | string
     updatedAt?: DateTimeFilter<"CallRound"> | Date | string
@@ -20405,9 +22112,28 @@ export namespace Prisma {
   export type CallRoundOrderByWithRelationInput = {
     id?: SortOrder
     name?: SortOrder
+    description?: SortOrderInput | SortOrder
+    registrationStartDate?: SortOrder
+    registrationEndDate?: SortOrder
+    projectStartDate?: SortOrderInput | SortOrder
+    projectEndDate?: SortOrderInput | SortOrder
+    reviewDeadline?: SortOrderInput | SortOrder
+    reportingStartDate?: SortOrderInput | SortOrder
     startDate?: SortOrder
     endDate?: SortOrder
+    maxProjects?: SortOrderInput | SortOrder
+    budgetLimit?: SortOrderInput | SortOrder
+    requirements?: SortOrderInput | SortOrder
+    guidelines?: SortOrderInput | SortOrder
+    contactInfo?: SortOrderInput | SortOrder
     isActive?: SortOrder
+    isLocked?: SortOrder
+    approvalStatus?: SortOrder
+    createdById?: SortOrderInput | SortOrder
+    createdByRole?: SortOrderInput | SortOrder
+    approvedById?: SortOrderInput | SortOrder
+    approvalNote?: SortOrderInput | SortOrder
+    approvedAt?: SortOrderInput | SortOrder
     templateId?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -20425,9 +22151,28 @@ export namespace Prisma {
     OR?: CallRoundWhereInput[]
     NOT?: CallRoundWhereInput | CallRoundWhereInput[]
     name?: StringFilter<"CallRound"> | string
+    description?: StringNullableFilter<"CallRound"> | string | null
+    registrationStartDate?: DateTimeFilter<"CallRound"> | Date | string
+    registrationEndDate?: DateTimeFilter<"CallRound"> | Date | string
+    projectStartDate?: DateTimeNullableFilter<"CallRound"> | Date | string | null
+    projectEndDate?: DateTimeNullableFilter<"CallRound"> | Date | string | null
+    reviewDeadline?: DateTimeNullableFilter<"CallRound"> | Date | string | null
+    reportingStartDate?: DateTimeNullableFilter<"CallRound"> | Date | string | null
     startDate?: DateTimeFilter<"CallRound"> | Date | string
     endDate?: DateTimeFilter<"CallRound"> | Date | string
+    maxProjects?: IntNullableFilter<"CallRound"> | number | null
+    budgetLimit?: DecimalNullableFilter<"CallRound"> | Decimal | DecimalJsLike | number | string | null
+    requirements?: StringNullableFilter<"CallRound"> | string | null
+    guidelines?: StringNullableFilter<"CallRound"> | string | null
+    contactInfo?: StringNullableFilter<"CallRound"> | string | null
     isActive?: BoolFilter<"CallRound"> | boolean
+    isLocked?: BoolFilter<"CallRound"> | boolean
+    approvalStatus?: EnumCallRoundApprovalStatusFilter<"CallRound"> | $Enums.CallRoundApprovalStatus
+    createdById?: StringNullableFilter<"CallRound"> | string | null
+    createdByRole?: EnumRoleNullableFilter<"CallRound"> | $Enums.Role | null
+    approvedById?: StringNullableFilter<"CallRound"> | string | null
+    approvalNote?: StringNullableFilter<"CallRound"> | string | null
+    approvedAt?: DateTimeNullableFilter<"CallRound"> | Date | string | null
     templateId?: StringNullableFilter<"CallRound"> | string | null
     createdAt?: DateTimeFilter<"CallRound"> | Date | string
     updatedAt?: DateTimeFilter<"CallRound"> | Date | string
@@ -20442,15 +22187,36 @@ export namespace Prisma {
   export type CallRoundOrderByWithAggregationInput = {
     id?: SortOrder
     name?: SortOrder
+    description?: SortOrderInput | SortOrder
+    registrationStartDate?: SortOrder
+    registrationEndDate?: SortOrder
+    projectStartDate?: SortOrderInput | SortOrder
+    projectEndDate?: SortOrderInput | SortOrder
+    reviewDeadline?: SortOrderInput | SortOrder
+    reportingStartDate?: SortOrderInput | SortOrder
     startDate?: SortOrder
     endDate?: SortOrder
+    maxProjects?: SortOrderInput | SortOrder
+    budgetLimit?: SortOrderInput | SortOrder
+    requirements?: SortOrderInput | SortOrder
+    guidelines?: SortOrderInput | SortOrder
+    contactInfo?: SortOrderInput | SortOrder
     isActive?: SortOrder
+    isLocked?: SortOrder
+    approvalStatus?: SortOrder
+    createdById?: SortOrderInput | SortOrder
+    createdByRole?: SortOrderInput | SortOrder
+    approvedById?: SortOrderInput | SortOrder
+    approvalNote?: SortOrderInput | SortOrder
+    approvedAt?: SortOrderInput | SortOrder
     templateId?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: CallRoundCountOrderByAggregateInput
+    _avg?: CallRoundAvgOrderByAggregateInput
     _max?: CallRoundMaxOrderByAggregateInput
     _min?: CallRoundMinOrderByAggregateInput
+    _sum?: CallRoundSumOrderByAggregateInput
   }
 
   export type CallRoundScalarWhereWithAggregatesInput = {
@@ -20459,9 +22225,28 @@ export namespace Prisma {
     NOT?: CallRoundScalarWhereWithAggregatesInput | CallRoundScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"CallRound"> | string
     name?: StringWithAggregatesFilter<"CallRound"> | string
+    description?: StringNullableWithAggregatesFilter<"CallRound"> | string | null
+    registrationStartDate?: DateTimeWithAggregatesFilter<"CallRound"> | Date | string
+    registrationEndDate?: DateTimeWithAggregatesFilter<"CallRound"> | Date | string
+    projectStartDate?: DateTimeNullableWithAggregatesFilter<"CallRound"> | Date | string | null
+    projectEndDate?: DateTimeNullableWithAggregatesFilter<"CallRound"> | Date | string | null
+    reviewDeadline?: DateTimeNullableWithAggregatesFilter<"CallRound"> | Date | string | null
+    reportingStartDate?: DateTimeNullableWithAggregatesFilter<"CallRound"> | Date | string | null
     startDate?: DateTimeWithAggregatesFilter<"CallRound"> | Date | string
     endDate?: DateTimeWithAggregatesFilter<"CallRound"> | Date | string
+    maxProjects?: IntNullableWithAggregatesFilter<"CallRound"> | number | null
+    budgetLimit?: DecimalNullableWithAggregatesFilter<"CallRound"> | Decimal | DecimalJsLike | number | string | null
+    requirements?: StringNullableWithAggregatesFilter<"CallRound"> | string | null
+    guidelines?: StringNullableWithAggregatesFilter<"CallRound"> | string | null
+    contactInfo?: StringNullableWithAggregatesFilter<"CallRound"> | string | null
     isActive?: BoolWithAggregatesFilter<"CallRound"> | boolean
+    isLocked?: BoolWithAggregatesFilter<"CallRound"> | boolean
+    approvalStatus?: EnumCallRoundApprovalStatusWithAggregatesFilter<"CallRound"> | $Enums.CallRoundApprovalStatus
+    createdById?: StringNullableWithAggregatesFilter<"CallRound"> | string | null
+    createdByRole?: EnumRoleNullableWithAggregatesFilter<"CallRound"> | $Enums.Role | null
+    approvedById?: StringNullableWithAggregatesFilter<"CallRound"> | string | null
+    approvalNote?: StringNullableWithAggregatesFilter<"CallRound"> | string | null
+    approvedAt?: DateTimeNullableWithAggregatesFilter<"CallRound"> | Date | string | null
     templateId?: StringNullableWithAggregatesFilter<"CallRound"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"CallRound"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"CallRound"> | Date | string
@@ -21261,6 +23046,86 @@ export namespace Prisma {
     facultyReviewerId?: StringNullableWithAggregatesFilter<"ProjectRegistration"> | string | null
   }
 
+  export type NotificationWhereInput = {
+    AND?: NotificationWhereInput | NotificationWhereInput[]
+    OR?: NotificationWhereInput[]
+    NOT?: NotificationWhereInput | NotificationWhereInput[]
+    id?: StringFilter<"Notification"> | string
+    userId?: StringFilter<"Notification"> | string
+    type?: EnumNotificationTypeFilter<"Notification"> | $Enums.NotificationType
+    title?: StringFilter<"Notification"> | string
+    message?: StringFilter<"Notification"> | string
+    link?: StringNullableFilter<"Notification"> | string | null
+    isRead?: BoolFilter<"Notification"> | boolean
+    metadata?: JsonNullableFilter<"Notification">
+    createdAt?: DateTimeFilter<"Notification"> | Date | string
+    readAt?: DateTimeNullableFilter<"Notification"> | Date | string | null
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }
+
+  export type NotificationOrderByWithRelationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    type?: SortOrder
+    title?: SortOrder
+    message?: SortOrder
+    link?: SortOrderInput | SortOrder
+    isRead?: SortOrder
+    metadata?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    readAt?: SortOrderInput | SortOrder
+    user?: UserOrderByWithRelationInput
+  }
+
+  export type NotificationWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: NotificationWhereInput | NotificationWhereInput[]
+    OR?: NotificationWhereInput[]
+    NOT?: NotificationWhereInput | NotificationWhereInput[]
+    userId?: StringFilter<"Notification"> | string
+    type?: EnumNotificationTypeFilter<"Notification"> | $Enums.NotificationType
+    title?: StringFilter<"Notification"> | string
+    message?: StringFilter<"Notification"> | string
+    link?: StringNullableFilter<"Notification"> | string | null
+    isRead?: BoolFilter<"Notification"> | boolean
+    metadata?: JsonNullableFilter<"Notification">
+    createdAt?: DateTimeFilter<"Notification"> | Date | string
+    readAt?: DateTimeNullableFilter<"Notification"> | Date | string | null
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }, "id">
+
+  export type NotificationOrderByWithAggregationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    type?: SortOrder
+    title?: SortOrder
+    message?: SortOrder
+    link?: SortOrderInput | SortOrder
+    isRead?: SortOrder
+    metadata?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    readAt?: SortOrderInput | SortOrder
+    _count?: NotificationCountOrderByAggregateInput
+    _max?: NotificationMaxOrderByAggregateInput
+    _min?: NotificationMinOrderByAggregateInput
+  }
+
+  export type NotificationScalarWhereWithAggregatesInput = {
+    AND?: NotificationScalarWhereWithAggregatesInput | NotificationScalarWhereWithAggregatesInput[]
+    OR?: NotificationScalarWhereWithAggregatesInput[]
+    NOT?: NotificationScalarWhereWithAggregatesInput | NotificationScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Notification"> | string
+    userId?: StringWithAggregatesFilter<"Notification"> | string
+    type?: EnumNotificationTypeWithAggregatesFilter<"Notification"> | $Enums.NotificationType
+    title?: StringWithAggregatesFilter<"Notification"> | string
+    message?: StringWithAggregatesFilter<"Notification"> | string
+    link?: StringNullableWithAggregatesFilter<"Notification"> | string | null
+    isRead?: BoolWithAggregatesFilter<"Notification"> | boolean
+    metadata?: JsonNullableWithAggregatesFilter<"Notification">
+    createdAt?: DateTimeWithAggregatesFilter<"Notification"> | Date | string
+    readAt?: DateTimeNullableWithAggregatesFilter<"Notification"> | Date | string | null
+  }
+
   export type DepartmentCreateInput = {
     id?: string
     code: string
@@ -21492,6 +23357,7 @@ export namespace Prisma {
     code?: string | null
     name: string
     email: string
+    password?: string | null
     dateOfBirth?: Date | string | null
     gender?: $Enums.Gender | null
     phone?: string | null
@@ -21510,6 +23376,7 @@ export namespace Prisma {
     instructedRegistrations?: ProjectRegistrationCreateNestedManyWithoutInstructorInput
     instructedProjects?: ProjectCreateNestedManyWithoutInstructorInput
     facultyReviews?: ProjectRegistrationCreateNestedManyWithoutFacultyReviewerInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -21517,6 +23384,7 @@ export namespace Prisma {
     code?: string | null
     name: string
     email: string
+    password?: string | null
     dateOfBirth?: Date | string | null
     gender?: $Enums.Gender | null
     phone?: string | null
@@ -21535,6 +23403,7 @@ export namespace Prisma {
     instructedRegistrations?: ProjectRegistrationUncheckedCreateNestedManyWithoutInstructorInput
     instructedProjects?: ProjectUncheckedCreateNestedManyWithoutInstructorInput
     facultyReviews?: ProjectRegistrationUncheckedCreateNestedManyWithoutFacultyReviewerInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserUpdateInput = {
@@ -21542,6 +23411,7 @@ export namespace Prisma {
     code?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
+    password?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
@@ -21560,6 +23430,7 @@ export namespace Prisma {
     instructedRegistrations?: ProjectRegistrationUpdateManyWithoutInstructorNestedInput
     instructedProjects?: ProjectUpdateManyWithoutInstructorNestedInput
     facultyReviews?: ProjectRegistrationUpdateManyWithoutFacultyReviewerNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -21567,6 +23438,7 @@ export namespace Prisma {
     code?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
+    password?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
@@ -21585,6 +23457,7 @@ export namespace Prisma {
     instructedRegistrations?: ProjectRegistrationUncheckedUpdateManyWithoutInstructorNestedInput
     instructedProjects?: ProjectUncheckedUpdateManyWithoutInstructorNestedInput
     facultyReviews?: ProjectRegistrationUncheckedUpdateManyWithoutFacultyReviewerNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -21592,6 +23465,7 @@ export namespace Prisma {
     code?: string | null
     name: string
     email: string
+    password?: string | null
     dateOfBirth?: Date | string | null
     gender?: $Enums.Gender | null
     phone?: string | null
@@ -21610,6 +23484,7 @@ export namespace Prisma {
     code?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
+    password?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
@@ -21625,6 +23500,7 @@ export namespace Prisma {
     code?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
+    password?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
@@ -21641,9 +23517,28 @@ export namespace Prisma {
   export type CallRoundCreateInput = {
     id?: string
     name: string
+    description?: string | null
+    registrationStartDate: Date | string
+    registrationEndDate: Date | string
+    projectStartDate?: Date | string | null
+    projectEndDate?: Date | string | null
+    reviewDeadline?: Date | string | null
+    reportingStartDate?: Date | string | null
     startDate: Date | string
     endDate: Date | string
+    maxProjects?: number | null
+    budgetLimit?: Decimal | DecimalJsLike | number | string | null
+    requirements?: string | null
+    guidelines?: string | null
+    contactInfo?: string | null
     isActive?: boolean
+    isLocked?: boolean
+    approvalStatus?: $Enums.CallRoundApprovalStatus
+    createdById?: string | null
+    createdByRole?: $Enums.Role | null
+    approvedById?: string | null
+    approvalNote?: string | null
+    approvedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     projects?: ProjectCreateNestedManyWithoutCallRoundInput
@@ -21657,9 +23552,28 @@ export namespace Prisma {
   export type CallRoundUncheckedCreateInput = {
     id?: string
     name: string
+    description?: string | null
+    registrationStartDate: Date | string
+    registrationEndDate: Date | string
+    projectStartDate?: Date | string | null
+    projectEndDate?: Date | string | null
+    reviewDeadline?: Date | string | null
+    reportingStartDate?: Date | string | null
     startDate: Date | string
     endDate: Date | string
+    maxProjects?: number | null
+    budgetLimit?: Decimal | DecimalJsLike | number | string | null
+    requirements?: string | null
+    guidelines?: string | null
+    contactInfo?: string | null
     isActive?: boolean
+    isLocked?: boolean
+    approvalStatus?: $Enums.CallRoundApprovalStatus
+    createdById?: string | null
+    createdByRole?: $Enums.Role | null
+    approvedById?: string | null
+    approvalNote?: string | null
+    approvedAt?: Date | string | null
     templateId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -21673,9 +23587,28 @@ export namespace Prisma {
   export type CallRoundUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    registrationStartDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    registrationEndDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    projectStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    projectEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reviewDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reportingStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    maxProjects?: NullableIntFieldUpdateOperationsInput | number | null
+    budgetLimit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    requirements?: NullableStringFieldUpdateOperationsInput | string | null
+    guidelines?: NullableStringFieldUpdateOperationsInput | string | null
+    contactInfo?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    isLocked?: BoolFieldUpdateOperationsInput | boolean
+    approvalStatus?: EnumCallRoundApprovalStatusFieldUpdateOperationsInput | $Enums.CallRoundApprovalStatus
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdByRole?: NullableEnumRoleFieldUpdateOperationsInput | $Enums.Role | null
+    approvedById?: NullableStringFieldUpdateOperationsInput | string | null
+    approvalNote?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     projects?: ProjectUpdateManyWithoutCallRoundNestedInput
@@ -21689,9 +23622,28 @@ export namespace Prisma {
   export type CallRoundUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    registrationStartDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    registrationEndDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    projectStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    projectEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reviewDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reportingStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    maxProjects?: NullableIntFieldUpdateOperationsInput | number | null
+    budgetLimit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    requirements?: NullableStringFieldUpdateOperationsInput | string | null
+    guidelines?: NullableStringFieldUpdateOperationsInput | string | null
+    contactInfo?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    isLocked?: BoolFieldUpdateOperationsInput | boolean
+    approvalStatus?: EnumCallRoundApprovalStatusFieldUpdateOperationsInput | $Enums.CallRoundApprovalStatus
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdByRole?: NullableEnumRoleFieldUpdateOperationsInput | $Enums.Role | null
+    approvedById?: NullableStringFieldUpdateOperationsInput | string | null
+    approvalNote?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     templateId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -21705,9 +23657,28 @@ export namespace Prisma {
   export type CallRoundCreateManyInput = {
     id?: string
     name: string
+    description?: string | null
+    registrationStartDate: Date | string
+    registrationEndDate: Date | string
+    projectStartDate?: Date | string | null
+    projectEndDate?: Date | string | null
+    reviewDeadline?: Date | string | null
+    reportingStartDate?: Date | string | null
     startDate: Date | string
     endDate: Date | string
+    maxProjects?: number | null
+    budgetLimit?: Decimal | DecimalJsLike | number | string | null
+    requirements?: string | null
+    guidelines?: string | null
+    contactInfo?: string | null
     isActive?: boolean
+    isLocked?: boolean
+    approvalStatus?: $Enums.CallRoundApprovalStatus
+    createdById?: string | null
+    createdByRole?: $Enums.Role | null
+    approvedById?: string | null
+    approvalNote?: string | null
+    approvedAt?: Date | string | null
     templateId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -21716,9 +23687,28 @@ export namespace Prisma {
   export type CallRoundUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    registrationStartDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    registrationEndDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    projectStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    projectEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reviewDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reportingStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    maxProjects?: NullableIntFieldUpdateOperationsInput | number | null
+    budgetLimit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    requirements?: NullableStringFieldUpdateOperationsInput | string | null
+    guidelines?: NullableStringFieldUpdateOperationsInput | string | null
+    contactInfo?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    isLocked?: BoolFieldUpdateOperationsInput | boolean
+    approvalStatus?: EnumCallRoundApprovalStatusFieldUpdateOperationsInput | $Enums.CallRoundApprovalStatus
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdByRole?: NullableEnumRoleFieldUpdateOperationsInput | $Enums.Role | null
+    approvedById?: NullableStringFieldUpdateOperationsInput | string | null
+    approvalNote?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -21726,9 +23716,28 @@ export namespace Prisma {
   export type CallRoundUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    registrationStartDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    registrationEndDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    projectStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    projectEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reviewDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reportingStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    maxProjects?: NullableIntFieldUpdateOperationsInput | number | null
+    budgetLimit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    requirements?: NullableStringFieldUpdateOperationsInput | string | null
+    guidelines?: NullableStringFieldUpdateOperationsInput | string | null
+    contactInfo?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    isLocked?: BoolFieldUpdateOperationsInput | boolean
+    approvalStatus?: EnumCallRoundApprovalStatusFieldUpdateOperationsInput | $Enums.CallRoundApprovalStatus
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdByRole?: NullableEnumRoleFieldUpdateOperationsInput | $Enums.Role | null
+    approvedById?: NullableStringFieldUpdateOperationsInput | string | null
+    approvalNote?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     templateId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -22594,6 +24603,96 @@ export namespace Prisma {
     facultyReviewerId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
+  export type NotificationCreateInput = {
+    id?: string
+    type: $Enums.NotificationType
+    title: string
+    message: string
+    link?: string | null
+    isRead?: boolean
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    readAt?: Date | string | null
+    user: UserCreateNestedOneWithoutNotificationsInput
+  }
+
+  export type NotificationUncheckedCreateInput = {
+    id?: string
+    userId: string
+    type: $Enums.NotificationType
+    title: string
+    message: string
+    link?: string | null
+    isRead?: boolean
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    readAt?: Date | string | null
+  }
+
+  export type NotificationUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    type?: EnumNotificationTypeFieldUpdateOperationsInput | $Enums.NotificationType
+    title?: StringFieldUpdateOperationsInput | string
+    message?: StringFieldUpdateOperationsInput | string
+    link?: NullableStringFieldUpdateOperationsInput | string | null
+    isRead?: BoolFieldUpdateOperationsInput | boolean
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    readAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    user?: UserUpdateOneRequiredWithoutNotificationsNestedInput
+  }
+
+  export type NotificationUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    type?: EnumNotificationTypeFieldUpdateOperationsInput | $Enums.NotificationType
+    title?: StringFieldUpdateOperationsInput | string
+    message?: StringFieldUpdateOperationsInput | string
+    link?: NullableStringFieldUpdateOperationsInput | string | null
+    isRead?: BoolFieldUpdateOperationsInput | boolean
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    readAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type NotificationCreateManyInput = {
+    id?: string
+    userId: string
+    type: $Enums.NotificationType
+    title: string
+    message: string
+    link?: string | null
+    isRead?: boolean
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    readAt?: Date | string | null
+  }
+
+  export type NotificationUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    type?: EnumNotificationTypeFieldUpdateOperationsInput | $Enums.NotificationType
+    title?: StringFieldUpdateOperationsInput | string
+    message?: StringFieldUpdateOperationsInput | string
+    link?: NullableStringFieldUpdateOperationsInput | string | null
+    isRead?: BoolFieldUpdateOperationsInput | boolean
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    readAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type NotificationUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    type?: EnumNotificationTypeFieldUpdateOperationsInput | $Enums.NotificationType
+    title?: StringFieldUpdateOperationsInput | string
+    message?: StringFieldUpdateOperationsInput | string
+    link?: NullableStringFieldUpdateOperationsInput | string | null
+    isRead?: BoolFieldUpdateOperationsInput | boolean
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    readAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
   export type StringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -22882,6 +24981,12 @@ export namespace Prisma {
     none?: ProjectRegistrationWhereInput
   }
 
+  export type NotificationListRelationFilter = {
+    every?: NotificationWhereInput
+    some?: NotificationWhereInput
+    none?: NotificationWhereInput
+  }
+
   export type ProjectOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -22894,11 +24999,16 @@ export namespace Prisma {
     _count?: SortOrder
   }
 
+  export type NotificationOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
   export type UserCountOrderByAggregateInput = {
     id?: SortOrder
     code?: SortOrder
     name?: SortOrder
     email?: SortOrder
+    password?: SortOrder
     dateOfBirth?: SortOrder
     gender?: SortOrder
     phone?: SortOrder
@@ -22917,6 +25027,7 @@ export namespace Prisma {
     code?: SortOrder
     name?: SortOrder
     email?: SortOrder
+    password?: SortOrder
     dateOfBirth?: SortOrder
     gender?: SortOrder
     phone?: SortOrder
@@ -22935,6 +25046,7 @@ export namespace Prisma {
     code?: SortOrder
     name?: SortOrder
     email?: SortOrder
+    password?: SortOrder
     dateOfBirth?: SortOrder
     gender?: SortOrder
     phone?: SortOrder
@@ -22982,9 +25094,45 @@ export namespace Prisma {
     _max?: NestedEnumRoleFilter<$PrismaModel>
   }
 
+  export type IntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
+  }
+
+  export type DecimalNullableFilter<$PrismaModel = never> = {
+    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel> | null
+    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
+    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
+    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    not?: NestedDecimalNullableFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string | null
+  }
+
   export type BoolFilter<$PrismaModel = never> = {
     equals?: boolean | BooleanFieldRefInput<$PrismaModel>
     not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
+  export type EnumCallRoundApprovalStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.CallRoundApprovalStatus | EnumCallRoundApprovalStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.CallRoundApprovalStatus[] | ListEnumCallRoundApprovalStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.CallRoundApprovalStatus[] | ListEnumCallRoundApprovalStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumCallRoundApprovalStatusFilter<$PrismaModel> | $Enums.CallRoundApprovalStatus
+  }
+
+  export type EnumRoleNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.Role | EnumRoleFieldRefInput<$PrismaModel> | null
+    in?: $Enums.Role[] | ListEnumRoleFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.Role[] | ListEnumRoleFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumRoleNullableFilter<$PrismaModel> | $Enums.Role | null
   }
 
   export type ProgressReportTemplateNullableScalarRelationFilter = {
@@ -23005,20 +25153,63 @@ export namespace Prisma {
   export type CallRoundCountOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
+    description?: SortOrder
+    registrationStartDate?: SortOrder
+    registrationEndDate?: SortOrder
+    projectStartDate?: SortOrder
+    projectEndDate?: SortOrder
+    reviewDeadline?: SortOrder
+    reportingStartDate?: SortOrder
     startDate?: SortOrder
     endDate?: SortOrder
+    maxProjects?: SortOrder
+    budgetLimit?: SortOrder
+    requirements?: SortOrder
+    guidelines?: SortOrder
+    contactInfo?: SortOrder
     isActive?: SortOrder
+    isLocked?: SortOrder
+    approvalStatus?: SortOrder
+    createdById?: SortOrder
+    createdByRole?: SortOrder
+    approvedById?: SortOrder
+    approvalNote?: SortOrder
+    approvedAt?: SortOrder
     templateId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
 
+  export type CallRoundAvgOrderByAggregateInput = {
+    maxProjects?: SortOrder
+    budgetLimit?: SortOrder
+  }
+
   export type CallRoundMaxOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
+    description?: SortOrder
+    registrationStartDate?: SortOrder
+    registrationEndDate?: SortOrder
+    projectStartDate?: SortOrder
+    projectEndDate?: SortOrder
+    reviewDeadline?: SortOrder
+    reportingStartDate?: SortOrder
     startDate?: SortOrder
     endDate?: SortOrder
+    maxProjects?: SortOrder
+    budgetLimit?: SortOrder
+    requirements?: SortOrder
+    guidelines?: SortOrder
+    contactInfo?: SortOrder
     isActive?: SortOrder
+    isLocked?: SortOrder
+    approvalStatus?: SortOrder
+    createdById?: SortOrder
+    createdByRole?: SortOrder
+    approvedById?: SortOrder
+    approvalNote?: SortOrder
+    approvedAt?: SortOrder
     templateId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -23027,12 +25218,68 @@ export namespace Prisma {
   export type CallRoundMinOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
+    description?: SortOrder
+    registrationStartDate?: SortOrder
+    registrationEndDate?: SortOrder
+    projectStartDate?: SortOrder
+    projectEndDate?: SortOrder
+    reviewDeadline?: SortOrder
+    reportingStartDate?: SortOrder
     startDate?: SortOrder
     endDate?: SortOrder
+    maxProjects?: SortOrder
+    budgetLimit?: SortOrder
+    requirements?: SortOrder
+    guidelines?: SortOrder
+    contactInfo?: SortOrder
     isActive?: SortOrder
+    isLocked?: SortOrder
+    approvalStatus?: SortOrder
+    createdById?: SortOrder
+    createdByRole?: SortOrder
+    approvedById?: SortOrder
+    approvalNote?: SortOrder
+    approvedAt?: SortOrder
     templateId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+  }
+
+  export type CallRoundSumOrderByAggregateInput = {
+    maxProjects?: SortOrder
+    budgetLimit?: SortOrder
+  }
+
+  export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
+  }
+
+  export type DecimalNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel> | null
+    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
+    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
+    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    not?: NestedDecimalNullableWithAggregatesFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedDecimalNullableFilter<$PrismaModel>
+    _sum?: NestedDecimalNullableFilter<$PrismaModel>
+    _min?: NestedDecimalNullableFilter<$PrismaModel>
+    _max?: NestedDecimalNullableFilter<$PrismaModel>
   }
 
   export type BoolWithAggregatesFilter<$PrismaModel = never> = {
@@ -23043,15 +25290,24 @@ export namespace Prisma {
     _max?: NestedBoolFilter<$PrismaModel>
   }
 
-  export type DecimalNullableFilter<$PrismaModel = never> = {
-    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel> | null
-    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
-    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
-    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    not?: NestedDecimalNullableFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string | null
+  export type EnumCallRoundApprovalStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.CallRoundApprovalStatus | EnumCallRoundApprovalStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.CallRoundApprovalStatus[] | ListEnumCallRoundApprovalStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.CallRoundApprovalStatus[] | ListEnumCallRoundApprovalStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumCallRoundApprovalStatusWithAggregatesFilter<$PrismaModel> | $Enums.CallRoundApprovalStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumCallRoundApprovalStatusFilter<$PrismaModel>
+    _max?: NestedEnumCallRoundApprovalStatusFilter<$PrismaModel>
+  }
+
+  export type EnumRoleNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.Role | EnumRoleFieldRefInput<$PrismaModel> | null
+    in?: $Enums.Role[] | ListEnumRoleFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.Role[] | ListEnumRoleFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumRoleNullableWithAggregatesFilter<$PrismaModel> | $Enums.Role | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumRoleNullableFilter<$PrismaModel>
+    _max?: NestedEnumRoleNullableFilter<$PrismaModel>
   }
 
   export type ProjectTypeCountOrderByAggregateInput = {
@@ -23084,22 +25340,6 @@ export namespace Prisma {
 
   export type ProjectTypeSumOrderByAggregateInput = {
     budgetCap?: SortOrder
-  }
-
-  export type DecimalNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel> | null
-    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
-    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
-    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    not?: NestedDecimalNullableWithAggregatesFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _avg?: NestedDecimalNullableFilter<$PrismaModel>
-    _sum?: NestedDecimalNullableFilter<$PrismaModel>
-    _min?: NestedDecimalNullableFilter<$PrismaModel>
-    _max?: NestedDecimalNullableFilter<$PrismaModel>
   }
 
   export type EnumProjectStatusFilter<$PrismaModel = never> = {
@@ -23367,17 +25607,6 @@ export namespace Prisma {
     orderIndex?: SortOrder
   }
 
-  export type IntNullableFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableFilter<$PrismaModel> | number | null
-  }
-
   export type FloatNullableFilter<$PrismaModel = never> = {
     equals?: number | FloatFieldRefInput<$PrismaModel> | null
     in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
@@ -23462,22 +25691,6 @@ export namespace Prisma {
   export type ProgressReportSumOrderByAggregateInput = {
     week?: SortOrder
     mentorScore?: SortOrder
-  }
-
-  export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _avg?: NestedFloatNullableFilter<$PrismaModel>
-    _sum?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedIntNullableFilter<$PrismaModel>
-    _max?: NestedIntNullableFilter<$PrismaModel>
   }
 
   export type FloatNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -23780,6 +25993,109 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumFacultyStatusFilter<$PrismaModel>
     _max?: NestedEnumFacultyStatusFilter<$PrismaModel>
+  }
+
+  export type EnumNotificationTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.NotificationType | EnumNotificationTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.NotificationType[] | ListEnumNotificationTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.NotificationType[] | ListEnumNotificationTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumNotificationTypeFilter<$PrismaModel> | $Enums.NotificationType
+  }
+  export type JsonNullableFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<JsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonNullableFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonNullableFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
+
+  export type NotificationCountOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    type?: SortOrder
+    title?: SortOrder
+    message?: SortOrder
+    link?: SortOrder
+    isRead?: SortOrder
+    metadata?: SortOrder
+    createdAt?: SortOrder
+    readAt?: SortOrder
+  }
+
+  export type NotificationMaxOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    type?: SortOrder
+    title?: SortOrder
+    message?: SortOrder
+    link?: SortOrder
+    isRead?: SortOrder
+    createdAt?: SortOrder
+    readAt?: SortOrder
+  }
+
+  export type NotificationMinOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    type?: SortOrder
+    title?: SortOrder
+    message?: SortOrder
+    link?: SortOrder
+    isRead?: SortOrder
+    createdAt?: SortOrder
+    readAt?: SortOrder
+  }
+
+  export type EnumNotificationTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.NotificationType | EnumNotificationTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.NotificationType[] | ListEnumNotificationTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.NotificationType[] | ListEnumNotificationTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumNotificationTypeWithAggregatesFilter<$PrismaModel> | $Enums.NotificationType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumNotificationTypeFilter<$PrismaModel>
+    _max?: NestedEnumNotificationTypeFilter<$PrismaModel>
+  }
+  export type JsonNullableWithAggregatesFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonNullableWithAggregatesFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedJsonNullableFilter<$PrismaModel>
+    _max?: NestedJsonNullableFilter<$PrismaModel>
   }
 
   export type MajorCreateNestedManyWithoutDepartmentInput = {
@@ -24213,6 +26529,13 @@ export namespace Prisma {
     connect?: ProjectRegistrationWhereUniqueInput | ProjectRegistrationWhereUniqueInput[]
   }
 
+  export type NotificationCreateNestedManyWithoutUserInput = {
+    create?: XOR<NotificationCreateWithoutUserInput, NotificationUncheckedCreateWithoutUserInput> | NotificationCreateWithoutUserInput[] | NotificationUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: NotificationCreateOrConnectWithoutUserInput | NotificationCreateOrConnectWithoutUserInput[]
+    createMany?: NotificationCreateManyUserInputEnvelope
+    connect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
+  }
+
   export type ProjectUncheckedCreateNestedManyWithoutLeaderInput = {
     create?: XOR<ProjectCreateWithoutLeaderInput, ProjectUncheckedCreateWithoutLeaderInput> | ProjectCreateWithoutLeaderInput[] | ProjectUncheckedCreateWithoutLeaderInput[]
     connectOrCreate?: ProjectCreateOrConnectWithoutLeaderInput | ProjectCreateOrConnectWithoutLeaderInput[]
@@ -24260,6 +26583,13 @@ export namespace Prisma {
     connectOrCreate?: ProjectRegistrationCreateOrConnectWithoutFacultyReviewerInput | ProjectRegistrationCreateOrConnectWithoutFacultyReviewerInput[]
     createMany?: ProjectRegistrationCreateManyFacultyReviewerInputEnvelope
     connect?: ProjectRegistrationWhereUniqueInput | ProjectRegistrationWhereUniqueInput[]
+  }
+
+  export type NotificationUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<NotificationCreateWithoutUserInput, NotificationUncheckedCreateWithoutUserInput> | NotificationCreateWithoutUserInput[] | NotificationUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: NotificationCreateOrConnectWithoutUserInput | NotificationCreateOrConnectWithoutUserInput[]
+    createMany?: NotificationCreateManyUserInputEnvelope
+    connect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
   }
 
   export type NullableDateTimeFieldUpdateOperationsInput = {
@@ -24402,6 +26732,20 @@ export namespace Prisma {
     deleteMany?: ProjectRegistrationScalarWhereInput | ProjectRegistrationScalarWhereInput[]
   }
 
+  export type NotificationUpdateManyWithoutUserNestedInput = {
+    create?: XOR<NotificationCreateWithoutUserInput, NotificationUncheckedCreateWithoutUserInput> | NotificationCreateWithoutUserInput[] | NotificationUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: NotificationCreateOrConnectWithoutUserInput | NotificationCreateOrConnectWithoutUserInput[]
+    upsert?: NotificationUpsertWithWhereUniqueWithoutUserInput | NotificationUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: NotificationCreateManyUserInputEnvelope
+    set?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
+    disconnect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
+    delete?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
+    connect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
+    update?: NotificationUpdateWithWhereUniqueWithoutUserInput | NotificationUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: NotificationUpdateManyWithWhereWithoutUserInput | NotificationUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: NotificationScalarWhereInput | NotificationScalarWhereInput[]
+  }
+
   export type ProjectUncheckedUpdateManyWithoutLeaderNestedInput = {
     create?: XOR<ProjectCreateWithoutLeaderInput, ProjectUncheckedCreateWithoutLeaderInput> | ProjectCreateWithoutLeaderInput[] | ProjectUncheckedCreateWithoutLeaderInput[]
     connectOrCreate?: ProjectCreateOrConnectWithoutLeaderInput | ProjectCreateOrConnectWithoutLeaderInput[]
@@ -24500,6 +26844,20 @@ export namespace Prisma {
     deleteMany?: ProjectRegistrationScalarWhereInput | ProjectRegistrationScalarWhereInput[]
   }
 
+  export type NotificationUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<NotificationCreateWithoutUserInput, NotificationUncheckedCreateWithoutUserInput> | NotificationCreateWithoutUserInput[] | NotificationUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: NotificationCreateOrConnectWithoutUserInput | NotificationCreateOrConnectWithoutUserInput[]
+    upsert?: NotificationUpsertWithWhereUniqueWithoutUserInput | NotificationUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: NotificationCreateManyUserInputEnvelope
+    set?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
+    disconnect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
+    delete?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
+    connect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
+    update?: NotificationUpdateWithWhereUniqueWithoutUserInput | NotificationUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: NotificationUpdateManyWithWhereWithoutUserInput | NotificationUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: NotificationScalarWhereInput | NotificationScalarWhereInput[]
+  }
+
   export type ProjectCreateNestedManyWithoutCallRoundInput = {
     create?: XOR<ProjectCreateWithoutCallRoundInput, ProjectUncheckedCreateWithoutCallRoundInput> | ProjectCreateWithoutCallRoundInput[] | ProjectUncheckedCreateWithoutCallRoundInput[]
     connectOrCreate?: ProjectCreateOrConnectWithoutCallRoundInput | ProjectCreateOrConnectWithoutCallRoundInput[]
@@ -24570,8 +26928,32 @@ export namespace Prisma {
     connect?: ClassWhereUniqueInput | ClassWhereUniqueInput[]
   }
 
+  export type NullableIntFieldUpdateOperationsInput = {
+    set?: number | null
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
+  export type NullableDecimalFieldUpdateOperationsInput = {
+    set?: Decimal | DecimalJsLike | number | string | null
+    increment?: Decimal | DecimalJsLike | number | string
+    decrement?: Decimal | DecimalJsLike | number | string
+    multiply?: Decimal | DecimalJsLike | number | string
+    divide?: Decimal | DecimalJsLike | number | string
+  }
+
   export type BoolFieldUpdateOperationsInput = {
     set?: boolean
+  }
+
+  export type EnumCallRoundApprovalStatusFieldUpdateOperationsInput = {
+    set?: $Enums.CallRoundApprovalStatus
+  }
+
+  export type NullableEnumRoleFieldUpdateOperationsInput = {
+    set?: $Enums.Role | null
   }
 
   export type ProjectUpdateManyWithoutCallRoundNestedInput = {
@@ -24730,14 +27112,6 @@ export namespace Prisma {
     connectOrCreate?: ProjectCreateOrConnectWithoutProjectTypeInput | ProjectCreateOrConnectWithoutProjectTypeInput[]
     createMany?: ProjectCreateManyProjectTypeInputEnvelope
     connect?: ProjectWhereUniqueInput | ProjectWhereUniqueInput[]
-  }
-
-  export type NullableDecimalFieldUpdateOperationsInput = {
-    set?: Decimal | DecimalJsLike | number | string | null
-    increment?: Decimal | DecimalJsLike | number | string
-    decrement?: Decimal | DecimalJsLike | number | string
-    multiply?: Decimal | DecimalJsLike | number | string
-    divide?: Decimal | DecimalJsLike | number | string
   }
 
   export type ProjectUpdateManyWithoutProjectTypeNestedInput = {
@@ -25130,14 +27504,6 @@ export namespace Prisma {
     connect?: ProjectWhereUniqueInput
   }
 
-  export type NullableIntFieldUpdateOperationsInput = {
-    set?: number | null
-    increment?: number
-    decrement?: number
-    multiply?: number
-    divide?: number
-  }
-
   export type NullableFloatFieldUpdateOperationsInput = {
     set?: number | null
     increment?: number
@@ -25298,6 +27664,24 @@ export namespace Prisma {
     delete?: UserWhereInput | boolean
     connect?: UserWhereUniqueInput
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutFacultyReviewsInput, UserUpdateWithoutFacultyReviewsInput>, UserUncheckedUpdateWithoutFacultyReviewsInput>
+  }
+
+  export type UserCreateNestedOneWithoutNotificationsInput = {
+    create?: XOR<UserCreateWithoutNotificationsInput, UserUncheckedCreateWithoutNotificationsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutNotificationsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type EnumNotificationTypeFieldUpdateOperationsInput = {
+    set?: $Enums.NotificationType
+  }
+
+  export type UserUpdateOneRequiredWithoutNotificationsNestedInput = {
+    create?: XOR<UserCreateWithoutNotificationsInput, UserUncheckedCreateWithoutNotificationsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutNotificationsInput
+    upsert?: UserUpsertWithoutNotificationsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutNotificationsInput, UserUpdateWithoutNotificationsInput>, UserUncheckedUpdateWithoutNotificationsInput>
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -25468,19 +27852,6 @@ export namespace Prisma {
     _max?: NestedEnumRoleFilter<$PrismaModel>
   }
 
-  export type NestedBoolFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolFilter<$PrismaModel> | boolean
-  }
-
-  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedBoolFilter<$PrismaModel>
-    _max?: NestedBoolFilter<$PrismaModel>
-  }
-
   export type NestedDecimalNullableFilter<$PrismaModel = never> = {
     equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel> | null
     in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
@@ -25490,6 +27861,52 @@ export namespace Prisma {
     gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
     gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
     not?: NestedDecimalNullableFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string | null
+  }
+
+  export type NestedBoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
+  export type NestedEnumCallRoundApprovalStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.CallRoundApprovalStatus | EnumCallRoundApprovalStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.CallRoundApprovalStatus[] | ListEnumCallRoundApprovalStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.CallRoundApprovalStatus[] | ListEnumCallRoundApprovalStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumCallRoundApprovalStatusFilter<$PrismaModel> | $Enums.CallRoundApprovalStatus
+  }
+
+  export type NestedEnumRoleNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.Role | EnumRoleFieldRefInput<$PrismaModel> | null
+    in?: $Enums.Role[] | ListEnumRoleFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.Role[] | ListEnumRoleFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumRoleNullableFilter<$PrismaModel> | $Enums.Role | null
+  }
+
+  export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
+  }
+
+  export type NestedFloatNullableFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
   }
 
   export type NestedDecimalNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -25506,6 +27923,34 @@ export namespace Prisma {
     _sum?: NestedDecimalNullableFilter<$PrismaModel>
     _min?: NestedDecimalNullableFilter<$PrismaModel>
     _max?: NestedDecimalNullableFilter<$PrismaModel>
+  }
+
+  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
+  }
+
+  export type NestedEnumCallRoundApprovalStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.CallRoundApprovalStatus | EnumCallRoundApprovalStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.CallRoundApprovalStatus[] | ListEnumCallRoundApprovalStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.CallRoundApprovalStatus[] | ListEnumCallRoundApprovalStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumCallRoundApprovalStatusWithAggregatesFilter<$PrismaModel> | $Enums.CallRoundApprovalStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumCallRoundApprovalStatusFilter<$PrismaModel>
+    _max?: NestedEnumCallRoundApprovalStatusFilter<$PrismaModel>
+  }
+
+  export type NestedEnumRoleNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.Role | EnumRoleFieldRefInput<$PrismaModel> | null
+    in?: $Enums.Role[] | ListEnumRoleFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.Role[] | ListEnumRoleFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumRoleNullableWithAggregatesFilter<$PrismaModel> | $Enums.Role | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumRoleNullableFilter<$PrismaModel>
+    _max?: NestedEnumRoleNullableFilter<$PrismaModel>
   }
 
   export type NestedEnumProjectStatusFilter<$PrismaModel = never> = {
@@ -25550,33 +27995,6 @@ export namespace Prisma {
     gt?: number | FloatFieldRefInput<$PrismaModel>
     gte?: number | FloatFieldRefInput<$PrismaModel>
     not?: NestedFloatFilter<$PrismaModel> | number
-  }
-
-  export type NestedFloatNullableFilter<$PrismaModel = never> = {
-    equals?: number | FloatFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
-    lt?: number | FloatFieldRefInput<$PrismaModel>
-    lte?: number | FloatFieldRefInput<$PrismaModel>
-    gt?: number | FloatFieldRefInput<$PrismaModel>
-    gte?: number | FloatFieldRefInput<$PrismaModel>
-    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
-  }
-
-  export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _avg?: NestedFloatNullableFilter<$PrismaModel>
-    _sum?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedIntNullableFilter<$PrismaModel>
-    _max?: NestedIntNullableFilter<$PrismaModel>
   }
 
   export type NestedFloatNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -25707,6 +28125,46 @@ export namespace Prisma {
     _max?: NestedEnumFacultyStatusFilter<$PrismaModel>
   }
 
+  export type NestedEnumNotificationTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.NotificationType | EnumNotificationTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.NotificationType[] | ListEnumNotificationTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.NotificationType[] | ListEnumNotificationTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumNotificationTypeFilter<$PrismaModel> | $Enums.NotificationType
+  }
+
+  export type NestedEnumNotificationTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.NotificationType | EnumNotificationTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.NotificationType[] | ListEnumNotificationTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.NotificationType[] | ListEnumNotificationTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumNotificationTypeWithAggregatesFilter<$PrismaModel> | $Enums.NotificationType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumNotificationTypeFilter<$PrismaModel>
+    _max?: NestedEnumNotificationTypeFilter<$PrismaModel>
+  }
+  export type NestedJsonNullableFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<NestedJsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<NestedJsonNullableFilterBase<$PrismaModel>>, 'path'>>,
+        Required<NestedJsonNullableFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<NestedJsonNullableFilterBase<$PrismaModel>>, 'path'>>
+
+  export type NestedJsonNullableFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
+
   export type MajorCreateWithoutDepartmentInput = {
     id?: string
     code: string
@@ -25746,6 +28204,7 @@ export namespace Prisma {
     code?: string | null
     name: string
     email: string
+    password?: string | null
     dateOfBirth?: Date | string | null
     gender?: $Enums.Gender | null
     phone?: string | null
@@ -25763,6 +28222,7 @@ export namespace Prisma {
     instructedRegistrations?: ProjectRegistrationCreateNestedManyWithoutInstructorInput
     instructedProjects?: ProjectCreateNestedManyWithoutInstructorInput
     facultyReviews?: ProjectRegistrationCreateNestedManyWithoutFacultyReviewerInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutDepartmentRefInput = {
@@ -25770,6 +28230,7 @@ export namespace Prisma {
     code?: string | null
     name: string
     email: string
+    password?: string | null
     dateOfBirth?: Date | string | null
     gender?: $Enums.Gender | null
     phone?: string | null
@@ -25787,6 +28248,7 @@ export namespace Prisma {
     instructedRegistrations?: ProjectRegistrationUncheckedCreateNestedManyWithoutInstructorInput
     instructedProjects?: ProjectUncheckedCreateNestedManyWithoutInstructorInput
     facultyReviews?: ProjectRegistrationUncheckedCreateNestedManyWithoutFacultyReviewerInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutDepartmentRefInput = {
@@ -25802,9 +28264,28 @@ export namespace Prisma {
   export type CallRoundCreateWithoutDepartmentsInput = {
     id?: string
     name: string
+    description?: string | null
+    registrationStartDate: Date | string
+    registrationEndDate: Date | string
+    projectStartDate?: Date | string | null
+    projectEndDate?: Date | string | null
+    reviewDeadline?: Date | string | null
+    reportingStartDate?: Date | string | null
     startDate: Date | string
     endDate: Date | string
+    maxProjects?: number | null
+    budgetLimit?: Decimal | DecimalJsLike | number | string | null
+    requirements?: string | null
+    guidelines?: string | null
+    contactInfo?: string | null
     isActive?: boolean
+    isLocked?: boolean
+    approvalStatus?: $Enums.CallRoundApprovalStatus
+    createdById?: string | null
+    createdByRole?: $Enums.Role | null
+    approvedById?: string | null
+    approvalNote?: string | null
+    approvedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     projects?: ProjectCreateNestedManyWithoutCallRoundInput
@@ -25817,9 +28298,28 @@ export namespace Prisma {
   export type CallRoundUncheckedCreateWithoutDepartmentsInput = {
     id?: string
     name: string
+    description?: string | null
+    registrationStartDate: Date | string
+    registrationEndDate: Date | string
+    projectStartDate?: Date | string | null
+    projectEndDate?: Date | string | null
+    reviewDeadline?: Date | string | null
+    reportingStartDate?: Date | string | null
     startDate: Date | string
     endDate: Date | string
+    maxProjects?: number | null
+    budgetLimit?: Decimal | DecimalJsLike | number | string | null
+    requirements?: string | null
+    guidelines?: string | null
+    contactInfo?: string | null
     isActive?: boolean
+    isLocked?: boolean
+    approvalStatus?: $Enums.CallRoundApprovalStatus
+    createdById?: string | null
+    createdByRole?: $Enums.Role | null
+    approvedById?: string | null
+    approvalNote?: string | null
+    approvedAt?: Date | string | null
     templateId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -25887,6 +28387,7 @@ export namespace Prisma {
     code?: StringNullableFilter<"User"> | string | null
     name?: StringFilter<"User"> | string
     email?: StringFilter<"User"> | string
+    password?: StringNullableFilter<"User"> | string | null
     dateOfBirth?: DateTimeNullableFilter<"User"> | Date | string | null
     gender?: EnumGenderNullableFilter<"User"> | $Enums.Gender | null
     phone?: StringNullableFilter<"User"> | string | null
@@ -25922,9 +28423,28 @@ export namespace Prisma {
     NOT?: CallRoundScalarWhereInput | CallRoundScalarWhereInput[]
     id?: StringFilter<"CallRound"> | string
     name?: StringFilter<"CallRound"> | string
+    description?: StringNullableFilter<"CallRound"> | string | null
+    registrationStartDate?: DateTimeFilter<"CallRound"> | Date | string
+    registrationEndDate?: DateTimeFilter<"CallRound"> | Date | string
+    projectStartDate?: DateTimeNullableFilter<"CallRound"> | Date | string | null
+    projectEndDate?: DateTimeNullableFilter<"CallRound"> | Date | string | null
+    reviewDeadline?: DateTimeNullableFilter<"CallRound"> | Date | string | null
+    reportingStartDate?: DateTimeNullableFilter<"CallRound"> | Date | string | null
     startDate?: DateTimeFilter<"CallRound"> | Date | string
     endDate?: DateTimeFilter<"CallRound"> | Date | string
+    maxProjects?: IntNullableFilter<"CallRound"> | number | null
+    budgetLimit?: DecimalNullableFilter<"CallRound"> | Decimal | DecimalJsLike | number | string | null
+    requirements?: StringNullableFilter<"CallRound"> | string | null
+    guidelines?: StringNullableFilter<"CallRound"> | string | null
+    contactInfo?: StringNullableFilter<"CallRound"> | string | null
     isActive?: BoolFilter<"CallRound"> | boolean
+    isLocked?: BoolFilter<"CallRound"> | boolean
+    approvalStatus?: EnumCallRoundApprovalStatusFilter<"CallRound"> | $Enums.CallRoundApprovalStatus
+    createdById?: StringNullableFilter<"CallRound"> | string | null
+    createdByRole?: EnumRoleNullableFilter<"CallRound"> | $Enums.Role | null
+    approvedById?: StringNullableFilter<"CallRound"> | string | null
+    approvalNote?: StringNullableFilter<"CallRound"> | string | null
+    approvedAt?: DateTimeNullableFilter<"CallRound"> | Date | string | null
     templateId?: StringNullableFilter<"CallRound"> | string | null
     createdAt?: DateTimeFilter<"CallRound"> | Date | string
     updatedAt?: DateTimeFilter<"CallRound"> | Date | string
@@ -25992,6 +28512,7 @@ export namespace Prisma {
     code?: string | null
     name: string
     email: string
+    password?: string | null
     dateOfBirth?: Date | string | null
     gender?: $Enums.Gender | null
     phone?: string | null
@@ -26009,6 +28530,7 @@ export namespace Prisma {
     instructedRegistrations?: ProjectRegistrationCreateNestedManyWithoutInstructorInput
     instructedProjects?: ProjectCreateNestedManyWithoutInstructorInput
     facultyReviews?: ProjectRegistrationCreateNestedManyWithoutFacultyReviewerInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutMajorInput = {
@@ -26016,6 +28538,7 @@ export namespace Prisma {
     code?: string | null
     name: string
     email: string
+    password?: string | null
     dateOfBirth?: Date | string | null
     gender?: $Enums.Gender | null
     phone?: string | null
@@ -26033,6 +28556,7 @@ export namespace Prisma {
     instructedRegistrations?: ProjectRegistrationUncheckedCreateNestedManyWithoutInstructorInput
     instructedProjects?: ProjectUncheckedCreateNestedManyWithoutInstructorInput
     facultyReviews?: ProjectRegistrationUncheckedCreateNestedManyWithoutFacultyReviewerInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutMajorInput = {
@@ -26048,9 +28572,28 @@ export namespace Prisma {
   export type CallRoundCreateWithoutMajorsInput = {
     id?: string
     name: string
+    description?: string | null
+    registrationStartDate: Date | string
+    registrationEndDate: Date | string
+    projectStartDate?: Date | string | null
+    projectEndDate?: Date | string | null
+    reviewDeadline?: Date | string | null
+    reportingStartDate?: Date | string | null
     startDate: Date | string
     endDate: Date | string
+    maxProjects?: number | null
+    budgetLimit?: Decimal | DecimalJsLike | number | string | null
+    requirements?: string | null
+    guidelines?: string | null
+    contactInfo?: string | null
     isActive?: boolean
+    isLocked?: boolean
+    approvalStatus?: $Enums.CallRoundApprovalStatus
+    createdById?: string | null
+    createdByRole?: $Enums.Role | null
+    approvedById?: string | null
+    approvalNote?: string | null
+    approvedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     projects?: ProjectCreateNestedManyWithoutCallRoundInput
@@ -26063,9 +28606,28 @@ export namespace Prisma {
   export type CallRoundUncheckedCreateWithoutMajorsInput = {
     id?: string
     name: string
+    description?: string | null
+    registrationStartDate: Date | string
+    registrationEndDate: Date | string
+    projectStartDate?: Date | string | null
+    projectEndDate?: Date | string | null
+    reviewDeadline?: Date | string | null
+    reportingStartDate?: Date | string | null
     startDate: Date | string
     endDate: Date | string
+    maxProjects?: number | null
+    budgetLimit?: Decimal | DecimalJsLike | number | string | null
+    requirements?: string | null
+    guidelines?: string | null
+    contactInfo?: string | null
     isActive?: boolean
+    isLocked?: boolean
+    approvalStatus?: $Enums.CallRoundApprovalStatus
+    createdById?: string | null
+    createdByRole?: $Enums.Role | null
+    approvedById?: string | null
+    approvalNote?: string | null
+    approvedAt?: Date | string | null
     templateId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -26207,6 +28769,7 @@ export namespace Prisma {
     code?: string | null
     name: string
     email: string
+    password?: string | null
     dateOfBirth?: Date | string | null
     gender?: $Enums.Gender | null
     phone?: string | null
@@ -26224,6 +28787,7 @@ export namespace Prisma {
     instructedRegistrations?: ProjectRegistrationCreateNestedManyWithoutInstructorInput
     instructedProjects?: ProjectCreateNestedManyWithoutInstructorInput
     facultyReviews?: ProjectRegistrationCreateNestedManyWithoutFacultyReviewerInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutClassInput = {
@@ -26231,6 +28795,7 @@ export namespace Prisma {
     code?: string | null
     name: string
     email: string
+    password?: string | null
     dateOfBirth?: Date | string | null
     gender?: $Enums.Gender | null
     phone?: string | null
@@ -26248,6 +28813,7 @@ export namespace Prisma {
     instructedRegistrations?: ProjectRegistrationUncheckedCreateNestedManyWithoutInstructorInput
     instructedProjects?: ProjectUncheckedCreateNestedManyWithoutInstructorInput
     facultyReviews?: ProjectRegistrationUncheckedCreateNestedManyWithoutFacultyReviewerInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutClassInput = {
@@ -26263,9 +28829,28 @@ export namespace Prisma {
   export type CallRoundCreateWithoutClassesInput = {
     id?: string
     name: string
+    description?: string | null
+    registrationStartDate: Date | string
+    registrationEndDate: Date | string
+    projectStartDate?: Date | string | null
+    projectEndDate?: Date | string | null
+    reviewDeadline?: Date | string | null
+    reportingStartDate?: Date | string | null
     startDate: Date | string
     endDate: Date | string
+    maxProjects?: number | null
+    budgetLimit?: Decimal | DecimalJsLike | number | string | null
+    requirements?: string | null
+    guidelines?: string | null
+    contactInfo?: string | null
     isActive?: boolean
+    isLocked?: boolean
+    approvalStatus?: $Enums.CallRoundApprovalStatus
+    createdById?: string | null
+    createdByRole?: $Enums.Role | null
+    approvedById?: string | null
+    approvalNote?: string | null
+    approvedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     projects?: ProjectCreateNestedManyWithoutCallRoundInput
@@ -26278,9 +28863,28 @@ export namespace Prisma {
   export type CallRoundUncheckedCreateWithoutClassesInput = {
     id?: string
     name: string
+    description?: string | null
+    registrationStartDate: Date | string
+    registrationEndDate: Date | string
+    projectStartDate?: Date | string | null
+    projectEndDate?: Date | string | null
+    reviewDeadline?: Date | string | null
+    reportingStartDate?: Date | string | null
     startDate: Date | string
     endDate: Date | string
+    maxProjects?: number | null
+    budgetLimit?: Decimal | DecimalJsLike | number | string | null
+    requirements?: string | null
+    guidelines?: string | null
+    contactInfo?: string | null
     isActive?: boolean
+    isLocked?: boolean
+    approvalStatus?: $Enums.CallRoundApprovalStatus
+    createdById?: string | null
+    createdByRole?: $Enums.Role | null
+    approvedById?: string | null
+    approvalNote?: string | null
+    approvedAt?: Date | string | null
     templateId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -26773,6 +29377,40 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type NotificationCreateWithoutUserInput = {
+    id?: string
+    type: $Enums.NotificationType
+    title: string
+    message: string
+    link?: string | null
+    isRead?: boolean
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    readAt?: Date | string | null
+  }
+
+  export type NotificationUncheckedCreateWithoutUserInput = {
+    id?: string
+    type: $Enums.NotificationType
+    title: string
+    message: string
+    link?: string | null
+    isRead?: boolean
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    readAt?: Date | string | null
+  }
+
+  export type NotificationCreateOrConnectWithoutUserInput = {
+    where: NotificationWhereUniqueInput
+    create: XOR<NotificationCreateWithoutUserInput, NotificationUncheckedCreateWithoutUserInput>
+  }
+
+  export type NotificationCreateManyUserInputEnvelope = {
+    data: NotificationCreateManyUserInput | NotificationCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
   export type DepartmentUpsertWithoutUsersInput = {
     update: XOR<DepartmentUpdateWithoutUsersInput, DepartmentUncheckedUpdateWithoutUsersInput>
     create: XOR<DepartmentCreateWithoutUsersInput, DepartmentUncheckedCreateWithoutUsersInput>
@@ -27040,6 +29678,38 @@ export namespace Prisma {
   export type ProjectRegistrationUpdateManyWithWhereWithoutFacultyReviewerInput = {
     where: ProjectRegistrationScalarWhereInput
     data: XOR<ProjectRegistrationUpdateManyMutationInput, ProjectRegistrationUncheckedUpdateManyWithoutFacultyReviewerInput>
+  }
+
+  export type NotificationUpsertWithWhereUniqueWithoutUserInput = {
+    where: NotificationWhereUniqueInput
+    update: XOR<NotificationUpdateWithoutUserInput, NotificationUncheckedUpdateWithoutUserInput>
+    create: XOR<NotificationCreateWithoutUserInput, NotificationUncheckedCreateWithoutUserInput>
+  }
+
+  export type NotificationUpdateWithWhereUniqueWithoutUserInput = {
+    where: NotificationWhereUniqueInput
+    data: XOR<NotificationUpdateWithoutUserInput, NotificationUncheckedUpdateWithoutUserInput>
+  }
+
+  export type NotificationUpdateManyWithWhereWithoutUserInput = {
+    where: NotificationScalarWhereInput
+    data: XOR<NotificationUpdateManyMutationInput, NotificationUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type NotificationScalarWhereInput = {
+    AND?: NotificationScalarWhereInput | NotificationScalarWhereInput[]
+    OR?: NotificationScalarWhereInput[]
+    NOT?: NotificationScalarWhereInput | NotificationScalarWhereInput[]
+    id?: StringFilter<"Notification"> | string
+    userId?: StringFilter<"Notification"> | string
+    type?: EnumNotificationTypeFilter<"Notification"> | $Enums.NotificationType
+    title?: StringFilter<"Notification"> | string
+    message?: StringFilter<"Notification"> | string
+    link?: StringNullableFilter<"Notification"> | string | null
+    isRead?: BoolFilter<"Notification"> | boolean
+    metadata?: JsonNullableFilter<"Notification">
+    createdAt?: DateTimeFilter<"Notification"> | Date | string
+    readAt?: DateTimeNullableFilter<"Notification"> | Date | string | null
   }
 
   export type ProjectCreateWithoutCallRoundInput = {
@@ -27450,6 +30120,7 @@ export namespace Prisma {
     code?: string | null
     name: string
     email: string
+    password?: string | null
     dateOfBirth?: Date | string | null
     gender?: $Enums.Gender | null
     phone?: string | null
@@ -27467,6 +30138,7 @@ export namespace Prisma {
     instructedRegistrations?: ProjectRegistrationCreateNestedManyWithoutInstructorInput
     instructedProjects?: ProjectCreateNestedManyWithoutInstructorInput
     facultyReviews?: ProjectRegistrationCreateNestedManyWithoutFacultyReviewerInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutLeadProjectsInput = {
@@ -27474,6 +30146,7 @@ export namespace Prisma {
     code?: string | null
     name: string
     email: string
+    password?: string | null
     dateOfBirth?: Date | string | null
     gender?: $Enums.Gender | null
     phone?: string | null
@@ -27491,6 +30164,7 @@ export namespace Prisma {
     instructedRegistrations?: ProjectRegistrationUncheckedCreateNestedManyWithoutInstructorInput
     instructedProjects?: ProjectUncheckedCreateNestedManyWithoutInstructorInput
     facultyReviews?: ProjectRegistrationUncheckedCreateNestedManyWithoutFacultyReviewerInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutLeadProjectsInput = {
@@ -27503,6 +30177,7 @@ export namespace Prisma {
     code?: string | null
     name: string
     email: string
+    password?: string | null
     dateOfBirth?: Date | string | null
     gender?: $Enums.Gender | null
     phone?: string | null
@@ -27520,6 +30195,7 @@ export namespace Prisma {
     instructedRegistrations?: ProjectRegistrationCreateNestedManyWithoutInstructorInput
     instructedProjects?: ProjectCreateNestedManyWithoutInstructorInput
     facultyReviews?: ProjectRegistrationCreateNestedManyWithoutFacultyReviewerInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutDeanReviewsInput = {
@@ -27527,6 +30203,7 @@ export namespace Prisma {
     code?: string | null
     name: string
     email: string
+    password?: string | null
     dateOfBirth?: Date | string | null
     gender?: $Enums.Gender | null
     phone?: string | null
@@ -27544,6 +30221,7 @@ export namespace Prisma {
     instructedRegistrations?: ProjectRegistrationUncheckedCreateNestedManyWithoutInstructorInput
     instructedProjects?: ProjectUncheckedCreateNestedManyWithoutInstructorInput
     facultyReviews?: ProjectRegistrationUncheckedCreateNestedManyWithoutFacultyReviewerInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutDeanReviewsInput = {
@@ -27554,9 +30232,28 @@ export namespace Prisma {
   export type CallRoundCreateWithoutProjectsInput = {
     id?: string
     name: string
+    description?: string | null
+    registrationStartDate: Date | string
+    registrationEndDate: Date | string
+    projectStartDate?: Date | string | null
+    projectEndDate?: Date | string | null
+    reviewDeadline?: Date | string | null
+    reportingStartDate?: Date | string | null
     startDate: Date | string
     endDate: Date | string
+    maxProjects?: number | null
+    budgetLimit?: Decimal | DecimalJsLike | number | string | null
+    requirements?: string | null
+    guidelines?: string | null
+    contactInfo?: string | null
     isActive?: boolean
+    isLocked?: boolean
+    approvalStatus?: $Enums.CallRoundApprovalStatus
+    createdById?: string | null
+    createdByRole?: $Enums.Role | null
+    approvedById?: string | null
+    approvalNote?: string | null
+    approvedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     registrations?: ProjectRegistrationCreateNestedManyWithoutCallRoundInput
@@ -27569,9 +30266,28 @@ export namespace Prisma {
   export type CallRoundUncheckedCreateWithoutProjectsInput = {
     id?: string
     name: string
+    description?: string | null
+    registrationStartDate: Date | string
+    registrationEndDate: Date | string
+    projectStartDate?: Date | string | null
+    projectEndDate?: Date | string | null
+    reviewDeadline?: Date | string | null
+    reportingStartDate?: Date | string | null
     startDate: Date | string
     endDate: Date | string
+    maxProjects?: number | null
+    budgetLimit?: Decimal | DecimalJsLike | number | string | null
+    requirements?: string | null
+    guidelines?: string | null
+    contactInfo?: string | null
     isActive?: boolean
+    isLocked?: boolean
+    approvalStatus?: $Enums.CallRoundApprovalStatus
+    createdById?: string | null
+    createdByRole?: $Enums.Role | null
+    approvedById?: string | null
+    approvalNote?: string | null
+    approvedAt?: Date | string | null
     templateId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -27750,6 +30466,7 @@ export namespace Prisma {
     code?: string | null
     name: string
     email: string
+    password?: string | null
     dateOfBirth?: Date | string | null
     gender?: $Enums.Gender | null
     phone?: string | null
@@ -27767,6 +30484,7 @@ export namespace Prisma {
     registrations?: ProjectRegistrationCreateNestedManyWithoutUserInput
     instructedRegistrations?: ProjectRegistrationCreateNestedManyWithoutInstructorInput
     facultyReviews?: ProjectRegistrationCreateNestedManyWithoutFacultyReviewerInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutInstructedProjectsInput = {
@@ -27774,6 +30492,7 @@ export namespace Prisma {
     code?: string | null
     name: string
     email: string
+    password?: string | null
     dateOfBirth?: Date | string | null
     gender?: $Enums.Gender | null
     phone?: string | null
@@ -27791,6 +30510,7 @@ export namespace Prisma {
     registrations?: ProjectRegistrationUncheckedCreateNestedManyWithoutUserInput
     instructedRegistrations?: ProjectRegistrationUncheckedCreateNestedManyWithoutInstructorInput
     facultyReviews?: ProjectRegistrationUncheckedCreateNestedManyWithoutFacultyReviewerInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutInstructedProjectsInput = {
@@ -27814,6 +30534,7 @@ export namespace Prisma {
     code?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
+    password?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
@@ -27831,6 +30552,7 @@ export namespace Prisma {
     instructedRegistrations?: ProjectRegistrationUpdateManyWithoutInstructorNestedInput
     instructedProjects?: ProjectUpdateManyWithoutInstructorNestedInput
     facultyReviews?: ProjectRegistrationUpdateManyWithoutFacultyReviewerNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutLeadProjectsInput = {
@@ -27838,6 +30560,7 @@ export namespace Prisma {
     code?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
+    password?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
@@ -27855,6 +30578,7 @@ export namespace Prisma {
     instructedRegistrations?: ProjectRegistrationUncheckedUpdateManyWithoutInstructorNestedInput
     instructedProjects?: ProjectUncheckedUpdateManyWithoutInstructorNestedInput
     facultyReviews?: ProjectRegistrationUncheckedUpdateManyWithoutFacultyReviewerNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUpsertWithoutDeanReviewsInput = {
@@ -27873,6 +30597,7 @@ export namespace Prisma {
     code?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
+    password?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
@@ -27890,6 +30615,7 @@ export namespace Prisma {
     instructedRegistrations?: ProjectRegistrationUpdateManyWithoutInstructorNestedInput
     instructedProjects?: ProjectUpdateManyWithoutInstructorNestedInput
     facultyReviews?: ProjectRegistrationUpdateManyWithoutFacultyReviewerNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutDeanReviewsInput = {
@@ -27897,6 +30623,7 @@ export namespace Prisma {
     code?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
+    password?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
@@ -27914,6 +30641,7 @@ export namespace Prisma {
     instructedRegistrations?: ProjectRegistrationUncheckedUpdateManyWithoutInstructorNestedInput
     instructedProjects?: ProjectUncheckedUpdateManyWithoutInstructorNestedInput
     facultyReviews?: ProjectRegistrationUncheckedUpdateManyWithoutFacultyReviewerNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type CallRoundUpsertWithoutProjectsInput = {
@@ -27930,9 +30658,28 @@ export namespace Prisma {
   export type CallRoundUpdateWithoutProjectsInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    registrationStartDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    registrationEndDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    projectStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    projectEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reviewDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reportingStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    maxProjects?: NullableIntFieldUpdateOperationsInput | number | null
+    budgetLimit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    requirements?: NullableStringFieldUpdateOperationsInput | string | null
+    guidelines?: NullableStringFieldUpdateOperationsInput | string | null
+    contactInfo?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    isLocked?: BoolFieldUpdateOperationsInput | boolean
+    approvalStatus?: EnumCallRoundApprovalStatusFieldUpdateOperationsInput | $Enums.CallRoundApprovalStatus
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdByRole?: NullableEnumRoleFieldUpdateOperationsInput | $Enums.Role | null
+    approvedById?: NullableStringFieldUpdateOperationsInput | string | null
+    approvalNote?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     registrations?: ProjectRegistrationUpdateManyWithoutCallRoundNestedInput
@@ -27945,9 +30692,28 @@ export namespace Prisma {
   export type CallRoundUncheckedUpdateWithoutProjectsInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    registrationStartDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    registrationEndDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    projectStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    projectEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reviewDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reportingStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    maxProjects?: NullableIntFieldUpdateOperationsInput | number | null
+    budgetLimit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    requirements?: NullableStringFieldUpdateOperationsInput | string | null
+    guidelines?: NullableStringFieldUpdateOperationsInput | string | null
+    contactInfo?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    isLocked?: BoolFieldUpdateOperationsInput | boolean
+    approvalStatus?: EnumCallRoundApprovalStatusFieldUpdateOperationsInput | $Enums.CallRoundApprovalStatus
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdByRole?: NullableEnumRoleFieldUpdateOperationsInput | $Enums.Role | null
+    approvedById?: NullableStringFieldUpdateOperationsInput | string | null
+    approvalNote?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     templateId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -28115,6 +30881,7 @@ export namespace Prisma {
     code?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
+    password?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
@@ -28132,6 +30899,7 @@ export namespace Prisma {
     registrations?: ProjectRegistrationUpdateManyWithoutUserNestedInput
     instructedRegistrations?: ProjectRegistrationUpdateManyWithoutInstructorNestedInput
     facultyReviews?: ProjectRegistrationUpdateManyWithoutFacultyReviewerNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutInstructedProjectsInput = {
@@ -28139,6 +30907,7 @@ export namespace Prisma {
     code?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
+    password?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
@@ -28156,6 +30925,7 @@ export namespace Prisma {
     registrations?: ProjectRegistrationUncheckedUpdateManyWithoutUserNestedInput
     instructedRegistrations?: ProjectRegistrationUncheckedUpdateManyWithoutInstructorNestedInput
     facultyReviews?: ProjectRegistrationUncheckedUpdateManyWithoutFacultyReviewerNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type ProgressReportTemplateItemCreateWithoutTemplateInput = {
@@ -28195,9 +30965,28 @@ export namespace Prisma {
   export type CallRoundCreateWithoutTemplateInput = {
     id?: string
     name: string
+    description?: string | null
+    registrationStartDate: Date | string
+    registrationEndDate: Date | string
+    projectStartDate?: Date | string | null
+    projectEndDate?: Date | string | null
+    reviewDeadline?: Date | string | null
+    reportingStartDate?: Date | string | null
     startDate: Date | string
     endDate: Date | string
+    maxProjects?: number | null
+    budgetLimit?: Decimal | DecimalJsLike | number | string | null
+    requirements?: string | null
+    guidelines?: string | null
+    contactInfo?: string | null
     isActive?: boolean
+    isLocked?: boolean
+    approvalStatus?: $Enums.CallRoundApprovalStatus
+    createdById?: string | null
+    createdByRole?: $Enums.Role | null
+    approvedById?: string | null
+    approvalNote?: string | null
+    approvedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     projects?: ProjectCreateNestedManyWithoutCallRoundInput
@@ -28210,9 +30999,28 @@ export namespace Prisma {
   export type CallRoundUncheckedCreateWithoutTemplateInput = {
     id?: string
     name: string
+    description?: string | null
+    registrationStartDate: Date | string
+    registrationEndDate: Date | string
+    projectStartDate?: Date | string | null
+    projectEndDate?: Date | string | null
+    reviewDeadline?: Date | string | null
+    reportingStartDate?: Date | string | null
     startDate: Date | string
     endDate: Date | string
+    maxProjects?: number | null
+    budgetLimit?: Decimal | DecimalJsLike | number | string | null
+    requirements?: string | null
+    guidelines?: string | null
+    contactInfo?: string | null
     isActive?: boolean
+    isLocked?: boolean
+    approvalStatus?: $Enums.CallRoundApprovalStatus
+    createdById?: string | null
+    createdByRole?: $Enums.Role | null
+    approvedById?: string | null
+    approvalNote?: string | null
+    approvedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     projects?: ProjectUncheckedCreateNestedManyWithoutCallRoundInput
@@ -28506,6 +31314,7 @@ export namespace Prisma {
     code?: string | null
     name: string
     email: string
+    password?: string | null
     dateOfBirth?: Date | string | null
     gender?: $Enums.Gender | null
     phone?: string | null
@@ -28523,6 +31332,7 @@ export namespace Prisma {
     instructedRegistrations?: ProjectRegistrationCreateNestedManyWithoutInstructorInput
     instructedProjects?: ProjectCreateNestedManyWithoutInstructorInput
     facultyReviews?: ProjectRegistrationCreateNestedManyWithoutFacultyReviewerInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutCouncilEvaluationsInput = {
@@ -28530,6 +31340,7 @@ export namespace Prisma {
     code?: string | null
     name: string
     email: string
+    password?: string | null
     dateOfBirth?: Date | string | null
     gender?: $Enums.Gender | null
     phone?: string | null
@@ -28547,6 +31358,7 @@ export namespace Prisma {
     instructedRegistrations?: ProjectRegistrationUncheckedCreateNestedManyWithoutInstructorInput
     instructedProjects?: ProjectUncheckedCreateNestedManyWithoutInstructorInput
     facultyReviews?: ProjectRegistrationUncheckedCreateNestedManyWithoutFacultyReviewerInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutCouncilEvaluationsInput = {
@@ -28629,6 +31441,7 @@ export namespace Prisma {
     code?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
+    password?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
@@ -28646,6 +31459,7 @@ export namespace Prisma {
     instructedRegistrations?: ProjectRegistrationUpdateManyWithoutInstructorNestedInput
     instructedProjects?: ProjectUpdateManyWithoutInstructorNestedInput
     facultyReviews?: ProjectRegistrationUpdateManyWithoutFacultyReviewerNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCouncilEvaluationsInput = {
@@ -28653,6 +31467,7 @@ export namespace Prisma {
     code?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
+    password?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
@@ -28670,6 +31485,7 @@ export namespace Prisma {
     instructedRegistrations?: ProjectRegistrationUncheckedUpdateManyWithoutInstructorNestedInput
     instructedProjects?: ProjectUncheckedUpdateManyWithoutInstructorNestedInput
     facultyReviews?: ProjectRegistrationUncheckedUpdateManyWithoutFacultyReviewerNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type ProjectCreateWithoutDisbursementsInput = {
@@ -28901,6 +31717,7 @@ export namespace Prisma {
     code?: string | null
     name: string
     email: string
+    password?: string | null
     dateOfBirth?: Date | string | null
     gender?: $Enums.Gender | null
     phone?: string | null
@@ -28918,6 +31735,7 @@ export namespace Prisma {
     instructedRegistrations?: ProjectRegistrationCreateNestedManyWithoutInstructorInput
     instructedProjects?: ProjectCreateNestedManyWithoutInstructorInput
     facultyReviews?: ProjectRegistrationCreateNestedManyWithoutFacultyReviewerInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutRegistrationsInput = {
@@ -28925,6 +31743,7 @@ export namespace Prisma {
     code?: string | null
     name: string
     email: string
+    password?: string | null
     dateOfBirth?: Date | string | null
     gender?: $Enums.Gender | null
     phone?: string | null
@@ -28942,6 +31761,7 @@ export namespace Prisma {
     instructedRegistrations?: ProjectRegistrationUncheckedCreateNestedManyWithoutInstructorInput
     instructedProjects?: ProjectUncheckedCreateNestedManyWithoutInstructorInput
     facultyReviews?: ProjectRegistrationUncheckedCreateNestedManyWithoutFacultyReviewerInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutRegistrationsInput = {
@@ -28954,6 +31774,7 @@ export namespace Prisma {
     code?: string | null
     name: string
     email: string
+    password?: string | null
     dateOfBirth?: Date | string | null
     gender?: $Enums.Gender | null
     phone?: string | null
@@ -28971,6 +31792,7 @@ export namespace Prisma {
     registrations?: ProjectRegistrationCreateNestedManyWithoutUserInput
     instructedProjects?: ProjectCreateNestedManyWithoutInstructorInput
     facultyReviews?: ProjectRegistrationCreateNestedManyWithoutFacultyReviewerInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutInstructedRegistrationsInput = {
@@ -28978,6 +31800,7 @@ export namespace Prisma {
     code?: string | null
     name: string
     email: string
+    password?: string | null
     dateOfBirth?: Date | string | null
     gender?: $Enums.Gender | null
     phone?: string | null
@@ -28995,6 +31818,7 @@ export namespace Prisma {
     registrations?: ProjectRegistrationUncheckedCreateNestedManyWithoutUserInput
     instructedProjects?: ProjectUncheckedCreateNestedManyWithoutInstructorInput
     facultyReviews?: ProjectRegistrationUncheckedCreateNestedManyWithoutFacultyReviewerInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutInstructedRegistrationsInput = {
@@ -29005,9 +31829,28 @@ export namespace Prisma {
   export type CallRoundCreateWithoutRegistrationsInput = {
     id?: string
     name: string
+    description?: string | null
+    registrationStartDate: Date | string
+    registrationEndDate: Date | string
+    projectStartDate?: Date | string | null
+    projectEndDate?: Date | string | null
+    reviewDeadline?: Date | string | null
+    reportingStartDate?: Date | string | null
     startDate: Date | string
     endDate: Date | string
+    maxProjects?: number | null
+    budgetLimit?: Decimal | DecimalJsLike | number | string | null
+    requirements?: string | null
+    guidelines?: string | null
+    contactInfo?: string | null
     isActive?: boolean
+    isLocked?: boolean
+    approvalStatus?: $Enums.CallRoundApprovalStatus
+    createdById?: string | null
+    createdByRole?: $Enums.Role | null
+    approvedById?: string | null
+    approvalNote?: string | null
+    approvedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     projects?: ProjectCreateNestedManyWithoutCallRoundInput
@@ -29020,9 +31863,28 @@ export namespace Prisma {
   export type CallRoundUncheckedCreateWithoutRegistrationsInput = {
     id?: string
     name: string
+    description?: string | null
+    registrationStartDate: Date | string
+    registrationEndDate: Date | string
+    projectStartDate?: Date | string | null
+    projectEndDate?: Date | string | null
+    reviewDeadline?: Date | string | null
+    reportingStartDate?: Date | string | null
     startDate: Date | string
     endDate: Date | string
+    maxProjects?: number | null
+    budgetLimit?: Decimal | DecimalJsLike | number | string | null
+    requirements?: string | null
+    guidelines?: string | null
+    contactInfo?: string | null
     isActive?: boolean
+    isLocked?: boolean
+    approvalStatus?: $Enums.CallRoundApprovalStatus
+    createdById?: string | null
+    createdByRole?: $Enums.Role | null
+    approvedById?: string | null
+    approvalNote?: string | null
+    approvedAt?: Date | string | null
     templateId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -29042,6 +31904,7 @@ export namespace Prisma {
     code?: string | null
     name: string
     email: string
+    password?: string | null
     dateOfBirth?: Date | string | null
     gender?: $Enums.Gender | null
     phone?: string | null
@@ -29059,6 +31922,7 @@ export namespace Prisma {
     registrations?: ProjectRegistrationCreateNestedManyWithoutUserInput
     instructedRegistrations?: ProjectRegistrationCreateNestedManyWithoutInstructorInput
     instructedProjects?: ProjectCreateNestedManyWithoutInstructorInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutFacultyReviewsInput = {
@@ -29066,6 +31930,7 @@ export namespace Prisma {
     code?: string | null
     name: string
     email: string
+    password?: string | null
     dateOfBirth?: Date | string | null
     gender?: $Enums.Gender | null
     phone?: string | null
@@ -29083,6 +31948,7 @@ export namespace Prisma {
     registrations?: ProjectRegistrationUncheckedCreateNestedManyWithoutUserInput
     instructedRegistrations?: ProjectRegistrationUncheckedCreateNestedManyWithoutInstructorInput
     instructedProjects?: ProjectUncheckedCreateNestedManyWithoutInstructorInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutFacultyReviewsInput = {
@@ -29106,6 +31972,7 @@ export namespace Prisma {
     code?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
+    password?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
@@ -29123,6 +31990,7 @@ export namespace Prisma {
     instructedRegistrations?: ProjectRegistrationUpdateManyWithoutInstructorNestedInput
     instructedProjects?: ProjectUpdateManyWithoutInstructorNestedInput
     facultyReviews?: ProjectRegistrationUpdateManyWithoutFacultyReviewerNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutRegistrationsInput = {
@@ -29130,6 +31998,7 @@ export namespace Prisma {
     code?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
+    password?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
@@ -29147,6 +32016,7 @@ export namespace Prisma {
     instructedRegistrations?: ProjectRegistrationUncheckedUpdateManyWithoutInstructorNestedInput
     instructedProjects?: ProjectUncheckedUpdateManyWithoutInstructorNestedInput
     facultyReviews?: ProjectRegistrationUncheckedUpdateManyWithoutFacultyReviewerNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUpsertWithoutInstructedRegistrationsInput = {
@@ -29165,6 +32035,7 @@ export namespace Prisma {
     code?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
+    password?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
@@ -29182,6 +32053,7 @@ export namespace Prisma {
     registrations?: ProjectRegistrationUpdateManyWithoutUserNestedInput
     instructedProjects?: ProjectUpdateManyWithoutInstructorNestedInput
     facultyReviews?: ProjectRegistrationUpdateManyWithoutFacultyReviewerNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutInstructedRegistrationsInput = {
@@ -29189,6 +32061,7 @@ export namespace Prisma {
     code?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
+    password?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
@@ -29206,6 +32079,7 @@ export namespace Prisma {
     registrations?: ProjectRegistrationUncheckedUpdateManyWithoutUserNestedInput
     instructedProjects?: ProjectUncheckedUpdateManyWithoutInstructorNestedInput
     facultyReviews?: ProjectRegistrationUncheckedUpdateManyWithoutFacultyReviewerNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type CallRoundUpsertWithoutRegistrationsInput = {
@@ -29222,9 +32096,28 @@ export namespace Prisma {
   export type CallRoundUpdateWithoutRegistrationsInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    registrationStartDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    registrationEndDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    projectStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    projectEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reviewDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reportingStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    maxProjects?: NullableIntFieldUpdateOperationsInput | number | null
+    budgetLimit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    requirements?: NullableStringFieldUpdateOperationsInput | string | null
+    guidelines?: NullableStringFieldUpdateOperationsInput | string | null
+    contactInfo?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    isLocked?: BoolFieldUpdateOperationsInput | boolean
+    approvalStatus?: EnumCallRoundApprovalStatusFieldUpdateOperationsInput | $Enums.CallRoundApprovalStatus
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdByRole?: NullableEnumRoleFieldUpdateOperationsInput | $Enums.Role | null
+    approvedById?: NullableStringFieldUpdateOperationsInput | string | null
+    approvalNote?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     projects?: ProjectUpdateManyWithoutCallRoundNestedInput
@@ -29237,9 +32130,28 @@ export namespace Prisma {
   export type CallRoundUncheckedUpdateWithoutRegistrationsInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    registrationStartDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    registrationEndDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    projectStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    projectEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reviewDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reportingStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    maxProjects?: NullableIntFieldUpdateOperationsInput | number | null
+    budgetLimit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    requirements?: NullableStringFieldUpdateOperationsInput | string | null
+    guidelines?: NullableStringFieldUpdateOperationsInput | string | null
+    contactInfo?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    isLocked?: BoolFieldUpdateOperationsInput | boolean
+    approvalStatus?: EnumCallRoundApprovalStatusFieldUpdateOperationsInput | $Enums.CallRoundApprovalStatus
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdByRole?: NullableEnumRoleFieldUpdateOperationsInput | $Enums.Role | null
+    approvedById?: NullableStringFieldUpdateOperationsInput | string | null
+    approvalNote?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     templateId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -29265,6 +32177,7 @@ export namespace Prisma {
     code?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
+    password?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
@@ -29282,6 +32195,7 @@ export namespace Prisma {
     registrations?: ProjectRegistrationUpdateManyWithoutUserNestedInput
     instructedRegistrations?: ProjectRegistrationUpdateManyWithoutInstructorNestedInput
     instructedProjects?: ProjectUpdateManyWithoutInstructorNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutFacultyReviewsInput = {
@@ -29289,6 +32203,7 @@ export namespace Prisma {
     code?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
+    password?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
@@ -29306,6 +32221,127 @@ export namespace Prisma {
     registrations?: ProjectRegistrationUncheckedUpdateManyWithoutUserNestedInput
     instructedRegistrations?: ProjectRegistrationUncheckedUpdateManyWithoutInstructorNestedInput
     instructedProjects?: ProjectUncheckedUpdateManyWithoutInstructorNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserCreateWithoutNotificationsInput = {
+    id?: string
+    code?: string | null
+    name: string
+    email: string
+    password?: string | null
+    dateOfBirth?: Date | string | null
+    gender?: $Enums.Gender | null
+    phone?: string | null
+    address?: string | null
+    role?: $Enums.Role
+    department?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    departmentRef?: DepartmentCreateNestedOneWithoutUsersInput
+    major?: MajorCreateNestedOneWithoutUsersInput
+    class?: ClassCreateNestedOneWithoutUsersInput
+    leadProjects?: ProjectCreateNestedManyWithoutLeaderInput
+    deanReviews?: ProjectCreateNestedManyWithoutDeanReviewerInput
+    councilEvaluations?: CouncilEvaluationCreateNestedManyWithoutCouncilMemberInput
+    registrations?: ProjectRegistrationCreateNestedManyWithoutUserInput
+    instructedRegistrations?: ProjectRegistrationCreateNestedManyWithoutInstructorInput
+    instructedProjects?: ProjectCreateNestedManyWithoutInstructorInput
+    facultyReviews?: ProjectRegistrationCreateNestedManyWithoutFacultyReviewerInput
+  }
+
+  export type UserUncheckedCreateWithoutNotificationsInput = {
+    id?: string
+    code?: string | null
+    name: string
+    email: string
+    password?: string | null
+    dateOfBirth?: Date | string | null
+    gender?: $Enums.Gender | null
+    phone?: string | null
+    address?: string | null
+    role?: $Enums.Role
+    department?: string | null
+    departmentId?: string | null
+    majorId?: string | null
+    classId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    leadProjects?: ProjectUncheckedCreateNestedManyWithoutLeaderInput
+    deanReviews?: ProjectUncheckedCreateNestedManyWithoutDeanReviewerInput
+    councilEvaluations?: CouncilEvaluationUncheckedCreateNestedManyWithoutCouncilMemberInput
+    registrations?: ProjectRegistrationUncheckedCreateNestedManyWithoutUserInput
+    instructedRegistrations?: ProjectRegistrationUncheckedCreateNestedManyWithoutInstructorInput
+    instructedProjects?: ProjectUncheckedCreateNestedManyWithoutInstructorInput
+    facultyReviews?: ProjectRegistrationUncheckedCreateNestedManyWithoutFacultyReviewerInput
+  }
+
+  export type UserCreateOrConnectWithoutNotificationsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutNotificationsInput, UserUncheckedCreateWithoutNotificationsInput>
+  }
+
+  export type UserUpsertWithoutNotificationsInput = {
+    update: XOR<UserUpdateWithoutNotificationsInput, UserUncheckedUpdateWithoutNotificationsInput>
+    create: XOR<UserCreateWithoutNotificationsInput, UserUncheckedCreateWithoutNotificationsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutNotificationsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutNotificationsInput, UserUncheckedUpdateWithoutNotificationsInput>
+  }
+
+  export type UserUpdateWithoutNotificationsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    departmentRef?: DepartmentUpdateOneWithoutUsersNestedInput
+    major?: MajorUpdateOneWithoutUsersNestedInput
+    class?: ClassUpdateOneWithoutUsersNestedInput
+    leadProjects?: ProjectUpdateManyWithoutLeaderNestedInput
+    deanReviews?: ProjectUpdateManyWithoutDeanReviewerNestedInput
+    councilEvaluations?: CouncilEvaluationUpdateManyWithoutCouncilMemberNestedInput
+    registrations?: ProjectRegistrationUpdateManyWithoutUserNestedInput
+    instructedRegistrations?: ProjectRegistrationUpdateManyWithoutInstructorNestedInput
+    instructedProjects?: ProjectUpdateManyWithoutInstructorNestedInput
+    facultyReviews?: ProjectRegistrationUpdateManyWithoutFacultyReviewerNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutNotificationsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    departmentId?: NullableStringFieldUpdateOperationsInput | string | null
+    majorId?: NullableStringFieldUpdateOperationsInput | string | null
+    classId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    leadProjects?: ProjectUncheckedUpdateManyWithoutLeaderNestedInput
+    deanReviews?: ProjectUncheckedUpdateManyWithoutDeanReviewerNestedInput
+    councilEvaluations?: CouncilEvaluationUncheckedUpdateManyWithoutCouncilMemberNestedInput
+    registrations?: ProjectRegistrationUncheckedUpdateManyWithoutUserNestedInput
+    instructedRegistrations?: ProjectRegistrationUncheckedUpdateManyWithoutInstructorNestedInput
+    instructedProjects?: ProjectUncheckedUpdateManyWithoutInstructorNestedInput
+    facultyReviews?: ProjectRegistrationUncheckedUpdateManyWithoutFacultyReviewerNestedInput
   }
 
   export type MajorCreateManyDepartmentInput = {
@@ -29322,6 +32358,7 @@ export namespace Prisma {
     code?: string | null
     name: string
     email: string
+    password?: string | null
     dateOfBirth?: Date | string | null
     gender?: $Enums.Gender | null
     phone?: string | null
@@ -29372,6 +32409,7 @@ export namespace Prisma {
     code?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
+    password?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
@@ -29389,6 +32427,7 @@ export namespace Prisma {
     instructedRegistrations?: ProjectRegistrationUpdateManyWithoutInstructorNestedInput
     instructedProjects?: ProjectUpdateManyWithoutInstructorNestedInput
     facultyReviews?: ProjectRegistrationUpdateManyWithoutFacultyReviewerNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutDepartmentRefInput = {
@@ -29396,6 +32435,7 @@ export namespace Prisma {
     code?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
+    password?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
@@ -29413,6 +32453,7 @@ export namespace Prisma {
     instructedRegistrations?: ProjectRegistrationUncheckedUpdateManyWithoutInstructorNestedInput
     instructedProjects?: ProjectUncheckedUpdateManyWithoutInstructorNestedInput
     facultyReviews?: ProjectRegistrationUncheckedUpdateManyWithoutFacultyReviewerNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutDepartmentRefInput = {
@@ -29420,6 +32461,7 @@ export namespace Prisma {
     code?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
+    password?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
@@ -29435,9 +32477,28 @@ export namespace Prisma {
   export type CallRoundUpdateWithoutDepartmentsInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    registrationStartDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    registrationEndDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    projectStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    projectEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reviewDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reportingStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    maxProjects?: NullableIntFieldUpdateOperationsInput | number | null
+    budgetLimit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    requirements?: NullableStringFieldUpdateOperationsInput | string | null
+    guidelines?: NullableStringFieldUpdateOperationsInput | string | null
+    contactInfo?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    isLocked?: BoolFieldUpdateOperationsInput | boolean
+    approvalStatus?: EnumCallRoundApprovalStatusFieldUpdateOperationsInput | $Enums.CallRoundApprovalStatus
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdByRole?: NullableEnumRoleFieldUpdateOperationsInput | $Enums.Role | null
+    approvedById?: NullableStringFieldUpdateOperationsInput | string | null
+    approvalNote?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     projects?: ProjectUpdateManyWithoutCallRoundNestedInput
@@ -29450,9 +32511,28 @@ export namespace Prisma {
   export type CallRoundUncheckedUpdateWithoutDepartmentsInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    registrationStartDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    registrationEndDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    projectStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    projectEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reviewDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reportingStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    maxProjects?: NullableIntFieldUpdateOperationsInput | number | null
+    budgetLimit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    requirements?: NullableStringFieldUpdateOperationsInput | string | null
+    guidelines?: NullableStringFieldUpdateOperationsInput | string | null
+    contactInfo?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    isLocked?: BoolFieldUpdateOperationsInput | boolean
+    approvalStatus?: EnumCallRoundApprovalStatusFieldUpdateOperationsInput | $Enums.CallRoundApprovalStatus
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdByRole?: NullableEnumRoleFieldUpdateOperationsInput | $Enums.Role | null
+    approvedById?: NullableStringFieldUpdateOperationsInput | string | null
+    approvalNote?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     templateId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -29465,9 +32545,28 @@ export namespace Prisma {
   export type CallRoundUncheckedUpdateManyWithoutDepartmentsInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    registrationStartDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    registrationEndDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    projectStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    projectEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reviewDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reportingStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    maxProjects?: NullableIntFieldUpdateOperationsInput | number | null
+    budgetLimit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    requirements?: NullableStringFieldUpdateOperationsInput | string | null
+    guidelines?: NullableStringFieldUpdateOperationsInput | string | null
+    contactInfo?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    isLocked?: BoolFieldUpdateOperationsInput | boolean
+    approvalStatus?: EnumCallRoundApprovalStatusFieldUpdateOperationsInput | $Enums.CallRoundApprovalStatus
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdByRole?: NullableEnumRoleFieldUpdateOperationsInput | $Enums.Role | null
+    approvedById?: NullableStringFieldUpdateOperationsInput | string | null
+    approvalNote?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     templateId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -29486,6 +32585,7 @@ export namespace Prisma {
     code?: string | null
     name: string
     email: string
+    password?: string | null
     dateOfBirth?: Date | string | null
     gender?: $Enums.Gender | null
     phone?: string | null
@@ -29531,6 +32631,7 @@ export namespace Prisma {
     code?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
+    password?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
@@ -29548,6 +32649,7 @@ export namespace Prisma {
     instructedRegistrations?: ProjectRegistrationUpdateManyWithoutInstructorNestedInput
     instructedProjects?: ProjectUpdateManyWithoutInstructorNestedInput
     facultyReviews?: ProjectRegistrationUpdateManyWithoutFacultyReviewerNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutMajorInput = {
@@ -29555,6 +32657,7 @@ export namespace Prisma {
     code?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
+    password?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
@@ -29572,6 +32675,7 @@ export namespace Prisma {
     instructedRegistrations?: ProjectRegistrationUncheckedUpdateManyWithoutInstructorNestedInput
     instructedProjects?: ProjectUncheckedUpdateManyWithoutInstructorNestedInput
     facultyReviews?: ProjectRegistrationUncheckedUpdateManyWithoutFacultyReviewerNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutMajorInput = {
@@ -29579,6 +32683,7 @@ export namespace Prisma {
     code?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
+    password?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
@@ -29594,9 +32699,28 @@ export namespace Prisma {
   export type CallRoundUpdateWithoutMajorsInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    registrationStartDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    registrationEndDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    projectStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    projectEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reviewDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reportingStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    maxProjects?: NullableIntFieldUpdateOperationsInput | number | null
+    budgetLimit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    requirements?: NullableStringFieldUpdateOperationsInput | string | null
+    guidelines?: NullableStringFieldUpdateOperationsInput | string | null
+    contactInfo?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    isLocked?: BoolFieldUpdateOperationsInput | boolean
+    approvalStatus?: EnumCallRoundApprovalStatusFieldUpdateOperationsInput | $Enums.CallRoundApprovalStatus
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdByRole?: NullableEnumRoleFieldUpdateOperationsInput | $Enums.Role | null
+    approvedById?: NullableStringFieldUpdateOperationsInput | string | null
+    approvalNote?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     projects?: ProjectUpdateManyWithoutCallRoundNestedInput
@@ -29609,9 +32733,28 @@ export namespace Prisma {
   export type CallRoundUncheckedUpdateWithoutMajorsInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    registrationStartDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    registrationEndDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    projectStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    projectEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reviewDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reportingStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    maxProjects?: NullableIntFieldUpdateOperationsInput | number | null
+    budgetLimit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    requirements?: NullableStringFieldUpdateOperationsInput | string | null
+    guidelines?: NullableStringFieldUpdateOperationsInput | string | null
+    contactInfo?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    isLocked?: BoolFieldUpdateOperationsInput | boolean
+    approvalStatus?: EnumCallRoundApprovalStatusFieldUpdateOperationsInput | $Enums.CallRoundApprovalStatus
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdByRole?: NullableEnumRoleFieldUpdateOperationsInput | $Enums.Role | null
+    approvedById?: NullableStringFieldUpdateOperationsInput | string | null
+    approvalNote?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     templateId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -29624,9 +32767,28 @@ export namespace Prisma {
   export type CallRoundUncheckedUpdateManyWithoutMajorsInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    registrationStartDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    registrationEndDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    projectStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    projectEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reviewDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reportingStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    maxProjects?: NullableIntFieldUpdateOperationsInput | number | null
+    budgetLimit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    requirements?: NullableStringFieldUpdateOperationsInput | string | null
+    guidelines?: NullableStringFieldUpdateOperationsInput | string | null
+    contactInfo?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    isLocked?: BoolFieldUpdateOperationsInput | boolean
+    approvalStatus?: EnumCallRoundApprovalStatusFieldUpdateOperationsInput | $Enums.CallRoundApprovalStatus
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdByRole?: NullableEnumRoleFieldUpdateOperationsInput | $Enums.Role | null
+    approvedById?: NullableStringFieldUpdateOperationsInput | string | null
+    approvalNote?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     templateId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -29637,6 +32799,7 @@ export namespace Prisma {
     code?: string | null
     name: string
     email: string
+    password?: string | null
     dateOfBirth?: Date | string | null
     gender?: $Enums.Gender | null
     phone?: string | null
@@ -29654,6 +32817,7 @@ export namespace Prisma {
     code?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
+    password?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
@@ -29671,6 +32835,7 @@ export namespace Prisma {
     instructedRegistrations?: ProjectRegistrationUpdateManyWithoutInstructorNestedInput
     instructedProjects?: ProjectUpdateManyWithoutInstructorNestedInput
     facultyReviews?: ProjectRegistrationUpdateManyWithoutFacultyReviewerNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutClassInput = {
@@ -29678,6 +32843,7 @@ export namespace Prisma {
     code?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
+    password?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
@@ -29695,6 +32861,7 @@ export namespace Prisma {
     instructedRegistrations?: ProjectRegistrationUncheckedUpdateManyWithoutInstructorNestedInput
     instructedProjects?: ProjectUncheckedUpdateManyWithoutInstructorNestedInput
     facultyReviews?: ProjectRegistrationUncheckedUpdateManyWithoutFacultyReviewerNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutClassInput = {
@@ -29702,6 +32869,7 @@ export namespace Prisma {
     code?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
+    password?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
@@ -29717,9 +32885,28 @@ export namespace Prisma {
   export type CallRoundUpdateWithoutClassesInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    registrationStartDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    registrationEndDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    projectStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    projectEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reviewDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reportingStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    maxProjects?: NullableIntFieldUpdateOperationsInput | number | null
+    budgetLimit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    requirements?: NullableStringFieldUpdateOperationsInput | string | null
+    guidelines?: NullableStringFieldUpdateOperationsInput | string | null
+    contactInfo?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    isLocked?: BoolFieldUpdateOperationsInput | boolean
+    approvalStatus?: EnumCallRoundApprovalStatusFieldUpdateOperationsInput | $Enums.CallRoundApprovalStatus
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdByRole?: NullableEnumRoleFieldUpdateOperationsInput | $Enums.Role | null
+    approvedById?: NullableStringFieldUpdateOperationsInput | string | null
+    approvalNote?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     projects?: ProjectUpdateManyWithoutCallRoundNestedInput
@@ -29732,9 +32919,28 @@ export namespace Prisma {
   export type CallRoundUncheckedUpdateWithoutClassesInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    registrationStartDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    registrationEndDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    projectStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    projectEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reviewDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reportingStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    maxProjects?: NullableIntFieldUpdateOperationsInput | number | null
+    budgetLimit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    requirements?: NullableStringFieldUpdateOperationsInput | string | null
+    guidelines?: NullableStringFieldUpdateOperationsInput | string | null
+    contactInfo?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    isLocked?: BoolFieldUpdateOperationsInput | boolean
+    approvalStatus?: EnumCallRoundApprovalStatusFieldUpdateOperationsInput | $Enums.CallRoundApprovalStatus
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdByRole?: NullableEnumRoleFieldUpdateOperationsInput | $Enums.Role | null
+    approvedById?: NullableStringFieldUpdateOperationsInput | string | null
+    approvalNote?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     templateId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -29747,9 +32953,28 @@ export namespace Prisma {
   export type CallRoundUncheckedUpdateManyWithoutClassesInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    registrationStartDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    registrationEndDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    projectStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    projectEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reviewDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reportingStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    maxProjects?: NullableIntFieldUpdateOperationsInput | number | null
+    budgetLimit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    requirements?: NullableStringFieldUpdateOperationsInput | string | null
+    guidelines?: NullableStringFieldUpdateOperationsInput | string | null
+    contactInfo?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    isLocked?: BoolFieldUpdateOperationsInput | boolean
+    approvalStatus?: EnumCallRoundApprovalStatusFieldUpdateOperationsInput | $Enums.CallRoundApprovalStatus
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdByRole?: NullableEnumRoleFieldUpdateOperationsInput | $Enums.Role | null
+    approvedById?: NullableStringFieldUpdateOperationsInput | string | null
+    approvalNote?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     templateId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -29871,6 +33096,18 @@ export namespace Prisma {
     instructorId?: string | null
     instructorStatus?: $Enums.InstructorStatus
     facultyStatus?: $Enums.FacultyStatus
+  }
+
+  export type NotificationCreateManyUserInput = {
+    id?: string
+    type: $Enums.NotificationType
+    title: string
+    message: string
+    link?: string | null
+    isRead?: boolean
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    readAt?: Date | string | null
   }
 
   export type ProjectUpdateWithoutLeaderInput = {
@@ -30249,6 +33486,42 @@ export namespace Prisma {
     instructorId?: NullableStringFieldUpdateOperationsInput | string | null
     instructorStatus?: EnumInstructorStatusFieldUpdateOperationsInput | $Enums.InstructorStatus
     facultyStatus?: EnumFacultyStatusFieldUpdateOperationsInput | $Enums.FacultyStatus
+  }
+
+  export type NotificationUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    type?: EnumNotificationTypeFieldUpdateOperationsInput | $Enums.NotificationType
+    title?: StringFieldUpdateOperationsInput | string
+    message?: StringFieldUpdateOperationsInput | string
+    link?: NullableStringFieldUpdateOperationsInput | string | null
+    isRead?: BoolFieldUpdateOperationsInput | boolean
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    readAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type NotificationUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    type?: EnumNotificationTypeFieldUpdateOperationsInput | $Enums.NotificationType
+    title?: StringFieldUpdateOperationsInput | string
+    message?: StringFieldUpdateOperationsInput | string
+    link?: NullableStringFieldUpdateOperationsInput | string | null
+    isRead?: BoolFieldUpdateOperationsInput | boolean
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    readAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type NotificationUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    type?: EnumNotificationTypeFieldUpdateOperationsInput | $Enums.NotificationType
+    title?: StringFieldUpdateOperationsInput | string
+    message?: StringFieldUpdateOperationsInput | string
+    link?: NullableStringFieldUpdateOperationsInput | string | null
+    isRead?: BoolFieldUpdateOperationsInput | boolean
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    readAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type ProjectCreateManyCallRoundInput = {
@@ -30796,9 +34069,28 @@ export namespace Prisma {
   export type CallRoundCreateManyTemplateInput = {
     id?: string
     name: string
+    description?: string | null
+    registrationStartDate: Date | string
+    registrationEndDate: Date | string
+    projectStartDate?: Date | string | null
+    projectEndDate?: Date | string | null
+    reviewDeadline?: Date | string | null
+    reportingStartDate?: Date | string | null
     startDate: Date | string
     endDate: Date | string
+    maxProjects?: number | null
+    budgetLimit?: Decimal | DecimalJsLike | number | string | null
+    requirements?: string | null
+    guidelines?: string | null
+    contactInfo?: string | null
     isActive?: boolean
+    isLocked?: boolean
+    approvalStatus?: $Enums.CallRoundApprovalStatus
+    createdById?: string | null
+    createdByRole?: $Enums.Role | null
+    approvedById?: string | null
+    approvalNote?: string | null
+    approvedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -30842,9 +34134,28 @@ export namespace Prisma {
   export type CallRoundUpdateWithoutTemplateInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    registrationStartDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    registrationEndDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    projectStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    projectEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reviewDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reportingStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    maxProjects?: NullableIntFieldUpdateOperationsInput | number | null
+    budgetLimit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    requirements?: NullableStringFieldUpdateOperationsInput | string | null
+    guidelines?: NullableStringFieldUpdateOperationsInput | string | null
+    contactInfo?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    isLocked?: BoolFieldUpdateOperationsInput | boolean
+    approvalStatus?: EnumCallRoundApprovalStatusFieldUpdateOperationsInput | $Enums.CallRoundApprovalStatus
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdByRole?: NullableEnumRoleFieldUpdateOperationsInput | $Enums.Role | null
+    approvedById?: NullableStringFieldUpdateOperationsInput | string | null
+    approvalNote?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     projects?: ProjectUpdateManyWithoutCallRoundNestedInput
@@ -30857,9 +34168,28 @@ export namespace Prisma {
   export type CallRoundUncheckedUpdateWithoutTemplateInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    registrationStartDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    registrationEndDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    projectStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    projectEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reviewDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reportingStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    maxProjects?: NullableIntFieldUpdateOperationsInput | number | null
+    budgetLimit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    requirements?: NullableStringFieldUpdateOperationsInput | string | null
+    guidelines?: NullableStringFieldUpdateOperationsInput | string | null
+    contactInfo?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    isLocked?: BoolFieldUpdateOperationsInput | boolean
+    approvalStatus?: EnumCallRoundApprovalStatusFieldUpdateOperationsInput | $Enums.CallRoundApprovalStatus
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdByRole?: NullableEnumRoleFieldUpdateOperationsInput | $Enums.Role | null
+    approvedById?: NullableStringFieldUpdateOperationsInput | string | null
+    approvalNote?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     projects?: ProjectUncheckedUpdateManyWithoutCallRoundNestedInput
@@ -30872,9 +34202,28 @@ export namespace Prisma {
   export type CallRoundUncheckedUpdateManyWithoutTemplateInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    registrationStartDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    registrationEndDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    projectStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    projectEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reviewDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reportingStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    maxProjects?: NullableIntFieldUpdateOperationsInput | number | null
+    budgetLimit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    requirements?: NullableStringFieldUpdateOperationsInput | string | null
+    guidelines?: NullableStringFieldUpdateOperationsInput | string | null
+    contactInfo?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    isLocked?: BoolFieldUpdateOperationsInput | boolean
+    approvalStatus?: EnumCallRoundApprovalStatusFieldUpdateOperationsInput | $Enums.CallRoundApprovalStatus
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdByRole?: NullableEnumRoleFieldUpdateOperationsInput | $Enums.Role | null
+    approvedById?: NullableStringFieldUpdateOperationsInput | string | null
+    approvalNote?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

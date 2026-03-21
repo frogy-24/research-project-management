@@ -1,22 +1,48 @@
 import prisma from "@/lib/prisma";
 import { NextResponse } from "next/server";
 import { createUserSchema } from "@/types/user.schema";
+import { getAuthUser, getDepartmentFilter, isAdmin } from "@/lib/auth-helpers";
 
 export async function GET(request: Request) {
   try {
+    // Get authenticated user for role-based filtering
+    const authUser = await getAuthUser();
+    
+    if (!authUser) {
+      return NextResponse.json(
+        { success: false, error: "Unauthorized" },
+        { status: 401 }
+      );
+    }
+
     const { searchParams } = new URL(request.url);
+    const page = parseInt(searchParams.get("page") || "1");
+    const limit = parseInt(searchParams.get("limit") || "20");
     const role = searchParams.get("role");
     const departmentId = searchParams.get("departmentId");
     const majorId = searchParams.get("majorId");
     const classId = searchParams.get("classId");
+    const gender = searchParams.get("gender");
     const search = searchParams.get("search") || "";
+
+    const skip = (page - 1) * limit;
 
     const whereClause: any = {};
 
+    // Apply role-based filtering
+    const departmentFilter = getDepartmentFilter(authUser);
+    if (departmentFilter && !isAdmin(authUser)) {
+      // DEAN sees only their department
+      whereClause.departmentId = departmentFilter;
+    } else if (departmentId) {
+      // ADMIN can filter by specific department
+      whereClause.departmentId = departmentId;
+    }
+
     if (role) whereClause.role = role;
-    if (departmentId) whereClause.departmentId = departmentId;
     if (majorId) whereClause.majorId = majorId;
     if (classId) whereClause.classId = classId;
+    if (gender) whereClause.gender = gender;
     
     if (search) {
       whereClause.OR = [
@@ -26,17 +52,31 @@ export async function GET(request: Request) {
       ];
     }
 
-    const users = await prisma.user.findMany({
-      where: whereClause,
-      include: {
-        departmentRef: true,
-        major: true,
-        class: true,
-      },
-      orderBy: { createdAt: "desc" },
-    });
+    const [users, total] = await Promise.all([
+      prisma.user.findMany({
+        where: whereClause,
+        include: {
+          departmentRef: true,
+          major: true,
+          class: true,
+        },
+        orderBy: { createdAt: "desc" },
+        skip,
+        take: limit,
+      }),
+      prisma.user.count({ where: whereClause }),
+    ]);
 
-    return NextResponse.json({ success: true, data: users });
+    return NextResponse.json({
+      success: true,
+      data: users,
+      pagination: {
+        page,
+        limit,
+        total,
+        totalPages: Math.ceil(total / limit),
+      },
+    });
   } catch (error) {
     console.error("Error fetching users:", error);
     return NextResponse.json(
@@ -51,8 +91,26 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
   try {
+    const authUser = await getAuthUser();
+    if (!authUser) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
     const body = await request.json();
     const validatedData = createUserSchema.parse(body);
+
+    // DEAN can only create users in their own department
+    // Auto-assign dean's departmentId if not provided or different
+    if (authUser.role === "DEAN") {
+      if (!authUser.departmentId) {
+        return NextResponse.json(
+          { error: "Forbidden: Dean has no department assigned" },
+          { status: 403 }
+        );
+      }
+      // Force departmentId to be the dean's own department
+      validatedData.departmentId = authUser.departmentId;
+    }
 
     const existingUser = await prisma.user.findFirst({
       where: {

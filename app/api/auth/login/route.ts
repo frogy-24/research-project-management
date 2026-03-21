@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { signAuthToken, AUTH_COOKIE_NAME, isSameOrigin } from "@/lib/auth";
-import { loginInputSchema } from "@/types/auth.schema";
+import { loginInputSchema, loginWithCredentialsSchema } from "@/types/auth.schema";
 
 export async function POST(request: Request) {
   try {
@@ -16,29 +16,93 @@ export async function POST(request: Request) {
     }
 
     const body: unknown = await request.json();
-    const parsed = loginInputSchema.safeParse(body);
+    
+    // Try to parse as credential-based login first
+    const credentialsParsed = loginWithCredentialsSchema.safeParse(body);
+    
+    if (credentialsParsed.success) {
+      // Handle email/password login
+      const { email, password } = credentialsParsed.data;
+      
+      const user = await prisma.user.findUnique({ 
+        where: { email },
+        select: {
+          id: true,
+          email: true,
+          name: true,
+          role: true,
+          password: true,
+        }
+      });
 
-    if (!parsed.success) {
+      if (!user) {
+        return NextResponse.json(
+          {
+            success: false,
+            error: "Email hoặc mật khẩu không đúng",
+          },
+          { status: 401 }
+        );
+      }
+
+      // Simple password comparison (in production, use bcrypt)
+      if (user.password !== password) {
+        return NextResponse.json(
+          {
+            success: false,
+            error: "Email hoặc mật khẩu không đúng",
+          },
+          { status: 401 }
+        );
+      }
+
+      const token = await signAuthToken({ userId: user.id, role: user.role });
+
+      const response = NextResponse.json({
+        success: true,
+        data: {
+          userId: user.id,
+          role: user.role,
+          name: user.name,
+          email: user.email,
+        },
+      });
+
+      response.cookies.set(AUTH_COOKIE_NAME, token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "lax",
+        path: "/",
+        maxAge: 60 * 60 * 24 * 7, // 7 days
+      });
+
+      return response;
+    }
+
+    // Fallback to role-based login (backward compatible)
+    const roleParsed = loginInputSchema.safeParse(body);
+    
+    if (!roleParsed.success) {
       return NextResponse.json(
         {
           success: false,
           error: "Invalid login payload.",
-          fields: parsed.error.flatten().fieldErrors,
+          fields: credentialsParsed.error.flatten().fieldErrors,
         },
         { status: 400 }
       );
     }
 
-    let user = parsed.data.userId
-      ? await prisma.user.findUnique({ where: { id: parsed.data.userId } })
-      : await prisma.user.findFirst({ where: { role: parsed.data.role }, orderBy: { createdAt: "asc" } });
+    let user = roleParsed.data.userId
+      ? await prisma.user.findUnique({ where: { id: roleParsed.data.userId } })
+      : await prisma.user.findFirst({ where: { role: roleParsed.data.role }, orderBy: { createdAt: "asc" } });
 
     if (!user) {
       user = await prisma.user.create({
         data: {
-          name: `${parsed.data.role} User`,
-          email: `${parsed.data.role.toLowerCase()}-${Date.now()}@urms.local`,
-          role: parsed.data.role,
+          name: `${roleParsed.data.role} User`,
+          email: `${roleParsed.data.role.toLowerCase()}-${Date.now()}@urms.local`,
+          role: roleParsed.data.role,
         },
       });
     }

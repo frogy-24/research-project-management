@@ -24,20 +24,14 @@ export async function GET(request: Request) {
 
     if (!actorUserId || !actorRole) {
       return NextResponse.json(
-        {
-          success: false,
-          error: "Unauthorized",
-        },
+        { success: false, error: "Unauthorized" },
         { status: 401 }
       );
     }
 
     if (!canManageOwnRegistrations(actorRole)) {
       return NextResponse.json(
-        {
-          success: false,
-          error: "Bạn không có quyền truy cập chức năng này.",
-        },
+        { success: false, error: "Bạn không có quyền truy cập chức năng này." },
         { status: 403 }
       );
     }
@@ -69,27 +63,33 @@ export async function POST(request: Request) {
 
     if (!actorUserId || !actorRole) {
       return NextResponse.json(
-        {
-          success: false,
-          error: "Unauthorized",
-        },
+        { success: false, error: "Unauthorized" },
         { status: 401 }
       );
     }
 
     if (!canManageOwnRegistrations(actorRole)) {
       return NextResponse.json(
-        {
-          success: false,
-          error: "Bạn không có quyền đăng ký đề tài.",
-        },
+        { success: false, error: "Bạn không có quyền đăng ký đề tài." },
         { status: 403 }
       );
     }
 
-    // Check if there's an active call round
-    const activeCallRound = await prisma.callRound.findFirst({
-      where: { isActive: true },
+    // Read body once
+    const rawBody: unknown = await request.json();
+    const requestedCallRoundId =
+      rawBody && typeof rawBody === "object" && "callRoundId" in rawBody
+        ? (rawBody as Record<string, unknown>).callRoundId
+        : null;
+
+    // Find all call rounds currently open for registration (by registrationStartDate/registrationEndDate)
+    const now = new Date();
+    const openCallRounds = await prisma.callRound.findMany({
+      where: {
+        isActive: true,
+        registrationStartDate: { lte: now },
+        registrationEndDate: { gte: now },
+      },
       include: {
         departments: true,
         majors: true,
@@ -97,7 +97,7 @@ export async function POST(request: Request) {
       },
     });
 
-    if (!activeCallRound) {
+    if (openCallRounds.length === 0) {
       return NextResponse.json(
         {
           success: false,
@@ -107,16 +107,20 @@ export async function POST(request: Request) {
       );
     }
 
-    // Check if the current date is within the call round period
-    const now = new Date();
-    if (now < new Date(activeCallRound.startDate) || now > new Date(activeCallRound.endDate)) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: "Hiện tại không phải thời gian đăng ký hợp lệ.",
-        },
-        { status: 400 }
-      );
+    // Select call round: use client-specified one if valid, otherwise pick first open one
+    let activeCallRound = openCallRounds[0];
+    if (requestedCallRoundId && typeof requestedCallRoundId === "string") {
+      const found = openCallRounds.find((r) => r.id === requestedCallRoundId);
+      if (!found) {
+        return NextResponse.json(
+          {
+            success: false,
+            error: "Đợt đăng ký được chọn không hợp lệ hoặc đã đóng.",
+          },
+          { status: 400 }
+        );
+      }
+      activeCallRound = found;
     }
 
     // Get user's department, major, and class
@@ -131,61 +135,46 @@ export async function POST(request: Request) {
 
     if (!user) {
       return NextResponse.json(
-        {
-          success: false,
-          error: "Không tìm thấy thông tin người dùng.",
-        },
+        { success: false, error: "Không tìm thấy thông tin người dùng." },
         { status: 404 }
       );
     }
 
-    // Validate user's organization against the call round
+    // Validate user's organization against the selected call round
     const { departmentId, majorId, classId } = user;
-    
-    // Check if user's department is allowed
+
     if (activeCallRound.departments.length > 0 && departmentId) {
-      const isDepartmentAllowed = activeCallRound.departments.some(d => d.id === departmentId);
-      if (!isDepartmentAllowed) {
+      const allowed = activeCallRound.departments.some((d) => d.id === departmentId);
+      if (!allowed) {
         return NextResponse.json(
-          {
-            success: false,
-            error: "Khoa của bạn không được phép đăng ký trong đợt này.",
-          },
+          { success: false, error: "Khoa của bạn không được phép đăng ký trong đợt này." },
           { status: 403 }
         );
       }
     }
 
-    // Check if user's major is allowed
     if (activeCallRound.majors.length > 0 && majorId) {
-      const isMajorAllowed = activeCallRound.majors.some(m => m.id === majorId);
-      if (!isMajorAllowed) {
+      const allowed = activeCallRound.majors.some((m) => m.id === majorId);
+      if (!allowed) {
         return NextResponse.json(
-          {
-            success: false,
-            error: "Ngành học của bạn không được phép đăng ký trong đợt này.",
-          },
+          { success: false, error: "Ngành học của bạn không được phép đăng ký trong đợt này." },
           { status: 403 }
         );
       }
     }
 
-    // Check if user's class is allowed
     if (activeCallRound.classes.length > 0 && classId) {
-      const isClassAllowed = activeCallRound.classes.some(c => c.id === classId);
-      if (!isClassAllowed) {
+      const allowed = activeCallRound.classes.some((c) => c.id === classId);
+      if (!allowed) {
         return NextResponse.json(
-          {
-            success: false,
-            error: "Lớp của bạn không được phép đăng ký trong đợt này.",
-          },
+          { success: false, error: "Lớp của bạn không được phép đăng ký trong đợt này." },
           { status: 403 }
         );
       }
     }
 
-    const body: unknown = await request.json();
-    const parsed = createProjectRegistrationSchema.safeParse(body);
+    // Validate payload with schema (reuse rawBody already read)
+    const parsed = createProjectRegistrationSchema.safeParse(rawBody);
 
     if (!parsed.success) {
       return NextResponse.json(
@@ -205,7 +194,7 @@ export async function POST(request: Request) {
         objective: parsed.data.objective,
         expectedOutput: parsed.data.expectedOutput ?? null,
         instructorId: parsed.data.instructorId ?? null,
-        callRoundId: activeCallRound.id, // Associate with the active call round
+        callRoundId: activeCallRound.id,
       },
     });
 

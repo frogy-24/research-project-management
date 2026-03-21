@@ -108,14 +108,11 @@ export function ProfilePage({ title }: ProfilePageProps) {
         </CardHeader>
         <CardContent className="grid gap-6 md:grid-cols-2 pt-6">
           <div className="space-y-2">
-            <Label className="text-muted-foreground">Mã sinh viên/Giảng viên</Label>
+            <Label className="text-muted-foreground">Mã số</Label>
             <Input
               value={form.code}
-              onChange={(e) =>
-                updateDraft((c) => ({ ...c, code: e.target.value }))
-              }
-              placeholder="VD: GV001"
-              className="bg-background"
+              readOnly
+              className="bg-muted/50 cursor-not-allowed"
             />
           </div>
 
@@ -123,11 +120,17 @@ export function ProfilePage({ title }: ProfilePageProps) {
             <Label className="text-muted-foreground">Họ và tên</Label>
             <Input
               value={form.name}
-              onChange={(e) =>
-                updateDraft((c) => ({ ...c, name: e.target.value }))
-              }
-              placeholder="Nguyễn Văn A"
-              className="bg-background"
+              readOnly
+              className="bg-muted/50 cursor-not-allowed"
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label className="text-muted-foreground">Email</Label>
+            <Input
+              value={me?.email || ""}
+              readOnly
+              className="bg-muted/50 cursor-not-allowed"
             />
           </div>
 
@@ -136,41 +139,35 @@ export function ProfilePage({ title }: ProfilePageProps) {
             <Input
               type="date"
               value={form.dateOfBirth}
-              onChange={(e) =>
-                updateDraft((c) => ({ ...c, dateOfBirth: e.target.value }))
-              }
-              className="bg-background"
+              readOnly
+              className="bg-muted/50 cursor-not-allowed"
             />
           </div>
 
           <div className="space-y-2">
             <Label className="text-muted-foreground">Giới tính</Label>
-            <Select
-              value={form.gender}
-              onValueChange={(val) =>
-                updateDraft((c) => ({ ...c, gender: val as Gender }))
-              }
-            >
-              <SelectTrigger className="bg-background">
-                <SelectValue placeholder="Chưa xác định" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="MALE">Nam</SelectItem>
-                <SelectItem value="FEMALE">Nữ</SelectItem>
-                <SelectItem value="OTHER">Khác</SelectItem>
-              </SelectContent>
-            </Select>
+            <Input
+              value={form.gender === "MALE" ? "Nam" : form.gender === "FEMALE" ? "Nữ" : form.gender === "OTHER" ? "Khác" : "Chưa xác định"}
+              readOnly
+              className="bg-muted/50 cursor-not-allowed"
+            />
           </div>
 
           <div className="space-y-2">
             <Label className="text-muted-foreground">Đơn vị / Khoa</Label>
             <Input
-              value={form.department}
-              onChange={(e) =>
-                updateDraft((c) => ({ ...c, department: e.target.value }))
-              }
-              placeholder="VD: Khoa CNTT"
-              className="bg-background"
+              value={me?.departmentRef?.name || form.department || "Chưa cập nhật"}
+              readOnly
+              className="bg-muted/50 cursor-not-allowed"
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label className="text-muted-foreground">Lớp</Label>
+            <Input
+              value={me?.class?.name || "Chưa cập nhật"}
+              readOnly
+              className="bg-muted/50 cursor-not-allowed"
             />
           </div>
 
@@ -178,11 +175,8 @@ export function ProfilePage({ title }: ProfilePageProps) {
             <Label className="text-muted-foreground">Số điện thoại</Label>
             <Input
               value={form.phone}
-              onChange={(e) =>
-                updateDraft((c) => ({ ...c, phone: e.target.value }))
-              }
-              placeholder="09xx..."
-              className="bg-background"
+              readOnly
+              className="bg-muted/50 cursor-not-allowed"
             />
           </div>
 
@@ -190,23 +184,11 @@ export function ProfilePage({ title }: ProfilePageProps) {
             <Label className="text-muted-foreground">Địa chỉ liên hệ</Label>
             <Input
               value={form.address}
-              onChange={(e) =>
-                updateDraft((c) => ({ ...c, address: e.target.value }))
-              }
-              placeholder="Số nhà, đường, phường, xã..."
-              className="bg-background"
+              readOnly
+              className="bg-muted/50 cursor-not-allowed"
             />
           </div>
         </CardContent>
-        <div className="border-t bg-muted/20 p-4 px-6 flex justify-end">
-           <Button
-             onClick={handleSubmit}
-             disabled={updateMeMutation.isPending}
-             className="min-w-32"
-           >
-             {updateMeMutation.isPending ? "Đang xử lý..." : "Lưu thay đổi"}
-           </Button>
-        </div>
       </Card>
     </div>
   );

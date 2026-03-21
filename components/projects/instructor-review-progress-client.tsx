@@ -16,7 +16,8 @@ import { ArrowLeft, Search, User, Mail, Phone } from "lucide-react";
 export function InstructorReviewProgressClient() {
   const { data: session } = useAuthSession();
   const { data: projects = [], isLoading: projectsLoading } = useProjects();
-  const { data: users = [], isLoading: usersLoading } = useUsers();
+  const { data: usersData, isLoading: usersLoading } = useUsers();
+  const users = usersData?.data ?? [];
   const [selectedProjectId, setSelectedProjectId] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
 

@@ -9,6 +9,7 @@ import {
   canUpdateProjectMeta,
   getActorRole,
 } from "@/lib/project-permissions";
+import { notifyProjectStatusChange } from "@/lib/notification-service";
 
 const mapZodError = (zodError: ZodError) => {
   const fields: Record<string, string[]> = {};
@@ -169,6 +170,21 @@ export async function PATCH(request: Request, { params }: Params) {
           : {}),
       },
     });
+
+    // Send notification if status changed
+    if (parsed.data.status !== undefined && parsed.data.status !== currentProject.status) {
+      try {
+        await notifyProjectStatusChange(
+          id,
+          currentProject.status,
+          parsed.data.status,
+          project
+        );
+      } catch (error) {
+        console.error("Failed to send notification:", error);
+        // Don't fail the request if notification fails
+      }
+    }
 
     return NextResponse.json({ success: true, data: project });
   } catch (error) {

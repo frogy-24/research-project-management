@@ -35,7 +35,9 @@ import { toast } from "sonner";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export function MajorManagement() {
-  const { data: majors = [], isLoading: isLoadingMajors } = useMajors();
+  const { data: majorsData, isLoading: isLoadingMajors } = useMajors({ limit: 1000 });
+  const majors = majorsData?.data ?? [];
+  
   const { data: departments = [], isLoading: isLoadingDepts } = useDepartments();
   
   const createMutation = useCreateMajor();

@@ -31,6 +31,10 @@ export async function GET(request: Request) {
 
     const user = await prisma.user.findUnique({
       where: { id: actorUserId },
+      include: {
+        departmentRef: true,
+        class: true,
+      }
     });
 
     if (!user) {

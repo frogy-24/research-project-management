@@ -6,7 +6,7 @@ config({ path: resolve(__dirname, "../.env") });
 
 import prisma from "../lib/prisma";
 
-async function main() {
+export async function seedTemplates() {
   console.log("🌱 Seeding Progress Report Templates...");
 
   // Xóa dữ liệu cũ
@@ -211,12 +211,3 @@ async function main() {
   console.log(`   - ${template3.name} (${template3.items.length} items)`);
   console.log("\n🎉 Seed completed successfully!");
 }
-
-main()
-  .catch((e) => {
-    console.error("❌ Seed failed:", e);
-    process.exit(1);
-  })
-  .finally(async () => {
-    await prisma.$disconnect();
-  });
