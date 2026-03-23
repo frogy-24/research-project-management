@@ -88,6 +88,16 @@ export type ProjectRegistration = $Result.DefaultSelection<Prisma.$ProjectRegist
  * 
  */
 export type Notification = $Result.DefaultSelection<Prisma.$NotificationPayload>
+/**
+ * Model CallRoundInstructor
+ * 
+ */
+export type CallRoundInstructor = $Result.DefaultSelection<Prisma.$CallRoundInstructorPayload>
+/**
+ * Model CallRoundCouncilMember
+ * 
+ */
+export type CallRoundCouncilMember = $Result.DefaultSelection<Prisma.$CallRoundCouncilMemberPayload>
 
 /**
  * Enums
@@ -156,6 +166,15 @@ export const CallRoundApprovalStatus: {
 };
 
 export type CallRoundApprovalStatus = (typeof CallRoundApprovalStatus)[keyof typeof CallRoundApprovalStatus]
+
+
+export const ApplicableFor: {
+  STUDENT: 'STUDENT',
+  LECTURER: 'LECTURER',
+  BOTH: 'BOTH'
+};
+
+export type ApplicableFor = (typeof ApplicableFor)[keyof typeof ApplicableFor]
 
 
 export const RegistrationStatus: {
@@ -228,6 +247,10 @@ export const RequestStatus: typeof $Enums.RequestStatus
 export type CallRoundApprovalStatus = $Enums.CallRoundApprovalStatus
 
 export const CallRoundApprovalStatus: typeof $Enums.CallRoundApprovalStatus
+
+export type ApplicableFor = $Enums.ApplicableFor
+
+export const ApplicableFor: typeof $Enums.ApplicableFor
 
 export type RegistrationStatus = $Enums.RegistrationStatus
 
@@ -515,6 +538,26 @@ export class PrismaClient<
     * ```
     */
   get notification(): Prisma.NotificationDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.callRoundInstructor`: Exposes CRUD operations for the **CallRoundInstructor** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more CallRoundInstructors
+    * const callRoundInstructors = await prisma.callRoundInstructor.findMany()
+    * ```
+    */
+  get callRoundInstructor(): Prisma.CallRoundInstructorDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.callRoundCouncilMember`: Exposes CRUD operations for the **CallRoundCouncilMember** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more CallRoundCouncilMembers
+    * const callRoundCouncilMembers = await prisma.callRoundCouncilMember.findMany()
+    * ```
+    */
+  get callRoundCouncilMember(): Prisma.CallRoundCouncilMemberDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -963,7 +1006,9 @@ export namespace Prisma {
     FundingDisbursement: 'FundingDisbursement',
     ExtensionRequest: 'ExtensionRequest',
     ProjectRegistration: 'ProjectRegistration',
-    Notification: 'Notification'
+    Notification: 'Notification',
+    CallRoundInstructor: 'CallRoundInstructor',
+    CallRoundCouncilMember: 'CallRoundCouncilMember'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -979,7 +1024,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "department" | "major" | "class" | "user" | "callRound" | "projectType" | "project" | "progressReportTemplate" | "progressReportTemplateItem" | "progressReport" | "councilEvaluation" | "fundingDisbursement" | "extensionRequest" | "projectRegistration" | "notification"
+      modelProps: "department" | "major" | "class" | "user" | "callRound" | "projectType" | "project" | "progressReportTemplate" | "progressReportTemplateItem" | "progressReport" | "councilEvaluation" | "fundingDisbursement" | "extensionRequest" | "projectRegistration" | "notification" | "callRoundInstructor" | "callRoundCouncilMember"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -2093,6 +2138,154 @@ export namespace Prisma {
           }
         }
       }
+      CallRoundInstructor: {
+        payload: Prisma.$CallRoundInstructorPayload<ExtArgs>
+        fields: Prisma.CallRoundInstructorFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.CallRoundInstructorFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CallRoundInstructorPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.CallRoundInstructorFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CallRoundInstructorPayload>
+          }
+          findFirst: {
+            args: Prisma.CallRoundInstructorFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CallRoundInstructorPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.CallRoundInstructorFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CallRoundInstructorPayload>
+          }
+          findMany: {
+            args: Prisma.CallRoundInstructorFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CallRoundInstructorPayload>[]
+          }
+          create: {
+            args: Prisma.CallRoundInstructorCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CallRoundInstructorPayload>
+          }
+          createMany: {
+            args: Prisma.CallRoundInstructorCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.CallRoundInstructorCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CallRoundInstructorPayload>[]
+          }
+          delete: {
+            args: Prisma.CallRoundInstructorDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CallRoundInstructorPayload>
+          }
+          update: {
+            args: Prisma.CallRoundInstructorUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CallRoundInstructorPayload>
+          }
+          deleteMany: {
+            args: Prisma.CallRoundInstructorDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.CallRoundInstructorUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.CallRoundInstructorUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CallRoundInstructorPayload>[]
+          }
+          upsert: {
+            args: Prisma.CallRoundInstructorUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CallRoundInstructorPayload>
+          }
+          aggregate: {
+            args: Prisma.CallRoundInstructorAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateCallRoundInstructor>
+          }
+          groupBy: {
+            args: Prisma.CallRoundInstructorGroupByArgs<ExtArgs>
+            result: $Utils.Optional<CallRoundInstructorGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.CallRoundInstructorCountArgs<ExtArgs>
+            result: $Utils.Optional<CallRoundInstructorCountAggregateOutputType> | number
+          }
+        }
+      }
+      CallRoundCouncilMember: {
+        payload: Prisma.$CallRoundCouncilMemberPayload<ExtArgs>
+        fields: Prisma.CallRoundCouncilMemberFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.CallRoundCouncilMemberFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CallRoundCouncilMemberPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.CallRoundCouncilMemberFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CallRoundCouncilMemberPayload>
+          }
+          findFirst: {
+            args: Prisma.CallRoundCouncilMemberFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CallRoundCouncilMemberPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.CallRoundCouncilMemberFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CallRoundCouncilMemberPayload>
+          }
+          findMany: {
+            args: Prisma.CallRoundCouncilMemberFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CallRoundCouncilMemberPayload>[]
+          }
+          create: {
+            args: Prisma.CallRoundCouncilMemberCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CallRoundCouncilMemberPayload>
+          }
+          createMany: {
+            args: Prisma.CallRoundCouncilMemberCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.CallRoundCouncilMemberCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CallRoundCouncilMemberPayload>[]
+          }
+          delete: {
+            args: Prisma.CallRoundCouncilMemberDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CallRoundCouncilMemberPayload>
+          }
+          update: {
+            args: Prisma.CallRoundCouncilMemberUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CallRoundCouncilMemberPayload>
+          }
+          deleteMany: {
+            args: Prisma.CallRoundCouncilMemberDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.CallRoundCouncilMemberUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.CallRoundCouncilMemberUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CallRoundCouncilMemberPayload>[]
+          }
+          upsert: {
+            args: Prisma.CallRoundCouncilMemberUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CallRoundCouncilMemberPayload>
+          }
+          aggregate: {
+            args: Prisma.CallRoundCouncilMemberAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateCallRoundCouncilMember>
+          }
+          groupBy: {
+            args: Prisma.CallRoundCouncilMemberGroupByArgs<ExtArgs>
+            result: $Utils.Optional<CallRoundCouncilMemberGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.CallRoundCouncilMemberCountArgs<ExtArgs>
+            result: $Utils.Optional<CallRoundCouncilMemberCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -2216,6 +2409,8 @@ export namespace Prisma {
     extensionRequest?: ExtensionRequestOmit
     projectRegistration?: ProjectRegistrationOmit
     notification?: NotificationOmit
+    callRoundInstructor?: CallRoundInstructorOmit
+    callRoundCouncilMember?: CallRoundCouncilMemberOmit
   }
 
   /* Types for Logging */
@@ -2442,6 +2637,8 @@ export namespace Prisma {
     instructedProjects: number
     facultyReviews: number
     notifications: number
+    callRoundInstructors: number
+    callRoundCouncilMembers: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2453,6 +2650,8 @@ export namespace Prisma {
     instructedProjects?: boolean | UserCountOutputTypeCountInstructedProjectsArgs
     facultyReviews?: boolean | UserCountOutputTypeCountFacultyReviewsArgs
     notifications?: boolean | UserCountOutputTypeCountNotificationsArgs
+    callRoundInstructors?: boolean | UserCountOutputTypeCountCallRoundInstructorsArgs
+    callRoundCouncilMembers?: boolean | UserCountOutputTypeCountCallRoundCouncilMembersArgs
   }
 
   // Custom InputTypes
@@ -2522,6 +2721,20 @@ export namespace Prisma {
     where?: NotificationWhereInput
   }
 
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountCallRoundInstructorsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CallRoundInstructorWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountCallRoundCouncilMembersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CallRoundCouncilMemberWhereInput
+  }
+
 
   /**
    * Count Type CallRoundCountOutputType
@@ -2533,6 +2746,8 @@ export namespace Prisma {
     departments: number
     majors: number
     classes: number
+    availableInstructors: number
+    availableCouncilMembers: number
   }
 
   export type CallRoundCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2541,6 +2756,8 @@ export namespace Prisma {
     departments?: boolean | CallRoundCountOutputTypeCountDepartmentsArgs
     majors?: boolean | CallRoundCountOutputTypeCountMajorsArgs
     classes?: boolean | CallRoundCountOutputTypeCountClassesArgs
+    availableInstructors?: boolean | CallRoundCountOutputTypeCountAvailableInstructorsArgs
+    availableCouncilMembers?: boolean | CallRoundCountOutputTypeCountAvailableCouncilMembersArgs
   }
 
   // Custom InputTypes
@@ -2587,6 +2804,20 @@ export namespace Prisma {
    */
   export type CallRoundCountOutputTypeCountClassesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: ClassWhereInput
+  }
+
+  /**
+   * CallRoundCountOutputType without action
+   */
+  export type CallRoundCountOutputTypeCountAvailableInstructorsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CallRoundInstructorWhereInput
+  }
+
+  /**
+   * CallRoundCountOutputType without action
+   */
+  export type CallRoundCountOutputTypeCountAvailableCouncilMembersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CallRoundCouncilMemberWhereInput
   }
 
 
@@ -6439,6 +6670,8 @@ export namespace Prisma {
     instructedProjects?: boolean | User$instructedProjectsArgs<ExtArgs>
     facultyReviews?: boolean | User$facultyReviewsArgs<ExtArgs>
     notifications?: boolean | User$notificationsArgs<ExtArgs>
+    callRoundInstructors?: boolean | User$callRoundInstructorsArgs<ExtArgs>
+    callRoundCouncilMembers?: boolean | User$callRoundCouncilMembersArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -6518,6 +6751,8 @@ export namespace Prisma {
     instructedProjects?: boolean | User$instructedProjectsArgs<ExtArgs>
     facultyReviews?: boolean | User$facultyReviewsArgs<ExtArgs>
     notifications?: boolean | User$notificationsArgs<ExtArgs>
+    callRoundInstructors?: boolean | User$callRoundInstructorsArgs<ExtArgs>
+    callRoundCouncilMembers?: boolean | User$callRoundCouncilMembersArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -6545,6 +6780,8 @@ export namespace Prisma {
       instructedProjects: Prisma.$ProjectPayload<ExtArgs>[]
       facultyReviews: Prisma.$ProjectRegistrationPayload<ExtArgs>[]
       notifications: Prisma.$NotificationPayload<ExtArgs>[]
+      callRoundInstructors: Prisma.$CallRoundInstructorPayload<ExtArgs>[]
+      callRoundCouncilMembers: Prisma.$CallRoundCouncilMemberPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -6968,6 +7205,8 @@ export namespace Prisma {
     instructedProjects<T extends User$instructedProjectsArgs<ExtArgs> = {}>(args?: Subset<T, User$instructedProjectsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProjectPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     facultyReviews<T extends User$facultyReviewsArgs<ExtArgs> = {}>(args?: Subset<T, User$facultyReviewsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProjectRegistrationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     notifications<T extends User$notificationsArgs<ExtArgs> = {}>(args?: Subset<T, User$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    callRoundInstructors<T extends User$callRoundInstructorsArgs<ExtArgs> = {}>(args?: Subset<T, User$callRoundInstructorsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CallRoundInstructorPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    callRoundCouncilMembers<T extends User$callRoundCouncilMembersArgs<ExtArgs> = {}>(args?: Subset<T, User$callRoundCouncilMembersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CallRoundCouncilMemberPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -7663,6 +7902,54 @@ export namespace Prisma {
   }
 
   /**
+   * User.callRoundInstructors
+   */
+  export type User$callRoundInstructorsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CallRoundInstructor
+     */
+    select?: CallRoundInstructorSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CallRoundInstructor
+     */
+    omit?: CallRoundInstructorOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CallRoundInstructorInclude<ExtArgs> | null
+    where?: CallRoundInstructorWhereInput
+    orderBy?: CallRoundInstructorOrderByWithRelationInput | CallRoundInstructorOrderByWithRelationInput[]
+    cursor?: CallRoundInstructorWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: CallRoundInstructorScalarFieldEnum | CallRoundInstructorScalarFieldEnum[]
+  }
+
+  /**
+   * User.callRoundCouncilMembers
+   */
+  export type User$callRoundCouncilMembersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CallRoundCouncilMember
+     */
+    select?: CallRoundCouncilMemberSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CallRoundCouncilMember
+     */
+    omit?: CallRoundCouncilMemberOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CallRoundCouncilMemberInclude<ExtArgs> | null
+    where?: CallRoundCouncilMemberWhereInput
+    orderBy?: CallRoundCouncilMemberOrderByWithRelationInput | CallRoundCouncilMemberOrderByWithRelationInput[]
+    cursor?: CallRoundCouncilMemberWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: CallRoundCouncilMemberScalarFieldEnum | CallRoundCouncilMemberScalarFieldEnum[]
+  }
+
+  /**
    * User without action
    */
   export type UserDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -7722,6 +8009,7 @@ export namespace Prisma {
     contactInfo: string | null
     isActive: boolean | null
     isLocked: boolean | null
+    applicableFor: $Enums.ApplicableFor | null
     approvalStatus: $Enums.CallRoundApprovalStatus | null
     createdById: string | null
     createdByRole: $Enums.Role | null
@@ -7752,6 +8040,7 @@ export namespace Prisma {
     contactInfo: string | null
     isActive: boolean | null
     isLocked: boolean | null
+    applicableFor: $Enums.ApplicableFor | null
     approvalStatus: $Enums.CallRoundApprovalStatus | null
     createdById: string | null
     createdByRole: $Enums.Role | null
@@ -7782,6 +8071,7 @@ export namespace Prisma {
     contactInfo: number
     isActive: number
     isLocked: number
+    applicableFor: number
     approvalStatus: number
     createdById: number
     createdByRole: number
@@ -7824,6 +8114,7 @@ export namespace Prisma {
     contactInfo?: true
     isActive?: true
     isLocked?: true
+    applicableFor?: true
     approvalStatus?: true
     createdById?: true
     createdByRole?: true
@@ -7854,6 +8145,7 @@ export namespace Prisma {
     contactInfo?: true
     isActive?: true
     isLocked?: true
+    applicableFor?: true
     approvalStatus?: true
     createdById?: true
     createdByRole?: true
@@ -7884,6 +8176,7 @@ export namespace Prisma {
     contactInfo?: true
     isActive?: true
     isLocked?: true
+    applicableFor?: true
     approvalStatus?: true
     createdById?: true
     createdByRole?: true
@@ -8001,6 +8294,7 @@ export namespace Prisma {
     contactInfo: string | null
     isActive: boolean
     isLocked: boolean
+    applicableFor: $Enums.ApplicableFor
     approvalStatus: $Enums.CallRoundApprovalStatus
     createdById: string | null
     createdByRole: $Enums.Role | null
@@ -8050,6 +8344,7 @@ export namespace Prisma {
     contactInfo?: boolean
     isActive?: boolean
     isLocked?: boolean
+    applicableFor?: boolean
     approvalStatus?: boolean
     createdById?: boolean
     createdByRole?: boolean
@@ -8065,6 +8360,8 @@ export namespace Prisma {
     departments?: boolean | CallRound$departmentsArgs<ExtArgs>
     majors?: boolean | CallRound$majorsArgs<ExtArgs>
     classes?: boolean | CallRound$classesArgs<ExtArgs>
+    availableInstructors?: boolean | CallRound$availableInstructorsArgs<ExtArgs>
+    availableCouncilMembers?: boolean | CallRound$availableCouncilMembersArgs<ExtArgs>
     _count?: boolean | CallRoundCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["callRound"]>
 
@@ -8087,6 +8384,7 @@ export namespace Prisma {
     contactInfo?: boolean
     isActive?: boolean
     isLocked?: boolean
+    applicableFor?: boolean
     approvalStatus?: boolean
     createdById?: boolean
     createdByRole?: boolean
@@ -8118,6 +8416,7 @@ export namespace Prisma {
     contactInfo?: boolean
     isActive?: boolean
     isLocked?: boolean
+    applicableFor?: boolean
     approvalStatus?: boolean
     createdById?: boolean
     createdByRole?: boolean
@@ -8149,6 +8448,7 @@ export namespace Prisma {
     contactInfo?: boolean
     isActive?: boolean
     isLocked?: boolean
+    applicableFor?: boolean
     approvalStatus?: boolean
     createdById?: boolean
     createdByRole?: boolean
@@ -8160,7 +8460,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type CallRoundOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "description" | "registrationStartDate" | "registrationEndDate" | "projectStartDate" | "projectEndDate" | "reviewDeadline" | "reportingStartDate" | "startDate" | "endDate" | "maxProjects" | "budgetLimit" | "requirements" | "guidelines" | "contactInfo" | "isActive" | "isLocked" | "approvalStatus" | "createdById" | "createdByRole" | "approvedById" | "approvalNote" | "approvedAt" | "templateId" | "createdAt" | "updatedAt", ExtArgs["result"]["callRound"]>
+  export type CallRoundOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "description" | "registrationStartDate" | "registrationEndDate" | "projectStartDate" | "projectEndDate" | "reviewDeadline" | "reportingStartDate" | "startDate" | "endDate" | "maxProjects" | "budgetLimit" | "requirements" | "guidelines" | "contactInfo" | "isActive" | "isLocked" | "applicableFor" | "approvalStatus" | "createdById" | "createdByRole" | "approvedById" | "approvalNote" | "approvedAt" | "templateId" | "createdAt" | "updatedAt", ExtArgs["result"]["callRound"]>
   export type CallRoundInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     projects?: boolean | CallRound$projectsArgs<ExtArgs>
     registrations?: boolean | CallRound$registrationsArgs<ExtArgs>
@@ -8168,6 +8468,8 @@ export namespace Prisma {
     departments?: boolean | CallRound$departmentsArgs<ExtArgs>
     majors?: boolean | CallRound$majorsArgs<ExtArgs>
     classes?: boolean | CallRound$classesArgs<ExtArgs>
+    availableInstructors?: boolean | CallRound$availableInstructorsArgs<ExtArgs>
+    availableCouncilMembers?: boolean | CallRound$availableCouncilMembersArgs<ExtArgs>
     _count?: boolean | CallRoundCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type CallRoundIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -8186,6 +8488,8 @@ export namespace Prisma {
       departments: Prisma.$DepartmentPayload<ExtArgs>[]
       majors: Prisma.$MajorPayload<ExtArgs>[]
       classes: Prisma.$ClassPayload<ExtArgs>[]
+      availableInstructors: Prisma.$CallRoundInstructorPayload<ExtArgs>[]
+      availableCouncilMembers: Prisma.$CallRoundCouncilMemberPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -8206,6 +8510,7 @@ export namespace Prisma {
       contactInfo: string | null
       isActive: boolean
       isLocked: boolean
+      applicableFor: $Enums.ApplicableFor
       approvalStatus: $Enums.CallRoundApprovalStatus
       createdById: string | null
       createdByRole: $Enums.Role | null
@@ -8615,6 +8920,8 @@ export namespace Prisma {
     departments<T extends CallRound$departmentsArgs<ExtArgs> = {}>(args?: Subset<T, CallRound$departmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DepartmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     majors<T extends CallRound$majorsArgs<ExtArgs> = {}>(args?: Subset<T, CallRound$majorsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MajorPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     classes<T extends CallRound$classesArgs<ExtArgs> = {}>(args?: Subset<T, CallRound$classesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClassPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    availableInstructors<T extends CallRound$availableInstructorsArgs<ExtArgs> = {}>(args?: Subset<T, CallRound$availableInstructorsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CallRoundInstructorPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    availableCouncilMembers<T extends CallRound$availableCouncilMembersArgs<ExtArgs> = {}>(args?: Subset<T, CallRound$availableCouncilMembersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CallRoundCouncilMemberPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -8662,6 +8969,7 @@ export namespace Prisma {
     readonly contactInfo: FieldRef<"CallRound", 'String'>
     readonly isActive: FieldRef<"CallRound", 'Boolean'>
     readonly isLocked: FieldRef<"CallRound", 'Boolean'>
+    readonly applicableFor: FieldRef<"CallRound", 'ApplicableFor'>
     readonly approvalStatus: FieldRef<"CallRound", 'CallRoundApprovalStatus'>
     readonly createdById: FieldRef<"CallRound", 'String'>
     readonly createdByRole: FieldRef<"CallRound", 'Role'>
@@ -9208,6 +9516,54 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: ClassScalarFieldEnum | ClassScalarFieldEnum[]
+  }
+
+  /**
+   * CallRound.availableInstructors
+   */
+  export type CallRound$availableInstructorsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CallRoundInstructor
+     */
+    select?: CallRoundInstructorSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CallRoundInstructor
+     */
+    omit?: CallRoundInstructorOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CallRoundInstructorInclude<ExtArgs> | null
+    where?: CallRoundInstructorWhereInput
+    orderBy?: CallRoundInstructorOrderByWithRelationInput | CallRoundInstructorOrderByWithRelationInput[]
+    cursor?: CallRoundInstructorWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: CallRoundInstructorScalarFieldEnum | CallRoundInstructorScalarFieldEnum[]
+  }
+
+  /**
+   * CallRound.availableCouncilMembers
+   */
+  export type CallRound$availableCouncilMembersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CallRoundCouncilMember
+     */
+    select?: CallRoundCouncilMemberSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CallRoundCouncilMember
+     */
+    omit?: CallRoundCouncilMemberOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CallRoundCouncilMemberInclude<ExtArgs> | null
+    where?: CallRoundCouncilMemberWhereInput
+    orderBy?: CallRoundCouncilMemberOrderByWithRelationInput | CallRoundCouncilMemberOrderByWithRelationInput[]
+    cursor?: CallRoundCouncilMemberWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: CallRoundCouncilMemberScalarFieldEnum | CallRoundCouncilMemberScalarFieldEnum[]
   }
 
   /**
@@ -11849,6 +12205,8 @@ export namespace Prisma {
     name: string | null
     description: string | null
     isActive: boolean | null
+    createdById: string | null
+    createdByRole: $Enums.Role | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -11858,6 +12216,8 @@ export namespace Prisma {
     name: string | null
     description: string | null
     isActive: boolean | null
+    createdById: string | null
+    createdByRole: $Enums.Role | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -11867,6 +12227,8 @@ export namespace Prisma {
     name: number
     description: number
     isActive: number
+    createdById: number
+    createdByRole: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -11878,6 +12240,8 @@ export namespace Prisma {
     name?: true
     description?: true
     isActive?: true
+    createdById?: true
+    createdByRole?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -11887,6 +12251,8 @@ export namespace Prisma {
     name?: true
     description?: true
     isActive?: true
+    createdById?: true
+    createdByRole?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -11896,6 +12262,8 @@ export namespace Prisma {
     name?: true
     description?: true
     isActive?: true
+    createdById?: true
+    createdByRole?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -11978,6 +12346,8 @@ export namespace Prisma {
     name: string
     description: string | null
     isActive: boolean
+    createdById: string | null
+    createdByRole: $Enums.Role | null
     createdAt: Date
     updatedAt: Date
     _count: ProgressReportTemplateCountAggregateOutputType | null
@@ -12004,6 +12374,8 @@ export namespace Prisma {
     name?: boolean
     description?: boolean
     isActive?: boolean
+    createdById?: boolean
+    createdByRole?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     items?: boolean | ProgressReportTemplate$itemsArgs<ExtArgs>
@@ -12016,6 +12388,8 @@ export namespace Prisma {
     name?: boolean
     description?: boolean
     isActive?: boolean
+    createdById?: boolean
+    createdByRole?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["progressReportTemplate"]>
@@ -12025,6 +12399,8 @@ export namespace Prisma {
     name?: boolean
     description?: boolean
     isActive?: boolean
+    createdById?: boolean
+    createdByRole?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["progressReportTemplate"]>
@@ -12034,11 +12410,13 @@ export namespace Prisma {
     name?: boolean
     description?: boolean
     isActive?: boolean
+    createdById?: boolean
+    createdByRole?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type ProgressReportTemplateOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "description" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["progressReportTemplate"]>
+  export type ProgressReportTemplateOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "description" | "isActive" | "createdById" | "createdByRole" | "createdAt" | "updatedAt", ExtArgs["result"]["progressReportTemplate"]>
   export type ProgressReportTemplateInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     items?: boolean | ProgressReportTemplate$itemsArgs<ExtArgs>
     callRounds?: boolean | ProgressReportTemplate$callRoundsArgs<ExtArgs>
@@ -12058,6 +12436,8 @@ export namespace Prisma {
       name: string
       description: string | null
       isActive: boolean
+      createdById: string | null
+      createdByRole: $Enums.Role | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["progressReportTemplate"]>
@@ -12489,6 +12869,8 @@ export namespace Prisma {
     readonly name: FieldRef<"ProgressReportTemplate", 'String'>
     readonly description: FieldRef<"ProgressReportTemplate", 'String'>
     readonly isActive: FieldRef<"ProgressReportTemplate", 'Boolean'>
+    readonly createdById: FieldRef<"ProgressReportTemplate", 'String'>
+    readonly createdByRole: FieldRef<"ProgressReportTemplate", 'Role'>
     readonly createdAt: FieldRef<"ProgressReportTemplate", 'DateTime'>
     readonly updatedAt: FieldRef<"ProgressReportTemplate", 'DateTime'>
   }
@@ -21175,6 +21557,2122 @@ export namespace Prisma {
 
 
   /**
+   * Model CallRoundInstructor
+   */
+
+  export type AggregateCallRoundInstructor = {
+    _count: CallRoundInstructorCountAggregateOutputType | null
+    _min: CallRoundInstructorMinAggregateOutputType | null
+    _max: CallRoundInstructorMaxAggregateOutputType | null
+  }
+
+  export type CallRoundInstructorMinAggregateOutputType = {
+    id: string | null
+    callRoundId: string | null
+    instructorId: string | null
+    createdAt: Date | null
+  }
+
+  export type CallRoundInstructorMaxAggregateOutputType = {
+    id: string | null
+    callRoundId: string | null
+    instructorId: string | null
+    createdAt: Date | null
+  }
+
+  export type CallRoundInstructorCountAggregateOutputType = {
+    id: number
+    callRoundId: number
+    instructorId: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type CallRoundInstructorMinAggregateInputType = {
+    id?: true
+    callRoundId?: true
+    instructorId?: true
+    createdAt?: true
+  }
+
+  export type CallRoundInstructorMaxAggregateInputType = {
+    id?: true
+    callRoundId?: true
+    instructorId?: true
+    createdAt?: true
+  }
+
+  export type CallRoundInstructorCountAggregateInputType = {
+    id?: true
+    callRoundId?: true
+    instructorId?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type CallRoundInstructorAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which CallRoundInstructor to aggregate.
+     */
+    where?: CallRoundInstructorWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CallRoundInstructors to fetch.
+     */
+    orderBy?: CallRoundInstructorOrderByWithRelationInput | CallRoundInstructorOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: CallRoundInstructorWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CallRoundInstructors from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CallRoundInstructors.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned CallRoundInstructors
+    **/
+    _count?: true | CallRoundInstructorCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: CallRoundInstructorMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: CallRoundInstructorMaxAggregateInputType
+  }
+
+  export type GetCallRoundInstructorAggregateType<T extends CallRoundInstructorAggregateArgs> = {
+        [P in keyof T & keyof AggregateCallRoundInstructor]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateCallRoundInstructor[P]>
+      : GetScalarType<T[P], AggregateCallRoundInstructor[P]>
+  }
+
+
+
+
+  export type CallRoundInstructorGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CallRoundInstructorWhereInput
+    orderBy?: CallRoundInstructorOrderByWithAggregationInput | CallRoundInstructorOrderByWithAggregationInput[]
+    by: CallRoundInstructorScalarFieldEnum[] | CallRoundInstructorScalarFieldEnum
+    having?: CallRoundInstructorScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: CallRoundInstructorCountAggregateInputType | true
+    _min?: CallRoundInstructorMinAggregateInputType
+    _max?: CallRoundInstructorMaxAggregateInputType
+  }
+
+  export type CallRoundInstructorGroupByOutputType = {
+    id: string
+    callRoundId: string
+    instructorId: string
+    createdAt: Date
+    _count: CallRoundInstructorCountAggregateOutputType | null
+    _min: CallRoundInstructorMinAggregateOutputType | null
+    _max: CallRoundInstructorMaxAggregateOutputType | null
+  }
+
+  type GetCallRoundInstructorGroupByPayload<T extends CallRoundInstructorGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<CallRoundInstructorGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof CallRoundInstructorGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], CallRoundInstructorGroupByOutputType[P]>
+            : GetScalarType<T[P], CallRoundInstructorGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type CallRoundInstructorSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    callRoundId?: boolean
+    instructorId?: boolean
+    createdAt?: boolean
+    callRound?: boolean | CallRoundDefaultArgs<ExtArgs>
+    instructor?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["callRoundInstructor"]>
+
+  export type CallRoundInstructorSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    callRoundId?: boolean
+    instructorId?: boolean
+    createdAt?: boolean
+    callRound?: boolean | CallRoundDefaultArgs<ExtArgs>
+    instructor?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["callRoundInstructor"]>
+
+  export type CallRoundInstructorSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    callRoundId?: boolean
+    instructorId?: boolean
+    createdAt?: boolean
+    callRound?: boolean | CallRoundDefaultArgs<ExtArgs>
+    instructor?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["callRoundInstructor"]>
+
+  export type CallRoundInstructorSelectScalar = {
+    id?: boolean
+    callRoundId?: boolean
+    instructorId?: boolean
+    createdAt?: boolean
+  }
+
+  export type CallRoundInstructorOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "callRoundId" | "instructorId" | "createdAt", ExtArgs["result"]["callRoundInstructor"]>
+  export type CallRoundInstructorInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    callRound?: boolean | CallRoundDefaultArgs<ExtArgs>
+    instructor?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type CallRoundInstructorIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    callRound?: boolean | CallRoundDefaultArgs<ExtArgs>
+    instructor?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type CallRoundInstructorIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    callRound?: boolean | CallRoundDefaultArgs<ExtArgs>
+    instructor?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $CallRoundInstructorPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "CallRoundInstructor"
+    objects: {
+      callRound: Prisma.$CallRoundPayload<ExtArgs>
+      instructor: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      callRoundId: string
+      instructorId: string
+      createdAt: Date
+    }, ExtArgs["result"]["callRoundInstructor"]>
+    composites: {}
+  }
+
+  type CallRoundInstructorGetPayload<S extends boolean | null | undefined | CallRoundInstructorDefaultArgs> = $Result.GetResult<Prisma.$CallRoundInstructorPayload, S>
+
+  type CallRoundInstructorCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<CallRoundInstructorFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: CallRoundInstructorCountAggregateInputType | true
+    }
+
+  export interface CallRoundInstructorDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['CallRoundInstructor'], meta: { name: 'CallRoundInstructor' } }
+    /**
+     * Find zero or one CallRoundInstructor that matches the filter.
+     * @param {CallRoundInstructorFindUniqueArgs} args - Arguments to find a CallRoundInstructor
+     * @example
+     * // Get one CallRoundInstructor
+     * const callRoundInstructor = await prisma.callRoundInstructor.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends CallRoundInstructorFindUniqueArgs>(args: SelectSubset<T, CallRoundInstructorFindUniqueArgs<ExtArgs>>): Prisma__CallRoundInstructorClient<$Result.GetResult<Prisma.$CallRoundInstructorPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one CallRoundInstructor that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {CallRoundInstructorFindUniqueOrThrowArgs} args - Arguments to find a CallRoundInstructor
+     * @example
+     * // Get one CallRoundInstructor
+     * const callRoundInstructor = await prisma.callRoundInstructor.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends CallRoundInstructorFindUniqueOrThrowArgs>(args: SelectSubset<T, CallRoundInstructorFindUniqueOrThrowArgs<ExtArgs>>): Prisma__CallRoundInstructorClient<$Result.GetResult<Prisma.$CallRoundInstructorPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first CallRoundInstructor that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CallRoundInstructorFindFirstArgs} args - Arguments to find a CallRoundInstructor
+     * @example
+     * // Get one CallRoundInstructor
+     * const callRoundInstructor = await prisma.callRoundInstructor.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends CallRoundInstructorFindFirstArgs>(args?: SelectSubset<T, CallRoundInstructorFindFirstArgs<ExtArgs>>): Prisma__CallRoundInstructorClient<$Result.GetResult<Prisma.$CallRoundInstructorPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first CallRoundInstructor that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CallRoundInstructorFindFirstOrThrowArgs} args - Arguments to find a CallRoundInstructor
+     * @example
+     * // Get one CallRoundInstructor
+     * const callRoundInstructor = await prisma.callRoundInstructor.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends CallRoundInstructorFindFirstOrThrowArgs>(args?: SelectSubset<T, CallRoundInstructorFindFirstOrThrowArgs<ExtArgs>>): Prisma__CallRoundInstructorClient<$Result.GetResult<Prisma.$CallRoundInstructorPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more CallRoundInstructors that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CallRoundInstructorFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all CallRoundInstructors
+     * const callRoundInstructors = await prisma.callRoundInstructor.findMany()
+     * 
+     * // Get first 10 CallRoundInstructors
+     * const callRoundInstructors = await prisma.callRoundInstructor.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const callRoundInstructorWithIdOnly = await prisma.callRoundInstructor.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends CallRoundInstructorFindManyArgs>(args?: SelectSubset<T, CallRoundInstructorFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CallRoundInstructorPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a CallRoundInstructor.
+     * @param {CallRoundInstructorCreateArgs} args - Arguments to create a CallRoundInstructor.
+     * @example
+     * // Create one CallRoundInstructor
+     * const CallRoundInstructor = await prisma.callRoundInstructor.create({
+     *   data: {
+     *     // ... data to create a CallRoundInstructor
+     *   }
+     * })
+     * 
+     */
+    create<T extends CallRoundInstructorCreateArgs>(args: SelectSubset<T, CallRoundInstructorCreateArgs<ExtArgs>>): Prisma__CallRoundInstructorClient<$Result.GetResult<Prisma.$CallRoundInstructorPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many CallRoundInstructors.
+     * @param {CallRoundInstructorCreateManyArgs} args - Arguments to create many CallRoundInstructors.
+     * @example
+     * // Create many CallRoundInstructors
+     * const callRoundInstructor = await prisma.callRoundInstructor.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends CallRoundInstructorCreateManyArgs>(args?: SelectSubset<T, CallRoundInstructorCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many CallRoundInstructors and returns the data saved in the database.
+     * @param {CallRoundInstructorCreateManyAndReturnArgs} args - Arguments to create many CallRoundInstructors.
+     * @example
+     * // Create many CallRoundInstructors
+     * const callRoundInstructor = await prisma.callRoundInstructor.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many CallRoundInstructors and only return the `id`
+     * const callRoundInstructorWithIdOnly = await prisma.callRoundInstructor.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends CallRoundInstructorCreateManyAndReturnArgs>(args?: SelectSubset<T, CallRoundInstructorCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CallRoundInstructorPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a CallRoundInstructor.
+     * @param {CallRoundInstructorDeleteArgs} args - Arguments to delete one CallRoundInstructor.
+     * @example
+     * // Delete one CallRoundInstructor
+     * const CallRoundInstructor = await prisma.callRoundInstructor.delete({
+     *   where: {
+     *     // ... filter to delete one CallRoundInstructor
+     *   }
+     * })
+     * 
+     */
+    delete<T extends CallRoundInstructorDeleteArgs>(args: SelectSubset<T, CallRoundInstructorDeleteArgs<ExtArgs>>): Prisma__CallRoundInstructorClient<$Result.GetResult<Prisma.$CallRoundInstructorPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one CallRoundInstructor.
+     * @param {CallRoundInstructorUpdateArgs} args - Arguments to update one CallRoundInstructor.
+     * @example
+     * // Update one CallRoundInstructor
+     * const callRoundInstructor = await prisma.callRoundInstructor.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends CallRoundInstructorUpdateArgs>(args: SelectSubset<T, CallRoundInstructorUpdateArgs<ExtArgs>>): Prisma__CallRoundInstructorClient<$Result.GetResult<Prisma.$CallRoundInstructorPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more CallRoundInstructors.
+     * @param {CallRoundInstructorDeleteManyArgs} args - Arguments to filter CallRoundInstructors to delete.
+     * @example
+     * // Delete a few CallRoundInstructors
+     * const { count } = await prisma.callRoundInstructor.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends CallRoundInstructorDeleteManyArgs>(args?: SelectSubset<T, CallRoundInstructorDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more CallRoundInstructors.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CallRoundInstructorUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many CallRoundInstructors
+     * const callRoundInstructor = await prisma.callRoundInstructor.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends CallRoundInstructorUpdateManyArgs>(args: SelectSubset<T, CallRoundInstructorUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more CallRoundInstructors and returns the data updated in the database.
+     * @param {CallRoundInstructorUpdateManyAndReturnArgs} args - Arguments to update many CallRoundInstructors.
+     * @example
+     * // Update many CallRoundInstructors
+     * const callRoundInstructor = await prisma.callRoundInstructor.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more CallRoundInstructors and only return the `id`
+     * const callRoundInstructorWithIdOnly = await prisma.callRoundInstructor.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends CallRoundInstructorUpdateManyAndReturnArgs>(args: SelectSubset<T, CallRoundInstructorUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CallRoundInstructorPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one CallRoundInstructor.
+     * @param {CallRoundInstructorUpsertArgs} args - Arguments to update or create a CallRoundInstructor.
+     * @example
+     * // Update or create a CallRoundInstructor
+     * const callRoundInstructor = await prisma.callRoundInstructor.upsert({
+     *   create: {
+     *     // ... data to create a CallRoundInstructor
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the CallRoundInstructor we want to update
+     *   }
+     * })
+     */
+    upsert<T extends CallRoundInstructorUpsertArgs>(args: SelectSubset<T, CallRoundInstructorUpsertArgs<ExtArgs>>): Prisma__CallRoundInstructorClient<$Result.GetResult<Prisma.$CallRoundInstructorPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of CallRoundInstructors.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CallRoundInstructorCountArgs} args - Arguments to filter CallRoundInstructors to count.
+     * @example
+     * // Count the number of CallRoundInstructors
+     * const count = await prisma.callRoundInstructor.count({
+     *   where: {
+     *     // ... the filter for the CallRoundInstructors we want to count
+     *   }
+     * })
+    **/
+    count<T extends CallRoundInstructorCountArgs>(
+      args?: Subset<T, CallRoundInstructorCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], CallRoundInstructorCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a CallRoundInstructor.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CallRoundInstructorAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends CallRoundInstructorAggregateArgs>(args: Subset<T, CallRoundInstructorAggregateArgs>): Prisma.PrismaPromise<GetCallRoundInstructorAggregateType<T>>
+
+    /**
+     * Group by CallRoundInstructor.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CallRoundInstructorGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends CallRoundInstructorGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: CallRoundInstructorGroupByArgs['orderBy'] }
+        : { orderBy?: CallRoundInstructorGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, CallRoundInstructorGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetCallRoundInstructorGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the CallRoundInstructor model
+   */
+  readonly fields: CallRoundInstructorFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for CallRoundInstructor.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__CallRoundInstructorClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    callRound<T extends CallRoundDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CallRoundDefaultArgs<ExtArgs>>): Prisma__CallRoundClient<$Result.GetResult<Prisma.$CallRoundPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    instructor<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the CallRoundInstructor model
+   */
+  interface CallRoundInstructorFieldRefs {
+    readonly id: FieldRef<"CallRoundInstructor", 'String'>
+    readonly callRoundId: FieldRef<"CallRoundInstructor", 'String'>
+    readonly instructorId: FieldRef<"CallRoundInstructor", 'String'>
+    readonly createdAt: FieldRef<"CallRoundInstructor", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * CallRoundInstructor findUnique
+   */
+  export type CallRoundInstructorFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CallRoundInstructor
+     */
+    select?: CallRoundInstructorSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CallRoundInstructor
+     */
+    omit?: CallRoundInstructorOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CallRoundInstructorInclude<ExtArgs> | null
+    /**
+     * Filter, which CallRoundInstructor to fetch.
+     */
+    where: CallRoundInstructorWhereUniqueInput
+  }
+
+  /**
+   * CallRoundInstructor findUniqueOrThrow
+   */
+  export type CallRoundInstructorFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CallRoundInstructor
+     */
+    select?: CallRoundInstructorSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CallRoundInstructor
+     */
+    omit?: CallRoundInstructorOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CallRoundInstructorInclude<ExtArgs> | null
+    /**
+     * Filter, which CallRoundInstructor to fetch.
+     */
+    where: CallRoundInstructorWhereUniqueInput
+  }
+
+  /**
+   * CallRoundInstructor findFirst
+   */
+  export type CallRoundInstructorFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CallRoundInstructor
+     */
+    select?: CallRoundInstructorSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CallRoundInstructor
+     */
+    omit?: CallRoundInstructorOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CallRoundInstructorInclude<ExtArgs> | null
+    /**
+     * Filter, which CallRoundInstructor to fetch.
+     */
+    where?: CallRoundInstructorWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CallRoundInstructors to fetch.
+     */
+    orderBy?: CallRoundInstructorOrderByWithRelationInput | CallRoundInstructorOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for CallRoundInstructors.
+     */
+    cursor?: CallRoundInstructorWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CallRoundInstructors from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CallRoundInstructors.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CallRoundInstructors.
+     */
+    distinct?: CallRoundInstructorScalarFieldEnum | CallRoundInstructorScalarFieldEnum[]
+  }
+
+  /**
+   * CallRoundInstructor findFirstOrThrow
+   */
+  export type CallRoundInstructorFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CallRoundInstructor
+     */
+    select?: CallRoundInstructorSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CallRoundInstructor
+     */
+    omit?: CallRoundInstructorOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CallRoundInstructorInclude<ExtArgs> | null
+    /**
+     * Filter, which CallRoundInstructor to fetch.
+     */
+    where?: CallRoundInstructorWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CallRoundInstructors to fetch.
+     */
+    orderBy?: CallRoundInstructorOrderByWithRelationInput | CallRoundInstructorOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for CallRoundInstructors.
+     */
+    cursor?: CallRoundInstructorWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CallRoundInstructors from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CallRoundInstructors.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CallRoundInstructors.
+     */
+    distinct?: CallRoundInstructorScalarFieldEnum | CallRoundInstructorScalarFieldEnum[]
+  }
+
+  /**
+   * CallRoundInstructor findMany
+   */
+  export type CallRoundInstructorFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CallRoundInstructor
+     */
+    select?: CallRoundInstructorSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CallRoundInstructor
+     */
+    omit?: CallRoundInstructorOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CallRoundInstructorInclude<ExtArgs> | null
+    /**
+     * Filter, which CallRoundInstructors to fetch.
+     */
+    where?: CallRoundInstructorWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CallRoundInstructors to fetch.
+     */
+    orderBy?: CallRoundInstructorOrderByWithRelationInput | CallRoundInstructorOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing CallRoundInstructors.
+     */
+    cursor?: CallRoundInstructorWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CallRoundInstructors from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CallRoundInstructors.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CallRoundInstructors.
+     */
+    distinct?: CallRoundInstructorScalarFieldEnum | CallRoundInstructorScalarFieldEnum[]
+  }
+
+  /**
+   * CallRoundInstructor create
+   */
+  export type CallRoundInstructorCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CallRoundInstructor
+     */
+    select?: CallRoundInstructorSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CallRoundInstructor
+     */
+    omit?: CallRoundInstructorOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CallRoundInstructorInclude<ExtArgs> | null
+    /**
+     * The data needed to create a CallRoundInstructor.
+     */
+    data: XOR<CallRoundInstructorCreateInput, CallRoundInstructorUncheckedCreateInput>
+  }
+
+  /**
+   * CallRoundInstructor createMany
+   */
+  export type CallRoundInstructorCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many CallRoundInstructors.
+     */
+    data: CallRoundInstructorCreateManyInput | CallRoundInstructorCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * CallRoundInstructor createManyAndReturn
+   */
+  export type CallRoundInstructorCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CallRoundInstructor
+     */
+    select?: CallRoundInstructorSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the CallRoundInstructor
+     */
+    omit?: CallRoundInstructorOmit<ExtArgs> | null
+    /**
+     * The data used to create many CallRoundInstructors.
+     */
+    data: CallRoundInstructorCreateManyInput | CallRoundInstructorCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CallRoundInstructorIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * CallRoundInstructor update
+   */
+  export type CallRoundInstructorUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CallRoundInstructor
+     */
+    select?: CallRoundInstructorSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CallRoundInstructor
+     */
+    omit?: CallRoundInstructorOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CallRoundInstructorInclude<ExtArgs> | null
+    /**
+     * The data needed to update a CallRoundInstructor.
+     */
+    data: XOR<CallRoundInstructorUpdateInput, CallRoundInstructorUncheckedUpdateInput>
+    /**
+     * Choose, which CallRoundInstructor to update.
+     */
+    where: CallRoundInstructorWhereUniqueInput
+  }
+
+  /**
+   * CallRoundInstructor updateMany
+   */
+  export type CallRoundInstructorUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update CallRoundInstructors.
+     */
+    data: XOR<CallRoundInstructorUpdateManyMutationInput, CallRoundInstructorUncheckedUpdateManyInput>
+    /**
+     * Filter which CallRoundInstructors to update
+     */
+    where?: CallRoundInstructorWhereInput
+    /**
+     * Limit how many CallRoundInstructors to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * CallRoundInstructor updateManyAndReturn
+   */
+  export type CallRoundInstructorUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CallRoundInstructor
+     */
+    select?: CallRoundInstructorSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the CallRoundInstructor
+     */
+    omit?: CallRoundInstructorOmit<ExtArgs> | null
+    /**
+     * The data used to update CallRoundInstructors.
+     */
+    data: XOR<CallRoundInstructorUpdateManyMutationInput, CallRoundInstructorUncheckedUpdateManyInput>
+    /**
+     * Filter which CallRoundInstructors to update
+     */
+    where?: CallRoundInstructorWhereInput
+    /**
+     * Limit how many CallRoundInstructors to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CallRoundInstructorIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * CallRoundInstructor upsert
+   */
+  export type CallRoundInstructorUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CallRoundInstructor
+     */
+    select?: CallRoundInstructorSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CallRoundInstructor
+     */
+    omit?: CallRoundInstructorOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CallRoundInstructorInclude<ExtArgs> | null
+    /**
+     * The filter to search for the CallRoundInstructor to update in case it exists.
+     */
+    where: CallRoundInstructorWhereUniqueInput
+    /**
+     * In case the CallRoundInstructor found by the `where` argument doesn't exist, create a new CallRoundInstructor with this data.
+     */
+    create: XOR<CallRoundInstructorCreateInput, CallRoundInstructorUncheckedCreateInput>
+    /**
+     * In case the CallRoundInstructor was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<CallRoundInstructorUpdateInput, CallRoundInstructorUncheckedUpdateInput>
+  }
+
+  /**
+   * CallRoundInstructor delete
+   */
+  export type CallRoundInstructorDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CallRoundInstructor
+     */
+    select?: CallRoundInstructorSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CallRoundInstructor
+     */
+    omit?: CallRoundInstructorOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CallRoundInstructorInclude<ExtArgs> | null
+    /**
+     * Filter which CallRoundInstructor to delete.
+     */
+    where: CallRoundInstructorWhereUniqueInput
+  }
+
+  /**
+   * CallRoundInstructor deleteMany
+   */
+  export type CallRoundInstructorDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which CallRoundInstructors to delete
+     */
+    where?: CallRoundInstructorWhereInput
+    /**
+     * Limit how many CallRoundInstructors to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * CallRoundInstructor without action
+   */
+  export type CallRoundInstructorDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CallRoundInstructor
+     */
+    select?: CallRoundInstructorSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CallRoundInstructor
+     */
+    omit?: CallRoundInstructorOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CallRoundInstructorInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model CallRoundCouncilMember
+   */
+
+  export type AggregateCallRoundCouncilMember = {
+    _count: CallRoundCouncilMemberCountAggregateOutputType | null
+    _min: CallRoundCouncilMemberMinAggregateOutputType | null
+    _max: CallRoundCouncilMemberMaxAggregateOutputType | null
+  }
+
+  export type CallRoundCouncilMemberMinAggregateOutputType = {
+    id: string | null
+    callRoundId: string | null
+    councilMemberId: string | null
+    createdAt: Date | null
+  }
+
+  export type CallRoundCouncilMemberMaxAggregateOutputType = {
+    id: string | null
+    callRoundId: string | null
+    councilMemberId: string | null
+    createdAt: Date | null
+  }
+
+  export type CallRoundCouncilMemberCountAggregateOutputType = {
+    id: number
+    callRoundId: number
+    councilMemberId: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type CallRoundCouncilMemberMinAggregateInputType = {
+    id?: true
+    callRoundId?: true
+    councilMemberId?: true
+    createdAt?: true
+  }
+
+  export type CallRoundCouncilMemberMaxAggregateInputType = {
+    id?: true
+    callRoundId?: true
+    councilMemberId?: true
+    createdAt?: true
+  }
+
+  export type CallRoundCouncilMemberCountAggregateInputType = {
+    id?: true
+    callRoundId?: true
+    councilMemberId?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type CallRoundCouncilMemberAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which CallRoundCouncilMember to aggregate.
+     */
+    where?: CallRoundCouncilMemberWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CallRoundCouncilMembers to fetch.
+     */
+    orderBy?: CallRoundCouncilMemberOrderByWithRelationInput | CallRoundCouncilMemberOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: CallRoundCouncilMemberWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CallRoundCouncilMembers from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CallRoundCouncilMembers.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned CallRoundCouncilMembers
+    **/
+    _count?: true | CallRoundCouncilMemberCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: CallRoundCouncilMemberMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: CallRoundCouncilMemberMaxAggregateInputType
+  }
+
+  export type GetCallRoundCouncilMemberAggregateType<T extends CallRoundCouncilMemberAggregateArgs> = {
+        [P in keyof T & keyof AggregateCallRoundCouncilMember]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateCallRoundCouncilMember[P]>
+      : GetScalarType<T[P], AggregateCallRoundCouncilMember[P]>
+  }
+
+
+
+
+  export type CallRoundCouncilMemberGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CallRoundCouncilMemberWhereInput
+    orderBy?: CallRoundCouncilMemberOrderByWithAggregationInput | CallRoundCouncilMemberOrderByWithAggregationInput[]
+    by: CallRoundCouncilMemberScalarFieldEnum[] | CallRoundCouncilMemberScalarFieldEnum
+    having?: CallRoundCouncilMemberScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: CallRoundCouncilMemberCountAggregateInputType | true
+    _min?: CallRoundCouncilMemberMinAggregateInputType
+    _max?: CallRoundCouncilMemberMaxAggregateInputType
+  }
+
+  export type CallRoundCouncilMemberGroupByOutputType = {
+    id: string
+    callRoundId: string
+    councilMemberId: string
+    createdAt: Date
+    _count: CallRoundCouncilMemberCountAggregateOutputType | null
+    _min: CallRoundCouncilMemberMinAggregateOutputType | null
+    _max: CallRoundCouncilMemberMaxAggregateOutputType | null
+  }
+
+  type GetCallRoundCouncilMemberGroupByPayload<T extends CallRoundCouncilMemberGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<CallRoundCouncilMemberGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof CallRoundCouncilMemberGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], CallRoundCouncilMemberGroupByOutputType[P]>
+            : GetScalarType<T[P], CallRoundCouncilMemberGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type CallRoundCouncilMemberSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    callRoundId?: boolean
+    councilMemberId?: boolean
+    createdAt?: boolean
+    callRound?: boolean | CallRoundDefaultArgs<ExtArgs>
+    councilMember?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["callRoundCouncilMember"]>
+
+  export type CallRoundCouncilMemberSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    callRoundId?: boolean
+    councilMemberId?: boolean
+    createdAt?: boolean
+    callRound?: boolean | CallRoundDefaultArgs<ExtArgs>
+    councilMember?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["callRoundCouncilMember"]>
+
+  export type CallRoundCouncilMemberSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    callRoundId?: boolean
+    councilMemberId?: boolean
+    createdAt?: boolean
+    callRound?: boolean | CallRoundDefaultArgs<ExtArgs>
+    councilMember?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["callRoundCouncilMember"]>
+
+  export type CallRoundCouncilMemberSelectScalar = {
+    id?: boolean
+    callRoundId?: boolean
+    councilMemberId?: boolean
+    createdAt?: boolean
+  }
+
+  export type CallRoundCouncilMemberOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "callRoundId" | "councilMemberId" | "createdAt", ExtArgs["result"]["callRoundCouncilMember"]>
+  export type CallRoundCouncilMemberInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    callRound?: boolean | CallRoundDefaultArgs<ExtArgs>
+    councilMember?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type CallRoundCouncilMemberIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    callRound?: boolean | CallRoundDefaultArgs<ExtArgs>
+    councilMember?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type CallRoundCouncilMemberIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    callRound?: boolean | CallRoundDefaultArgs<ExtArgs>
+    councilMember?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $CallRoundCouncilMemberPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "CallRoundCouncilMember"
+    objects: {
+      callRound: Prisma.$CallRoundPayload<ExtArgs>
+      councilMember: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      callRoundId: string
+      councilMemberId: string
+      createdAt: Date
+    }, ExtArgs["result"]["callRoundCouncilMember"]>
+    composites: {}
+  }
+
+  type CallRoundCouncilMemberGetPayload<S extends boolean | null | undefined | CallRoundCouncilMemberDefaultArgs> = $Result.GetResult<Prisma.$CallRoundCouncilMemberPayload, S>
+
+  type CallRoundCouncilMemberCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<CallRoundCouncilMemberFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: CallRoundCouncilMemberCountAggregateInputType | true
+    }
+
+  export interface CallRoundCouncilMemberDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['CallRoundCouncilMember'], meta: { name: 'CallRoundCouncilMember' } }
+    /**
+     * Find zero or one CallRoundCouncilMember that matches the filter.
+     * @param {CallRoundCouncilMemberFindUniqueArgs} args - Arguments to find a CallRoundCouncilMember
+     * @example
+     * // Get one CallRoundCouncilMember
+     * const callRoundCouncilMember = await prisma.callRoundCouncilMember.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends CallRoundCouncilMemberFindUniqueArgs>(args: SelectSubset<T, CallRoundCouncilMemberFindUniqueArgs<ExtArgs>>): Prisma__CallRoundCouncilMemberClient<$Result.GetResult<Prisma.$CallRoundCouncilMemberPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one CallRoundCouncilMember that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {CallRoundCouncilMemberFindUniqueOrThrowArgs} args - Arguments to find a CallRoundCouncilMember
+     * @example
+     * // Get one CallRoundCouncilMember
+     * const callRoundCouncilMember = await prisma.callRoundCouncilMember.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends CallRoundCouncilMemberFindUniqueOrThrowArgs>(args: SelectSubset<T, CallRoundCouncilMemberFindUniqueOrThrowArgs<ExtArgs>>): Prisma__CallRoundCouncilMemberClient<$Result.GetResult<Prisma.$CallRoundCouncilMemberPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first CallRoundCouncilMember that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CallRoundCouncilMemberFindFirstArgs} args - Arguments to find a CallRoundCouncilMember
+     * @example
+     * // Get one CallRoundCouncilMember
+     * const callRoundCouncilMember = await prisma.callRoundCouncilMember.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends CallRoundCouncilMemberFindFirstArgs>(args?: SelectSubset<T, CallRoundCouncilMemberFindFirstArgs<ExtArgs>>): Prisma__CallRoundCouncilMemberClient<$Result.GetResult<Prisma.$CallRoundCouncilMemberPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first CallRoundCouncilMember that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CallRoundCouncilMemberFindFirstOrThrowArgs} args - Arguments to find a CallRoundCouncilMember
+     * @example
+     * // Get one CallRoundCouncilMember
+     * const callRoundCouncilMember = await prisma.callRoundCouncilMember.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends CallRoundCouncilMemberFindFirstOrThrowArgs>(args?: SelectSubset<T, CallRoundCouncilMemberFindFirstOrThrowArgs<ExtArgs>>): Prisma__CallRoundCouncilMemberClient<$Result.GetResult<Prisma.$CallRoundCouncilMemberPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more CallRoundCouncilMembers that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CallRoundCouncilMemberFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all CallRoundCouncilMembers
+     * const callRoundCouncilMembers = await prisma.callRoundCouncilMember.findMany()
+     * 
+     * // Get first 10 CallRoundCouncilMembers
+     * const callRoundCouncilMembers = await prisma.callRoundCouncilMember.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const callRoundCouncilMemberWithIdOnly = await prisma.callRoundCouncilMember.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends CallRoundCouncilMemberFindManyArgs>(args?: SelectSubset<T, CallRoundCouncilMemberFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CallRoundCouncilMemberPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a CallRoundCouncilMember.
+     * @param {CallRoundCouncilMemberCreateArgs} args - Arguments to create a CallRoundCouncilMember.
+     * @example
+     * // Create one CallRoundCouncilMember
+     * const CallRoundCouncilMember = await prisma.callRoundCouncilMember.create({
+     *   data: {
+     *     // ... data to create a CallRoundCouncilMember
+     *   }
+     * })
+     * 
+     */
+    create<T extends CallRoundCouncilMemberCreateArgs>(args: SelectSubset<T, CallRoundCouncilMemberCreateArgs<ExtArgs>>): Prisma__CallRoundCouncilMemberClient<$Result.GetResult<Prisma.$CallRoundCouncilMemberPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many CallRoundCouncilMembers.
+     * @param {CallRoundCouncilMemberCreateManyArgs} args - Arguments to create many CallRoundCouncilMembers.
+     * @example
+     * // Create many CallRoundCouncilMembers
+     * const callRoundCouncilMember = await prisma.callRoundCouncilMember.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends CallRoundCouncilMemberCreateManyArgs>(args?: SelectSubset<T, CallRoundCouncilMemberCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many CallRoundCouncilMembers and returns the data saved in the database.
+     * @param {CallRoundCouncilMemberCreateManyAndReturnArgs} args - Arguments to create many CallRoundCouncilMembers.
+     * @example
+     * // Create many CallRoundCouncilMembers
+     * const callRoundCouncilMember = await prisma.callRoundCouncilMember.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many CallRoundCouncilMembers and only return the `id`
+     * const callRoundCouncilMemberWithIdOnly = await prisma.callRoundCouncilMember.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends CallRoundCouncilMemberCreateManyAndReturnArgs>(args?: SelectSubset<T, CallRoundCouncilMemberCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CallRoundCouncilMemberPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a CallRoundCouncilMember.
+     * @param {CallRoundCouncilMemberDeleteArgs} args - Arguments to delete one CallRoundCouncilMember.
+     * @example
+     * // Delete one CallRoundCouncilMember
+     * const CallRoundCouncilMember = await prisma.callRoundCouncilMember.delete({
+     *   where: {
+     *     // ... filter to delete one CallRoundCouncilMember
+     *   }
+     * })
+     * 
+     */
+    delete<T extends CallRoundCouncilMemberDeleteArgs>(args: SelectSubset<T, CallRoundCouncilMemberDeleteArgs<ExtArgs>>): Prisma__CallRoundCouncilMemberClient<$Result.GetResult<Prisma.$CallRoundCouncilMemberPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one CallRoundCouncilMember.
+     * @param {CallRoundCouncilMemberUpdateArgs} args - Arguments to update one CallRoundCouncilMember.
+     * @example
+     * // Update one CallRoundCouncilMember
+     * const callRoundCouncilMember = await prisma.callRoundCouncilMember.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends CallRoundCouncilMemberUpdateArgs>(args: SelectSubset<T, CallRoundCouncilMemberUpdateArgs<ExtArgs>>): Prisma__CallRoundCouncilMemberClient<$Result.GetResult<Prisma.$CallRoundCouncilMemberPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more CallRoundCouncilMembers.
+     * @param {CallRoundCouncilMemberDeleteManyArgs} args - Arguments to filter CallRoundCouncilMembers to delete.
+     * @example
+     * // Delete a few CallRoundCouncilMembers
+     * const { count } = await prisma.callRoundCouncilMember.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends CallRoundCouncilMemberDeleteManyArgs>(args?: SelectSubset<T, CallRoundCouncilMemberDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more CallRoundCouncilMembers.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CallRoundCouncilMemberUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many CallRoundCouncilMembers
+     * const callRoundCouncilMember = await prisma.callRoundCouncilMember.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends CallRoundCouncilMemberUpdateManyArgs>(args: SelectSubset<T, CallRoundCouncilMemberUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more CallRoundCouncilMembers and returns the data updated in the database.
+     * @param {CallRoundCouncilMemberUpdateManyAndReturnArgs} args - Arguments to update many CallRoundCouncilMembers.
+     * @example
+     * // Update many CallRoundCouncilMembers
+     * const callRoundCouncilMember = await prisma.callRoundCouncilMember.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more CallRoundCouncilMembers and only return the `id`
+     * const callRoundCouncilMemberWithIdOnly = await prisma.callRoundCouncilMember.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends CallRoundCouncilMemberUpdateManyAndReturnArgs>(args: SelectSubset<T, CallRoundCouncilMemberUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CallRoundCouncilMemberPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one CallRoundCouncilMember.
+     * @param {CallRoundCouncilMemberUpsertArgs} args - Arguments to update or create a CallRoundCouncilMember.
+     * @example
+     * // Update or create a CallRoundCouncilMember
+     * const callRoundCouncilMember = await prisma.callRoundCouncilMember.upsert({
+     *   create: {
+     *     // ... data to create a CallRoundCouncilMember
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the CallRoundCouncilMember we want to update
+     *   }
+     * })
+     */
+    upsert<T extends CallRoundCouncilMemberUpsertArgs>(args: SelectSubset<T, CallRoundCouncilMemberUpsertArgs<ExtArgs>>): Prisma__CallRoundCouncilMemberClient<$Result.GetResult<Prisma.$CallRoundCouncilMemberPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of CallRoundCouncilMembers.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CallRoundCouncilMemberCountArgs} args - Arguments to filter CallRoundCouncilMembers to count.
+     * @example
+     * // Count the number of CallRoundCouncilMembers
+     * const count = await prisma.callRoundCouncilMember.count({
+     *   where: {
+     *     // ... the filter for the CallRoundCouncilMembers we want to count
+     *   }
+     * })
+    **/
+    count<T extends CallRoundCouncilMemberCountArgs>(
+      args?: Subset<T, CallRoundCouncilMemberCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], CallRoundCouncilMemberCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a CallRoundCouncilMember.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CallRoundCouncilMemberAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends CallRoundCouncilMemberAggregateArgs>(args: Subset<T, CallRoundCouncilMemberAggregateArgs>): Prisma.PrismaPromise<GetCallRoundCouncilMemberAggregateType<T>>
+
+    /**
+     * Group by CallRoundCouncilMember.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CallRoundCouncilMemberGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends CallRoundCouncilMemberGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: CallRoundCouncilMemberGroupByArgs['orderBy'] }
+        : { orderBy?: CallRoundCouncilMemberGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, CallRoundCouncilMemberGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetCallRoundCouncilMemberGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the CallRoundCouncilMember model
+   */
+  readonly fields: CallRoundCouncilMemberFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for CallRoundCouncilMember.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__CallRoundCouncilMemberClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    callRound<T extends CallRoundDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CallRoundDefaultArgs<ExtArgs>>): Prisma__CallRoundClient<$Result.GetResult<Prisma.$CallRoundPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    councilMember<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the CallRoundCouncilMember model
+   */
+  interface CallRoundCouncilMemberFieldRefs {
+    readonly id: FieldRef<"CallRoundCouncilMember", 'String'>
+    readonly callRoundId: FieldRef<"CallRoundCouncilMember", 'String'>
+    readonly councilMemberId: FieldRef<"CallRoundCouncilMember", 'String'>
+    readonly createdAt: FieldRef<"CallRoundCouncilMember", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * CallRoundCouncilMember findUnique
+   */
+  export type CallRoundCouncilMemberFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CallRoundCouncilMember
+     */
+    select?: CallRoundCouncilMemberSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CallRoundCouncilMember
+     */
+    omit?: CallRoundCouncilMemberOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CallRoundCouncilMemberInclude<ExtArgs> | null
+    /**
+     * Filter, which CallRoundCouncilMember to fetch.
+     */
+    where: CallRoundCouncilMemberWhereUniqueInput
+  }
+
+  /**
+   * CallRoundCouncilMember findUniqueOrThrow
+   */
+  export type CallRoundCouncilMemberFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CallRoundCouncilMember
+     */
+    select?: CallRoundCouncilMemberSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CallRoundCouncilMember
+     */
+    omit?: CallRoundCouncilMemberOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CallRoundCouncilMemberInclude<ExtArgs> | null
+    /**
+     * Filter, which CallRoundCouncilMember to fetch.
+     */
+    where: CallRoundCouncilMemberWhereUniqueInput
+  }
+
+  /**
+   * CallRoundCouncilMember findFirst
+   */
+  export type CallRoundCouncilMemberFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CallRoundCouncilMember
+     */
+    select?: CallRoundCouncilMemberSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CallRoundCouncilMember
+     */
+    omit?: CallRoundCouncilMemberOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CallRoundCouncilMemberInclude<ExtArgs> | null
+    /**
+     * Filter, which CallRoundCouncilMember to fetch.
+     */
+    where?: CallRoundCouncilMemberWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CallRoundCouncilMembers to fetch.
+     */
+    orderBy?: CallRoundCouncilMemberOrderByWithRelationInput | CallRoundCouncilMemberOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for CallRoundCouncilMembers.
+     */
+    cursor?: CallRoundCouncilMemberWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CallRoundCouncilMembers from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CallRoundCouncilMembers.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CallRoundCouncilMembers.
+     */
+    distinct?: CallRoundCouncilMemberScalarFieldEnum | CallRoundCouncilMemberScalarFieldEnum[]
+  }
+
+  /**
+   * CallRoundCouncilMember findFirstOrThrow
+   */
+  export type CallRoundCouncilMemberFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CallRoundCouncilMember
+     */
+    select?: CallRoundCouncilMemberSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CallRoundCouncilMember
+     */
+    omit?: CallRoundCouncilMemberOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CallRoundCouncilMemberInclude<ExtArgs> | null
+    /**
+     * Filter, which CallRoundCouncilMember to fetch.
+     */
+    where?: CallRoundCouncilMemberWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CallRoundCouncilMembers to fetch.
+     */
+    orderBy?: CallRoundCouncilMemberOrderByWithRelationInput | CallRoundCouncilMemberOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for CallRoundCouncilMembers.
+     */
+    cursor?: CallRoundCouncilMemberWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CallRoundCouncilMembers from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CallRoundCouncilMembers.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CallRoundCouncilMembers.
+     */
+    distinct?: CallRoundCouncilMemberScalarFieldEnum | CallRoundCouncilMemberScalarFieldEnum[]
+  }
+
+  /**
+   * CallRoundCouncilMember findMany
+   */
+  export type CallRoundCouncilMemberFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CallRoundCouncilMember
+     */
+    select?: CallRoundCouncilMemberSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CallRoundCouncilMember
+     */
+    omit?: CallRoundCouncilMemberOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CallRoundCouncilMemberInclude<ExtArgs> | null
+    /**
+     * Filter, which CallRoundCouncilMembers to fetch.
+     */
+    where?: CallRoundCouncilMemberWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CallRoundCouncilMembers to fetch.
+     */
+    orderBy?: CallRoundCouncilMemberOrderByWithRelationInput | CallRoundCouncilMemberOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing CallRoundCouncilMembers.
+     */
+    cursor?: CallRoundCouncilMemberWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CallRoundCouncilMembers from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CallRoundCouncilMembers.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CallRoundCouncilMembers.
+     */
+    distinct?: CallRoundCouncilMemberScalarFieldEnum | CallRoundCouncilMemberScalarFieldEnum[]
+  }
+
+  /**
+   * CallRoundCouncilMember create
+   */
+  export type CallRoundCouncilMemberCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CallRoundCouncilMember
+     */
+    select?: CallRoundCouncilMemberSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CallRoundCouncilMember
+     */
+    omit?: CallRoundCouncilMemberOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CallRoundCouncilMemberInclude<ExtArgs> | null
+    /**
+     * The data needed to create a CallRoundCouncilMember.
+     */
+    data: XOR<CallRoundCouncilMemberCreateInput, CallRoundCouncilMemberUncheckedCreateInput>
+  }
+
+  /**
+   * CallRoundCouncilMember createMany
+   */
+  export type CallRoundCouncilMemberCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many CallRoundCouncilMembers.
+     */
+    data: CallRoundCouncilMemberCreateManyInput | CallRoundCouncilMemberCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * CallRoundCouncilMember createManyAndReturn
+   */
+  export type CallRoundCouncilMemberCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CallRoundCouncilMember
+     */
+    select?: CallRoundCouncilMemberSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the CallRoundCouncilMember
+     */
+    omit?: CallRoundCouncilMemberOmit<ExtArgs> | null
+    /**
+     * The data used to create many CallRoundCouncilMembers.
+     */
+    data: CallRoundCouncilMemberCreateManyInput | CallRoundCouncilMemberCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CallRoundCouncilMemberIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * CallRoundCouncilMember update
+   */
+  export type CallRoundCouncilMemberUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CallRoundCouncilMember
+     */
+    select?: CallRoundCouncilMemberSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CallRoundCouncilMember
+     */
+    omit?: CallRoundCouncilMemberOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CallRoundCouncilMemberInclude<ExtArgs> | null
+    /**
+     * The data needed to update a CallRoundCouncilMember.
+     */
+    data: XOR<CallRoundCouncilMemberUpdateInput, CallRoundCouncilMemberUncheckedUpdateInput>
+    /**
+     * Choose, which CallRoundCouncilMember to update.
+     */
+    where: CallRoundCouncilMemberWhereUniqueInput
+  }
+
+  /**
+   * CallRoundCouncilMember updateMany
+   */
+  export type CallRoundCouncilMemberUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update CallRoundCouncilMembers.
+     */
+    data: XOR<CallRoundCouncilMemberUpdateManyMutationInput, CallRoundCouncilMemberUncheckedUpdateManyInput>
+    /**
+     * Filter which CallRoundCouncilMembers to update
+     */
+    where?: CallRoundCouncilMemberWhereInput
+    /**
+     * Limit how many CallRoundCouncilMembers to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * CallRoundCouncilMember updateManyAndReturn
+   */
+  export type CallRoundCouncilMemberUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CallRoundCouncilMember
+     */
+    select?: CallRoundCouncilMemberSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the CallRoundCouncilMember
+     */
+    omit?: CallRoundCouncilMemberOmit<ExtArgs> | null
+    /**
+     * The data used to update CallRoundCouncilMembers.
+     */
+    data: XOR<CallRoundCouncilMemberUpdateManyMutationInput, CallRoundCouncilMemberUncheckedUpdateManyInput>
+    /**
+     * Filter which CallRoundCouncilMembers to update
+     */
+    where?: CallRoundCouncilMemberWhereInput
+    /**
+     * Limit how many CallRoundCouncilMembers to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CallRoundCouncilMemberIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * CallRoundCouncilMember upsert
+   */
+  export type CallRoundCouncilMemberUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CallRoundCouncilMember
+     */
+    select?: CallRoundCouncilMemberSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CallRoundCouncilMember
+     */
+    omit?: CallRoundCouncilMemberOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CallRoundCouncilMemberInclude<ExtArgs> | null
+    /**
+     * The filter to search for the CallRoundCouncilMember to update in case it exists.
+     */
+    where: CallRoundCouncilMemberWhereUniqueInput
+    /**
+     * In case the CallRoundCouncilMember found by the `where` argument doesn't exist, create a new CallRoundCouncilMember with this data.
+     */
+    create: XOR<CallRoundCouncilMemberCreateInput, CallRoundCouncilMemberUncheckedCreateInput>
+    /**
+     * In case the CallRoundCouncilMember was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<CallRoundCouncilMemberUpdateInput, CallRoundCouncilMemberUncheckedUpdateInput>
+  }
+
+  /**
+   * CallRoundCouncilMember delete
+   */
+  export type CallRoundCouncilMemberDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CallRoundCouncilMember
+     */
+    select?: CallRoundCouncilMemberSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CallRoundCouncilMember
+     */
+    omit?: CallRoundCouncilMemberOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CallRoundCouncilMemberInclude<ExtArgs> | null
+    /**
+     * Filter which CallRoundCouncilMember to delete.
+     */
+    where: CallRoundCouncilMemberWhereUniqueInput
+  }
+
+  /**
+   * CallRoundCouncilMember deleteMany
+   */
+  export type CallRoundCouncilMemberDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which CallRoundCouncilMembers to delete
+     */
+    where?: CallRoundCouncilMemberWhereInput
+    /**
+     * Limit how many CallRoundCouncilMembers to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * CallRoundCouncilMember without action
+   */
+  export type CallRoundCouncilMemberDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CallRoundCouncilMember
+     */
+    select?: CallRoundCouncilMemberSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CallRoundCouncilMember
+     */
+    omit?: CallRoundCouncilMemberOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CallRoundCouncilMemberInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -21266,6 +23764,7 @@ export namespace Prisma {
     contactInfo: 'contactInfo',
     isActive: 'isActive',
     isLocked: 'isLocked',
+    applicableFor: 'applicableFor',
     approvalStatus: 'approvalStatus',
     createdById: 'createdById',
     createdByRole: 'createdByRole',
@@ -21320,6 +23819,8 @@ export namespace Prisma {
     name: 'name',
     description: 'description',
     isActive: 'isActive',
+    createdById: 'createdById',
+    createdByRole: 'createdByRole',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -21442,6 +23943,26 @@ export namespace Prisma {
   };
 
   export type NotificationScalarFieldEnum = (typeof NotificationScalarFieldEnum)[keyof typeof NotificationScalarFieldEnum]
+
+
+  export const CallRoundInstructorScalarFieldEnum: {
+    id: 'id',
+    callRoundId: 'callRoundId',
+    instructorId: 'instructorId',
+    createdAt: 'createdAt'
+  };
+
+  export type CallRoundInstructorScalarFieldEnum = (typeof CallRoundInstructorScalarFieldEnum)[keyof typeof CallRoundInstructorScalarFieldEnum]
+
+
+  export const CallRoundCouncilMemberScalarFieldEnum: {
+    id: 'id',
+    callRoundId: 'callRoundId',
+    councilMemberId: 'councilMemberId',
+    createdAt: 'createdAt'
+  };
+
+  export type CallRoundCouncilMemberScalarFieldEnum = (typeof CallRoundCouncilMemberScalarFieldEnum)[keyof typeof CallRoundCouncilMemberScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -21578,6 +24099,20 @@ export namespace Prisma {
    * Reference to a field of type 'Boolean'
    */
   export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
+    
+
+
+  /**
+   * Reference to a field of type 'ApplicableFor'
+   */
+  export type EnumApplicableForFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ApplicableFor'>
+    
+
+
+  /**
+   * Reference to a field of type 'ApplicableFor[]'
+   */
+  export type ListEnumApplicableForFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ApplicableFor[]'>
     
 
 
@@ -21961,6 +24496,8 @@ export namespace Prisma {
     instructedProjects?: ProjectListRelationFilter
     facultyReviews?: ProjectRegistrationListRelationFilter
     notifications?: NotificationListRelationFilter
+    callRoundInstructors?: CallRoundInstructorListRelationFilter
+    callRoundCouncilMembers?: CallRoundCouncilMemberListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -21991,6 +24528,8 @@ export namespace Prisma {
     instructedProjects?: ProjectOrderByRelationAggregateInput
     facultyReviews?: ProjectRegistrationOrderByRelationAggregateInput
     notifications?: NotificationOrderByRelationAggregateInput
+    callRoundInstructors?: CallRoundInstructorOrderByRelationAggregateInput
+    callRoundCouncilMembers?: CallRoundCouncilMemberOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -22024,6 +24563,8 @@ export namespace Prisma {
     instructedProjects?: ProjectListRelationFilter
     facultyReviews?: ProjectRegistrationListRelationFilter
     notifications?: NotificationListRelationFilter
+    callRoundInstructors?: CallRoundInstructorListRelationFilter
+    callRoundCouncilMembers?: CallRoundCouncilMemberListRelationFilter
   }, "id" | "code" | "email">
 
   export type UserOrderByWithAggregationInput = {
@@ -22092,6 +24633,7 @@ export namespace Prisma {
     contactInfo?: StringNullableFilter<"CallRound"> | string | null
     isActive?: BoolFilter<"CallRound"> | boolean
     isLocked?: BoolFilter<"CallRound"> | boolean
+    applicableFor?: EnumApplicableForFilter<"CallRound"> | $Enums.ApplicableFor
     approvalStatus?: EnumCallRoundApprovalStatusFilter<"CallRound"> | $Enums.CallRoundApprovalStatus
     createdById?: StringNullableFilter<"CallRound"> | string | null
     createdByRole?: EnumRoleNullableFilter<"CallRound"> | $Enums.Role | null
@@ -22107,6 +24649,8 @@ export namespace Prisma {
     departments?: DepartmentListRelationFilter
     majors?: MajorListRelationFilter
     classes?: ClassListRelationFilter
+    availableInstructors?: CallRoundInstructorListRelationFilter
+    availableCouncilMembers?: CallRoundCouncilMemberListRelationFilter
   }
 
   export type CallRoundOrderByWithRelationInput = {
@@ -22128,6 +24672,7 @@ export namespace Prisma {
     contactInfo?: SortOrderInput | SortOrder
     isActive?: SortOrder
     isLocked?: SortOrder
+    applicableFor?: SortOrder
     approvalStatus?: SortOrder
     createdById?: SortOrderInput | SortOrder
     createdByRole?: SortOrderInput | SortOrder
@@ -22143,6 +24688,8 @@ export namespace Prisma {
     departments?: DepartmentOrderByRelationAggregateInput
     majors?: MajorOrderByRelationAggregateInput
     classes?: ClassOrderByRelationAggregateInput
+    availableInstructors?: CallRoundInstructorOrderByRelationAggregateInput
+    availableCouncilMembers?: CallRoundCouncilMemberOrderByRelationAggregateInput
   }
 
   export type CallRoundWhereUniqueInput = Prisma.AtLeast<{
@@ -22167,6 +24714,7 @@ export namespace Prisma {
     contactInfo?: StringNullableFilter<"CallRound"> | string | null
     isActive?: BoolFilter<"CallRound"> | boolean
     isLocked?: BoolFilter<"CallRound"> | boolean
+    applicableFor?: EnumApplicableForFilter<"CallRound"> | $Enums.ApplicableFor
     approvalStatus?: EnumCallRoundApprovalStatusFilter<"CallRound"> | $Enums.CallRoundApprovalStatus
     createdById?: StringNullableFilter<"CallRound"> | string | null
     createdByRole?: EnumRoleNullableFilter<"CallRound"> | $Enums.Role | null
@@ -22182,6 +24730,8 @@ export namespace Prisma {
     departments?: DepartmentListRelationFilter
     majors?: MajorListRelationFilter
     classes?: ClassListRelationFilter
+    availableInstructors?: CallRoundInstructorListRelationFilter
+    availableCouncilMembers?: CallRoundCouncilMemberListRelationFilter
   }, "id">
 
   export type CallRoundOrderByWithAggregationInput = {
@@ -22203,6 +24753,7 @@ export namespace Prisma {
     contactInfo?: SortOrderInput | SortOrder
     isActive?: SortOrder
     isLocked?: SortOrder
+    applicableFor?: SortOrder
     approvalStatus?: SortOrder
     createdById?: SortOrderInput | SortOrder
     createdByRole?: SortOrderInput | SortOrder
@@ -22241,6 +24792,7 @@ export namespace Prisma {
     contactInfo?: StringNullableWithAggregatesFilter<"CallRound"> | string | null
     isActive?: BoolWithAggregatesFilter<"CallRound"> | boolean
     isLocked?: BoolWithAggregatesFilter<"CallRound"> | boolean
+    applicableFor?: EnumApplicableForWithAggregatesFilter<"CallRound"> | $Enums.ApplicableFor
     approvalStatus?: EnumCallRoundApprovalStatusWithAggregatesFilter<"CallRound"> | $Enums.CallRoundApprovalStatus
     createdById?: StringNullableWithAggregatesFilter<"CallRound"> | string | null
     createdByRole?: EnumRoleNullableWithAggregatesFilter<"CallRound"> | $Enums.Role | null
@@ -22463,6 +25015,8 @@ export namespace Prisma {
     name?: StringFilter<"ProgressReportTemplate"> | string
     description?: StringNullableFilter<"ProgressReportTemplate"> | string | null
     isActive?: BoolFilter<"ProgressReportTemplate"> | boolean
+    createdById?: StringNullableFilter<"ProgressReportTemplate"> | string | null
+    createdByRole?: EnumRoleNullableFilter<"ProgressReportTemplate"> | $Enums.Role | null
     createdAt?: DateTimeFilter<"ProgressReportTemplate"> | Date | string
     updatedAt?: DateTimeFilter<"ProgressReportTemplate"> | Date | string
     items?: ProgressReportTemplateItemListRelationFilter
@@ -22474,6 +25028,8 @@ export namespace Prisma {
     name?: SortOrder
     description?: SortOrderInput | SortOrder
     isActive?: SortOrder
+    createdById?: SortOrderInput | SortOrder
+    createdByRole?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     items?: ProgressReportTemplateItemOrderByRelationAggregateInput
@@ -22488,6 +25044,8 @@ export namespace Prisma {
     name?: StringFilter<"ProgressReportTemplate"> | string
     description?: StringNullableFilter<"ProgressReportTemplate"> | string | null
     isActive?: BoolFilter<"ProgressReportTemplate"> | boolean
+    createdById?: StringNullableFilter<"ProgressReportTemplate"> | string | null
+    createdByRole?: EnumRoleNullableFilter<"ProgressReportTemplate"> | $Enums.Role | null
     createdAt?: DateTimeFilter<"ProgressReportTemplate"> | Date | string
     updatedAt?: DateTimeFilter<"ProgressReportTemplate"> | Date | string
     items?: ProgressReportTemplateItemListRelationFilter
@@ -22499,6 +25057,8 @@ export namespace Prisma {
     name?: SortOrder
     description?: SortOrderInput | SortOrder
     isActive?: SortOrder
+    createdById?: SortOrderInput | SortOrder
+    createdByRole?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: ProgressReportTemplateCountOrderByAggregateInput
@@ -22514,6 +25074,8 @@ export namespace Prisma {
     name?: StringWithAggregatesFilter<"ProgressReportTemplate"> | string
     description?: StringNullableWithAggregatesFilter<"ProgressReportTemplate"> | string | null
     isActive?: BoolWithAggregatesFilter<"ProgressReportTemplate"> | boolean
+    createdById?: StringNullableWithAggregatesFilter<"ProgressReportTemplate"> | string | null
+    createdByRole?: EnumRoleNullableWithAggregatesFilter<"ProgressReportTemplate"> | $Enums.Role | null
     createdAt?: DateTimeWithAggregatesFilter<"ProgressReportTemplate"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"ProgressReportTemplate"> | Date | string
   }
@@ -23126,6 +25688,114 @@ export namespace Prisma {
     readAt?: DateTimeNullableWithAggregatesFilter<"Notification"> | Date | string | null
   }
 
+  export type CallRoundInstructorWhereInput = {
+    AND?: CallRoundInstructorWhereInput | CallRoundInstructorWhereInput[]
+    OR?: CallRoundInstructorWhereInput[]
+    NOT?: CallRoundInstructorWhereInput | CallRoundInstructorWhereInput[]
+    id?: StringFilter<"CallRoundInstructor"> | string
+    callRoundId?: StringFilter<"CallRoundInstructor"> | string
+    instructorId?: StringFilter<"CallRoundInstructor"> | string
+    createdAt?: DateTimeFilter<"CallRoundInstructor"> | Date | string
+    callRound?: XOR<CallRoundScalarRelationFilter, CallRoundWhereInput>
+    instructor?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }
+
+  export type CallRoundInstructorOrderByWithRelationInput = {
+    id?: SortOrder
+    callRoundId?: SortOrder
+    instructorId?: SortOrder
+    createdAt?: SortOrder
+    callRound?: CallRoundOrderByWithRelationInput
+    instructor?: UserOrderByWithRelationInput
+  }
+
+  export type CallRoundInstructorWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    callRoundId_instructorId?: CallRoundInstructorCallRoundIdInstructorIdCompoundUniqueInput
+    AND?: CallRoundInstructorWhereInput | CallRoundInstructorWhereInput[]
+    OR?: CallRoundInstructorWhereInput[]
+    NOT?: CallRoundInstructorWhereInput | CallRoundInstructorWhereInput[]
+    callRoundId?: StringFilter<"CallRoundInstructor"> | string
+    instructorId?: StringFilter<"CallRoundInstructor"> | string
+    createdAt?: DateTimeFilter<"CallRoundInstructor"> | Date | string
+    callRound?: XOR<CallRoundScalarRelationFilter, CallRoundWhereInput>
+    instructor?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }, "id" | "callRoundId_instructorId">
+
+  export type CallRoundInstructorOrderByWithAggregationInput = {
+    id?: SortOrder
+    callRoundId?: SortOrder
+    instructorId?: SortOrder
+    createdAt?: SortOrder
+    _count?: CallRoundInstructorCountOrderByAggregateInput
+    _max?: CallRoundInstructorMaxOrderByAggregateInput
+    _min?: CallRoundInstructorMinOrderByAggregateInput
+  }
+
+  export type CallRoundInstructorScalarWhereWithAggregatesInput = {
+    AND?: CallRoundInstructorScalarWhereWithAggregatesInput | CallRoundInstructorScalarWhereWithAggregatesInput[]
+    OR?: CallRoundInstructorScalarWhereWithAggregatesInput[]
+    NOT?: CallRoundInstructorScalarWhereWithAggregatesInput | CallRoundInstructorScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"CallRoundInstructor"> | string
+    callRoundId?: StringWithAggregatesFilter<"CallRoundInstructor"> | string
+    instructorId?: StringWithAggregatesFilter<"CallRoundInstructor"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"CallRoundInstructor"> | Date | string
+  }
+
+  export type CallRoundCouncilMemberWhereInput = {
+    AND?: CallRoundCouncilMemberWhereInput | CallRoundCouncilMemberWhereInput[]
+    OR?: CallRoundCouncilMemberWhereInput[]
+    NOT?: CallRoundCouncilMemberWhereInput | CallRoundCouncilMemberWhereInput[]
+    id?: StringFilter<"CallRoundCouncilMember"> | string
+    callRoundId?: StringFilter<"CallRoundCouncilMember"> | string
+    councilMemberId?: StringFilter<"CallRoundCouncilMember"> | string
+    createdAt?: DateTimeFilter<"CallRoundCouncilMember"> | Date | string
+    callRound?: XOR<CallRoundScalarRelationFilter, CallRoundWhereInput>
+    councilMember?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }
+
+  export type CallRoundCouncilMemberOrderByWithRelationInput = {
+    id?: SortOrder
+    callRoundId?: SortOrder
+    councilMemberId?: SortOrder
+    createdAt?: SortOrder
+    callRound?: CallRoundOrderByWithRelationInput
+    councilMember?: UserOrderByWithRelationInput
+  }
+
+  export type CallRoundCouncilMemberWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    callRoundId_councilMemberId?: CallRoundCouncilMemberCallRoundIdCouncilMemberIdCompoundUniqueInput
+    AND?: CallRoundCouncilMemberWhereInput | CallRoundCouncilMemberWhereInput[]
+    OR?: CallRoundCouncilMemberWhereInput[]
+    NOT?: CallRoundCouncilMemberWhereInput | CallRoundCouncilMemberWhereInput[]
+    callRoundId?: StringFilter<"CallRoundCouncilMember"> | string
+    councilMemberId?: StringFilter<"CallRoundCouncilMember"> | string
+    createdAt?: DateTimeFilter<"CallRoundCouncilMember"> | Date | string
+    callRound?: XOR<CallRoundScalarRelationFilter, CallRoundWhereInput>
+    councilMember?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }, "id" | "callRoundId_councilMemberId">
+
+  export type CallRoundCouncilMemberOrderByWithAggregationInput = {
+    id?: SortOrder
+    callRoundId?: SortOrder
+    councilMemberId?: SortOrder
+    createdAt?: SortOrder
+    _count?: CallRoundCouncilMemberCountOrderByAggregateInput
+    _max?: CallRoundCouncilMemberMaxOrderByAggregateInput
+    _min?: CallRoundCouncilMemberMinOrderByAggregateInput
+  }
+
+  export type CallRoundCouncilMemberScalarWhereWithAggregatesInput = {
+    AND?: CallRoundCouncilMemberScalarWhereWithAggregatesInput | CallRoundCouncilMemberScalarWhereWithAggregatesInput[]
+    OR?: CallRoundCouncilMemberScalarWhereWithAggregatesInput[]
+    NOT?: CallRoundCouncilMemberScalarWhereWithAggregatesInput | CallRoundCouncilMemberScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"CallRoundCouncilMember"> | string
+    callRoundId?: StringWithAggregatesFilter<"CallRoundCouncilMember"> | string
+    councilMemberId?: StringWithAggregatesFilter<"CallRoundCouncilMember"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"CallRoundCouncilMember"> | Date | string
+  }
+
   export type DepartmentCreateInput = {
     id?: string
     code: string
@@ -23377,6 +26047,8 @@ export namespace Prisma {
     instructedProjects?: ProjectCreateNestedManyWithoutInstructorInput
     facultyReviews?: ProjectRegistrationCreateNestedManyWithoutFacultyReviewerInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    callRoundInstructors?: CallRoundInstructorCreateNestedManyWithoutInstructorInput
+    callRoundCouncilMembers?: CallRoundCouncilMemberCreateNestedManyWithoutCouncilMemberInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -23404,6 +26076,8 @@ export namespace Prisma {
     instructedProjects?: ProjectUncheckedCreateNestedManyWithoutInstructorInput
     facultyReviews?: ProjectRegistrationUncheckedCreateNestedManyWithoutFacultyReviewerInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    callRoundInstructors?: CallRoundInstructorUncheckedCreateNestedManyWithoutInstructorInput
+    callRoundCouncilMembers?: CallRoundCouncilMemberUncheckedCreateNestedManyWithoutCouncilMemberInput
   }
 
   export type UserUpdateInput = {
@@ -23431,6 +26105,8 @@ export namespace Prisma {
     instructedProjects?: ProjectUpdateManyWithoutInstructorNestedInput
     facultyReviews?: ProjectRegistrationUpdateManyWithoutFacultyReviewerNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    callRoundInstructors?: CallRoundInstructorUpdateManyWithoutInstructorNestedInput
+    callRoundCouncilMembers?: CallRoundCouncilMemberUpdateManyWithoutCouncilMemberNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -23458,6 +26134,8 @@ export namespace Prisma {
     instructedProjects?: ProjectUncheckedUpdateManyWithoutInstructorNestedInput
     facultyReviews?: ProjectRegistrationUncheckedUpdateManyWithoutFacultyReviewerNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    callRoundInstructors?: CallRoundInstructorUncheckedUpdateManyWithoutInstructorNestedInput
+    callRoundCouncilMembers?: CallRoundCouncilMemberUncheckedUpdateManyWithoutCouncilMemberNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -23533,6 +26211,7 @@ export namespace Prisma {
     contactInfo?: string | null
     isActive?: boolean
     isLocked?: boolean
+    applicableFor?: $Enums.ApplicableFor
     approvalStatus?: $Enums.CallRoundApprovalStatus
     createdById?: string | null
     createdByRole?: $Enums.Role | null
@@ -23547,6 +26226,8 @@ export namespace Prisma {
     departments?: DepartmentCreateNestedManyWithoutCallRoundsInput
     majors?: MajorCreateNestedManyWithoutCallRoundsInput
     classes?: ClassCreateNestedManyWithoutCallRoundsInput
+    availableInstructors?: CallRoundInstructorCreateNestedManyWithoutCallRoundInput
+    availableCouncilMembers?: CallRoundCouncilMemberCreateNestedManyWithoutCallRoundInput
   }
 
   export type CallRoundUncheckedCreateInput = {
@@ -23568,6 +26249,7 @@ export namespace Prisma {
     contactInfo?: string | null
     isActive?: boolean
     isLocked?: boolean
+    applicableFor?: $Enums.ApplicableFor
     approvalStatus?: $Enums.CallRoundApprovalStatus
     createdById?: string | null
     createdByRole?: $Enums.Role | null
@@ -23582,6 +26264,8 @@ export namespace Prisma {
     departments?: DepartmentUncheckedCreateNestedManyWithoutCallRoundsInput
     majors?: MajorUncheckedCreateNestedManyWithoutCallRoundsInput
     classes?: ClassUncheckedCreateNestedManyWithoutCallRoundsInput
+    availableInstructors?: CallRoundInstructorUncheckedCreateNestedManyWithoutCallRoundInput
+    availableCouncilMembers?: CallRoundCouncilMemberUncheckedCreateNestedManyWithoutCallRoundInput
   }
 
   export type CallRoundUpdateInput = {
@@ -23603,6 +26287,7 @@ export namespace Prisma {
     contactInfo?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     isLocked?: BoolFieldUpdateOperationsInput | boolean
+    applicableFor?: EnumApplicableForFieldUpdateOperationsInput | $Enums.ApplicableFor
     approvalStatus?: EnumCallRoundApprovalStatusFieldUpdateOperationsInput | $Enums.CallRoundApprovalStatus
     createdById?: NullableStringFieldUpdateOperationsInput | string | null
     createdByRole?: NullableEnumRoleFieldUpdateOperationsInput | $Enums.Role | null
@@ -23617,6 +26302,8 @@ export namespace Prisma {
     departments?: DepartmentUpdateManyWithoutCallRoundsNestedInput
     majors?: MajorUpdateManyWithoutCallRoundsNestedInput
     classes?: ClassUpdateManyWithoutCallRoundsNestedInput
+    availableInstructors?: CallRoundInstructorUpdateManyWithoutCallRoundNestedInput
+    availableCouncilMembers?: CallRoundCouncilMemberUpdateManyWithoutCallRoundNestedInput
   }
 
   export type CallRoundUncheckedUpdateInput = {
@@ -23638,6 +26325,7 @@ export namespace Prisma {
     contactInfo?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     isLocked?: BoolFieldUpdateOperationsInput | boolean
+    applicableFor?: EnumApplicableForFieldUpdateOperationsInput | $Enums.ApplicableFor
     approvalStatus?: EnumCallRoundApprovalStatusFieldUpdateOperationsInput | $Enums.CallRoundApprovalStatus
     createdById?: NullableStringFieldUpdateOperationsInput | string | null
     createdByRole?: NullableEnumRoleFieldUpdateOperationsInput | $Enums.Role | null
@@ -23652,6 +26340,8 @@ export namespace Prisma {
     departments?: DepartmentUncheckedUpdateManyWithoutCallRoundsNestedInput
     majors?: MajorUncheckedUpdateManyWithoutCallRoundsNestedInput
     classes?: ClassUncheckedUpdateManyWithoutCallRoundsNestedInput
+    availableInstructors?: CallRoundInstructorUncheckedUpdateManyWithoutCallRoundNestedInput
+    availableCouncilMembers?: CallRoundCouncilMemberUncheckedUpdateManyWithoutCallRoundNestedInput
   }
 
   export type CallRoundCreateManyInput = {
@@ -23673,6 +26363,7 @@ export namespace Prisma {
     contactInfo?: string | null
     isActive?: boolean
     isLocked?: boolean
+    applicableFor?: $Enums.ApplicableFor
     approvalStatus?: $Enums.CallRoundApprovalStatus
     createdById?: string | null
     createdByRole?: $Enums.Role | null
@@ -23703,6 +26394,7 @@ export namespace Prisma {
     contactInfo?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     isLocked?: BoolFieldUpdateOperationsInput | boolean
+    applicableFor?: EnumApplicableForFieldUpdateOperationsInput | $Enums.ApplicableFor
     approvalStatus?: EnumCallRoundApprovalStatusFieldUpdateOperationsInput | $Enums.CallRoundApprovalStatus
     createdById?: NullableStringFieldUpdateOperationsInput | string | null
     createdByRole?: NullableEnumRoleFieldUpdateOperationsInput | $Enums.Role | null
@@ -23732,6 +26424,7 @@ export namespace Prisma {
     contactInfo?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     isLocked?: BoolFieldUpdateOperationsInput | boolean
+    applicableFor?: EnumApplicableForFieldUpdateOperationsInput | $Enums.ApplicableFor
     approvalStatus?: EnumCallRoundApprovalStatusFieldUpdateOperationsInput | $Enums.CallRoundApprovalStatus
     createdById?: NullableStringFieldUpdateOperationsInput | string | null
     createdByRole?: NullableEnumRoleFieldUpdateOperationsInput | $Enums.Role | null
@@ -23966,6 +26659,8 @@ export namespace Prisma {
     name: string
     description?: string | null
     isActive?: boolean
+    createdById?: string | null
+    createdByRole?: $Enums.Role | null
     createdAt?: Date | string
     updatedAt?: Date | string
     items?: ProgressReportTemplateItemCreateNestedManyWithoutTemplateInput
@@ -23977,6 +26672,8 @@ export namespace Prisma {
     name: string
     description?: string | null
     isActive?: boolean
+    createdById?: string | null
+    createdByRole?: $Enums.Role | null
     createdAt?: Date | string
     updatedAt?: Date | string
     items?: ProgressReportTemplateItemUncheckedCreateNestedManyWithoutTemplateInput
@@ -23988,6 +26685,8 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdByRole?: NullableEnumRoleFieldUpdateOperationsInput | $Enums.Role | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     items?: ProgressReportTemplateItemUpdateManyWithoutTemplateNestedInput
@@ -23999,6 +26698,8 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdByRole?: NullableEnumRoleFieldUpdateOperationsInput | $Enums.Role | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     items?: ProgressReportTemplateItemUncheckedUpdateManyWithoutTemplateNestedInput
@@ -24010,6 +26711,8 @@ export namespace Prisma {
     name: string
     description?: string | null
     isActive?: boolean
+    createdById?: string | null
+    createdByRole?: $Enums.Role | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -24019,6 +26722,8 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdByRole?: NullableEnumRoleFieldUpdateOperationsInput | $Enums.Role | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -24028,6 +26733,8 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdByRole?: NullableEnumRoleFieldUpdateOperationsInput | $Enums.Role | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -24693,6 +27400,100 @@ export namespace Prisma {
     readAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
+  export type CallRoundInstructorCreateInput = {
+    id?: string
+    createdAt?: Date | string
+    callRound: CallRoundCreateNestedOneWithoutAvailableInstructorsInput
+    instructor: UserCreateNestedOneWithoutCallRoundInstructorsInput
+  }
+
+  export type CallRoundInstructorUncheckedCreateInput = {
+    id?: string
+    callRoundId: string
+    instructorId: string
+    createdAt?: Date | string
+  }
+
+  export type CallRoundInstructorUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    callRound?: CallRoundUpdateOneRequiredWithoutAvailableInstructorsNestedInput
+    instructor?: UserUpdateOneRequiredWithoutCallRoundInstructorsNestedInput
+  }
+
+  export type CallRoundInstructorUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    callRoundId?: StringFieldUpdateOperationsInput | string
+    instructorId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CallRoundInstructorCreateManyInput = {
+    id?: string
+    callRoundId: string
+    instructorId: string
+    createdAt?: Date | string
+  }
+
+  export type CallRoundInstructorUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CallRoundInstructorUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    callRoundId?: StringFieldUpdateOperationsInput | string
+    instructorId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CallRoundCouncilMemberCreateInput = {
+    id?: string
+    createdAt?: Date | string
+    callRound: CallRoundCreateNestedOneWithoutAvailableCouncilMembersInput
+    councilMember: UserCreateNestedOneWithoutCallRoundCouncilMembersInput
+  }
+
+  export type CallRoundCouncilMemberUncheckedCreateInput = {
+    id?: string
+    callRoundId: string
+    councilMemberId: string
+    createdAt?: Date | string
+  }
+
+  export type CallRoundCouncilMemberUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    callRound?: CallRoundUpdateOneRequiredWithoutAvailableCouncilMembersNestedInput
+    councilMember?: UserUpdateOneRequiredWithoutCallRoundCouncilMembersNestedInput
+  }
+
+  export type CallRoundCouncilMemberUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    callRoundId?: StringFieldUpdateOperationsInput | string
+    councilMemberId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CallRoundCouncilMemberCreateManyInput = {
+    id?: string
+    callRoundId: string
+    councilMemberId: string
+    createdAt?: Date | string
+  }
+
+  export type CallRoundCouncilMemberUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CallRoundCouncilMemberUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    callRoundId?: StringFieldUpdateOperationsInput | string
+    councilMemberId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type StringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -24987,6 +27788,18 @@ export namespace Prisma {
     none?: NotificationWhereInput
   }
 
+  export type CallRoundInstructorListRelationFilter = {
+    every?: CallRoundInstructorWhereInput
+    some?: CallRoundInstructorWhereInput
+    none?: CallRoundInstructorWhereInput
+  }
+
+  export type CallRoundCouncilMemberListRelationFilter = {
+    every?: CallRoundCouncilMemberWhereInput
+    some?: CallRoundCouncilMemberWhereInput
+    none?: CallRoundCouncilMemberWhereInput
+  }
+
   export type ProjectOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -25000,6 +27813,14 @@ export namespace Prisma {
   }
 
   export type NotificationOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type CallRoundInstructorOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type CallRoundCouncilMemberOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -25121,6 +27942,13 @@ export namespace Prisma {
     not?: NestedBoolFilter<$PrismaModel> | boolean
   }
 
+  export type EnumApplicableForFilter<$PrismaModel = never> = {
+    equals?: $Enums.ApplicableFor | EnumApplicableForFieldRefInput<$PrismaModel>
+    in?: $Enums.ApplicableFor[] | ListEnumApplicableForFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ApplicableFor[] | ListEnumApplicableForFieldRefInput<$PrismaModel>
+    not?: NestedEnumApplicableForFilter<$PrismaModel> | $Enums.ApplicableFor
+  }
+
   export type EnumCallRoundApprovalStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.CallRoundApprovalStatus | EnumCallRoundApprovalStatusFieldRefInput<$PrismaModel>
     in?: $Enums.CallRoundApprovalStatus[] | ListEnumCallRoundApprovalStatusFieldRefInput<$PrismaModel>
@@ -25169,6 +27997,7 @@ export namespace Prisma {
     contactInfo?: SortOrder
     isActive?: SortOrder
     isLocked?: SortOrder
+    applicableFor?: SortOrder
     approvalStatus?: SortOrder
     createdById?: SortOrder
     createdByRole?: SortOrder
@@ -25204,6 +28033,7 @@ export namespace Prisma {
     contactInfo?: SortOrder
     isActive?: SortOrder
     isLocked?: SortOrder
+    applicableFor?: SortOrder
     approvalStatus?: SortOrder
     createdById?: SortOrder
     createdByRole?: SortOrder
@@ -25234,6 +28064,7 @@ export namespace Prisma {
     contactInfo?: SortOrder
     isActive?: SortOrder
     isLocked?: SortOrder
+    applicableFor?: SortOrder
     approvalStatus?: SortOrder
     createdById?: SortOrder
     createdByRole?: SortOrder
@@ -25288,6 +28119,16 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedBoolFilter<$PrismaModel>
     _max?: NestedBoolFilter<$PrismaModel>
+  }
+
+  export type EnumApplicableForWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ApplicableFor | EnumApplicableForFieldRefInput<$PrismaModel>
+    in?: $Enums.ApplicableFor[] | ListEnumApplicableForFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ApplicableFor[] | ListEnumApplicableForFieldRefInput<$PrismaModel>
+    not?: NestedEnumApplicableForWithAggregatesFilter<$PrismaModel> | $Enums.ApplicableFor
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumApplicableForFilter<$PrismaModel>
+    _max?: NestedEnumApplicableForFilter<$PrismaModel>
   }
 
   export type EnumCallRoundApprovalStatusWithAggregatesFilter<$PrismaModel = never> = {
@@ -25526,6 +28367,8 @@ export namespace Prisma {
     name?: SortOrder
     description?: SortOrder
     isActive?: SortOrder
+    createdById?: SortOrder
+    createdByRole?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -25535,6 +28378,8 @@ export namespace Prisma {
     name?: SortOrder
     description?: SortOrder
     isActive?: SortOrder
+    createdById?: SortOrder
+    createdByRole?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -25544,6 +28389,8 @@ export namespace Prisma {
     name?: SortOrder
     description?: SortOrder
     isActive?: SortOrder
+    createdById?: SortOrder
+    createdByRole?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -26098,6 +28945,63 @@ export namespace Prisma {
     _max?: NestedJsonNullableFilter<$PrismaModel>
   }
 
+  export type CallRoundScalarRelationFilter = {
+    is?: CallRoundWhereInput
+    isNot?: CallRoundWhereInput
+  }
+
+  export type CallRoundInstructorCallRoundIdInstructorIdCompoundUniqueInput = {
+    callRoundId: string
+    instructorId: string
+  }
+
+  export type CallRoundInstructorCountOrderByAggregateInput = {
+    id?: SortOrder
+    callRoundId?: SortOrder
+    instructorId?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type CallRoundInstructorMaxOrderByAggregateInput = {
+    id?: SortOrder
+    callRoundId?: SortOrder
+    instructorId?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type CallRoundInstructorMinOrderByAggregateInput = {
+    id?: SortOrder
+    callRoundId?: SortOrder
+    instructorId?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type CallRoundCouncilMemberCallRoundIdCouncilMemberIdCompoundUniqueInput = {
+    callRoundId: string
+    councilMemberId: string
+  }
+
+  export type CallRoundCouncilMemberCountOrderByAggregateInput = {
+    id?: SortOrder
+    callRoundId?: SortOrder
+    councilMemberId?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type CallRoundCouncilMemberMaxOrderByAggregateInput = {
+    id?: SortOrder
+    callRoundId?: SortOrder
+    councilMemberId?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type CallRoundCouncilMemberMinOrderByAggregateInput = {
+    id?: SortOrder
+    callRoundId?: SortOrder
+    councilMemberId?: SortOrder
+    createdAt?: SortOrder
+  }
+
   export type MajorCreateNestedManyWithoutDepartmentInput = {
     create?: XOR<MajorCreateWithoutDepartmentInput, MajorUncheckedCreateWithoutDepartmentInput> | MajorCreateWithoutDepartmentInput[] | MajorUncheckedCreateWithoutDepartmentInput[]
     connectOrCreate?: MajorCreateOrConnectWithoutDepartmentInput | MajorCreateOrConnectWithoutDepartmentInput[]
@@ -26536,6 +29440,20 @@ export namespace Prisma {
     connect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
   }
 
+  export type CallRoundInstructorCreateNestedManyWithoutInstructorInput = {
+    create?: XOR<CallRoundInstructorCreateWithoutInstructorInput, CallRoundInstructorUncheckedCreateWithoutInstructorInput> | CallRoundInstructorCreateWithoutInstructorInput[] | CallRoundInstructorUncheckedCreateWithoutInstructorInput[]
+    connectOrCreate?: CallRoundInstructorCreateOrConnectWithoutInstructorInput | CallRoundInstructorCreateOrConnectWithoutInstructorInput[]
+    createMany?: CallRoundInstructorCreateManyInstructorInputEnvelope
+    connect?: CallRoundInstructorWhereUniqueInput | CallRoundInstructorWhereUniqueInput[]
+  }
+
+  export type CallRoundCouncilMemberCreateNestedManyWithoutCouncilMemberInput = {
+    create?: XOR<CallRoundCouncilMemberCreateWithoutCouncilMemberInput, CallRoundCouncilMemberUncheckedCreateWithoutCouncilMemberInput> | CallRoundCouncilMemberCreateWithoutCouncilMemberInput[] | CallRoundCouncilMemberUncheckedCreateWithoutCouncilMemberInput[]
+    connectOrCreate?: CallRoundCouncilMemberCreateOrConnectWithoutCouncilMemberInput | CallRoundCouncilMemberCreateOrConnectWithoutCouncilMemberInput[]
+    createMany?: CallRoundCouncilMemberCreateManyCouncilMemberInputEnvelope
+    connect?: CallRoundCouncilMemberWhereUniqueInput | CallRoundCouncilMemberWhereUniqueInput[]
+  }
+
   export type ProjectUncheckedCreateNestedManyWithoutLeaderInput = {
     create?: XOR<ProjectCreateWithoutLeaderInput, ProjectUncheckedCreateWithoutLeaderInput> | ProjectCreateWithoutLeaderInput[] | ProjectUncheckedCreateWithoutLeaderInput[]
     connectOrCreate?: ProjectCreateOrConnectWithoutLeaderInput | ProjectCreateOrConnectWithoutLeaderInput[]
@@ -26590,6 +29508,20 @@ export namespace Prisma {
     connectOrCreate?: NotificationCreateOrConnectWithoutUserInput | NotificationCreateOrConnectWithoutUserInput[]
     createMany?: NotificationCreateManyUserInputEnvelope
     connect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
+  }
+
+  export type CallRoundInstructorUncheckedCreateNestedManyWithoutInstructorInput = {
+    create?: XOR<CallRoundInstructorCreateWithoutInstructorInput, CallRoundInstructorUncheckedCreateWithoutInstructorInput> | CallRoundInstructorCreateWithoutInstructorInput[] | CallRoundInstructorUncheckedCreateWithoutInstructorInput[]
+    connectOrCreate?: CallRoundInstructorCreateOrConnectWithoutInstructorInput | CallRoundInstructorCreateOrConnectWithoutInstructorInput[]
+    createMany?: CallRoundInstructorCreateManyInstructorInputEnvelope
+    connect?: CallRoundInstructorWhereUniqueInput | CallRoundInstructorWhereUniqueInput[]
+  }
+
+  export type CallRoundCouncilMemberUncheckedCreateNestedManyWithoutCouncilMemberInput = {
+    create?: XOR<CallRoundCouncilMemberCreateWithoutCouncilMemberInput, CallRoundCouncilMemberUncheckedCreateWithoutCouncilMemberInput> | CallRoundCouncilMemberCreateWithoutCouncilMemberInput[] | CallRoundCouncilMemberUncheckedCreateWithoutCouncilMemberInput[]
+    connectOrCreate?: CallRoundCouncilMemberCreateOrConnectWithoutCouncilMemberInput | CallRoundCouncilMemberCreateOrConnectWithoutCouncilMemberInput[]
+    createMany?: CallRoundCouncilMemberCreateManyCouncilMemberInputEnvelope
+    connect?: CallRoundCouncilMemberWhereUniqueInput | CallRoundCouncilMemberWhereUniqueInput[]
   }
 
   export type NullableDateTimeFieldUpdateOperationsInput = {
@@ -26746,6 +29678,34 @@ export namespace Prisma {
     deleteMany?: NotificationScalarWhereInput | NotificationScalarWhereInput[]
   }
 
+  export type CallRoundInstructorUpdateManyWithoutInstructorNestedInput = {
+    create?: XOR<CallRoundInstructorCreateWithoutInstructorInput, CallRoundInstructorUncheckedCreateWithoutInstructorInput> | CallRoundInstructorCreateWithoutInstructorInput[] | CallRoundInstructorUncheckedCreateWithoutInstructorInput[]
+    connectOrCreate?: CallRoundInstructorCreateOrConnectWithoutInstructorInput | CallRoundInstructorCreateOrConnectWithoutInstructorInput[]
+    upsert?: CallRoundInstructorUpsertWithWhereUniqueWithoutInstructorInput | CallRoundInstructorUpsertWithWhereUniqueWithoutInstructorInput[]
+    createMany?: CallRoundInstructorCreateManyInstructorInputEnvelope
+    set?: CallRoundInstructorWhereUniqueInput | CallRoundInstructorWhereUniqueInput[]
+    disconnect?: CallRoundInstructorWhereUniqueInput | CallRoundInstructorWhereUniqueInput[]
+    delete?: CallRoundInstructorWhereUniqueInput | CallRoundInstructorWhereUniqueInput[]
+    connect?: CallRoundInstructorWhereUniqueInput | CallRoundInstructorWhereUniqueInput[]
+    update?: CallRoundInstructorUpdateWithWhereUniqueWithoutInstructorInput | CallRoundInstructorUpdateWithWhereUniqueWithoutInstructorInput[]
+    updateMany?: CallRoundInstructorUpdateManyWithWhereWithoutInstructorInput | CallRoundInstructorUpdateManyWithWhereWithoutInstructorInput[]
+    deleteMany?: CallRoundInstructorScalarWhereInput | CallRoundInstructorScalarWhereInput[]
+  }
+
+  export type CallRoundCouncilMemberUpdateManyWithoutCouncilMemberNestedInput = {
+    create?: XOR<CallRoundCouncilMemberCreateWithoutCouncilMemberInput, CallRoundCouncilMemberUncheckedCreateWithoutCouncilMemberInput> | CallRoundCouncilMemberCreateWithoutCouncilMemberInput[] | CallRoundCouncilMemberUncheckedCreateWithoutCouncilMemberInput[]
+    connectOrCreate?: CallRoundCouncilMemberCreateOrConnectWithoutCouncilMemberInput | CallRoundCouncilMemberCreateOrConnectWithoutCouncilMemberInput[]
+    upsert?: CallRoundCouncilMemberUpsertWithWhereUniqueWithoutCouncilMemberInput | CallRoundCouncilMemberUpsertWithWhereUniqueWithoutCouncilMemberInput[]
+    createMany?: CallRoundCouncilMemberCreateManyCouncilMemberInputEnvelope
+    set?: CallRoundCouncilMemberWhereUniqueInput | CallRoundCouncilMemberWhereUniqueInput[]
+    disconnect?: CallRoundCouncilMemberWhereUniqueInput | CallRoundCouncilMemberWhereUniqueInput[]
+    delete?: CallRoundCouncilMemberWhereUniqueInput | CallRoundCouncilMemberWhereUniqueInput[]
+    connect?: CallRoundCouncilMemberWhereUniqueInput | CallRoundCouncilMemberWhereUniqueInput[]
+    update?: CallRoundCouncilMemberUpdateWithWhereUniqueWithoutCouncilMemberInput | CallRoundCouncilMemberUpdateWithWhereUniqueWithoutCouncilMemberInput[]
+    updateMany?: CallRoundCouncilMemberUpdateManyWithWhereWithoutCouncilMemberInput | CallRoundCouncilMemberUpdateManyWithWhereWithoutCouncilMemberInput[]
+    deleteMany?: CallRoundCouncilMemberScalarWhereInput | CallRoundCouncilMemberScalarWhereInput[]
+  }
+
   export type ProjectUncheckedUpdateManyWithoutLeaderNestedInput = {
     create?: XOR<ProjectCreateWithoutLeaderInput, ProjectUncheckedCreateWithoutLeaderInput> | ProjectCreateWithoutLeaderInput[] | ProjectUncheckedCreateWithoutLeaderInput[]
     connectOrCreate?: ProjectCreateOrConnectWithoutLeaderInput | ProjectCreateOrConnectWithoutLeaderInput[]
@@ -26858,6 +29818,34 @@ export namespace Prisma {
     deleteMany?: NotificationScalarWhereInput | NotificationScalarWhereInput[]
   }
 
+  export type CallRoundInstructorUncheckedUpdateManyWithoutInstructorNestedInput = {
+    create?: XOR<CallRoundInstructorCreateWithoutInstructorInput, CallRoundInstructorUncheckedCreateWithoutInstructorInput> | CallRoundInstructorCreateWithoutInstructorInput[] | CallRoundInstructorUncheckedCreateWithoutInstructorInput[]
+    connectOrCreate?: CallRoundInstructorCreateOrConnectWithoutInstructorInput | CallRoundInstructorCreateOrConnectWithoutInstructorInput[]
+    upsert?: CallRoundInstructorUpsertWithWhereUniqueWithoutInstructorInput | CallRoundInstructorUpsertWithWhereUniqueWithoutInstructorInput[]
+    createMany?: CallRoundInstructorCreateManyInstructorInputEnvelope
+    set?: CallRoundInstructorWhereUniqueInput | CallRoundInstructorWhereUniqueInput[]
+    disconnect?: CallRoundInstructorWhereUniqueInput | CallRoundInstructorWhereUniqueInput[]
+    delete?: CallRoundInstructorWhereUniqueInput | CallRoundInstructorWhereUniqueInput[]
+    connect?: CallRoundInstructorWhereUniqueInput | CallRoundInstructorWhereUniqueInput[]
+    update?: CallRoundInstructorUpdateWithWhereUniqueWithoutInstructorInput | CallRoundInstructorUpdateWithWhereUniqueWithoutInstructorInput[]
+    updateMany?: CallRoundInstructorUpdateManyWithWhereWithoutInstructorInput | CallRoundInstructorUpdateManyWithWhereWithoutInstructorInput[]
+    deleteMany?: CallRoundInstructorScalarWhereInput | CallRoundInstructorScalarWhereInput[]
+  }
+
+  export type CallRoundCouncilMemberUncheckedUpdateManyWithoutCouncilMemberNestedInput = {
+    create?: XOR<CallRoundCouncilMemberCreateWithoutCouncilMemberInput, CallRoundCouncilMemberUncheckedCreateWithoutCouncilMemberInput> | CallRoundCouncilMemberCreateWithoutCouncilMemberInput[] | CallRoundCouncilMemberUncheckedCreateWithoutCouncilMemberInput[]
+    connectOrCreate?: CallRoundCouncilMemberCreateOrConnectWithoutCouncilMemberInput | CallRoundCouncilMemberCreateOrConnectWithoutCouncilMemberInput[]
+    upsert?: CallRoundCouncilMemberUpsertWithWhereUniqueWithoutCouncilMemberInput | CallRoundCouncilMemberUpsertWithWhereUniqueWithoutCouncilMemberInput[]
+    createMany?: CallRoundCouncilMemberCreateManyCouncilMemberInputEnvelope
+    set?: CallRoundCouncilMemberWhereUniqueInput | CallRoundCouncilMemberWhereUniqueInput[]
+    disconnect?: CallRoundCouncilMemberWhereUniqueInput | CallRoundCouncilMemberWhereUniqueInput[]
+    delete?: CallRoundCouncilMemberWhereUniqueInput | CallRoundCouncilMemberWhereUniqueInput[]
+    connect?: CallRoundCouncilMemberWhereUniqueInput | CallRoundCouncilMemberWhereUniqueInput[]
+    update?: CallRoundCouncilMemberUpdateWithWhereUniqueWithoutCouncilMemberInput | CallRoundCouncilMemberUpdateWithWhereUniqueWithoutCouncilMemberInput[]
+    updateMany?: CallRoundCouncilMemberUpdateManyWithWhereWithoutCouncilMemberInput | CallRoundCouncilMemberUpdateManyWithWhereWithoutCouncilMemberInput[]
+    deleteMany?: CallRoundCouncilMemberScalarWhereInput | CallRoundCouncilMemberScalarWhereInput[]
+  }
+
   export type ProjectCreateNestedManyWithoutCallRoundInput = {
     create?: XOR<ProjectCreateWithoutCallRoundInput, ProjectUncheckedCreateWithoutCallRoundInput> | ProjectCreateWithoutCallRoundInput[] | ProjectUncheckedCreateWithoutCallRoundInput[]
     connectOrCreate?: ProjectCreateOrConnectWithoutCallRoundInput | ProjectCreateOrConnectWithoutCallRoundInput[]
@@ -26896,6 +29884,20 @@ export namespace Prisma {
     connect?: ClassWhereUniqueInput | ClassWhereUniqueInput[]
   }
 
+  export type CallRoundInstructorCreateNestedManyWithoutCallRoundInput = {
+    create?: XOR<CallRoundInstructorCreateWithoutCallRoundInput, CallRoundInstructorUncheckedCreateWithoutCallRoundInput> | CallRoundInstructorCreateWithoutCallRoundInput[] | CallRoundInstructorUncheckedCreateWithoutCallRoundInput[]
+    connectOrCreate?: CallRoundInstructorCreateOrConnectWithoutCallRoundInput | CallRoundInstructorCreateOrConnectWithoutCallRoundInput[]
+    createMany?: CallRoundInstructorCreateManyCallRoundInputEnvelope
+    connect?: CallRoundInstructorWhereUniqueInput | CallRoundInstructorWhereUniqueInput[]
+  }
+
+  export type CallRoundCouncilMemberCreateNestedManyWithoutCallRoundInput = {
+    create?: XOR<CallRoundCouncilMemberCreateWithoutCallRoundInput, CallRoundCouncilMemberUncheckedCreateWithoutCallRoundInput> | CallRoundCouncilMemberCreateWithoutCallRoundInput[] | CallRoundCouncilMemberUncheckedCreateWithoutCallRoundInput[]
+    connectOrCreate?: CallRoundCouncilMemberCreateOrConnectWithoutCallRoundInput | CallRoundCouncilMemberCreateOrConnectWithoutCallRoundInput[]
+    createMany?: CallRoundCouncilMemberCreateManyCallRoundInputEnvelope
+    connect?: CallRoundCouncilMemberWhereUniqueInput | CallRoundCouncilMemberWhereUniqueInput[]
+  }
+
   export type ProjectUncheckedCreateNestedManyWithoutCallRoundInput = {
     create?: XOR<ProjectCreateWithoutCallRoundInput, ProjectUncheckedCreateWithoutCallRoundInput> | ProjectCreateWithoutCallRoundInput[] | ProjectUncheckedCreateWithoutCallRoundInput[]
     connectOrCreate?: ProjectCreateOrConnectWithoutCallRoundInput | ProjectCreateOrConnectWithoutCallRoundInput[]
@@ -26928,6 +29930,20 @@ export namespace Prisma {
     connect?: ClassWhereUniqueInput | ClassWhereUniqueInput[]
   }
 
+  export type CallRoundInstructorUncheckedCreateNestedManyWithoutCallRoundInput = {
+    create?: XOR<CallRoundInstructorCreateWithoutCallRoundInput, CallRoundInstructorUncheckedCreateWithoutCallRoundInput> | CallRoundInstructorCreateWithoutCallRoundInput[] | CallRoundInstructorUncheckedCreateWithoutCallRoundInput[]
+    connectOrCreate?: CallRoundInstructorCreateOrConnectWithoutCallRoundInput | CallRoundInstructorCreateOrConnectWithoutCallRoundInput[]
+    createMany?: CallRoundInstructorCreateManyCallRoundInputEnvelope
+    connect?: CallRoundInstructorWhereUniqueInput | CallRoundInstructorWhereUniqueInput[]
+  }
+
+  export type CallRoundCouncilMemberUncheckedCreateNestedManyWithoutCallRoundInput = {
+    create?: XOR<CallRoundCouncilMemberCreateWithoutCallRoundInput, CallRoundCouncilMemberUncheckedCreateWithoutCallRoundInput> | CallRoundCouncilMemberCreateWithoutCallRoundInput[] | CallRoundCouncilMemberUncheckedCreateWithoutCallRoundInput[]
+    connectOrCreate?: CallRoundCouncilMemberCreateOrConnectWithoutCallRoundInput | CallRoundCouncilMemberCreateOrConnectWithoutCallRoundInput[]
+    createMany?: CallRoundCouncilMemberCreateManyCallRoundInputEnvelope
+    connect?: CallRoundCouncilMemberWhereUniqueInput | CallRoundCouncilMemberWhereUniqueInput[]
+  }
+
   export type NullableIntFieldUpdateOperationsInput = {
     set?: number | null
     increment?: number
@@ -26946,6 +29962,10 @@ export namespace Prisma {
 
   export type BoolFieldUpdateOperationsInput = {
     set?: boolean
+  }
+
+  export type EnumApplicableForFieldUpdateOperationsInput = {
+    set?: $Enums.ApplicableFor
   }
 
   export type EnumCallRoundApprovalStatusFieldUpdateOperationsInput = {
@@ -27033,6 +30053,34 @@ export namespace Prisma {
     deleteMany?: ClassScalarWhereInput | ClassScalarWhereInput[]
   }
 
+  export type CallRoundInstructorUpdateManyWithoutCallRoundNestedInput = {
+    create?: XOR<CallRoundInstructorCreateWithoutCallRoundInput, CallRoundInstructorUncheckedCreateWithoutCallRoundInput> | CallRoundInstructorCreateWithoutCallRoundInput[] | CallRoundInstructorUncheckedCreateWithoutCallRoundInput[]
+    connectOrCreate?: CallRoundInstructorCreateOrConnectWithoutCallRoundInput | CallRoundInstructorCreateOrConnectWithoutCallRoundInput[]
+    upsert?: CallRoundInstructorUpsertWithWhereUniqueWithoutCallRoundInput | CallRoundInstructorUpsertWithWhereUniqueWithoutCallRoundInput[]
+    createMany?: CallRoundInstructorCreateManyCallRoundInputEnvelope
+    set?: CallRoundInstructorWhereUniqueInput | CallRoundInstructorWhereUniqueInput[]
+    disconnect?: CallRoundInstructorWhereUniqueInput | CallRoundInstructorWhereUniqueInput[]
+    delete?: CallRoundInstructorWhereUniqueInput | CallRoundInstructorWhereUniqueInput[]
+    connect?: CallRoundInstructorWhereUniqueInput | CallRoundInstructorWhereUniqueInput[]
+    update?: CallRoundInstructorUpdateWithWhereUniqueWithoutCallRoundInput | CallRoundInstructorUpdateWithWhereUniqueWithoutCallRoundInput[]
+    updateMany?: CallRoundInstructorUpdateManyWithWhereWithoutCallRoundInput | CallRoundInstructorUpdateManyWithWhereWithoutCallRoundInput[]
+    deleteMany?: CallRoundInstructorScalarWhereInput | CallRoundInstructorScalarWhereInput[]
+  }
+
+  export type CallRoundCouncilMemberUpdateManyWithoutCallRoundNestedInput = {
+    create?: XOR<CallRoundCouncilMemberCreateWithoutCallRoundInput, CallRoundCouncilMemberUncheckedCreateWithoutCallRoundInput> | CallRoundCouncilMemberCreateWithoutCallRoundInput[] | CallRoundCouncilMemberUncheckedCreateWithoutCallRoundInput[]
+    connectOrCreate?: CallRoundCouncilMemberCreateOrConnectWithoutCallRoundInput | CallRoundCouncilMemberCreateOrConnectWithoutCallRoundInput[]
+    upsert?: CallRoundCouncilMemberUpsertWithWhereUniqueWithoutCallRoundInput | CallRoundCouncilMemberUpsertWithWhereUniqueWithoutCallRoundInput[]
+    createMany?: CallRoundCouncilMemberCreateManyCallRoundInputEnvelope
+    set?: CallRoundCouncilMemberWhereUniqueInput | CallRoundCouncilMemberWhereUniqueInput[]
+    disconnect?: CallRoundCouncilMemberWhereUniqueInput | CallRoundCouncilMemberWhereUniqueInput[]
+    delete?: CallRoundCouncilMemberWhereUniqueInput | CallRoundCouncilMemberWhereUniqueInput[]
+    connect?: CallRoundCouncilMemberWhereUniqueInput | CallRoundCouncilMemberWhereUniqueInput[]
+    update?: CallRoundCouncilMemberUpdateWithWhereUniqueWithoutCallRoundInput | CallRoundCouncilMemberUpdateWithWhereUniqueWithoutCallRoundInput[]
+    updateMany?: CallRoundCouncilMemberUpdateManyWithWhereWithoutCallRoundInput | CallRoundCouncilMemberUpdateManyWithWhereWithoutCallRoundInput[]
+    deleteMany?: CallRoundCouncilMemberScalarWhereInput | CallRoundCouncilMemberScalarWhereInput[]
+  }
+
   export type ProjectUncheckedUpdateManyWithoutCallRoundNestedInput = {
     create?: XOR<ProjectCreateWithoutCallRoundInput, ProjectUncheckedCreateWithoutCallRoundInput> | ProjectCreateWithoutCallRoundInput[] | ProjectUncheckedCreateWithoutCallRoundInput[]
     connectOrCreate?: ProjectCreateOrConnectWithoutCallRoundInput | ProjectCreateOrConnectWithoutCallRoundInput[]
@@ -27098,6 +30146,34 @@ export namespace Prisma {
     update?: ClassUpdateWithWhereUniqueWithoutCallRoundsInput | ClassUpdateWithWhereUniqueWithoutCallRoundsInput[]
     updateMany?: ClassUpdateManyWithWhereWithoutCallRoundsInput | ClassUpdateManyWithWhereWithoutCallRoundsInput[]
     deleteMany?: ClassScalarWhereInput | ClassScalarWhereInput[]
+  }
+
+  export type CallRoundInstructorUncheckedUpdateManyWithoutCallRoundNestedInput = {
+    create?: XOR<CallRoundInstructorCreateWithoutCallRoundInput, CallRoundInstructorUncheckedCreateWithoutCallRoundInput> | CallRoundInstructorCreateWithoutCallRoundInput[] | CallRoundInstructorUncheckedCreateWithoutCallRoundInput[]
+    connectOrCreate?: CallRoundInstructorCreateOrConnectWithoutCallRoundInput | CallRoundInstructorCreateOrConnectWithoutCallRoundInput[]
+    upsert?: CallRoundInstructorUpsertWithWhereUniqueWithoutCallRoundInput | CallRoundInstructorUpsertWithWhereUniqueWithoutCallRoundInput[]
+    createMany?: CallRoundInstructorCreateManyCallRoundInputEnvelope
+    set?: CallRoundInstructorWhereUniqueInput | CallRoundInstructorWhereUniqueInput[]
+    disconnect?: CallRoundInstructorWhereUniqueInput | CallRoundInstructorWhereUniqueInput[]
+    delete?: CallRoundInstructorWhereUniqueInput | CallRoundInstructorWhereUniqueInput[]
+    connect?: CallRoundInstructorWhereUniqueInput | CallRoundInstructorWhereUniqueInput[]
+    update?: CallRoundInstructorUpdateWithWhereUniqueWithoutCallRoundInput | CallRoundInstructorUpdateWithWhereUniqueWithoutCallRoundInput[]
+    updateMany?: CallRoundInstructorUpdateManyWithWhereWithoutCallRoundInput | CallRoundInstructorUpdateManyWithWhereWithoutCallRoundInput[]
+    deleteMany?: CallRoundInstructorScalarWhereInput | CallRoundInstructorScalarWhereInput[]
+  }
+
+  export type CallRoundCouncilMemberUncheckedUpdateManyWithoutCallRoundNestedInput = {
+    create?: XOR<CallRoundCouncilMemberCreateWithoutCallRoundInput, CallRoundCouncilMemberUncheckedCreateWithoutCallRoundInput> | CallRoundCouncilMemberCreateWithoutCallRoundInput[] | CallRoundCouncilMemberUncheckedCreateWithoutCallRoundInput[]
+    connectOrCreate?: CallRoundCouncilMemberCreateOrConnectWithoutCallRoundInput | CallRoundCouncilMemberCreateOrConnectWithoutCallRoundInput[]
+    upsert?: CallRoundCouncilMemberUpsertWithWhereUniqueWithoutCallRoundInput | CallRoundCouncilMemberUpsertWithWhereUniqueWithoutCallRoundInput[]
+    createMany?: CallRoundCouncilMemberCreateManyCallRoundInputEnvelope
+    set?: CallRoundCouncilMemberWhereUniqueInput | CallRoundCouncilMemberWhereUniqueInput[]
+    disconnect?: CallRoundCouncilMemberWhereUniqueInput | CallRoundCouncilMemberWhereUniqueInput[]
+    delete?: CallRoundCouncilMemberWhereUniqueInput | CallRoundCouncilMemberWhereUniqueInput[]
+    connect?: CallRoundCouncilMemberWhereUniqueInput | CallRoundCouncilMemberWhereUniqueInput[]
+    update?: CallRoundCouncilMemberUpdateWithWhereUniqueWithoutCallRoundInput | CallRoundCouncilMemberUpdateWithWhereUniqueWithoutCallRoundInput[]
+    updateMany?: CallRoundCouncilMemberUpdateManyWithWhereWithoutCallRoundInput | CallRoundCouncilMemberUpdateManyWithWhereWithoutCallRoundInput[]
+    deleteMany?: CallRoundCouncilMemberScalarWhereInput | CallRoundCouncilMemberScalarWhereInput[]
   }
 
   export type ProjectCreateNestedManyWithoutProjectTypeInput = {
@@ -27684,6 +30760,62 @@ export namespace Prisma {
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutNotificationsInput, UserUpdateWithoutNotificationsInput>, UserUncheckedUpdateWithoutNotificationsInput>
   }
 
+  export type CallRoundCreateNestedOneWithoutAvailableInstructorsInput = {
+    create?: XOR<CallRoundCreateWithoutAvailableInstructorsInput, CallRoundUncheckedCreateWithoutAvailableInstructorsInput>
+    connectOrCreate?: CallRoundCreateOrConnectWithoutAvailableInstructorsInput
+    connect?: CallRoundWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutCallRoundInstructorsInput = {
+    create?: XOR<UserCreateWithoutCallRoundInstructorsInput, UserUncheckedCreateWithoutCallRoundInstructorsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutCallRoundInstructorsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type CallRoundUpdateOneRequiredWithoutAvailableInstructorsNestedInput = {
+    create?: XOR<CallRoundCreateWithoutAvailableInstructorsInput, CallRoundUncheckedCreateWithoutAvailableInstructorsInput>
+    connectOrCreate?: CallRoundCreateOrConnectWithoutAvailableInstructorsInput
+    upsert?: CallRoundUpsertWithoutAvailableInstructorsInput
+    connect?: CallRoundWhereUniqueInput
+    update?: XOR<XOR<CallRoundUpdateToOneWithWhereWithoutAvailableInstructorsInput, CallRoundUpdateWithoutAvailableInstructorsInput>, CallRoundUncheckedUpdateWithoutAvailableInstructorsInput>
+  }
+
+  export type UserUpdateOneRequiredWithoutCallRoundInstructorsNestedInput = {
+    create?: XOR<UserCreateWithoutCallRoundInstructorsInput, UserUncheckedCreateWithoutCallRoundInstructorsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutCallRoundInstructorsInput
+    upsert?: UserUpsertWithoutCallRoundInstructorsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutCallRoundInstructorsInput, UserUpdateWithoutCallRoundInstructorsInput>, UserUncheckedUpdateWithoutCallRoundInstructorsInput>
+  }
+
+  export type CallRoundCreateNestedOneWithoutAvailableCouncilMembersInput = {
+    create?: XOR<CallRoundCreateWithoutAvailableCouncilMembersInput, CallRoundUncheckedCreateWithoutAvailableCouncilMembersInput>
+    connectOrCreate?: CallRoundCreateOrConnectWithoutAvailableCouncilMembersInput
+    connect?: CallRoundWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutCallRoundCouncilMembersInput = {
+    create?: XOR<UserCreateWithoutCallRoundCouncilMembersInput, UserUncheckedCreateWithoutCallRoundCouncilMembersInput>
+    connectOrCreate?: UserCreateOrConnectWithoutCallRoundCouncilMembersInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type CallRoundUpdateOneRequiredWithoutAvailableCouncilMembersNestedInput = {
+    create?: XOR<CallRoundCreateWithoutAvailableCouncilMembersInput, CallRoundUncheckedCreateWithoutAvailableCouncilMembersInput>
+    connectOrCreate?: CallRoundCreateOrConnectWithoutAvailableCouncilMembersInput
+    upsert?: CallRoundUpsertWithoutAvailableCouncilMembersInput
+    connect?: CallRoundWhereUniqueInput
+    update?: XOR<XOR<CallRoundUpdateToOneWithWhereWithoutAvailableCouncilMembersInput, CallRoundUpdateWithoutAvailableCouncilMembersInput>, CallRoundUncheckedUpdateWithoutAvailableCouncilMembersInput>
+  }
+
+  export type UserUpdateOneRequiredWithoutCallRoundCouncilMembersNestedInput = {
+    create?: XOR<UserCreateWithoutCallRoundCouncilMembersInput, UserUncheckedCreateWithoutCallRoundCouncilMembersInput>
+    connectOrCreate?: UserCreateOrConnectWithoutCallRoundCouncilMembersInput
+    upsert?: UserUpsertWithoutCallRoundCouncilMembersInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutCallRoundCouncilMembersInput, UserUpdateWithoutCallRoundCouncilMembersInput>, UserUncheckedUpdateWithoutCallRoundCouncilMembersInput>
+  }
+
   export type NestedStringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -27868,6 +31000,13 @@ export namespace Prisma {
     not?: NestedBoolFilter<$PrismaModel> | boolean
   }
 
+  export type NestedEnumApplicableForFilter<$PrismaModel = never> = {
+    equals?: $Enums.ApplicableFor | EnumApplicableForFieldRefInput<$PrismaModel>
+    in?: $Enums.ApplicableFor[] | ListEnumApplicableForFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ApplicableFor[] | ListEnumApplicableForFieldRefInput<$PrismaModel>
+    not?: NestedEnumApplicableForFilter<$PrismaModel> | $Enums.ApplicableFor
+  }
+
   export type NestedEnumCallRoundApprovalStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.CallRoundApprovalStatus | EnumCallRoundApprovalStatusFieldRefInput<$PrismaModel>
     in?: $Enums.CallRoundApprovalStatus[] | ListEnumCallRoundApprovalStatusFieldRefInput<$PrismaModel>
@@ -27931,6 +31070,16 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedBoolFilter<$PrismaModel>
     _max?: NestedBoolFilter<$PrismaModel>
+  }
+
+  export type NestedEnumApplicableForWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ApplicableFor | EnumApplicableForFieldRefInput<$PrismaModel>
+    in?: $Enums.ApplicableFor[] | ListEnumApplicableForFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ApplicableFor[] | ListEnumApplicableForFieldRefInput<$PrismaModel>
+    not?: NestedEnumApplicableForWithAggregatesFilter<$PrismaModel> | $Enums.ApplicableFor
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumApplicableForFilter<$PrismaModel>
+    _max?: NestedEnumApplicableForFilter<$PrismaModel>
   }
 
   export type NestedEnumCallRoundApprovalStatusWithAggregatesFilter<$PrismaModel = never> = {
@@ -28223,6 +31372,8 @@ export namespace Prisma {
     instructedProjects?: ProjectCreateNestedManyWithoutInstructorInput
     facultyReviews?: ProjectRegistrationCreateNestedManyWithoutFacultyReviewerInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    callRoundInstructors?: CallRoundInstructorCreateNestedManyWithoutInstructorInput
+    callRoundCouncilMembers?: CallRoundCouncilMemberCreateNestedManyWithoutCouncilMemberInput
   }
 
   export type UserUncheckedCreateWithoutDepartmentRefInput = {
@@ -28249,6 +31400,8 @@ export namespace Prisma {
     instructedProjects?: ProjectUncheckedCreateNestedManyWithoutInstructorInput
     facultyReviews?: ProjectRegistrationUncheckedCreateNestedManyWithoutFacultyReviewerInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    callRoundInstructors?: CallRoundInstructorUncheckedCreateNestedManyWithoutInstructorInput
+    callRoundCouncilMembers?: CallRoundCouncilMemberUncheckedCreateNestedManyWithoutCouncilMemberInput
   }
 
   export type UserCreateOrConnectWithoutDepartmentRefInput = {
@@ -28280,6 +31433,7 @@ export namespace Prisma {
     contactInfo?: string | null
     isActive?: boolean
     isLocked?: boolean
+    applicableFor?: $Enums.ApplicableFor
     approvalStatus?: $Enums.CallRoundApprovalStatus
     createdById?: string | null
     createdByRole?: $Enums.Role | null
@@ -28293,6 +31447,8 @@ export namespace Prisma {
     template?: ProgressReportTemplateCreateNestedOneWithoutCallRoundsInput
     majors?: MajorCreateNestedManyWithoutCallRoundsInput
     classes?: ClassCreateNestedManyWithoutCallRoundsInput
+    availableInstructors?: CallRoundInstructorCreateNestedManyWithoutCallRoundInput
+    availableCouncilMembers?: CallRoundCouncilMemberCreateNestedManyWithoutCallRoundInput
   }
 
   export type CallRoundUncheckedCreateWithoutDepartmentsInput = {
@@ -28314,6 +31470,7 @@ export namespace Prisma {
     contactInfo?: string | null
     isActive?: boolean
     isLocked?: boolean
+    applicableFor?: $Enums.ApplicableFor
     approvalStatus?: $Enums.CallRoundApprovalStatus
     createdById?: string | null
     createdByRole?: $Enums.Role | null
@@ -28327,6 +31484,8 @@ export namespace Prisma {
     registrations?: ProjectRegistrationUncheckedCreateNestedManyWithoutCallRoundInput
     majors?: MajorUncheckedCreateNestedManyWithoutCallRoundsInput
     classes?: ClassUncheckedCreateNestedManyWithoutCallRoundsInput
+    availableInstructors?: CallRoundInstructorUncheckedCreateNestedManyWithoutCallRoundInput
+    availableCouncilMembers?: CallRoundCouncilMemberUncheckedCreateNestedManyWithoutCallRoundInput
   }
 
   export type CallRoundCreateOrConnectWithoutDepartmentsInput = {
@@ -28439,6 +31598,7 @@ export namespace Prisma {
     contactInfo?: StringNullableFilter<"CallRound"> | string | null
     isActive?: BoolFilter<"CallRound"> | boolean
     isLocked?: BoolFilter<"CallRound"> | boolean
+    applicableFor?: EnumApplicableForFilter<"CallRound"> | $Enums.ApplicableFor
     approvalStatus?: EnumCallRoundApprovalStatusFilter<"CallRound"> | $Enums.CallRoundApprovalStatus
     createdById?: StringNullableFilter<"CallRound"> | string | null
     createdByRole?: EnumRoleNullableFilter<"CallRound"> | $Enums.Role | null
@@ -28531,6 +31691,8 @@ export namespace Prisma {
     instructedProjects?: ProjectCreateNestedManyWithoutInstructorInput
     facultyReviews?: ProjectRegistrationCreateNestedManyWithoutFacultyReviewerInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    callRoundInstructors?: CallRoundInstructorCreateNestedManyWithoutInstructorInput
+    callRoundCouncilMembers?: CallRoundCouncilMemberCreateNestedManyWithoutCouncilMemberInput
   }
 
   export type UserUncheckedCreateWithoutMajorInput = {
@@ -28557,6 +31719,8 @@ export namespace Prisma {
     instructedProjects?: ProjectUncheckedCreateNestedManyWithoutInstructorInput
     facultyReviews?: ProjectRegistrationUncheckedCreateNestedManyWithoutFacultyReviewerInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    callRoundInstructors?: CallRoundInstructorUncheckedCreateNestedManyWithoutInstructorInput
+    callRoundCouncilMembers?: CallRoundCouncilMemberUncheckedCreateNestedManyWithoutCouncilMemberInput
   }
 
   export type UserCreateOrConnectWithoutMajorInput = {
@@ -28588,6 +31752,7 @@ export namespace Prisma {
     contactInfo?: string | null
     isActive?: boolean
     isLocked?: boolean
+    applicableFor?: $Enums.ApplicableFor
     approvalStatus?: $Enums.CallRoundApprovalStatus
     createdById?: string | null
     createdByRole?: $Enums.Role | null
@@ -28601,6 +31766,8 @@ export namespace Prisma {
     template?: ProgressReportTemplateCreateNestedOneWithoutCallRoundsInput
     departments?: DepartmentCreateNestedManyWithoutCallRoundsInput
     classes?: ClassCreateNestedManyWithoutCallRoundsInput
+    availableInstructors?: CallRoundInstructorCreateNestedManyWithoutCallRoundInput
+    availableCouncilMembers?: CallRoundCouncilMemberCreateNestedManyWithoutCallRoundInput
   }
 
   export type CallRoundUncheckedCreateWithoutMajorsInput = {
@@ -28622,6 +31789,7 @@ export namespace Prisma {
     contactInfo?: string | null
     isActive?: boolean
     isLocked?: boolean
+    applicableFor?: $Enums.ApplicableFor
     approvalStatus?: $Enums.CallRoundApprovalStatus
     createdById?: string | null
     createdByRole?: $Enums.Role | null
@@ -28635,6 +31803,8 @@ export namespace Prisma {
     registrations?: ProjectRegistrationUncheckedCreateNestedManyWithoutCallRoundInput
     departments?: DepartmentUncheckedCreateNestedManyWithoutCallRoundsInput
     classes?: ClassUncheckedCreateNestedManyWithoutCallRoundsInput
+    availableInstructors?: CallRoundInstructorUncheckedCreateNestedManyWithoutCallRoundInput
+    availableCouncilMembers?: CallRoundCouncilMemberUncheckedCreateNestedManyWithoutCallRoundInput
   }
 
   export type CallRoundCreateOrConnectWithoutMajorsInput = {
@@ -28788,6 +31958,8 @@ export namespace Prisma {
     instructedProjects?: ProjectCreateNestedManyWithoutInstructorInput
     facultyReviews?: ProjectRegistrationCreateNestedManyWithoutFacultyReviewerInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    callRoundInstructors?: CallRoundInstructorCreateNestedManyWithoutInstructorInput
+    callRoundCouncilMembers?: CallRoundCouncilMemberCreateNestedManyWithoutCouncilMemberInput
   }
 
   export type UserUncheckedCreateWithoutClassInput = {
@@ -28814,6 +31986,8 @@ export namespace Prisma {
     instructedProjects?: ProjectUncheckedCreateNestedManyWithoutInstructorInput
     facultyReviews?: ProjectRegistrationUncheckedCreateNestedManyWithoutFacultyReviewerInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    callRoundInstructors?: CallRoundInstructorUncheckedCreateNestedManyWithoutInstructorInput
+    callRoundCouncilMembers?: CallRoundCouncilMemberUncheckedCreateNestedManyWithoutCouncilMemberInput
   }
 
   export type UserCreateOrConnectWithoutClassInput = {
@@ -28845,6 +32019,7 @@ export namespace Prisma {
     contactInfo?: string | null
     isActive?: boolean
     isLocked?: boolean
+    applicableFor?: $Enums.ApplicableFor
     approvalStatus?: $Enums.CallRoundApprovalStatus
     createdById?: string | null
     createdByRole?: $Enums.Role | null
@@ -28858,6 +32033,8 @@ export namespace Prisma {
     template?: ProgressReportTemplateCreateNestedOneWithoutCallRoundsInput
     departments?: DepartmentCreateNestedManyWithoutCallRoundsInput
     majors?: MajorCreateNestedManyWithoutCallRoundsInput
+    availableInstructors?: CallRoundInstructorCreateNestedManyWithoutCallRoundInput
+    availableCouncilMembers?: CallRoundCouncilMemberCreateNestedManyWithoutCallRoundInput
   }
 
   export type CallRoundUncheckedCreateWithoutClassesInput = {
@@ -28879,6 +32056,7 @@ export namespace Prisma {
     contactInfo?: string | null
     isActive?: boolean
     isLocked?: boolean
+    applicableFor?: $Enums.ApplicableFor
     approvalStatus?: $Enums.CallRoundApprovalStatus
     createdById?: string | null
     createdByRole?: $Enums.Role | null
@@ -28892,6 +32070,8 @@ export namespace Prisma {
     registrations?: ProjectRegistrationUncheckedCreateNestedManyWithoutCallRoundInput
     departments?: DepartmentUncheckedCreateNestedManyWithoutCallRoundsInput
     majors?: MajorUncheckedCreateNestedManyWithoutCallRoundsInput
+    availableInstructors?: CallRoundInstructorUncheckedCreateNestedManyWithoutCallRoundInput
+    availableCouncilMembers?: CallRoundCouncilMemberUncheckedCreateNestedManyWithoutCallRoundInput
   }
 
   export type CallRoundCreateOrConnectWithoutClassesInput = {
@@ -29411,6 +32591,50 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type CallRoundInstructorCreateWithoutInstructorInput = {
+    id?: string
+    createdAt?: Date | string
+    callRound: CallRoundCreateNestedOneWithoutAvailableInstructorsInput
+  }
+
+  export type CallRoundInstructorUncheckedCreateWithoutInstructorInput = {
+    id?: string
+    callRoundId: string
+    createdAt?: Date | string
+  }
+
+  export type CallRoundInstructorCreateOrConnectWithoutInstructorInput = {
+    where: CallRoundInstructorWhereUniqueInput
+    create: XOR<CallRoundInstructorCreateWithoutInstructorInput, CallRoundInstructorUncheckedCreateWithoutInstructorInput>
+  }
+
+  export type CallRoundInstructorCreateManyInstructorInputEnvelope = {
+    data: CallRoundInstructorCreateManyInstructorInput | CallRoundInstructorCreateManyInstructorInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type CallRoundCouncilMemberCreateWithoutCouncilMemberInput = {
+    id?: string
+    createdAt?: Date | string
+    callRound: CallRoundCreateNestedOneWithoutAvailableCouncilMembersInput
+  }
+
+  export type CallRoundCouncilMemberUncheckedCreateWithoutCouncilMemberInput = {
+    id?: string
+    callRoundId: string
+    createdAt?: Date | string
+  }
+
+  export type CallRoundCouncilMemberCreateOrConnectWithoutCouncilMemberInput = {
+    where: CallRoundCouncilMemberWhereUniqueInput
+    create: XOR<CallRoundCouncilMemberCreateWithoutCouncilMemberInput, CallRoundCouncilMemberUncheckedCreateWithoutCouncilMemberInput>
+  }
+
+  export type CallRoundCouncilMemberCreateManyCouncilMemberInputEnvelope = {
+    data: CallRoundCouncilMemberCreateManyCouncilMemberInput | CallRoundCouncilMemberCreateManyCouncilMemberInput[]
+    skipDuplicates?: boolean
+  }
+
   export type DepartmentUpsertWithoutUsersInput = {
     update: XOR<DepartmentUpdateWithoutUsersInput, DepartmentUncheckedUpdateWithoutUsersInput>
     create: XOR<DepartmentCreateWithoutUsersInput, DepartmentUncheckedCreateWithoutUsersInput>
@@ -29712,6 +32936,58 @@ export namespace Prisma {
     readAt?: DateTimeNullableFilter<"Notification"> | Date | string | null
   }
 
+  export type CallRoundInstructorUpsertWithWhereUniqueWithoutInstructorInput = {
+    where: CallRoundInstructorWhereUniqueInput
+    update: XOR<CallRoundInstructorUpdateWithoutInstructorInput, CallRoundInstructorUncheckedUpdateWithoutInstructorInput>
+    create: XOR<CallRoundInstructorCreateWithoutInstructorInput, CallRoundInstructorUncheckedCreateWithoutInstructorInput>
+  }
+
+  export type CallRoundInstructorUpdateWithWhereUniqueWithoutInstructorInput = {
+    where: CallRoundInstructorWhereUniqueInput
+    data: XOR<CallRoundInstructorUpdateWithoutInstructorInput, CallRoundInstructorUncheckedUpdateWithoutInstructorInput>
+  }
+
+  export type CallRoundInstructorUpdateManyWithWhereWithoutInstructorInput = {
+    where: CallRoundInstructorScalarWhereInput
+    data: XOR<CallRoundInstructorUpdateManyMutationInput, CallRoundInstructorUncheckedUpdateManyWithoutInstructorInput>
+  }
+
+  export type CallRoundInstructorScalarWhereInput = {
+    AND?: CallRoundInstructorScalarWhereInput | CallRoundInstructorScalarWhereInput[]
+    OR?: CallRoundInstructorScalarWhereInput[]
+    NOT?: CallRoundInstructorScalarWhereInput | CallRoundInstructorScalarWhereInput[]
+    id?: StringFilter<"CallRoundInstructor"> | string
+    callRoundId?: StringFilter<"CallRoundInstructor"> | string
+    instructorId?: StringFilter<"CallRoundInstructor"> | string
+    createdAt?: DateTimeFilter<"CallRoundInstructor"> | Date | string
+  }
+
+  export type CallRoundCouncilMemberUpsertWithWhereUniqueWithoutCouncilMemberInput = {
+    where: CallRoundCouncilMemberWhereUniqueInput
+    update: XOR<CallRoundCouncilMemberUpdateWithoutCouncilMemberInput, CallRoundCouncilMemberUncheckedUpdateWithoutCouncilMemberInput>
+    create: XOR<CallRoundCouncilMemberCreateWithoutCouncilMemberInput, CallRoundCouncilMemberUncheckedCreateWithoutCouncilMemberInput>
+  }
+
+  export type CallRoundCouncilMemberUpdateWithWhereUniqueWithoutCouncilMemberInput = {
+    where: CallRoundCouncilMemberWhereUniqueInput
+    data: XOR<CallRoundCouncilMemberUpdateWithoutCouncilMemberInput, CallRoundCouncilMemberUncheckedUpdateWithoutCouncilMemberInput>
+  }
+
+  export type CallRoundCouncilMemberUpdateManyWithWhereWithoutCouncilMemberInput = {
+    where: CallRoundCouncilMemberScalarWhereInput
+    data: XOR<CallRoundCouncilMemberUpdateManyMutationInput, CallRoundCouncilMemberUncheckedUpdateManyWithoutCouncilMemberInput>
+  }
+
+  export type CallRoundCouncilMemberScalarWhereInput = {
+    AND?: CallRoundCouncilMemberScalarWhereInput | CallRoundCouncilMemberScalarWhereInput[]
+    OR?: CallRoundCouncilMemberScalarWhereInput[]
+    NOT?: CallRoundCouncilMemberScalarWhereInput | CallRoundCouncilMemberScalarWhereInput[]
+    id?: StringFilter<"CallRoundCouncilMember"> | string
+    callRoundId?: StringFilter<"CallRoundCouncilMember"> | string
+    councilMemberId?: StringFilter<"CallRoundCouncilMember"> | string
+    createdAt?: DateTimeFilter<"CallRoundCouncilMember"> | Date | string
+  }
+
   export type ProjectCreateWithoutCallRoundInput = {
     id?: string
     code?: string | null
@@ -29817,6 +33093,8 @@ export namespace Prisma {
     name: string
     description?: string | null
     isActive?: boolean
+    createdById?: string | null
+    createdByRole?: $Enums.Role | null
     createdAt?: Date | string
     updatedAt?: Date | string
     items?: ProgressReportTemplateItemCreateNestedManyWithoutTemplateInput
@@ -29827,6 +33105,8 @@ export namespace Prisma {
     name: string
     description?: string | null
     isActive?: boolean
+    createdById?: string | null
+    createdByRole?: $Enums.Role | null
     createdAt?: Date | string
     updatedAt?: Date | string
     items?: ProgressReportTemplateItemUncheckedCreateNestedManyWithoutTemplateInput
@@ -29918,6 +33198,50 @@ export namespace Prisma {
     create: XOR<ClassCreateWithoutCallRoundsInput, ClassUncheckedCreateWithoutCallRoundsInput>
   }
 
+  export type CallRoundInstructorCreateWithoutCallRoundInput = {
+    id?: string
+    createdAt?: Date | string
+    instructor: UserCreateNestedOneWithoutCallRoundInstructorsInput
+  }
+
+  export type CallRoundInstructorUncheckedCreateWithoutCallRoundInput = {
+    id?: string
+    instructorId: string
+    createdAt?: Date | string
+  }
+
+  export type CallRoundInstructorCreateOrConnectWithoutCallRoundInput = {
+    where: CallRoundInstructorWhereUniqueInput
+    create: XOR<CallRoundInstructorCreateWithoutCallRoundInput, CallRoundInstructorUncheckedCreateWithoutCallRoundInput>
+  }
+
+  export type CallRoundInstructorCreateManyCallRoundInputEnvelope = {
+    data: CallRoundInstructorCreateManyCallRoundInput | CallRoundInstructorCreateManyCallRoundInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type CallRoundCouncilMemberCreateWithoutCallRoundInput = {
+    id?: string
+    createdAt?: Date | string
+    councilMember: UserCreateNestedOneWithoutCallRoundCouncilMembersInput
+  }
+
+  export type CallRoundCouncilMemberUncheckedCreateWithoutCallRoundInput = {
+    id?: string
+    councilMemberId: string
+    createdAt?: Date | string
+  }
+
+  export type CallRoundCouncilMemberCreateOrConnectWithoutCallRoundInput = {
+    where: CallRoundCouncilMemberWhereUniqueInput
+    create: XOR<CallRoundCouncilMemberCreateWithoutCallRoundInput, CallRoundCouncilMemberUncheckedCreateWithoutCallRoundInput>
+  }
+
+  export type CallRoundCouncilMemberCreateManyCallRoundInputEnvelope = {
+    data: CallRoundCouncilMemberCreateManyCallRoundInput | CallRoundCouncilMemberCreateManyCallRoundInput[]
+    skipDuplicates?: boolean
+  }
+
   export type ProjectUpsertWithWhereUniqueWithoutCallRoundInput = {
     where: ProjectWhereUniqueInput
     update: XOR<ProjectUpdateWithoutCallRoundInput, ProjectUncheckedUpdateWithoutCallRoundInput>
@@ -29966,6 +33290,8 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdByRole?: NullableEnumRoleFieldUpdateOperationsInput | $Enums.Role | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     items?: ProgressReportTemplateItemUpdateManyWithoutTemplateNestedInput
@@ -29976,6 +33302,8 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdByRole?: NullableEnumRoleFieldUpdateOperationsInput | $Enums.Role | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     items?: ProgressReportTemplateItemUncheckedUpdateManyWithoutTemplateNestedInput
@@ -30039,6 +33367,38 @@ export namespace Prisma {
   export type ClassUpdateManyWithWhereWithoutCallRoundsInput = {
     where: ClassScalarWhereInput
     data: XOR<ClassUpdateManyMutationInput, ClassUncheckedUpdateManyWithoutCallRoundsInput>
+  }
+
+  export type CallRoundInstructorUpsertWithWhereUniqueWithoutCallRoundInput = {
+    where: CallRoundInstructorWhereUniqueInput
+    update: XOR<CallRoundInstructorUpdateWithoutCallRoundInput, CallRoundInstructorUncheckedUpdateWithoutCallRoundInput>
+    create: XOR<CallRoundInstructorCreateWithoutCallRoundInput, CallRoundInstructorUncheckedCreateWithoutCallRoundInput>
+  }
+
+  export type CallRoundInstructorUpdateWithWhereUniqueWithoutCallRoundInput = {
+    where: CallRoundInstructorWhereUniqueInput
+    data: XOR<CallRoundInstructorUpdateWithoutCallRoundInput, CallRoundInstructorUncheckedUpdateWithoutCallRoundInput>
+  }
+
+  export type CallRoundInstructorUpdateManyWithWhereWithoutCallRoundInput = {
+    where: CallRoundInstructorScalarWhereInput
+    data: XOR<CallRoundInstructorUpdateManyMutationInput, CallRoundInstructorUncheckedUpdateManyWithoutCallRoundInput>
+  }
+
+  export type CallRoundCouncilMemberUpsertWithWhereUniqueWithoutCallRoundInput = {
+    where: CallRoundCouncilMemberWhereUniqueInput
+    update: XOR<CallRoundCouncilMemberUpdateWithoutCallRoundInput, CallRoundCouncilMemberUncheckedUpdateWithoutCallRoundInput>
+    create: XOR<CallRoundCouncilMemberCreateWithoutCallRoundInput, CallRoundCouncilMemberUncheckedCreateWithoutCallRoundInput>
+  }
+
+  export type CallRoundCouncilMemberUpdateWithWhereUniqueWithoutCallRoundInput = {
+    where: CallRoundCouncilMemberWhereUniqueInput
+    data: XOR<CallRoundCouncilMemberUpdateWithoutCallRoundInput, CallRoundCouncilMemberUncheckedUpdateWithoutCallRoundInput>
+  }
+
+  export type CallRoundCouncilMemberUpdateManyWithWhereWithoutCallRoundInput = {
+    where: CallRoundCouncilMemberScalarWhereInput
+    data: XOR<CallRoundCouncilMemberUpdateManyMutationInput, CallRoundCouncilMemberUncheckedUpdateManyWithoutCallRoundInput>
   }
 
   export type ProjectCreateWithoutProjectTypeInput = {
@@ -30139,6 +33499,8 @@ export namespace Prisma {
     instructedProjects?: ProjectCreateNestedManyWithoutInstructorInput
     facultyReviews?: ProjectRegistrationCreateNestedManyWithoutFacultyReviewerInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    callRoundInstructors?: CallRoundInstructorCreateNestedManyWithoutInstructorInput
+    callRoundCouncilMembers?: CallRoundCouncilMemberCreateNestedManyWithoutCouncilMemberInput
   }
 
   export type UserUncheckedCreateWithoutLeadProjectsInput = {
@@ -30165,6 +33527,8 @@ export namespace Prisma {
     instructedProjects?: ProjectUncheckedCreateNestedManyWithoutInstructorInput
     facultyReviews?: ProjectRegistrationUncheckedCreateNestedManyWithoutFacultyReviewerInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    callRoundInstructors?: CallRoundInstructorUncheckedCreateNestedManyWithoutInstructorInput
+    callRoundCouncilMembers?: CallRoundCouncilMemberUncheckedCreateNestedManyWithoutCouncilMemberInput
   }
 
   export type UserCreateOrConnectWithoutLeadProjectsInput = {
@@ -30196,6 +33560,8 @@ export namespace Prisma {
     instructedProjects?: ProjectCreateNestedManyWithoutInstructorInput
     facultyReviews?: ProjectRegistrationCreateNestedManyWithoutFacultyReviewerInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    callRoundInstructors?: CallRoundInstructorCreateNestedManyWithoutInstructorInput
+    callRoundCouncilMembers?: CallRoundCouncilMemberCreateNestedManyWithoutCouncilMemberInput
   }
 
   export type UserUncheckedCreateWithoutDeanReviewsInput = {
@@ -30222,6 +33588,8 @@ export namespace Prisma {
     instructedProjects?: ProjectUncheckedCreateNestedManyWithoutInstructorInput
     facultyReviews?: ProjectRegistrationUncheckedCreateNestedManyWithoutFacultyReviewerInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    callRoundInstructors?: CallRoundInstructorUncheckedCreateNestedManyWithoutInstructorInput
+    callRoundCouncilMembers?: CallRoundCouncilMemberUncheckedCreateNestedManyWithoutCouncilMemberInput
   }
 
   export type UserCreateOrConnectWithoutDeanReviewsInput = {
@@ -30248,6 +33616,7 @@ export namespace Prisma {
     contactInfo?: string | null
     isActive?: boolean
     isLocked?: boolean
+    applicableFor?: $Enums.ApplicableFor
     approvalStatus?: $Enums.CallRoundApprovalStatus
     createdById?: string | null
     createdByRole?: $Enums.Role | null
@@ -30261,6 +33630,8 @@ export namespace Prisma {
     departments?: DepartmentCreateNestedManyWithoutCallRoundsInput
     majors?: MajorCreateNestedManyWithoutCallRoundsInput
     classes?: ClassCreateNestedManyWithoutCallRoundsInput
+    availableInstructors?: CallRoundInstructorCreateNestedManyWithoutCallRoundInput
+    availableCouncilMembers?: CallRoundCouncilMemberCreateNestedManyWithoutCallRoundInput
   }
 
   export type CallRoundUncheckedCreateWithoutProjectsInput = {
@@ -30282,6 +33653,7 @@ export namespace Prisma {
     contactInfo?: string | null
     isActive?: boolean
     isLocked?: boolean
+    applicableFor?: $Enums.ApplicableFor
     approvalStatus?: $Enums.CallRoundApprovalStatus
     createdById?: string | null
     createdByRole?: $Enums.Role | null
@@ -30295,6 +33667,8 @@ export namespace Prisma {
     departments?: DepartmentUncheckedCreateNestedManyWithoutCallRoundsInput
     majors?: MajorUncheckedCreateNestedManyWithoutCallRoundsInput
     classes?: ClassUncheckedCreateNestedManyWithoutCallRoundsInput
+    availableInstructors?: CallRoundInstructorUncheckedCreateNestedManyWithoutCallRoundInput
+    availableCouncilMembers?: CallRoundCouncilMemberUncheckedCreateNestedManyWithoutCallRoundInput
   }
 
   export type CallRoundCreateOrConnectWithoutProjectsInput = {
@@ -30485,6 +33859,8 @@ export namespace Prisma {
     instructedRegistrations?: ProjectRegistrationCreateNestedManyWithoutInstructorInput
     facultyReviews?: ProjectRegistrationCreateNestedManyWithoutFacultyReviewerInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    callRoundInstructors?: CallRoundInstructorCreateNestedManyWithoutInstructorInput
+    callRoundCouncilMembers?: CallRoundCouncilMemberCreateNestedManyWithoutCouncilMemberInput
   }
 
   export type UserUncheckedCreateWithoutInstructedProjectsInput = {
@@ -30511,6 +33887,8 @@ export namespace Prisma {
     instructedRegistrations?: ProjectRegistrationUncheckedCreateNestedManyWithoutInstructorInput
     facultyReviews?: ProjectRegistrationUncheckedCreateNestedManyWithoutFacultyReviewerInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    callRoundInstructors?: CallRoundInstructorUncheckedCreateNestedManyWithoutInstructorInput
+    callRoundCouncilMembers?: CallRoundCouncilMemberUncheckedCreateNestedManyWithoutCouncilMemberInput
   }
 
   export type UserCreateOrConnectWithoutInstructedProjectsInput = {
@@ -30553,6 +33931,8 @@ export namespace Prisma {
     instructedProjects?: ProjectUpdateManyWithoutInstructorNestedInput
     facultyReviews?: ProjectRegistrationUpdateManyWithoutFacultyReviewerNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    callRoundInstructors?: CallRoundInstructorUpdateManyWithoutInstructorNestedInput
+    callRoundCouncilMembers?: CallRoundCouncilMemberUpdateManyWithoutCouncilMemberNestedInput
   }
 
   export type UserUncheckedUpdateWithoutLeadProjectsInput = {
@@ -30579,6 +33959,8 @@ export namespace Prisma {
     instructedProjects?: ProjectUncheckedUpdateManyWithoutInstructorNestedInput
     facultyReviews?: ProjectRegistrationUncheckedUpdateManyWithoutFacultyReviewerNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    callRoundInstructors?: CallRoundInstructorUncheckedUpdateManyWithoutInstructorNestedInput
+    callRoundCouncilMembers?: CallRoundCouncilMemberUncheckedUpdateManyWithoutCouncilMemberNestedInput
   }
 
   export type UserUpsertWithoutDeanReviewsInput = {
@@ -30616,6 +33998,8 @@ export namespace Prisma {
     instructedProjects?: ProjectUpdateManyWithoutInstructorNestedInput
     facultyReviews?: ProjectRegistrationUpdateManyWithoutFacultyReviewerNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    callRoundInstructors?: CallRoundInstructorUpdateManyWithoutInstructorNestedInput
+    callRoundCouncilMembers?: CallRoundCouncilMemberUpdateManyWithoutCouncilMemberNestedInput
   }
 
   export type UserUncheckedUpdateWithoutDeanReviewsInput = {
@@ -30642,6 +34026,8 @@ export namespace Prisma {
     instructedProjects?: ProjectUncheckedUpdateManyWithoutInstructorNestedInput
     facultyReviews?: ProjectRegistrationUncheckedUpdateManyWithoutFacultyReviewerNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    callRoundInstructors?: CallRoundInstructorUncheckedUpdateManyWithoutInstructorNestedInput
+    callRoundCouncilMembers?: CallRoundCouncilMemberUncheckedUpdateManyWithoutCouncilMemberNestedInput
   }
 
   export type CallRoundUpsertWithoutProjectsInput = {
@@ -30674,6 +34060,7 @@ export namespace Prisma {
     contactInfo?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     isLocked?: BoolFieldUpdateOperationsInput | boolean
+    applicableFor?: EnumApplicableForFieldUpdateOperationsInput | $Enums.ApplicableFor
     approvalStatus?: EnumCallRoundApprovalStatusFieldUpdateOperationsInput | $Enums.CallRoundApprovalStatus
     createdById?: NullableStringFieldUpdateOperationsInput | string | null
     createdByRole?: NullableEnumRoleFieldUpdateOperationsInput | $Enums.Role | null
@@ -30687,6 +34074,8 @@ export namespace Prisma {
     departments?: DepartmentUpdateManyWithoutCallRoundsNestedInput
     majors?: MajorUpdateManyWithoutCallRoundsNestedInput
     classes?: ClassUpdateManyWithoutCallRoundsNestedInput
+    availableInstructors?: CallRoundInstructorUpdateManyWithoutCallRoundNestedInput
+    availableCouncilMembers?: CallRoundCouncilMemberUpdateManyWithoutCallRoundNestedInput
   }
 
   export type CallRoundUncheckedUpdateWithoutProjectsInput = {
@@ -30708,6 +34097,7 @@ export namespace Prisma {
     contactInfo?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     isLocked?: BoolFieldUpdateOperationsInput | boolean
+    applicableFor?: EnumApplicableForFieldUpdateOperationsInput | $Enums.ApplicableFor
     approvalStatus?: EnumCallRoundApprovalStatusFieldUpdateOperationsInput | $Enums.CallRoundApprovalStatus
     createdById?: NullableStringFieldUpdateOperationsInput | string | null
     createdByRole?: NullableEnumRoleFieldUpdateOperationsInput | $Enums.Role | null
@@ -30721,6 +34111,8 @@ export namespace Prisma {
     departments?: DepartmentUncheckedUpdateManyWithoutCallRoundsNestedInput
     majors?: MajorUncheckedUpdateManyWithoutCallRoundsNestedInput
     classes?: ClassUncheckedUpdateManyWithoutCallRoundsNestedInput
+    availableInstructors?: CallRoundInstructorUncheckedUpdateManyWithoutCallRoundNestedInput
+    availableCouncilMembers?: CallRoundCouncilMemberUncheckedUpdateManyWithoutCallRoundNestedInput
   }
 
   export type ProjectTypeUpsertWithoutProjectsInput = {
@@ -30900,6 +34292,8 @@ export namespace Prisma {
     instructedRegistrations?: ProjectRegistrationUpdateManyWithoutInstructorNestedInput
     facultyReviews?: ProjectRegistrationUpdateManyWithoutFacultyReviewerNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    callRoundInstructors?: CallRoundInstructorUpdateManyWithoutInstructorNestedInput
+    callRoundCouncilMembers?: CallRoundCouncilMemberUpdateManyWithoutCouncilMemberNestedInput
   }
 
   export type UserUncheckedUpdateWithoutInstructedProjectsInput = {
@@ -30926,6 +34320,8 @@ export namespace Prisma {
     instructedRegistrations?: ProjectRegistrationUncheckedUpdateManyWithoutInstructorNestedInput
     facultyReviews?: ProjectRegistrationUncheckedUpdateManyWithoutFacultyReviewerNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    callRoundInstructors?: CallRoundInstructorUncheckedUpdateManyWithoutInstructorNestedInput
+    callRoundCouncilMembers?: CallRoundCouncilMemberUncheckedUpdateManyWithoutCouncilMemberNestedInput
   }
 
   export type ProgressReportTemplateItemCreateWithoutTemplateInput = {
@@ -30981,6 +34377,7 @@ export namespace Prisma {
     contactInfo?: string | null
     isActive?: boolean
     isLocked?: boolean
+    applicableFor?: $Enums.ApplicableFor
     approvalStatus?: $Enums.CallRoundApprovalStatus
     createdById?: string | null
     createdByRole?: $Enums.Role | null
@@ -30994,6 +34391,8 @@ export namespace Prisma {
     departments?: DepartmentCreateNestedManyWithoutCallRoundsInput
     majors?: MajorCreateNestedManyWithoutCallRoundsInput
     classes?: ClassCreateNestedManyWithoutCallRoundsInput
+    availableInstructors?: CallRoundInstructorCreateNestedManyWithoutCallRoundInput
+    availableCouncilMembers?: CallRoundCouncilMemberCreateNestedManyWithoutCallRoundInput
   }
 
   export type CallRoundUncheckedCreateWithoutTemplateInput = {
@@ -31015,6 +34414,7 @@ export namespace Prisma {
     contactInfo?: string | null
     isActive?: boolean
     isLocked?: boolean
+    applicableFor?: $Enums.ApplicableFor
     approvalStatus?: $Enums.CallRoundApprovalStatus
     createdById?: string | null
     createdByRole?: $Enums.Role | null
@@ -31028,6 +34428,8 @@ export namespace Prisma {
     departments?: DepartmentUncheckedCreateNestedManyWithoutCallRoundsInput
     majors?: MajorUncheckedCreateNestedManyWithoutCallRoundsInput
     classes?: ClassUncheckedCreateNestedManyWithoutCallRoundsInput
+    availableInstructors?: CallRoundInstructorUncheckedCreateNestedManyWithoutCallRoundInput
+    availableCouncilMembers?: CallRoundCouncilMemberUncheckedCreateNestedManyWithoutCallRoundInput
   }
 
   export type CallRoundCreateOrConnectWithoutTemplateInput = {
@@ -31093,6 +34495,8 @@ export namespace Prisma {
     name: string
     description?: string | null
     isActive?: boolean
+    createdById?: string | null
+    createdByRole?: $Enums.Role | null
     createdAt?: Date | string
     updatedAt?: Date | string
     callRounds?: CallRoundCreateNestedManyWithoutTemplateInput
@@ -31103,6 +34507,8 @@ export namespace Prisma {
     name: string
     description?: string | null
     isActive?: boolean
+    createdById?: string | null
+    createdByRole?: $Enums.Role | null
     createdAt?: Date | string
     updatedAt?: Date | string
     callRounds?: CallRoundUncheckedCreateNestedManyWithoutTemplateInput
@@ -31129,6 +34535,8 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdByRole?: NullableEnumRoleFieldUpdateOperationsInput | $Enums.Role | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     callRounds?: CallRoundUpdateManyWithoutTemplateNestedInput
@@ -31139,6 +34547,8 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdByRole?: NullableEnumRoleFieldUpdateOperationsInput | $Enums.Role | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     callRounds?: CallRoundUncheckedUpdateManyWithoutTemplateNestedInput
@@ -31333,6 +34743,8 @@ export namespace Prisma {
     instructedProjects?: ProjectCreateNestedManyWithoutInstructorInput
     facultyReviews?: ProjectRegistrationCreateNestedManyWithoutFacultyReviewerInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    callRoundInstructors?: CallRoundInstructorCreateNestedManyWithoutInstructorInput
+    callRoundCouncilMembers?: CallRoundCouncilMemberCreateNestedManyWithoutCouncilMemberInput
   }
 
   export type UserUncheckedCreateWithoutCouncilEvaluationsInput = {
@@ -31359,6 +34771,8 @@ export namespace Prisma {
     instructedProjects?: ProjectUncheckedCreateNestedManyWithoutInstructorInput
     facultyReviews?: ProjectRegistrationUncheckedCreateNestedManyWithoutFacultyReviewerInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    callRoundInstructors?: CallRoundInstructorUncheckedCreateNestedManyWithoutInstructorInput
+    callRoundCouncilMembers?: CallRoundCouncilMemberUncheckedCreateNestedManyWithoutCouncilMemberInput
   }
 
   export type UserCreateOrConnectWithoutCouncilEvaluationsInput = {
@@ -31460,6 +34874,8 @@ export namespace Prisma {
     instructedProjects?: ProjectUpdateManyWithoutInstructorNestedInput
     facultyReviews?: ProjectRegistrationUpdateManyWithoutFacultyReviewerNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    callRoundInstructors?: CallRoundInstructorUpdateManyWithoutInstructorNestedInput
+    callRoundCouncilMembers?: CallRoundCouncilMemberUpdateManyWithoutCouncilMemberNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCouncilEvaluationsInput = {
@@ -31486,6 +34902,8 @@ export namespace Prisma {
     instructedProjects?: ProjectUncheckedUpdateManyWithoutInstructorNestedInput
     facultyReviews?: ProjectRegistrationUncheckedUpdateManyWithoutFacultyReviewerNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    callRoundInstructors?: CallRoundInstructorUncheckedUpdateManyWithoutInstructorNestedInput
+    callRoundCouncilMembers?: CallRoundCouncilMemberUncheckedUpdateManyWithoutCouncilMemberNestedInput
   }
 
   export type ProjectCreateWithoutDisbursementsInput = {
@@ -31736,6 +35154,8 @@ export namespace Prisma {
     instructedProjects?: ProjectCreateNestedManyWithoutInstructorInput
     facultyReviews?: ProjectRegistrationCreateNestedManyWithoutFacultyReviewerInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    callRoundInstructors?: CallRoundInstructorCreateNestedManyWithoutInstructorInput
+    callRoundCouncilMembers?: CallRoundCouncilMemberCreateNestedManyWithoutCouncilMemberInput
   }
 
   export type UserUncheckedCreateWithoutRegistrationsInput = {
@@ -31762,6 +35182,8 @@ export namespace Prisma {
     instructedProjects?: ProjectUncheckedCreateNestedManyWithoutInstructorInput
     facultyReviews?: ProjectRegistrationUncheckedCreateNestedManyWithoutFacultyReviewerInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    callRoundInstructors?: CallRoundInstructorUncheckedCreateNestedManyWithoutInstructorInput
+    callRoundCouncilMembers?: CallRoundCouncilMemberUncheckedCreateNestedManyWithoutCouncilMemberInput
   }
 
   export type UserCreateOrConnectWithoutRegistrationsInput = {
@@ -31793,6 +35215,8 @@ export namespace Prisma {
     instructedProjects?: ProjectCreateNestedManyWithoutInstructorInput
     facultyReviews?: ProjectRegistrationCreateNestedManyWithoutFacultyReviewerInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    callRoundInstructors?: CallRoundInstructorCreateNestedManyWithoutInstructorInput
+    callRoundCouncilMembers?: CallRoundCouncilMemberCreateNestedManyWithoutCouncilMemberInput
   }
 
   export type UserUncheckedCreateWithoutInstructedRegistrationsInput = {
@@ -31819,6 +35243,8 @@ export namespace Prisma {
     instructedProjects?: ProjectUncheckedCreateNestedManyWithoutInstructorInput
     facultyReviews?: ProjectRegistrationUncheckedCreateNestedManyWithoutFacultyReviewerInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    callRoundInstructors?: CallRoundInstructorUncheckedCreateNestedManyWithoutInstructorInput
+    callRoundCouncilMembers?: CallRoundCouncilMemberUncheckedCreateNestedManyWithoutCouncilMemberInput
   }
 
   export type UserCreateOrConnectWithoutInstructedRegistrationsInput = {
@@ -31845,6 +35271,7 @@ export namespace Prisma {
     contactInfo?: string | null
     isActive?: boolean
     isLocked?: boolean
+    applicableFor?: $Enums.ApplicableFor
     approvalStatus?: $Enums.CallRoundApprovalStatus
     createdById?: string | null
     createdByRole?: $Enums.Role | null
@@ -31858,6 +35285,8 @@ export namespace Prisma {
     departments?: DepartmentCreateNestedManyWithoutCallRoundsInput
     majors?: MajorCreateNestedManyWithoutCallRoundsInput
     classes?: ClassCreateNestedManyWithoutCallRoundsInput
+    availableInstructors?: CallRoundInstructorCreateNestedManyWithoutCallRoundInput
+    availableCouncilMembers?: CallRoundCouncilMemberCreateNestedManyWithoutCallRoundInput
   }
 
   export type CallRoundUncheckedCreateWithoutRegistrationsInput = {
@@ -31879,6 +35308,7 @@ export namespace Prisma {
     contactInfo?: string | null
     isActive?: boolean
     isLocked?: boolean
+    applicableFor?: $Enums.ApplicableFor
     approvalStatus?: $Enums.CallRoundApprovalStatus
     createdById?: string | null
     createdByRole?: $Enums.Role | null
@@ -31892,6 +35322,8 @@ export namespace Prisma {
     departments?: DepartmentUncheckedCreateNestedManyWithoutCallRoundsInput
     majors?: MajorUncheckedCreateNestedManyWithoutCallRoundsInput
     classes?: ClassUncheckedCreateNestedManyWithoutCallRoundsInput
+    availableInstructors?: CallRoundInstructorUncheckedCreateNestedManyWithoutCallRoundInput
+    availableCouncilMembers?: CallRoundCouncilMemberUncheckedCreateNestedManyWithoutCallRoundInput
   }
 
   export type CallRoundCreateOrConnectWithoutRegistrationsInput = {
@@ -31923,6 +35355,8 @@ export namespace Prisma {
     instructedRegistrations?: ProjectRegistrationCreateNestedManyWithoutInstructorInput
     instructedProjects?: ProjectCreateNestedManyWithoutInstructorInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    callRoundInstructors?: CallRoundInstructorCreateNestedManyWithoutInstructorInput
+    callRoundCouncilMembers?: CallRoundCouncilMemberCreateNestedManyWithoutCouncilMemberInput
   }
 
   export type UserUncheckedCreateWithoutFacultyReviewsInput = {
@@ -31949,6 +35383,8 @@ export namespace Prisma {
     instructedRegistrations?: ProjectRegistrationUncheckedCreateNestedManyWithoutInstructorInput
     instructedProjects?: ProjectUncheckedCreateNestedManyWithoutInstructorInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    callRoundInstructors?: CallRoundInstructorUncheckedCreateNestedManyWithoutInstructorInput
+    callRoundCouncilMembers?: CallRoundCouncilMemberUncheckedCreateNestedManyWithoutCouncilMemberInput
   }
 
   export type UserCreateOrConnectWithoutFacultyReviewsInput = {
@@ -31991,6 +35427,8 @@ export namespace Prisma {
     instructedProjects?: ProjectUpdateManyWithoutInstructorNestedInput
     facultyReviews?: ProjectRegistrationUpdateManyWithoutFacultyReviewerNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    callRoundInstructors?: CallRoundInstructorUpdateManyWithoutInstructorNestedInput
+    callRoundCouncilMembers?: CallRoundCouncilMemberUpdateManyWithoutCouncilMemberNestedInput
   }
 
   export type UserUncheckedUpdateWithoutRegistrationsInput = {
@@ -32017,6 +35455,8 @@ export namespace Prisma {
     instructedProjects?: ProjectUncheckedUpdateManyWithoutInstructorNestedInput
     facultyReviews?: ProjectRegistrationUncheckedUpdateManyWithoutFacultyReviewerNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    callRoundInstructors?: CallRoundInstructorUncheckedUpdateManyWithoutInstructorNestedInput
+    callRoundCouncilMembers?: CallRoundCouncilMemberUncheckedUpdateManyWithoutCouncilMemberNestedInput
   }
 
   export type UserUpsertWithoutInstructedRegistrationsInput = {
@@ -32054,6 +35494,8 @@ export namespace Prisma {
     instructedProjects?: ProjectUpdateManyWithoutInstructorNestedInput
     facultyReviews?: ProjectRegistrationUpdateManyWithoutFacultyReviewerNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    callRoundInstructors?: CallRoundInstructorUpdateManyWithoutInstructorNestedInput
+    callRoundCouncilMembers?: CallRoundCouncilMemberUpdateManyWithoutCouncilMemberNestedInput
   }
 
   export type UserUncheckedUpdateWithoutInstructedRegistrationsInput = {
@@ -32080,6 +35522,8 @@ export namespace Prisma {
     instructedProjects?: ProjectUncheckedUpdateManyWithoutInstructorNestedInput
     facultyReviews?: ProjectRegistrationUncheckedUpdateManyWithoutFacultyReviewerNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    callRoundInstructors?: CallRoundInstructorUncheckedUpdateManyWithoutInstructorNestedInput
+    callRoundCouncilMembers?: CallRoundCouncilMemberUncheckedUpdateManyWithoutCouncilMemberNestedInput
   }
 
   export type CallRoundUpsertWithoutRegistrationsInput = {
@@ -32112,6 +35556,7 @@ export namespace Prisma {
     contactInfo?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     isLocked?: BoolFieldUpdateOperationsInput | boolean
+    applicableFor?: EnumApplicableForFieldUpdateOperationsInput | $Enums.ApplicableFor
     approvalStatus?: EnumCallRoundApprovalStatusFieldUpdateOperationsInput | $Enums.CallRoundApprovalStatus
     createdById?: NullableStringFieldUpdateOperationsInput | string | null
     createdByRole?: NullableEnumRoleFieldUpdateOperationsInput | $Enums.Role | null
@@ -32125,6 +35570,8 @@ export namespace Prisma {
     departments?: DepartmentUpdateManyWithoutCallRoundsNestedInput
     majors?: MajorUpdateManyWithoutCallRoundsNestedInput
     classes?: ClassUpdateManyWithoutCallRoundsNestedInput
+    availableInstructors?: CallRoundInstructorUpdateManyWithoutCallRoundNestedInput
+    availableCouncilMembers?: CallRoundCouncilMemberUpdateManyWithoutCallRoundNestedInput
   }
 
   export type CallRoundUncheckedUpdateWithoutRegistrationsInput = {
@@ -32146,6 +35593,7 @@ export namespace Prisma {
     contactInfo?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     isLocked?: BoolFieldUpdateOperationsInput | boolean
+    applicableFor?: EnumApplicableForFieldUpdateOperationsInput | $Enums.ApplicableFor
     approvalStatus?: EnumCallRoundApprovalStatusFieldUpdateOperationsInput | $Enums.CallRoundApprovalStatus
     createdById?: NullableStringFieldUpdateOperationsInput | string | null
     createdByRole?: NullableEnumRoleFieldUpdateOperationsInput | $Enums.Role | null
@@ -32159,6 +35607,8 @@ export namespace Prisma {
     departments?: DepartmentUncheckedUpdateManyWithoutCallRoundsNestedInput
     majors?: MajorUncheckedUpdateManyWithoutCallRoundsNestedInput
     classes?: ClassUncheckedUpdateManyWithoutCallRoundsNestedInput
+    availableInstructors?: CallRoundInstructorUncheckedUpdateManyWithoutCallRoundNestedInput
+    availableCouncilMembers?: CallRoundCouncilMemberUncheckedUpdateManyWithoutCallRoundNestedInput
   }
 
   export type UserUpsertWithoutFacultyReviewsInput = {
@@ -32196,6 +35646,8 @@ export namespace Prisma {
     instructedRegistrations?: ProjectRegistrationUpdateManyWithoutInstructorNestedInput
     instructedProjects?: ProjectUpdateManyWithoutInstructorNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    callRoundInstructors?: CallRoundInstructorUpdateManyWithoutInstructorNestedInput
+    callRoundCouncilMembers?: CallRoundCouncilMemberUpdateManyWithoutCouncilMemberNestedInput
   }
 
   export type UserUncheckedUpdateWithoutFacultyReviewsInput = {
@@ -32222,6 +35674,8 @@ export namespace Prisma {
     instructedRegistrations?: ProjectRegistrationUncheckedUpdateManyWithoutInstructorNestedInput
     instructedProjects?: ProjectUncheckedUpdateManyWithoutInstructorNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    callRoundInstructors?: CallRoundInstructorUncheckedUpdateManyWithoutInstructorNestedInput
+    callRoundCouncilMembers?: CallRoundCouncilMemberUncheckedUpdateManyWithoutCouncilMemberNestedInput
   }
 
   export type UserCreateWithoutNotificationsInput = {
@@ -32248,6 +35702,8 @@ export namespace Prisma {
     instructedRegistrations?: ProjectRegistrationCreateNestedManyWithoutInstructorInput
     instructedProjects?: ProjectCreateNestedManyWithoutInstructorInput
     facultyReviews?: ProjectRegistrationCreateNestedManyWithoutFacultyReviewerInput
+    callRoundInstructors?: CallRoundInstructorCreateNestedManyWithoutInstructorInput
+    callRoundCouncilMembers?: CallRoundCouncilMemberCreateNestedManyWithoutCouncilMemberInput
   }
 
   export type UserUncheckedCreateWithoutNotificationsInput = {
@@ -32274,6 +35730,8 @@ export namespace Prisma {
     instructedRegistrations?: ProjectRegistrationUncheckedCreateNestedManyWithoutInstructorInput
     instructedProjects?: ProjectUncheckedCreateNestedManyWithoutInstructorInput
     facultyReviews?: ProjectRegistrationUncheckedCreateNestedManyWithoutFacultyReviewerInput
+    callRoundInstructors?: CallRoundInstructorUncheckedCreateNestedManyWithoutInstructorInput
+    callRoundCouncilMembers?: CallRoundCouncilMemberUncheckedCreateNestedManyWithoutCouncilMemberInput
   }
 
   export type UserCreateOrConnectWithoutNotificationsInput = {
@@ -32316,6 +35774,8 @@ export namespace Prisma {
     instructedRegistrations?: ProjectRegistrationUpdateManyWithoutInstructorNestedInput
     instructedProjects?: ProjectUpdateManyWithoutInstructorNestedInput
     facultyReviews?: ProjectRegistrationUpdateManyWithoutFacultyReviewerNestedInput
+    callRoundInstructors?: CallRoundInstructorUpdateManyWithoutInstructorNestedInput
+    callRoundCouncilMembers?: CallRoundCouncilMemberUpdateManyWithoutCouncilMemberNestedInput
   }
 
   export type UserUncheckedUpdateWithoutNotificationsInput = {
@@ -32342,6 +35802,592 @@ export namespace Prisma {
     instructedRegistrations?: ProjectRegistrationUncheckedUpdateManyWithoutInstructorNestedInput
     instructedProjects?: ProjectUncheckedUpdateManyWithoutInstructorNestedInput
     facultyReviews?: ProjectRegistrationUncheckedUpdateManyWithoutFacultyReviewerNestedInput
+    callRoundInstructors?: CallRoundInstructorUncheckedUpdateManyWithoutInstructorNestedInput
+    callRoundCouncilMembers?: CallRoundCouncilMemberUncheckedUpdateManyWithoutCouncilMemberNestedInput
+  }
+
+  export type CallRoundCreateWithoutAvailableInstructorsInput = {
+    id?: string
+    name: string
+    description?: string | null
+    registrationStartDate: Date | string
+    registrationEndDate: Date | string
+    projectStartDate?: Date | string | null
+    projectEndDate?: Date | string | null
+    reviewDeadline?: Date | string | null
+    reportingStartDate?: Date | string | null
+    startDate: Date | string
+    endDate: Date | string
+    maxProjects?: number | null
+    budgetLimit?: Decimal | DecimalJsLike | number | string | null
+    requirements?: string | null
+    guidelines?: string | null
+    contactInfo?: string | null
+    isActive?: boolean
+    isLocked?: boolean
+    applicableFor?: $Enums.ApplicableFor
+    approvalStatus?: $Enums.CallRoundApprovalStatus
+    createdById?: string | null
+    createdByRole?: $Enums.Role | null
+    approvedById?: string | null
+    approvalNote?: string | null
+    approvedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    projects?: ProjectCreateNestedManyWithoutCallRoundInput
+    registrations?: ProjectRegistrationCreateNestedManyWithoutCallRoundInput
+    template?: ProgressReportTemplateCreateNestedOneWithoutCallRoundsInput
+    departments?: DepartmentCreateNestedManyWithoutCallRoundsInput
+    majors?: MajorCreateNestedManyWithoutCallRoundsInput
+    classes?: ClassCreateNestedManyWithoutCallRoundsInput
+    availableCouncilMembers?: CallRoundCouncilMemberCreateNestedManyWithoutCallRoundInput
+  }
+
+  export type CallRoundUncheckedCreateWithoutAvailableInstructorsInput = {
+    id?: string
+    name: string
+    description?: string | null
+    registrationStartDate: Date | string
+    registrationEndDate: Date | string
+    projectStartDate?: Date | string | null
+    projectEndDate?: Date | string | null
+    reviewDeadline?: Date | string | null
+    reportingStartDate?: Date | string | null
+    startDate: Date | string
+    endDate: Date | string
+    maxProjects?: number | null
+    budgetLimit?: Decimal | DecimalJsLike | number | string | null
+    requirements?: string | null
+    guidelines?: string | null
+    contactInfo?: string | null
+    isActive?: boolean
+    isLocked?: boolean
+    applicableFor?: $Enums.ApplicableFor
+    approvalStatus?: $Enums.CallRoundApprovalStatus
+    createdById?: string | null
+    createdByRole?: $Enums.Role | null
+    approvedById?: string | null
+    approvalNote?: string | null
+    approvedAt?: Date | string | null
+    templateId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    projects?: ProjectUncheckedCreateNestedManyWithoutCallRoundInput
+    registrations?: ProjectRegistrationUncheckedCreateNestedManyWithoutCallRoundInput
+    departments?: DepartmentUncheckedCreateNestedManyWithoutCallRoundsInput
+    majors?: MajorUncheckedCreateNestedManyWithoutCallRoundsInput
+    classes?: ClassUncheckedCreateNestedManyWithoutCallRoundsInput
+    availableCouncilMembers?: CallRoundCouncilMemberUncheckedCreateNestedManyWithoutCallRoundInput
+  }
+
+  export type CallRoundCreateOrConnectWithoutAvailableInstructorsInput = {
+    where: CallRoundWhereUniqueInput
+    create: XOR<CallRoundCreateWithoutAvailableInstructorsInput, CallRoundUncheckedCreateWithoutAvailableInstructorsInput>
+  }
+
+  export type UserCreateWithoutCallRoundInstructorsInput = {
+    id?: string
+    code?: string | null
+    name: string
+    email: string
+    password?: string | null
+    dateOfBirth?: Date | string | null
+    gender?: $Enums.Gender | null
+    phone?: string | null
+    address?: string | null
+    role?: $Enums.Role
+    department?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    departmentRef?: DepartmentCreateNestedOneWithoutUsersInput
+    major?: MajorCreateNestedOneWithoutUsersInput
+    class?: ClassCreateNestedOneWithoutUsersInput
+    leadProjects?: ProjectCreateNestedManyWithoutLeaderInput
+    deanReviews?: ProjectCreateNestedManyWithoutDeanReviewerInput
+    councilEvaluations?: CouncilEvaluationCreateNestedManyWithoutCouncilMemberInput
+    registrations?: ProjectRegistrationCreateNestedManyWithoutUserInput
+    instructedRegistrations?: ProjectRegistrationCreateNestedManyWithoutInstructorInput
+    instructedProjects?: ProjectCreateNestedManyWithoutInstructorInput
+    facultyReviews?: ProjectRegistrationCreateNestedManyWithoutFacultyReviewerInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    callRoundCouncilMembers?: CallRoundCouncilMemberCreateNestedManyWithoutCouncilMemberInput
+  }
+
+  export type UserUncheckedCreateWithoutCallRoundInstructorsInput = {
+    id?: string
+    code?: string | null
+    name: string
+    email: string
+    password?: string | null
+    dateOfBirth?: Date | string | null
+    gender?: $Enums.Gender | null
+    phone?: string | null
+    address?: string | null
+    role?: $Enums.Role
+    department?: string | null
+    departmentId?: string | null
+    majorId?: string | null
+    classId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    leadProjects?: ProjectUncheckedCreateNestedManyWithoutLeaderInput
+    deanReviews?: ProjectUncheckedCreateNestedManyWithoutDeanReviewerInput
+    councilEvaluations?: CouncilEvaluationUncheckedCreateNestedManyWithoutCouncilMemberInput
+    registrations?: ProjectRegistrationUncheckedCreateNestedManyWithoutUserInput
+    instructedRegistrations?: ProjectRegistrationUncheckedCreateNestedManyWithoutInstructorInput
+    instructedProjects?: ProjectUncheckedCreateNestedManyWithoutInstructorInput
+    facultyReviews?: ProjectRegistrationUncheckedCreateNestedManyWithoutFacultyReviewerInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    callRoundCouncilMembers?: CallRoundCouncilMemberUncheckedCreateNestedManyWithoutCouncilMemberInput
+  }
+
+  export type UserCreateOrConnectWithoutCallRoundInstructorsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutCallRoundInstructorsInput, UserUncheckedCreateWithoutCallRoundInstructorsInput>
+  }
+
+  export type CallRoundUpsertWithoutAvailableInstructorsInput = {
+    update: XOR<CallRoundUpdateWithoutAvailableInstructorsInput, CallRoundUncheckedUpdateWithoutAvailableInstructorsInput>
+    create: XOR<CallRoundCreateWithoutAvailableInstructorsInput, CallRoundUncheckedCreateWithoutAvailableInstructorsInput>
+    where?: CallRoundWhereInput
+  }
+
+  export type CallRoundUpdateToOneWithWhereWithoutAvailableInstructorsInput = {
+    where?: CallRoundWhereInput
+    data: XOR<CallRoundUpdateWithoutAvailableInstructorsInput, CallRoundUncheckedUpdateWithoutAvailableInstructorsInput>
+  }
+
+  export type CallRoundUpdateWithoutAvailableInstructorsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    registrationStartDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    registrationEndDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    projectStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    projectEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reviewDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reportingStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    maxProjects?: NullableIntFieldUpdateOperationsInput | number | null
+    budgetLimit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    requirements?: NullableStringFieldUpdateOperationsInput | string | null
+    guidelines?: NullableStringFieldUpdateOperationsInput | string | null
+    contactInfo?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    isLocked?: BoolFieldUpdateOperationsInput | boolean
+    applicableFor?: EnumApplicableForFieldUpdateOperationsInput | $Enums.ApplicableFor
+    approvalStatus?: EnumCallRoundApprovalStatusFieldUpdateOperationsInput | $Enums.CallRoundApprovalStatus
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdByRole?: NullableEnumRoleFieldUpdateOperationsInput | $Enums.Role | null
+    approvedById?: NullableStringFieldUpdateOperationsInput | string | null
+    approvalNote?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    projects?: ProjectUpdateManyWithoutCallRoundNestedInput
+    registrations?: ProjectRegistrationUpdateManyWithoutCallRoundNestedInput
+    template?: ProgressReportTemplateUpdateOneWithoutCallRoundsNestedInput
+    departments?: DepartmentUpdateManyWithoutCallRoundsNestedInput
+    majors?: MajorUpdateManyWithoutCallRoundsNestedInput
+    classes?: ClassUpdateManyWithoutCallRoundsNestedInput
+    availableCouncilMembers?: CallRoundCouncilMemberUpdateManyWithoutCallRoundNestedInput
+  }
+
+  export type CallRoundUncheckedUpdateWithoutAvailableInstructorsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    registrationStartDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    registrationEndDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    projectStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    projectEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reviewDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reportingStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    maxProjects?: NullableIntFieldUpdateOperationsInput | number | null
+    budgetLimit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    requirements?: NullableStringFieldUpdateOperationsInput | string | null
+    guidelines?: NullableStringFieldUpdateOperationsInput | string | null
+    contactInfo?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    isLocked?: BoolFieldUpdateOperationsInput | boolean
+    applicableFor?: EnumApplicableForFieldUpdateOperationsInput | $Enums.ApplicableFor
+    approvalStatus?: EnumCallRoundApprovalStatusFieldUpdateOperationsInput | $Enums.CallRoundApprovalStatus
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdByRole?: NullableEnumRoleFieldUpdateOperationsInput | $Enums.Role | null
+    approvedById?: NullableStringFieldUpdateOperationsInput | string | null
+    approvalNote?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    templateId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    projects?: ProjectUncheckedUpdateManyWithoutCallRoundNestedInput
+    registrations?: ProjectRegistrationUncheckedUpdateManyWithoutCallRoundNestedInput
+    departments?: DepartmentUncheckedUpdateManyWithoutCallRoundsNestedInput
+    majors?: MajorUncheckedUpdateManyWithoutCallRoundsNestedInput
+    classes?: ClassUncheckedUpdateManyWithoutCallRoundsNestedInput
+    availableCouncilMembers?: CallRoundCouncilMemberUncheckedUpdateManyWithoutCallRoundNestedInput
+  }
+
+  export type UserUpsertWithoutCallRoundInstructorsInput = {
+    update: XOR<UserUpdateWithoutCallRoundInstructorsInput, UserUncheckedUpdateWithoutCallRoundInstructorsInput>
+    create: XOR<UserCreateWithoutCallRoundInstructorsInput, UserUncheckedCreateWithoutCallRoundInstructorsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutCallRoundInstructorsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutCallRoundInstructorsInput, UserUncheckedUpdateWithoutCallRoundInstructorsInput>
+  }
+
+  export type UserUpdateWithoutCallRoundInstructorsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    departmentRef?: DepartmentUpdateOneWithoutUsersNestedInput
+    major?: MajorUpdateOneWithoutUsersNestedInput
+    class?: ClassUpdateOneWithoutUsersNestedInput
+    leadProjects?: ProjectUpdateManyWithoutLeaderNestedInput
+    deanReviews?: ProjectUpdateManyWithoutDeanReviewerNestedInput
+    councilEvaluations?: CouncilEvaluationUpdateManyWithoutCouncilMemberNestedInput
+    registrations?: ProjectRegistrationUpdateManyWithoutUserNestedInput
+    instructedRegistrations?: ProjectRegistrationUpdateManyWithoutInstructorNestedInput
+    instructedProjects?: ProjectUpdateManyWithoutInstructorNestedInput
+    facultyReviews?: ProjectRegistrationUpdateManyWithoutFacultyReviewerNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    callRoundCouncilMembers?: CallRoundCouncilMemberUpdateManyWithoutCouncilMemberNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutCallRoundInstructorsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    departmentId?: NullableStringFieldUpdateOperationsInput | string | null
+    majorId?: NullableStringFieldUpdateOperationsInput | string | null
+    classId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    leadProjects?: ProjectUncheckedUpdateManyWithoutLeaderNestedInput
+    deanReviews?: ProjectUncheckedUpdateManyWithoutDeanReviewerNestedInput
+    councilEvaluations?: CouncilEvaluationUncheckedUpdateManyWithoutCouncilMemberNestedInput
+    registrations?: ProjectRegistrationUncheckedUpdateManyWithoutUserNestedInput
+    instructedRegistrations?: ProjectRegistrationUncheckedUpdateManyWithoutInstructorNestedInput
+    instructedProjects?: ProjectUncheckedUpdateManyWithoutInstructorNestedInput
+    facultyReviews?: ProjectRegistrationUncheckedUpdateManyWithoutFacultyReviewerNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    callRoundCouncilMembers?: CallRoundCouncilMemberUncheckedUpdateManyWithoutCouncilMemberNestedInput
+  }
+
+  export type CallRoundCreateWithoutAvailableCouncilMembersInput = {
+    id?: string
+    name: string
+    description?: string | null
+    registrationStartDate: Date | string
+    registrationEndDate: Date | string
+    projectStartDate?: Date | string | null
+    projectEndDate?: Date | string | null
+    reviewDeadline?: Date | string | null
+    reportingStartDate?: Date | string | null
+    startDate: Date | string
+    endDate: Date | string
+    maxProjects?: number | null
+    budgetLimit?: Decimal | DecimalJsLike | number | string | null
+    requirements?: string | null
+    guidelines?: string | null
+    contactInfo?: string | null
+    isActive?: boolean
+    isLocked?: boolean
+    applicableFor?: $Enums.ApplicableFor
+    approvalStatus?: $Enums.CallRoundApprovalStatus
+    createdById?: string | null
+    createdByRole?: $Enums.Role | null
+    approvedById?: string | null
+    approvalNote?: string | null
+    approvedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    projects?: ProjectCreateNestedManyWithoutCallRoundInput
+    registrations?: ProjectRegistrationCreateNestedManyWithoutCallRoundInput
+    template?: ProgressReportTemplateCreateNestedOneWithoutCallRoundsInput
+    departments?: DepartmentCreateNestedManyWithoutCallRoundsInput
+    majors?: MajorCreateNestedManyWithoutCallRoundsInput
+    classes?: ClassCreateNestedManyWithoutCallRoundsInput
+    availableInstructors?: CallRoundInstructorCreateNestedManyWithoutCallRoundInput
+  }
+
+  export type CallRoundUncheckedCreateWithoutAvailableCouncilMembersInput = {
+    id?: string
+    name: string
+    description?: string | null
+    registrationStartDate: Date | string
+    registrationEndDate: Date | string
+    projectStartDate?: Date | string | null
+    projectEndDate?: Date | string | null
+    reviewDeadline?: Date | string | null
+    reportingStartDate?: Date | string | null
+    startDate: Date | string
+    endDate: Date | string
+    maxProjects?: number | null
+    budgetLimit?: Decimal | DecimalJsLike | number | string | null
+    requirements?: string | null
+    guidelines?: string | null
+    contactInfo?: string | null
+    isActive?: boolean
+    isLocked?: boolean
+    applicableFor?: $Enums.ApplicableFor
+    approvalStatus?: $Enums.CallRoundApprovalStatus
+    createdById?: string | null
+    createdByRole?: $Enums.Role | null
+    approvedById?: string | null
+    approvalNote?: string | null
+    approvedAt?: Date | string | null
+    templateId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    projects?: ProjectUncheckedCreateNestedManyWithoutCallRoundInput
+    registrations?: ProjectRegistrationUncheckedCreateNestedManyWithoutCallRoundInput
+    departments?: DepartmentUncheckedCreateNestedManyWithoutCallRoundsInput
+    majors?: MajorUncheckedCreateNestedManyWithoutCallRoundsInput
+    classes?: ClassUncheckedCreateNestedManyWithoutCallRoundsInput
+    availableInstructors?: CallRoundInstructorUncheckedCreateNestedManyWithoutCallRoundInput
+  }
+
+  export type CallRoundCreateOrConnectWithoutAvailableCouncilMembersInput = {
+    where: CallRoundWhereUniqueInput
+    create: XOR<CallRoundCreateWithoutAvailableCouncilMembersInput, CallRoundUncheckedCreateWithoutAvailableCouncilMembersInput>
+  }
+
+  export type UserCreateWithoutCallRoundCouncilMembersInput = {
+    id?: string
+    code?: string | null
+    name: string
+    email: string
+    password?: string | null
+    dateOfBirth?: Date | string | null
+    gender?: $Enums.Gender | null
+    phone?: string | null
+    address?: string | null
+    role?: $Enums.Role
+    department?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    departmentRef?: DepartmentCreateNestedOneWithoutUsersInput
+    major?: MajorCreateNestedOneWithoutUsersInput
+    class?: ClassCreateNestedOneWithoutUsersInput
+    leadProjects?: ProjectCreateNestedManyWithoutLeaderInput
+    deanReviews?: ProjectCreateNestedManyWithoutDeanReviewerInput
+    councilEvaluations?: CouncilEvaluationCreateNestedManyWithoutCouncilMemberInput
+    registrations?: ProjectRegistrationCreateNestedManyWithoutUserInput
+    instructedRegistrations?: ProjectRegistrationCreateNestedManyWithoutInstructorInput
+    instructedProjects?: ProjectCreateNestedManyWithoutInstructorInput
+    facultyReviews?: ProjectRegistrationCreateNestedManyWithoutFacultyReviewerInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    callRoundInstructors?: CallRoundInstructorCreateNestedManyWithoutInstructorInput
+  }
+
+  export type UserUncheckedCreateWithoutCallRoundCouncilMembersInput = {
+    id?: string
+    code?: string | null
+    name: string
+    email: string
+    password?: string | null
+    dateOfBirth?: Date | string | null
+    gender?: $Enums.Gender | null
+    phone?: string | null
+    address?: string | null
+    role?: $Enums.Role
+    department?: string | null
+    departmentId?: string | null
+    majorId?: string | null
+    classId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    leadProjects?: ProjectUncheckedCreateNestedManyWithoutLeaderInput
+    deanReviews?: ProjectUncheckedCreateNestedManyWithoutDeanReviewerInput
+    councilEvaluations?: CouncilEvaluationUncheckedCreateNestedManyWithoutCouncilMemberInput
+    registrations?: ProjectRegistrationUncheckedCreateNestedManyWithoutUserInput
+    instructedRegistrations?: ProjectRegistrationUncheckedCreateNestedManyWithoutInstructorInput
+    instructedProjects?: ProjectUncheckedCreateNestedManyWithoutInstructorInput
+    facultyReviews?: ProjectRegistrationUncheckedCreateNestedManyWithoutFacultyReviewerInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    callRoundInstructors?: CallRoundInstructorUncheckedCreateNestedManyWithoutInstructorInput
+  }
+
+  export type UserCreateOrConnectWithoutCallRoundCouncilMembersInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutCallRoundCouncilMembersInput, UserUncheckedCreateWithoutCallRoundCouncilMembersInput>
+  }
+
+  export type CallRoundUpsertWithoutAvailableCouncilMembersInput = {
+    update: XOR<CallRoundUpdateWithoutAvailableCouncilMembersInput, CallRoundUncheckedUpdateWithoutAvailableCouncilMembersInput>
+    create: XOR<CallRoundCreateWithoutAvailableCouncilMembersInput, CallRoundUncheckedCreateWithoutAvailableCouncilMembersInput>
+    where?: CallRoundWhereInput
+  }
+
+  export type CallRoundUpdateToOneWithWhereWithoutAvailableCouncilMembersInput = {
+    where?: CallRoundWhereInput
+    data: XOR<CallRoundUpdateWithoutAvailableCouncilMembersInput, CallRoundUncheckedUpdateWithoutAvailableCouncilMembersInput>
+  }
+
+  export type CallRoundUpdateWithoutAvailableCouncilMembersInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    registrationStartDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    registrationEndDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    projectStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    projectEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reviewDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reportingStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    maxProjects?: NullableIntFieldUpdateOperationsInput | number | null
+    budgetLimit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    requirements?: NullableStringFieldUpdateOperationsInput | string | null
+    guidelines?: NullableStringFieldUpdateOperationsInput | string | null
+    contactInfo?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    isLocked?: BoolFieldUpdateOperationsInput | boolean
+    applicableFor?: EnumApplicableForFieldUpdateOperationsInput | $Enums.ApplicableFor
+    approvalStatus?: EnumCallRoundApprovalStatusFieldUpdateOperationsInput | $Enums.CallRoundApprovalStatus
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdByRole?: NullableEnumRoleFieldUpdateOperationsInput | $Enums.Role | null
+    approvedById?: NullableStringFieldUpdateOperationsInput | string | null
+    approvalNote?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    projects?: ProjectUpdateManyWithoutCallRoundNestedInput
+    registrations?: ProjectRegistrationUpdateManyWithoutCallRoundNestedInput
+    template?: ProgressReportTemplateUpdateOneWithoutCallRoundsNestedInput
+    departments?: DepartmentUpdateManyWithoutCallRoundsNestedInput
+    majors?: MajorUpdateManyWithoutCallRoundsNestedInput
+    classes?: ClassUpdateManyWithoutCallRoundsNestedInput
+    availableInstructors?: CallRoundInstructorUpdateManyWithoutCallRoundNestedInput
+  }
+
+  export type CallRoundUncheckedUpdateWithoutAvailableCouncilMembersInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    registrationStartDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    registrationEndDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    projectStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    projectEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reviewDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reportingStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    maxProjects?: NullableIntFieldUpdateOperationsInput | number | null
+    budgetLimit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    requirements?: NullableStringFieldUpdateOperationsInput | string | null
+    guidelines?: NullableStringFieldUpdateOperationsInput | string | null
+    contactInfo?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    isLocked?: BoolFieldUpdateOperationsInput | boolean
+    applicableFor?: EnumApplicableForFieldUpdateOperationsInput | $Enums.ApplicableFor
+    approvalStatus?: EnumCallRoundApprovalStatusFieldUpdateOperationsInput | $Enums.CallRoundApprovalStatus
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdByRole?: NullableEnumRoleFieldUpdateOperationsInput | $Enums.Role | null
+    approvedById?: NullableStringFieldUpdateOperationsInput | string | null
+    approvalNote?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    templateId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    projects?: ProjectUncheckedUpdateManyWithoutCallRoundNestedInput
+    registrations?: ProjectRegistrationUncheckedUpdateManyWithoutCallRoundNestedInput
+    departments?: DepartmentUncheckedUpdateManyWithoutCallRoundsNestedInput
+    majors?: MajorUncheckedUpdateManyWithoutCallRoundsNestedInput
+    classes?: ClassUncheckedUpdateManyWithoutCallRoundsNestedInput
+    availableInstructors?: CallRoundInstructorUncheckedUpdateManyWithoutCallRoundNestedInput
+  }
+
+  export type UserUpsertWithoutCallRoundCouncilMembersInput = {
+    update: XOR<UserUpdateWithoutCallRoundCouncilMembersInput, UserUncheckedUpdateWithoutCallRoundCouncilMembersInput>
+    create: XOR<UserCreateWithoutCallRoundCouncilMembersInput, UserUncheckedCreateWithoutCallRoundCouncilMembersInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutCallRoundCouncilMembersInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutCallRoundCouncilMembersInput, UserUncheckedUpdateWithoutCallRoundCouncilMembersInput>
+  }
+
+  export type UserUpdateWithoutCallRoundCouncilMembersInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    departmentRef?: DepartmentUpdateOneWithoutUsersNestedInput
+    major?: MajorUpdateOneWithoutUsersNestedInput
+    class?: ClassUpdateOneWithoutUsersNestedInput
+    leadProjects?: ProjectUpdateManyWithoutLeaderNestedInput
+    deanReviews?: ProjectUpdateManyWithoutDeanReviewerNestedInput
+    councilEvaluations?: CouncilEvaluationUpdateManyWithoutCouncilMemberNestedInput
+    registrations?: ProjectRegistrationUpdateManyWithoutUserNestedInput
+    instructedRegistrations?: ProjectRegistrationUpdateManyWithoutInstructorNestedInput
+    instructedProjects?: ProjectUpdateManyWithoutInstructorNestedInput
+    facultyReviews?: ProjectRegistrationUpdateManyWithoutFacultyReviewerNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    callRoundInstructors?: CallRoundInstructorUpdateManyWithoutInstructorNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutCallRoundCouncilMembersInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    departmentId?: NullableStringFieldUpdateOperationsInput | string | null
+    majorId?: NullableStringFieldUpdateOperationsInput | string | null
+    classId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    leadProjects?: ProjectUncheckedUpdateManyWithoutLeaderNestedInput
+    deanReviews?: ProjectUncheckedUpdateManyWithoutDeanReviewerNestedInput
+    councilEvaluations?: CouncilEvaluationUncheckedUpdateManyWithoutCouncilMemberNestedInput
+    registrations?: ProjectRegistrationUncheckedUpdateManyWithoutUserNestedInput
+    instructedRegistrations?: ProjectRegistrationUncheckedUpdateManyWithoutInstructorNestedInput
+    instructedProjects?: ProjectUncheckedUpdateManyWithoutInstructorNestedInput
+    facultyReviews?: ProjectRegistrationUncheckedUpdateManyWithoutFacultyReviewerNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    callRoundInstructors?: CallRoundInstructorUncheckedUpdateManyWithoutInstructorNestedInput
   }
 
   export type MajorCreateManyDepartmentInput = {
@@ -32428,6 +36474,8 @@ export namespace Prisma {
     instructedProjects?: ProjectUpdateManyWithoutInstructorNestedInput
     facultyReviews?: ProjectRegistrationUpdateManyWithoutFacultyReviewerNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    callRoundInstructors?: CallRoundInstructorUpdateManyWithoutInstructorNestedInput
+    callRoundCouncilMembers?: CallRoundCouncilMemberUpdateManyWithoutCouncilMemberNestedInput
   }
 
   export type UserUncheckedUpdateWithoutDepartmentRefInput = {
@@ -32454,6 +36502,8 @@ export namespace Prisma {
     instructedProjects?: ProjectUncheckedUpdateManyWithoutInstructorNestedInput
     facultyReviews?: ProjectRegistrationUncheckedUpdateManyWithoutFacultyReviewerNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    callRoundInstructors?: CallRoundInstructorUncheckedUpdateManyWithoutInstructorNestedInput
+    callRoundCouncilMembers?: CallRoundCouncilMemberUncheckedUpdateManyWithoutCouncilMemberNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutDepartmentRefInput = {
@@ -32493,6 +36543,7 @@ export namespace Prisma {
     contactInfo?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     isLocked?: BoolFieldUpdateOperationsInput | boolean
+    applicableFor?: EnumApplicableForFieldUpdateOperationsInput | $Enums.ApplicableFor
     approvalStatus?: EnumCallRoundApprovalStatusFieldUpdateOperationsInput | $Enums.CallRoundApprovalStatus
     createdById?: NullableStringFieldUpdateOperationsInput | string | null
     createdByRole?: NullableEnumRoleFieldUpdateOperationsInput | $Enums.Role | null
@@ -32506,6 +36557,8 @@ export namespace Prisma {
     template?: ProgressReportTemplateUpdateOneWithoutCallRoundsNestedInput
     majors?: MajorUpdateManyWithoutCallRoundsNestedInput
     classes?: ClassUpdateManyWithoutCallRoundsNestedInput
+    availableInstructors?: CallRoundInstructorUpdateManyWithoutCallRoundNestedInput
+    availableCouncilMembers?: CallRoundCouncilMemberUpdateManyWithoutCallRoundNestedInput
   }
 
   export type CallRoundUncheckedUpdateWithoutDepartmentsInput = {
@@ -32527,6 +36580,7 @@ export namespace Prisma {
     contactInfo?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     isLocked?: BoolFieldUpdateOperationsInput | boolean
+    applicableFor?: EnumApplicableForFieldUpdateOperationsInput | $Enums.ApplicableFor
     approvalStatus?: EnumCallRoundApprovalStatusFieldUpdateOperationsInput | $Enums.CallRoundApprovalStatus
     createdById?: NullableStringFieldUpdateOperationsInput | string | null
     createdByRole?: NullableEnumRoleFieldUpdateOperationsInput | $Enums.Role | null
@@ -32540,6 +36594,8 @@ export namespace Prisma {
     registrations?: ProjectRegistrationUncheckedUpdateManyWithoutCallRoundNestedInput
     majors?: MajorUncheckedUpdateManyWithoutCallRoundsNestedInput
     classes?: ClassUncheckedUpdateManyWithoutCallRoundsNestedInput
+    availableInstructors?: CallRoundInstructorUncheckedUpdateManyWithoutCallRoundNestedInput
+    availableCouncilMembers?: CallRoundCouncilMemberUncheckedUpdateManyWithoutCallRoundNestedInput
   }
 
   export type CallRoundUncheckedUpdateManyWithoutDepartmentsInput = {
@@ -32561,6 +36617,7 @@ export namespace Prisma {
     contactInfo?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     isLocked?: BoolFieldUpdateOperationsInput | boolean
+    applicableFor?: EnumApplicableForFieldUpdateOperationsInput | $Enums.ApplicableFor
     approvalStatus?: EnumCallRoundApprovalStatusFieldUpdateOperationsInput | $Enums.CallRoundApprovalStatus
     createdById?: NullableStringFieldUpdateOperationsInput | string | null
     createdByRole?: NullableEnumRoleFieldUpdateOperationsInput | $Enums.Role | null
@@ -32650,6 +36707,8 @@ export namespace Prisma {
     instructedProjects?: ProjectUpdateManyWithoutInstructorNestedInput
     facultyReviews?: ProjectRegistrationUpdateManyWithoutFacultyReviewerNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    callRoundInstructors?: CallRoundInstructorUpdateManyWithoutInstructorNestedInput
+    callRoundCouncilMembers?: CallRoundCouncilMemberUpdateManyWithoutCouncilMemberNestedInput
   }
 
   export type UserUncheckedUpdateWithoutMajorInput = {
@@ -32676,6 +36735,8 @@ export namespace Prisma {
     instructedProjects?: ProjectUncheckedUpdateManyWithoutInstructorNestedInput
     facultyReviews?: ProjectRegistrationUncheckedUpdateManyWithoutFacultyReviewerNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    callRoundInstructors?: CallRoundInstructorUncheckedUpdateManyWithoutInstructorNestedInput
+    callRoundCouncilMembers?: CallRoundCouncilMemberUncheckedUpdateManyWithoutCouncilMemberNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutMajorInput = {
@@ -32715,6 +36776,7 @@ export namespace Prisma {
     contactInfo?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     isLocked?: BoolFieldUpdateOperationsInput | boolean
+    applicableFor?: EnumApplicableForFieldUpdateOperationsInput | $Enums.ApplicableFor
     approvalStatus?: EnumCallRoundApprovalStatusFieldUpdateOperationsInput | $Enums.CallRoundApprovalStatus
     createdById?: NullableStringFieldUpdateOperationsInput | string | null
     createdByRole?: NullableEnumRoleFieldUpdateOperationsInput | $Enums.Role | null
@@ -32728,6 +36790,8 @@ export namespace Prisma {
     template?: ProgressReportTemplateUpdateOneWithoutCallRoundsNestedInput
     departments?: DepartmentUpdateManyWithoutCallRoundsNestedInput
     classes?: ClassUpdateManyWithoutCallRoundsNestedInput
+    availableInstructors?: CallRoundInstructorUpdateManyWithoutCallRoundNestedInput
+    availableCouncilMembers?: CallRoundCouncilMemberUpdateManyWithoutCallRoundNestedInput
   }
 
   export type CallRoundUncheckedUpdateWithoutMajorsInput = {
@@ -32749,6 +36813,7 @@ export namespace Prisma {
     contactInfo?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     isLocked?: BoolFieldUpdateOperationsInput | boolean
+    applicableFor?: EnumApplicableForFieldUpdateOperationsInput | $Enums.ApplicableFor
     approvalStatus?: EnumCallRoundApprovalStatusFieldUpdateOperationsInput | $Enums.CallRoundApprovalStatus
     createdById?: NullableStringFieldUpdateOperationsInput | string | null
     createdByRole?: NullableEnumRoleFieldUpdateOperationsInput | $Enums.Role | null
@@ -32762,6 +36827,8 @@ export namespace Prisma {
     registrations?: ProjectRegistrationUncheckedUpdateManyWithoutCallRoundNestedInput
     departments?: DepartmentUncheckedUpdateManyWithoutCallRoundsNestedInput
     classes?: ClassUncheckedUpdateManyWithoutCallRoundsNestedInput
+    availableInstructors?: CallRoundInstructorUncheckedUpdateManyWithoutCallRoundNestedInput
+    availableCouncilMembers?: CallRoundCouncilMemberUncheckedUpdateManyWithoutCallRoundNestedInput
   }
 
   export type CallRoundUncheckedUpdateManyWithoutMajorsInput = {
@@ -32783,6 +36850,7 @@ export namespace Prisma {
     contactInfo?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     isLocked?: BoolFieldUpdateOperationsInput | boolean
+    applicableFor?: EnumApplicableForFieldUpdateOperationsInput | $Enums.ApplicableFor
     approvalStatus?: EnumCallRoundApprovalStatusFieldUpdateOperationsInput | $Enums.CallRoundApprovalStatus
     createdById?: NullableStringFieldUpdateOperationsInput | string | null
     createdByRole?: NullableEnumRoleFieldUpdateOperationsInput | $Enums.Role | null
@@ -32836,6 +36904,8 @@ export namespace Prisma {
     instructedProjects?: ProjectUpdateManyWithoutInstructorNestedInput
     facultyReviews?: ProjectRegistrationUpdateManyWithoutFacultyReviewerNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    callRoundInstructors?: CallRoundInstructorUpdateManyWithoutInstructorNestedInput
+    callRoundCouncilMembers?: CallRoundCouncilMemberUpdateManyWithoutCouncilMemberNestedInput
   }
 
   export type UserUncheckedUpdateWithoutClassInput = {
@@ -32862,6 +36932,8 @@ export namespace Prisma {
     instructedProjects?: ProjectUncheckedUpdateManyWithoutInstructorNestedInput
     facultyReviews?: ProjectRegistrationUncheckedUpdateManyWithoutFacultyReviewerNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    callRoundInstructors?: CallRoundInstructorUncheckedUpdateManyWithoutInstructorNestedInput
+    callRoundCouncilMembers?: CallRoundCouncilMemberUncheckedUpdateManyWithoutCouncilMemberNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutClassInput = {
@@ -32901,6 +36973,7 @@ export namespace Prisma {
     contactInfo?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     isLocked?: BoolFieldUpdateOperationsInput | boolean
+    applicableFor?: EnumApplicableForFieldUpdateOperationsInput | $Enums.ApplicableFor
     approvalStatus?: EnumCallRoundApprovalStatusFieldUpdateOperationsInput | $Enums.CallRoundApprovalStatus
     createdById?: NullableStringFieldUpdateOperationsInput | string | null
     createdByRole?: NullableEnumRoleFieldUpdateOperationsInput | $Enums.Role | null
@@ -32914,6 +36987,8 @@ export namespace Prisma {
     template?: ProgressReportTemplateUpdateOneWithoutCallRoundsNestedInput
     departments?: DepartmentUpdateManyWithoutCallRoundsNestedInput
     majors?: MajorUpdateManyWithoutCallRoundsNestedInput
+    availableInstructors?: CallRoundInstructorUpdateManyWithoutCallRoundNestedInput
+    availableCouncilMembers?: CallRoundCouncilMemberUpdateManyWithoutCallRoundNestedInput
   }
 
   export type CallRoundUncheckedUpdateWithoutClassesInput = {
@@ -32935,6 +37010,7 @@ export namespace Prisma {
     contactInfo?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     isLocked?: BoolFieldUpdateOperationsInput | boolean
+    applicableFor?: EnumApplicableForFieldUpdateOperationsInput | $Enums.ApplicableFor
     approvalStatus?: EnumCallRoundApprovalStatusFieldUpdateOperationsInput | $Enums.CallRoundApprovalStatus
     createdById?: NullableStringFieldUpdateOperationsInput | string | null
     createdByRole?: NullableEnumRoleFieldUpdateOperationsInput | $Enums.Role | null
@@ -32948,6 +37024,8 @@ export namespace Prisma {
     registrations?: ProjectRegistrationUncheckedUpdateManyWithoutCallRoundNestedInput
     departments?: DepartmentUncheckedUpdateManyWithoutCallRoundsNestedInput
     majors?: MajorUncheckedUpdateManyWithoutCallRoundsNestedInput
+    availableInstructors?: CallRoundInstructorUncheckedUpdateManyWithoutCallRoundNestedInput
+    availableCouncilMembers?: CallRoundCouncilMemberUncheckedUpdateManyWithoutCallRoundNestedInput
   }
 
   export type CallRoundUncheckedUpdateManyWithoutClassesInput = {
@@ -32969,6 +37047,7 @@ export namespace Prisma {
     contactInfo?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     isLocked?: BoolFieldUpdateOperationsInput | boolean
+    applicableFor?: EnumApplicableForFieldUpdateOperationsInput | $Enums.ApplicableFor
     approvalStatus?: EnumCallRoundApprovalStatusFieldUpdateOperationsInput | $Enums.CallRoundApprovalStatus
     createdById?: NullableStringFieldUpdateOperationsInput | string | null
     createdByRole?: NullableEnumRoleFieldUpdateOperationsInput | $Enums.Role | null
@@ -33108,6 +37187,18 @@ export namespace Prisma {
     metadata?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     readAt?: Date | string | null
+  }
+
+  export type CallRoundInstructorCreateManyInstructorInput = {
+    id?: string
+    callRoundId: string
+    createdAt?: Date | string
+  }
+
+  export type CallRoundCouncilMemberCreateManyCouncilMemberInput = {
+    id?: string
+    callRoundId: string
+    createdAt?: Date | string
   }
 
   export type ProjectUpdateWithoutLeaderInput = {
@@ -33524,6 +37615,42 @@ export namespace Prisma {
     readAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
+  export type CallRoundInstructorUpdateWithoutInstructorInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    callRound?: CallRoundUpdateOneRequiredWithoutAvailableInstructorsNestedInput
+  }
+
+  export type CallRoundInstructorUncheckedUpdateWithoutInstructorInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    callRoundId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CallRoundInstructorUncheckedUpdateManyWithoutInstructorInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    callRoundId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CallRoundCouncilMemberUpdateWithoutCouncilMemberInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    callRound?: CallRoundUpdateOneRequiredWithoutAvailableCouncilMembersNestedInput
+  }
+
+  export type CallRoundCouncilMemberUncheckedUpdateWithoutCouncilMemberInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    callRoundId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CallRoundCouncilMemberUncheckedUpdateManyWithoutCouncilMemberInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    callRoundId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type ProjectCreateManyCallRoundInput = {
     id?: string
     code?: string | null
@@ -33558,6 +37685,18 @@ export namespace Prisma {
     instructorStatus?: $Enums.InstructorStatus
     facultyStatus?: $Enums.FacultyStatus
     facultyReviewerId?: string | null
+  }
+
+  export type CallRoundInstructorCreateManyCallRoundInput = {
+    id?: string
+    instructorId: string
+    createdAt?: Date | string
+  }
+
+  export type CallRoundCouncilMemberCreateManyCallRoundInput = {
+    id?: string
+    councilMemberId: string
+    createdAt?: Date | string
   }
 
   export type ProjectUpdateWithoutCallRoundInput = {
@@ -33768,6 +37907,42 @@ export namespace Prisma {
     majorId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CallRoundInstructorUpdateWithoutCallRoundInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    instructor?: UserUpdateOneRequiredWithoutCallRoundInstructorsNestedInput
+  }
+
+  export type CallRoundInstructorUncheckedUpdateWithoutCallRoundInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    instructorId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CallRoundInstructorUncheckedUpdateManyWithoutCallRoundInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    instructorId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CallRoundCouncilMemberUpdateWithoutCallRoundInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    councilMember?: UserUpdateOneRequiredWithoutCallRoundCouncilMembersNestedInput
+  }
+
+  export type CallRoundCouncilMemberUncheckedUpdateWithoutCallRoundInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    councilMemberId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CallRoundCouncilMemberUncheckedUpdateManyWithoutCallRoundInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    councilMemberId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ProjectCreateManyProjectTypeInput = {
@@ -34085,6 +38260,7 @@ export namespace Prisma {
     contactInfo?: string | null
     isActive?: boolean
     isLocked?: boolean
+    applicableFor?: $Enums.ApplicableFor
     approvalStatus?: $Enums.CallRoundApprovalStatus
     createdById?: string | null
     createdByRole?: $Enums.Role | null
@@ -34150,6 +38326,7 @@ export namespace Prisma {
     contactInfo?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     isLocked?: BoolFieldUpdateOperationsInput | boolean
+    applicableFor?: EnumApplicableForFieldUpdateOperationsInput | $Enums.ApplicableFor
     approvalStatus?: EnumCallRoundApprovalStatusFieldUpdateOperationsInput | $Enums.CallRoundApprovalStatus
     createdById?: NullableStringFieldUpdateOperationsInput | string | null
     createdByRole?: NullableEnumRoleFieldUpdateOperationsInput | $Enums.Role | null
@@ -34163,6 +38340,8 @@ export namespace Prisma {
     departments?: DepartmentUpdateManyWithoutCallRoundsNestedInput
     majors?: MajorUpdateManyWithoutCallRoundsNestedInput
     classes?: ClassUpdateManyWithoutCallRoundsNestedInput
+    availableInstructors?: CallRoundInstructorUpdateManyWithoutCallRoundNestedInput
+    availableCouncilMembers?: CallRoundCouncilMemberUpdateManyWithoutCallRoundNestedInput
   }
 
   export type CallRoundUncheckedUpdateWithoutTemplateInput = {
@@ -34184,6 +38363,7 @@ export namespace Prisma {
     contactInfo?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     isLocked?: BoolFieldUpdateOperationsInput | boolean
+    applicableFor?: EnumApplicableForFieldUpdateOperationsInput | $Enums.ApplicableFor
     approvalStatus?: EnumCallRoundApprovalStatusFieldUpdateOperationsInput | $Enums.CallRoundApprovalStatus
     createdById?: NullableStringFieldUpdateOperationsInput | string | null
     createdByRole?: NullableEnumRoleFieldUpdateOperationsInput | $Enums.Role | null
@@ -34197,6 +38377,8 @@ export namespace Prisma {
     departments?: DepartmentUncheckedUpdateManyWithoutCallRoundsNestedInput
     majors?: MajorUncheckedUpdateManyWithoutCallRoundsNestedInput
     classes?: ClassUncheckedUpdateManyWithoutCallRoundsNestedInput
+    availableInstructors?: CallRoundInstructorUncheckedUpdateManyWithoutCallRoundNestedInput
+    availableCouncilMembers?: CallRoundCouncilMemberUncheckedUpdateManyWithoutCallRoundNestedInput
   }
 
   export type CallRoundUncheckedUpdateManyWithoutTemplateInput = {
@@ -34218,6 +38400,7 @@ export namespace Prisma {
     contactInfo?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     isLocked?: BoolFieldUpdateOperationsInput | boolean
+    applicableFor?: EnumApplicableForFieldUpdateOperationsInput | $Enums.ApplicableFor
     approvalStatus?: EnumCallRoundApprovalStatusFieldUpdateOperationsInput | $Enums.CallRoundApprovalStatus
     createdById?: NullableStringFieldUpdateOperationsInput | string | null
     createdByRole?: NullableEnumRoleFieldUpdateOperationsInput | $Enums.Role | null

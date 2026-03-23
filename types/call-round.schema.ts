@@ -31,6 +31,9 @@ export const callRoundSchema = z.object({
   isActive: z.boolean(),
   isLocked: z.boolean().default(false),
   
+  // Áp dụng cho đối tượng nào
+  applicableFor: z.enum(["STUDENT", "LECTURER", "BOTH"]).default("STUDENT"),
+  
   // Approval workflow
   approvalStatus: z.enum(["PENDING_APPROVAL", "APPROVED", "REJECTED"]),
   createdById: z.string().nullable().optional(),
@@ -78,9 +81,37 @@ export const callRoundSchema = z.object({
             }),
         )
         .optional(),
+    availableInstructors: z
+        .array(
+            z.object({
+                instructorId: z.string(),
+                instructor: z.object({
+                    id: z.string(),
+                    name: z.string(),
+                    email: z.string(),
+                    departmentId: z.string().nullable().optional(),
+                }),
+            }),
+        )
+        .optional(),
+    availableCouncilMembers: z
+        .array(
+            z.object({
+                councilMemberId: z.string(),
+                councilMember: z.object({
+                    id: z.string(),
+                    name: z.string(),
+                    email: z.string(),
+                    departmentId: z.string().nullable().optional(),
+                }),
+            }),
+        )
+        .optional(),
     _count: z
         .object({
             projects: z.number(),
+            availableInstructors: z.number().optional(),
+            availableCouncilMembers: z.number().optional(),
         })
         .optional(),
 });
@@ -115,10 +146,13 @@ const callRoundBaseSchema = z.object({
 
     isActive: z.boolean().default(true),
     isLocked: z.boolean().default(false),
+    applicableFor: z.enum(["STUDENT", "LECTURER", "BOTH"]).default("STUDENT"),
     templateId: z.string().nullable().optional(),
     departmentIds: z.array(z.string()).optional(),
     majorIds: z.array(z.string()).optional(),
     classIds: z.array(z.string()).optional(),
+    instructorIds: z.array(z.string()).optional(), // Danh sách ID giảng viên hướng dẫn được chỉ định
+    councilMemberIds: z.array(z.string()).optional(), // Danh sách ID thành viên hội đồng được chỉ định
 });
 
 export const createCallRoundSchema = callRoundBaseSchema

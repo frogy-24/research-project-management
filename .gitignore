@@ -42,5 +42,5 @@ next-env.d.ts
 
 /app/generated/prisma
 
-.roo
-.github
+/.roo
+/.github

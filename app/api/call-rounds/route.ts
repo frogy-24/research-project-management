@@ -55,9 +55,37 @@ export async function GET(req: Request) {
             name: true,
           },
         },
+        availableInstructors: {
+          select: {
+            instructorId: true,
+            instructor: {
+              select: {
+                id: true,
+                name: true,
+                email: true,
+                departmentId: true,
+              },
+            },
+          },
+        },
+        availableCouncilMembers: {
+          select: {
+            councilMemberId: true,
+            councilMember: {
+              select: {
+                id: true,
+                name: true,
+                email: true,
+                departmentId: true,
+              },
+            },
+          },
+        },
         _count: {
           select: {
             projects: true,
+            availableInstructors: true,
+            availableCouncilMembers: true,
           },
         },
       },
@@ -103,7 +131,7 @@ export async function POST(request: Request) {
       );
     }
 
-    const { departmentIds, majorIds, classIds, ...callRoundData } = parsed.data;
+    const { departmentIds, majorIds, classIds, instructorIds, councilMemberIds, ...callRoundData } = parsed.data;
 
     // DEAN tạo -> PENDING_APPROVAL, ADMIN/LEADER tạo -> APPROVED
     const approvalStatus = actorRole === "DEAN" ? "PENDING_APPROVAL" : "APPROVED";
@@ -137,6 +165,12 @@ export async function POST(request: Request) {
         classes: {
           connect: classIds?.map((id) => ({ id })) || [],
         },
+        availableInstructors: {
+          create: instructorIds?.map((instructorId) => ({ instructorId })) || [],
+        },
+        availableCouncilMembers: {
+          create: councilMemberIds?.map((councilMemberId) => ({ councilMemberId })) || [],
+        },
       },
       include: {
         template: {
@@ -164,6 +198,32 @@ export async function POST(request: Request) {
             id: true,
             code: true,
             name: true,
+          },
+        },
+        availableInstructors: {
+          select: {
+            instructorId: true,
+            instructor: {
+              select: {
+                id: true,
+                name: true,
+                email: true,
+                departmentId: true,
+              },
+            },
+          },
+        },
+        availableCouncilMembers: {
+          select: {
+            councilMemberId: true,
+            councilMember: {
+              select: {
+                id: true,
+                name: true,
+                email: true,
+                departmentId: true,
+              },
+            },
           },
         },
       },

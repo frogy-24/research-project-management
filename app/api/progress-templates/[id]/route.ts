@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { updateTemplateSchema } from "@/types/progress-template.schema";
+import { getAuthUser } from "@/lib/auth-helpers";
 
 // GET - Get single template
 export async function GET(
@@ -41,7 +42,38 @@ export async function PUT(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    // Verify session
+    const authUser = await getAuthUser();
+    if (!authUser) {
+      return NextResponse.json(
+        { error: "Unauthorized" },
+        { status: 401 }
+      );
+    }
+
     const { id } = await params;
+    
+    // Check template ownership (DEAN can only edit own templates, ADMIN can edit all)
+    const existingTemplate = await prisma.progressReportTemplate.findUnique({
+      where: { id },
+      select: { createdById: true, createdByRole: true },
+    });
+
+    if (!existingTemplate) {
+      return NextResponse.json(
+        { error: "Không tìm thấy biểu mẫu" },
+        { status: 404 }
+      );
+    }
+
+    // Authorization check
+    if (authUser.role !== "ADMIN" && existingTemplate.createdById !== authUser.userId) {
+      return NextResponse.json(
+        { error: "Bạn không có quyền chỉnh sửa biểu mẫu này" },
+        { status: 403 }
+      );
+    }
+
     const body = await request.json();
     const validated = updateTemplateSchema.parse({ ...body, id });
 
@@ -92,7 +124,38 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    // Verify session
+    const authUser = await getAuthUser();
+    if (!authUser) {
+      return NextResponse.json(
+        { error: "Unauthorized" },
+        { status: 401 }
+      );
+    }
+
     const { id } = await params;
+    
+    // Check template ownership (DEAN can only delete own templates, ADMIN can delete all)
+    const existingTemplate = await prisma.progressReportTemplate.findUnique({
+      where: { id },
+      select: { createdById: true, createdByRole: true },
+    });
+
+    if (!existingTemplate) {
+      return NextResponse.json(
+        { error: "Không tìm thấy biểu mẫu" },
+        { status: 404 }
+      );
+    }
+
+    // Authorization check
+    if (authUser.role !== "ADMIN" && existingTemplate.createdById !== authUser.userId) {
+      return NextResponse.json(
+        { error: "Bạn không có quyền xóa biểu mẫu này" },
+        { status: 403 }
+      );
+    }
+
     await prisma.progressReportTemplate.delete({
       where: { id },
     });

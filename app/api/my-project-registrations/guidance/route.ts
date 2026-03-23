@@ -17,7 +17,12 @@ export async function GET(req: Request) {
       where: {
         instructorId: userId,
       },
-      include: {
+      select: {
+        id: true,
+        title: true,
+        objective: true,
+        expectedOutput: true,
+        instructorStatus: true,
         user: {
           select: { name: true, email: true },
         },

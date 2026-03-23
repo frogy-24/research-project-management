@@ -235,6 +235,34 @@ async function seedUsers(orgData: {
   }
   console.log(`✅ Created ${lecturers.length} LECTURERs (10 per department)`);
 
+  // Tạo thành viên Hội đồng (3-5 người cho mỗi khoa)
+  const councilMembers = [];
+  const councilTitles = ['PGS.TS', 'TS', 'ThS', 'GS.TS'];
+  
+  for (let deptIdx = 0; deptIdx < departments.length; deptIdx++) {
+    const numCouncil = 3 + Math.floor(Math.random() * 3); // 3-5 thành viên/khoa
+    for (let i = 0; i < numCouncil; i++) {
+      const councilNum = deptIdx * 5 + i + 1;
+      const title = councilTitles[i % councilTitles.length];
+      const council = await prisma.user.create({
+        data: {
+          email: `hd${String(councilNum).padStart(3, '0')}@university.edu`,
+          password: '123456',
+          name: `${title}. ${firstNames[(i + 3) % 10]} ${middleNames[(i + 5) % 10]} ${lastNames[(i + 7) % 10]}`,
+          role: Role.COUNCIL,
+          code: `HD${String(councilNum).padStart(3, '0')}`,
+          departmentId: departments[deptIdx].id,
+          gender: i % 3 === 0 ? Gender.FEMALE : Gender.MALE,
+          phone: `093${String(1000000 + councilNum).substring(1)}`,
+          address: `Phòng ${100 + councilNum}, Nhà A, Trường Đại học`,
+        },
+      });
+      councilMembers.push(council);
+      allUsers.push(council);
+    }
+  }
+  console.log(`✅ Created ${councilMembers.length} COUNCIL members (3-5 per department)`);
+
   // Tạo sinh viên cho mỗi lớp (15-20 sinh viên/lớp)
   const students = [];
   const studentFirstNames = ['Nguyễn', 'Trần', 'Lê', 'Phạm', 'Hoàng', 'Phan', 'Vũ', 'Đặng', 'Bùi', 'Đỗ', 'Lý', 'Dương', 'Võ', 'Hồ', 'Đinh'];
@@ -271,7 +299,132 @@ async function seedUsers(orgData: {
   }
   console.log(`✅ Created ${students.length} STUDENTs (15-20 per class)\n`);
 
-  return { admin, deans, lecturers, students, allUsers };
+  return { admin, deans, lecturers, councilMembers, students, allUsers };
+}
+
+/**
+ * Seed 50 ProjectRegistrations cho khoa CNTT
+ */
+async function seedProjectRegistrationsForIT(orgData: {
+  departments: any[];
+  majors: any[];
+  classes: any[];
+}) {
+  console.log('📝 Seeding Project Registrations for IT Department (50 records)...');
+
+  const { departments } = orgData;
+  
+  // Tìm khoa CNTT
+  const itDept = departments.find((d) => d.code === 'IT');
+  if (!itDept) {
+    console.log('❌ IT Department not found, skipping registrations seed');
+    return;
+  }
+
+  // Lấy sinh viên thuộc khoa CNTT
+  const itStudents = await prisma.user.findMany({
+    where: {
+      role: 'STUDENT',
+      departmentId: itDept.id,
+    },
+    take: 60, // Lấy tối đa 60 sinh viên
+  });
+
+  // Lấy giảng viên thuộc khoa CNTT
+  const itLecturers = await prisma.user.findMany({
+    where: {
+      role: 'LECTURER',
+      departmentId: itDept.id,
+    },
+  });
+
+  if (itStudents.length === 0) {
+    console.log('❌ No IT students found, skipping registrations seed');
+    return;
+  }
+
+  // Danh sách đề tài mẫu CNTT
+  const projectTopics = [
+    'Xây dựng hệ thống quản lý thư viện trực tuyến',
+    'Phát triển ứng dụng di động hỗ trợ học tập',
+    'Thiết kế hệ thống IoT giám sát môi trường',
+    'Xây dựng chatbot hỗ trợ tư vấn học đường',
+    'Phát triển website thương mại điện tử',
+    'Ứng dụng Machine Learning trong nhận diện khuôn mặt',
+    'Xây dựng hệ thống quản lý bệnh viện',
+    'Phát triển game 2D giáo dục cho trẻ em',
+    'Thiết kế hệ thống điểm danh bằng mã QR',
+    'Xây dựng ứng dụng đặt lịch khám bệnh online',
+    'Phát triển hệ thống quản lý kho hàng',
+    'Ứng dụng AI trong phân loại rác thải',
+    'Xây dựng platform học trực tuyến',
+    'Phát triển ứng dụng quản lý tài chính cá nhân',
+    'Thiết kế hệ thống giám sát giao thông thông minh',
+    'Xây dựng mạng xã hội cho sinh viên',
+    'Phát triển ứng dụng đọc sách điện tử',
+    'Ứng dụng Blockchain trong quản lý chứng chỉ',
+    'Xây dựng hệ thống bán vé sự kiện online',
+    'Phát triển robot tự động phục vụ',
+    'Thiết kế hệ thống smart home',
+    'Xây dựng ứng dụng tìm việc làm',
+    'Phát triển hệ thống quản lý sinh viên',
+    'Ứng dụng AR trong giáo dục lịch sử',
+    'Xây dựng website tin tức tự động',
+  ];
+
+  const objectives = [
+    'Nghiên cứu và phát triển giải pháp công nghệ nhằm tối ưu hóa quy trình',
+    'Ứng dụng các công nghệ mới để giải quyết vấn đề thực tế',
+    'Phát triển sản phẩm phần mềm đáp ứng nhu cầu người dùng',
+    'Nghiên cứu các thuật toán và phương pháp tiên tiến',
+    'Xây dựng giải pháp tích hợp đa nền tảng',
+  ];
+
+  const expectedOutputs = [
+    'Sản phẩm phần mềm hoàn chỉnh có thể đưa vào sử dụng',
+    'Hệ thống đáp ứng các tiêu chí kỹ thuật đề ra',
+    'Ứng dụng được triển khai thực tế tại đơn vị',
+    'Tài liệu kỹ thuật và hướng dẫn sử dụng đầy đủ',
+    'Prototype sản phẩm kèm báo cáo nghiên cứu',
+  ];
+
+  const statuses: Array<'PENDING' | 'APPROVED' | 'REJECTED'> = ['PENDING', 'APPROVED', 'REJECTED'];
+  const instructorStatuses: Array<'PENDING' | 'ACCEPTED' | 'REJECTED'> = ['PENDING', 'ACCEPTED', 'REJECTED'];
+  const facultyStatuses: Array<'PENDING' | 'APPROVED' | 'REJECTED'> = ['PENDING', 'APPROVED', 'REJECTED'];
+
+  const registrations = [];
+
+  for (let i = 0; i < 50; i++) {
+    const student = itStudents[i % itStudents.length];
+    const instructor = itLecturers[i % itLecturers.length];
+    const topic = projectTopics[i % projectTopics.length];
+    const objective = objectives[i % objectives.length];
+    const expectedOutput = expectedOutputs[i % expectedOutputs.length];
+
+    // Tạo các trạng thái ngẫu nhiên nhưng hợp lý
+    const instructorStatus = instructorStatuses[Math.floor(Math.random() * instructorStatuses.length)];
+    // Nếu instructor đã duyệt, faculty có thể duyệt; ngược lại faculty chờ
+    const facultyStatus = instructorStatus === 'ACCEPTED' 
+      ? facultyStatuses[Math.floor(Math.random() * facultyStatuses.length)]
+      : 'PENDING';
+
+    const registration = await prisma.projectRegistration.create({
+      data: {
+        userId: student.id,
+        title: `${topic} - Phiên bản ${i + 1}`,
+        objective: `${objective}. Đề tài số ${i + 1} trong lĩnh vực CNTT.`,
+        expectedOutput: expectedOutput,
+        status: 'PENDING',
+        instructorId: instructor.id,
+        instructorStatus: instructorStatus,
+        facultyStatus: facultyStatus,
+      },
+    });
+    registrations.push(registration);
+  }
+
+  console.log(`✅ Created ${registrations.length} Project Registrations for IT Department\n`);
+  return registrations;
 }
 
 /**
@@ -293,6 +446,9 @@ async function main() {
 
   // Step 4: Seed progress report templates
   seedTemplates();
+
+  // Step 5: Seed project registrations for IT Department (50 records)
+  await seedProjectRegistrationsForIT(orgData);
 
   console.log('\n🎉 Seed completed successfully!\n');
  

@@ -15,9 +15,10 @@ export const useLogin = () => {
 
   return useMutation({
     mutationFn: (credentials: LoginWithCredentials) => authApi.loginWithCredentials(credentials),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["auth", "session"] });
-      queryClient.invalidateQueries({ queryKey: ["projects"] });
+    onSuccess: async () => {
+      // Clear all cached data and refetch fresh data for the new user
+      queryClient.clear();
+      await queryClient.invalidateQueries({ queryKey: ["auth", "session"] });
     },
   });
 };
@@ -27,9 +28,10 @@ export const useLoginAsRole = () => {
 
   return useMutation({
     mutationFn: (role: Role) => authApi.loginAsRole(role),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["auth", "session"] });
-      queryClient.invalidateQueries({ queryKey: ["projects"] });
+    onSuccess: async () => {
+      // Clear all cached data and refetch fresh data for the new user
+      queryClient.clear();
+      await queryClient.invalidateQueries({ queryKey: ["auth", "session"] });
     },
   });
 };
@@ -40,8 +42,8 @@ export const useLogout = () => {
   return useMutation({
     mutationFn: authApi.logout,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["auth", "session"] });
-      queryClient.invalidateQueries({ queryKey: ["projects"] });
+      // Clear all cached data to ensure next login starts fresh
+      queryClient.clear();
     },
   });
 };

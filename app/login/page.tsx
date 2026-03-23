@@ -40,6 +40,7 @@ export default function LoginPage() {
       onSuccess: (response) => {
         toast.success(`Đăng nhập thành công! Xin chào ${response.name}`);
         router.replace(getDashboardRoute(response.role));
+        router.refresh(); // Force Next.js to re-render with new session
       },
       onError: (error: any) => {
         const errorMessage = error?.response?.data?.error || "Không thể đăng nhập";

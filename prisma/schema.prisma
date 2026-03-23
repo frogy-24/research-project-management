@@ -54,6 +54,12 @@ enum CallRoundApprovalStatus {
   REJECTED          // Admin từ chối
 }
 
+enum ApplicableFor {
+  STUDENT           // Áp dụng cho sinh viên
+  LECTURER          // Áp dụng cho giảng viên
+  BOTH              // Áp dụng cho cả hai
+}
+
 enum RegistrationStatus {
   PENDING
   APPROVED
@@ -100,33 +106,35 @@ model Class {
 }
 
 model User {
-  id                      String                @id @default(cuid())
-  code                    String?               @unique
+  id                      String                   @id @default(cuid())
+  code                    String?                  @unique
   name                    String
-  email                   String                @unique
+  email                   String                   @unique
   password                String?
   dateOfBirth             DateTime?
   gender                  Gender?
   phone                   String?
   address                 String?
-  role                    Role                  @default(LECTURER)
-  department              String?               // Legacy field, keep for backward compatibility
+  role                    Role                     @default(LECTURER)
+  department              String?                  // Legacy field, keep for backward compatibility
   departmentId            String?
-  departmentRef           Department?           @relation(fields: [departmentId], references: [id])
+  departmentRef           Department?              @relation(fields: [departmentId], references: [id])
   majorId                 String?
-  major                   Major?                @relation(fields: [majorId], references: [id])
+  major                   Major?                   @relation(fields: [majorId], references: [id])
   classId                 String?
-  class                   Class?                @relation(fields: [classId], references: [id])
-  createdAt               DateTime              @default(now())
-  updatedAt               DateTime              @updatedAt
-  leadProjects            Project[]             @relation("ProjectLeader")
-  deanReviews             Project[]             @relation("DeanReviewer")
+  class                   Class?                   @relation(fields: [classId], references: [id])
+  createdAt               DateTime                 @default(now())
+  updatedAt               DateTime                 @updatedAt
+  leadProjects            Project[]                @relation("ProjectLeader")
+  deanReviews             Project[]                @relation("DeanReviewer")
   councilEvaluations      CouncilEvaluation[]
   registrations           ProjectRegistration[]
-  instructedRegistrations ProjectRegistration[] @relation("ProjectRegistrationInstructor")
-  instructedProjects      Project[]             @relation("ProjectInstructor")
-  facultyReviews          ProjectRegistration[] @relation("FacultyReviewer")
+  instructedRegistrations ProjectRegistration[]    @relation("ProjectRegistrationInstructor")
+  instructedProjects      Project[]                @relation("ProjectInstructor")
+  facultyReviews          ProjectRegistration[]    @relation("FacultyReviewer")
   notifications           Notification[]
+  callRoundInstructors    CallRoundInstructor[]    // Danh sách đợt đăng ký mà giảng viên được chỉ định hướng dẫn
+  callRoundCouncilMembers CallRoundCouncilMember[] // Danh sách đợt đăng ký mà thành viên hội đồng được chỉ định
 }
 
 model CallRound {
@@ -160,6 +168,9 @@ model CallRound {
   isActive               Boolean                 @default(true)
   isLocked               Boolean                 @default(false) // Khóa chỉnh sửa
   
+  // Áp dụng cho đối tượng nào
+  applicableFor          ApplicableFor           @default(STUDENT) // STUDENT, LECTURER, hoặc BOTH
+  
   // Approval workflow: DEAN creates -> PENDING_APPROVAL, ADMIN creates -> APPROVED
   approvalStatus         CallRoundApprovalStatus @default(APPROVED)
   createdById            String?                 // ID người tạo
@@ -178,6 +189,8 @@ model CallRound {
   departments            Department[]            @relation("CallRoundDepartments")
   majors                 Major[]                 @relation("CallRoundMajors")
   classes                Class[]                 @relation("CallRoundClasses")
+  availableInstructors   CallRoundInstructor[]   // Danh sách giảng viên hướng dẫn được chỉ định cho đợt này
+  availableCouncilMembers CallRoundCouncilMember[] // Danh sách thành viên hội đồng được chỉ định cho đợt này
 }
 
 model ProjectType {
@@ -220,14 +233,16 @@ model Project {
 }
 
 model ProgressReportTemplate {
-  id          String       @id @default(cuid())
-  name        String
-  description String?
-  isActive    Boolean      @default(true)
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
-  items       ProgressReportTemplateItem[]
-  callRounds  CallRound[]
+  id            String                       @id @default(cuid())
+  name          String
+  description   String?
+  isActive      Boolean                      @default(true)
+  createdById   String?                      // ID người tạo
+  createdByRole Role?                        // Role người tạo
+  createdAt     DateTime                     @default(now())
+  updatedAt     DateTime                     @updatedAt
+  items         ProgressReportTemplateItem[]
+  callRounds    CallRound[]
 }
 
 model ProgressReportTemplateItem {
@@ -370,4 +385,34 @@ model Notification {
   
   @@index([userId, isRead])
   @@index([userId, createdAt])
+}
+
+// Junction table: Danh sách giảng viên hướng dẫn được chỉ định cho mỗi đợt đăng ký
+model CallRoundInstructor {
+  id           String    @id @default(cuid())
+  callRoundId  String
+  instructorId String
+  createdAt    DateTime  @default(now())
+  
+  callRound    CallRound @relation(fields: [callRoundId], references: [id], onDelete: Cascade)
+  instructor   User      @relation(fields: [instructorId], references: [id], onDelete: Cascade)
+  
+  @@unique([callRoundId, instructorId])
+  @@index([callRoundId])
+  @@index([instructorId])
+}
+
+// Junction table: Danh sách thành viên hội đồng được chỉ định cho mỗi đợt đăng ký
+model CallRoundCouncilMember {
+  id              String    @id @default(cuid())
+  callRoundId     String
+  councilMemberId String
+  createdAt       DateTime  @default(now())
+  
+  callRound       CallRound @relation(fields: [callRoundId], references: [id], onDelete: Cascade)
+  councilMember   User      @relation(fields: [councilMemberId], references: [id], onDelete: Cascade)
+  
+  @@unique([callRoundId, councilMemberId])
+  @@index([callRoundId])
+  @@index([councilMemberId])
 }

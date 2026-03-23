@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { createTemplateSchema } from "@/types/progress-template.schema";
+import { getAuthUser } from "@/lib/auth-helpers";
 
 // GET - List all templates
 export async function GET(request: NextRequest) {
@@ -31,6 +32,15 @@ export async function GET(request: NextRequest) {
 // POST - Create new template
 export async function POST(request: NextRequest) {
   try {
+    // Verify session and get current user
+    const authUser = await getAuthUser();
+    if (!authUser) {
+      return NextResponse.json(
+        { error: "Unauthorized" },
+        { status: 401 }
+      );
+    }
+
     const body = await request.json();
     const validated = createTemplateSchema.parse(body);
 
@@ -39,6 +49,8 @@ export async function POST(request: NextRequest) {
         name: validated.name,
         description: validated.description,
         isActive: validated.isActive,
+        createdById: authUser.userId,
+        createdByRole: authUser.role,
         items: {
           create: validated.items.map((item) => ({
             weekNumber: item.weekNumber,

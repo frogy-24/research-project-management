@@ -39,6 +39,32 @@ export async function GET(
             name: true,
           },
         },
+        availableInstructors: {
+          select: {
+            instructorId: true,
+            instructor: {
+              select: {
+                id: true,
+                name: true,
+                email: true,
+                departmentId: true,
+              },
+            },
+          },
+        },
+        availableCouncilMembers: {
+          select: {
+            councilMemberId: true,
+            councilMember: {
+              select: {
+                id: true,
+                name: true,
+                email: true,
+                departmentId: true,
+              },
+            },
+          },
+        },
       },
     });
 
@@ -123,7 +149,7 @@ export async function PATCH(
       );
     }
 
-    const { departmentIds, majorIds, classIds, ...callRoundData } = parsed.data;
+    const { departmentIds, majorIds, classIds, instructorIds, councilMemberIds, ...callRoundData } = parsed.data;
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const updateData: any = {
@@ -156,6 +182,36 @@ export async function PATCH(
       updateData.classes = { set: classIds.map((id) => ({ id })) };
     }
 
+    // Handle instructorIds: Delete existing and create new
+    if (instructorIds !== undefined) {
+      await prisma.callRoundInstructor.deleteMany({
+        where: { callRoundId: id },
+      });
+      if (instructorIds.length > 0) {
+        await prisma.callRoundInstructor.createMany({
+          data: instructorIds.map((instructorId) => ({
+            callRoundId: id,
+            instructorId,
+          })),
+        });
+      }
+    }
+
+    // Handle councilMemberIds: Delete existing and create new
+    if (councilMemberIds !== undefined) {
+      await prisma.callRoundCouncilMember.deleteMany({
+        where: { callRoundId: id },
+      });
+      if (councilMemberIds.length > 0) {
+        await prisma.callRoundCouncilMember.createMany({
+          data: councilMemberIds.map((councilMemberId) => ({
+            callRoundId: id,
+            councilMemberId,
+          })),
+        });
+      }
+    }
+
     const callRound = await prisma.callRound.update({
       where: { id },
       data: updateData,
@@ -185,6 +241,32 @@ export async function PATCH(
             id: true,
             code: true,
             name: true,
+          },
+        },
+        availableInstructors: {
+          select: {
+            instructorId: true,
+            instructor: {
+              select: {
+                id: true,
+                name: true,
+                email: true,
+                departmentId: true,
+              },
+            },
+          },
+        },
+        availableCouncilMembers: {
+          select: {
+            councilMemberId: true,
+            councilMember: {
+              select: {
+                id: true,
+                name: true,
+                email: true,
+                departmentId: true,
+              },
+            },
           },
         },
       },

@@ -69,12 +69,18 @@ export function StudentManagement() {
     const students = studentsData?.data ?? [];
     const pagination = studentsData?.pagination;
 
-    // Fetch classes – API tự lọc theo departmentId của dean
-    const { data: classesData } = useClasses({ limit: 1000 });
+    // Fetch classes – CHỈ LẤY CÁC LỚP THUỘC KHOA CỦA DEAN
+    const { data: classesData } = useClasses({ 
+        limit: 1000,
+        departmentId: myDepartmentId // Filter theo departmentId của Dean
+    });
     const classes = classesData?.data ?? [];
 
-    // Fetch majors – API tự lọc theo departmentId của dean
-    const { data: majorsData } = useMajors({ limit: 1000 });
+    // Fetch majors – CHỈ LẤY CÁC NGÀNH THUỘC KHOA CỦA DEAN
+    const { data: majorsData } = useMajors({ 
+        limit: 1000,
+        departmentId: myDepartmentId // Filter theo departmentId của Dean
+    });
     const majors = majorsData?.data ?? [];
 
     const createMutation = useCreateUser();

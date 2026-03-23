@@ -66,8 +66,11 @@ export function LecturerManagement() {
     const lecturers = lecturersData?.data ?? [];
     const pagination = lecturersData?.pagination;
 
-    // Fetch majors – API tự lọc theo departmentId của dean
-    const { data: majorsData } = useMajors({ limit: 1000 });
+    // Fetch majors – CHỈ LẤY CÁC NGÀNH THUỘC KHOA CỦA DEAN
+    const { data: majorsData } = useMajors({ 
+        limit: 1000,
+        departmentId: myDepartmentId // Filter theo departmentId của Dean
+    });
     const majors = majorsData?.data ?? [];
 
     const createMutation = useCreateUser();

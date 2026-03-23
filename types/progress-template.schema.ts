@@ -37,6 +37,8 @@ export type TemplateWithItems = {
   name: string;
   description?: string | null;
   isActive: boolean;
+  createdById: string;
+  createdByRole: string;
   createdAt: Date;
   updatedAt: Date;
   items: Array<{

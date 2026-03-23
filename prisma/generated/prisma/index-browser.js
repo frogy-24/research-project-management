@@ -186,6 +186,7 @@ exports.Prisma.CallRoundScalarFieldEnum = {
   contactInfo: 'contactInfo',
   isActive: 'isActive',
   isLocked: 'isLocked',
+  applicableFor: 'applicableFor',
   approvalStatus: 'approvalStatus',
   createdById: 'createdById',
   createdByRole: 'createdByRole',
@@ -231,6 +232,8 @@ exports.Prisma.ProgressReportTemplateScalarFieldEnum = {
   name: 'name',
   description: 'description',
   isActive: 'isActive',
+  createdById: 'createdById',
+  createdByRole: 'createdByRole',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -331,6 +334,20 @@ exports.Prisma.NotificationScalarFieldEnum = {
   readAt: 'readAt'
 };
 
+exports.Prisma.CallRoundInstructorScalarFieldEnum = {
+  id: 'id',
+  callRoundId: 'callRoundId',
+  instructorId: 'instructorId',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.CallRoundCouncilMemberScalarFieldEnum = {
+  id: 'id',
+  callRoundId: 'callRoundId',
+  councilMemberId: 'councilMemberId',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -369,6 +386,12 @@ exports.Role = exports.$Enums.Role = {
   ADMIN: 'ADMIN',
   COUNCIL: 'COUNCIL',
   LEADER: 'LEADER'
+};
+
+exports.ApplicableFor = exports.$Enums.ApplicableFor = {
+  STUDENT: 'STUDENT',
+  LECTURER: 'LECTURER',
+  BOTH: 'BOTH'
 };
 
 exports.CallRoundApprovalStatus = exports.$Enums.CallRoundApprovalStatus = {
@@ -452,7 +475,9 @@ exports.Prisma.ModelName = {
   FundingDisbursement: 'FundingDisbursement',
   ExtensionRequest: 'ExtensionRequest',
   ProjectRegistration: 'ProjectRegistration',
-  Notification: 'Notification'
+  Notification: 'Notification',
+  CallRoundInstructor: 'CallRoundInstructor',
+  CallRoundCouncilMember: 'CallRoundCouncilMember'
 };
 
 /**

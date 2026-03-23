@@ -2,13 +2,11 @@
 
 import { useState } from 'react';
 import { toast } from 'sonner';
-import { useCallRounds, useCreateCallRound, useUpdateCallRound, useDeleteCallRound } from '@/hooks/useCallRounds';
+import { useCallRounds, useCreateCallRound, useUpdateCallRound, useDeleteCallRound, useApproveCallRound, useRejectCallRound } from '@/hooks/useCallRounds';
 import { useProgressTemplates } from '@/hooks/useProgressTemplates';
 import { useDepartments } from '@/hooks/useDepartments';
 import { useMajors } from '@/hooks/useMajors';
 import { useClasses } from '@/hooks/useClasses';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { approveCallRound, rejectCallRound } from '@/api/call-rounds-approval';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -34,7 +32,8 @@ export default function CallRoundsPage() {
     const createMutation = useCreateCallRound();
     const updateMutation = useUpdateCallRound();
     const deleteMutation = useDeleteCallRound();
-    const queryClient = useQueryClient();
+    const approveMutation = useApproveCallRound();
+    const rejectMutation = useRejectCallRound();
 
     const [dialogOpen, setDialogOpen] = useState(false);
     const [editingRound, setEditingRound] = useState<CallRound | null>(null);
@@ -47,34 +46,6 @@ export default function CallRoundsPage() {
     const [approvalNote, setApprovalNote] = useState('');
     const [errors, setErrors] = useState<Record<string, boolean>>({});
 
-    // Approval mutations
-    const approveMutation = useMutation({
-        mutationFn: ({ id, note }: { id: string; note?: string }) => approveCallRound(id, note),
-        onSuccess: () => {
-            toast.success('Đã phê duyệt đợt đăng ký');
-            queryClient.invalidateQueries({ queryKey: ['call-rounds'] });
-            setApprovalDialogOpen(false);
-            setSelectedRoundForAction(null);
-            setApprovalNote('');
-        },
-        onError: (error: any) => {
-            toast.error(error.response?.data?.error || 'Lỗi khi phê duyệt');
-        },
-    });
-
-    const rejectMutation = useMutation({
-        mutationFn: ({ id, note }: { id: string; note?: string }) => rejectCallRound(id, note),
-        onSuccess: () => {
-            toast.success('Đã từ chối đợt đăng ký');
-            queryClient.invalidateQueries({ queryKey: ['call-rounds'] });
-            setApprovalDialogOpen(false);
-            setSelectedRoundForAction(null);
-            setApprovalNote('');
-        },
-        onError: (error: any) => {
-            toast.error(error.response?.data?.error || 'Lỗi khi từ chối');
-        },
-    });
     const [formData, setFormData] = useState<{
         name: string;
         description: string;
@@ -400,6 +371,12 @@ export default function CallRoundsPage() {
                                                         <div className="text-xs text-muted-foreground mt-1">
                                                             {round.description.substring(0, 50)}
                                                             {round.description.length > 50 && '...'}
+                                                        </div>
+                                                    )}
+                                                    {round.creator && round.creator.role !== 'ADMIN' && (
+                                                        <div className="text-xs text-blue-600 mt-1 flex items-center gap-1">
+                                                            <Building2 className="h-3 w-3" />
+                                                            Tạo bởi: {round.creator.name} ({round.creator.department?.name || 'Khoa'})
                                                         </div>
                                                     )}
                                                 </TableCell>
@@ -982,10 +959,23 @@ export default function CallRoundsPage() {
                             variant="destructive"
                             onClick={() => {
                                 if (selectedRoundForAction) {
-                                    rejectMutation.mutate({ 
-                                        id: selectedRoundForAction.id, 
-                                        note: approvalNote || undefined 
-                                    });
+                                    rejectMutation.mutate(
+                                        { 
+                                            id: selectedRoundForAction.id, 
+                                            note: approvalNote || undefined 
+                                        },
+                                        {
+                                            onSuccess: () => {
+                                                toast.success('Đã từ chối đợt đăng ký');
+                                                setApprovalDialogOpen(false);
+                                                setSelectedRoundForAction(null);
+                                                setApprovalNote('');
+                                            },
+                                            onError: (error: any) => {
+                                                toast.error(error.response?.data?.error || 'Lỗi khi từ chối');
+                                            },
+                                        }
+                                    );
                                 }
                             }}
                             disabled={rejectMutation.isPending || approveMutation.isPending}
@@ -996,10 +986,23 @@ export default function CallRoundsPage() {
                             className="bg-emerald-600 hover:bg-emerald-700"
                             onClick={() => {
                                 if (selectedRoundForAction) {
-                                    approveMutation.mutate({ 
-                                        id: selectedRoundForAction.id, 
-                                        note: approvalNote || undefined 
-                                    });
+                                    approveMutation.mutate(
+                                        { 
+                                            id: selectedRoundForAction.id, 
+                                            note: approvalNote || undefined 
+                                        },
+                                        {
+                                            onSuccess: () => {
+                                                toast.success('Đã phê duyệt đợt đăng ký');
+                                                setApprovalDialogOpen(false);
+                                                setSelectedRoundForAction(null);
+                                                setApprovalNote('');
+                                            },
+                                            onError: (error: any) => {
+                                                toast.error(error.response?.data?.error || 'Lỗi khi phê duyệt');
+                                            },
+                                        }
+                                    );
                                 }
                             }}
                             disabled={approveMutation.isPending || rejectMutation.isPending}
