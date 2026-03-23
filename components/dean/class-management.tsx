@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { Plus, Pencil, Trash2, Search, School, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useClasses, useCreateClass, useUpdateClass, useDeleteClass } from '@/hooks/useClasses';
 import { useMajors } from '@/hooks/useMajors';
+import { classApi } from '@/api/classes';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
@@ -66,7 +67,7 @@ export function ClassManagement() {
         return pages;
     };
 
-    const handleOpenDialog = (classObj?: any) => {
+    const handleOpenDialog = async (classObj?: any) => {
         if (classObj) {
             setEditingId(classObj.id);
             setFormData({
@@ -77,6 +78,14 @@ export function ClassManagement() {
         } else {
             setEditingId(null);
             setFormData({ code: '', name: '', majorId: '' });
+            
+            // Fetch next code when creating new class
+            try {
+                const { code } = await classApi.getNextCode();
+                setFormData(prev => ({ ...prev, code }));
+            } catch (error) {
+                console.error('Error fetching next code:', error);
+            }
         }
         setIsDialogOpen(true);
     };
@@ -155,7 +164,9 @@ export function ClassManagement() {
                                     id="code"
                                     value={formData.code}
                                     onChange={(e) => setFormData({ ...formData, code: e.target.value })}
-                                    placeholder="VD: 20DTH01"
+                                    placeholder="VD: LOP001"
+                                    disabled={!editingId}
+                                    className={!editingId ? 'bg-muted' : ''}
                                     required
                                 />
                             </div>

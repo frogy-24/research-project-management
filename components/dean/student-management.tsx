@@ -7,6 +7,7 @@ import { useUsers, useCreateUser, useUpdateUser, useDeleteUser } from '@/hooks/u
 import { useClasses } from '@/hooks/useClasses';
 import { useMajors } from '@/hooks/useMajors';
 import { useMe } from '@/hooks/useMe';
+import { userApi } from '@/api/users';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
@@ -106,10 +107,18 @@ export function StudentManagement() {
         return pages;
     };
 
-    const handleOpenCreate = () => {
+    const handleOpenCreate = async () => {
         setEditingId(null);
         setFormData(defaultForm);
         setIsDialogOpen(true);
+        
+        // Fetch next code
+        try {
+            const { code } = await userApi.getNextCode('STUDENT');
+            setFormData(prev => ({ ...prev, code }));
+        } catch (error) {
+            console.error('Error fetching next code:', error);
+        }
     };
 
     const handleOpenEdit = (student: any) => {
@@ -355,7 +364,9 @@ export function StudentManagement() {
                                     id="sv-code"
                                     value={formData.code}
                                     onChange={(e) => setFormData({ ...formData, code: e.target.value })}
-                                    placeholder="VD: 20110001"
+                                    placeholder="VD: SV001"
+                                    disabled={!editingId}
+                                    className={!editingId ? 'bg-muted' : ''}
                                 />
                             </div>
                             <div className="space-y-2">

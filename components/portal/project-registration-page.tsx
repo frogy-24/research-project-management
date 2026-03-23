@@ -494,6 +494,31 @@ export function ProjectRegistrationPage({ title }: ProjectRegistrationPageProps)
                                                         </div>
                                                     </TableCell>
                                                     <TableCell>
+                                                        {item.instructor ? (
+                                                            <div className="flex flex-col gap-1">
+                                                                <span className="font-medium text-sm">{item.instructor.name}</span>
+                                                                <Badge
+                                                                    variant={
+                                                                        item.instructorStatus === 'ACCEPTED'
+                                                                            ? 'default'
+                                                                            : item.instructorStatus === 'REJECTED'
+                                                                              ? 'destructive'
+                                                                              : 'secondary'
+                                                                    }
+                                                                    className="w-fit text-xs"
+                                                                >
+                                                                    {item.instructorStatus === 'ACCEPTED'
+                                                                        ? 'Đã đồng ý'
+                                                                        : item.instructorStatus === 'REJECTED'
+                                                                          ? 'Từ chối'
+                                                                          : 'Chờ xác nhận'}
+                                                                </Badge>
+                                                            </div>
+                                                        ) : (
+                                                            <span className="text-muted-foreground text-sm">Chưa chọn</span>
+                                                        )}
+                                                    </TableCell>
+                                                    <TableCell>
                                                         <Badge variant={statusVariant[item.status] || 'default'}>
                                                             {statusLabel[item.status] ?? item.status}
                                                         </Badge>

@@ -14,7 +14,7 @@ export interface DeanLecturersResponse {
 }
 
 async function fetchDeanLecturers(): Promise<DeanLecturersResponse> {
-    const response = await api.get('/api/dean/lecturers-list');
+    const response = await api.get('/dean/lecturers-list');
     return response.data;
 }
 

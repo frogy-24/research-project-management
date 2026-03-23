@@ -57,4 +57,8 @@ export const userApi = {
   delete: async (id: string): Promise<void> => {
     await api.delete(`/users/${id}`);
   },
+  getNextCode: async (role: string): Promise<{ code: string }> => {
+    const response = await api.get<{ code: string }>(`/users/next-code?role=${role}`);
+    return response.data;
+  },
 };

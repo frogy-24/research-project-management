@@ -92,4 +92,8 @@ export const classApi = {
   delete: async (id: string): Promise<void> => {
     await api.delete(`/classes/${id}`);
   },
+  getNextCode: async (): Promise<{ code: string }> => {
+    const response = await api.get<{ code: string }>(`/classes/next-code`);
+    return response.data;
+  },
 };

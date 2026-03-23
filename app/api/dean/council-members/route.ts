@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 import { getAuthUser } from '@/lib/auth-helpers';
 
-// GET - Lấy danh sách thành viên hội đồng theo call round
+// GET - Lấy danh sách thành viên hội đồng theo call round (with pagination)
 export async function GET(request: NextRequest) {
     try {
         const session = await getAuthUser();
@@ -12,11 +12,22 @@ export async function GET(request: NextRequest) {
 
         const { searchParams } = new URL(request.url);
         const callRoundId = searchParams.get('callRoundId');
+        const page = parseInt(searchParams.get('page') || '1');
+        const limit = parseInt(searchParams.get('limit') || '10');
 
         if (!callRoundId) {
             return NextResponse.json({ error: 'callRoundId is required' }, { status: 400 });
         }
 
+        // Calculate skip
+        const skip = (page - 1) * limit;
+
+        // Get total count
+        const total = await prisma.callRoundCouncilMember.count({
+            where: { callRoundId },
+        });
+
+        // Get paginated data
         const councilMembers = await prisma.callRoundCouncilMember.findMany({
             where: { callRoundId },
             include: {
@@ -30,9 +41,22 @@ export async function GET(request: NextRequest) {
                 },
             },
             orderBy: { createdAt: 'asc' },
+            skip,
+            take: limit,
         });
 
-        return NextResponse.json({ data: councilMembers });
+        // Calculate pagination metadata
+        const totalPages = Math.ceil(total / limit);
+
+        return NextResponse.json({
+            data: councilMembers,
+            pagination: {
+                total,
+                page,
+                limit,
+                totalPages,
+            },
+        });
     } catch (error) {
         console.error('Error fetching council members:', error);
         return NextResponse.json({ error: 'Internal server error' }, { status: 500 });

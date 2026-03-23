@@ -135,6 +135,7 @@ model User {
   notifications           Notification[]
   callRoundInstructors    CallRoundInstructor[]    // Danh sách đợt đăng ký mà giảng viên được chỉ định hướng dẫn
   callRoundCouncilMembers CallRoundCouncilMember[] // Danh sách đợt đăng ký mà thành viên hội đồng được chỉ định
+  councilAssignments      CouncilMemberAssignment[] @relation("CouncilMemberAssignments") // Phân công vào các hội đồng cụ thể
 }
 
 model CallRound {
@@ -191,6 +192,7 @@ model CallRound {
   classes                Class[]                 @relation("CallRoundClasses")
   availableInstructors   CallRoundInstructor[]   // Danh sách giảng viên hướng dẫn được chỉ định cho đợt này
   availableCouncilMembers CallRoundCouncilMember[] // Danh sách thành viên hội đồng được chỉ định cho đợt này
+  councils                Council[]                 // Các hội đồng được tạo trong đợt này
 }
 
 model ProjectType {
@@ -340,7 +342,8 @@ model ProjectRegistration {
 
   facultyStatus     FacultyStatus @default(PENDING)
   facultyReviewerId String?
-  facultyReviewer   User?         @relation("FacultyReviewer", fields: [facultyReviewerId], references: [id])
+  facultyReviewer   User?                        @relation("FacultyReviewer", fields: [facultyReviewerId], references: [id])
+  councilAssignment ProjectCouncilAssignment?    // Hội đồng được phân công đánh giá đề tài này
 }
 
 enum InstructorStatus {
@@ -415,4 +418,50 @@ model CallRoundCouncilMember {
   @@unique([callRoundId, councilMemberId])
   @@index([callRoundId])
   @@index([councilMemberId])
+}
+
+// Model: Hội đồng đánh giá (được chia tự động hoặc thủ công)
+model Council {
+  id           String                      @id @default(cuid())
+  callRoundId  String
+  name         String                      // VD: "Hội đồng 1", "Hội đồng A"
+  description  String?
+  createdAt    DateTime                    @default(now())
+  updatedAt    DateTime                    @updatedAt
+  
+  callRound    CallRound                   @relation(fields: [callRoundId], references: [id], onDelete: Cascade)
+  members      CouncilMemberAssignment[]   // Thành viên của hội đồng này
+  projects     ProjectCouncilAssignment[]  // Đề tài được phân cho hội đồng này
+  
+  @@index([callRoundId])
+}
+
+// Junction table: Phân công thành viên vào hội đồng cụ thể
+model CouncilMemberAssignment {
+  id              String    @id @default(cuid())
+  councilId       String
+  councilMemberId String
+  role            String?   // VD: "Chủ tịch", "Thư ký", "Ủy viên"
+  createdAt       DateTime  @default(now())
+  
+  council         Council   @relation(fields: [councilId], references: [id], onDelete: Cascade)
+  councilMember   User      @relation("CouncilMemberAssignments", fields: [councilMemberId], references: [id], onDelete: Cascade)
+  
+  @@unique([councilId, councilMemberId])
+  @@index([councilId])
+  @@index([councilMemberId])
+}
+
+// Junction table: Phân công đề tài cho hội đồng
+model ProjectCouncilAssignment {
+  id                    String              @id @default(cuid())
+  councilId             String
+  projectRegistrationId String
+  createdAt             DateTime            @default(now())
+  
+  council               Council             @relation(fields: [councilId], references: [id], onDelete: Cascade)
+  projectRegistration   ProjectRegistration @relation(fields: [projectRegistrationId], references: [id], onDelete: Cascade)
+  
+  @@unique([projectRegistrationId]) // Mỗi đề tài chỉ thuộc 1 hội đồng
+  @@index([councilId])
 }

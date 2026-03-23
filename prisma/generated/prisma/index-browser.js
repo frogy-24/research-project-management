@@ -348,6 +348,30 @@ exports.Prisma.CallRoundCouncilMemberScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
+exports.Prisma.CouncilScalarFieldEnum = {
+  id: 'id',
+  callRoundId: 'callRoundId',
+  name: 'name',
+  description: 'description',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.CouncilMemberAssignmentScalarFieldEnum = {
+  id: 'id',
+  councilId: 'councilId',
+  councilMemberId: 'councilMemberId',
+  role: 'role',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.ProjectCouncilAssignmentScalarFieldEnum = {
+  id: 'id',
+  councilId: 'councilId',
+  projectRegistrationId: 'projectRegistrationId',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -477,7 +501,10 @@ exports.Prisma.ModelName = {
   ProjectRegistration: 'ProjectRegistration',
   Notification: 'Notification',
   CallRoundInstructor: 'CallRoundInstructor',
-  CallRoundCouncilMember: 'CallRoundCouncilMember'
+  CallRoundCouncilMember: 'CallRoundCouncilMember',
+  Council: 'Council',
+  CouncilMemberAssignment: 'CouncilMemberAssignment',
+  ProjectCouncilAssignment: 'ProjectCouncilAssignment'
 };
 
 /**

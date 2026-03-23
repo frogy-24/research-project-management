@@ -1,11 +1,12 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Search, BookUser, ChevronLeft, ChevronRight, Plus, Pencil, Trash2 } from 'lucide-react';
 import { useDebounce } from '@/hooks/useDebounce';
 import { useUsers, useCreateUser, useUpdateUser, useDeleteUser } from '@/hooks/useUsers';
 import { useMajors } from '@/hooks/useMajors';
 import { useMe } from '@/hooks/useMe';
+import { userApi } from '@/api/users';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
@@ -95,10 +96,18 @@ export function LecturerManagement() {
         return pages;
     };
 
-    const handleOpenCreate = () => {
+    const handleOpenCreate = async () => {
         setEditingId(null);
         setFormData(defaultForm);
         setIsDialogOpen(true);
+        
+        // Fetch next code
+        try {
+            const { code } = await userApi.getNextCode('LECTURER');
+            setFormData(prev => ({ ...prev, code }));
+        } catch (error) {
+            console.error('Error fetching next code:', error);
+        }
     };
 
     const handleOpenEdit = (lecturer: any) => {
@@ -341,6 +350,8 @@ export function LecturerManagement() {
                                     value={formData.code}
                                     onChange={(e) => setFormData({ ...formData, code: e.target.value })}
                                     placeholder="VD: GV001"
+                                    disabled={!editingId}
+                                    className={!editingId ? 'bg-muted' : ''}
                                 />
                             </div>
                             <div className="space-y-2">

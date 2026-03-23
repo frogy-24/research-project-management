@@ -98,6 +98,21 @@ export type CallRoundInstructor = $Result.DefaultSelection<Prisma.$CallRoundInst
  * 
  */
 export type CallRoundCouncilMember = $Result.DefaultSelection<Prisma.$CallRoundCouncilMemberPayload>
+/**
+ * Model Council
+ * 
+ */
+export type Council = $Result.DefaultSelection<Prisma.$CouncilPayload>
+/**
+ * Model CouncilMemberAssignment
+ * 
+ */
+export type CouncilMemberAssignment = $Result.DefaultSelection<Prisma.$CouncilMemberAssignmentPayload>
+/**
+ * Model ProjectCouncilAssignment
+ * 
+ */
+export type ProjectCouncilAssignment = $Result.DefaultSelection<Prisma.$ProjectCouncilAssignmentPayload>
 
 /**
  * Enums
@@ -558,6 +573,36 @@ export class PrismaClient<
     * ```
     */
   get callRoundCouncilMember(): Prisma.CallRoundCouncilMemberDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.council`: Exposes CRUD operations for the **Council** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Councils
+    * const councils = await prisma.council.findMany()
+    * ```
+    */
+  get council(): Prisma.CouncilDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.councilMemberAssignment`: Exposes CRUD operations for the **CouncilMemberAssignment** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more CouncilMemberAssignments
+    * const councilMemberAssignments = await prisma.councilMemberAssignment.findMany()
+    * ```
+    */
+  get councilMemberAssignment(): Prisma.CouncilMemberAssignmentDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.projectCouncilAssignment`: Exposes CRUD operations for the **ProjectCouncilAssignment** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ProjectCouncilAssignments
+    * const projectCouncilAssignments = await prisma.projectCouncilAssignment.findMany()
+    * ```
+    */
+  get projectCouncilAssignment(): Prisma.ProjectCouncilAssignmentDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -1008,7 +1053,10 @@ export namespace Prisma {
     ProjectRegistration: 'ProjectRegistration',
     Notification: 'Notification',
     CallRoundInstructor: 'CallRoundInstructor',
-    CallRoundCouncilMember: 'CallRoundCouncilMember'
+    CallRoundCouncilMember: 'CallRoundCouncilMember',
+    Council: 'Council',
+    CouncilMemberAssignment: 'CouncilMemberAssignment',
+    ProjectCouncilAssignment: 'ProjectCouncilAssignment'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -1024,7 +1072,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "department" | "major" | "class" | "user" | "callRound" | "projectType" | "project" | "progressReportTemplate" | "progressReportTemplateItem" | "progressReport" | "councilEvaluation" | "fundingDisbursement" | "extensionRequest" | "projectRegistration" | "notification" | "callRoundInstructor" | "callRoundCouncilMember"
+      modelProps: "department" | "major" | "class" | "user" | "callRound" | "projectType" | "project" | "progressReportTemplate" | "progressReportTemplateItem" | "progressReport" | "councilEvaluation" | "fundingDisbursement" | "extensionRequest" | "projectRegistration" | "notification" | "callRoundInstructor" | "callRoundCouncilMember" | "council" | "councilMemberAssignment" | "projectCouncilAssignment"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -2286,6 +2334,228 @@ export namespace Prisma {
           }
         }
       }
+      Council: {
+        payload: Prisma.$CouncilPayload<ExtArgs>
+        fields: Prisma.CouncilFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.CouncilFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CouncilPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.CouncilFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CouncilPayload>
+          }
+          findFirst: {
+            args: Prisma.CouncilFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CouncilPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.CouncilFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CouncilPayload>
+          }
+          findMany: {
+            args: Prisma.CouncilFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CouncilPayload>[]
+          }
+          create: {
+            args: Prisma.CouncilCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CouncilPayload>
+          }
+          createMany: {
+            args: Prisma.CouncilCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.CouncilCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CouncilPayload>[]
+          }
+          delete: {
+            args: Prisma.CouncilDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CouncilPayload>
+          }
+          update: {
+            args: Prisma.CouncilUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CouncilPayload>
+          }
+          deleteMany: {
+            args: Prisma.CouncilDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.CouncilUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.CouncilUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CouncilPayload>[]
+          }
+          upsert: {
+            args: Prisma.CouncilUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CouncilPayload>
+          }
+          aggregate: {
+            args: Prisma.CouncilAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateCouncil>
+          }
+          groupBy: {
+            args: Prisma.CouncilGroupByArgs<ExtArgs>
+            result: $Utils.Optional<CouncilGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.CouncilCountArgs<ExtArgs>
+            result: $Utils.Optional<CouncilCountAggregateOutputType> | number
+          }
+        }
+      }
+      CouncilMemberAssignment: {
+        payload: Prisma.$CouncilMemberAssignmentPayload<ExtArgs>
+        fields: Prisma.CouncilMemberAssignmentFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.CouncilMemberAssignmentFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CouncilMemberAssignmentPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.CouncilMemberAssignmentFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CouncilMemberAssignmentPayload>
+          }
+          findFirst: {
+            args: Prisma.CouncilMemberAssignmentFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CouncilMemberAssignmentPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.CouncilMemberAssignmentFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CouncilMemberAssignmentPayload>
+          }
+          findMany: {
+            args: Prisma.CouncilMemberAssignmentFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CouncilMemberAssignmentPayload>[]
+          }
+          create: {
+            args: Prisma.CouncilMemberAssignmentCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CouncilMemberAssignmentPayload>
+          }
+          createMany: {
+            args: Prisma.CouncilMemberAssignmentCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.CouncilMemberAssignmentCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CouncilMemberAssignmentPayload>[]
+          }
+          delete: {
+            args: Prisma.CouncilMemberAssignmentDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CouncilMemberAssignmentPayload>
+          }
+          update: {
+            args: Prisma.CouncilMemberAssignmentUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CouncilMemberAssignmentPayload>
+          }
+          deleteMany: {
+            args: Prisma.CouncilMemberAssignmentDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.CouncilMemberAssignmentUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.CouncilMemberAssignmentUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CouncilMemberAssignmentPayload>[]
+          }
+          upsert: {
+            args: Prisma.CouncilMemberAssignmentUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CouncilMemberAssignmentPayload>
+          }
+          aggregate: {
+            args: Prisma.CouncilMemberAssignmentAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateCouncilMemberAssignment>
+          }
+          groupBy: {
+            args: Prisma.CouncilMemberAssignmentGroupByArgs<ExtArgs>
+            result: $Utils.Optional<CouncilMemberAssignmentGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.CouncilMemberAssignmentCountArgs<ExtArgs>
+            result: $Utils.Optional<CouncilMemberAssignmentCountAggregateOutputType> | number
+          }
+        }
+      }
+      ProjectCouncilAssignment: {
+        payload: Prisma.$ProjectCouncilAssignmentPayload<ExtArgs>
+        fields: Prisma.ProjectCouncilAssignmentFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ProjectCouncilAssignmentFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProjectCouncilAssignmentPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ProjectCouncilAssignmentFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProjectCouncilAssignmentPayload>
+          }
+          findFirst: {
+            args: Prisma.ProjectCouncilAssignmentFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProjectCouncilAssignmentPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ProjectCouncilAssignmentFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProjectCouncilAssignmentPayload>
+          }
+          findMany: {
+            args: Prisma.ProjectCouncilAssignmentFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProjectCouncilAssignmentPayload>[]
+          }
+          create: {
+            args: Prisma.ProjectCouncilAssignmentCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProjectCouncilAssignmentPayload>
+          }
+          createMany: {
+            args: Prisma.ProjectCouncilAssignmentCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ProjectCouncilAssignmentCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProjectCouncilAssignmentPayload>[]
+          }
+          delete: {
+            args: Prisma.ProjectCouncilAssignmentDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProjectCouncilAssignmentPayload>
+          }
+          update: {
+            args: Prisma.ProjectCouncilAssignmentUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProjectCouncilAssignmentPayload>
+          }
+          deleteMany: {
+            args: Prisma.ProjectCouncilAssignmentDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ProjectCouncilAssignmentUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.ProjectCouncilAssignmentUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProjectCouncilAssignmentPayload>[]
+          }
+          upsert: {
+            args: Prisma.ProjectCouncilAssignmentUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProjectCouncilAssignmentPayload>
+          }
+          aggregate: {
+            args: Prisma.ProjectCouncilAssignmentAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateProjectCouncilAssignment>
+          }
+          groupBy: {
+            args: Prisma.ProjectCouncilAssignmentGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ProjectCouncilAssignmentGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ProjectCouncilAssignmentCountArgs<ExtArgs>
+            result: $Utils.Optional<ProjectCouncilAssignmentCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -2411,6 +2681,9 @@ export namespace Prisma {
     notification?: NotificationOmit
     callRoundInstructor?: CallRoundInstructorOmit
     callRoundCouncilMember?: CallRoundCouncilMemberOmit
+    council?: CouncilOmit
+    councilMemberAssignment?: CouncilMemberAssignmentOmit
+    projectCouncilAssignment?: ProjectCouncilAssignmentOmit
   }
 
   /* Types for Logging */
@@ -2639,6 +2912,7 @@ export namespace Prisma {
     notifications: number
     callRoundInstructors: number
     callRoundCouncilMembers: number
+    councilAssignments: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2652,6 +2926,7 @@ export namespace Prisma {
     notifications?: boolean | UserCountOutputTypeCountNotificationsArgs
     callRoundInstructors?: boolean | UserCountOutputTypeCountCallRoundInstructorsArgs
     callRoundCouncilMembers?: boolean | UserCountOutputTypeCountCallRoundCouncilMembersArgs
+    councilAssignments?: boolean | UserCountOutputTypeCountCouncilAssignmentsArgs
   }
 
   // Custom InputTypes
@@ -2735,6 +3010,13 @@ export namespace Prisma {
     where?: CallRoundCouncilMemberWhereInput
   }
 
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountCouncilAssignmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CouncilMemberAssignmentWhereInput
+  }
+
 
   /**
    * Count Type CallRoundCountOutputType
@@ -2748,6 +3030,7 @@ export namespace Prisma {
     classes: number
     availableInstructors: number
     availableCouncilMembers: number
+    councils: number
   }
 
   export type CallRoundCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2758,6 +3041,7 @@ export namespace Prisma {
     classes?: boolean | CallRoundCountOutputTypeCountClassesArgs
     availableInstructors?: boolean | CallRoundCountOutputTypeCountAvailableInstructorsArgs
     availableCouncilMembers?: boolean | CallRoundCountOutputTypeCountAvailableCouncilMembersArgs
+    councils?: boolean | CallRoundCountOutputTypeCountCouncilsArgs
   }
 
   // Custom InputTypes
@@ -2818,6 +3102,13 @@ export namespace Prisma {
    */
   export type CallRoundCountOutputTypeCountAvailableCouncilMembersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: CallRoundCouncilMemberWhereInput
+  }
+
+  /**
+   * CallRoundCountOutputType without action
+   */
+  export type CallRoundCountOutputTypeCountCouncilsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CouncilWhereInput
   }
 
 
@@ -2947,6 +3238,46 @@ export namespace Prisma {
    */
   export type ProgressReportTemplateCountOutputTypeCountCallRoundsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: CallRoundWhereInput
+  }
+
+
+  /**
+   * Count Type CouncilCountOutputType
+   */
+
+  export type CouncilCountOutputType = {
+    members: number
+    projects: number
+  }
+
+  export type CouncilCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    members?: boolean | CouncilCountOutputTypeCountMembersArgs
+    projects?: boolean | CouncilCountOutputTypeCountProjectsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * CouncilCountOutputType without action
+   */
+  export type CouncilCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CouncilCountOutputType
+     */
+    select?: CouncilCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * CouncilCountOutputType without action
+   */
+  export type CouncilCountOutputTypeCountMembersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CouncilMemberAssignmentWhereInput
+  }
+
+  /**
+   * CouncilCountOutputType without action
+   */
+  export type CouncilCountOutputTypeCountProjectsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ProjectCouncilAssignmentWhereInput
   }
 
 
@@ -6672,6 +7003,7 @@ export namespace Prisma {
     notifications?: boolean | User$notificationsArgs<ExtArgs>
     callRoundInstructors?: boolean | User$callRoundInstructorsArgs<ExtArgs>
     callRoundCouncilMembers?: boolean | User$callRoundCouncilMembersArgs<ExtArgs>
+    councilAssignments?: boolean | User$councilAssignmentsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -6753,6 +7085,7 @@ export namespace Prisma {
     notifications?: boolean | User$notificationsArgs<ExtArgs>
     callRoundInstructors?: boolean | User$callRoundInstructorsArgs<ExtArgs>
     callRoundCouncilMembers?: boolean | User$callRoundCouncilMembersArgs<ExtArgs>
+    councilAssignments?: boolean | User$councilAssignmentsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -6782,6 +7115,7 @@ export namespace Prisma {
       notifications: Prisma.$NotificationPayload<ExtArgs>[]
       callRoundInstructors: Prisma.$CallRoundInstructorPayload<ExtArgs>[]
       callRoundCouncilMembers: Prisma.$CallRoundCouncilMemberPayload<ExtArgs>[]
+      councilAssignments: Prisma.$CouncilMemberAssignmentPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -7207,6 +7541,7 @@ export namespace Prisma {
     notifications<T extends User$notificationsArgs<ExtArgs> = {}>(args?: Subset<T, User$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     callRoundInstructors<T extends User$callRoundInstructorsArgs<ExtArgs> = {}>(args?: Subset<T, User$callRoundInstructorsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CallRoundInstructorPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     callRoundCouncilMembers<T extends User$callRoundCouncilMembersArgs<ExtArgs> = {}>(args?: Subset<T, User$callRoundCouncilMembersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CallRoundCouncilMemberPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    councilAssignments<T extends User$councilAssignmentsArgs<ExtArgs> = {}>(args?: Subset<T, User$councilAssignmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CouncilMemberAssignmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -7950,6 +8285,30 @@ export namespace Prisma {
   }
 
   /**
+   * User.councilAssignments
+   */
+  export type User$councilAssignmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CouncilMemberAssignment
+     */
+    select?: CouncilMemberAssignmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CouncilMemberAssignment
+     */
+    omit?: CouncilMemberAssignmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CouncilMemberAssignmentInclude<ExtArgs> | null
+    where?: CouncilMemberAssignmentWhereInput
+    orderBy?: CouncilMemberAssignmentOrderByWithRelationInput | CouncilMemberAssignmentOrderByWithRelationInput[]
+    cursor?: CouncilMemberAssignmentWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: CouncilMemberAssignmentScalarFieldEnum | CouncilMemberAssignmentScalarFieldEnum[]
+  }
+
+  /**
    * User without action
    */
   export type UserDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -8362,6 +8721,7 @@ export namespace Prisma {
     classes?: boolean | CallRound$classesArgs<ExtArgs>
     availableInstructors?: boolean | CallRound$availableInstructorsArgs<ExtArgs>
     availableCouncilMembers?: boolean | CallRound$availableCouncilMembersArgs<ExtArgs>
+    councils?: boolean | CallRound$councilsArgs<ExtArgs>
     _count?: boolean | CallRoundCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["callRound"]>
 
@@ -8470,6 +8830,7 @@ export namespace Prisma {
     classes?: boolean | CallRound$classesArgs<ExtArgs>
     availableInstructors?: boolean | CallRound$availableInstructorsArgs<ExtArgs>
     availableCouncilMembers?: boolean | CallRound$availableCouncilMembersArgs<ExtArgs>
+    councils?: boolean | CallRound$councilsArgs<ExtArgs>
     _count?: boolean | CallRoundCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type CallRoundIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -8490,6 +8851,7 @@ export namespace Prisma {
       classes: Prisma.$ClassPayload<ExtArgs>[]
       availableInstructors: Prisma.$CallRoundInstructorPayload<ExtArgs>[]
       availableCouncilMembers: Prisma.$CallRoundCouncilMemberPayload<ExtArgs>[]
+      councils: Prisma.$CouncilPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -8922,6 +9284,7 @@ export namespace Prisma {
     classes<T extends CallRound$classesArgs<ExtArgs> = {}>(args?: Subset<T, CallRound$classesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClassPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     availableInstructors<T extends CallRound$availableInstructorsArgs<ExtArgs> = {}>(args?: Subset<T, CallRound$availableInstructorsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CallRoundInstructorPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     availableCouncilMembers<T extends CallRound$availableCouncilMembersArgs<ExtArgs> = {}>(args?: Subset<T, CallRound$availableCouncilMembersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CallRoundCouncilMemberPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    councils<T extends CallRound$councilsArgs<ExtArgs> = {}>(args?: Subset<T, CallRound$councilsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CouncilPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -9564,6 +9927,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: CallRoundCouncilMemberScalarFieldEnum | CallRoundCouncilMemberScalarFieldEnum[]
+  }
+
+  /**
+   * CallRound.councils
+   */
+  export type CallRound$councilsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Council
+     */
+    select?: CouncilSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Council
+     */
+    omit?: CouncilOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CouncilInclude<ExtArgs> | null
+    where?: CouncilWhereInput
+    orderBy?: CouncilOrderByWithRelationInput | CouncilOrderByWithRelationInput[]
+    cursor?: CouncilWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: CouncilScalarFieldEnum | CouncilScalarFieldEnum[]
   }
 
   /**
@@ -19411,6 +19798,7 @@ export namespace Prisma {
     instructor?: boolean | ProjectRegistration$instructorArgs<ExtArgs>
     callRound?: boolean | ProjectRegistration$callRoundArgs<ExtArgs>
     facultyReviewer?: boolean | ProjectRegistration$facultyReviewerArgs<ExtArgs>
+    councilAssignment?: boolean | ProjectRegistration$councilAssignmentArgs<ExtArgs>
   }, ExtArgs["result"]["projectRegistration"]>
 
   export type ProjectRegistrationSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -19478,6 +19866,7 @@ export namespace Prisma {
     instructor?: boolean | ProjectRegistration$instructorArgs<ExtArgs>
     callRound?: boolean | ProjectRegistration$callRoundArgs<ExtArgs>
     facultyReviewer?: boolean | ProjectRegistration$facultyReviewerArgs<ExtArgs>
+    councilAssignment?: boolean | ProjectRegistration$councilAssignmentArgs<ExtArgs>
   }
   export type ProjectRegistrationIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -19499,6 +19888,7 @@ export namespace Prisma {
       instructor: Prisma.$UserPayload<ExtArgs> | null
       callRound: Prisma.$CallRoundPayload<ExtArgs> | null
       facultyReviewer: Prisma.$UserPayload<ExtArgs> | null
+      councilAssignment: Prisma.$ProjectCouncilAssignmentPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -19913,6 +20303,7 @@ export namespace Prisma {
     instructor<T extends ProjectRegistration$instructorArgs<ExtArgs> = {}>(args?: Subset<T, ProjectRegistration$instructorArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     callRound<T extends ProjectRegistration$callRoundArgs<ExtArgs> = {}>(args?: Subset<T, ProjectRegistration$callRoundArgs<ExtArgs>>): Prisma__CallRoundClient<$Result.GetResult<Prisma.$CallRoundPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     facultyReviewer<T extends ProjectRegistration$facultyReviewerArgs<ExtArgs> = {}>(args?: Subset<T, ProjectRegistration$facultyReviewerArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    councilAssignment<T extends ProjectRegistration$councilAssignmentArgs<ExtArgs> = {}>(args?: Subset<T, ProjectRegistration$councilAssignmentArgs<ExtArgs>>): Prisma__ProjectCouncilAssignmentClient<$Result.GetResult<Prisma.$ProjectCouncilAssignmentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -20411,6 +20802,25 @@ export namespace Prisma {
      */
     include?: UserInclude<ExtArgs> | null
     where?: UserWhereInput
+  }
+
+  /**
+   * ProjectRegistration.councilAssignment
+   */
+  export type ProjectRegistration$councilAssignmentArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProjectCouncilAssignment
+     */
+    select?: ProjectCouncilAssignmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProjectCouncilAssignment
+     */
+    omit?: ProjectCouncilAssignmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProjectCouncilAssignmentInclude<ExtArgs> | null
+    where?: ProjectCouncilAssignmentWhereInput
   }
 
   /**
@@ -23673,6 +24083,3269 @@ export namespace Prisma {
 
 
   /**
+   * Model Council
+   */
+
+  export type AggregateCouncil = {
+    _count: CouncilCountAggregateOutputType | null
+    _min: CouncilMinAggregateOutputType | null
+    _max: CouncilMaxAggregateOutputType | null
+  }
+
+  export type CouncilMinAggregateOutputType = {
+    id: string | null
+    callRoundId: string | null
+    name: string | null
+    description: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type CouncilMaxAggregateOutputType = {
+    id: string | null
+    callRoundId: string | null
+    name: string | null
+    description: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type CouncilCountAggregateOutputType = {
+    id: number
+    callRoundId: number
+    name: number
+    description: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type CouncilMinAggregateInputType = {
+    id?: true
+    callRoundId?: true
+    name?: true
+    description?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type CouncilMaxAggregateInputType = {
+    id?: true
+    callRoundId?: true
+    name?: true
+    description?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type CouncilCountAggregateInputType = {
+    id?: true
+    callRoundId?: true
+    name?: true
+    description?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type CouncilAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Council to aggregate.
+     */
+    where?: CouncilWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Councils to fetch.
+     */
+    orderBy?: CouncilOrderByWithRelationInput | CouncilOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: CouncilWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Councils from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Councils.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Councils
+    **/
+    _count?: true | CouncilCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: CouncilMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: CouncilMaxAggregateInputType
+  }
+
+  export type GetCouncilAggregateType<T extends CouncilAggregateArgs> = {
+        [P in keyof T & keyof AggregateCouncil]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateCouncil[P]>
+      : GetScalarType<T[P], AggregateCouncil[P]>
+  }
+
+
+
+
+  export type CouncilGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CouncilWhereInput
+    orderBy?: CouncilOrderByWithAggregationInput | CouncilOrderByWithAggregationInput[]
+    by: CouncilScalarFieldEnum[] | CouncilScalarFieldEnum
+    having?: CouncilScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: CouncilCountAggregateInputType | true
+    _min?: CouncilMinAggregateInputType
+    _max?: CouncilMaxAggregateInputType
+  }
+
+  export type CouncilGroupByOutputType = {
+    id: string
+    callRoundId: string
+    name: string
+    description: string | null
+    createdAt: Date
+    updatedAt: Date
+    _count: CouncilCountAggregateOutputType | null
+    _min: CouncilMinAggregateOutputType | null
+    _max: CouncilMaxAggregateOutputType | null
+  }
+
+  type GetCouncilGroupByPayload<T extends CouncilGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<CouncilGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof CouncilGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], CouncilGroupByOutputType[P]>
+            : GetScalarType<T[P], CouncilGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type CouncilSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    callRoundId?: boolean
+    name?: boolean
+    description?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    callRound?: boolean | CallRoundDefaultArgs<ExtArgs>
+    members?: boolean | Council$membersArgs<ExtArgs>
+    projects?: boolean | Council$projectsArgs<ExtArgs>
+    _count?: boolean | CouncilCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["council"]>
+
+  export type CouncilSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    callRoundId?: boolean
+    name?: boolean
+    description?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    callRound?: boolean | CallRoundDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["council"]>
+
+  export type CouncilSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    callRoundId?: boolean
+    name?: boolean
+    description?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    callRound?: boolean | CallRoundDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["council"]>
+
+  export type CouncilSelectScalar = {
+    id?: boolean
+    callRoundId?: boolean
+    name?: boolean
+    description?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type CouncilOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "callRoundId" | "name" | "description" | "createdAt" | "updatedAt", ExtArgs["result"]["council"]>
+  export type CouncilInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    callRound?: boolean | CallRoundDefaultArgs<ExtArgs>
+    members?: boolean | Council$membersArgs<ExtArgs>
+    projects?: boolean | Council$projectsArgs<ExtArgs>
+    _count?: boolean | CouncilCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type CouncilIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    callRound?: boolean | CallRoundDefaultArgs<ExtArgs>
+  }
+  export type CouncilIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    callRound?: boolean | CallRoundDefaultArgs<ExtArgs>
+  }
+
+  export type $CouncilPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Council"
+    objects: {
+      callRound: Prisma.$CallRoundPayload<ExtArgs>
+      members: Prisma.$CouncilMemberAssignmentPayload<ExtArgs>[]
+      projects: Prisma.$ProjectCouncilAssignmentPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      callRoundId: string
+      name: string
+      description: string | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["council"]>
+    composites: {}
+  }
+
+  type CouncilGetPayload<S extends boolean | null | undefined | CouncilDefaultArgs> = $Result.GetResult<Prisma.$CouncilPayload, S>
+
+  type CouncilCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<CouncilFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: CouncilCountAggregateInputType | true
+    }
+
+  export interface CouncilDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Council'], meta: { name: 'Council' } }
+    /**
+     * Find zero or one Council that matches the filter.
+     * @param {CouncilFindUniqueArgs} args - Arguments to find a Council
+     * @example
+     * // Get one Council
+     * const council = await prisma.council.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends CouncilFindUniqueArgs>(args: SelectSubset<T, CouncilFindUniqueArgs<ExtArgs>>): Prisma__CouncilClient<$Result.GetResult<Prisma.$CouncilPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Council that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {CouncilFindUniqueOrThrowArgs} args - Arguments to find a Council
+     * @example
+     * // Get one Council
+     * const council = await prisma.council.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends CouncilFindUniqueOrThrowArgs>(args: SelectSubset<T, CouncilFindUniqueOrThrowArgs<ExtArgs>>): Prisma__CouncilClient<$Result.GetResult<Prisma.$CouncilPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Council that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CouncilFindFirstArgs} args - Arguments to find a Council
+     * @example
+     * // Get one Council
+     * const council = await prisma.council.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends CouncilFindFirstArgs>(args?: SelectSubset<T, CouncilFindFirstArgs<ExtArgs>>): Prisma__CouncilClient<$Result.GetResult<Prisma.$CouncilPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Council that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CouncilFindFirstOrThrowArgs} args - Arguments to find a Council
+     * @example
+     * // Get one Council
+     * const council = await prisma.council.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends CouncilFindFirstOrThrowArgs>(args?: SelectSubset<T, CouncilFindFirstOrThrowArgs<ExtArgs>>): Prisma__CouncilClient<$Result.GetResult<Prisma.$CouncilPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Councils that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CouncilFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Councils
+     * const councils = await prisma.council.findMany()
+     * 
+     * // Get first 10 Councils
+     * const councils = await prisma.council.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const councilWithIdOnly = await prisma.council.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends CouncilFindManyArgs>(args?: SelectSubset<T, CouncilFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CouncilPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Council.
+     * @param {CouncilCreateArgs} args - Arguments to create a Council.
+     * @example
+     * // Create one Council
+     * const Council = await prisma.council.create({
+     *   data: {
+     *     // ... data to create a Council
+     *   }
+     * })
+     * 
+     */
+    create<T extends CouncilCreateArgs>(args: SelectSubset<T, CouncilCreateArgs<ExtArgs>>): Prisma__CouncilClient<$Result.GetResult<Prisma.$CouncilPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Councils.
+     * @param {CouncilCreateManyArgs} args - Arguments to create many Councils.
+     * @example
+     * // Create many Councils
+     * const council = await prisma.council.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends CouncilCreateManyArgs>(args?: SelectSubset<T, CouncilCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Councils and returns the data saved in the database.
+     * @param {CouncilCreateManyAndReturnArgs} args - Arguments to create many Councils.
+     * @example
+     * // Create many Councils
+     * const council = await prisma.council.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Councils and only return the `id`
+     * const councilWithIdOnly = await prisma.council.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends CouncilCreateManyAndReturnArgs>(args?: SelectSubset<T, CouncilCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CouncilPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Council.
+     * @param {CouncilDeleteArgs} args - Arguments to delete one Council.
+     * @example
+     * // Delete one Council
+     * const Council = await prisma.council.delete({
+     *   where: {
+     *     // ... filter to delete one Council
+     *   }
+     * })
+     * 
+     */
+    delete<T extends CouncilDeleteArgs>(args: SelectSubset<T, CouncilDeleteArgs<ExtArgs>>): Prisma__CouncilClient<$Result.GetResult<Prisma.$CouncilPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Council.
+     * @param {CouncilUpdateArgs} args - Arguments to update one Council.
+     * @example
+     * // Update one Council
+     * const council = await prisma.council.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends CouncilUpdateArgs>(args: SelectSubset<T, CouncilUpdateArgs<ExtArgs>>): Prisma__CouncilClient<$Result.GetResult<Prisma.$CouncilPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Councils.
+     * @param {CouncilDeleteManyArgs} args - Arguments to filter Councils to delete.
+     * @example
+     * // Delete a few Councils
+     * const { count } = await prisma.council.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends CouncilDeleteManyArgs>(args?: SelectSubset<T, CouncilDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Councils.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CouncilUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Councils
+     * const council = await prisma.council.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends CouncilUpdateManyArgs>(args: SelectSubset<T, CouncilUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Councils and returns the data updated in the database.
+     * @param {CouncilUpdateManyAndReturnArgs} args - Arguments to update many Councils.
+     * @example
+     * // Update many Councils
+     * const council = await prisma.council.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Councils and only return the `id`
+     * const councilWithIdOnly = await prisma.council.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends CouncilUpdateManyAndReturnArgs>(args: SelectSubset<T, CouncilUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CouncilPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Council.
+     * @param {CouncilUpsertArgs} args - Arguments to update or create a Council.
+     * @example
+     * // Update or create a Council
+     * const council = await prisma.council.upsert({
+     *   create: {
+     *     // ... data to create a Council
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Council we want to update
+     *   }
+     * })
+     */
+    upsert<T extends CouncilUpsertArgs>(args: SelectSubset<T, CouncilUpsertArgs<ExtArgs>>): Prisma__CouncilClient<$Result.GetResult<Prisma.$CouncilPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Councils.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CouncilCountArgs} args - Arguments to filter Councils to count.
+     * @example
+     * // Count the number of Councils
+     * const count = await prisma.council.count({
+     *   where: {
+     *     // ... the filter for the Councils we want to count
+     *   }
+     * })
+    **/
+    count<T extends CouncilCountArgs>(
+      args?: Subset<T, CouncilCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], CouncilCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Council.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CouncilAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends CouncilAggregateArgs>(args: Subset<T, CouncilAggregateArgs>): Prisma.PrismaPromise<GetCouncilAggregateType<T>>
+
+    /**
+     * Group by Council.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CouncilGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends CouncilGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: CouncilGroupByArgs['orderBy'] }
+        : { orderBy?: CouncilGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, CouncilGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetCouncilGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Council model
+   */
+  readonly fields: CouncilFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Council.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__CouncilClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    callRound<T extends CallRoundDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CallRoundDefaultArgs<ExtArgs>>): Prisma__CallRoundClient<$Result.GetResult<Prisma.$CallRoundPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    members<T extends Council$membersArgs<ExtArgs> = {}>(args?: Subset<T, Council$membersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CouncilMemberAssignmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    projects<T extends Council$projectsArgs<ExtArgs> = {}>(args?: Subset<T, Council$projectsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProjectCouncilAssignmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Council model
+   */
+  interface CouncilFieldRefs {
+    readonly id: FieldRef<"Council", 'String'>
+    readonly callRoundId: FieldRef<"Council", 'String'>
+    readonly name: FieldRef<"Council", 'String'>
+    readonly description: FieldRef<"Council", 'String'>
+    readonly createdAt: FieldRef<"Council", 'DateTime'>
+    readonly updatedAt: FieldRef<"Council", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Council findUnique
+   */
+  export type CouncilFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Council
+     */
+    select?: CouncilSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Council
+     */
+    omit?: CouncilOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CouncilInclude<ExtArgs> | null
+    /**
+     * Filter, which Council to fetch.
+     */
+    where: CouncilWhereUniqueInput
+  }
+
+  /**
+   * Council findUniqueOrThrow
+   */
+  export type CouncilFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Council
+     */
+    select?: CouncilSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Council
+     */
+    omit?: CouncilOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CouncilInclude<ExtArgs> | null
+    /**
+     * Filter, which Council to fetch.
+     */
+    where: CouncilWhereUniqueInput
+  }
+
+  /**
+   * Council findFirst
+   */
+  export type CouncilFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Council
+     */
+    select?: CouncilSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Council
+     */
+    omit?: CouncilOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CouncilInclude<ExtArgs> | null
+    /**
+     * Filter, which Council to fetch.
+     */
+    where?: CouncilWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Councils to fetch.
+     */
+    orderBy?: CouncilOrderByWithRelationInput | CouncilOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Councils.
+     */
+    cursor?: CouncilWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Councils from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Councils.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Councils.
+     */
+    distinct?: CouncilScalarFieldEnum | CouncilScalarFieldEnum[]
+  }
+
+  /**
+   * Council findFirstOrThrow
+   */
+  export type CouncilFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Council
+     */
+    select?: CouncilSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Council
+     */
+    omit?: CouncilOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CouncilInclude<ExtArgs> | null
+    /**
+     * Filter, which Council to fetch.
+     */
+    where?: CouncilWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Councils to fetch.
+     */
+    orderBy?: CouncilOrderByWithRelationInput | CouncilOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Councils.
+     */
+    cursor?: CouncilWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Councils from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Councils.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Councils.
+     */
+    distinct?: CouncilScalarFieldEnum | CouncilScalarFieldEnum[]
+  }
+
+  /**
+   * Council findMany
+   */
+  export type CouncilFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Council
+     */
+    select?: CouncilSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Council
+     */
+    omit?: CouncilOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CouncilInclude<ExtArgs> | null
+    /**
+     * Filter, which Councils to fetch.
+     */
+    where?: CouncilWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Councils to fetch.
+     */
+    orderBy?: CouncilOrderByWithRelationInput | CouncilOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Councils.
+     */
+    cursor?: CouncilWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Councils from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Councils.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Councils.
+     */
+    distinct?: CouncilScalarFieldEnum | CouncilScalarFieldEnum[]
+  }
+
+  /**
+   * Council create
+   */
+  export type CouncilCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Council
+     */
+    select?: CouncilSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Council
+     */
+    omit?: CouncilOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CouncilInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Council.
+     */
+    data: XOR<CouncilCreateInput, CouncilUncheckedCreateInput>
+  }
+
+  /**
+   * Council createMany
+   */
+  export type CouncilCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Councils.
+     */
+    data: CouncilCreateManyInput | CouncilCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Council createManyAndReturn
+   */
+  export type CouncilCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Council
+     */
+    select?: CouncilSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Council
+     */
+    omit?: CouncilOmit<ExtArgs> | null
+    /**
+     * The data used to create many Councils.
+     */
+    data: CouncilCreateManyInput | CouncilCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CouncilIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Council update
+   */
+  export type CouncilUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Council
+     */
+    select?: CouncilSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Council
+     */
+    omit?: CouncilOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CouncilInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Council.
+     */
+    data: XOR<CouncilUpdateInput, CouncilUncheckedUpdateInput>
+    /**
+     * Choose, which Council to update.
+     */
+    where: CouncilWhereUniqueInput
+  }
+
+  /**
+   * Council updateMany
+   */
+  export type CouncilUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Councils.
+     */
+    data: XOR<CouncilUpdateManyMutationInput, CouncilUncheckedUpdateManyInput>
+    /**
+     * Filter which Councils to update
+     */
+    where?: CouncilWhereInput
+    /**
+     * Limit how many Councils to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Council updateManyAndReturn
+   */
+  export type CouncilUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Council
+     */
+    select?: CouncilSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Council
+     */
+    omit?: CouncilOmit<ExtArgs> | null
+    /**
+     * The data used to update Councils.
+     */
+    data: XOR<CouncilUpdateManyMutationInput, CouncilUncheckedUpdateManyInput>
+    /**
+     * Filter which Councils to update
+     */
+    where?: CouncilWhereInput
+    /**
+     * Limit how many Councils to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CouncilIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Council upsert
+   */
+  export type CouncilUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Council
+     */
+    select?: CouncilSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Council
+     */
+    omit?: CouncilOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CouncilInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Council to update in case it exists.
+     */
+    where: CouncilWhereUniqueInput
+    /**
+     * In case the Council found by the `where` argument doesn't exist, create a new Council with this data.
+     */
+    create: XOR<CouncilCreateInput, CouncilUncheckedCreateInput>
+    /**
+     * In case the Council was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<CouncilUpdateInput, CouncilUncheckedUpdateInput>
+  }
+
+  /**
+   * Council delete
+   */
+  export type CouncilDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Council
+     */
+    select?: CouncilSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Council
+     */
+    omit?: CouncilOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CouncilInclude<ExtArgs> | null
+    /**
+     * Filter which Council to delete.
+     */
+    where: CouncilWhereUniqueInput
+  }
+
+  /**
+   * Council deleteMany
+   */
+  export type CouncilDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Councils to delete
+     */
+    where?: CouncilWhereInput
+    /**
+     * Limit how many Councils to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Council.members
+   */
+  export type Council$membersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CouncilMemberAssignment
+     */
+    select?: CouncilMemberAssignmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CouncilMemberAssignment
+     */
+    omit?: CouncilMemberAssignmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CouncilMemberAssignmentInclude<ExtArgs> | null
+    where?: CouncilMemberAssignmentWhereInput
+    orderBy?: CouncilMemberAssignmentOrderByWithRelationInput | CouncilMemberAssignmentOrderByWithRelationInput[]
+    cursor?: CouncilMemberAssignmentWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: CouncilMemberAssignmentScalarFieldEnum | CouncilMemberAssignmentScalarFieldEnum[]
+  }
+
+  /**
+   * Council.projects
+   */
+  export type Council$projectsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProjectCouncilAssignment
+     */
+    select?: ProjectCouncilAssignmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProjectCouncilAssignment
+     */
+    omit?: ProjectCouncilAssignmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProjectCouncilAssignmentInclude<ExtArgs> | null
+    where?: ProjectCouncilAssignmentWhereInput
+    orderBy?: ProjectCouncilAssignmentOrderByWithRelationInput | ProjectCouncilAssignmentOrderByWithRelationInput[]
+    cursor?: ProjectCouncilAssignmentWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ProjectCouncilAssignmentScalarFieldEnum | ProjectCouncilAssignmentScalarFieldEnum[]
+  }
+
+  /**
+   * Council without action
+   */
+  export type CouncilDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Council
+     */
+    select?: CouncilSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Council
+     */
+    omit?: CouncilOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CouncilInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model CouncilMemberAssignment
+   */
+
+  export type AggregateCouncilMemberAssignment = {
+    _count: CouncilMemberAssignmentCountAggregateOutputType | null
+    _min: CouncilMemberAssignmentMinAggregateOutputType | null
+    _max: CouncilMemberAssignmentMaxAggregateOutputType | null
+  }
+
+  export type CouncilMemberAssignmentMinAggregateOutputType = {
+    id: string | null
+    councilId: string | null
+    councilMemberId: string | null
+    role: string | null
+    createdAt: Date | null
+  }
+
+  export type CouncilMemberAssignmentMaxAggregateOutputType = {
+    id: string | null
+    councilId: string | null
+    councilMemberId: string | null
+    role: string | null
+    createdAt: Date | null
+  }
+
+  export type CouncilMemberAssignmentCountAggregateOutputType = {
+    id: number
+    councilId: number
+    councilMemberId: number
+    role: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type CouncilMemberAssignmentMinAggregateInputType = {
+    id?: true
+    councilId?: true
+    councilMemberId?: true
+    role?: true
+    createdAt?: true
+  }
+
+  export type CouncilMemberAssignmentMaxAggregateInputType = {
+    id?: true
+    councilId?: true
+    councilMemberId?: true
+    role?: true
+    createdAt?: true
+  }
+
+  export type CouncilMemberAssignmentCountAggregateInputType = {
+    id?: true
+    councilId?: true
+    councilMemberId?: true
+    role?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type CouncilMemberAssignmentAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which CouncilMemberAssignment to aggregate.
+     */
+    where?: CouncilMemberAssignmentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CouncilMemberAssignments to fetch.
+     */
+    orderBy?: CouncilMemberAssignmentOrderByWithRelationInput | CouncilMemberAssignmentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: CouncilMemberAssignmentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CouncilMemberAssignments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CouncilMemberAssignments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned CouncilMemberAssignments
+    **/
+    _count?: true | CouncilMemberAssignmentCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: CouncilMemberAssignmentMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: CouncilMemberAssignmentMaxAggregateInputType
+  }
+
+  export type GetCouncilMemberAssignmentAggregateType<T extends CouncilMemberAssignmentAggregateArgs> = {
+        [P in keyof T & keyof AggregateCouncilMemberAssignment]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateCouncilMemberAssignment[P]>
+      : GetScalarType<T[P], AggregateCouncilMemberAssignment[P]>
+  }
+
+
+
+
+  export type CouncilMemberAssignmentGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CouncilMemberAssignmentWhereInput
+    orderBy?: CouncilMemberAssignmentOrderByWithAggregationInput | CouncilMemberAssignmentOrderByWithAggregationInput[]
+    by: CouncilMemberAssignmentScalarFieldEnum[] | CouncilMemberAssignmentScalarFieldEnum
+    having?: CouncilMemberAssignmentScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: CouncilMemberAssignmentCountAggregateInputType | true
+    _min?: CouncilMemberAssignmentMinAggregateInputType
+    _max?: CouncilMemberAssignmentMaxAggregateInputType
+  }
+
+  export type CouncilMemberAssignmentGroupByOutputType = {
+    id: string
+    councilId: string
+    councilMemberId: string
+    role: string | null
+    createdAt: Date
+    _count: CouncilMemberAssignmentCountAggregateOutputType | null
+    _min: CouncilMemberAssignmentMinAggregateOutputType | null
+    _max: CouncilMemberAssignmentMaxAggregateOutputType | null
+  }
+
+  type GetCouncilMemberAssignmentGroupByPayload<T extends CouncilMemberAssignmentGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<CouncilMemberAssignmentGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof CouncilMemberAssignmentGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], CouncilMemberAssignmentGroupByOutputType[P]>
+            : GetScalarType<T[P], CouncilMemberAssignmentGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type CouncilMemberAssignmentSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    councilId?: boolean
+    councilMemberId?: boolean
+    role?: boolean
+    createdAt?: boolean
+    council?: boolean | CouncilDefaultArgs<ExtArgs>
+    councilMember?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["councilMemberAssignment"]>
+
+  export type CouncilMemberAssignmentSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    councilId?: boolean
+    councilMemberId?: boolean
+    role?: boolean
+    createdAt?: boolean
+    council?: boolean | CouncilDefaultArgs<ExtArgs>
+    councilMember?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["councilMemberAssignment"]>
+
+  export type CouncilMemberAssignmentSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    councilId?: boolean
+    councilMemberId?: boolean
+    role?: boolean
+    createdAt?: boolean
+    council?: boolean | CouncilDefaultArgs<ExtArgs>
+    councilMember?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["councilMemberAssignment"]>
+
+  export type CouncilMemberAssignmentSelectScalar = {
+    id?: boolean
+    councilId?: boolean
+    councilMemberId?: boolean
+    role?: boolean
+    createdAt?: boolean
+  }
+
+  export type CouncilMemberAssignmentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "councilId" | "councilMemberId" | "role" | "createdAt", ExtArgs["result"]["councilMemberAssignment"]>
+  export type CouncilMemberAssignmentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    council?: boolean | CouncilDefaultArgs<ExtArgs>
+    councilMember?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type CouncilMemberAssignmentIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    council?: boolean | CouncilDefaultArgs<ExtArgs>
+    councilMember?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type CouncilMemberAssignmentIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    council?: boolean | CouncilDefaultArgs<ExtArgs>
+    councilMember?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $CouncilMemberAssignmentPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "CouncilMemberAssignment"
+    objects: {
+      council: Prisma.$CouncilPayload<ExtArgs>
+      councilMember: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      councilId: string
+      councilMemberId: string
+      role: string | null
+      createdAt: Date
+    }, ExtArgs["result"]["councilMemberAssignment"]>
+    composites: {}
+  }
+
+  type CouncilMemberAssignmentGetPayload<S extends boolean | null | undefined | CouncilMemberAssignmentDefaultArgs> = $Result.GetResult<Prisma.$CouncilMemberAssignmentPayload, S>
+
+  type CouncilMemberAssignmentCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<CouncilMemberAssignmentFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: CouncilMemberAssignmentCountAggregateInputType | true
+    }
+
+  export interface CouncilMemberAssignmentDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['CouncilMemberAssignment'], meta: { name: 'CouncilMemberAssignment' } }
+    /**
+     * Find zero or one CouncilMemberAssignment that matches the filter.
+     * @param {CouncilMemberAssignmentFindUniqueArgs} args - Arguments to find a CouncilMemberAssignment
+     * @example
+     * // Get one CouncilMemberAssignment
+     * const councilMemberAssignment = await prisma.councilMemberAssignment.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends CouncilMemberAssignmentFindUniqueArgs>(args: SelectSubset<T, CouncilMemberAssignmentFindUniqueArgs<ExtArgs>>): Prisma__CouncilMemberAssignmentClient<$Result.GetResult<Prisma.$CouncilMemberAssignmentPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one CouncilMemberAssignment that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {CouncilMemberAssignmentFindUniqueOrThrowArgs} args - Arguments to find a CouncilMemberAssignment
+     * @example
+     * // Get one CouncilMemberAssignment
+     * const councilMemberAssignment = await prisma.councilMemberAssignment.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends CouncilMemberAssignmentFindUniqueOrThrowArgs>(args: SelectSubset<T, CouncilMemberAssignmentFindUniqueOrThrowArgs<ExtArgs>>): Prisma__CouncilMemberAssignmentClient<$Result.GetResult<Prisma.$CouncilMemberAssignmentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first CouncilMemberAssignment that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CouncilMemberAssignmentFindFirstArgs} args - Arguments to find a CouncilMemberAssignment
+     * @example
+     * // Get one CouncilMemberAssignment
+     * const councilMemberAssignment = await prisma.councilMemberAssignment.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends CouncilMemberAssignmentFindFirstArgs>(args?: SelectSubset<T, CouncilMemberAssignmentFindFirstArgs<ExtArgs>>): Prisma__CouncilMemberAssignmentClient<$Result.GetResult<Prisma.$CouncilMemberAssignmentPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first CouncilMemberAssignment that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CouncilMemberAssignmentFindFirstOrThrowArgs} args - Arguments to find a CouncilMemberAssignment
+     * @example
+     * // Get one CouncilMemberAssignment
+     * const councilMemberAssignment = await prisma.councilMemberAssignment.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends CouncilMemberAssignmentFindFirstOrThrowArgs>(args?: SelectSubset<T, CouncilMemberAssignmentFindFirstOrThrowArgs<ExtArgs>>): Prisma__CouncilMemberAssignmentClient<$Result.GetResult<Prisma.$CouncilMemberAssignmentPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more CouncilMemberAssignments that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CouncilMemberAssignmentFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all CouncilMemberAssignments
+     * const councilMemberAssignments = await prisma.councilMemberAssignment.findMany()
+     * 
+     * // Get first 10 CouncilMemberAssignments
+     * const councilMemberAssignments = await prisma.councilMemberAssignment.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const councilMemberAssignmentWithIdOnly = await prisma.councilMemberAssignment.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends CouncilMemberAssignmentFindManyArgs>(args?: SelectSubset<T, CouncilMemberAssignmentFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CouncilMemberAssignmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a CouncilMemberAssignment.
+     * @param {CouncilMemberAssignmentCreateArgs} args - Arguments to create a CouncilMemberAssignment.
+     * @example
+     * // Create one CouncilMemberAssignment
+     * const CouncilMemberAssignment = await prisma.councilMemberAssignment.create({
+     *   data: {
+     *     // ... data to create a CouncilMemberAssignment
+     *   }
+     * })
+     * 
+     */
+    create<T extends CouncilMemberAssignmentCreateArgs>(args: SelectSubset<T, CouncilMemberAssignmentCreateArgs<ExtArgs>>): Prisma__CouncilMemberAssignmentClient<$Result.GetResult<Prisma.$CouncilMemberAssignmentPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many CouncilMemberAssignments.
+     * @param {CouncilMemberAssignmentCreateManyArgs} args - Arguments to create many CouncilMemberAssignments.
+     * @example
+     * // Create many CouncilMemberAssignments
+     * const councilMemberAssignment = await prisma.councilMemberAssignment.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends CouncilMemberAssignmentCreateManyArgs>(args?: SelectSubset<T, CouncilMemberAssignmentCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many CouncilMemberAssignments and returns the data saved in the database.
+     * @param {CouncilMemberAssignmentCreateManyAndReturnArgs} args - Arguments to create many CouncilMemberAssignments.
+     * @example
+     * // Create many CouncilMemberAssignments
+     * const councilMemberAssignment = await prisma.councilMemberAssignment.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many CouncilMemberAssignments and only return the `id`
+     * const councilMemberAssignmentWithIdOnly = await prisma.councilMemberAssignment.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends CouncilMemberAssignmentCreateManyAndReturnArgs>(args?: SelectSubset<T, CouncilMemberAssignmentCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CouncilMemberAssignmentPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a CouncilMemberAssignment.
+     * @param {CouncilMemberAssignmentDeleteArgs} args - Arguments to delete one CouncilMemberAssignment.
+     * @example
+     * // Delete one CouncilMemberAssignment
+     * const CouncilMemberAssignment = await prisma.councilMemberAssignment.delete({
+     *   where: {
+     *     // ... filter to delete one CouncilMemberAssignment
+     *   }
+     * })
+     * 
+     */
+    delete<T extends CouncilMemberAssignmentDeleteArgs>(args: SelectSubset<T, CouncilMemberAssignmentDeleteArgs<ExtArgs>>): Prisma__CouncilMemberAssignmentClient<$Result.GetResult<Prisma.$CouncilMemberAssignmentPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one CouncilMemberAssignment.
+     * @param {CouncilMemberAssignmentUpdateArgs} args - Arguments to update one CouncilMemberAssignment.
+     * @example
+     * // Update one CouncilMemberAssignment
+     * const councilMemberAssignment = await prisma.councilMemberAssignment.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends CouncilMemberAssignmentUpdateArgs>(args: SelectSubset<T, CouncilMemberAssignmentUpdateArgs<ExtArgs>>): Prisma__CouncilMemberAssignmentClient<$Result.GetResult<Prisma.$CouncilMemberAssignmentPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more CouncilMemberAssignments.
+     * @param {CouncilMemberAssignmentDeleteManyArgs} args - Arguments to filter CouncilMemberAssignments to delete.
+     * @example
+     * // Delete a few CouncilMemberAssignments
+     * const { count } = await prisma.councilMemberAssignment.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends CouncilMemberAssignmentDeleteManyArgs>(args?: SelectSubset<T, CouncilMemberAssignmentDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more CouncilMemberAssignments.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CouncilMemberAssignmentUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many CouncilMemberAssignments
+     * const councilMemberAssignment = await prisma.councilMemberAssignment.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends CouncilMemberAssignmentUpdateManyArgs>(args: SelectSubset<T, CouncilMemberAssignmentUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more CouncilMemberAssignments and returns the data updated in the database.
+     * @param {CouncilMemberAssignmentUpdateManyAndReturnArgs} args - Arguments to update many CouncilMemberAssignments.
+     * @example
+     * // Update many CouncilMemberAssignments
+     * const councilMemberAssignment = await prisma.councilMemberAssignment.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more CouncilMemberAssignments and only return the `id`
+     * const councilMemberAssignmentWithIdOnly = await prisma.councilMemberAssignment.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends CouncilMemberAssignmentUpdateManyAndReturnArgs>(args: SelectSubset<T, CouncilMemberAssignmentUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CouncilMemberAssignmentPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one CouncilMemberAssignment.
+     * @param {CouncilMemberAssignmentUpsertArgs} args - Arguments to update or create a CouncilMemberAssignment.
+     * @example
+     * // Update or create a CouncilMemberAssignment
+     * const councilMemberAssignment = await prisma.councilMemberAssignment.upsert({
+     *   create: {
+     *     // ... data to create a CouncilMemberAssignment
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the CouncilMemberAssignment we want to update
+     *   }
+     * })
+     */
+    upsert<T extends CouncilMemberAssignmentUpsertArgs>(args: SelectSubset<T, CouncilMemberAssignmentUpsertArgs<ExtArgs>>): Prisma__CouncilMemberAssignmentClient<$Result.GetResult<Prisma.$CouncilMemberAssignmentPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of CouncilMemberAssignments.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CouncilMemberAssignmentCountArgs} args - Arguments to filter CouncilMemberAssignments to count.
+     * @example
+     * // Count the number of CouncilMemberAssignments
+     * const count = await prisma.councilMemberAssignment.count({
+     *   where: {
+     *     // ... the filter for the CouncilMemberAssignments we want to count
+     *   }
+     * })
+    **/
+    count<T extends CouncilMemberAssignmentCountArgs>(
+      args?: Subset<T, CouncilMemberAssignmentCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], CouncilMemberAssignmentCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a CouncilMemberAssignment.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CouncilMemberAssignmentAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends CouncilMemberAssignmentAggregateArgs>(args: Subset<T, CouncilMemberAssignmentAggregateArgs>): Prisma.PrismaPromise<GetCouncilMemberAssignmentAggregateType<T>>
+
+    /**
+     * Group by CouncilMemberAssignment.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CouncilMemberAssignmentGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends CouncilMemberAssignmentGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: CouncilMemberAssignmentGroupByArgs['orderBy'] }
+        : { orderBy?: CouncilMemberAssignmentGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, CouncilMemberAssignmentGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetCouncilMemberAssignmentGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the CouncilMemberAssignment model
+   */
+  readonly fields: CouncilMemberAssignmentFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for CouncilMemberAssignment.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__CouncilMemberAssignmentClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    council<T extends CouncilDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CouncilDefaultArgs<ExtArgs>>): Prisma__CouncilClient<$Result.GetResult<Prisma.$CouncilPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    councilMember<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the CouncilMemberAssignment model
+   */
+  interface CouncilMemberAssignmentFieldRefs {
+    readonly id: FieldRef<"CouncilMemberAssignment", 'String'>
+    readonly councilId: FieldRef<"CouncilMemberAssignment", 'String'>
+    readonly councilMemberId: FieldRef<"CouncilMemberAssignment", 'String'>
+    readonly role: FieldRef<"CouncilMemberAssignment", 'String'>
+    readonly createdAt: FieldRef<"CouncilMemberAssignment", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * CouncilMemberAssignment findUnique
+   */
+  export type CouncilMemberAssignmentFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CouncilMemberAssignment
+     */
+    select?: CouncilMemberAssignmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CouncilMemberAssignment
+     */
+    omit?: CouncilMemberAssignmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CouncilMemberAssignmentInclude<ExtArgs> | null
+    /**
+     * Filter, which CouncilMemberAssignment to fetch.
+     */
+    where: CouncilMemberAssignmentWhereUniqueInput
+  }
+
+  /**
+   * CouncilMemberAssignment findUniqueOrThrow
+   */
+  export type CouncilMemberAssignmentFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CouncilMemberAssignment
+     */
+    select?: CouncilMemberAssignmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CouncilMemberAssignment
+     */
+    omit?: CouncilMemberAssignmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CouncilMemberAssignmentInclude<ExtArgs> | null
+    /**
+     * Filter, which CouncilMemberAssignment to fetch.
+     */
+    where: CouncilMemberAssignmentWhereUniqueInput
+  }
+
+  /**
+   * CouncilMemberAssignment findFirst
+   */
+  export type CouncilMemberAssignmentFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CouncilMemberAssignment
+     */
+    select?: CouncilMemberAssignmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CouncilMemberAssignment
+     */
+    omit?: CouncilMemberAssignmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CouncilMemberAssignmentInclude<ExtArgs> | null
+    /**
+     * Filter, which CouncilMemberAssignment to fetch.
+     */
+    where?: CouncilMemberAssignmentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CouncilMemberAssignments to fetch.
+     */
+    orderBy?: CouncilMemberAssignmentOrderByWithRelationInput | CouncilMemberAssignmentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for CouncilMemberAssignments.
+     */
+    cursor?: CouncilMemberAssignmentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CouncilMemberAssignments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CouncilMemberAssignments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CouncilMemberAssignments.
+     */
+    distinct?: CouncilMemberAssignmentScalarFieldEnum | CouncilMemberAssignmentScalarFieldEnum[]
+  }
+
+  /**
+   * CouncilMemberAssignment findFirstOrThrow
+   */
+  export type CouncilMemberAssignmentFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CouncilMemberAssignment
+     */
+    select?: CouncilMemberAssignmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CouncilMemberAssignment
+     */
+    omit?: CouncilMemberAssignmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CouncilMemberAssignmentInclude<ExtArgs> | null
+    /**
+     * Filter, which CouncilMemberAssignment to fetch.
+     */
+    where?: CouncilMemberAssignmentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CouncilMemberAssignments to fetch.
+     */
+    orderBy?: CouncilMemberAssignmentOrderByWithRelationInput | CouncilMemberAssignmentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for CouncilMemberAssignments.
+     */
+    cursor?: CouncilMemberAssignmentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CouncilMemberAssignments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CouncilMemberAssignments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CouncilMemberAssignments.
+     */
+    distinct?: CouncilMemberAssignmentScalarFieldEnum | CouncilMemberAssignmentScalarFieldEnum[]
+  }
+
+  /**
+   * CouncilMemberAssignment findMany
+   */
+  export type CouncilMemberAssignmentFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CouncilMemberAssignment
+     */
+    select?: CouncilMemberAssignmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CouncilMemberAssignment
+     */
+    omit?: CouncilMemberAssignmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CouncilMemberAssignmentInclude<ExtArgs> | null
+    /**
+     * Filter, which CouncilMemberAssignments to fetch.
+     */
+    where?: CouncilMemberAssignmentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CouncilMemberAssignments to fetch.
+     */
+    orderBy?: CouncilMemberAssignmentOrderByWithRelationInput | CouncilMemberAssignmentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing CouncilMemberAssignments.
+     */
+    cursor?: CouncilMemberAssignmentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CouncilMemberAssignments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CouncilMemberAssignments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CouncilMemberAssignments.
+     */
+    distinct?: CouncilMemberAssignmentScalarFieldEnum | CouncilMemberAssignmentScalarFieldEnum[]
+  }
+
+  /**
+   * CouncilMemberAssignment create
+   */
+  export type CouncilMemberAssignmentCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CouncilMemberAssignment
+     */
+    select?: CouncilMemberAssignmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CouncilMemberAssignment
+     */
+    omit?: CouncilMemberAssignmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CouncilMemberAssignmentInclude<ExtArgs> | null
+    /**
+     * The data needed to create a CouncilMemberAssignment.
+     */
+    data: XOR<CouncilMemberAssignmentCreateInput, CouncilMemberAssignmentUncheckedCreateInput>
+  }
+
+  /**
+   * CouncilMemberAssignment createMany
+   */
+  export type CouncilMemberAssignmentCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many CouncilMemberAssignments.
+     */
+    data: CouncilMemberAssignmentCreateManyInput | CouncilMemberAssignmentCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * CouncilMemberAssignment createManyAndReturn
+   */
+  export type CouncilMemberAssignmentCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CouncilMemberAssignment
+     */
+    select?: CouncilMemberAssignmentSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the CouncilMemberAssignment
+     */
+    omit?: CouncilMemberAssignmentOmit<ExtArgs> | null
+    /**
+     * The data used to create many CouncilMemberAssignments.
+     */
+    data: CouncilMemberAssignmentCreateManyInput | CouncilMemberAssignmentCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CouncilMemberAssignmentIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * CouncilMemberAssignment update
+   */
+  export type CouncilMemberAssignmentUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CouncilMemberAssignment
+     */
+    select?: CouncilMemberAssignmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CouncilMemberAssignment
+     */
+    omit?: CouncilMemberAssignmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CouncilMemberAssignmentInclude<ExtArgs> | null
+    /**
+     * The data needed to update a CouncilMemberAssignment.
+     */
+    data: XOR<CouncilMemberAssignmentUpdateInput, CouncilMemberAssignmentUncheckedUpdateInput>
+    /**
+     * Choose, which CouncilMemberAssignment to update.
+     */
+    where: CouncilMemberAssignmentWhereUniqueInput
+  }
+
+  /**
+   * CouncilMemberAssignment updateMany
+   */
+  export type CouncilMemberAssignmentUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update CouncilMemberAssignments.
+     */
+    data: XOR<CouncilMemberAssignmentUpdateManyMutationInput, CouncilMemberAssignmentUncheckedUpdateManyInput>
+    /**
+     * Filter which CouncilMemberAssignments to update
+     */
+    where?: CouncilMemberAssignmentWhereInput
+    /**
+     * Limit how many CouncilMemberAssignments to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * CouncilMemberAssignment updateManyAndReturn
+   */
+  export type CouncilMemberAssignmentUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CouncilMemberAssignment
+     */
+    select?: CouncilMemberAssignmentSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the CouncilMemberAssignment
+     */
+    omit?: CouncilMemberAssignmentOmit<ExtArgs> | null
+    /**
+     * The data used to update CouncilMemberAssignments.
+     */
+    data: XOR<CouncilMemberAssignmentUpdateManyMutationInput, CouncilMemberAssignmentUncheckedUpdateManyInput>
+    /**
+     * Filter which CouncilMemberAssignments to update
+     */
+    where?: CouncilMemberAssignmentWhereInput
+    /**
+     * Limit how many CouncilMemberAssignments to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CouncilMemberAssignmentIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * CouncilMemberAssignment upsert
+   */
+  export type CouncilMemberAssignmentUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CouncilMemberAssignment
+     */
+    select?: CouncilMemberAssignmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CouncilMemberAssignment
+     */
+    omit?: CouncilMemberAssignmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CouncilMemberAssignmentInclude<ExtArgs> | null
+    /**
+     * The filter to search for the CouncilMemberAssignment to update in case it exists.
+     */
+    where: CouncilMemberAssignmentWhereUniqueInput
+    /**
+     * In case the CouncilMemberAssignment found by the `where` argument doesn't exist, create a new CouncilMemberAssignment with this data.
+     */
+    create: XOR<CouncilMemberAssignmentCreateInput, CouncilMemberAssignmentUncheckedCreateInput>
+    /**
+     * In case the CouncilMemberAssignment was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<CouncilMemberAssignmentUpdateInput, CouncilMemberAssignmentUncheckedUpdateInput>
+  }
+
+  /**
+   * CouncilMemberAssignment delete
+   */
+  export type CouncilMemberAssignmentDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CouncilMemberAssignment
+     */
+    select?: CouncilMemberAssignmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CouncilMemberAssignment
+     */
+    omit?: CouncilMemberAssignmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CouncilMemberAssignmentInclude<ExtArgs> | null
+    /**
+     * Filter which CouncilMemberAssignment to delete.
+     */
+    where: CouncilMemberAssignmentWhereUniqueInput
+  }
+
+  /**
+   * CouncilMemberAssignment deleteMany
+   */
+  export type CouncilMemberAssignmentDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which CouncilMemberAssignments to delete
+     */
+    where?: CouncilMemberAssignmentWhereInput
+    /**
+     * Limit how many CouncilMemberAssignments to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * CouncilMemberAssignment without action
+   */
+  export type CouncilMemberAssignmentDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CouncilMemberAssignment
+     */
+    select?: CouncilMemberAssignmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CouncilMemberAssignment
+     */
+    omit?: CouncilMemberAssignmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CouncilMemberAssignmentInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model ProjectCouncilAssignment
+   */
+
+  export type AggregateProjectCouncilAssignment = {
+    _count: ProjectCouncilAssignmentCountAggregateOutputType | null
+    _min: ProjectCouncilAssignmentMinAggregateOutputType | null
+    _max: ProjectCouncilAssignmentMaxAggregateOutputType | null
+  }
+
+  export type ProjectCouncilAssignmentMinAggregateOutputType = {
+    id: string | null
+    councilId: string | null
+    projectRegistrationId: string | null
+    createdAt: Date | null
+  }
+
+  export type ProjectCouncilAssignmentMaxAggregateOutputType = {
+    id: string | null
+    councilId: string | null
+    projectRegistrationId: string | null
+    createdAt: Date | null
+  }
+
+  export type ProjectCouncilAssignmentCountAggregateOutputType = {
+    id: number
+    councilId: number
+    projectRegistrationId: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type ProjectCouncilAssignmentMinAggregateInputType = {
+    id?: true
+    councilId?: true
+    projectRegistrationId?: true
+    createdAt?: true
+  }
+
+  export type ProjectCouncilAssignmentMaxAggregateInputType = {
+    id?: true
+    councilId?: true
+    projectRegistrationId?: true
+    createdAt?: true
+  }
+
+  export type ProjectCouncilAssignmentCountAggregateInputType = {
+    id?: true
+    councilId?: true
+    projectRegistrationId?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type ProjectCouncilAssignmentAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ProjectCouncilAssignment to aggregate.
+     */
+    where?: ProjectCouncilAssignmentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ProjectCouncilAssignments to fetch.
+     */
+    orderBy?: ProjectCouncilAssignmentOrderByWithRelationInput | ProjectCouncilAssignmentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ProjectCouncilAssignmentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ProjectCouncilAssignments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ProjectCouncilAssignments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned ProjectCouncilAssignments
+    **/
+    _count?: true | ProjectCouncilAssignmentCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ProjectCouncilAssignmentMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ProjectCouncilAssignmentMaxAggregateInputType
+  }
+
+  export type GetProjectCouncilAssignmentAggregateType<T extends ProjectCouncilAssignmentAggregateArgs> = {
+        [P in keyof T & keyof AggregateProjectCouncilAssignment]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateProjectCouncilAssignment[P]>
+      : GetScalarType<T[P], AggregateProjectCouncilAssignment[P]>
+  }
+
+
+
+
+  export type ProjectCouncilAssignmentGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ProjectCouncilAssignmentWhereInput
+    orderBy?: ProjectCouncilAssignmentOrderByWithAggregationInput | ProjectCouncilAssignmentOrderByWithAggregationInput[]
+    by: ProjectCouncilAssignmentScalarFieldEnum[] | ProjectCouncilAssignmentScalarFieldEnum
+    having?: ProjectCouncilAssignmentScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ProjectCouncilAssignmentCountAggregateInputType | true
+    _min?: ProjectCouncilAssignmentMinAggregateInputType
+    _max?: ProjectCouncilAssignmentMaxAggregateInputType
+  }
+
+  export type ProjectCouncilAssignmentGroupByOutputType = {
+    id: string
+    councilId: string
+    projectRegistrationId: string
+    createdAt: Date
+    _count: ProjectCouncilAssignmentCountAggregateOutputType | null
+    _min: ProjectCouncilAssignmentMinAggregateOutputType | null
+    _max: ProjectCouncilAssignmentMaxAggregateOutputType | null
+  }
+
+  type GetProjectCouncilAssignmentGroupByPayload<T extends ProjectCouncilAssignmentGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ProjectCouncilAssignmentGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ProjectCouncilAssignmentGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ProjectCouncilAssignmentGroupByOutputType[P]>
+            : GetScalarType<T[P], ProjectCouncilAssignmentGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ProjectCouncilAssignmentSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    councilId?: boolean
+    projectRegistrationId?: boolean
+    createdAt?: boolean
+    council?: boolean | CouncilDefaultArgs<ExtArgs>
+    projectRegistration?: boolean | ProjectRegistrationDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["projectCouncilAssignment"]>
+
+  export type ProjectCouncilAssignmentSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    councilId?: boolean
+    projectRegistrationId?: boolean
+    createdAt?: boolean
+    council?: boolean | CouncilDefaultArgs<ExtArgs>
+    projectRegistration?: boolean | ProjectRegistrationDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["projectCouncilAssignment"]>
+
+  export type ProjectCouncilAssignmentSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    councilId?: boolean
+    projectRegistrationId?: boolean
+    createdAt?: boolean
+    council?: boolean | CouncilDefaultArgs<ExtArgs>
+    projectRegistration?: boolean | ProjectRegistrationDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["projectCouncilAssignment"]>
+
+  export type ProjectCouncilAssignmentSelectScalar = {
+    id?: boolean
+    councilId?: boolean
+    projectRegistrationId?: boolean
+    createdAt?: boolean
+  }
+
+  export type ProjectCouncilAssignmentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "councilId" | "projectRegistrationId" | "createdAt", ExtArgs["result"]["projectCouncilAssignment"]>
+  export type ProjectCouncilAssignmentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    council?: boolean | CouncilDefaultArgs<ExtArgs>
+    projectRegistration?: boolean | ProjectRegistrationDefaultArgs<ExtArgs>
+  }
+  export type ProjectCouncilAssignmentIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    council?: boolean | CouncilDefaultArgs<ExtArgs>
+    projectRegistration?: boolean | ProjectRegistrationDefaultArgs<ExtArgs>
+  }
+  export type ProjectCouncilAssignmentIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    council?: boolean | CouncilDefaultArgs<ExtArgs>
+    projectRegistration?: boolean | ProjectRegistrationDefaultArgs<ExtArgs>
+  }
+
+  export type $ProjectCouncilAssignmentPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "ProjectCouncilAssignment"
+    objects: {
+      council: Prisma.$CouncilPayload<ExtArgs>
+      projectRegistration: Prisma.$ProjectRegistrationPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      councilId: string
+      projectRegistrationId: string
+      createdAt: Date
+    }, ExtArgs["result"]["projectCouncilAssignment"]>
+    composites: {}
+  }
+
+  type ProjectCouncilAssignmentGetPayload<S extends boolean | null | undefined | ProjectCouncilAssignmentDefaultArgs> = $Result.GetResult<Prisma.$ProjectCouncilAssignmentPayload, S>
+
+  type ProjectCouncilAssignmentCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<ProjectCouncilAssignmentFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: ProjectCouncilAssignmentCountAggregateInputType | true
+    }
+
+  export interface ProjectCouncilAssignmentDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ProjectCouncilAssignment'], meta: { name: 'ProjectCouncilAssignment' } }
+    /**
+     * Find zero or one ProjectCouncilAssignment that matches the filter.
+     * @param {ProjectCouncilAssignmentFindUniqueArgs} args - Arguments to find a ProjectCouncilAssignment
+     * @example
+     * // Get one ProjectCouncilAssignment
+     * const projectCouncilAssignment = await prisma.projectCouncilAssignment.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ProjectCouncilAssignmentFindUniqueArgs>(args: SelectSubset<T, ProjectCouncilAssignmentFindUniqueArgs<ExtArgs>>): Prisma__ProjectCouncilAssignmentClient<$Result.GetResult<Prisma.$ProjectCouncilAssignmentPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one ProjectCouncilAssignment that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {ProjectCouncilAssignmentFindUniqueOrThrowArgs} args - Arguments to find a ProjectCouncilAssignment
+     * @example
+     * // Get one ProjectCouncilAssignment
+     * const projectCouncilAssignment = await prisma.projectCouncilAssignment.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ProjectCouncilAssignmentFindUniqueOrThrowArgs>(args: SelectSubset<T, ProjectCouncilAssignmentFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ProjectCouncilAssignmentClient<$Result.GetResult<Prisma.$ProjectCouncilAssignmentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ProjectCouncilAssignment that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProjectCouncilAssignmentFindFirstArgs} args - Arguments to find a ProjectCouncilAssignment
+     * @example
+     * // Get one ProjectCouncilAssignment
+     * const projectCouncilAssignment = await prisma.projectCouncilAssignment.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ProjectCouncilAssignmentFindFirstArgs>(args?: SelectSubset<T, ProjectCouncilAssignmentFindFirstArgs<ExtArgs>>): Prisma__ProjectCouncilAssignmentClient<$Result.GetResult<Prisma.$ProjectCouncilAssignmentPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ProjectCouncilAssignment that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProjectCouncilAssignmentFindFirstOrThrowArgs} args - Arguments to find a ProjectCouncilAssignment
+     * @example
+     * // Get one ProjectCouncilAssignment
+     * const projectCouncilAssignment = await prisma.projectCouncilAssignment.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ProjectCouncilAssignmentFindFirstOrThrowArgs>(args?: SelectSubset<T, ProjectCouncilAssignmentFindFirstOrThrowArgs<ExtArgs>>): Prisma__ProjectCouncilAssignmentClient<$Result.GetResult<Prisma.$ProjectCouncilAssignmentPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more ProjectCouncilAssignments that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProjectCouncilAssignmentFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all ProjectCouncilAssignments
+     * const projectCouncilAssignments = await prisma.projectCouncilAssignment.findMany()
+     * 
+     * // Get first 10 ProjectCouncilAssignments
+     * const projectCouncilAssignments = await prisma.projectCouncilAssignment.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const projectCouncilAssignmentWithIdOnly = await prisma.projectCouncilAssignment.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends ProjectCouncilAssignmentFindManyArgs>(args?: SelectSubset<T, ProjectCouncilAssignmentFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProjectCouncilAssignmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a ProjectCouncilAssignment.
+     * @param {ProjectCouncilAssignmentCreateArgs} args - Arguments to create a ProjectCouncilAssignment.
+     * @example
+     * // Create one ProjectCouncilAssignment
+     * const ProjectCouncilAssignment = await prisma.projectCouncilAssignment.create({
+     *   data: {
+     *     // ... data to create a ProjectCouncilAssignment
+     *   }
+     * })
+     * 
+     */
+    create<T extends ProjectCouncilAssignmentCreateArgs>(args: SelectSubset<T, ProjectCouncilAssignmentCreateArgs<ExtArgs>>): Prisma__ProjectCouncilAssignmentClient<$Result.GetResult<Prisma.$ProjectCouncilAssignmentPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many ProjectCouncilAssignments.
+     * @param {ProjectCouncilAssignmentCreateManyArgs} args - Arguments to create many ProjectCouncilAssignments.
+     * @example
+     * // Create many ProjectCouncilAssignments
+     * const projectCouncilAssignment = await prisma.projectCouncilAssignment.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ProjectCouncilAssignmentCreateManyArgs>(args?: SelectSubset<T, ProjectCouncilAssignmentCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many ProjectCouncilAssignments and returns the data saved in the database.
+     * @param {ProjectCouncilAssignmentCreateManyAndReturnArgs} args - Arguments to create many ProjectCouncilAssignments.
+     * @example
+     * // Create many ProjectCouncilAssignments
+     * const projectCouncilAssignment = await prisma.projectCouncilAssignment.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many ProjectCouncilAssignments and only return the `id`
+     * const projectCouncilAssignmentWithIdOnly = await prisma.projectCouncilAssignment.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ProjectCouncilAssignmentCreateManyAndReturnArgs>(args?: SelectSubset<T, ProjectCouncilAssignmentCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProjectCouncilAssignmentPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a ProjectCouncilAssignment.
+     * @param {ProjectCouncilAssignmentDeleteArgs} args - Arguments to delete one ProjectCouncilAssignment.
+     * @example
+     * // Delete one ProjectCouncilAssignment
+     * const ProjectCouncilAssignment = await prisma.projectCouncilAssignment.delete({
+     *   where: {
+     *     // ... filter to delete one ProjectCouncilAssignment
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ProjectCouncilAssignmentDeleteArgs>(args: SelectSubset<T, ProjectCouncilAssignmentDeleteArgs<ExtArgs>>): Prisma__ProjectCouncilAssignmentClient<$Result.GetResult<Prisma.$ProjectCouncilAssignmentPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one ProjectCouncilAssignment.
+     * @param {ProjectCouncilAssignmentUpdateArgs} args - Arguments to update one ProjectCouncilAssignment.
+     * @example
+     * // Update one ProjectCouncilAssignment
+     * const projectCouncilAssignment = await prisma.projectCouncilAssignment.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ProjectCouncilAssignmentUpdateArgs>(args: SelectSubset<T, ProjectCouncilAssignmentUpdateArgs<ExtArgs>>): Prisma__ProjectCouncilAssignmentClient<$Result.GetResult<Prisma.$ProjectCouncilAssignmentPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more ProjectCouncilAssignments.
+     * @param {ProjectCouncilAssignmentDeleteManyArgs} args - Arguments to filter ProjectCouncilAssignments to delete.
+     * @example
+     * // Delete a few ProjectCouncilAssignments
+     * const { count } = await prisma.projectCouncilAssignment.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ProjectCouncilAssignmentDeleteManyArgs>(args?: SelectSubset<T, ProjectCouncilAssignmentDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ProjectCouncilAssignments.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProjectCouncilAssignmentUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many ProjectCouncilAssignments
+     * const projectCouncilAssignment = await prisma.projectCouncilAssignment.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ProjectCouncilAssignmentUpdateManyArgs>(args: SelectSubset<T, ProjectCouncilAssignmentUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ProjectCouncilAssignments and returns the data updated in the database.
+     * @param {ProjectCouncilAssignmentUpdateManyAndReturnArgs} args - Arguments to update many ProjectCouncilAssignments.
+     * @example
+     * // Update many ProjectCouncilAssignments
+     * const projectCouncilAssignment = await prisma.projectCouncilAssignment.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more ProjectCouncilAssignments and only return the `id`
+     * const projectCouncilAssignmentWithIdOnly = await prisma.projectCouncilAssignment.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends ProjectCouncilAssignmentUpdateManyAndReturnArgs>(args: SelectSubset<T, ProjectCouncilAssignmentUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProjectCouncilAssignmentPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one ProjectCouncilAssignment.
+     * @param {ProjectCouncilAssignmentUpsertArgs} args - Arguments to update or create a ProjectCouncilAssignment.
+     * @example
+     * // Update or create a ProjectCouncilAssignment
+     * const projectCouncilAssignment = await prisma.projectCouncilAssignment.upsert({
+     *   create: {
+     *     // ... data to create a ProjectCouncilAssignment
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the ProjectCouncilAssignment we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ProjectCouncilAssignmentUpsertArgs>(args: SelectSubset<T, ProjectCouncilAssignmentUpsertArgs<ExtArgs>>): Prisma__ProjectCouncilAssignmentClient<$Result.GetResult<Prisma.$ProjectCouncilAssignmentPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of ProjectCouncilAssignments.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProjectCouncilAssignmentCountArgs} args - Arguments to filter ProjectCouncilAssignments to count.
+     * @example
+     * // Count the number of ProjectCouncilAssignments
+     * const count = await prisma.projectCouncilAssignment.count({
+     *   where: {
+     *     // ... the filter for the ProjectCouncilAssignments we want to count
+     *   }
+     * })
+    **/
+    count<T extends ProjectCouncilAssignmentCountArgs>(
+      args?: Subset<T, ProjectCouncilAssignmentCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ProjectCouncilAssignmentCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a ProjectCouncilAssignment.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProjectCouncilAssignmentAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ProjectCouncilAssignmentAggregateArgs>(args: Subset<T, ProjectCouncilAssignmentAggregateArgs>): Prisma.PrismaPromise<GetProjectCouncilAssignmentAggregateType<T>>
+
+    /**
+     * Group by ProjectCouncilAssignment.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProjectCouncilAssignmentGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ProjectCouncilAssignmentGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ProjectCouncilAssignmentGroupByArgs['orderBy'] }
+        : { orderBy?: ProjectCouncilAssignmentGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ProjectCouncilAssignmentGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetProjectCouncilAssignmentGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the ProjectCouncilAssignment model
+   */
+  readonly fields: ProjectCouncilAssignmentFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for ProjectCouncilAssignment.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ProjectCouncilAssignmentClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    council<T extends CouncilDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CouncilDefaultArgs<ExtArgs>>): Prisma__CouncilClient<$Result.GetResult<Prisma.$CouncilPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    projectRegistration<T extends ProjectRegistrationDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ProjectRegistrationDefaultArgs<ExtArgs>>): Prisma__ProjectRegistrationClient<$Result.GetResult<Prisma.$ProjectRegistrationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the ProjectCouncilAssignment model
+   */
+  interface ProjectCouncilAssignmentFieldRefs {
+    readonly id: FieldRef<"ProjectCouncilAssignment", 'String'>
+    readonly councilId: FieldRef<"ProjectCouncilAssignment", 'String'>
+    readonly projectRegistrationId: FieldRef<"ProjectCouncilAssignment", 'String'>
+    readonly createdAt: FieldRef<"ProjectCouncilAssignment", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * ProjectCouncilAssignment findUnique
+   */
+  export type ProjectCouncilAssignmentFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProjectCouncilAssignment
+     */
+    select?: ProjectCouncilAssignmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProjectCouncilAssignment
+     */
+    omit?: ProjectCouncilAssignmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProjectCouncilAssignmentInclude<ExtArgs> | null
+    /**
+     * Filter, which ProjectCouncilAssignment to fetch.
+     */
+    where: ProjectCouncilAssignmentWhereUniqueInput
+  }
+
+  /**
+   * ProjectCouncilAssignment findUniqueOrThrow
+   */
+  export type ProjectCouncilAssignmentFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProjectCouncilAssignment
+     */
+    select?: ProjectCouncilAssignmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProjectCouncilAssignment
+     */
+    omit?: ProjectCouncilAssignmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProjectCouncilAssignmentInclude<ExtArgs> | null
+    /**
+     * Filter, which ProjectCouncilAssignment to fetch.
+     */
+    where: ProjectCouncilAssignmentWhereUniqueInput
+  }
+
+  /**
+   * ProjectCouncilAssignment findFirst
+   */
+  export type ProjectCouncilAssignmentFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProjectCouncilAssignment
+     */
+    select?: ProjectCouncilAssignmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProjectCouncilAssignment
+     */
+    omit?: ProjectCouncilAssignmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProjectCouncilAssignmentInclude<ExtArgs> | null
+    /**
+     * Filter, which ProjectCouncilAssignment to fetch.
+     */
+    where?: ProjectCouncilAssignmentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ProjectCouncilAssignments to fetch.
+     */
+    orderBy?: ProjectCouncilAssignmentOrderByWithRelationInput | ProjectCouncilAssignmentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ProjectCouncilAssignments.
+     */
+    cursor?: ProjectCouncilAssignmentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ProjectCouncilAssignments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ProjectCouncilAssignments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ProjectCouncilAssignments.
+     */
+    distinct?: ProjectCouncilAssignmentScalarFieldEnum | ProjectCouncilAssignmentScalarFieldEnum[]
+  }
+
+  /**
+   * ProjectCouncilAssignment findFirstOrThrow
+   */
+  export type ProjectCouncilAssignmentFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProjectCouncilAssignment
+     */
+    select?: ProjectCouncilAssignmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProjectCouncilAssignment
+     */
+    omit?: ProjectCouncilAssignmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProjectCouncilAssignmentInclude<ExtArgs> | null
+    /**
+     * Filter, which ProjectCouncilAssignment to fetch.
+     */
+    where?: ProjectCouncilAssignmentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ProjectCouncilAssignments to fetch.
+     */
+    orderBy?: ProjectCouncilAssignmentOrderByWithRelationInput | ProjectCouncilAssignmentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ProjectCouncilAssignments.
+     */
+    cursor?: ProjectCouncilAssignmentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ProjectCouncilAssignments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ProjectCouncilAssignments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ProjectCouncilAssignments.
+     */
+    distinct?: ProjectCouncilAssignmentScalarFieldEnum | ProjectCouncilAssignmentScalarFieldEnum[]
+  }
+
+  /**
+   * ProjectCouncilAssignment findMany
+   */
+  export type ProjectCouncilAssignmentFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProjectCouncilAssignment
+     */
+    select?: ProjectCouncilAssignmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProjectCouncilAssignment
+     */
+    omit?: ProjectCouncilAssignmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProjectCouncilAssignmentInclude<ExtArgs> | null
+    /**
+     * Filter, which ProjectCouncilAssignments to fetch.
+     */
+    where?: ProjectCouncilAssignmentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ProjectCouncilAssignments to fetch.
+     */
+    orderBy?: ProjectCouncilAssignmentOrderByWithRelationInput | ProjectCouncilAssignmentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing ProjectCouncilAssignments.
+     */
+    cursor?: ProjectCouncilAssignmentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ProjectCouncilAssignments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ProjectCouncilAssignments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ProjectCouncilAssignments.
+     */
+    distinct?: ProjectCouncilAssignmentScalarFieldEnum | ProjectCouncilAssignmentScalarFieldEnum[]
+  }
+
+  /**
+   * ProjectCouncilAssignment create
+   */
+  export type ProjectCouncilAssignmentCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProjectCouncilAssignment
+     */
+    select?: ProjectCouncilAssignmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProjectCouncilAssignment
+     */
+    omit?: ProjectCouncilAssignmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProjectCouncilAssignmentInclude<ExtArgs> | null
+    /**
+     * The data needed to create a ProjectCouncilAssignment.
+     */
+    data: XOR<ProjectCouncilAssignmentCreateInput, ProjectCouncilAssignmentUncheckedCreateInput>
+  }
+
+  /**
+   * ProjectCouncilAssignment createMany
+   */
+  export type ProjectCouncilAssignmentCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many ProjectCouncilAssignments.
+     */
+    data: ProjectCouncilAssignmentCreateManyInput | ProjectCouncilAssignmentCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * ProjectCouncilAssignment createManyAndReturn
+   */
+  export type ProjectCouncilAssignmentCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProjectCouncilAssignment
+     */
+    select?: ProjectCouncilAssignmentSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProjectCouncilAssignment
+     */
+    omit?: ProjectCouncilAssignmentOmit<ExtArgs> | null
+    /**
+     * The data used to create many ProjectCouncilAssignments.
+     */
+    data: ProjectCouncilAssignmentCreateManyInput | ProjectCouncilAssignmentCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProjectCouncilAssignmentIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ProjectCouncilAssignment update
+   */
+  export type ProjectCouncilAssignmentUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProjectCouncilAssignment
+     */
+    select?: ProjectCouncilAssignmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProjectCouncilAssignment
+     */
+    omit?: ProjectCouncilAssignmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProjectCouncilAssignmentInclude<ExtArgs> | null
+    /**
+     * The data needed to update a ProjectCouncilAssignment.
+     */
+    data: XOR<ProjectCouncilAssignmentUpdateInput, ProjectCouncilAssignmentUncheckedUpdateInput>
+    /**
+     * Choose, which ProjectCouncilAssignment to update.
+     */
+    where: ProjectCouncilAssignmentWhereUniqueInput
+  }
+
+  /**
+   * ProjectCouncilAssignment updateMany
+   */
+  export type ProjectCouncilAssignmentUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update ProjectCouncilAssignments.
+     */
+    data: XOR<ProjectCouncilAssignmentUpdateManyMutationInput, ProjectCouncilAssignmentUncheckedUpdateManyInput>
+    /**
+     * Filter which ProjectCouncilAssignments to update
+     */
+    where?: ProjectCouncilAssignmentWhereInput
+    /**
+     * Limit how many ProjectCouncilAssignments to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * ProjectCouncilAssignment updateManyAndReturn
+   */
+  export type ProjectCouncilAssignmentUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProjectCouncilAssignment
+     */
+    select?: ProjectCouncilAssignmentSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProjectCouncilAssignment
+     */
+    omit?: ProjectCouncilAssignmentOmit<ExtArgs> | null
+    /**
+     * The data used to update ProjectCouncilAssignments.
+     */
+    data: XOR<ProjectCouncilAssignmentUpdateManyMutationInput, ProjectCouncilAssignmentUncheckedUpdateManyInput>
+    /**
+     * Filter which ProjectCouncilAssignments to update
+     */
+    where?: ProjectCouncilAssignmentWhereInput
+    /**
+     * Limit how many ProjectCouncilAssignments to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProjectCouncilAssignmentIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ProjectCouncilAssignment upsert
+   */
+  export type ProjectCouncilAssignmentUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProjectCouncilAssignment
+     */
+    select?: ProjectCouncilAssignmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProjectCouncilAssignment
+     */
+    omit?: ProjectCouncilAssignmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProjectCouncilAssignmentInclude<ExtArgs> | null
+    /**
+     * The filter to search for the ProjectCouncilAssignment to update in case it exists.
+     */
+    where: ProjectCouncilAssignmentWhereUniqueInput
+    /**
+     * In case the ProjectCouncilAssignment found by the `where` argument doesn't exist, create a new ProjectCouncilAssignment with this data.
+     */
+    create: XOR<ProjectCouncilAssignmentCreateInput, ProjectCouncilAssignmentUncheckedCreateInput>
+    /**
+     * In case the ProjectCouncilAssignment was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ProjectCouncilAssignmentUpdateInput, ProjectCouncilAssignmentUncheckedUpdateInput>
+  }
+
+  /**
+   * ProjectCouncilAssignment delete
+   */
+  export type ProjectCouncilAssignmentDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProjectCouncilAssignment
+     */
+    select?: ProjectCouncilAssignmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProjectCouncilAssignment
+     */
+    omit?: ProjectCouncilAssignmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProjectCouncilAssignmentInclude<ExtArgs> | null
+    /**
+     * Filter which ProjectCouncilAssignment to delete.
+     */
+    where: ProjectCouncilAssignmentWhereUniqueInput
+  }
+
+  /**
+   * ProjectCouncilAssignment deleteMany
+   */
+  export type ProjectCouncilAssignmentDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ProjectCouncilAssignments to delete
+     */
+    where?: ProjectCouncilAssignmentWhereInput
+    /**
+     * Limit how many ProjectCouncilAssignments to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * ProjectCouncilAssignment without action
+   */
+  export type ProjectCouncilAssignmentDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProjectCouncilAssignment
+     */
+    select?: ProjectCouncilAssignmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProjectCouncilAssignment
+     */
+    omit?: ProjectCouncilAssignmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProjectCouncilAssignmentInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -23963,6 +27636,39 @@ export namespace Prisma {
   };
 
   export type CallRoundCouncilMemberScalarFieldEnum = (typeof CallRoundCouncilMemberScalarFieldEnum)[keyof typeof CallRoundCouncilMemberScalarFieldEnum]
+
+
+  export const CouncilScalarFieldEnum: {
+    id: 'id',
+    callRoundId: 'callRoundId',
+    name: 'name',
+    description: 'description',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type CouncilScalarFieldEnum = (typeof CouncilScalarFieldEnum)[keyof typeof CouncilScalarFieldEnum]
+
+
+  export const CouncilMemberAssignmentScalarFieldEnum: {
+    id: 'id',
+    councilId: 'councilId',
+    councilMemberId: 'councilMemberId',
+    role: 'role',
+    createdAt: 'createdAt'
+  };
+
+  export type CouncilMemberAssignmentScalarFieldEnum = (typeof CouncilMemberAssignmentScalarFieldEnum)[keyof typeof CouncilMemberAssignmentScalarFieldEnum]
+
+
+  export const ProjectCouncilAssignmentScalarFieldEnum: {
+    id: 'id',
+    councilId: 'councilId',
+    projectRegistrationId: 'projectRegistrationId',
+    createdAt: 'createdAt'
+  };
+
+  export type ProjectCouncilAssignmentScalarFieldEnum = (typeof ProjectCouncilAssignmentScalarFieldEnum)[keyof typeof ProjectCouncilAssignmentScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -24498,6 +28204,7 @@ export namespace Prisma {
     notifications?: NotificationListRelationFilter
     callRoundInstructors?: CallRoundInstructorListRelationFilter
     callRoundCouncilMembers?: CallRoundCouncilMemberListRelationFilter
+    councilAssignments?: CouncilMemberAssignmentListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -24530,6 +28237,7 @@ export namespace Prisma {
     notifications?: NotificationOrderByRelationAggregateInput
     callRoundInstructors?: CallRoundInstructorOrderByRelationAggregateInput
     callRoundCouncilMembers?: CallRoundCouncilMemberOrderByRelationAggregateInput
+    councilAssignments?: CouncilMemberAssignmentOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -24565,6 +28273,7 @@ export namespace Prisma {
     notifications?: NotificationListRelationFilter
     callRoundInstructors?: CallRoundInstructorListRelationFilter
     callRoundCouncilMembers?: CallRoundCouncilMemberListRelationFilter
+    councilAssignments?: CouncilMemberAssignmentListRelationFilter
   }, "id" | "code" | "email">
 
   export type UserOrderByWithAggregationInput = {
@@ -24651,6 +28360,7 @@ export namespace Prisma {
     classes?: ClassListRelationFilter
     availableInstructors?: CallRoundInstructorListRelationFilter
     availableCouncilMembers?: CallRoundCouncilMemberListRelationFilter
+    councils?: CouncilListRelationFilter
   }
 
   export type CallRoundOrderByWithRelationInput = {
@@ -24690,6 +28400,7 @@ export namespace Prisma {
     classes?: ClassOrderByRelationAggregateInput
     availableInstructors?: CallRoundInstructorOrderByRelationAggregateInput
     availableCouncilMembers?: CallRoundCouncilMemberOrderByRelationAggregateInput
+    councils?: CouncilOrderByRelationAggregateInput
   }
 
   export type CallRoundWhereUniqueInput = Prisma.AtLeast<{
@@ -24732,6 +28443,7 @@ export namespace Prisma {
     classes?: ClassListRelationFilter
     availableInstructors?: CallRoundInstructorListRelationFilter
     availableCouncilMembers?: CallRoundCouncilMemberListRelationFilter
+    councils?: CouncilListRelationFilter
   }, "id">
 
   export type CallRoundOrderByWithAggregationInput = {
@@ -25521,6 +29233,7 @@ export namespace Prisma {
     instructor?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     callRound?: XOR<CallRoundNullableScalarRelationFilter, CallRoundWhereInput> | null
     facultyReviewer?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+    councilAssignment?: XOR<ProjectCouncilAssignmentNullableScalarRelationFilter, ProjectCouncilAssignmentWhereInput> | null
   }
 
   export type ProjectRegistrationOrderByWithRelationInput = {
@@ -25542,6 +29255,7 @@ export namespace Prisma {
     instructor?: UserOrderByWithRelationInput
     callRound?: CallRoundOrderByWithRelationInput
     facultyReviewer?: UserOrderByWithRelationInput
+    councilAssignment?: ProjectCouncilAssignmentOrderByWithRelationInput
   }
 
   export type ProjectRegistrationWhereUniqueInput = Prisma.AtLeast<{
@@ -25566,6 +29280,7 @@ export namespace Prisma {
     instructor?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     callRound?: XOR<CallRoundNullableScalarRelationFilter, CallRoundWhereInput> | null
     facultyReviewer?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+    councilAssignment?: XOR<ProjectCouncilAssignmentNullableScalarRelationFilter, ProjectCouncilAssignmentWhereInput> | null
   }, "id">
 
   export type ProjectRegistrationOrderByWithAggregationInput = {
@@ -25794,6 +29509,184 @@ export namespace Prisma {
     callRoundId?: StringWithAggregatesFilter<"CallRoundCouncilMember"> | string
     councilMemberId?: StringWithAggregatesFilter<"CallRoundCouncilMember"> | string
     createdAt?: DateTimeWithAggregatesFilter<"CallRoundCouncilMember"> | Date | string
+  }
+
+  export type CouncilWhereInput = {
+    AND?: CouncilWhereInput | CouncilWhereInput[]
+    OR?: CouncilWhereInput[]
+    NOT?: CouncilWhereInput | CouncilWhereInput[]
+    id?: StringFilter<"Council"> | string
+    callRoundId?: StringFilter<"Council"> | string
+    name?: StringFilter<"Council"> | string
+    description?: StringNullableFilter<"Council"> | string | null
+    createdAt?: DateTimeFilter<"Council"> | Date | string
+    updatedAt?: DateTimeFilter<"Council"> | Date | string
+    callRound?: XOR<CallRoundScalarRelationFilter, CallRoundWhereInput>
+    members?: CouncilMemberAssignmentListRelationFilter
+    projects?: ProjectCouncilAssignmentListRelationFilter
+  }
+
+  export type CouncilOrderByWithRelationInput = {
+    id?: SortOrder
+    callRoundId?: SortOrder
+    name?: SortOrder
+    description?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    callRound?: CallRoundOrderByWithRelationInput
+    members?: CouncilMemberAssignmentOrderByRelationAggregateInput
+    projects?: ProjectCouncilAssignmentOrderByRelationAggregateInput
+  }
+
+  export type CouncilWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: CouncilWhereInput | CouncilWhereInput[]
+    OR?: CouncilWhereInput[]
+    NOT?: CouncilWhereInput | CouncilWhereInput[]
+    callRoundId?: StringFilter<"Council"> | string
+    name?: StringFilter<"Council"> | string
+    description?: StringNullableFilter<"Council"> | string | null
+    createdAt?: DateTimeFilter<"Council"> | Date | string
+    updatedAt?: DateTimeFilter<"Council"> | Date | string
+    callRound?: XOR<CallRoundScalarRelationFilter, CallRoundWhereInput>
+    members?: CouncilMemberAssignmentListRelationFilter
+    projects?: ProjectCouncilAssignmentListRelationFilter
+  }, "id">
+
+  export type CouncilOrderByWithAggregationInput = {
+    id?: SortOrder
+    callRoundId?: SortOrder
+    name?: SortOrder
+    description?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: CouncilCountOrderByAggregateInput
+    _max?: CouncilMaxOrderByAggregateInput
+    _min?: CouncilMinOrderByAggregateInput
+  }
+
+  export type CouncilScalarWhereWithAggregatesInput = {
+    AND?: CouncilScalarWhereWithAggregatesInput | CouncilScalarWhereWithAggregatesInput[]
+    OR?: CouncilScalarWhereWithAggregatesInput[]
+    NOT?: CouncilScalarWhereWithAggregatesInput | CouncilScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Council"> | string
+    callRoundId?: StringWithAggregatesFilter<"Council"> | string
+    name?: StringWithAggregatesFilter<"Council"> | string
+    description?: StringNullableWithAggregatesFilter<"Council"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"Council"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Council"> | Date | string
+  }
+
+  export type CouncilMemberAssignmentWhereInput = {
+    AND?: CouncilMemberAssignmentWhereInput | CouncilMemberAssignmentWhereInput[]
+    OR?: CouncilMemberAssignmentWhereInput[]
+    NOT?: CouncilMemberAssignmentWhereInput | CouncilMemberAssignmentWhereInput[]
+    id?: StringFilter<"CouncilMemberAssignment"> | string
+    councilId?: StringFilter<"CouncilMemberAssignment"> | string
+    councilMemberId?: StringFilter<"CouncilMemberAssignment"> | string
+    role?: StringNullableFilter<"CouncilMemberAssignment"> | string | null
+    createdAt?: DateTimeFilter<"CouncilMemberAssignment"> | Date | string
+    council?: XOR<CouncilScalarRelationFilter, CouncilWhereInput>
+    councilMember?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }
+
+  export type CouncilMemberAssignmentOrderByWithRelationInput = {
+    id?: SortOrder
+    councilId?: SortOrder
+    councilMemberId?: SortOrder
+    role?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    council?: CouncilOrderByWithRelationInput
+    councilMember?: UserOrderByWithRelationInput
+  }
+
+  export type CouncilMemberAssignmentWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    councilId_councilMemberId?: CouncilMemberAssignmentCouncilIdCouncilMemberIdCompoundUniqueInput
+    AND?: CouncilMemberAssignmentWhereInput | CouncilMemberAssignmentWhereInput[]
+    OR?: CouncilMemberAssignmentWhereInput[]
+    NOT?: CouncilMemberAssignmentWhereInput | CouncilMemberAssignmentWhereInput[]
+    councilId?: StringFilter<"CouncilMemberAssignment"> | string
+    councilMemberId?: StringFilter<"CouncilMemberAssignment"> | string
+    role?: StringNullableFilter<"CouncilMemberAssignment"> | string | null
+    createdAt?: DateTimeFilter<"CouncilMemberAssignment"> | Date | string
+    council?: XOR<CouncilScalarRelationFilter, CouncilWhereInput>
+    councilMember?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }, "id" | "councilId_councilMemberId">
+
+  export type CouncilMemberAssignmentOrderByWithAggregationInput = {
+    id?: SortOrder
+    councilId?: SortOrder
+    councilMemberId?: SortOrder
+    role?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    _count?: CouncilMemberAssignmentCountOrderByAggregateInput
+    _max?: CouncilMemberAssignmentMaxOrderByAggregateInput
+    _min?: CouncilMemberAssignmentMinOrderByAggregateInput
+  }
+
+  export type CouncilMemberAssignmentScalarWhereWithAggregatesInput = {
+    AND?: CouncilMemberAssignmentScalarWhereWithAggregatesInput | CouncilMemberAssignmentScalarWhereWithAggregatesInput[]
+    OR?: CouncilMemberAssignmentScalarWhereWithAggregatesInput[]
+    NOT?: CouncilMemberAssignmentScalarWhereWithAggregatesInput | CouncilMemberAssignmentScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"CouncilMemberAssignment"> | string
+    councilId?: StringWithAggregatesFilter<"CouncilMemberAssignment"> | string
+    councilMemberId?: StringWithAggregatesFilter<"CouncilMemberAssignment"> | string
+    role?: StringNullableWithAggregatesFilter<"CouncilMemberAssignment"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"CouncilMemberAssignment"> | Date | string
+  }
+
+  export type ProjectCouncilAssignmentWhereInput = {
+    AND?: ProjectCouncilAssignmentWhereInput | ProjectCouncilAssignmentWhereInput[]
+    OR?: ProjectCouncilAssignmentWhereInput[]
+    NOT?: ProjectCouncilAssignmentWhereInput | ProjectCouncilAssignmentWhereInput[]
+    id?: StringFilter<"ProjectCouncilAssignment"> | string
+    councilId?: StringFilter<"ProjectCouncilAssignment"> | string
+    projectRegistrationId?: StringFilter<"ProjectCouncilAssignment"> | string
+    createdAt?: DateTimeFilter<"ProjectCouncilAssignment"> | Date | string
+    council?: XOR<CouncilScalarRelationFilter, CouncilWhereInput>
+    projectRegistration?: XOR<ProjectRegistrationScalarRelationFilter, ProjectRegistrationWhereInput>
+  }
+
+  export type ProjectCouncilAssignmentOrderByWithRelationInput = {
+    id?: SortOrder
+    councilId?: SortOrder
+    projectRegistrationId?: SortOrder
+    createdAt?: SortOrder
+    council?: CouncilOrderByWithRelationInput
+    projectRegistration?: ProjectRegistrationOrderByWithRelationInput
+  }
+
+  export type ProjectCouncilAssignmentWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    projectRegistrationId?: string
+    AND?: ProjectCouncilAssignmentWhereInput | ProjectCouncilAssignmentWhereInput[]
+    OR?: ProjectCouncilAssignmentWhereInput[]
+    NOT?: ProjectCouncilAssignmentWhereInput | ProjectCouncilAssignmentWhereInput[]
+    councilId?: StringFilter<"ProjectCouncilAssignment"> | string
+    createdAt?: DateTimeFilter<"ProjectCouncilAssignment"> | Date | string
+    council?: XOR<CouncilScalarRelationFilter, CouncilWhereInput>
+    projectRegistration?: XOR<ProjectRegistrationScalarRelationFilter, ProjectRegistrationWhereInput>
+  }, "id" | "projectRegistrationId">
+
+  export type ProjectCouncilAssignmentOrderByWithAggregationInput = {
+    id?: SortOrder
+    councilId?: SortOrder
+    projectRegistrationId?: SortOrder
+    createdAt?: SortOrder
+    _count?: ProjectCouncilAssignmentCountOrderByAggregateInput
+    _max?: ProjectCouncilAssignmentMaxOrderByAggregateInput
+    _min?: ProjectCouncilAssignmentMinOrderByAggregateInput
+  }
+
+  export type ProjectCouncilAssignmentScalarWhereWithAggregatesInput = {
+    AND?: ProjectCouncilAssignmentScalarWhereWithAggregatesInput | ProjectCouncilAssignmentScalarWhereWithAggregatesInput[]
+    OR?: ProjectCouncilAssignmentScalarWhereWithAggregatesInput[]
+    NOT?: ProjectCouncilAssignmentScalarWhereWithAggregatesInput | ProjectCouncilAssignmentScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"ProjectCouncilAssignment"> | string
+    councilId?: StringWithAggregatesFilter<"ProjectCouncilAssignment"> | string
+    projectRegistrationId?: StringWithAggregatesFilter<"ProjectCouncilAssignment"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"ProjectCouncilAssignment"> | Date | string
   }
 
   export type DepartmentCreateInput = {
@@ -26049,6 +29942,7 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     callRoundInstructors?: CallRoundInstructorCreateNestedManyWithoutInstructorInput
     callRoundCouncilMembers?: CallRoundCouncilMemberCreateNestedManyWithoutCouncilMemberInput
+    councilAssignments?: CouncilMemberAssignmentCreateNestedManyWithoutCouncilMemberInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -26078,6 +29972,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     callRoundInstructors?: CallRoundInstructorUncheckedCreateNestedManyWithoutInstructorInput
     callRoundCouncilMembers?: CallRoundCouncilMemberUncheckedCreateNestedManyWithoutCouncilMemberInput
+    councilAssignments?: CouncilMemberAssignmentUncheckedCreateNestedManyWithoutCouncilMemberInput
   }
 
   export type UserUpdateInput = {
@@ -26107,6 +30002,7 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     callRoundInstructors?: CallRoundInstructorUpdateManyWithoutInstructorNestedInput
     callRoundCouncilMembers?: CallRoundCouncilMemberUpdateManyWithoutCouncilMemberNestedInput
+    councilAssignments?: CouncilMemberAssignmentUpdateManyWithoutCouncilMemberNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -26136,6 +30032,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     callRoundInstructors?: CallRoundInstructorUncheckedUpdateManyWithoutInstructorNestedInput
     callRoundCouncilMembers?: CallRoundCouncilMemberUncheckedUpdateManyWithoutCouncilMemberNestedInput
+    councilAssignments?: CouncilMemberAssignmentUncheckedUpdateManyWithoutCouncilMemberNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -26228,6 +30125,7 @@ export namespace Prisma {
     classes?: ClassCreateNestedManyWithoutCallRoundsInput
     availableInstructors?: CallRoundInstructorCreateNestedManyWithoutCallRoundInput
     availableCouncilMembers?: CallRoundCouncilMemberCreateNestedManyWithoutCallRoundInput
+    councils?: CouncilCreateNestedManyWithoutCallRoundInput
   }
 
   export type CallRoundUncheckedCreateInput = {
@@ -26266,6 +30164,7 @@ export namespace Prisma {
     classes?: ClassUncheckedCreateNestedManyWithoutCallRoundsInput
     availableInstructors?: CallRoundInstructorUncheckedCreateNestedManyWithoutCallRoundInput
     availableCouncilMembers?: CallRoundCouncilMemberUncheckedCreateNestedManyWithoutCallRoundInput
+    councils?: CouncilUncheckedCreateNestedManyWithoutCallRoundInput
   }
 
   export type CallRoundUpdateInput = {
@@ -26304,6 +30203,7 @@ export namespace Prisma {
     classes?: ClassUpdateManyWithoutCallRoundsNestedInput
     availableInstructors?: CallRoundInstructorUpdateManyWithoutCallRoundNestedInput
     availableCouncilMembers?: CallRoundCouncilMemberUpdateManyWithoutCallRoundNestedInput
+    councils?: CouncilUpdateManyWithoutCallRoundNestedInput
   }
 
   export type CallRoundUncheckedUpdateInput = {
@@ -26342,6 +30242,7 @@ export namespace Prisma {
     classes?: ClassUncheckedUpdateManyWithoutCallRoundsNestedInput
     availableInstructors?: CallRoundInstructorUncheckedUpdateManyWithoutCallRoundNestedInput
     availableCouncilMembers?: CallRoundCouncilMemberUncheckedUpdateManyWithoutCallRoundNestedInput
+    councils?: CouncilUncheckedUpdateManyWithoutCallRoundNestedInput
   }
 
   export type CallRoundCreateManyInput = {
@@ -27210,6 +31111,7 @@ export namespace Prisma {
     instructor?: UserCreateNestedOneWithoutInstructedRegistrationsInput
     callRound?: CallRoundCreateNestedOneWithoutRegistrationsInput
     facultyReviewer?: UserCreateNestedOneWithoutFacultyReviewsInput
+    councilAssignment?: ProjectCouncilAssignmentCreateNestedOneWithoutProjectRegistrationInput
   }
 
   export type ProjectRegistrationUncheckedCreateInput = {
@@ -27227,6 +31129,7 @@ export namespace Prisma {
     instructorStatus?: $Enums.InstructorStatus
     facultyStatus?: $Enums.FacultyStatus
     facultyReviewerId?: string | null
+    councilAssignment?: ProjectCouncilAssignmentUncheckedCreateNestedOneWithoutProjectRegistrationInput
   }
 
   export type ProjectRegistrationUpdateInput = {
@@ -27244,6 +31147,7 @@ export namespace Prisma {
     instructor?: UserUpdateOneWithoutInstructedRegistrationsNestedInput
     callRound?: CallRoundUpdateOneWithoutRegistrationsNestedInput
     facultyReviewer?: UserUpdateOneWithoutFacultyReviewsNestedInput
+    councilAssignment?: ProjectCouncilAssignmentUpdateOneWithoutProjectRegistrationNestedInput
   }
 
   export type ProjectRegistrationUncheckedUpdateInput = {
@@ -27261,6 +31165,7 @@ export namespace Prisma {
     instructorStatus?: EnumInstructorStatusFieldUpdateOperationsInput | $Enums.InstructorStatus
     facultyStatus?: EnumFacultyStatusFieldUpdateOperationsInput | $Enums.FacultyStatus
     facultyReviewerId?: NullableStringFieldUpdateOperationsInput | string | null
+    councilAssignment?: ProjectCouncilAssignmentUncheckedUpdateOneWithoutProjectRegistrationNestedInput
   }
 
   export type ProjectRegistrationCreateManyInput = {
@@ -27491,6 +31396,177 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     callRoundId?: StringFieldUpdateOperationsInput | string
     councilMemberId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CouncilCreateInput = {
+    id?: string
+    name: string
+    description?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    callRound: CallRoundCreateNestedOneWithoutCouncilsInput
+    members?: CouncilMemberAssignmentCreateNestedManyWithoutCouncilInput
+    projects?: ProjectCouncilAssignmentCreateNestedManyWithoutCouncilInput
+  }
+
+  export type CouncilUncheckedCreateInput = {
+    id?: string
+    callRoundId: string
+    name: string
+    description?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    members?: CouncilMemberAssignmentUncheckedCreateNestedManyWithoutCouncilInput
+    projects?: ProjectCouncilAssignmentUncheckedCreateNestedManyWithoutCouncilInput
+  }
+
+  export type CouncilUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    callRound?: CallRoundUpdateOneRequiredWithoutCouncilsNestedInput
+    members?: CouncilMemberAssignmentUpdateManyWithoutCouncilNestedInput
+    projects?: ProjectCouncilAssignmentUpdateManyWithoutCouncilNestedInput
+  }
+
+  export type CouncilUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    callRoundId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    members?: CouncilMemberAssignmentUncheckedUpdateManyWithoutCouncilNestedInput
+    projects?: ProjectCouncilAssignmentUncheckedUpdateManyWithoutCouncilNestedInput
+  }
+
+  export type CouncilCreateManyInput = {
+    id?: string
+    callRoundId: string
+    name: string
+    description?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type CouncilUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CouncilUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    callRoundId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CouncilMemberAssignmentCreateInput = {
+    id?: string
+    role?: string | null
+    createdAt?: Date | string
+    council: CouncilCreateNestedOneWithoutMembersInput
+    councilMember: UserCreateNestedOneWithoutCouncilAssignmentsInput
+  }
+
+  export type CouncilMemberAssignmentUncheckedCreateInput = {
+    id?: string
+    councilId: string
+    councilMemberId: string
+    role?: string | null
+    createdAt?: Date | string
+  }
+
+  export type CouncilMemberAssignmentUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    role?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    council?: CouncilUpdateOneRequiredWithoutMembersNestedInput
+    councilMember?: UserUpdateOneRequiredWithoutCouncilAssignmentsNestedInput
+  }
+
+  export type CouncilMemberAssignmentUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    councilId?: StringFieldUpdateOperationsInput | string
+    councilMemberId?: StringFieldUpdateOperationsInput | string
+    role?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CouncilMemberAssignmentCreateManyInput = {
+    id?: string
+    councilId: string
+    councilMemberId: string
+    role?: string | null
+    createdAt?: Date | string
+  }
+
+  export type CouncilMemberAssignmentUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    role?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CouncilMemberAssignmentUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    councilId?: StringFieldUpdateOperationsInput | string
+    councilMemberId?: StringFieldUpdateOperationsInput | string
+    role?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProjectCouncilAssignmentCreateInput = {
+    id?: string
+    createdAt?: Date | string
+    council: CouncilCreateNestedOneWithoutProjectsInput
+    projectRegistration: ProjectRegistrationCreateNestedOneWithoutCouncilAssignmentInput
+  }
+
+  export type ProjectCouncilAssignmentUncheckedCreateInput = {
+    id?: string
+    councilId: string
+    projectRegistrationId: string
+    createdAt?: Date | string
+  }
+
+  export type ProjectCouncilAssignmentUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    council?: CouncilUpdateOneRequiredWithoutProjectsNestedInput
+    projectRegistration?: ProjectRegistrationUpdateOneRequiredWithoutCouncilAssignmentNestedInput
+  }
+
+  export type ProjectCouncilAssignmentUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    councilId?: StringFieldUpdateOperationsInput | string
+    projectRegistrationId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProjectCouncilAssignmentCreateManyInput = {
+    id?: string
+    councilId: string
+    projectRegistrationId: string
+    createdAt?: Date | string
+  }
+
+  export type ProjectCouncilAssignmentUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProjectCouncilAssignmentUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    councilId?: StringFieldUpdateOperationsInput | string
+    projectRegistrationId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -27800,6 +31876,12 @@ export namespace Prisma {
     none?: CallRoundCouncilMemberWhereInput
   }
 
+  export type CouncilMemberAssignmentListRelationFilter = {
+    every?: CouncilMemberAssignmentWhereInput
+    some?: CouncilMemberAssignmentWhereInput
+    none?: CouncilMemberAssignmentWhereInput
+  }
+
   export type ProjectOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -27821,6 +31903,10 @@ export namespace Prisma {
   }
 
   export type CallRoundCouncilMemberOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type CouncilMemberAssignmentOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -27974,7 +32060,17 @@ export namespace Prisma {
     none?: DepartmentWhereInput
   }
 
+  export type CouncilListRelationFilter = {
+    every?: CouncilWhereInput
+    some?: CouncilWhereInput
+    none?: CouncilWhereInput
+  }
+
   export type DepartmentOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type CouncilOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -28761,6 +32857,11 @@ export namespace Prisma {
     not?: NestedEnumFacultyStatusFilter<$PrismaModel> | $Enums.FacultyStatus
   }
 
+  export type ProjectCouncilAssignmentNullableScalarRelationFilter = {
+    is?: ProjectCouncilAssignmentWhereInput | null
+    isNot?: ProjectCouncilAssignmentWhereInput | null
+  }
+
   export type ProjectRegistrationCountOrderByAggregateInput = {
     id?: SortOrder
     userId?: SortOrder
@@ -28999,6 +33100,103 @@ export namespace Prisma {
     id?: SortOrder
     callRoundId?: SortOrder
     councilMemberId?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type ProjectCouncilAssignmentListRelationFilter = {
+    every?: ProjectCouncilAssignmentWhereInput
+    some?: ProjectCouncilAssignmentWhereInput
+    none?: ProjectCouncilAssignmentWhereInput
+  }
+
+  export type ProjectCouncilAssignmentOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type CouncilCountOrderByAggregateInput = {
+    id?: SortOrder
+    callRoundId?: SortOrder
+    name?: SortOrder
+    description?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type CouncilMaxOrderByAggregateInput = {
+    id?: SortOrder
+    callRoundId?: SortOrder
+    name?: SortOrder
+    description?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type CouncilMinOrderByAggregateInput = {
+    id?: SortOrder
+    callRoundId?: SortOrder
+    name?: SortOrder
+    description?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type CouncilScalarRelationFilter = {
+    is?: CouncilWhereInput
+    isNot?: CouncilWhereInput
+  }
+
+  export type CouncilMemberAssignmentCouncilIdCouncilMemberIdCompoundUniqueInput = {
+    councilId: string
+    councilMemberId: string
+  }
+
+  export type CouncilMemberAssignmentCountOrderByAggregateInput = {
+    id?: SortOrder
+    councilId?: SortOrder
+    councilMemberId?: SortOrder
+    role?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type CouncilMemberAssignmentMaxOrderByAggregateInput = {
+    id?: SortOrder
+    councilId?: SortOrder
+    councilMemberId?: SortOrder
+    role?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type CouncilMemberAssignmentMinOrderByAggregateInput = {
+    id?: SortOrder
+    councilId?: SortOrder
+    councilMemberId?: SortOrder
+    role?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type ProjectRegistrationScalarRelationFilter = {
+    is?: ProjectRegistrationWhereInput
+    isNot?: ProjectRegistrationWhereInput
+  }
+
+  export type ProjectCouncilAssignmentCountOrderByAggregateInput = {
+    id?: SortOrder
+    councilId?: SortOrder
+    projectRegistrationId?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type ProjectCouncilAssignmentMaxOrderByAggregateInput = {
+    id?: SortOrder
+    councilId?: SortOrder
+    projectRegistrationId?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type ProjectCouncilAssignmentMinOrderByAggregateInput = {
+    id?: SortOrder
+    councilId?: SortOrder
+    projectRegistrationId?: SortOrder
     createdAt?: SortOrder
   }
 
@@ -29454,6 +33652,13 @@ export namespace Prisma {
     connect?: CallRoundCouncilMemberWhereUniqueInput | CallRoundCouncilMemberWhereUniqueInput[]
   }
 
+  export type CouncilMemberAssignmentCreateNestedManyWithoutCouncilMemberInput = {
+    create?: XOR<CouncilMemberAssignmentCreateWithoutCouncilMemberInput, CouncilMemberAssignmentUncheckedCreateWithoutCouncilMemberInput> | CouncilMemberAssignmentCreateWithoutCouncilMemberInput[] | CouncilMemberAssignmentUncheckedCreateWithoutCouncilMemberInput[]
+    connectOrCreate?: CouncilMemberAssignmentCreateOrConnectWithoutCouncilMemberInput | CouncilMemberAssignmentCreateOrConnectWithoutCouncilMemberInput[]
+    createMany?: CouncilMemberAssignmentCreateManyCouncilMemberInputEnvelope
+    connect?: CouncilMemberAssignmentWhereUniqueInput | CouncilMemberAssignmentWhereUniqueInput[]
+  }
+
   export type ProjectUncheckedCreateNestedManyWithoutLeaderInput = {
     create?: XOR<ProjectCreateWithoutLeaderInput, ProjectUncheckedCreateWithoutLeaderInput> | ProjectCreateWithoutLeaderInput[] | ProjectUncheckedCreateWithoutLeaderInput[]
     connectOrCreate?: ProjectCreateOrConnectWithoutLeaderInput | ProjectCreateOrConnectWithoutLeaderInput[]
@@ -29522,6 +33727,13 @@ export namespace Prisma {
     connectOrCreate?: CallRoundCouncilMemberCreateOrConnectWithoutCouncilMemberInput | CallRoundCouncilMemberCreateOrConnectWithoutCouncilMemberInput[]
     createMany?: CallRoundCouncilMemberCreateManyCouncilMemberInputEnvelope
     connect?: CallRoundCouncilMemberWhereUniqueInput | CallRoundCouncilMemberWhereUniqueInput[]
+  }
+
+  export type CouncilMemberAssignmentUncheckedCreateNestedManyWithoutCouncilMemberInput = {
+    create?: XOR<CouncilMemberAssignmentCreateWithoutCouncilMemberInput, CouncilMemberAssignmentUncheckedCreateWithoutCouncilMemberInput> | CouncilMemberAssignmentCreateWithoutCouncilMemberInput[] | CouncilMemberAssignmentUncheckedCreateWithoutCouncilMemberInput[]
+    connectOrCreate?: CouncilMemberAssignmentCreateOrConnectWithoutCouncilMemberInput | CouncilMemberAssignmentCreateOrConnectWithoutCouncilMemberInput[]
+    createMany?: CouncilMemberAssignmentCreateManyCouncilMemberInputEnvelope
+    connect?: CouncilMemberAssignmentWhereUniqueInput | CouncilMemberAssignmentWhereUniqueInput[]
   }
 
   export type NullableDateTimeFieldUpdateOperationsInput = {
@@ -29706,6 +33918,20 @@ export namespace Prisma {
     deleteMany?: CallRoundCouncilMemberScalarWhereInput | CallRoundCouncilMemberScalarWhereInput[]
   }
 
+  export type CouncilMemberAssignmentUpdateManyWithoutCouncilMemberNestedInput = {
+    create?: XOR<CouncilMemberAssignmentCreateWithoutCouncilMemberInput, CouncilMemberAssignmentUncheckedCreateWithoutCouncilMemberInput> | CouncilMemberAssignmentCreateWithoutCouncilMemberInput[] | CouncilMemberAssignmentUncheckedCreateWithoutCouncilMemberInput[]
+    connectOrCreate?: CouncilMemberAssignmentCreateOrConnectWithoutCouncilMemberInput | CouncilMemberAssignmentCreateOrConnectWithoutCouncilMemberInput[]
+    upsert?: CouncilMemberAssignmentUpsertWithWhereUniqueWithoutCouncilMemberInput | CouncilMemberAssignmentUpsertWithWhereUniqueWithoutCouncilMemberInput[]
+    createMany?: CouncilMemberAssignmentCreateManyCouncilMemberInputEnvelope
+    set?: CouncilMemberAssignmentWhereUniqueInput | CouncilMemberAssignmentWhereUniqueInput[]
+    disconnect?: CouncilMemberAssignmentWhereUniqueInput | CouncilMemberAssignmentWhereUniqueInput[]
+    delete?: CouncilMemberAssignmentWhereUniqueInput | CouncilMemberAssignmentWhereUniqueInput[]
+    connect?: CouncilMemberAssignmentWhereUniqueInput | CouncilMemberAssignmentWhereUniqueInput[]
+    update?: CouncilMemberAssignmentUpdateWithWhereUniqueWithoutCouncilMemberInput | CouncilMemberAssignmentUpdateWithWhereUniqueWithoutCouncilMemberInput[]
+    updateMany?: CouncilMemberAssignmentUpdateManyWithWhereWithoutCouncilMemberInput | CouncilMemberAssignmentUpdateManyWithWhereWithoutCouncilMemberInput[]
+    deleteMany?: CouncilMemberAssignmentScalarWhereInput | CouncilMemberAssignmentScalarWhereInput[]
+  }
+
   export type ProjectUncheckedUpdateManyWithoutLeaderNestedInput = {
     create?: XOR<ProjectCreateWithoutLeaderInput, ProjectUncheckedCreateWithoutLeaderInput> | ProjectCreateWithoutLeaderInput[] | ProjectUncheckedCreateWithoutLeaderInput[]
     connectOrCreate?: ProjectCreateOrConnectWithoutLeaderInput | ProjectCreateOrConnectWithoutLeaderInput[]
@@ -29846,6 +34072,20 @@ export namespace Prisma {
     deleteMany?: CallRoundCouncilMemberScalarWhereInput | CallRoundCouncilMemberScalarWhereInput[]
   }
 
+  export type CouncilMemberAssignmentUncheckedUpdateManyWithoutCouncilMemberNestedInput = {
+    create?: XOR<CouncilMemberAssignmentCreateWithoutCouncilMemberInput, CouncilMemberAssignmentUncheckedCreateWithoutCouncilMemberInput> | CouncilMemberAssignmentCreateWithoutCouncilMemberInput[] | CouncilMemberAssignmentUncheckedCreateWithoutCouncilMemberInput[]
+    connectOrCreate?: CouncilMemberAssignmentCreateOrConnectWithoutCouncilMemberInput | CouncilMemberAssignmentCreateOrConnectWithoutCouncilMemberInput[]
+    upsert?: CouncilMemberAssignmentUpsertWithWhereUniqueWithoutCouncilMemberInput | CouncilMemberAssignmentUpsertWithWhereUniqueWithoutCouncilMemberInput[]
+    createMany?: CouncilMemberAssignmentCreateManyCouncilMemberInputEnvelope
+    set?: CouncilMemberAssignmentWhereUniqueInput | CouncilMemberAssignmentWhereUniqueInput[]
+    disconnect?: CouncilMemberAssignmentWhereUniqueInput | CouncilMemberAssignmentWhereUniqueInput[]
+    delete?: CouncilMemberAssignmentWhereUniqueInput | CouncilMemberAssignmentWhereUniqueInput[]
+    connect?: CouncilMemberAssignmentWhereUniqueInput | CouncilMemberAssignmentWhereUniqueInput[]
+    update?: CouncilMemberAssignmentUpdateWithWhereUniqueWithoutCouncilMemberInput | CouncilMemberAssignmentUpdateWithWhereUniqueWithoutCouncilMemberInput[]
+    updateMany?: CouncilMemberAssignmentUpdateManyWithWhereWithoutCouncilMemberInput | CouncilMemberAssignmentUpdateManyWithWhereWithoutCouncilMemberInput[]
+    deleteMany?: CouncilMemberAssignmentScalarWhereInput | CouncilMemberAssignmentScalarWhereInput[]
+  }
+
   export type ProjectCreateNestedManyWithoutCallRoundInput = {
     create?: XOR<ProjectCreateWithoutCallRoundInput, ProjectUncheckedCreateWithoutCallRoundInput> | ProjectCreateWithoutCallRoundInput[] | ProjectUncheckedCreateWithoutCallRoundInput[]
     connectOrCreate?: ProjectCreateOrConnectWithoutCallRoundInput | ProjectCreateOrConnectWithoutCallRoundInput[]
@@ -29898,6 +34138,13 @@ export namespace Prisma {
     connect?: CallRoundCouncilMemberWhereUniqueInput | CallRoundCouncilMemberWhereUniqueInput[]
   }
 
+  export type CouncilCreateNestedManyWithoutCallRoundInput = {
+    create?: XOR<CouncilCreateWithoutCallRoundInput, CouncilUncheckedCreateWithoutCallRoundInput> | CouncilCreateWithoutCallRoundInput[] | CouncilUncheckedCreateWithoutCallRoundInput[]
+    connectOrCreate?: CouncilCreateOrConnectWithoutCallRoundInput | CouncilCreateOrConnectWithoutCallRoundInput[]
+    createMany?: CouncilCreateManyCallRoundInputEnvelope
+    connect?: CouncilWhereUniqueInput | CouncilWhereUniqueInput[]
+  }
+
   export type ProjectUncheckedCreateNestedManyWithoutCallRoundInput = {
     create?: XOR<ProjectCreateWithoutCallRoundInput, ProjectUncheckedCreateWithoutCallRoundInput> | ProjectCreateWithoutCallRoundInput[] | ProjectUncheckedCreateWithoutCallRoundInput[]
     connectOrCreate?: ProjectCreateOrConnectWithoutCallRoundInput | ProjectCreateOrConnectWithoutCallRoundInput[]
@@ -29942,6 +34189,13 @@ export namespace Prisma {
     connectOrCreate?: CallRoundCouncilMemberCreateOrConnectWithoutCallRoundInput | CallRoundCouncilMemberCreateOrConnectWithoutCallRoundInput[]
     createMany?: CallRoundCouncilMemberCreateManyCallRoundInputEnvelope
     connect?: CallRoundCouncilMemberWhereUniqueInput | CallRoundCouncilMemberWhereUniqueInput[]
+  }
+
+  export type CouncilUncheckedCreateNestedManyWithoutCallRoundInput = {
+    create?: XOR<CouncilCreateWithoutCallRoundInput, CouncilUncheckedCreateWithoutCallRoundInput> | CouncilCreateWithoutCallRoundInput[] | CouncilUncheckedCreateWithoutCallRoundInput[]
+    connectOrCreate?: CouncilCreateOrConnectWithoutCallRoundInput | CouncilCreateOrConnectWithoutCallRoundInput[]
+    createMany?: CouncilCreateManyCallRoundInputEnvelope
+    connect?: CouncilWhereUniqueInput | CouncilWhereUniqueInput[]
   }
 
   export type NullableIntFieldUpdateOperationsInput = {
@@ -30081,6 +34335,20 @@ export namespace Prisma {
     deleteMany?: CallRoundCouncilMemberScalarWhereInput | CallRoundCouncilMemberScalarWhereInput[]
   }
 
+  export type CouncilUpdateManyWithoutCallRoundNestedInput = {
+    create?: XOR<CouncilCreateWithoutCallRoundInput, CouncilUncheckedCreateWithoutCallRoundInput> | CouncilCreateWithoutCallRoundInput[] | CouncilUncheckedCreateWithoutCallRoundInput[]
+    connectOrCreate?: CouncilCreateOrConnectWithoutCallRoundInput | CouncilCreateOrConnectWithoutCallRoundInput[]
+    upsert?: CouncilUpsertWithWhereUniqueWithoutCallRoundInput | CouncilUpsertWithWhereUniqueWithoutCallRoundInput[]
+    createMany?: CouncilCreateManyCallRoundInputEnvelope
+    set?: CouncilWhereUniqueInput | CouncilWhereUniqueInput[]
+    disconnect?: CouncilWhereUniqueInput | CouncilWhereUniqueInput[]
+    delete?: CouncilWhereUniqueInput | CouncilWhereUniqueInput[]
+    connect?: CouncilWhereUniqueInput | CouncilWhereUniqueInput[]
+    update?: CouncilUpdateWithWhereUniqueWithoutCallRoundInput | CouncilUpdateWithWhereUniqueWithoutCallRoundInput[]
+    updateMany?: CouncilUpdateManyWithWhereWithoutCallRoundInput | CouncilUpdateManyWithWhereWithoutCallRoundInput[]
+    deleteMany?: CouncilScalarWhereInput | CouncilScalarWhereInput[]
+  }
+
   export type ProjectUncheckedUpdateManyWithoutCallRoundNestedInput = {
     create?: XOR<ProjectCreateWithoutCallRoundInput, ProjectUncheckedCreateWithoutCallRoundInput> | ProjectCreateWithoutCallRoundInput[] | ProjectUncheckedCreateWithoutCallRoundInput[]
     connectOrCreate?: ProjectCreateOrConnectWithoutCallRoundInput | ProjectCreateOrConnectWithoutCallRoundInput[]
@@ -30174,6 +34442,20 @@ export namespace Prisma {
     update?: CallRoundCouncilMemberUpdateWithWhereUniqueWithoutCallRoundInput | CallRoundCouncilMemberUpdateWithWhereUniqueWithoutCallRoundInput[]
     updateMany?: CallRoundCouncilMemberUpdateManyWithWhereWithoutCallRoundInput | CallRoundCouncilMemberUpdateManyWithWhereWithoutCallRoundInput[]
     deleteMany?: CallRoundCouncilMemberScalarWhereInput | CallRoundCouncilMemberScalarWhereInput[]
+  }
+
+  export type CouncilUncheckedUpdateManyWithoutCallRoundNestedInput = {
+    create?: XOR<CouncilCreateWithoutCallRoundInput, CouncilUncheckedCreateWithoutCallRoundInput> | CouncilCreateWithoutCallRoundInput[] | CouncilUncheckedCreateWithoutCallRoundInput[]
+    connectOrCreate?: CouncilCreateOrConnectWithoutCallRoundInput | CouncilCreateOrConnectWithoutCallRoundInput[]
+    upsert?: CouncilUpsertWithWhereUniqueWithoutCallRoundInput | CouncilUpsertWithWhereUniqueWithoutCallRoundInput[]
+    createMany?: CouncilCreateManyCallRoundInputEnvelope
+    set?: CouncilWhereUniqueInput | CouncilWhereUniqueInput[]
+    disconnect?: CouncilWhereUniqueInput | CouncilWhereUniqueInput[]
+    delete?: CouncilWhereUniqueInput | CouncilWhereUniqueInput[]
+    connect?: CouncilWhereUniqueInput | CouncilWhereUniqueInput[]
+    update?: CouncilUpdateWithWhereUniqueWithoutCallRoundInput | CouncilUpdateWithWhereUniqueWithoutCallRoundInput[]
+    updateMany?: CouncilUpdateManyWithWhereWithoutCallRoundInput | CouncilUpdateManyWithWhereWithoutCallRoundInput[]
+    deleteMany?: CouncilScalarWhereInput | CouncilScalarWhereInput[]
   }
 
   export type ProjectCreateNestedManyWithoutProjectTypeInput = {
@@ -30692,6 +34974,18 @@ export namespace Prisma {
     connect?: UserWhereUniqueInput
   }
 
+  export type ProjectCouncilAssignmentCreateNestedOneWithoutProjectRegistrationInput = {
+    create?: XOR<ProjectCouncilAssignmentCreateWithoutProjectRegistrationInput, ProjectCouncilAssignmentUncheckedCreateWithoutProjectRegistrationInput>
+    connectOrCreate?: ProjectCouncilAssignmentCreateOrConnectWithoutProjectRegistrationInput
+    connect?: ProjectCouncilAssignmentWhereUniqueInput
+  }
+
+  export type ProjectCouncilAssignmentUncheckedCreateNestedOneWithoutProjectRegistrationInput = {
+    create?: XOR<ProjectCouncilAssignmentCreateWithoutProjectRegistrationInput, ProjectCouncilAssignmentUncheckedCreateWithoutProjectRegistrationInput>
+    connectOrCreate?: ProjectCouncilAssignmentCreateOrConnectWithoutProjectRegistrationInput
+    connect?: ProjectCouncilAssignmentWhereUniqueInput
+  }
+
   export type EnumRegistrationStatusFieldUpdateOperationsInput = {
     set?: $Enums.RegistrationStatus
   }
@@ -30740,6 +35034,26 @@ export namespace Prisma {
     delete?: UserWhereInput | boolean
     connect?: UserWhereUniqueInput
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutFacultyReviewsInput, UserUpdateWithoutFacultyReviewsInput>, UserUncheckedUpdateWithoutFacultyReviewsInput>
+  }
+
+  export type ProjectCouncilAssignmentUpdateOneWithoutProjectRegistrationNestedInput = {
+    create?: XOR<ProjectCouncilAssignmentCreateWithoutProjectRegistrationInput, ProjectCouncilAssignmentUncheckedCreateWithoutProjectRegistrationInput>
+    connectOrCreate?: ProjectCouncilAssignmentCreateOrConnectWithoutProjectRegistrationInput
+    upsert?: ProjectCouncilAssignmentUpsertWithoutProjectRegistrationInput
+    disconnect?: ProjectCouncilAssignmentWhereInput | boolean
+    delete?: ProjectCouncilAssignmentWhereInput | boolean
+    connect?: ProjectCouncilAssignmentWhereUniqueInput
+    update?: XOR<XOR<ProjectCouncilAssignmentUpdateToOneWithWhereWithoutProjectRegistrationInput, ProjectCouncilAssignmentUpdateWithoutProjectRegistrationInput>, ProjectCouncilAssignmentUncheckedUpdateWithoutProjectRegistrationInput>
+  }
+
+  export type ProjectCouncilAssignmentUncheckedUpdateOneWithoutProjectRegistrationNestedInput = {
+    create?: XOR<ProjectCouncilAssignmentCreateWithoutProjectRegistrationInput, ProjectCouncilAssignmentUncheckedCreateWithoutProjectRegistrationInput>
+    connectOrCreate?: ProjectCouncilAssignmentCreateOrConnectWithoutProjectRegistrationInput
+    upsert?: ProjectCouncilAssignmentUpsertWithoutProjectRegistrationInput
+    disconnect?: ProjectCouncilAssignmentWhereInput | boolean
+    delete?: ProjectCouncilAssignmentWhereInput | boolean
+    connect?: ProjectCouncilAssignmentWhereUniqueInput
+    update?: XOR<XOR<ProjectCouncilAssignmentUpdateToOneWithWhereWithoutProjectRegistrationInput, ProjectCouncilAssignmentUpdateWithoutProjectRegistrationInput>, ProjectCouncilAssignmentUncheckedUpdateWithoutProjectRegistrationInput>
   }
 
   export type UserCreateNestedOneWithoutNotificationsInput = {
@@ -30814,6 +35128,160 @@ export namespace Prisma {
     upsert?: UserUpsertWithoutCallRoundCouncilMembersInput
     connect?: UserWhereUniqueInput
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutCallRoundCouncilMembersInput, UserUpdateWithoutCallRoundCouncilMembersInput>, UserUncheckedUpdateWithoutCallRoundCouncilMembersInput>
+  }
+
+  export type CallRoundCreateNestedOneWithoutCouncilsInput = {
+    create?: XOR<CallRoundCreateWithoutCouncilsInput, CallRoundUncheckedCreateWithoutCouncilsInput>
+    connectOrCreate?: CallRoundCreateOrConnectWithoutCouncilsInput
+    connect?: CallRoundWhereUniqueInput
+  }
+
+  export type CouncilMemberAssignmentCreateNestedManyWithoutCouncilInput = {
+    create?: XOR<CouncilMemberAssignmentCreateWithoutCouncilInput, CouncilMemberAssignmentUncheckedCreateWithoutCouncilInput> | CouncilMemberAssignmentCreateWithoutCouncilInput[] | CouncilMemberAssignmentUncheckedCreateWithoutCouncilInput[]
+    connectOrCreate?: CouncilMemberAssignmentCreateOrConnectWithoutCouncilInput | CouncilMemberAssignmentCreateOrConnectWithoutCouncilInput[]
+    createMany?: CouncilMemberAssignmentCreateManyCouncilInputEnvelope
+    connect?: CouncilMemberAssignmentWhereUniqueInput | CouncilMemberAssignmentWhereUniqueInput[]
+  }
+
+  export type ProjectCouncilAssignmentCreateNestedManyWithoutCouncilInput = {
+    create?: XOR<ProjectCouncilAssignmentCreateWithoutCouncilInput, ProjectCouncilAssignmentUncheckedCreateWithoutCouncilInput> | ProjectCouncilAssignmentCreateWithoutCouncilInput[] | ProjectCouncilAssignmentUncheckedCreateWithoutCouncilInput[]
+    connectOrCreate?: ProjectCouncilAssignmentCreateOrConnectWithoutCouncilInput | ProjectCouncilAssignmentCreateOrConnectWithoutCouncilInput[]
+    createMany?: ProjectCouncilAssignmentCreateManyCouncilInputEnvelope
+    connect?: ProjectCouncilAssignmentWhereUniqueInput | ProjectCouncilAssignmentWhereUniqueInput[]
+  }
+
+  export type CouncilMemberAssignmentUncheckedCreateNestedManyWithoutCouncilInput = {
+    create?: XOR<CouncilMemberAssignmentCreateWithoutCouncilInput, CouncilMemberAssignmentUncheckedCreateWithoutCouncilInput> | CouncilMemberAssignmentCreateWithoutCouncilInput[] | CouncilMemberAssignmentUncheckedCreateWithoutCouncilInput[]
+    connectOrCreate?: CouncilMemberAssignmentCreateOrConnectWithoutCouncilInput | CouncilMemberAssignmentCreateOrConnectWithoutCouncilInput[]
+    createMany?: CouncilMemberAssignmentCreateManyCouncilInputEnvelope
+    connect?: CouncilMemberAssignmentWhereUniqueInput | CouncilMemberAssignmentWhereUniqueInput[]
+  }
+
+  export type ProjectCouncilAssignmentUncheckedCreateNestedManyWithoutCouncilInput = {
+    create?: XOR<ProjectCouncilAssignmentCreateWithoutCouncilInput, ProjectCouncilAssignmentUncheckedCreateWithoutCouncilInput> | ProjectCouncilAssignmentCreateWithoutCouncilInput[] | ProjectCouncilAssignmentUncheckedCreateWithoutCouncilInput[]
+    connectOrCreate?: ProjectCouncilAssignmentCreateOrConnectWithoutCouncilInput | ProjectCouncilAssignmentCreateOrConnectWithoutCouncilInput[]
+    createMany?: ProjectCouncilAssignmentCreateManyCouncilInputEnvelope
+    connect?: ProjectCouncilAssignmentWhereUniqueInput | ProjectCouncilAssignmentWhereUniqueInput[]
+  }
+
+  export type CallRoundUpdateOneRequiredWithoutCouncilsNestedInput = {
+    create?: XOR<CallRoundCreateWithoutCouncilsInput, CallRoundUncheckedCreateWithoutCouncilsInput>
+    connectOrCreate?: CallRoundCreateOrConnectWithoutCouncilsInput
+    upsert?: CallRoundUpsertWithoutCouncilsInput
+    connect?: CallRoundWhereUniqueInput
+    update?: XOR<XOR<CallRoundUpdateToOneWithWhereWithoutCouncilsInput, CallRoundUpdateWithoutCouncilsInput>, CallRoundUncheckedUpdateWithoutCouncilsInput>
+  }
+
+  export type CouncilMemberAssignmentUpdateManyWithoutCouncilNestedInput = {
+    create?: XOR<CouncilMemberAssignmentCreateWithoutCouncilInput, CouncilMemberAssignmentUncheckedCreateWithoutCouncilInput> | CouncilMemberAssignmentCreateWithoutCouncilInput[] | CouncilMemberAssignmentUncheckedCreateWithoutCouncilInput[]
+    connectOrCreate?: CouncilMemberAssignmentCreateOrConnectWithoutCouncilInput | CouncilMemberAssignmentCreateOrConnectWithoutCouncilInput[]
+    upsert?: CouncilMemberAssignmentUpsertWithWhereUniqueWithoutCouncilInput | CouncilMemberAssignmentUpsertWithWhereUniqueWithoutCouncilInput[]
+    createMany?: CouncilMemberAssignmentCreateManyCouncilInputEnvelope
+    set?: CouncilMemberAssignmentWhereUniqueInput | CouncilMemberAssignmentWhereUniqueInput[]
+    disconnect?: CouncilMemberAssignmentWhereUniqueInput | CouncilMemberAssignmentWhereUniqueInput[]
+    delete?: CouncilMemberAssignmentWhereUniqueInput | CouncilMemberAssignmentWhereUniqueInput[]
+    connect?: CouncilMemberAssignmentWhereUniqueInput | CouncilMemberAssignmentWhereUniqueInput[]
+    update?: CouncilMemberAssignmentUpdateWithWhereUniqueWithoutCouncilInput | CouncilMemberAssignmentUpdateWithWhereUniqueWithoutCouncilInput[]
+    updateMany?: CouncilMemberAssignmentUpdateManyWithWhereWithoutCouncilInput | CouncilMemberAssignmentUpdateManyWithWhereWithoutCouncilInput[]
+    deleteMany?: CouncilMemberAssignmentScalarWhereInput | CouncilMemberAssignmentScalarWhereInput[]
+  }
+
+  export type ProjectCouncilAssignmentUpdateManyWithoutCouncilNestedInput = {
+    create?: XOR<ProjectCouncilAssignmentCreateWithoutCouncilInput, ProjectCouncilAssignmentUncheckedCreateWithoutCouncilInput> | ProjectCouncilAssignmentCreateWithoutCouncilInput[] | ProjectCouncilAssignmentUncheckedCreateWithoutCouncilInput[]
+    connectOrCreate?: ProjectCouncilAssignmentCreateOrConnectWithoutCouncilInput | ProjectCouncilAssignmentCreateOrConnectWithoutCouncilInput[]
+    upsert?: ProjectCouncilAssignmentUpsertWithWhereUniqueWithoutCouncilInput | ProjectCouncilAssignmentUpsertWithWhereUniqueWithoutCouncilInput[]
+    createMany?: ProjectCouncilAssignmentCreateManyCouncilInputEnvelope
+    set?: ProjectCouncilAssignmentWhereUniqueInput | ProjectCouncilAssignmentWhereUniqueInput[]
+    disconnect?: ProjectCouncilAssignmentWhereUniqueInput | ProjectCouncilAssignmentWhereUniqueInput[]
+    delete?: ProjectCouncilAssignmentWhereUniqueInput | ProjectCouncilAssignmentWhereUniqueInput[]
+    connect?: ProjectCouncilAssignmentWhereUniqueInput | ProjectCouncilAssignmentWhereUniqueInput[]
+    update?: ProjectCouncilAssignmentUpdateWithWhereUniqueWithoutCouncilInput | ProjectCouncilAssignmentUpdateWithWhereUniqueWithoutCouncilInput[]
+    updateMany?: ProjectCouncilAssignmentUpdateManyWithWhereWithoutCouncilInput | ProjectCouncilAssignmentUpdateManyWithWhereWithoutCouncilInput[]
+    deleteMany?: ProjectCouncilAssignmentScalarWhereInput | ProjectCouncilAssignmentScalarWhereInput[]
+  }
+
+  export type CouncilMemberAssignmentUncheckedUpdateManyWithoutCouncilNestedInput = {
+    create?: XOR<CouncilMemberAssignmentCreateWithoutCouncilInput, CouncilMemberAssignmentUncheckedCreateWithoutCouncilInput> | CouncilMemberAssignmentCreateWithoutCouncilInput[] | CouncilMemberAssignmentUncheckedCreateWithoutCouncilInput[]
+    connectOrCreate?: CouncilMemberAssignmentCreateOrConnectWithoutCouncilInput | CouncilMemberAssignmentCreateOrConnectWithoutCouncilInput[]
+    upsert?: CouncilMemberAssignmentUpsertWithWhereUniqueWithoutCouncilInput | CouncilMemberAssignmentUpsertWithWhereUniqueWithoutCouncilInput[]
+    createMany?: CouncilMemberAssignmentCreateManyCouncilInputEnvelope
+    set?: CouncilMemberAssignmentWhereUniqueInput | CouncilMemberAssignmentWhereUniqueInput[]
+    disconnect?: CouncilMemberAssignmentWhereUniqueInput | CouncilMemberAssignmentWhereUniqueInput[]
+    delete?: CouncilMemberAssignmentWhereUniqueInput | CouncilMemberAssignmentWhereUniqueInput[]
+    connect?: CouncilMemberAssignmentWhereUniqueInput | CouncilMemberAssignmentWhereUniqueInput[]
+    update?: CouncilMemberAssignmentUpdateWithWhereUniqueWithoutCouncilInput | CouncilMemberAssignmentUpdateWithWhereUniqueWithoutCouncilInput[]
+    updateMany?: CouncilMemberAssignmentUpdateManyWithWhereWithoutCouncilInput | CouncilMemberAssignmentUpdateManyWithWhereWithoutCouncilInput[]
+    deleteMany?: CouncilMemberAssignmentScalarWhereInput | CouncilMemberAssignmentScalarWhereInput[]
+  }
+
+  export type ProjectCouncilAssignmentUncheckedUpdateManyWithoutCouncilNestedInput = {
+    create?: XOR<ProjectCouncilAssignmentCreateWithoutCouncilInput, ProjectCouncilAssignmentUncheckedCreateWithoutCouncilInput> | ProjectCouncilAssignmentCreateWithoutCouncilInput[] | ProjectCouncilAssignmentUncheckedCreateWithoutCouncilInput[]
+    connectOrCreate?: ProjectCouncilAssignmentCreateOrConnectWithoutCouncilInput | ProjectCouncilAssignmentCreateOrConnectWithoutCouncilInput[]
+    upsert?: ProjectCouncilAssignmentUpsertWithWhereUniqueWithoutCouncilInput | ProjectCouncilAssignmentUpsertWithWhereUniqueWithoutCouncilInput[]
+    createMany?: ProjectCouncilAssignmentCreateManyCouncilInputEnvelope
+    set?: ProjectCouncilAssignmentWhereUniqueInput | ProjectCouncilAssignmentWhereUniqueInput[]
+    disconnect?: ProjectCouncilAssignmentWhereUniqueInput | ProjectCouncilAssignmentWhereUniqueInput[]
+    delete?: ProjectCouncilAssignmentWhereUniqueInput | ProjectCouncilAssignmentWhereUniqueInput[]
+    connect?: ProjectCouncilAssignmentWhereUniqueInput | ProjectCouncilAssignmentWhereUniqueInput[]
+    update?: ProjectCouncilAssignmentUpdateWithWhereUniqueWithoutCouncilInput | ProjectCouncilAssignmentUpdateWithWhereUniqueWithoutCouncilInput[]
+    updateMany?: ProjectCouncilAssignmentUpdateManyWithWhereWithoutCouncilInput | ProjectCouncilAssignmentUpdateManyWithWhereWithoutCouncilInput[]
+    deleteMany?: ProjectCouncilAssignmentScalarWhereInput | ProjectCouncilAssignmentScalarWhereInput[]
+  }
+
+  export type CouncilCreateNestedOneWithoutMembersInput = {
+    create?: XOR<CouncilCreateWithoutMembersInput, CouncilUncheckedCreateWithoutMembersInput>
+    connectOrCreate?: CouncilCreateOrConnectWithoutMembersInput
+    connect?: CouncilWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutCouncilAssignmentsInput = {
+    create?: XOR<UserCreateWithoutCouncilAssignmentsInput, UserUncheckedCreateWithoutCouncilAssignmentsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutCouncilAssignmentsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type CouncilUpdateOneRequiredWithoutMembersNestedInput = {
+    create?: XOR<CouncilCreateWithoutMembersInput, CouncilUncheckedCreateWithoutMembersInput>
+    connectOrCreate?: CouncilCreateOrConnectWithoutMembersInput
+    upsert?: CouncilUpsertWithoutMembersInput
+    connect?: CouncilWhereUniqueInput
+    update?: XOR<XOR<CouncilUpdateToOneWithWhereWithoutMembersInput, CouncilUpdateWithoutMembersInput>, CouncilUncheckedUpdateWithoutMembersInput>
+  }
+
+  export type UserUpdateOneRequiredWithoutCouncilAssignmentsNestedInput = {
+    create?: XOR<UserCreateWithoutCouncilAssignmentsInput, UserUncheckedCreateWithoutCouncilAssignmentsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutCouncilAssignmentsInput
+    upsert?: UserUpsertWithoutCouncilAssignmentsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutCouncilAssignmentsInput, UserUpdateWithoutCouncilAssignmentsInput>, UserUncheckedUpdateWithoutCouncilAssignmentsInput>
+  }
+
+  export type CouncilCreateNestedOneWithoutProjectsInput = {
+    create?: XOR<CouncilCreateWithoutProjectsInput, CouncilUncheckedCreateWithoutProjectsInput>
+    connectOrCreate?: CouncilCreateOrConnectWithoutProjectsInput
+    connect?: CouncilWhereUniqueInput
+  }
+
+  export type ProjectRegistrationCreateNestedOneWithoutCouncilAssignmentInput = {
+    create?: XOR<ProjectRegistrationCreateWithoutCouncilAssignmentInput, ProjectRegistrationUncheckedCreateWithoutCouncilAssignmentInput>
+    connectOrCreate?: ProjectRegistrationCreateOrConnectWithoutCouncilAssignmentInput
+    connect?: ProjectRegistrationWhereUniqueInput
+  }
+
+  export type CouncilUpdateOneRequiredWithoutProjectsNestedInput = {
+    create?: XOR<CouncilCreateWithoutProjectsInput, CouncilUncheckedCreateWithoutProjectsInput>
+    connectOrCreate?: CouncilCreateOrConnectWithoutProjectsInput
+    upsert?: CouncilUpsertWithoutProjectsInput
+    connect?: CouncilWhereUniqueInput
+    update?: XOR<XOR<CouncilUpdateToOneWithWhereWithoutProjectsInput, CouncilUpdateWithoutProjectsInput>, CouncilUncheckedUpdateWithoutProjectsInput>
+  }
+
+  export type ProjectRegistrationUpdateOneRequiredWithoutCouncilAssignmentNestedInput = {
+    create?: XOR<ProjectRegistrationCreateWithoutCouncilAssignmentInput, ProjectRegistrationUncheckedCreateWithoutCouncilAssignmentInput>
+    connectOrCreate?: ProjectRegistrationCreateOrConnectWithoutCouncilAssignmentInput
+    upsert?: ProjectRegistrationUpsertWithoutCouncilAssignmentInput
+    connect?: ProjectRegistrationWhereUniqueInput
+    update?: XOR<XOR<ProjectRegistrationUpdateToOneWithWhereWithoutCouncilAssignmentInput, ProjectRegistrationUpdateWithoutCouncilAssignmentInput>, ProjectRegistrationUncheckedUpdateWithoutCouncilAssignmentInput>
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -31374,6 +35842,7 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     callRoundInstructors?: CallRoundInstructorCreateNestedManyWithoutInstructorInput
     callRoundCouncilMembers?: CallRoundCouncilMemberCreateNestedManyWithoutCouncilMemberInput
+    councilAssignments?: CouncilMemberAssignmentCreateNestedManyWithoutCouncilMemberInput
   }
 
   export type UserUncheckedCreateWithoutDepartmentRefInput = {
@@ -31402,6 +35871,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     callRoundInstructors?: CallRoundInstructorUncheckedCreateNestedManyWithoutInstructorInput
     callRoundCouncilMembers?: CallRoundCouncilMemberUncheckedCreateNestedManyWithoutCouncilMemberInput
+    councilAssignments?: CouncilMemberAssignmentUncheckedCreateNestedManyWithoutCouncilMemberInput
   }
 
   export type UserCreateOrConnectWithoutDepartmentRefInput = {
@@ -31449,6 +35919,7 @@ export namespace Prisma {
     classes?: ClassCreateNestedManyWithoutCallRoundsInput
     availableInstructors?: CallRoundInstructorCreateNestedManyWithoutCallRoundInput
     availableCouncilMembers?: CallRoundCouncilMemberCreateNestedManyWithoutCallRoundInput
+    councils?: CouncilCreateNestedManyWithoutCallRoundInput
   }
 
   export type CallRoundUncheckedCreateWithoutDepartmentsInput = {
@@ -31486,6 +35957,7 @@ export namespace Prisma {
     classes?: ClassUncheckedCreateNestedManyWithoutCallRoundsInput
     availableInstructors?: CallRoundInstructorUncheckedCreateNestedManyWithoutCallRoundInput
     availableCouncilMembers?: CallRoundCouncilMemberUncheckedCreateNestedManyWithoutCallRoundInput
+    councils?: CouncilUncheckedCreateNestedManyWithoutCallRoundInput
   }
 
   export type CallRoundCreateOrConnectWithoutDepartmentsInput = {
@@ -31693,6 +36165,7 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     callRoundInstructors?: CallRoundInstructorCreateNestedManyWithoutInstructorInput
     callRoundCouncilMembers?: CallRoundCouncilMemberCreateNestedManyWithoutCouncilMemberInput
+    councilAssignments?: CouncilMemberAssignmentCreateNestedManyWithoutCouncilMemberInput
   }
 
   export type UserUncheckedCreateWithoutMajorInput = {
@@ -31721,6 +36194,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     callRoundInstructors?: CallRoundInstructorUncheckedCreateNestedManyWithoutInstructorInput
     callRoundCouncilMembers?: CallRoundCouncilMemberUncheckedCreateNestedManyWithoutCouncilMemberInput
+    councilAssignments?: CouncilMemberAssignmentUncheckedCreateNestedManyWithoutCouncilMemberInput
   }
 
   export type UserCreateOrConnectWithoutMajorInput = {
@@ -31768,6 +36242,7 @@ export namespace Prisma {
     classes?: ClassCreateNestedManyWithoutCallRoundsInput
     availableInstructors?: CallRoundInstructorCreateNestedManyWithoutCallRoundInput
     availableCouncilMembers?: CallRoundCouncilMemberCreateNestedManyWithoutCallRoundInput
+    councils?: CouncilCreateNestedManyWithoutCallRoundInput
   }
 
   export type CallRoundUncheckedCreateWithoutMajorsInput = {
@@ -31805,6 +36280,7 @@ export namespace Prisma {
     classes?: ClassUncheckedCreateNestedManyWithoutCallRoundsInput
     availableInstructors?: CallRoundInstructorUncheckedCreateNestedManyWithoutCallRoundInput
     availableCouncilMembers?: CallRoundCouncilMemberUncheckedCreateNestedManyWithoutCallRoundInput
+    councils?: CouncilUncheckedCreateNestedManyWithoutCallRoundInput
   }
 
   export type CallRoundCreateOrConnectWithoutMajorsInput = {
@@ -31960,6 +36436,7 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     callRoundInstructors?: CallRoundInstructorCreateNestedManyWithoutInstructorInput
     callRoundCouncilMembers?: CallRoundCouncilMemberCreateNestedManyWithoutCouncilMemberInput
+    councilAssignments?: CouncilMemberAssignmentCreateNestedManyWithoutCouncilMemberInput
   }
 
   export type UserUncheckedCreateWithoutClassInput = {
@@ -31988,6 +36465,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     callRoundInstructors?: CallRoundInstructorUncheckedCreateNestedManyWithoutInstructorInput
     callRoundCouncilMembers?: CallRoundCouncilMemberUncheckedCreateNestedManyWithoutCouncilMemberInput
+    councilAssignments?: CouncilMemberAssignmentUncheckedCreateNestedManyWithoutCouncilMemberInput
   }
 
   export type UserCreateOrConnectWithoutClassInput = {
@@ -32035,6 +36513,7 @@ export namespace Prisma {
     majors?: MajorCreateNestedManyWithoutCallRoundsInput
     availableInstructors?: CallRoundInstructorCreateNestedManyWithoutCallRoundInput
     availableCouncilMembers?: CallRoundCouncilMemberCreateNestedManyWithoutCallRoundInput
+    councils?: CouncilCreateNestedManyWithoutCallRoundInput
   }
 
   export type CallRoundUncheckedCreateWithoutClassesInput = {
@@ -32072,6 +36551,7 @@ export namespace Prisma {
     majors?: MajorUncheckedCreateNestedManyWithoutCallRoundsInput
     availableInstructors?: CallRoundInstructorUncheckedCreateNestedManyWithoutCallRoundInput
     availableCouncilMembers?: CallRoundCouncilMemberUncheckedCreateNestedManyWithoutCallRoundInput
+    councils?: CouncilUncheckedCreateNestedManyWithoutCallRoundInput
   }
 
   export type CallRoundCreateOrConnectWithoutClassesInput = {
@@ -32387,6 +36867,7 @@ export namespace Prisma {
     instructor?: UserCreateNestedOneWithoutInstructedRegistrationsInput
     callRound?: CallRoundCreateNestedOneWithoutRegistrationsInput
     facultyReviewer?: UserCreateNestedOneWithoutFacultyReviewsInput
+    councilAssignment?: ProjectCouncilAssignmentCreateNestedOneWithoutProjectRegistrationInput
   }
 
   export type ProjectRegistrationUncheckedCreateWithoutUserInput = {
@@ -32403,6 +36884,7 @@ export namespace Prisma {
     instructorStatus?: $Enums.InstructorStatus
     facultyStatus?: $Enums.FacultyStatus
     facultyReviewerId?: string | null
+    councilAssignment?: ProjectCouncilAssignmentUncheckedCreateNestedOneWithoutProjectRegistrationInput
   }
 
   export type ProjectRegistrationCreateOrConnectWithoutUserInput = {
@@ -32429,6 +36911,7 @@ export namespace Prisma {
     user: UserCreateNestedOneWithoutRegistrationsInput
     callRound?: CallRoundCreateNestedOneWithoutRegistrationsInput
     facultyReviewer?: UserCreateNestedOneWithoutFacultyReviewsInput
+    councilAssignment?: ProjectCouncilAssignmentCreateNestedOneWithoutProjectRegistrationInput
   }
 
   export type ProjectRegistrationUncheckedCreateWithoutInstructorInput = {
@@ -32445,6 +36928,7 @@ export namespace Prisma {
     instructorStatus?: $Enums.InstructorStatus
     facultyStatus?: $Enums.FacultyStatus
     facultyReviewerId?: string | null
+    councilAssignment?: ProjectCouncilAssignmentUncheckedCreateNestedOneWithoutProjectRegistrationInput
   }
 
   export type ProjectRegistrationCreateOrConnectWithoutInstructorInput = {
@@ -32529,6 +37013,7 @@ export namespace Prisma {
     user: UserCreateNestedOneWithoutRegistrationsInput
     instructor?: UserCreateNestedOneWithoutInstructedRegistrationsInput
     callRound?: CallRoundCreateNestedOneWithoutRegistrationsInput
+    councilAssignment?: ProjectCouncilAssignmentCreateNestedOneWithoutProjectRegistrationInput
   }
 
   export type ProjectRegistrationUncheckedCreateWithoutFacultyReviewerInput = {
@@ -32545,6 +37030,7 @@ export namespace Prisma {
     instructorId?: string | null
     instructorStatus?: $Enums.InstructorStatus
     facultyStatus?: $Enums.FacultyStatus
+    councilAssignment?: ProjectCouncilAssignmentUncheckedCreateNestedOneWithoutProjectRegistrationInput
   }
 
   export type ProjectRegistrationCreateOrConnectWithoutFacultyReviewerInput = {
@@ -32632,6 +37118,30 @@ export namespace Prisma {
 
   export type CallRoundCouncilMemberCreateManyCouncilMemberInputEnvelope = {
     data: CallRoundCouncilMemberCreateManyCouncilMemberInput | CallRoundCouncilMemberCreateManyCouncilMemberInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type CouncilMemberAssignmentCreateWithoutCouncilMemberInput = {
+    id?: string
+    role?: string | null
+    createdAt?: Date | string
+    council: CouncilCreateNestedOneWithoutMembersInput
+  }
+
+  export type CouncilMemberAssignmentUncheckedCreateWithoutCouncilMemberInput = {
+    id?: string
+    councilId: string
+    role?: string | null
+    createdAt?: Date | string
+  }
+
+  export type CouncilMemberAssignmentCreateOrConnectWithoutCouncilMemberInput = {
+    where: CouncilMemberAssignmentWhereUniqueInput
+    create: XOR<CouncilMemberAssignmentCreateWithoutCouncilMemberInput, CouncilMemberAssignmentUncheckedCreateWithoutCouncilMemberInput>
+  }
+
+  export type CouncilMemberAssignmentCreateManyCouncilMemberInputEnvelope = {
+    data: CouncilMemberAssignmentCreateManyCouncilMemberInput | CouncilMemberAssignmentCreateManyCouncilMemberInput[]
     skipDuplicates?: boolean
   }
 
@@ -32988,6 +37498,33 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"CallRoundCouncilMember"> | Date | string
   }
 
+  export type CouncilMemberAssignmentUpsertWithWhereUniqueWithoutCouncilMemberInput = {
+    where: CouncilMemberAssignmentWhereUniqueInput
+    update: XOR<CouncilMemberAssignmentUpdateWithoutCouncilMemberInput, CouncilMemberAssignmentUncheckedUpdateWithoutCouncilMemberInput>
+    create: XOR<CouncilMemberAssignmentCreateWithoutCouncilMemberInput, CouncilMemberAssignmentUncheckedCreateWithoutCouncilMemberInput>
+  }
+
+  export type CouncilMemberAssignmentUpdateWithWhereUniqueWithoutCouncilMemberInput = {
+    where: CouncilMemberAssignmentWhereUniqueInput
+    data: XOR<CouncilMemberAssignmentUpdateWithoutCouncilMemberInput, CouncilMemberAssignmentUncheckedUpdateWithoutCouncilMemberInput>
+  }
+
+  export type CouncilMemberAssignmentUpdateManyWithWhereWithoutCouncilMemberInput = {
+    where: CouncilMemberAssignmentScalarWhereInput
+    data: XOR<CouncilMemberAssignmentUpdateManyMutationInput, CouncilMemberAssignmentUncheckedUpdateManyWithoutCouncilMemberInput>
+  }
+
+  export type CouncilMemberAssignmentScalarWhereInput = {
+    AND?: CouncilMemberAssignmentScalarWhereInput | CouncilMemberAssignmentScalarWhereInput[]
+    OR?: CouncilMemberAssignmentScalarWhereInput[]
+    NOT?: CouncilMemberAssignmentScalarWhereInput | CouncilMemberAssignmentScalarWhereInput[]
+    id?: StringFilter<"CouncilMemberAssignment"> | string
+    councilId?: StringFilter<"CouncilMemberAssignment"> | string
+    councilMemberId?: StringFilter<"CouncilMemberAssignment"> | string
+    role?: StringNullableFilter<"CouncilMemberAssignment"> | string | null
+    createdAt?: DateTimeFilter<"CouncilMemberAssignment"> | Date | string
+  }
+
   export type ProjectCreateWithoutCallRoundInput = {
     id?: string
     code?: string | null
@@ -33060,6 +37597,7 @@ export namespace Prisma {
     user: UserCreateNestedOneWithoutRegistrationsInput
     instructor?: UserCreateNestedOneWithoutInstructedRegistrationsInput
     facultyReviewer?: UserCreateNestedOneWithoutFacultyReviewsInput
+    councilAssignment?: ProjectCouncilAssignmentCreateNestedOneWithoutProjectRegistrationInput
   }
 
   export type ProjectRegistrationUncheckedCreateWithoutCallRoundInput = {
@@ -33076,6 +37614,7 @@ export namespace Prisma {
     instructorStatus?: $Enums.InstructorStatus
     facultyStatus?: $Enums.FacultyStatus
     facultyReviewerId?: string | null
+    councilAssignment?: ProjectCouncilAssignmentUncheckedCreateNestedOneWithoutProjectRegistrationInput
   }
 
   export type ProjectRegistrationCreateOrConnectWithoutCallRoundInput = {
@@ -33242,6 +37781,36 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type CouncilCreateWithoutCallRoundInput = {
+    id?: string
+    name: string
+    description?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    members?: CouncilMemberAssignmentCreateNestedManyWithoutCouncilInput
+    projects?: ProjectCouncilAssignmentCreateNestedManyWithoutCouncilInput
+  }
+
+  export type CouncilUncheckedCreateWithoutCallRoundInput = {
+    id?: string
+    name: string
+    description?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    members?: CouncilMemberAssignmentUncheckedCreateNestedManyWithoutCouncilInput
+    projects?: ProjectCouncilAssignmentUncheckedCreateNestedManyWithoutCouncilInput
+  }
+
+  export type CouncilCreateOrConnectWithoutCallRoundInput = {
+    where: CouncilWhereUniqueInput
+    create: XOR<CouncilCreateWithoutCallRoundInput, CouncilUncheckedCreateWithoutCallRoundInput>
+  }
+
+  export type CouncilCreateManyCallRoundInputEnvelope = {
+    data: CouncilCreateManyCallRoundInput | CouncilCreateManyCallRoundInput[]
+    skipDuplicates?: boolean
+  }
+
   export type ProjectUpsertWithWhereUniqueWithoutCallRoundInput = {
     where: ProjectWhereUniqueInput
     update: XOR<ProjectUpdateWithoutCallRoundInput, ProjectUncheckedUpdateWithoutCallRoundInput>
@@ -33401,6 +37970,34 @@ export namespace Prisma {
     data: XOR<CallRoundCouncilMemberUpdateManyMutationInput, CallRoundCouncilMemberUncheckedUpdateManyWithoutCallRoundInput>
   }
 
+  export type CouncilUpsertWithWhereUniqueWithoutCallRoundInput = {
+    where: CouncilWhereUniqueInput
+    update: XOR<CouncilUpdateWithoutCallRoundInput, CouncilUncheckedUpdateWithoutCallRoundInput>
+    create: XOR<CouncilCreateWithoutCallRoundInput, CouncilUncheckedCreateWithoutCallRoundInput>
+  }
+
+  export type CouncilUpdateWithWhereUniqueWithoutCallRoundInput = {
+    where: CouncilWhereUniqueInput
+    data: XOR<CouncilUpdateWithoutCallRoundInput, CouncilUncheckedUpdateWithoutCallRoundInput>
+  }
+
+  export type CouncilUpdateManyWithWhereWithoutCallRoundInput = {
+    where: CouncilScalarWhereInput
+    data: XOR<CouncilUpdateManyMutationInput, CouncilUncheckedUpdateManyWithoutCallRoundInput>
+  }
+
+  export type CouncilScalarWhereInput = {
+    AND?: CouncilScalarWhereInput | CouncilScalarWhereInput[]
+    OR?: CouncilScalarWhereInput[]
+    NOT?: CouncilScalarWhereInput | CouncilScalarWhereInput[]
+    id?: StringFilter<"Council"> | string
+    callRoundId?: StringFilter<"Council"> | string
+    name?: StringFilter<"Council"> | string
+    description?: StringNullableFilter<"Council"> | string | null
+    createdAt?: DateTimeFilter<"Council"> | Date | string
+    updatedAt?: DateTimeFilter<"Council"> | Date | string
+  }
+
   export type ProjectCreateWithoutProjectTypeInput = {
     id?: string
     code?: string | null
@@ -33501,6 +38098,7 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     callRoundInstructors?: CallRoundInstructorCreateNestedManyWithoutInstructorInput
     callRoundCouncilMembers?: CallRoundCouncilMemberCreateNestedManyWithoutCouncilMemberInput
+    councilAssignments?: CouncilMemberAssignmentCreateNestedManyWithoutCouncilMemberInput
   }
 
   export type UserUncheckedCreateWithoutLeadProjectsInput = {
@@ -33529,6 +38127,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     callRoundInstructors?: CallRoundInstructorUncheckedCreateNestedManyWithoutInstructorInput
     callRoundCouncilMembers?: CallRoundCouncilMemberUncheckedCreateNestedManyWithoutCouncilMemberInput
+    councilAssignments?: CouncilMemberAssignmentUncheckedCreateNestedManyWithoutCouncilMemberInput
   }
 
   export type UserCreateOrConnectWithoutLeadProjectsInput = {
@@ -33562,6 +38161,7 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     callRoundInstructors?: CallRoundInstructorCreateNestedManyWithoutInstructorInput
     callRoundCouncilMembers?: CallRoundCouncilMemberCreateNestedManyWithoutCouncilMemberInput
+    councilAssignments?: CouncilMemberAssignmentCreateNestedManyWithoutCouncilMemberInput
   }
 
   export type UserUncheckedCreateWithoutDeanReviewsInput = {
@@ -33590,6 +38190,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     callRoundInstructors?: CallRoundInstructorUncheckedCreateNestedManyWithoutInstructorInput
     callRoundCouncilMembers?: CallRoundCouncilMemberUncheckedCreateNestedManyWithoutCouncilMemberInput
+    councilAssignments?: CouncilMemberAssignmentUncheckedCreateNestedManyWithoutCouncilMemberInput
   }
 
   export type UserCreateOrConnectWithoutDeanReviewsInput = {
@@ -33632,6 +38233,7 @@ export namespace Prisma {
     classes?: ClassCreateNestedManyWithoutCallRoundsInput
     availableInstructors?: CallRoundInstructorCreateNestedManyWithoutCallRoundInput
     availableCouncilMembers?: CallRoundCouncilMemberCreateNestedManyWithoutCallRoundInput
+    councils?: CouncilCreateNestedManyWithoutCallRoundInput
   }
 
   export type CallRoundUncheckedCreateWithoutProjectsInput = {
@@ -33669,6 +38271,7 @@ export namespace Prisma {
     classes?: ClassUncheckedCreateNestedManyWithoutCallRoundsInput
     availableInstructors?: CallRoundInstructorUncheckedCreateNestedManyWithoutCallRoundInput
     availableCouncilMembers?: CallRoundCouncilMemberUncheckedCreateNestedManyWithoutCallRoundInput
+    councils?: CouncilUncheckedCreateNestedManyWithoutCallRoundInput
   }
 
   export type CallRoundCreateOrConnectWithoutProjectsInput = {
@@ -33861,6 +38464,7 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     callRoundInstructors?: CallRoundInstructorCreateNestedManyWithoutInstructorInput
     callRoundCouncilMembers?: CallRoundCouncilMemberCreateNestedManyWithoutCouncilMemberInput
+    councilAssignments?: CouncilMemberAssignmentCreateNestedManyWithoutCouncilMemberInput
   }
 
   export type UserUncheckedCreateWithoutInstructedProjectsInput = {
@@ -33889,6 +38493,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     callRoundInstructors?: CallRoundInstructorUncheckedCreateNestedManyWithoutInstructorInput
     callRoundCouncilMembers?: CallRoundCouncilMemberUncheckedCreateNestedManyWithoutCouncilMemberInput
+    councilAssignments?: CouncilMemberAssignmentUncheckedCreateNestedManyWithoutCouncilMemberInput
   }
 
   export type UserCreateOrConnectWithoutInstructedProjectsInput = {
@@ -33933,6 +38538,7 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     callRoundInstructors?: CallRoundInstructorUpdateManyWithoutInstructorNestedInput
     callRoundCouncilMembers?: CallRoundCouncilMemberUpdateManyWithoutCouncilMemberNestedInput
+    councilAssignments?: CouncilMemberAssignmentUpdateManyWithoutCouncilMemberNestedInput
   }
 
   export type UserUncheckedUpdateWithoutLeadProjectsInput = {
@@ -33961,6 +38567,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     callRoundInstructors?: CallRoundInstructorUncheckedUpdateManyWithoutInstructorNestedInput
     callRoundCouncilMembers?: CallRoundCouncilMemberUncheckedUpdateManyWithoutCouncilMemberNestedInput
+    councilAssignments?: CouncilMemberAssignmentUncheckedUpdateManyWithoutCouncilMemberNestedInput
   }
 
   export type UserUpsertWithoutDeanReviewsInput = {
@@ -34000,6 +38607,7 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     callRoundInstructors?: CallRoundInstructorUpdateManyWithoutInstructorNestedInput
     callRoundCouncilMembers?: CallRoundCouncilMemberUpdateManyWithoutCouncilMemberNestedInput
+    councilAssignments?: CouncilMemberAssignmentUpdateManyWithoutCouncilMemberNestedInput
   }
 
   export type UserUncheckedUpdateWithoutDeanReviewsInput = {
@@ -34028,6 +38636,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     callRoundInstructors?: CallRoundInstructorUncheckedUpdateManyWithoutInstructorNestedInput
     callRoundCouncilMembers?: CallRoundCouncilMemberUncheckedUpdateManyWithoutCouncilMemberNestedInput
+    councilAssignments?: CouncilMemberAssignmentUncheckedUpdateManyWithoutCouncilMemberNestedInput
   }
 
   export type CallRoundUpsertWithoutProjectsInput = {
@@ -34076,6 +38685,7 @@ export namespace Prisma {
     classes?: ClassUpdateManyWithoutCallRoundsNestedInput
     availableInstructors?: CallRoundInstructorUpdateManyWithoutCallRoundNestedInput
     availableCouncilMembers?: CallRoundCouncilMemberUpdateManyWithoutCallRoundNestedInput
+    councils?: CouncilUpdateManyWithoutCallRoundNestedInput
   }
 
   export type CallRoundUncheckedUpdateWithoutProjectsInput = {
@@ -34113,6 +38723,7 @@ export namespace Prisma {
     classes?: ClassUncheckedUpdateManyWithoutCallRoundsNestedInput
     availableInstructors?: CallRoundInstructorUncheckedUpdateManyWithoutCallRoundNestedInput
     availableCouncilMembers?: CallRoundCouncilMemberUncheckedUpdateManyWithoutCallRoundNestedInput
+    councils?: CouncilUncheckedUpdateManyWithoutCallRoundNestedInput
   }
 
   export type ProjectTypeUpsertWithoutProjectsInput = {
@@ -34294,6 +38905,7 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     callRoundInstructors?: CallRoundInstructorUpdateManyWithoutInstructorNestedInput
     callRoundCouncilMembers?: CallRoundCouncilMemberUpdateManyWithoutCouncilMemberNestedInput
+    councilAssignments?: CouncilMemberAssignmentUpdateManyWithoutCouncilMemberNestedInput
   }
 
   export type UserUncheckedUpdateWithoutInstructedProjectsInput = {
@@ -34322,6 +38934,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     callRoundInstructors?: CallRoundInstructorUncheckedUpdateManyWithoutInstructorNestedInput
     callRoundCouncilMembers?: CallRoundCouncilMemberUncheckedUpdateManyWithoutCouncilMemberNestedInput
+    councilAssignments?: CouncilMemberAssignmentUncheckedUpdateManyWithoutCouncilMemberNestedInput
   }
 
   export type ProgressReportTemplateItemCreateWithoutTemplateInput = {
@@ -34393,6 +39006,7 @@ export namespace Prisma {
     classes?: ClassCreateNestedManyWithoutCallRoundsInput
     availableInstructors?: CallRoundInstructorCreateNestedManyWithoutCallRoundInput
     availableCouncilMembers?: CallRoundCouncilMemberCreateNestedManyWithoutCallRoundInput
+    councils?: CouncilCreateNestedManyWithoutCallRoundInput
   }
 
   export type CallRoundUncheckedCreateWithoutTemplateInput = {
@@ -34430,6 +39044,7 @@ export namespace Prisma {
     classes?: ClassUncheckedCreateNestedManyWithoutCallRoundsInput
     availableInstructors?: CallRoundInstructorUncheckedCreateNestedManyWithoutCallRoundInput
     availableCouncilMembers?: CallRoundCouncilMemberUncheckedCreateNestedManyWithoutCallRoundInput
+    councils?: CouncilUncheckedCreateNestedManyWithoutCallRoundInput
   }
 
   export type CallRoundCreateOrConnectWithoutTemplateInput = {
@@ -34745,6 +39360,7 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     callRoundInstructors?: CallRoundInstructorCreateNestedManyWithoutInstructorInput
     callRoundCouncilMembers?: CallRoundCouncilMemberCreateNestedManyWithoutCouncilMemberInput
+    councilAssignments?: CouncilMemberAssignmentCreateNestedManyWithoutCouncilMemberInput
   }
 
   export type UserUncheckedCreateWithoutCouncilEvaluationsInput = {
@@ -34773,6 +39389,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     callRoundInstructors?: CallRoundInstructorUncheckedCreateNestedManyWithoutInstructorInput
     callRoundCouncilMembers?: CallRoundCouncilMemberUncheckedCreateNestedManyWithoutCouncilMemberInput
+    councilAssignments?: CouncilMemberAssignmentUncheckedCreateNestedManyWithoutCouncilMemberInput
   }
 
   export type UserCreateOrConnectWithoutCouncilEvaluationsInput = {
@@ -34876,6 +39493,7 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     callRoundInstructors?: CallRoundInstructorUpdateManyWithoutInstructorNestedInput
     callRoundCouncilMembers?: CallRoundCouncilMemberUpdateManyWithoutCouncilMemberNestedInput
+    councilAssignments?: CouncilMemberAssignmentUpdateManyWithoutCouncilMemberNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCouncilEvaluationsInput = {
@@ -34904,6 +39522,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     callRoundInstructors?: CallRoundInstructorUncheckedUpdateManyWithoutInstructorNestedInput
     callRoundCouncilMembers?: CallRoundCouncilMemberUncheckedUpdateManyWithoutCouncilMemberNestedInput
+    councilAssignments?: CouncilMemberAssignmentUncheckedUpdateManyWithoutCouncilMemberNestedInput
   }
 
   export type ProjectCreateWithoutDisbursementsInput = {
@@ -35156,6 +39775,7 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     callRoundInstructors?: CallRoundInstructorCreateNestedManyWithoutInstructorInput
     callRoundCouncilMembers?: CallRoundCouncilMemberCreateNestedManyWithoutCouncilMemberInput
+    councilAssignments?: CouncilMemberAssignmentCreateNestedManyWithoutCouncilMemberInput
   }
 
   export type UserUncheckedCreateWithoutRegistrationsInput = {
@@ -35184,6 +39804,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     callRoundInstructors?: CallRoundInstructorUncheckedCreateNestedManyWithoutInstructorInput
     callRoundCouncilMembers?: CallRoundCouncilMemberUncheckedCreateNestedManyWithoutCouncilMemberInput
+    councilAssignments?: CouncilMemberAssignmentUncheckedCreateNestedManyWithoutCouncilMemberInput
   }
 
   export type UserCreateOrConnectWithoutRegistrationsInput = {
@@ -35217,6 +39838,7 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     callRoundInstructors?: CallRoundInstructorCreateNestedManyWithoutInstructorInput
     callRoundCouncilMembers?: CallRoundCouncilMemberCreateNestedManyWithoutCouncilMemberInput
+    councilAssignments?: CouncilMemberAssignmentCreateNestedManyWithoutCouncilMemberInput
   }
 
   export type UserUncheckedCreateWithoutInstructedRegistrationsInput = {
@@ -35245,6 +39867,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     callRoundInstructors?: CallRoundInstructorUncheckedCreateNestedManyWithoutInstructorInput
     callRoundCouncilMembers?: CallRoundCouncilMemberUncheckedCreateNestedManyWithoutCouncilMemberInput
+    councilAssignments?: CouncilMemberAssignmentUncheckedCreateNestedManyWithoutCouncilMemberInput
   }
 
   export type UserCreateOrConnectWithoutInstructedRegistrationsInput = {
@@ -35287,6 +39910,7 @@ export namespace Prisma {
     classes?: ClassCreateNestedManyWithoutCallRoundsInput
     availableInstructors?: CallRoundInstructorCreateNestedManyWithoutCallRoundInput
     availableCouncilMembers?: CallRoundCouncilMemberCreateNestedManyWithoutCallRoundInput
+    councils?: CouncilCreateNestedManyWithoutCallRoundInput
   }
 
   export type CallRoundUncheckedCreateWithoutRegistrationsInput = {
@@ -35324,6 +39948,7 @@ export namespace Prisma {
     classes?: ClassUncheckedCreateNestedManyWithoutCallRoundsInput
     availableInstructors?: CallRoundInstructorUncheckedCreateNestedManyWithoutCallRoundInput
     availableCouncilMembers?: CallRoundCouncilMemberUncheckedCreateNestedManyWithoutCallRoundInput
+    councils?: CouncilUncheckedCreateNestedManyWithoutCallRoundInput
   }
 
   export type CallRoundCreateOrConnectWithoutRegistrationsInput = {
@@ -35357,6 +39982,7 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     callRoundInstructors?: CallRoundInstructorCreateNestedManyWithoutInstructorInput
     callRoundCouncilMembers?: CallRoundCouncilMemberCreateNestedManyWithoutCouncilMemberInput
+    councilAssignments?: CouncilMemberAssignmentCreateNestedManyWithoutCouncilMemberInput
   }
 
   export type UserUncheckedCreateWithoutFacultyReviewsInput = {
@@ -35385,11 +40011,29 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     callRoundInstructors?: CallRoundInstructorUncheckedCreateNestedManyWithoutInstructorInput
     callRoundCouncilMembers?: CallRoundCouncilMemberUncheckedCreateNestedManyWithoutCouncilMemberInput
+    councilAssignments?: CouncilMemberAssignmentUncheckedCreateNestedManyWithoutCouncilMemberInput
   }
 
   export type UserCreateOrConnectWithoutFacultyReviewsInput = {
     where: UserWhereUniqueInput
     create: XOR<UserCreateWithoutFacultyReviewsInput, UserUncheckedCreateWithoutFacultyReviewsInput>
+  }
+
+  export type ProjectCouncilAssignmentCreateWithoutProjectRegistrationInput = {
+    id?: string
+    createdAt?: Date | string
+    council: CouncilCreateNestedOneWithoutProjectsInput
+  }
+
+  export type ProjectCouncilAssignmentUncheckedCreateWithoutProjectRegistrationInput = {
+    id?: string
+    councilId: string
+    createdAt?: Date | string
+  }
+
+  export type ProjectCouncilAssignmentCreateOrConnectWithoutProjectRegistrationInput = {
+    where: ProjectCouncilAssignmentWhereUniqueInput
+    create: XOR<ProjectCouncilAssignmentCreateWithoutProjectRegistrationInput, ProjectCouncilAssignmentUncheckedCreateWithoutProjectRegistrationInput>
   }
 
   export type UserUpsertWithoutRegistrationsInput = {
@@ -35429,6 +40073,7 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     callRoundInstructors?: CallRoundInstructorUpdateManyWithoutInstructorNestedInput
     callRoundCouncilMembers?: CallRoundCouncilMemberUpdateManyWithoutCouncilMemberNestedInput
+    councilAssignments?: CouncilMemberAssignmentUpdateManyWithoutCouncilMemberNestedInput
   }
 
   export type UserUncheckedUpdateWithoutRegistrationsInput = {
@@ -35457,6 +40102,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     callRoundInstructors?: CallRoundInstructorUncheckedUpdateManyWithoutInstructorNestedInput
     callRoundCouncilMembers?: CallRoundCouncilMemberUncheckedUpdateManyWithoutCouncilMemberNestedInput
+    councilAssignments?: CouncilMemberAssignmentUncheckedUpdateManyWithoutCouncilMemberNestedInput
   }
 
   export type UserUpsertWithoutInstructedRegistrationsInput = {
@@ -35496,6 +40142,7 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     callRoundInstructors?: CallRoundInstructorUpdateManyWithoutInstructorNestedInput
     callRoundCouncilMembers?: CallRoundCouncilMemberUpdateManyWithoutCouncilMemberNestedInput
+    councilAssignments?: CouncilMemberAssignmentUpdateManyWithoutCouncilMemberNestedInput
   }
 
   export type UserUncheckedUpdateWithoutInstructedRegistrationsInput = {
@@ -35524,6 +40171,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     callRoundInstructors?: CallRoundInstructorUncheckedUpdateManyWithoutInstructorNestedInput
     callRoundCouncilMembers?: CallRoundCouncilMemberUncheckedUpdateManyWithoutCouncilMemberNestedInput
+    councilAssignments?: CouncilMemberAssignmentUncheckedUpdateManyWithoutCouncilMemberNestedInput
   }
 
   export type CallRoundUpsertWithoutRegistrationsInput = {
@@ -35572,6 +40220,7 @@ export namespace Prisma {
     classes?: ClassUpdateManyWithoutCallRoundsNestedInput
     availableInstructors?: CallRoundInstructorUpdateManyWithoutCallRoundNestedInput
     availableCouncilMembers?: CallRoundCouncilMemberUpdateManyWithoutCallRoundNestedInput
+    councils?: CouncilUpdateManyWithoutCallRoundNestedInput
   }
 
   export type CallRoundUncheckedUpdateWithoutRegistrationsInput = {
@@ -35609,6 +40258,7 @@ export namespace Prisma {
     classes?: ClassUncheckedUpdateManyWithoutCallRoundsNestedInput
     availableInstructors?: CallRoundInstructorUncheckedUpdateManyWithoutCallRoundNestedInput
     availableCouncilMembers?: CallRoundCouncilMemberUncheckedUpdateManyWithoutCallRoundNestedInput
+    councils?: CouncilUncheckedUpdateManyWithoutCallRoundNestedInput
   }
 
   export type UserUpsertWithoutFacultyReviewsInput = {
@@ -35648,6 +40298,7 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     callRoundInstructors?: CallRoundInstructorUpdateManyWithoutInstructorNestedInput
     callRoundCouncilMembers?: CallRoundCouncilMemberUpdateManyWithoutCouncilMemberNestedInput
+    councilAssignments?: CouncilMemberAssignmentUpdateManyWithoutCouncilMemberNestedInput
   }
 
   export type UserUncheckedUpdateWithoutFacultyReviewsInput = {
@@ -35676,6 +40327,30 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     callRoundInstructors?: CallRoundInstructorUncheckedUpdateManyWithoutInstructorNestedInput
     callRoundCouncilMembers?: CallRoundCouncilMemberUncheckedUpdateManyWithoutCouncilMemberNestedInput
+    councilAssignments?: CouncilMemberAssignmentUncheckedUpdateManyWithoutCouncilMemberNestedInput
+  }
+
+  export type ProjectCouncilAssignmentUpsertWithoutProjectRegistrationInput = {
+    update: XOR<ProjectCouncilAssignmentUpdateWithoutProjectRegistrationInput, ProjectCouncilAssignmentUncheckedUpdateWithoutProjectRegistrationInput>
+    create: XOR<ProjectCouncilAssignmentCreateWithoutProjectRegistrationInput, ProjectCouncilAssignmentUncheckedCreateWithoutProjectRegistrationInput>
+    where?: ProjectCouncilAssignmentWhereInput
+  }
+
+  export type ProjectCouncilAssignmentUpdateToOneWithWhereWithoutProjectRegistrationInput = {
+    where?: ProjectCouncilAssignmentWhereInput
+    data: XOR<ProjectCouncilAssignmentUpdateWithoutProjectRegistrationInput, ProjectCouncilAssignmentUncheckedUpdateWithoutProjectRegistrationInput>
+  }
+
+  export type ProjectCouncilAssignmentUpdateWithoutProjectRegistrationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    council?: CouncilUpdateOneRequiredWithoutProjectsNestedInput
+  }
+
+  export type ProjectCouncilAssignmentUncheckedUpdateWithoutProjectRegistrationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    councilId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type UserCreateWithoutNotificationsInput = {
@@ -35704,6 +40379,7 @@ export namespace Prisma {
     facultyReviews?: ProjectRegistrationCreateNestedManyWithoutFacultyReviewerInput
     callRoundInstructors?: CallRoundInstructorCreateNestedManyWithoutInstructorInput
     callRoundCouncilMembers?: CallRoundCouncilMemberCreateNestedManyWithoutCouncilMemberInput
+    councilAssignments?: CouncilMemberAssignmentCreateNestedManyWithoutCouncilMemberInput
   }
 
   export type UserUncheckedCreateWithoutNotificationsInput = {
@@ -35732,6 +40408,7 @@ export namespace Prisma {
     facultyReviews?: ProjectRegistrationUncheckedCreateNestedManyWithoutFacultyReviewerInput
     callRoundInstructors?: CallRoundInstructorUncheckedCreateNestedManyWithoutInstructorInput
     callRoundCouncilMembers?: CallRoundCouncilMemberUncheckedCreateNestedManyWithoutCouncilMemberInput
+    councilAssignments?: CouncilMemberAssignmentUncheckedCreateNestedManyWithoutCouncilMemberInput
   }
 
   export type UserCreateOrConnectWithoutNotificationsInput = {
@@ -35776,6 +40453,7 @@ export namespace Prisma {
     facultyReviews?: ProjectRegistrationUpdateManyWithoutFacultyReviewerNestedInput
     callRoundInstructors?: CallRoundInstructorUpdateManyWithoutInstructorNestedInput
     callRoundCouncilMembers?: CallRoundCouncilMemberUpdateManyWithoutCouncilMemberNestedInput
+    councilAssignments?: CouncilMemberAssignmentUpdateManyWithoutCouncilMemberNestedInput
   }
 
   export type UserUncheckedUpdateWithoutNotificationsInput = {
@@ -35804,6 +40482,7 @@ export namespace Prisma {
     facultyReviews?: ProjectRegistrationUncheckedUpdateManyWithoutFacultyReviewerNestedInput
     callRoundInstructors?: CallRoundInstructorUncheckedUpdateManyWithoutInstructorNestedInput
     callRoundCouncilMembers?: CallRoundCouncilMemberUncheckedUpdateManyWithoutCouncilMemberNestedInput
+    councilAssignments?: CouncilMemberAssignmentUncheckedUpdateManyWithoutCouncilMemberNestedInput
   }
 
   export type CallRoundCreateWithoutAvailableInstructorsInput = {
@@ -35841,6 +40520,7 @@ export namespace Prisma {
     majors?: MajorCreateNestedManyWithoutCallRoundsInput
     classes?: ClassCreateNestedManyWithoutCallRoundsInput
     availableCouncilMembers?: CallRoundCouncilMemberCreateNestedManyWithoutCallRoundInput
+    councils?: CouncilCreateNestedManyWithoutCallRoundInput
   }
 
   export type CallRoundUncheckedCreateWithoutAvailableInstructorsInput = {
@@ -35878,6 +40558,7 @@ export namespace Prisma {
     majors?: MajorUncheckedCreateNestedManyWithoutCallRoundsInput
     classes?: ClassUncheckedCreateNestedManyWithoutCallRoundsInput
     availableCouncilMembers?: CallRoundCouncilMemberUncheckedCreateNestedManyWithoutCallRoundInput
+    councils?: CouncilUncheckedCreateNestedManyWithoutCallRoundInput
   }
 
   export type CallRoundCreateOrConnectWithoutAvailableInstructorsInput = {
@@ -35911,6 +40592,7 @@ export namespace Prisma {
     facultyReviews?: ProjectRegistrationCreateNestedManyWithoutFacultyReviewerInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     callRoundCouncilMembers?: CallRoundCouncilMemberCreateNestedManyWithoutCouncilMemberInput
+    councilAssignments?: CouncilMemberAssignmentCreateNestedManyWithoutCouncilMemberInput
   }
 
   export type UserUncheckedCreateWithoutCallRoundInstructorsInput = {
@@ -35939,6 +40621,7 @@ export namespace Prisma {
     facultyReviews?: ProjectRegistrationUncheckedCreateNestedManyWithoutFacultyReviewerInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     callRoundCouncilMembers?: CallRoundCouncilMemberUncheckedCreateNestedManyWithoutCouncilMemberInput
+    councilAssignments?: CouncilMemberAssignmentUncheckedCreateNestedManyWithoutCouncilMemberInput
   }
 
   export type UserCreateOrConnectWithoutCallRoundInstructorsInput = {
@@ -35992,6 +40675,7 @@ export namespace Prisma {
     majors?: MajorUpdateManyWithoutCallRoundsNestedInput
     classes?: ClassUpdateManyWithoutCallRoundsNestedInput
     availableCouncilMembers?: CallRoundCouncilMemberUpdateManyWithoutCallRoundNestedInput
+    councils?: CouncilUpdateManyWithoutCallRoundNestedInput
   }
 
   export type CallRoundUncheckedUpdateWithoutAvailableInstructorsInput = {
@@ -36029,6 +40713,7 @@ export namespace Prisma {
     majors?: MajorUncheckedUpdateManyWithoutCallRoundsNestedInput
     classes?: ClassUncheckedUpdateManyWithoutCallRoundsNestedInput
     availableCouncilMembers?: CallRoundCouncilMemberUncheckedUpdateManyWithoutCallRoundNestedInput
+    councils?: CouncilUncheckedUpdateManyWithoutCallRoundNestedInput
   }
 
   export type UserUpsertWithoutCallRoundInstructorsInput = {
@@ -36068,6 +40753,7 @@ export namespace Prisma {
     facultyReviews?: ProjectRegistrationUpdateManyWithoutFacultyReviewerNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     callRoundCouncilMembers?: CallRoundCouncilMemberUpdateManyWithoutCouncilMemberNestedInput
+    councilAssignments?: CouncilMemberAssignmentUpdateManyWithoutCouncilMemberNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCallRoundInstructorsInput = {
@@ -36096,6 +40782,7 @@ export namespace Prisma {
     facultyReviews?: ProjectRegistrationUncheckedUpdateManyWithoutFacultyReviewerNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     callRoundCouncilMembers?: CallRoundCouncilMemberUncheckedUpdateManyWithoutCouncilMemberNestedInput
+    councilAssignments?: CouncilMemberAssignmentUncheckedUpdateManyWithoutCouncilMemberNestedInput
   }
 
   export type CallRoundCreateWithoutAvailableCouncilMembersInput = {
@@ -36133,6 +40820,7 @@ export namespace Prisma {
     majors?: MajorCreateNestedManyWithoutCallRoundsInput
     classes?: ClassCreateNestedManyWithoutCallRoundsInput
     availableInstructors?: CallRoundInstructorCreateNestedManyWithoutCallRoundInput
+    councils?: CouncilCreateNestedManyWithoutCallRoundInput
   }
 
   export type CallRoundUncheckedCreateWithoutAvailableCouncilMembersInput = {
@@ -36170,6 +40858,7 @@ export namespace Prisma {
     majors?: MajorUncheckedCreateNestedManyWithoutCallRoundsInput
     classes?: ClassUncheckedCreateNestedManyWithoutCallRoundsInput
     availableInstructors?: CallRoundInstructorUncheckedCreateNestedManyWithoutCallRoundInput
+    councils?: CouncilUncheckedCreateNestedManyWithoutCallRoundInput
   }
 
   export type CallRoundCreateOrConnectWithoutAvailableCouncilMembersInput = {
@@ -36203,6 +40892,7 @@ export namespace Prisma {
     facultyReviews?: ProjectRegistrationCreateNestedManyWithoutFacultyReviewerInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     callRoundInstructors?: CallRoundInstructorCreateNestedManyWithoutInstructorInput
+    councilAssignments?: CouncilMemberAssignmentCreateNestedManyWithoutCouncilMemberInput
   }
 
   export type UserUncheckedCreateWithoutCallRoundCouncilMembersInput = {
@@ -36231,6 +40921,7 @@ export namespace Prisma {
     facultyReviews?: ProjectRegistrationUncheckedCreateNestedManyWithoutFacultyReviewerInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     callRoundInstructors?: CallRoundInstructorUncheckedCreateNestedManyWithoutInstructorInput
+    councilAssignments?: CouncilMemberAssignmentUncheckedCreateNestedManyWithoutCouncilMemberInput
   }
 
   export type UserCreateOrConnectWithoutCallRoundCouncilMembersInput = {
@@ -36284,6 +40975,7 @@ export namespace Prisma {
     majors?: MajorUpdateManyWithoutCallRoundsNestedInput
     classes?: ClassUpdateManyWithoutCallRoundsNestedInput
     availableInstructors?: CallRoundInstructorUpdateManyWithoutCallRoundNestedInput
+    councils?: CouncilUpdateManyWithoutCallRoundNestedInput
   }
 
   export type CallRoundUncheckedUpdateWithoutAvailableCouncilMembersInput = {
@@ -36321,6 +41013,7 @@ export namespace Prisma {
     majors?: MajorUncheckedUpdateManyWithoutCallRoundsNestedInput
     classes?: ClassUncheckedUpdateManyWithoutCallRoundsNestedInput
     availableInstructors?: CallRoundInstructorUncheckedUpdateManyWithoutCallRoundNestedInput
+    councils?: CouncilUncheckedUpdateManyWithoutCallRoundNestedInput
   }
 
   export type UserUpsertWithoutCallRoundCouncilMembersInput = {
@@ -36360,6 +41053,7 @@ export namespace Prisma {
     facultyReviews?: ProjectRegistrationUpdateManyWithoutFacultyReviewerNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     callRoundInstructors?: CallRoundInstructorUpdateManyWithoutInstructorNestedInput
+    councilAssignments?: CouncilMemberAssignmentUpdateManyWithoutCouncilMemberNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCallRoundCouncilMembersInput = {
@@ -36388,6 +41082,591 @@ export namespace Prisma {
     facultyReviews?: ProjectRegistrationUncheckedUpdateManyWithoutFacultyReviewerNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     callRoundInstructors?: CallRoundInstructorUncheckedUpdateManyWithoutInstructorNestedInput
+    councilAssignments?: CouncilMemberAssignmentUncheckedUpdateManyWithoutCouncilMemberNestedInput
+  }
+
+  export type CallRoundCreateWithoutCouncilsInput = {
+    id?: string
+    name: string
+    description?: string | null
+    registrationStartDate: Date | string
+    registrationEndDate: Date | string
+    projectStartDate?: Date | string | null
+    projectEndDate?: Date | string | null
+    reviewDeadline?: Date | string | null
+    reportingStartDate?: Date | string | null
+    startDate: Date | string
+    endDate: Date | string
+    maxProjects?: number | null
+    budgetLimit?: Decimal | DecimalJsLike | number | string | null
+    requirements?: string | null
+    guidelines?: string | null
+    contactInfo?: string | null
+    isActive?: boolean
+    isLocked?: boolean
+    applicableFor?: $Enums.ApplicableFor
+    approvalStatus?: $Enums.CallRoundApprovalStatus
+    createdById?: string | null
+    createdByRole?: $Enums.Role | null
+    approvedById?: string | null
+    approvalNote?: string | null
+    approvedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    projects?: ProjectCreateNestedManyWithoutCallRoundInput
+    registrations?: ProjectRegistrationCreateNestedManyWithoutCallRoundInput
+    template?: ProgressReportTemplateCreateNestedOneWithoutCallRoundsInput
+    departments?: DepartmentCreateNestedManyWithoutCallRoundsInput
+    majors?: MajorCreateNestedManyWithoutCallRoundsInput
+    classes?: ClassCreateNestedManyWithoutCallRoundsInput
+    availableInstructors?: CallRoundInstructorCreateNestedManyWithoutCallRoundInput
+    availableCouncilMembers?: CallRoundCouncilMemberCreateNestedManyWithoutCallRoundInput
+  }
+
+  export type CallRoundUncheckedCreateWithoutCouncilsInput = {
+    id?: string
+    name: string
+    description?: string | null
+    registrationStartDate: Date | string
+    registrationEndDate: Date | string
+    projectStartDate?: Date | string | null
+    projectEndDate?: Date | string | null
+    reviewDeadline?: Date | string | null
+    reportingStartDate?: Date | string | null
+    startDate: Date | string
+    endDate: Date | string
+    maxProjects?: number | null
+    budgetLimit?: Decimal | DecimalJsLike | number | string | null
+    requirements?: string | null
+    guidelines?: string | null
+    contactInfo?: string | null
+    isActive?: boolean
+    isLocked?: boolean
+    applicableFor?: $Enums.ApplicableFor
+    approvalStatus?: $Enums.CallRoundApprovalStatus
+    createdById?: string | null
+    createdByRole?: $Enums.Role | null
+    approvedById?: string | null
+    approvalNote?: string | null
+    approvedAt?: Date | string | null
+    templateId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    projects?: ProjectUncheckedCreateNestedManyWithoutCallRoundInput
+    registrations?: ProjectRegistrationUncheckedCreateNestedManyWithoutCallRoundInput
+    departments?: DepartmentUncheckedCreateNestedManyWithoutCallRoundsInput
+    majors?: MajorUncheckedCreateNestedManyWithoutCallRoundsInput
+    classes?: ClassUncheckedCreateNestedManyWithoutCallRoundsInput
+    availableInstructors?: CallRoundInstructorUncheckedCreateNestedManyWithoutCallRoundInput
+    availableCouncilMembers?: CallRoundCouncilMemberUncheckedCreateNestedManyWithoutCallRoundInput
+  }
+
+  export type CallRoundCreateOrConnectWithoutCouncilsInput = {
+    where: CallRoundWhereUniqueInput
+    create: XOR<CallRoundCreateWithoutCouncilsInput, CallRoundUncheckedCreateWithoutCouncilsInput>
+  }
+
+  export type CouncilMemberAssignmentCreateWithoutCouncilInput = {
+    id?: string
+    role?: string | null
+    createdAt?: Date | string
+    councilMember: UserCreateNestedOneWithoutCouncilAssignmentsInput
+  }
+
+  export type CouncilMemberAssignmentUncheckedCreateWithoutCouncilInput = {
+    id?: string
+    councilMemberId: string
+    role?: string | null
+    createdAt?: Date | string
+  }
+
+  export type CouncilMemberAssignmentCreateOrConnectWithoutCouncilInput = {
+    where: CouncilMemberAssignmentWhereUniqueInput
+    create: XOR<CouncilMemberAssignmentCreateWithoutCouncilInput, CouncilMemberAssignmentUncheckedCreateWithoutCouncilInput>
+  }
+
+  export type CouncilMemberAssignmentCreateManyCouncilInputEnvelope = {
+    data: CouncilMemberAssignmentCreateManyCouncilInput | CouncilMemberAssignmentCreateManyCouncilInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type ProjectCouncilAssignmentCreateWithoutCouncilInput = {
+    id?: string
+    createdAt?: Date | string
+    projectRegistration: ProjectRegistrationCreateNestedOneWithoutCouncilAssignmentInput
+  }
+
+  export type ProjectCouncilAssignmentUncheckedCreateWithoutCouncilInput = {
+    id?: string
+    projectRegistrationId: string
+    createdAt?: Date | string
+  }
+
+  export type ProjectCouncilAssignmentCreateOrConnectWithoutCouncilInput = {
+    where: ProjectCouncilAssignmentWhereUniqueInput
+    create: XOR<ProjectCouncilAssignmentCreateWithoutCouncilInput, ProjectCouncilAssignmentUncheckedCreateWithoutCouncilInput>
+  }
+
+  export type ProjectCouncilAssignmentCreateManyCouncilInputEnvelope = {
+    data: ProjectCouncilAssignmentCreateManyCouncilInput | ProjectCouncilAssignmentCreateManyCouncilInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type CallRoundUpsertWithoutCouncilsInput = {
+    update: XOR<CallRoundUpdateWithoutCouncilsInput, CallRoundUncheckedUpdateWithoutCouncilsInput>
+    create: XOR<CallRoundCreateWithoutCouncilsInput, CallRoundUncheckedCreateWithoutCouncilsInput>
+    where?: CallRoundWhereInput
+  }
+
+  export type CallRoundUpdateToOneWithWhereWithoutCouncilsInput = {
+    where?: CallRoundWhereInput
+    data: XOR<CallRoundUpdateWithoutCouncilsInput, CallRoundUncheckedUpdateWithoutCouncilsInput>
+  }
+
+  export type CallRoundUpdateWithoutCouncilsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    registrationStartDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    registrationEndDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    projectStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    projectEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reviewDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reportingStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    maxProjects?: NullableIntFieldUpdateOperationsInput | number | null
+    budgetLimit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    requirements?: NullableStringFieldUpdateOperationsInput | string | null
+    guidelines?: NullableStringFieldUpdateOperationsInput | string | null
+    contactInfo?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    isLocked?: BoolFieldUpdateOperationsInput | boolean
+    applicableFor?: EnumApplicableForFieldUpdateOperationsInput | $Enums.ApplicableFor
+    approvalStatus?: EnumCallRoundApprovalStatusFieldUpdateOperationsInput | $Enums.CallRoundApprovalStatus
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdByRole?: NullableEnumRoleFieldUpdateOperationsInput | $Enums.Role | null
+    approvedById?: NullableStringFieldUpdateOperationsInput | string | null
+    approvalNote?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    projects?: ProjectUpdateManyWithoutCallRoundNestedInput
+    registrations?: ProjectRegistrationUpdateManyWithoutCallRoundNestedInput
+    template?: ProgressReportTemplateUpdateOneWithoutCallRoundsNestedInput
+    departments?: DepartmentUpdateManyWithoutCallRoundsNestedInput
+    majors?: MajorUpdateManyWithoutCallRoundsNestedInput
+    classes?: ClassUpdateManyWithoutCallRoundsNestedInput
+    availableInstructors?: CallRoundInstructorUpdateManyWithoutCallRoundNestedInput
+    availableCouncilMembers?: CallRoundCouncilMemberUpdateManyWithoutCallRoundNestedInput
+  }
+
+  export type CallRoundUncheckedUpdateWithoutCouncilsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    registrationStartDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    registrationEndDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    projectStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    projectEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reviewDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reportingStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    maxProjects?: NullableIntFieldUpdateOperationsInput | number | null
+    budgetLimit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    requirements?: NullableStringFieldUpdateOperationsInput | string | null
+    guidelines?: NullableStringFieldUpdateOperationsInput | string | null
+    contactInfo?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    isLocked?: BoolFieldUpdateOperationsInput | boolean
+    applicableFor?: EnumApplicableForFieldUpdateOperationsInput | $Enums.ApplicableFor
+    approvalStatus?: EnumCallRoundApprovalStatusFieldUpdateOperationsInput | $Enums.CallRoundApprovalStatus
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdByRole?: NullableEnumRoleFieldUpdateOperationsInput | $Enums.Role | null
+    approvedById?: NullableStringFieldUpdateOperationsInput | string | null
+    approvalNote?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    templateId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    projects?: ProjectUncheckedUpdateManyWithoutCallRoundNestedInput
+    registrations?: ProjectRegistrationUncheckedUpdateManyWithoutCallRoundNestedInput
+    departments?: DepartmentUncheckedUpdateManyWithoutCallRoundsNestedInput
+    majors?: MajorUncheckedUpdateManyWithoutCallRoundsNestedInput
+    classes?: ClassUncheckedUpdateManyWithoutCallRoundsNestedInput
+    availableInstructors?: CallRoundInstructorUncheckedUpdateManyWithoutCallRoundNestedInput
+    availableCouncilMembers?: CallRoundCouncilMemberUncheckedUpdateManyWithoutCallRoundNestedInput
+  }
+
+  export type CouncilMemberAssignmentUpsertWithWhereUniqueWithoutCouncilInput = {
+    where: CouncilMemberAssignmentWhereUniqueInput
+    update: XOR<CouncilMemberAssignmentUpdateWithoutCouncilInput, CouncilMemberAssignmentUncheckedUpdateWithoutCouncilInput>
+    create: XOR<CouncilMemberAssignmentCreateWithoutCouncilInput, CouncilMemberAssignmentUncheckedCreateWithoutCouncilInput>
+  }
+
+  export type CouncilMemberAssignmentUpdateWithWhereUniqueWithoutCouncilInput = {
+    where: CouncilMemberAssignmentWhereUniqueInput
+    data: XOR<CouncilMemberAssignmentUpdateWithoutCouncilInput, CouncilMemberAssignmentUncheckedUpdateWithoutCouncilInput>
+  }
+
+  export type CouncilMemberAssignmentUpdateManyWithWhereWithoutCouncilInput = {
+    where: CouncilMemberAssignmentScalarWhereInput
+    data: XOR<CouncilMemberAssignmentUpdateManyMutationInput, CouncilMemberAssignmentUncheckedUpdateManyWithoutCouncilInput>
+  }
+
+  export type ProjectCouncilAssignmentUpsertWithWhereUniqueWithoutCouncilInput = {
+    where: ProjectCouncilAssignmentWhereUniqueInput
+    update: XOR<ProjectCouncilAssignmentUpdateWithoutCouncilInput, ProjectCouncilAssignmentUncheckedUpdateWithoutCouncilInput>
+    create: XOR<ProjectCouncilAssignmentCreateWithoutCouncilInput, ProjectCouncilAssignmentUncheckedCreateWithoutCouncilInput>
+  }
+
+  export type ProjectCouncilAssignmentUpdateWithWhereUniqueWithoutCouncilInput = {
+    where: ProjectCouncilAssignmentWhereUniqueInput
+    data: XOR<ProjectCouncilAssignmentUpdateWithoutCouncilInput, ProjectCouncilAssignmentUncheckedUpdateWithoutCouncilInput>
+  }
+
+  export type ProjectCouncilAssignmentUpdateManyWithWhereWithoutCouncilInput = {
+    where: ProjectCouncilAssignmentScalarWhereInput
+    data: XOR<ProjectCouncilAssignmentUpdateManyMutationInput, ProjectCouncilAssignmentUncheckedUpdateManyWithoutCouncilInput>
+  }
+
+  export type ProjectCouncilAssignmentScalarWhereInput = {
+    AND?: ProjectCouncilAssignmentScalarWhereInput | ProjectCouncilAssignmentScalarWhereInput[]
+    OR?: ProjectCouncilAssignmentScalarWhereInput[]
+    NOT?: ProjectCouncilAssignmentScalarWhereInput | ProjectCouncilAssignmentScalarWhereInput[]
+    id?: StringFilter<"ProjectCouncilAssignment"> | string
+    councilId?: StringFilter<"ProjectCouncilAssignment"> | string
+    projectRegistrationId?: StringFilter<"ProjectCouncilAssignment"> | string
+    createdAt?: DateTimeFilter<"ProjectCouncilAssignment"> | Date | string
+  }
+
+  export type CouncilCreateWithoutMembersInput = {
+    id?: string
+    name: string
+    description?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    callRound: CallRoundCreateNestedOneWithoutCouncilsInput
+    projects?: ProjectCouncilAssignmentCreateNestedManyWithoutCouncilInput
+  }
+
+  export type CouncilUncheckedCreateWithoutMembersInput = {
+    id?: string
+    callRoundId: string
+    name: string
+    description?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    projects?: ProjectCouncilAssignmentUncheckedCreateNestedManyWithoutCouncilInput
+  }
+
+  export type CouncilCreateOrConnectWithoutMembersInput = {
+    where: CouncilWhereUniqueInput
+    create: XOR<CouncilCreateWithoutMembersInput, CouncilUncheckedCreateWithoutMembersInput>
+  }
+
+  export type UserCreateWithoutCouncilAssignmentsInput = {
+    id?: string
+    code?: string | null
+    name: string
+    email: string
+    password?: string | null
+    dateOfBirth?: Date | string | null
+    gender?: $Enums.Gender | null
+    phone?: string | null
+    address?: string | null
+    role?: $Enums.Role
+    department?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    departmentRef?: DepartmentCreateNestedOneWithoutUsersInput
+    major?: MajorCreateNestedOneWithoutUsersInput
+    class?: ClassCreateNestedOneWithoutUsersInput
+    leadProjects?: ProjectCreateNestedManyWithoutLeaderInput
+    deanReviews?: ProjectCreateNestedManyWithoutDeanReviewerInput
+    councilEvaluations?: CouncilEvaluationCreateNestedManyWithoutCouncilMemberInput
+    registrations?: ProjectRegistrationCreateNestedManyWithoutUserInput
+    instructedRegistrations?: ProjectRegistrationCreateNestedManyWithoutInstructorInput
+    instructedProjects?: ProjectCreateNestedManyWithoutInstructorInput
+    facultyReviews?: ProjectRegistrationCreateNestedManyWithoutFacultyReviewerInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    callRoundInstructors?: CallRoundInstructorCreateNestedManyWithoutInstructorInput
+    callRoundCouncilMembers?: CallRoundCouncilMemberCreateNestedManyWithoutCouncilMemberInput
+  }
+
+  export type UserUncheckedCreateWithoutCouncilAssignmentsInput = {
+    id?: string
+    code?: string | null
+    name: string
+    email: string
+    password?: string | null
+    dateOfBirth?: Date | string | null
+    gender?: $Enums.Gender | null
+    phone?: string | null
+    address?: string | null
+    role?: $Enums.Role
+    department?: string | null
+    departmentId?: string | null
+    majorId?: string | null
+    classId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    leadProjects?: ProjectUncheckedCreateNestedManyWithoutLeaderInput
+    deanReviews?: ProjectUncheckedCreateNestedManyWithoutDeanReviewerInput
+    councilEvaluations?: CouncilEvaluationUncheckedCreateNestedManyWithoutCouncilMemberInput
+    registrations?: ProjectRegistrationUncheckedCreateNestedManyWithoutUserInput
+    instructedRegistrations?: ProjectRegistrationUncheckedCreateNestedManyWithoutInstructorInput
+    instructedProjects?: ProjectUncheckedCreateNestedManyWithoutInstructorInput
+    facultyReviews?: ProjectRegistrationUncheckedCreateNestedManyWithoutFacultyReviewerInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    callRoundInstructors?: CallRoundInstructorUncheckedCreateNestedManyWithoutInstructorInput
+    callRoundCouncilMembers?: CallRoundCouncilMemberUncheckedCreateNestedManyWithoutCouncilMemberInput
+  }
+
+  export type UserCreateOrConnectWithoutCouncilAssignmentsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutCouncilAssignmentsInput, UserUncheckedCreateWithoutCouncilAssignmentsInput>
+  }
+
+  export type CouncilUpsertWithoutMembersInput = {
+    update: XOR<CouncilUpdateWithoutMembersInput, CouncilUncheckedUpdateWithoutMembersInput>
+    create: XOR<CouncilCreateWithoutMembersInput, CouncilUncheckedCreateWithoutMembersInput>
+    where?: CouncilWhereInput
+  }
+
+  export type CouncilUpdateToOneWithWhereWithoutMembersInput = {
+    where?: CouncilWhereInput
+    data: XOR<CouncilUpdateWithoutMembersInput, CouncilUncheckedUpdateWithoutMembersInput>
+  }
+
+  export type CouncilUpdateWithoutMembersInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    callRound?: CallRoundUpdateOneRequiredWithoutCouncilsNestedInput
+    projects?: ProjectCouncilAssignmentUpdateManyWithoutCouncilNestedInput
+  }
+
+  export type CouncilUncheckedUpdateWithoutMembersInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    callRoundId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    projects?: ProjectCouncilAssignmentUncheckedUpdateManyWithoutCouncilNestedInput
+  }
+
+  export type UserUpsertWithoutCouncilAssignmentsInput = {
+    update: XOR<UserUpdateWithoutCouncilAssignmentsInput, UserUncheckedUpdateWithoutCouncilAssignmentsInput>
+    create: XOR<UserCreateWithoutCouncilAssignmentsInput, UserUncheckedCreateWithoutCouncilAssignmentsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutCouncilAssignmentsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutCouncilAssignmentsInput, UserUncheckedUpdateWithoutCouncilAssignmentsInput>
+  }
+
+  export type UserUpdateWithoutCouncilAssignmentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    departmentRef?: DepartmentUpdateOneWithoutUsersNestedInput
+    major?: MajorUpdateOneWithoutUsersNestedInput
+    class?: ClassUpdateOneWithoutUsersNestedInput
+    leadProjects?: ProjectUpdateManyWithoutLeaderNestedInput
+    deanReviews?: ProjectUpdateManyWithoutDeanReviewerNestedInput
+    councilEvaluations?: CouncilEvaluationUpdateManyWithoutCouncilMemberNestedInput
+    registrations?: ProjectRegistrationUpdateManyWithoutUserNestedInput
+    instructedRegistrations?: ProjectRegistrationUpdateManyWithoutInstructorNestedInput
+    instructedProjects?: ProjectUpdateManyWithoutInstructorNestedInput
+    facultyReviews?: ProjectRegistrationUpdateManyWithoutFacultyReviewerNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    callRoundInstructors?: CallRoundInstructorUpdateManyWithoutInstructorNestedInput
+    callRoundCouncilMembers?: CallRoundCouncilMemberUpdateManyWithoutCouncilMemberNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutCouncilAssignmentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    departmentId?: NullableStringFieldUpdateOperationsInput | string | null
+    majorId?: NullableStringFieldUpdateOperationsInput | string | null
+    classId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    leadProjects?: ProjectUncheckedUpdateManyWithoutLeaderNestedInput
+    deanReviews?: ProjectUncheckedUpdateManyWithoutDeanReviewerNestedInput
+    councilEvaluations?: CouncilEvaluationUncheckedUpdateManyWithoutCouncilMemberNestedInput
+    registrations?: ProjectRegistrationUncheckedUpdateManyWithoutUserNestedInput
+    instructedRegistrations?: ProjectRegistrationUncheckedUpdateManyWithoutInstructorNestedInput
+    instructedProjects?: ProjectUncheckedUpdateManyWithoutInstructorNestedInput
+    facultyReviews?: ProjectRegistrationUncheckedUpdateManyWithoutFacultyReviewerNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    callRoundInstructors?: CallRoundInstructorUncheckedUpdateManyWithoutInstructorNestedInput
+    callRoundCouncilMembers?: CallRoundCouncilMemberUncheckedUpdateManyWithoutCouncilMemberNestedInput
+  }
+
+  export type CouncilCreateWithoutProjectsInput = {
+    id?: string
+    name: string
+    description?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    callRound: CallRoundCreateNestedOneWithoutCouncilsInput
+    members?: CouncilMemberAssignmentCreateNestedManyWithoutCouncilInput
+  }
+
+  export type CouncilUncheckedCreateWithoutProjectsInput = {
+    id?: string
+    callRoundId: string
+    name: string
+    description?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    members?: CouncilMemberAssignmentUncheckedCreateNestedManyWithoutCouncilInput
+  }
+
+  export type CouncilCreateOrConnectWithoutProjectsInput = {
+    where: CouncilWhereUniqueInput
+    create: XOR<CouncilCreateWithoutProjectsInput, CouncilUncheckedCreateWithoutProjectsInput>
+  }
+
+  export type ProjectRegistrationCreateWithoutCouncilAssignmentInput = {
+    id?: string
+    title: string
+    objective: string
+    expectedOutput?: string | null
+    status?: $Enums.RegistrationStatus
+    cancelReason?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    instructorStatus?: $Enums.InstructorStatus
+    facultyStatus?: $Enums.FacultyStatus
+    user: UserCreateNestedOneWithoutRegistrationsInput
+    instructor?: UserCreateNestedOneWithoutInstructedRegistrationsInput
+    callRound?: CallRoundCreateNestedOneWithoutRegistrationsInput
+    facultyReviewer?: UserCreateNestedOneWithoutFacultyReviewsInput
+  }
+
+  export type ProjectRegistrationUncheckedCreateWithoutCouncilAssignmentInput = {
+    id?: string
+    userId: string
+    callRoundId?: string | null
+    title: string
+    objective: string
+    expectedOutput?: string | null
+    status?: $Enums.RegistrationStatus
+    cancelReason?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    instructorId?: string | null
+    instructorStatus?: $Enums.InstructorStatus
+    facultyStatus?: $Enums.FacultyStatus
+    facultyReviewerId?: string | null
+  }
+
+  export type ProjectRegistrationCreateOrConnectWithoutCouncilAssignmentInput = {
+    where: ProjectRegistrationWhereUniqueInput
+    create: XOR<ProjectRegistrationCreateWithoutCouncilAssignmentInput, ProjectRegistrationUncheckedCreateWithoutCouncilAssignmentInput>
+  }
+
+  export type CouncilUpsertWithoutProjectsInput = {
+    update: XOR<CouncilUpdateWithoutProjectsInput, CouncilUncheckedUpdateWithoutProjectsInput>
+    create: XOR<CouncilCreateWithoutProjectsInput, CouncilUncheckedCreateWithoutProjectsInput>
+    where?: CouncilWhereInput
+  }
+
+  export type CouncilUpdateToOneWithWhereWithoutProjectsInput = {
+    where?: CouncilWhereInput
+    data: XOR<CouncilUpdateWithoutProjectsInput, CouncilUncheckedUpdateWithoutProjectsInput>
+  }
+
+  export type CouncilUpdateWithoutProjectsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    callRound?: CallRoundUpdateOneRequiredWithoutCouncilsNestedInput
+    members?: CouncilMemberAssignmentUpdateManyWithoutCouncilNestedInput
+  }
+
+  export type CouncilUncheckedUpdateWithoutProjectsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    callRoundId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    members?: CouncilMemberAssignmentUncheckedUpdateManyWithoutCouncilNestedInput
+  }
+
+  export type ProjectRegistrationUpsertWithoutCouncilAssignmentInput = {
+    update: XOR<ProjectRegistrationUpdateWithoutCouncilAssignmentInput, ProjectRegistrationUncheckedUpdateWithoutCouncilAssignmentInput>
+    create: XOR<ProjectRegistrationCreateWithoutCouncilAssignmentInput, ProjectRegistrationUncheckedCreateWithoutCouncilAssignmentInput>
+    where?: ProjectRegistrationWhereInput
+  }
+
+  export type ProjectRegistrationUpdateToOneWithWhereWithoutCouncilAssignmentInput = {
+    where?: ProjectRegistrationWhereInput
+    data: XOR<ProjectRegistrationUpdateWithoutCouncilAssignmentInput, ProjectRegistrationUncheckedUpdateWithoutCouncilAssignmentInput>
+  }
+
+  export type ProjectRegistrationUpdateWithoutCouncilAssignmentInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    objective?: StringFieldUpdateOperationsInput | string
+    expectedOutput?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumRegistrationStatusFieldUpdateOperationsInput | $Enums.RegistrationStatus
+    cancelReason?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    instructorStatus?: EnumInstructorStatusFieldUpdateOperationsInput | $Enums.InstructorStatus
+    facultyStatus?: EnumFacultyStatusFieldUpdateOperationsInput | $Enums.FacultyStatus
+    user?: UserUpdateOneRequiredWithoutRegistrationsNestedInput
+    instructor?: UserUpdateOneWithoutInstructedRegistrationsNestedInput
+    callRound?: CallRoundUpdateOneWithoutRegistrationsNestedInput
+    facultyReviewer?: UserUpdateOneWithoutFacultyReviewsNestedInput
+  }
+
+  export type ProjectRegistrationUncheckedUpdateWithoutCouncilAssignmentInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    callRoundId?: NullableStringFieldUpdateOperationsInput | string | null
+    title?: StringFieldUpdateOperationsInput | string
+    objective?: StringFieldUpdateOperationsInput | string
+    expectedOutput?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumRegistrationStatusFieldUpdateOperationsInput | $Enums.RegistrationStatus
+    cancelReason?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    instructorId?: NullableStringFieldUpdateOperationsInput | string | null
+    instructorStatus?: EnumInstructorStatusFieldUpdateOperationsInput | $Enums.InstructorStatus
+    facultyStatus?: EnumFacultyStatusFieldUpdateOperationsInput | $Enums.FacultyStatus
+    facultyReviewerId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type MajorCreateManyDepartmentInput = {
@@ -36476,6 +41755,7 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     callRoundInstructors?: CallRoundInstructorUpdateManyWithoutInstructorNestedInput
     callRoundCouncilMembers?: CallRoundCouncilMemberUpdateManyWithoutCouncilMemberNestedInput
+    councilAssignments?: CouncilMemberAssignmentUpdateManyWithoutCouncilMemberNestedInput
   }
 
   export type UserUncheckedUpdateWithoutDepartmentRefInput = {
@@ -36504,6 +41784,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     callRoundInstructors?: CallRoundInstructorUncheckedUpdateManyWithoutInstructorNestedInput
     callRoundCouncilMembers?: CallRoundCouncilMemberUncheckedUpdateManyWithoutCouncilMemberNestedInput
+    councilAssignments?: CouncilMemberAssignmentUncheckedUpdateManyWithoutCouncilMemberNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutDepartmentRefInput = {
@@ -36559,6 +41840,7 @@ export namespace Prisma {
     classes?: ClassUpdateManyWithoutCallRoundsNestedInput
     availableInstructors?: CallRoundInstructorUpdateManyWithoutCallRoundNestedInput
     availableCouncilMembers?: CallRoundCouncilMemberUpdateManyWithoutCallRoundNestedInput
+    councils?: CouncilUpdateManyWithoutCallRoundNestedInput
   }
 
   export type CallRoundUncheckedUpdateWithoutDepartmentsInput = {
@@ -36596,6 +41878,7 @@ export namespace Prisma {
     classes?: ClassUncheckedUpdateManyWithoutCallRoundsNestedInput
     availableInstructors?: CallRoundInstructorUncheckedUpdateManyWithoutCallRoundNestedInput
     availableCouncilMembers?: CallRoundCouncilMemberUncheckedUpdateManyWithoutCallRoundNestedInput
+    councils?: CouncilUncheckedUpdateManyWithoutCallRoundNestedInput
   }
 
   export type CallRoundUncheckedUpdateManyWithoutDepartmentsInput = {
@@ -36709,6 +41992,7 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     callRoundInstructors?: CallRoundInstructorUpdateManyWithoutInstructorNestedInput
     callRoundCouncilMembers?: CallRoundCouncilMemberUpdateManyWithoutCouncilMemberNestedInput
+    councilAssignments?: CouncilMemberAssignmentUpdateManyWithoutCouncilMemberNestedInput
   }
 
   export type UserUncheckedUpdateWithoutMajorInput = {
@@ -36737,6 +42021,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     callRoundInstructors?: CallRoundInstructorUncheckedUpdateManyWithoutInstructorNestedInput
     callRoundCouncilMembers?: CallRoundCouncilMemberUncheckedUpdateManyWithoutCouncilMemberNestedInput
+    councilAssignments?: CouncilMemberAssignmentUncheckedUpdateManyWithoutCouncilMemberNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutMajorInput = {
@@ -36792,6 +42077,7 @@ export namespace Prisma {
     classes?: ClassUpdateManyWithoutCallRoundsNestedInput
     availableInstructors?: CallRoundInstructorUpdateManyWithoutCallRoundNestedInput
     availableCouncilMembers?: CallRoundCouncilMemberUpdateManyWithoutCallRoundNestedInput
+    councils?: CouncilUpdateManyWithoutCallRoundNestedInput
   }
 
   export type CallRoundUncheckedUpdateWithoutMajorsInput = {
@@ -36829,6 +42115,7 @@ export namespace Prisma {
     classes?: ClassUncheckedUpdateManyWithoutCallRoundsNestedInput
     availableInstructors?: CallRoundInstructorUncheckedUpdateManyWithoutCallRoundNestedInput
     availableCouncilMembers?: CallRoundCouncilMemberUncheckedUpdateManyWithoutCallRoundNestedInput
+    councils?: CouncilUncheckedUpdateManyWithoutCallRoundNestedInput
   }
 
   export type CallRoundUncheckedUpdateManyWithoutMajorsInput = {
@@ -36906,6 +42193,7 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     callRoundInstructors?: CallRoundInstructorUpdateManyWithoutInstructorNestedInput
     callRoundCouncilMembers?: CallRoundCouncilMemberUpdateManyWithoutCouncilMemberNestedInput
+    councilAssignments?: CouncilMemberAssignmentUpdateManyWithoutCouncilMemberNestedInput
   }
 
   export type UserUncheckedUpdateWithoutClassInput = {
@@ -36934,6 +42222,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     callRoundInstructors?: CallRoundInstructorUncheckedUpdateManyWithoutInstructorNestedInput
     callRoundCouncilMembers?: CallRoundCouncilMemberUncheckedUpdateManyWithoutCouncilMemberNestedInput
+    councilAssignments?: CouncilMemberAssignmentUncheckedUpdateManyWithoutCouncilMemberNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutClassInput = {
@@ -36989,6 +42278,7 @@ export namespace Prisma {
     majors?: MajorUpdateManyWithoutCallRoundsNestedInput
     availableInstructors?: CallRoundInstructorUpdateManyWithoutCallRoundNestedInput
     availableCouncilMembers?: CallRoundCouncilMemberUpdateManyWithoutCallRoundNestedInput
+    councils?: CouncilUpdateManyWithoutCallRoundNestedInput
   }
 
   export type CallRoundUncheckedUpdateWithoutClassesInput = {
@@ -37026,6 +42316,7 @@ export namespace Prisma {
     majors?: MajorUncheckedUpdateManyWithoutCallRoundsNestedInput
     availableInstructors?: CallRoundInstructorUncheckedUpdateManyWithoutCallRoundNestedInput
     availableCouncilMembers?: CallRoundCouncilMemberUncheckedUpdateManyWithoutCallRoundNestedInput
+    councils?: CouncilUncheckedUpdateManyWithoutCallRoundNestedInput
   }
 
   export type CallRoundUncheckedUpdateManyWithoutClassesInput = {
@@ -37198,6 +42489,13 @@ export namespace Prisma {
   export type CallRoundCouncilMemberCreateManyCouncilMemberInput = {
     id?: string
     callRoundId: string
+    createdAt?: Date | string
+  }
+
+  export type CouncilMemberAssignmentCreateManyCouncilMemberInput = {
+    id?: string
+    councilId: string
+    role?: string | null
     createdAt?: Date | string
   }
 
@@ -37381,6 +42679,7 @@ export namespace Prisma {
     instructor?: UserUpdateOneWithoutInstructedRegistrationsNestedInput
     callRound?: CallRoundUpdateOneWithoutRegistrationsNestedInput
     facultyReviewer?: UserUpdateOneWithoutFacultyReviewsNestedInput
+    councilAssignment?: ProjectCouncilAssignmentUpdateOneWithoutProjectRegistrationNestedInput
   }
 
   export type ProjectRegistrationUncheckedUpdateWithoutUserInput = {
@@ -37397,6 +42696,7 @@ export namespace Prisma {
     instructorStatus?: EnumInstructorStatusFieldUpdateOperationsInput | $Enums.InstructorStatus
     facultyStatus?: EnumFacultyStatusFieldUpdateOperationsInput | $Enums.FacultyStatus
     facultyReviewerId?: NullableStringFieldUpdateOperationsInput | string | null
+    councilAssignment?: ProjectCouncilAssignmentUncheckedUpdateOneWithoutProjectRegistrationNestedInput
   }
 
   export type ProjectRegistrationUncheckedUpdateManyWithoutUserInput = {
@@ -37429,6 +42729,7 @@ export namespace Prisma {
     user?: UserUpdateOneRequiredWithoutRegistrationsNestedInput
     callRound?: CallRoundUpdateOneWithoutRegistrationsNestedInput
     facultyReviewer?: UserUpdateOneWithoutFacultyReviewsNestedInput
+    councilAssignment?: ProjectCouncilAssignmentUpdateOneWithoutProjectRegistrationNestedInput
   }
 
   export type ProjectRegistrationUncheckedUpdateWithoutInstructorInput = {
@@ -37445,6 +42746,7 @@ export namespace Prisma {
     instructorStatus?: EnumInstructorStatusFieldUpdateOperationsInput | $Enums.InstructorStatus
     facultyStatus?: EnumFacultyStatusFieldUpdateOperationsInput | $Enums.FacultyStatus
     facultyReviewerId?: NullableStringFieldUpdateOperationsInput | string | null
+    councilAssignment?: ProjectCouncilAssignmentUncheckedUpdateOneWithoutProjectRegistrationNestedInput
   }
 
   export type ProjectRegistrationUncheckedUpdateManyWithoutInstructorInput = {
@@ -37545,6 +42847,7 @@ export namespace Prisma {
     user?: UserUpdateOneRequiredWithoutRegistrationsNestedInput
     instructor?: UserUpdateOneWithoutInstructedRegistrationsNestedInput
     callRound?: CallRoundUpdateOneWithoutRegistrationsNestedInput
+    councilAssignment?: ProjectCouncilAssignmentUpdateOneWithoutProjectRegistrationNestedInput
   }
 
   export type ProjectRegistrationUncheckedUpdateWithoutFacultyReviewerInput = {
@@ -37561,6 +42864,7 @@ export namespace Prisma {
     instructorId?: NullableStringFieldUpdateOperationsInput | string | null
     instructorStatus?: EnumInstructorStatusFieldUpdateOperationsInput | $Enums.InstructorStatus
     facultyStatus?: EnumFacultyStatusFieldUpdateOperationsInput | $Enums.FacultyStatus
+    councilAssignment?: ProjectCouncilAssignmentUncheckedUpdateOneWithoutProjectRegistrationNestedInput
   }
 
   export type ProjectRegistrationUncheckedUpdateManyWithoutFacultyReviewerInput = {
@@ -37651,6 +42955,27 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type CouncilMemberAssignmentUpdateWithoutCouncilMemberInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    role?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    council?: CouncilUpdateOneRequiredWithoutMembersNestedInput
+  }
+
+  export type CouncilMemberAssignmentUncheckedUpdateWithoutCouncilMemberInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    councilId?: StringFieldUpdateOperationsInput | string
+    role?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CouncilMemberAssignmentUncheckedUpdateManyWithoutCouncilMemberInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    councilId?: StringFieldUpdateOperationsInput | string
+    role?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type ProjectCreateManyCallRoundInput = {
     id?: string
     code?: string | null
@@ -37697,6 +43022,14 @@ export namespace Prisma {
     id?: string
     councilMemberId: string
     createdAt?: Date | string
+  }
+
+  export type CouncilCreateManyCallRoundInput = {
+    id?: string
+    name: string
+    description?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type ProjectUpdateWithoutCallRoundInput = {
@@ -37781,6 +43114,7 @@ export namespace Prisma {
     user?: UserUpdateOneRequiredWithoutRegistrationsNestedInput
     instructor?: UserUpdateOneWithoutInstructedRegistrationsNestedInput
     facultyReviewer?: UserUpdateOneWithoutFacultyReviewsNestedInput
+    councilAssignment?: ProjectCouncilAssignmentUpdateOneWithoutProjectRegistrationNestedInput
   }
 
   export type ProjectRegistrationUncheckedUpdateWithoutCallRoundInput = {
@@ -37797,6 +43131,7 @@ export namespace Prisma {
     instructorStatus?: EnumInstructorStatusFieldUpdateOperationsInput | $Enums.InstructorStatus
     facultyStatus?: EnumFacultyStatusFieldUpdateOperationsInput | $Enums.FacultyStatus
     facultyReviewerId?: NullableStringFieldUpdateOperationsInput | string | null
+    councilAssignment?: ProjectCouncilAssignmentUncheckedUpdateOneWithoutProjectRegistrationNestedInput
   }
 
   export type ProjectRegistrationUncheckedUpdateManyWithoutCallRoundInput = {
@@ -37943,6 +43278,34 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     councilMemberId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CouncilUpdateWithoutCallRoundInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    members?: CouncilMemberAssignmentUpdateManyWithoutCouncilNestedInput
+    projects?: ProjectCouncilAssignmentUpdateManyWithoutCouncilNestedInput
+  }
+
+  export type CouncilUncheckedUpdateWithoutCallRoundInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    members?: CouncilMemberAssignmentUncheckedUpdateManyWithoutCouncilNestedInput
+    projects?: ProjectCouncilAssignmentUncheckedUpdateManyWithoutCouncilNestedInput
+  }
+
+  export type CouncilUncheckedUpdateManyWithoutCallRoundInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ProjectCreateManyProjectTypeInput = {
@@ -38342,6 +43705,7 @@ export namespace Prisma {
     classes?: ClassUpdateManyWithoutCallRoundsNestedInput
     availableInstructors?: CallRoundInstructorUpdateManyWithoutCallRoundNestedInput
     availableCouncilMembers?: CallRoundCouncilMemberUpdateManyWithoutCallRoundNestedInput
+    councils?: CouncilUpdateManyWithoutCallRoundNestedInput
   }
 
   export type CallRoundUncheckedUpdateWithoutTemplateInput = {
@@ -38379,6 +43743,7 @@ export namespace Prisma {
     classes?: ClassUncheckedUpdateManyWithoutCallRoundsNestedInput
     availableInstructors?: CallRoundInstructorUncheckedUpdateManyWithoutCallRoundNestedInput
     availableCouncilMembers?: CallRoundCouncilMemberUncheckedUpdateManyWithoutCallRoundNestedInput
+    councils?: CouncilUncheckedUpdateManyWithoutCallRoundNestedInput
   }
 
   export type CallRoundUncheckedUpdateManyWithoutTemplateInput = {
@@ -38409,6 +43774,58 @@ export namespace Prisma {
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CouncilMemberAssignmentCreateManyCouncilInput = {
+    id?: string
+    councilMemberId: string
+    role?: string | null
+    createdAt?: Date | string
+  }
+
+  export type ProjectCouncilAssignmentCreateManyCouncilInput = {
+    id?: string
+    projectRegistrationId: string
+    createdAt?: Date | string
+  }
+
+  export type CouncilMemberAssignmentUpdateWithoutCouncilInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    role?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    councilMember?: UserUpdateOneRequiredWithoutCouncilAssignmentsNestedInput
+  }
+
+  export type CouncilMemberAssignmentUncheckedUpdateWithoutCouncilInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    councilMemberId?: StringFieldUpdateOperationsInput | string
+    role?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CouncilMemberAssignmentUncheckedUpdateManyWithoutCouncilInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    councilMemberId?: StringFieldUpdateOperationsInput | string
+    role?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProjectCouncilAssignmentUpdateWithoutCouncilInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    projectRegistration?: ProjectRegistrationUpdateOneRequiredWithoutCouncilAssignmentNestedInput
+  }
+
+  export type ProjectCouncilAssignmentUncheckedUpdateWithoutCouncilInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    projectRegistrationId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProjectCouncilAssignmentUncheckedUpdateManyWithoutCouncilInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    projectRegistrationId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
 
