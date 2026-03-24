@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { Plus, Pencil, Trash2, Clock, CheckCircle, XCircle } from 'lucide-react';
+import { Clock, CheckCircle, XCircle, PlusCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
@@ -91,8 +91,14 @@ export function DeanCallRoundsManagement() {
     // API đã filter sẵn: DEAN chỉ thấy đợt mình tạo, ADMIN thấy tất cả
     const deanCallRounds = callRounds || [];
 
+    const canEditCallRound = (callRound: CallRound) => callRound.approvalStatus === 'PENDING_APPROVAL';
+
     const handleOpenDialog = (callRound?: CallRound) => {
         if (callRound) {
+            if (!canEditCallRound(callRound)) {
+                toast.error('Chỉ có thể chỉnh sửa đợt đăng ký khi đang ở trạng thái chờ duyệt.');
+                return;
+            }
             setEditingCallRound(callRound);
             setFormData({
                 name: callRound.name,
@@ -214,9 +220,9 @@ export function DeanCallRoundsManagement() {
                     <h1 className="text-3xl font-bold tracking-tight">Quản lý Đợt Đăng Ký</h1>
                     <p className="text-muted-foreground mt-1">Tạo và quản lý các đợt đăng ký đề tài của khoa</p>
                 </div>
-                <Button onClick={() => handleOpenDialog()} className="gap-2">
-                    <Plus className="h-4 w-4" />
-                    Tạo đợt mới
+                <Button onClick={() => handleOpenDialog()}>
+                    <PlusCircle className="h-4 w-4 mr-2" />
+                    Thêm đợt đăng ký
                 </Button>
             </div>
 
@@ -236,7 +242,6 @@ export function DeanCallRoundsManagement() {
                                 <TableHead>Thời gian thực hiện</TableHead>
                                 <TableHead>Biểu mẫu</TableHead>
                                 <TableHead>Trạng thái</TableHead>
-                                <TableHead className="text-right">Thao tác</TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
@@ -292,29 +297,6 @@ export function DeanCallRoundsManagement() {
                                             )}
                                         </TableCell>
                                         <TableCell>{getStatusBadge(callRound)}</TableCell>
-                                        <TableCell className="text-right">
-                                            <div className="flex justify-end gap-2">
-                                                <Button
-                                                    variant="ghost"
-                                                    size="sm"
-                                                    onClick={() => handleOpenDialog(callRound)}
-                                                    disabled={callRound.approvalStatus === 'APPROVED'}
-                                                >
-                                                    <Pencil className="h-4 w-4" />
-                                                </Button>
-                                                <Button
-                                                    variant="ghost"
-                                                    size="sm"
-                                                    onClick={() => {
-                                                        setDeletingCallRound(callRound);
-                                                        setIsDeleteDialogOpen(true);
-                                                    }}
-                                                    disabled={callRound.approvalStatus === 'APPROVED'}
-                                                >
-                                                    <Trash2 className="h-4 w-4 text-destructive" />
-                                                </Button>
-                                            </div>
-                                        </TableCell>
                                     </TableRow>
                                 ))
                             )}
@@ -513,7 +495,7 @@ export function DeanCallRoundsManagement() {
                                 ) : lecturers.length === 0 ? (
                                     <p className="text-sm text-muted-foreground">Chưa có giảng viên nào trong khoa</p>
                                 ) : (
-                                    <ScrollArea className="h-[200px]">
+                                    <ScrollArea className="h-50">
                                         <div className="space-y-2">
                                             {lecturers.map((lecturer) => (
                                                 <div key={lecturer.id} className="flex items-center space-x-2">
@@ -594,7 +576,7 @@ export function DeanCallRoundsManagement() {
                                 ) : lecturers.length === 0 ? (
                                     <p className="text-sm text-muted-foreground">Chưa có giảng viên nào trong khoa</p>
                                 ) : (
-                                    <ScrollArea className="h-[200px]">
+                                    <ScrollArea className="h-50">
                                         <div className="space-y-2">
                                             {lecturers.map((member) => (
                                                 <div key={member.id} className="flex items-center space-x-2">

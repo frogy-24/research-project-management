@@ -7,6 +7,12 @@ export interface DeanLecturer {
     email: string;
     code?: string;
     departmentId?: string;
+    majorId?: string | null;
+    major?: {
+        id: string;
+        code: string;
+        name: string;
+    } | null;
 }
 
 export interface DeanLecturersResponse {

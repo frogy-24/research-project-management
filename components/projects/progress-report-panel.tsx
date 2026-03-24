@@ -5,6 +5,7 @@ import { toast } from 'sonner';
 import { useAuthSession } from '@/hooks/useAuth';
 import { useProjects } from '@/hooks/useProjects';
 import { useProgressReports, useCreateProgressReport, useReviewProgressReport } from '@/hooks/useProjectOperations';
+import type { Project } from '@/types/project.schema';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -62,7 +63,16 @@ export function ProgressReportPanel({ projectId }: ProgressReportPanelProps) {
     const reviewMutation = useReviewProgressReport(projectId);
 
     // Get template items from project's callRound
-    const templateItems: TemplateItem[] = (project as any)?.callRound?.template?.items || [];
+    const templateItems: TemplateItem[] =
+        project?.callRound?.template?.items?.map((item) => ({
+            id: item.id,
+            weekNumber: item.weekNumber,
+            weekLabel: item.weekLabel,
+            taskDescription: item.taskDescription,
+            contentGuideline: item.contentGuideline ?? null,
+            expectedResult: item.expectedResult ?? null,
+            orderIndex: item.orderIndex,
+        })) ?? [];
     const hasTemplate = templateItems.length > 0;
 
     // States for form - Dynamic based on template
@@ -93,6 +103,12 @@ export function ProgressReportPanel({ projectId }: ProgressReportPanelProps) {
     const [currentDocName, setCurrentDocName] = useState('');
 
     if (!project) return null;
+
+    const typedProject = project as Project;
+    const instructorDisplay =
+        typedProject.instructor?.name || typedProject.instructorId || typedProject.deanReviewer?.name || 'Chưa phân công';
+    const callRoundDisplay = typedProject.callRound?.name || 'Chưa gắn đợt đề tài';
+    const templateDisplay = typedProject.callRound?.template?.name || 'Có sẵn';
 
     const isLeader = session?.userId === project.leaderId;
     const isMentor =
@@ -229,20 +245,18 @@ export function ProgressReportPanel({ projectId }: ProgressReportPanelProps) {
                         <p className="font-medium">{project.title}</p>
                     </div>
                     <div>
-                        <Label className="text-muted-foreground">Người hướng dẫn (Khoa):</Label>
-                        <p className="font-medium">{project.deanReviewerId || 'Chưa phân công'}</p>
+                        <Label className="text-muted-foreground">Giảng viên hướng dẫn:</Label>
+                        <p className="font-medium">{instructorDisplay}</p>
                     </div>
                     <div>
                         <Label className="text-muted-foreground">Đợt đăng ký:</Label>
-                        <p className="font-medium">
-                            {(project as any)?.callRound?.name || 'Không xác định'}
-                        </p>
+                        <p className="font-medium">{callRoundDisplay}</p>
                     </div>
                     {hasTemplate && (
                         <div>
                             <Label className="text-muted-foreground">Mẫu báo cáo tiến độ:</Label>
                             <p className="font-medium text-primary">
-                                {(project as any)?.callRound?.template?.name || 'Có sẵn'} ({templateItems.length} tuần)
+                                {templateDisplay} ({templateItems.length} tuần)
                             </p>
                         </div>
                     )}
@@ -380,11 +394,7 @@ export function ProgressReportPanel({ projectId }: ProgressReportPanelProps) {
                                         <Label>
                                             Đến ngày <span className="text-destructive">*</span>
                                         </Label>
-                                        <Input
-                                            type="date"
-                                            value={toDate}
-                                            onChange={(e) => setToDate(e.target.value)}
-                                        />
+                                        <Input type="date" value={toDate} onChange={(e) => setToDate(e.target.value)} />
                                     </div>
                                 </div>
 
@@ -427,7 +437,7 @@ export function ProgressReportPanel({ projectId }: ProgressReportPanelProps) {
                                             <a
                                                 href={fileUrl}
                                                 target="_blank"
-                                                className="text-sm text-primary underline shrink-0 truncate max-w-[200px]"
+                                                className="text-sm text-primary underline shrink-0 truncate max-w-50"
                                             >
                                                 Đã đính kèm
                                             </a>
@@ -586,7 +596,7 @@ export function ProgressReportPanel({ projectId }: ProgressReportPanelProps) {
                                             Mở trong tab mới →
                                         </a>
                                     </div>
-                                    <div className="w-full h-[400px]">
+                                    <div className="w-full h-100">
                                         <iframe
                                             src={selectedReport.fileUrl}
                                             className="w-full h-full"

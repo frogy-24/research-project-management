@@ -28,7 +28,8 @@ export async function GET(req: Request) {
     // Parse filter params
     const search = url.searchParams.get("search") || "";
     const facultyStatus = url.searchParams.get("facultyStatus") || "";
-    const instructorStatus = url.searchParams.get("instructorStatus") || "";
+    const callRoundId = url.searchParams.get("callRoundId") || "";
+    const instructorStatus = "ACCEPTED";
 
     // Build the query based on dean's department and filters
     const whereClause: any = {};
@@ -65,10 +66,13 @@ export async function GET(req: Request) {
       whereClause.facultyStatus = facultyStatus;
     }
 
-    // Instructor status filter
-    if (instructorStatus && ["PENDING", "ACCEPTED", "REJECTED"].includes(instructorStatus)) {
-      whereClause.instructorStatus = instructorStatus;
+    // Call round filter
+    if (callRoundId) {
+      whereClause.callRoundId = callRoundId;
     }
+
+    // Chỉ hiển thị đề tài đã được giảng viên/người hướng dẫn chấp nhận
+    whereClause.instructorStatus = instructorStatus;
 
     // Get total count for pagination
     const total = await prisma.projectRegistration.count({ where: whereClause });
@@ -76,8 +80,46 @@ export async function GET(req: Request) {
     const registrations = await prisma.projectRegistration.findMany({
       where: whereClause,
       include: {
-        user: { select: { name: true, email: true, department: true, departmentId: true } },
-        instructor: { select: { name: true } }
+        user: {
+          select: {
+            name: true,
+            email: true,
+            code: true,
+            department: true,
+            departmentId: true,
+            class: {
+              select: {
+                name: true,
+                code: true,
+              },
+            },
+            major: {
+              select: {
+                name: true,
+                code: true,
+              },
+            },
+          },
+        },
+        instructor: {
+          select: {
+            name: true,
+            email: true,
+            code: true,
+            department: true,
+            departmentRef: {
+              select: {
+                name: true,
+                code: true,
+              },
+            },
+          },
+        },
+        callRound: {
+          select: {
+            name: true,
+          },
+        },
       },
       orderBy: { createdAt: "desc" },
       skip,

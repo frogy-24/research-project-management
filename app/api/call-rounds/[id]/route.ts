@@ -126,10 +126,10 @@ export async function PATCH(
           { status: 403 }
         );
       }
-      // DEAN không được sửa nếu đã được ADMIN duyệt/từ chối
-      if (existing.approvalStatus === "APPROVED" && existing.createdByRole === "DEAN") {
+      // DEAN chỉ được sửa khi đợt đăng ký đang ở trạng thái chờ duyệt
+      if (existing.approvalStatus !== "PENDING_APPROVAL") {
         return NextResponse.json(
-          { success: false, error: "Đợt đăng ký đã được duyệt, không thể chỉnh sửa." },
+          { success: false, error: "Chỉ có thể chỉnh sửa đợt đăng ký khi đang ở trạng thái chờ duyệt." },
           { status: 403 }
         );
       }

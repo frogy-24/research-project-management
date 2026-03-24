@@ -40,6 +40,13 @@ export async function POST(request: Request) {
       );
     }
 
+    if (callRound.approvalStatus !== 'APPROVED') {
+      return NextResponse.json(
+        { error: 'Chỉ có thể tạo hội đồng cho đợt đề tài đã APPROVED' },
+        { status: 400 }
+      );
+    }
+
     // Tạo hội đồng và phân công thành viên trong transaction
     const council = await prisma.$transaction(async (tx) => {
       // Tạo hội đồng

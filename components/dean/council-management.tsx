@@ -1,10 +1,30 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
-import { Plus, Search, Users, UserPlus, UserMinus, Calendar, CheckCircle2, FileText, GraduationCap, UserCheck, BarChart3, Split, Loader2, UserCog } from 'lucide-react';
+import {
+    Plus,
+    Search,
+    Users,
+    UserPlus,
+    UserMinus,
+    Calendar,
+    CheckCircle2,
+    FileText,
+    GraduationCap,
+    UserCheck,
+    BarChart3,
+    Split,
+    Loader2,
+    UserCog,
+} from 'lucide-react';
 import { useCallRounds } from '@/hooks/useCallRounds';
-import { useCouncilMembers, useAssignCouncilMember, useRemoveCouncilMember, useCreateExternalCouncilMember } from '@/hooks/useCouncilMembers';
+import {
+    useCouncilMembers,
+    useAssignCouncilMember,
+    useRemoveCouncilMember,
+    useCreateExternalCouncilMember,
+} from '@/hooks/useCouncilMembers';
 import { useDeanLecturers } from '@/hooks/useDeanLecturers';
 import { useCallRoundStats } from '@/hooks/useCallRoundStats';
 import { useCouncils, useAutoDivideCouncils, useCreateCouncil } from '@/hooks/useCouncils';
@@ -14,55 +34,84 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger, DialogFooter, DialogClose } from '@/components/ui/dialog';
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+    DialogFooter,
+    DialogClose,
+} from '@/components/ui/dialog';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Checkbox } from '@/components/ui/checkbox';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from '@/components/ui/pagination';
-import type { CouncilMemberAssignment } from '@/types/council.schema';
+import {
+    Pagination,
+    PaginationContent,
+    PaginationItem,
+    PaginationLink,
+    PaginationNext,
+    PaginationPrevious,
+} from '@/components/ui/pagination';
+import type { CouncilWithRelations } from '@/types/council.schema';
+import type { CouncilMember } from '@/api/council-members';
 import { Label } from '@/components/ui/label';
 
 // Create Council Dialog Component
-function CreateCouncilDialog({ callRoundId, councilMembers }: { callRoundId: string; councilMembers: any[] }) {
+function CreateCouncilDialog({
+    callRoundId,
+    councilMembers,
+    councils,
+}: {
+    callRoundId: string;
+    councilMembers: CouncilMember[];
+    councils: CouncilWithRelations[];
+}) {
     const [isOpen, setIsOpen] = useState(false);
     const [councilName, setCouncilName] = useState('');
     const [councilDescription, setCouncilDescription] = useState('');
     const [selectedMembers, setSelectedMembers] = useState<Array<{ councilMemberId: string; role: string }>>([]);
     const [searchMember, setSearchMember] = useState('');
-    
+
     const createCouncilMutation = useCreateCouncil();
 
     const roles = ['Chủ tịch', 'Thư ký', 'Ủy viên'];
+    const occupiedMemberIds = new Set(councils.flatMap((council) => council.members.map((m) => m.councilMemberId)));
 
-    const availableMembers = councilMembers.filter(m => 
-        !selectedMembers.some(sm => sm.councilMemberId === m.councilMember.id)
-    ).filter(m => 
-        m.councilMember.name.toLowerCase().includes(searchMember.toLowerCase()) ||
-        m.councilMember.email.toLowerCase().includes(searchMember.toLowerCase())
-    );
+    const availableMembers = councilMembers
+        .filter((m) => !occupiedMemberIds.has(m.councilMember.id))
+        .filter((m) => !selectedMembers.some((sm) => sm.councilMemberId === m.councilMember.id))
+        .filter(
+            (m) =>
+                m.councilMember.name.toLowerCase().includes(searchMember.toLowerCase()) ||
+                m.councilMember.email.toLowerCase().includes(searchMember.toLowerCase()),
+        );
 
     const handleAddMember = (memberId: string) => {
         if (selectedMembers.length >= 3) {
             toast.error('Hội đồng tối đa 3 thành viên');
             return;
         }
-        
+
         // Auto-assign role based on order
         const roleIndex = selectedMembers.length;
-        setSelectedMembers(prev => [...prev, {
-            councilMemberId: memberId,
-            role: roles[roleIndex]
-        }]);
+        setSelectedMembers((prev) => [
+            ...prev,
+            {
+                councilMemberId: memberId,
+                role: roles[roleIndex],
+            },
+        ]);
     };
 
     const handleRemoveMember = (memberId: string) => {
-        setSelectedMembers(prev => prev.filter(m => m.councilMemberId !== memberId));
+        setSelectedMembers((prev) => prev.filter((m) => m.councilMemberId !== memberId));
     };
 
     const handleUpdateRole = (memberId: string, role: string) => {
-        setSelectedMembers(prev => prev.map(m => 
-            m.councilMemberId === memberId ? { ...m, role } : m
-        ));
+        setSelectedMembers((prev) => prev.map((m) => (m.councilMemberId === memberId ? { ...m, role } : m)));
     };
 
     const handleCreate = () => {
@@ -93,12 +142,12 @@ function CreateCouncilDialog({ callRoundId, councilMembers }: { callRoundId: str
                 onError: (error: any) => {
                     toast.error(error.response?.data?.error || 'Lỗi khi tạo hội đồng');
                 },
-            }
+            },
         );
     };
 
     const getMemberInfo = (memberId: string) => {
-        const member = councilMembers.find(m => m.councilMember.id === memberId);
+        const member = councilMembers.find((m) => m.councilMember.id === memberId);
         return member?.councilMember;
     };
 
@@ -110,12 +159,10 @@ function CreateCouncilDialog({ callRoundId, councilMembers }: { callRoundId: str
                     Tạo hội đồng
                 </Button>
             </DialogTrigger>
-            <DialogContent className="max-w-2xl">
+            <DialogContent className="max-w-2xl sm:max-w-1/2">
                 <DialogHeader>
                     <DialogTitle>Tạo hội đồng mới</DialogTitle>
-                    <DialogDescription>
-                        Nhập thông tin và chọn 3 thành viên cho hội đồng
-                    </DialogDescription>
+                    <DialogDescription>Nhập thông tin và chọn 3 thành viên cho hội đồng</DialogDescription>
                 </DialogHeader>
                 <div className="space-y-4">
                     {/* Council Info */}
@@ -152,18 +199,30 @@ function CreateCouncilDialog({ callRoundId, councilMembers }: { callRoundId: str
                                 {selectedMembers.map((sm) => {
                                     const memberInfo = getMemberInfo(sm.councilMemberId);
                                     return (
-                                        <div key={sm.councilMemberId} className="flex items-center gap-2 p-2 bg-muted rounded-md">
+                                        <div
+                                            key={sm.councilMemberId}
+                                            className="flex items-center gap-2 p-2 bg-muted rounded-md"
+                                        >
                                             <div className="flex-1">
                                                 <p className="font-medium text-sm">{memberInfo?.name}</p>
                                                 <p className="text-xs text-muted-foreground">{memberInfo?.email}</p>
+                                                <p className="text-xs text-muted-foreground">
+                                                    Ngành:{' '}
+                                                    {memberInfo?.major?.name || memberInfo?.major?.code || 'Chưa cập nhật'}
+                                                </p>
                                             </div>
-                                            <Select value={sm.role} onValueChange={(role) => handleUpdateRole(sm.councilMemberId, role)}>
-                                                <SelectTrigger className="w-[130px]">
+                                            <Select
+                                                value={sm.role}
+                                                onValueChange={(role) => handleUpdateRole(sm.councilMemberId, role)}
+                                            >
+                                                <SelectTrigger className="w-32.5">
                                                     <SelectValue />
                                                 </SelectTrigger>
                                                 <SelectContent>
-                                                    {roles.map(role => (
-                                                        <SelectItem key={role} value={role}>{role}</SelectItem>
+                                                    {roles.map((role) => (
+                                                        <SelectItem key={role} value={role}>
+                                                            {role}
+                                                        </SelectItem>
                                                     ))}
                                                 </SelectContent>
                                             </Select>
@@ -194,10 +253,10 @@ function CreateCouncilDialog({ callRoundId, councilMembers }: { callRoundId: str
                                     className="pl-10"
                                 />
                             </div>
-                            <ScrollArea className="h-[200px] border rounded-md p-2">
+                            <ScrollArea className="h-50 border rounded-md p-2">
                                 {availableMembers.length === 0 ? (
                                     <p className="text-center text-sm text-muted-foreground py-4">
-                                        Không tìm thấy thành viên
+                                        Không còn thành viên khả dụng để tạo hội đồng mới
                                     </p>
                                 ) : (
                                     <div className="space-y-1">
@@ -209,7 +268,15 @@ function CreateCouncilDialog({ callRoundId, councilMembers }: { callRoundId: str
                                             >
                                                 <div>
                                                     <p className="font-medium text-sm">{member.councilMember.name}</p>
-                                                    <p className="text-xs text-muted-foreground">{member.councilMember.email}</p>
+                                                    <p className="text-xs text-muted-foreground">
+                                                        {member.councilMember.email}
+                                                    </p>
+                                                    <p className="text-xs text-muted-foreground">
+                                                        Ngành:{' '}
+                                                        {member.councilMember.major?.name ||
+                                                            member.councilMember.major?.code ||
+                                                            'Chưa cập nhật'}
+                                                    </p>
                                                 </div>
                                                 <Button variant="ghost" size="sm">
                                                     <Plus className="h-4 w-4" />
@@ -263,12 +330,13 @@ export function CouncilManagement() {
     // Fetch call rounds của khoa
     const { data: callRoundsData, isLoading: loadingCallRounds } = useCallRounds();
     const callRounds = callRoundsData ?? [];
+    const approvedCallRounds = callRounds.filter((callRound) => callRound.approvalStatus === 'APPROVED');
 
     // Fetch council members của call round đã chọn (with server-side pagination)
     const { data: councilData, isLoading: loadingCouncil } = useCouncilMembers(
         selectedCallRoundId,
         currentPage,
-        itemsPerPage
+        itemsPerPage,
     );
     const councilMembers = councilData?.data ?? [];
     const pagination = councilData?.pagination;
@@ -290,18 +358,19 @@ export function CouncilManagement() {
     const autoDivideMutation = useAutoDivideCouncils(selectedCallRoundId || '');
 
     // Lọc giảng viên chưa có trong hội đồng
-    const councilMemberIds = councilMembers.map(m => m.councilMember.id);
-    const availableLecturers = allLecturers.filter(l => !councilMemberIds.includes(l.id));
-    const filteredLecturers = availableLecturers.filter(l =>
-        l.name.toLowerCase().includes(searchLecturer.toLowerCase()) ||
-        (l.email && l.email.toLowerCase().includes(searchLecturer.toLowerCase()))
+    const councilMemberIds = councilMembers.map((m) => m.councilMember.id);
+    const availableLecturers = allLecturers.filter((l) => !councilMemberIds.includes(l.id));
+    const filteredLecturers = availableLecturers.filter(
+        (l) =>
+            l.name.toLowerCase().includes(searchLecturer.toLowerCase()) ||
+            (l.email && l.email.toLowerCase().includes(searchLecturer.toLowerCase())),
     );
 
     const handleAssignMembers = () => {
         if (!selectedCallRoundId || selectedLecturers.length === 0) return;
 
         // Assign từng lecturer
-        selectedLecturers.forEach(lecturerId => {
+        selectedLecturers.forEach((lecturerId) => {
             assignMutation.mutate(
                 { callRoundId: selectedCallRoundId, councilMemberId: lecturerId },
                 {
@@ -311,7 +380,7 @@ export function CouncilManagement() {
                     onError: () => {
                         toast.error('Lỗi khi thêm thành viên hội đồng');
                     },
-                }
+                },
             );
         });
 
@@ -326,18 +395,41 @@ export function CouncilManagement() {
             { callRoundId: selectedCallRoundId, councilMemberId: memberId },
             {
                 onSuccess: () => {
+                    // If removing the last row on a non-first page, move back one page
+                    if (currentPage > 1 && councilMembers.length === 1) {
+                        setCurrentPage((prev) => Math.max(1, prev - 1));
+                    }
                     toast.success('Đã xóa thành viên khỏi hội đồng');
                 },
                 onError: () => {
                     toast.error('Lỗi khi xóa thành viên hội đồng');
                 },
-            }
+            },
         );
     };
 
+    useEffect(() => {
+        // Guard against stale page index after data changes (delete/filter)
+        if (pagination && pagination.totalPages > 0 && currentPage > pagination.totalPages) {
+            setCurrentPage(pagination.totalPages);
+        }
+    }, [pagination, currentPage]);
+
+    useEffect(() => {
+        if (!selectedCallRoundId) {
+            return;
+        }
+
+        const isSelectedRoundApproved = approvedCallRounds.some((callRound) => callRound.id === selectedCallRoundId);
+        if (!isSelectedRoundApproved) {
+            setSelectedCallRoundId('');
+            setCurrentPage(1);
+        }
+    }, [approvedCallRounds, selectedCallRoundId]);
+
     const handleCreateExternalMember = () => {
         if (!selectedCallRoundId) return;
-        
+
         // Validation
         if (!externalMemberForm.name.trim()) {
             toast.error('Vui lòng nhập họ tên');
@@ -347,7 +439,7 @@ export function CouncilManagement() {
             toast.error('Vui lòng nhập email');
             return;
         }
-        
+
         createExternalMutation.mutate(
             {
                 callRoundId: selectedCallRoundId,
@@ -362,52 +454,44 @@ export function CouncilManagement() {
                 onError: (error: any) => {
                     toast.error(error.response?.data?.error || 'Lỗi khi tạo thành viên');
                 },
-            }
+            },
         );
     };
 
     const toggleLecturerSelection = (lecturerId: string) => {
-        setSelectedLecturers(prev =>
-            prev.includes(lecturerId)
-                ? prev.filter(id => id !== lecturerId)
-                : [...prev, lecturerId]
+        setSelectedLecturers((prev) =>
+            prev.includes(lecturerId) ? prev.filter((id) => id !== lecturerId) : [...prev, lecturerId],
         );
     };
 
-    const selectedCallRound = callRounds.find((cr: { id: string }) => cr.id === selectedCallRoundId);
+    const selectedCallRound = approvedCallRounds.find((cr: { id: string }) => cr.id === selectedCallRoundId);
 
-    // Reset to page 1 when changing call round
+ 
     const handleCallRoundChange = (value: string) => {
         setSelectedCallRoundId(value);
         setCurrentPage(1);
     };
 
     return (
-        <div className="space-y-6">
-            {/* Select Call Round */}
+        <div className="space-y-6 p-4">
             <Card>
                 <CardHeader>
                     <CardTitle className="flex items-center gap-2">
                         <Calendar className="h-5 w-5" />
                         Chọn Đợt Đăng Ký
                     </CardTitle>
-                    <CardDescription>
-                        Chọn đợt đăng ký để quản lý thành viên hội đồng đánh giá
-                    </CardDescription>
+                    <CardDescription>Chọn đợt đăng ký để quản lý thành viên hội đồng đánh giá</CardDescription>
                 </CardHeader>
                 <CardContent>
                     {loadingCallRounds ? (
                         <Skeleton className="h-10 w-full" />
                     ) : (
-                        <Select
-                            value={selectedCallRoundId}
-                            onValueChange={handleCallRoundChange}
-                        >
-                            <SelectTrigger className="w-full md:w-[400px]">
+                        <Select value={selectedCallRoundId} onValueChange={handleCallRoundChange}>
+                            <SelectTrigger className="w-full md:w-100">
                                 <SelectValue placeholder="Chọn đợt đăng ký..." />
                             </SelectTrigger>
                             <SelectContent>
-                                {callRounds.map((cr: { id: string; name: string; isActive: boolean }) => (
+                                {approvedCallRounds.map((cr: { id: string; name: string; isActive: boolean }) => (
                                     <SelectItem key={cr.id} value={cr.id}>
                                         <div className="flex items-center gap-2">
                                             <span>{cr.name}</span>
@@ -420,10 +504,14 @@ export function CouncilManagement() {
                             </SelectContent>
                         </Select>
                     )}
+                    {!loadingCallRounds && approvedCallRounds.length === 0 && (
+                        <p className="text-sm text-muted-foreground mt-2">
+                            Chưa có đợt đề tài nào ở trạng thái APPROVED để quản lý hội đồng.
+                        </p>
+                    )}
                 </CardContent>
             </Card>
 
-            {/* Statistics Card */}
             {selectedCallRoundId && (
                 <Card>
                     <CardHeader>
@@ -431,14 +519,12 @@ export function CouncilManagement() {
                             <BarChart3 className="h-5 w-5" />
                             Thống kê Tổng quan
                         </CardTitle>
-                        <CardDescription>
-                            Thông tin về đề tài và sinh viên đăng ký trong đợt này
-                        </CardDescription>
+                        <CardDescription>Thông tin về đề tài và sinh viên đăng ký trong đợt này</CardDescription>
                     </CardHeader>
                     <CardContent>
                         {loadingStats ? (
                             <div className="grid gap-4 md:grid-cols-4">
-                                {[1, 2, 3, 4].map(i => (
+                                {[1, 2, 3, 4].map((i) => (
                                     <Skeleton key={i} className="h-24 w-full" />
                                 ))}
                             </div>
@@ -494,11 +580,12 @@ export function CouncilManagement() {
                                     </Card>
                                 </div>
 
-                                {/* Status Breakdown */}
                                 <div className="grid gap-4 md:grid-cols-3">
                                     <Card>
                                         <CardHeader className="pb-2">
-                                            <CardTitle className="text-sm font-medium">Trạng thái đơn đăng ký</CardTitle>
+                                            <CardTitle className="text-sm font-medium">
+                                                Trạng thái đơn đăng ký
+                                            </CardTitle>
                                         </CardHeader>
                                         <CardContent className="space-y-2">
                                             <div className="flex justify-between items-center">
@@ -527,15 +614,21 @@ export function CouncilManagement() {
                                         <CardContent className="space-y-2">
                                             <div className="flex justify-between items-center">
                                                 <span className="text-sm text-muted-foreground">Chờ phản hồi:</span>
-                                                <Badge variant="secondary">{stats.instructorStatusBreakdown.pending}</Badge>
+                                                <Badge variant="secondary">
+                                                    {stats.instructorStatusBreakdown.pending}
+                                                </Badge>
                                             </div>
                                             <div className="flex justify-between items-center">
                                                 <span className="text-sm text-muted-foreground">Đã chấp nhận:</span>
-                                                <Badge variant="default">{stats.instructorStatusBreakdown.accepted}</Badge>
+                                                <Badge variant="default">
+                                                    {stats.instructorStatusBreakdown.accepted}
+                                                </Badge>
                                             </div>
                                             <div className="flex justify-between items-center">
                                                 <span className="text-sm text-muted-foreground">Từ chối:</span>
-                                                <Badge variant="destructive">{stats.instructorStatusBreakdown.rejected}</Badge>
+                                                <Badge variant="destructive">
+                                                    {stats.instructorStatusBreakdown.rejected}
+                                                </Badge>
                                             </div>
                                         </CardContent>
                                     </Card>
@@ -547,7 +640,9 @@ export function CouncilManagement() {
                                         <CardContent className="space-y-2">
                                             <div className="flex justify-between items-center">
                                                 <span className="text-sm text-muted-foreground">Chờ duyệt:</span>
-                                                <Badge variant="secondary">{stats.facultyStatusBreakdown.pending}</Badge>
+                                                <Badge variant="secondary">
+                                                    {stats.facultyStatusBreakdown.pending}
+                                                </Badge>
                                             </div>
                                             <div className="flex justify-between items-center">
                                                 <span className="text-sm text-muted-foreground">Đã duyệt:</span>
@@ -555,7 +650,9 @@ export function CouncilManagement() {
                                             </div>
                                             <div className="flex justify-between items-center">
                                                 <span className="text-sm text-muted-foreground">Từ chối:</span>
-                                                <Badge variant="destructive">{stats.facultyStatusBreakdown.rejected}</Badge>
+                                                <Badge variant="destructive">
+                                                    {stats.facultyStatusBreakdown.rejected}
+                                                </Badge>
                                             </div>
                                         </CardContent>
                                     </Card>
@@ -566,7 +663,6 @@ export function CouncilManagement() {
                 </Card>
             )}
 
-            {/* Council Members */}
             {selectedCallRoundId && (
                 <Card>
                     <CardHeader className="flex flex-row items-center justify-between">
@@ -602,7 +698,9 @@ export function CouncilManagement() {
                                             <Input
                                                 placeholder="Nhập họ tên..."
                                                 value={externalMemberForm.name}
-                                                onChange={(e) => setExternalMemberForm(prev => ({ ...prev, name: e.target.value }))}
+                                                onChange={(e) =>
+                                                    setExternalMemberForm((prev) => ({ ...prev, name: e.target.value }))
+                                                }
                                             />
                                         </div>
                                         <div className="space-y-2">
@@ -613,7 +711,12 @@ export function CouncilManagement() {
                                                 type="email"
                                                 placeholder="Nhập email..."
                                                 value={externalMemberForm.email}
-                                                onChange={(e) => setExternalMemberForm(prev => ({ ...prev, email: e.target.value }))}
+                                                onChange={(e) =>
+                                                    setExternalMemberForm((prev) => ({
+                                                        ...prev,
+                                                        email: e.target.value,
+                                                    }))
+                                                }
                                             />
                                         </div>
                                         <div className="space-y-2">
@@ -621,7 +724,12 @@ export function CouncilManagement() {
                                             <Input
                                                 placeholder="Nhập số điện thoại..."
                                                 value={externalMemberForm.phone}
-                                                onChange={(e) => setExternalMemberForm(prev => ({ ...prev, phone: e.target.value }))}
+                                                onChange={(e) =>
+                                                    setExternalMemberForm((prev) => ({
+                                                        ...prev,
+                                                        phone: e.target.value,
+                                                    }))
+                                                }
                                             />
                                         </div>
                                         <div className="space-y-2">
@@ -629,7 +737,12 @@ export function CouncilManagement() {
                                             <Input
                                                 placeholder="Nhập đơn vị công tác..."
                                                 value={externalMemberForm.organization}
-                                                onChange={(e) => setExternalMemberForm(prev => ({ ...prev, organization: e.target.value }))}
+                                                onChange={(e) =>
+                                                    setExternalMemberForm((prev) => ({
+                                                        ...prev,
+                                                        organization: e.target.value,
+                                                    }))
+                                                }
                                             />
                                         </div>
                                     </div>
@@ -641,7 +754,9 @@ export function CouncilManagement() {
                                             onClick={handleCreateExternalMember}
                                             disabled={createExternalMutation.isPending}
                                         >
-                                            {createExternalMutation.isPending ? 'Đang tạo...' : 'Tạo và thêm vào hội đồng'}
+                                            {createExternalMutation.isPending
+                                                ? 'Đang tạo...'
+                                                : 'Tạo và thêm vào hội đồng'}
                                         </Button>
                                     </DialogFooter>
                                 </DialogContent>
@@ -653,92 +768,98 @@ export function CouncilManagement() {
                                         Thêm thành viên
                                     </Button>
                                 </DialogTrigger>
-                            <DialogContent className="max-w-lg">
-                                <DialogHeader>
-                                    <DialogTitle>Thêm thành viên Hội đồng</DialogTitle>
-                                    <DialogDescription>
-                                        Chọn giảng viên để thêm vào hội đồng đánh giá
-                                    </DialogDescription>
-                                </DialogHeader>
-                                <div className="space-y-4">
-                                    <div className="relative">
-                                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                                        <Input
-                                            placeholder="Tìm kiếm giảng viên..."
-                                            value={searchLecturer}
-                                            onChange={(e) => setSearchLecturer(e.target.value)}
-                                            className="pl-10"
-                                        />
-                                    </div>
-                                    <ScrollArea className="h-[300px] rounded-md border p-2">
-                                        {loadingLecturers ? (
-                                            <div className="space-y-2">
-                                                {[1, 2, 3].map(i => (
-                                                    <Skeleton key={i} className="h-12 w-full" />
-                                                ))}
-                                            </div>
-                                        ) : filteredLecturers.length === 0 ? (
-                                            <p className="text-center text-muted-foreground py-4">
-                                                Không có giảng viên nào
-                                            </p>
-                                        ) : (
-                                            <div className="space-y-1">
-                                                {filteredLecturers.map((lecturer) => (
-                                                    <div
-                                                        key={lecturer.id}
-                                                        className="flex items-center gap-3 p-2 rounded-md hover:bg-muted cursor-pointer"
-                                                        onClick={() => toggleLecturerSelection(lecturer.id)}
-                                                    >
-                                                        <Checkbox
-                                                            checked={selectedLecturers.includes(lecturer.id)}
-                                                            onCheckedChange={() => toggleLecturerSelection(lecturer.id)}
-                                                        />
-                                                        <div className="flex-1">
-                                                            <p className="font-medium text-sm">{lecturer.name}</p>
-                                                            <p className="text-xs text-muted-foreground">{lecturer.email}</p>
+                                <DialogContent className="max-w-lg">
+                                    <DialogHeader>
+                                        <DialogTitle>Thêm thành viên Hội đồng</DialogTitle>
+                                        <DialogDescription>
+                                            Chọn giảng viên để thêm vào hội đồng đánh giá
+                                        </DialogDescription>
+                                    </DialogHeader>
+                                    <div className="space-y-4">
+                                        <div className="relative">
+                                            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                                            <Input
+                                                placeholder="Tìm kiếm giảng viên..."
+                                                value={searchLecturer}
+                                                onChange={(e) => setSearchLecturer(e.target.value)}
+                                                className="pl-10"
+                                            />
+                                        </div>
+                                        <ScrollArea className="h-75 rounded-md border p-2">
+                                            {loadingLecturers ? (
+                                                <div className="space-y-2">
+                                                    {[1, 2, 3].map((i) => (
+                                                        <Skeleton key={i} className="h-12 w-full" />
+                                                    ))}
+                                                </div>
+                                            ) : filteredLecturers.length === 0 ? (
+                                                <p className="text-center text-muted-foreground py-4">
+                                                    Không có giảng viên nào
+                                                </p>
+                                            ) : (
+                                                <div className="space-y-1">
+                                                    {filteredLecturers.map((lecturer) => (
+                                                        <div
+                                                            key={lecturer.id}
+                                                            className="flex items-center gap-3 p-2 rounded-md hover:bg-muted cursor-pointer"
+                                                            onClick={() => toggleLecturerSelection(lecturer.id)}
+                                                        >
+                                                            <Checkbox
+                                                                checked={selectedLecturers.includes(lecturer.id)}
+                                                                onCheckedChange={() =>
+                                                                    toggleLecturerSelection(lecturer.id)
+                                                                }
+                                                            />
+                                                            <div className="flex-1">
+                                                                <p className="font-medium text-sm">{lecturer.name}</p>
+                                                                <p className="text-xs text-muted-foreground">
+                                                                    {lecturer.email}
+                                                                </p>
+                                                                <p className="text-xs text-muted-foreground">
+                                                                    Ngành:{' '}
+                                                                    {lecturer.major?.name ||
+                                                                        lecturer.major?.code ||
+                                                                        'Chưa cập nhật'}
+                                                                </p>
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                ))}
-                                            </div>
+                                                    ))}
+                                                </div>
+                                            )}
+                                        </ScrollArea>
+                                        {selectedLecturers.length > 0 && (
+                                            <p className="text-sm text-muted-foreground">
+                                                Đã chọn: {selectedLecturers.length} giảng viên
+                                            </p>
                                         )}
-                                    </ScrollArea>
-                                    {selectedLecturers.length > 0 && (
-                                        <p className="text-sm text-muted-foreground">
-                                            Đã chọn: {selectedLecturers.length} giảng viên
-                                        </p>
-                                    )}
-                                </div>
-                                <DialogFooter>
-                                    <DialogClose asChild>
-                                        <Button variant="outline">Hủy</Button>
-                                    </DialogClose>
-                                    <Button
-                                        onClick={handleAssignMembers}
-                                        disabled={selectedLecturers.length === 0 || assignMutation.isPending}
-                                    >
-                                        {assignMutation.isPending ? 'Đang thêm...' : 'Thêm vào hội đồng'}
-                                    </Button>
-                                </DialogFooter>
-                            </DialogContent>
-                        </Dialog>
+                                    </div>
+                                    <DialogFooter>
+                                        <DialogClose asChild>
+                                            <Button variant="outline">Hủy</Button>
+                                        </DialogClose>
+                                        <Button
+                                            onClick={handleAssignMembers}
+                                            disabled={selectedLecturers.length === 0 || assignMutation.isPending}
+                                        >
+                                            {assignMutation.isPending ? 'Đang thêm...' : 'Thêm vào hội đồng'}
+                                        </Button>
+                                    </DialogFooter>
+                                </DialogContent>
+                            </Dialog>
                         </div>
                     </CardHeader>
                     <CardContent>
                         {loadingCouncil ? (
                             <div className="space-y-2">
-                                {[1, 2, 3].map(i => (
+                                {[1, 2, 3].map((i) => (
                                     <Skeleton key={i} className="h-16 w-full" />
                                 ))}
                             </div>
                         ) : councilMembers.length === 0 ? (
                             <div className="text-center py-12 border border-dashed rounded-lg">
                                 <Users className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-                                <p className="text-muted-foreground">
-                                    Chưa có thành viên nào trong hội đồng
-                                </p>
-                                <p className="text-sm text-muted-foreground mt-1">
-                                    Nhấn "Thêm thành viên" để bắt đầu
-                                </p>
+                                <p className="text-muted-foreground">Chưa có thành viên nào trong hội đồng</p>
+                                <p className="text-sm text-muted-foreground mt-1">Nhấn "Thêm thành viên" để bắt đầu</p>
                             </div>
                         ) : (
                             <div className="space-y-4">
@@ -758,7 +879,9 @@ export function CouncilManagement() {
                                                 <TableCell className="text-muted-foreground">
                                                     {((pagination?.page || 1) - 1) * itemsPerPage + index + 1}
                                                 </TableCell>
-                                                <TableCell className="font-medium">{member.councilMember.name}</TableCell>
+                                                <TableCell className="font-medium">
+                                                    {member.councilMember.name}
+                                                </TableCell>
                                                 <TableCell>{member.councilMember.email}</TableCell>
                                                 <TableCell>
                                                     {new Date(member.createdAt).toLocaleDateString('vi-VN')}
@@ -779,38 +902,54 @@ export function CouncilManagement() {
                                         ))}
                                     </TableBody>
                                 </Table>
-                                
+
                                 {/* Pagination */}
                                 {pagination && pagination.totalPages > 1 && (
                                     <div className="flex items-center justify-between">
                                         <p className="text-sm text-muted-foreground">
-                                            Hiển thị {((pagination.page - 1) * pagination.limit) + 1} - {Math.min(pagination.page * pagination.limit, pagination.total)} trong tổng số {pagination.total} thành viên
+                                            Hiển thị {(pagination.page - 1) * pagination.limit + 1} -{' '}
+                                            {Math.min(pagination.page * pagination.limit, pagination.total)} trong tổng
+                                            số {pagination.total} thành viên
                                         </p>
                                         <Pagination>
                                             <PaginationContent>
                                                 <PaginationItem>
                                                     <PaginationPrevious
-                                                        onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
-                                                        className={currentPage === 1 ? 'pointer-events-none opacity-50' : 'cursor-pointer'}
+                                                        onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                                                        className={
+                                                            currentPage === 1
+                                                                ? 'pointer-events-none opacity-50'
+                                                                : 'cursor-pointer'
+                                                        }
                                                     />
                                                 </PaginationItem>
-                                                
-                                                {Array.from({ length: pagination.totalPages }, (_, i) => i + 1).map((page) => (
-                                                    <PaginationItem key={page}>
-                                                        <PaginationLink
-                                                            onClick={() => setCurrentPage(page)}
-                                                            isActive={currentPage === page}
-                                                            className="cursor-pointer"
-                                                        >
-                                                            {page}
-                                                        </PaginationLink>
-                                                    </PaginationItem>
-                                                ))}
-                                                
+
+                                                {Array.from({ length: pagination.totalPages }, (_, i) => i + 1).map(
+                                                    (page) => (
+                                                        <PaginationItem key={page}>
+                                                            <PaginationLink
+                                                                onClick={() => setCurrentPage(page)}
+                                                                isActive={currentPage === page}
+                                                                className="cursor-pointer"
+                                                            >
+                                                                {page}
+                                                            </PaginationLink>
+                                                        </PaginationItem>
+                                                    ),
+                                                )}
+
                                                 <PaginationItem>
                                                     <PaginationNext
-                                                        onClick={() => setCurrentPage(p => Math.min(pagination.totalPages, p + 1))}
-                                                        className={currentPage === pagination.totalPages ? 'pointer-events-none opacity-50' : 'cursor-pointer'}
+                                                        onClick={() =>
+                                                            setCurrentPage((p) =>
+                                                                Math.min(pagination.totalPages, p + 1),
+                                                            )
+                                                        }
+                                                        className={
+                                                            currentPage === pagination.totalPages
+                                                                ? 'pointer-events-none opacity-50'
+                                                                : 'cursor-pointer'
+                                                        }
                                                     />
                                                 </PaginationItem>
                                             </PaginationContent>
@@ -832,109 +971,89 @@ export function CouncilManagement() {
                                 <Split className="h-5 w-5" />
                                 Danh sách Hội đồng ({councils?.length || 0} hội đồng)
                             </CardTitle>
-                            <CardDescription>
-                                Các hội đồng đã được phân công thành viên và đề tài
-                            </CardDescription>
+                            <CardDescription>Các hội đồng đã được phân công thành viên và đề tài</CardDescription>
                         </div>
-                        <CreateCouncilDialog 
+                        <CreateCouncilDialog
                             callRoundId={selectedCallRoundId}
                             councilMembers={councilMembers}
+                            councils={councils ?? []}
                         />
                     </CardHeader>
                     <CardContent>
-                        <div className="space-y-4">
-                            {councils?.map((council) => (
-                                <Card key={council.id} className="border-2">
-                                    <CardHeader>
-                                        <div className="flex items-start justify-between">
-                                            <div>
-                                                <CardTitle className="text-lg">{council.name}</CardTitle>
+                        {loadingCouncils ? (
+                            <div className="space-y-2">
+                                {[1, 2, 3].map((i) => (
+                                    <Skeleton key={i} className="h-14 w-full" />
+                                ))}
+                            </div>
+                        ) : !councils || councils.length === 0 ? (
+                            <div className="text-center py-12 border border-dashed rounded-lg">
+                                <Split className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
+                                <p className="text-muted-foreground">Chưa có hội đồng nào được tạo</p>
+                                <p className="text-sm text-muted-foreground mt-1">Nhấn "Tạo hội đồng" để bắt đầu</p>
+                            </div>
+                        ) : (
+                            <Table>
+                                <TableHeader>
+                                    <TableRow>
+                                        <TableHead className="w-12">#</TableHead>
+                                        <TableHead>Tên hội đồng</TableHead>
+                                        <TableHead>Thành viên</TableHead>
+                                        <TableHead>Đề tài được phân công</TableHead>
+                                        <TableHead className="w-30 text-center">SL thành viên</TableHead>
+                                        <TableHead className="w-30 text-center">SL đề tài</TableHead>
+                                    </TableRow>
+                                </TableHeader>
+                                <TableBody>
+                                    {councils.map((council, index) => (
+                                        <TableRow key={council.id}>
+                                            <TableCell className="text-muted-foreground">{index + 1}</TableCell>
+                                            <TableCell>
+                                                <p className="font-medium">{council.name}</p>
                                                 {council.description && (
-                                                    <CardDescription className="mt-1">
+                                                    <p className="text-xs text-muted-foreground mt-1">
                                                         {council.description}
-                                                    </CardDescription>
+                                                    </p>
                                                 )}
-                                            </div>
-                                            <div className="flex gap-2">
-                                                <Badge variant="secondary">
-                                                    <Users className="h-3 w-3 mr-1" />
-                                                    {council._count.members} thành viên
-                                                </Badge>
-                                                <Badge variant="default">
-                                                    <FileText className="h-3 w-3 mr-1" />
-                                                    {council._count.projects} đề tài
-                                                </Badge>
-                                            </div>
-                                        </div>
-                                    </CardHeader>
-                                    <CardContent className="space-y-4">
-                                        {/* Members */}
-                                        {council.members.length > 0 && (
-                                            <div>
-                                                <h4 className="font-medium text-sm mb-2 flex items-center gap-2">
-                                                    <Users className="h-4 w-4" />
-                                                    Thành viên hội đồng
-                                                </h4>
-                                                <div className="space-y-2">
+                                            </TableCell>
+                                            <TableCell>
+                                                <div className="space-y-1">
                                                     {council.members.map((member) => (
-                                                        <div
-                                                            key={member.id}
-                                                            className="flex items-center justify-between p-2 rounded-md bg-muted/50"
-                                                        >
-                                                            <div className="flex items-center gap-3">
-                                                                <Badge variant="outline" className="font-normal">
-                                                                    {member.role}
-                                                                </Badge>
-                                                                <div>
-                                                                    <p className="font-medium text-sm">
-                                                                        {member.councilMember.name}
-                                                                    </p>
-                                                                    <p className="text-xs text-muted-foreground">
-                                                                        {member.councilMember.email}
-                                                                    </p>
-                                                                </div>
-                                                            </div>
+                                                        <div key={member.id} className="text-sm">
+                                                            <span className="font-medium">
+                                                                {member.role || 'Ủy viên'}:
+                                                            </span>{' '}
+                                                            {member.councilMember.name}
                                                         </div>
                                                     ))}
                                                 </div>
-                                            </div>
-                                        )}
-
-                                        {/* Projects */}
-                                        {council.projects.length > 0 && (
-                                            <div>
-                                                <h4 className="font-medium text-sm mb-2 flex items-center gap-2">
-                                                    <FileText className="h-4 w-4" />
-                                                    Đề tài được phân công
-                                                </h4>
-                                                <div className="space-y-2">
-                                                    {council.projects.map((project) => (
-                                                        <div
-                                                            key={project.id}
-                                                            className="p-3 rounded-md border bg-background"
-                                                        >
-                                                            <div className="flex items-start justify-between gap-2">
-                                                                <div className="flex-1">
-                                                                    <p className="font-medium text-sm">
-                                                                        {project.projectRegistration.title}
-                                                                    </p>
-                                                                    <p className="text-xs text-muted-foreground mt-1">
-                                                                        Sinh viên: {project.projectRegistration.user.name} ({project.projectRegistration.user.code})
-                                                                    </p>
-                                                                </div>
-                                                                <Badge variant="secondary" className="text-xs">
-                                                                    {project.projectRegistration.status}
-                                                                </Badge>
+                                            </TableCell>
+                                            <TableCell>
+                                                <div className="space-y-1">
+                                                    {council.projects.length === 0 ? (
+                                                        <span className="text-sm text-muted-foreground">
+                                                            Chưa phân công đề tài
+                                                        </span>
+                                                    ) : (
+                                                        council.projects.map((project) => (
+                                                            <div key={project.id} className="text-sm">
+                                                                {project.projectRegistration.title}
                                                             </div>
-                                                        </div>
-                                                    ))}
+                                                        ))
+                                                    )}
                                                 </div>
-                                            </div>
-                                        )}
-                                    </CardContent>
-                                </Card>
-                            ))}
-                        </div>
+                                            </TableCell>
+                                            <TableCell className="text-center">
+                                                <Badge variant="secondary">{council._count.members}</Badge>
+                                            </TableCell>
+                                            <TableCell className="text-center">
+                                                <Badge>{council._count.projects}</Badge>
+                                            </TableCell>
+                                        </TableRow>
+                                    ))}
+                                </TableBody>
+                            </Table>
+                        )}
                     </CardContent>
                 </Card>
             )}

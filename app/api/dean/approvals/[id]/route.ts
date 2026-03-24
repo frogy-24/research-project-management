@@ -44,6 +44,7 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
       where: { id: registrationId },
       data: {
         facultyStatus: status,
+        status,
         facultyReviewerId: deanId,
       },
     });

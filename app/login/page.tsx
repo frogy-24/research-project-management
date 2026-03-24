@@ -197,6 +197,38 @@ export default function LoginPage() {
                       <span className="text-xs text-muted-foreground">sv0001@university.edu</span>
                     </div>
                   </Button>
+
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={() => {
+                      fillDemoAccount("sv0002@university.edu", "123456");
+                      handleSubmit(onSubmit)();
+                    }}
+                    className="justify-start text-left h-auto py-2"
+                  >
+                    <div className="flex flex-col items-start">
+                      <span className="font-semibold text-xs text-orange-600">🎓 Sinh viên (test 2)</span>
+                      <span className="text-xs text-muted-foreground">sv0002@university.edu</span>
+                    </div>
+                  </Button>
+
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={() => {
+                      fillDemoAccount("sv0003@university.edu", "123456");
+                      handleSubmit(onSubmit)();
+                    }}
+                    className="justify-start text-left h-auto py-2"
+                  >
+                    <div className="flex flex-col items-start">
+                      <span className="font-semibold text-xs text-orange-600">🎓 Sinh viên (test 3)</span>
+                      <span className="text-xs text-muted-foreground">sv0003@university.edu</span>
+                    </div>
+                  </Button>
                 </div>
                 <p className="text-xs text-muted-foreground mt-2 italic">
                   Mật khẩu tất cả tài khoản: <strong>123456</strong>

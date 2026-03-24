@@ -3,9 +3,11 @@ import {
   cancelProjectRegistrationSchema,
   createProjectRegistrationSchema,
   projectRegistrationSchema,
+  updateProjectRegistrationSchema,
   type CancelProjectRegistrationInput,
   type CreateProjectRegistrationInput,
   type ProjectRegistration,
+  type UpdateProjectRegistrationInput,
 } from "@/types/project-registration.schema";
 
 type ApiSuccess<T> = {
@@ -33,6 +35,18 @@ export const myProjectRegistrationsApi = {
     payload: CancelProjectRegistrationInput
   ): Promise<ProjectRegistration> => {
     const validated = cancelProjectRegistrationSchema.parse(payload);
+    const response = await api.patch<ApiSuccess<ProjectRegistration>>(
+      `/my-project-registrations/${id}`,
+      validated
+    );
+    return projectRegistrationSchema.parse(response.data.data);
+  },
+
+  update: async (
+    id: string,
+    payload: UpdateProjectRegistrationInput
+  ): Promise<ProjectRegistration> => {
+    const validated = updateProjectRegistrationSchema.parse(payload);
     const response = await api.patch<ApiSuccess<ProjectRegistration>>(
       `/my-project-registrations/${id}`,
       validated

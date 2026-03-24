@@ -12,6 +12,19 @@ export async function GET(_request: Request, { params }: { params: Promise<{ id:
 
         const { id } = await params;
 
+        const callRound = await prisma.callRound.findUnique({
+            where: { id },
+            select: { id: true, approvalStatus: true },
+        });
+
+        if (!callRound) {
+            return NextResponse.json({ error: 'Call round not found' }, { status: 404 });
+        }
+
+        if (callRound.approvalStatus !== 'APPROVED') {
+            return NextResponse.json({ error: 'Call round must be APPROVED' }, { status: 400 });
+        }
+
         const councils = await prisma.council.findMany({
             where: { callRoundId: id },
             include: {
@@ -78,6 +91,19 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
         }
 
         const { id } = await params;
+
+        const callRound = await prisma.callRound.findUnique({
+            where: { id },
+            select: { id: true, approvalStatus: true },
+        });
+
+        if (!callRound) {
+            return NextResponse.json({ error: 'Call round not found' }, { status: 404 });
+        }
+
+        if (callRound.approvalStatus !== 'APPROVED') {
+            return NextResponse.json({ error: 'Call round must be APPROVED' }, { status: 400 });
+        }
 
         const body = await request.json();
         const { minProjectsPerCouncil = 5, maxProjectsPerCouncil = 10, clearExisting = false } = body;

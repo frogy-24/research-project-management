@@ -36,7 +36,24 @@ export async function GET(_: Request, { params }: Params) {
         leader: {
           select: { id: true, name: true, email: true, role: true, department: true },
         },
+        instructor: {
+          select: { id: true, name: true, email: true, role: true, department: true },
+        },
+        deanReviewer: {
+          select: { id: true, name: true, email: true, role: true, department: true },
+        },
         projectType: true,
+        callRound: {
+          include: {
+            template: {
+              include: {
+                items: {
+                  orderBy: { orderIndex: "asc" },
+                },
+              },
+            },
+          },
+        },
       },
     });
 

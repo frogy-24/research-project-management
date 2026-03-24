@@ -29,7 +29,10 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
 
         const updated = await prisma.projectRegistration.update({
             where: { id: registrationId },
-            data: { instructorStatus: status },
+            data:
+                status === 'REJECTED'
+                    ? { instructorStatus: status, status: 'REJECTED' }
+                    : { instructorStatus: status },
         });
 
         return NextResponse.json(updated);

@@ -14,6 +14,36 @@ export const ProjectStatusEnum = z.enum([
   "SUSPENDED",
 ]);
 
+const relatedUserSchema = z.object({
+  id: z.string().cuid(),
+  name: z.string(),
+  email: z.string().email(),
+  role: z.string().optional(),
+  department: z.string().nullable().optional(),
+});
+
+const callRoundTemplateItemSchema = z.object({
+  id: z.string().cuid(),
+  weekNumber: z.number().int(),
+  weekLabel: z.string(),
+  taskDescription: z.string(),
+  contentGuideline: z.string().nullable().optional(),
+  expectedResult: z.string().nullable().optional(),
+  orderIndex: z.number().int(),
+});
+
+const callRoundTemplateSchema = z.object({
+  id: z.string().cuid(),
+  name: z.string(),
+  items: z.array(callRoundTemplateItemSchema).optional(),
+});
+
+const callRoundRelationSchema = z.object({
+  id: z.string().cuid(),
+  name: z.string(),
+  template: callRoundTemplateSchema.nullable().optional(),
+});
+
 export const projectSchema = z.object({
   id: z.string().cuid(),
   title: z.string().min(1, "Title is required"),
@@ -33,12 +63,25 @@ export const projectSchema = z.object({
   projectTypeId: z.string().nullable().optional(),
   createdAt: z.coerce.date(),
   updatedAt: z.coerce.date(),
+  leader: relatedUserSchema.optional(),
+  instructor: relatedUserSchema.nullable().optional(),
+  deanReviewer: relatedUserSchema.nullable().optional(),
+  callRound: callRoundRelationSchema.nullable().optional(),
+  projectType: z.object({
+    id: z.string().cuid(),
+    name: z.string(),
+  }).nullable().optional(),
 });
 
 export const createProjectSchema = projectSchema.omit({
   id: true,
   createdAt: true,
   updatedAt: true,
+  leader: true,
+  instructor: true,
+  deanReviewer: true,
+  callRound: true,
+  projectType: true,
 });
 
 export const updateProjectSchema = createProjectSchema.partial();

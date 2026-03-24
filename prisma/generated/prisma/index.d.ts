@@ -19609,6 +19609,7 @@ export namespace Prisma {
     title: number
     objective: number
     expectedOutput: number
+    teamMembers: number
     status: number
     cancelReason: number
     createdAt: number
@@ -19662,6 +19663,7 @@ export namespace Prisma {
     title?: true
     objective?: true
     expectedOutput?: true
+    teamMembers?: true
     status?: true
     cancelReason?: true
     createdAt?: true
@@ -19752,6 +19754,7 @@ export namespace Prisma {
     title: string
     objective: string
     expectedOutput: string | null
+    teamMembers: JsonValue | null
     status: $Enums.RegistrationStatus
     cancelReason: string | null
     createdAt: Date
@@ -19786,6 +19789,7 @@ export namespace Prisma {
     title?: boolean
     objective?: boolean
     expectedOutput?: boolean
+    teamMembers?: boolean
     status?: boolean
     cancelReason?: boolean
     createdAt?: boolean
@@ -19808,6 +19812,7 @@ export namespace Prisma {
     title?: boolean
     objective?: boolean
     expectedOutput?: boolean
+    teamMembers?: boolean
     status?: boolean
     cancelReason?: boolean
     createdAt?: boolean
@@ -19829,6 +19834,7 @@ export namespace Prisma {
     title?: boolean
     objective?: boolean
     expectedOutput?: boolean
+    teamMembers?: boolean
     status?: boolean
     cancelReason?: boolean
     createdAt?: boolean
@@ -19850,6 +19856,7 @@ export namespace Prisma {
     title?: boolean
     objective?: boolean
     expectedOutput?: boolean
+    teamMembers?: boolean
     status?: boolean
     cancelReason?: boolean
     createdAt?: boolean
@@ -19860,7 +19867,7 @@ export namespace Prisma {
     facultyReviewerId?: boolean
   }
 
-  export type ProjectRegistrationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "callRoundId" | "title" | "objective" | "expectedOutput" | "status" | "cancelReason" | "createdAt" | "updatedAt" | "instructorId" | "instructorStatus" | "facultyStatus" | "facultyReviewerId", ExtArgs["result"]["projectRegistration"]>
+  export type ProjectRegistrationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "callRoundId" | "title" | "objective" | "expectedOutput" | "teamMembers" | "status" | "cancelReason" | "createdAt" | "updatedAt" | "instructorId" | "instructorStatus" | "facultyStatus" | "facultyReviewerId", ExtArgs["result"]["projectRegistration"]>
   export type ProjectRegistrationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
     instructor?: boolean | ProjectRegistration$instructorArgs<ExtArgs>
@@ -19897,6 +19904,7 @@ export namespace Prisma {
       title: string
       objective: string
       expectedOutput: string | null
+      teamMembers: Prisma.JsonValue | null
       status: $Enums.RegistrationStatus
       cancelReason: string | null
       createdAt: Date
@@ -20339,6 +20347,7 @@ export namespace Prisma {
     readonly title: FieldRef<"ProjectRegistration", 'String'>
     readonly objective: FieldRef<"ProjectRegistration", 'String'>
     readonly expectedOutput: FieldRef<"ProjectRegistration", 'String'>
+    readonly teamMembers: FieldRef<"ProjectRegistration", 'Json'>
     readonly status: FieldRef<"ProjectRegistration", 'RegistrationStatus'>
     readonly cancelReason: FieldRef<"ProjectRegistration", 'String'>
     readonly createdAt: FieldRef<"ProjectRegistration", 'DateTime'>
@@ -27589,6 +27598,7 @@ export namespace Prisma {
     title: 'title',
     objective: 'objective',
     expectedOutput: 'expectedOutput',
+    teamMembers: 'teamMembers',
     status: 'status',
     cancelReason: 'cancelReason',
     createdAt: 'createdAt',
@@ -27893,6 +27903,20 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'Json'
+   */
+  export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
+    
+
+
+  /**
+   * Reference to a field of type 'QueryMode'
+   */
+  export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>
+    
+
+
+  /**
    * Reference to a field of type 'RegistrationStatus'
    */
   export type EnumRegistrationStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'RegistrationStatus'>
@@ -27945,20 +27969,6 @@ export namespace Prisma {
    * Reference to a field of type 'NotificationType[]'
    */
   export type ListEnumNotificationTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'NotificationType[]'>
-    
-
-
-  /**
-   * Reference to a field of type 'Json'
-   */
-  export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
-    
-
-
-  /**
-   * Reference to a field of type 'QueryMode'
-   */
-  export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>
     
   /**
    * Deep Input Types
@@ -29221,6 +29231,7 @@ export namespace Prisma {
     title?: StringFilter<"ProjectRegistration"> | string
     objective?: StringFilter<"ProjectRegistration"> | string
     expectedOutput?: StringNullableFilter<"ProjectRegistration"> | string | null
+    teamMembers?: JsonNullableFilter<"ProjectRegistration">
     status?: EnumRegistrationStatusFilter<"ProjectRegistration"> | $Enums.RegistrationStatus
     cancelReason?: StringNullableFilter<"ProjectRegistration"> | string | null
     createdAt?: DateTimeFilter<"ProjectRegistration"> | Date | string
@@ -29243,6 +29254,7 @@ export namespace Prisma {
     title?: SortOrder
     objective?: SortOrder
     expectedOutput?: SortOrderInput | SortOrder
+    teamMembers?: SortOrderInput | SortOrder
     status?: SortOrder
     cancelReason?: SortOrderInput | SortOrder
     createdAt?: SortOrder
@@ -29268,6 +29280,7 @@ export namespace Prisma {
     title?: StringFilter<"ProjectRegistration"> | string
     objective?: StringFilter<"ProjectRegistration"> | string
     expectedOutput?: StringNullableFilter<"ProjectRegistration"> | string | null
+    teamMembers?: JsonNullableFilter<"ProjectRegistration">
     status?: EnumRegistrationStatusFilter<"ProjectRegistration"> | $Enums.RegistrationStatus
     cancelReason?: StringNullableFilter<"ProjectRegistration"> | string | null
     createdAt?: DateTimeFilter<"ProjectRegistration"> | Date | string
@@ -29290,6 +29303,7 @@ export namespace Prisma {
     title?: SortOrder
     objective?: SortOrder
     expectedOutput?: SortOrderInput | SortOrder
+    teamMembers?: SortOrderInput | SortOrder
     status?: SortOrder
     cancelReason?: SortOrderInput | SortOrder
     createdAt?: SortOrder
@@ -29313,6 +29327,7 @@ export namespace Prisma {
     title?: StringWithAggregatesFilter<"ProjectRegistration"> | string
     objective?: StringWithAggregatesFilter<"ProjectRegistration"> | string
     expectedOutput?: StringNullableWithAggregatesFilter<"ProjectRegistration"> | string | null
+    teamMembers?: JsonNullableWithAggregatesFilter<"ProjectRegistration">
     status?: EnumRegistrationStatusWithAggregatesFilter<"ProjectRegistration"> | $Enums.RegistrationStatus
     cancelReason?: StringNullableWithAggregatesFilter<"ProjectRegistration"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"ProjectRegistration"> | Date | string
@@ -31101,6 +31116,7 @@ export namespace Prisma {
     title: string
     objective: string
     expectedOutput?: string | null
+    teamMembers?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.RegistrationStatus
     cancelReason?: string | null
     createdAt?: Date | string
@@ -31121,6 +31137,7 @@ export namespace Prisma {
     title: string
     objective: string
     expectedOutput?: string | null
+    teamMembers?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.RegistrationStatus
     cancelReason?: string | null
     createdAt?: Date | string
@@ -31137,6 +31154,7 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     objective?: StringFieldUpdateOperationsInput | string
     expectedOutput?: NullableStringFieldUpdateOperationsInput | string | null
+    teamMembers?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumRegistrationStatusFieldUpdateOperationsInput | $Enums.RegistrationStatus
     cancelReason?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -31157,6 +31175,7 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     objective?: StringFieldUpdateOperationsInput | string
     expectedOutput?: NullableStringFieldUpdateOperationsInput | string | null
+    teamMembers?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumRegistrationStatusFieldUpdateOperationsInput | $Enums.RegistrationStatus
     cancelReason?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -31175,6 +31194,7 @@ export namespace Prisma {
     title: string
     objective: string
     expectedOutput?: string | null
+    teamMembers?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.RegistrationStatus
     cancelReason?: string | null
     createdAt?: Date | string
@@ -31190,6 +31210,7 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     objective?: StringFieldUpdateOperationsInput | string
     expectedOutput?: NullableStringFieldUpdateOperationsInput | string | null
+    teamMembers?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumRegistrationStatusFieldUpdateOperationsInput | $Enums.RegistrationStatus
     cancelReason?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -31205,6 +31226,7 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     objective?: StringFieldUpdateOperationsInput | string
     expectedOutput?: NullableStringFieldUpdateOperationsInput | string | null
+    teamMembers?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumRegistrationStatusFieldUpdateOperationsInput | $Enums.RegistrationStatus
     cancelReason?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -32835,6 +32857,29 @@ export namespace Prisma {
     _min?: NestedEnumRequestStatusFilter<$PrismaModel>
     _max?: NestedEnumRequestStatusFilter<$PrismaModel>
   }
+  export type JsonNullableFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<JsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonNullableFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonNullableFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
 
   export type EnumRegistrationStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.RegistrationStatus | EnumRegistrationStatusFieldRefInput<$PrismaModel>
@@ -32869,6 +32914,7 @@ export namespace Prisma {
     title?: SortOrder
     objective?: SortOrder
     expectedOutput?: SortOrder
+    teamMembers?: SortOrder
     status?: SortOrder
     cancelReason?: SortOrder
     createdAt?: SortOrder
@@ -32912,6 +32958,32 @@ export namespace Prisma {
     facultyStatus?: SortOrder
     facultyReviewerId?: SortOrder
   }
+  export type JsonNullableWithAggregatesFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonNullableWithAggregatesFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedJsonNullableFilter<$PrismaModel>
+    _max?: NestedJsonNullableFilter<$PrismaModel>
+  }
 
   export type EnumRegistrationStatusWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.RegistrationStatus | EnumRegistrationStatusFieldRefInput<$PrismaModel>
@@ -32948,29 +33020,6 @@ export namespace Prisma {
     in?: $Enums.NotificationType[] | ListEnumNotificationTypeFieldRefInput<$PrismaModel>
     notIn?: $Enums.NotificationType[] | ListEnumNotificationTypeFieldRefInput<$PrismaModel>
     not?: NestedEnumNotificationTypeFilter<$PrismaModel> | $Enums.NotificationType
-  }
-  export type JsonNullableFilter<$PrismaModel = never> =
-    | PatchUndefined<
-        Either<Required<JsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>,
-        Required<JsonNullableFilterBase<$PrismaModel>>
-      >
-    | OptionalFlat<Omit<Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>
-
-  export type JsonNullableFilterBase<$PrismaModel = never> = {
-    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-    path?: string[]
-    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
-    string_contains?: string | StringFieldRefInput<$PrismaModel>
-    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
-    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
-    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
   }
 
   export type NotificationCountOrderByAggregateInput = {
@@ -33018,32 +33067,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumNotificationTypeFilter<$PrismaModel>
     _max?: NestedEnumNotificationTypeFilter<$PrismaModel>
-  }
-  export type JsonNullableWithAggregatesFilter<$PrismaModel = never> =
-    | PatchUndefined<
-        Either<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>,
-        Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>
-      >
-    | OptionalFlat<Omit<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>
-
-  export type JsonNullableWithAggregatesFilterBase<$PrismaModel = never> = {
-    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-    path?: string[]
-    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
-    string_contains?: string | StringFieldRefInput<$PrismaModel>
-    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
-    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
-    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedJsonNullableFilter<$PrismaModel>
-    _max?: NestedJsonNullableFilter<$PrismaModel>
   }
 
   export type CallRoundScalarRelationFilter = {
@@ -35711,6 +35734,29 @@ export namespace Prisma {
     notIn?: $Enums.FacultyStatus[] | ListEnumFacultyStatusFieldRefInput<$PrismaModel>
     not?: NestedEnumFacultyStatusFilter<$PrismaModel> | $Enums.FacultyStatus
   }
+  export type NestedJsonNullableFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<NestedJsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<NestedJsonNullableFilterBase<$PrismaModel>>, 'path'>>,
+        Required<NestedJsonNullableFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<NestedJsonNullableFilterBase<$PrismaModel>>, 'path'>>
+
+  export type NestedJsonNullableFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
 
   export type NestedEnumRegistrationStatusWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.RegistrationStatus | EnumRegistrationStatusFieldRefInput<$PrismaModel>
@@ -35757,29 +35803,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumNotificationTypeFilter<$PrismaModel>
     _max?: NestedEnumNotificationTypeFilter<$PrismaModel>
-  }
-  export type NestedJsonNullableFilter<$PrismaModel = never> =
-    | PatchUndefined<
-        Either<Required<NestedJsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<NestedJsonNullableFilterBase<$PrismaModel>>, 'path'>>,
-        Required<NestedJsonNullableFilterBase<$PrismaModel>>
-      >
-    | OptionalFlat<Omit<Required<NestedJsonNullableFilterBase<$PrismaModel>>, 'path'>>
-
-  export type NestedJsonNullableFilterBase<$PrismaModel = never> = {
-    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-    path?: string[]
-    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
-    string_contains?: string | StringFieldRefInput<$PrismaModel>
-    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
-    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
-    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
   }
 
   export type MajorCreateWithoutDepartmentInput = {
@@ -36858,6 +36881,7 @@ export namespace Prisma {
     title: string
     objective: string
     expectedOutput?: string | null
+    teamMembers?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.RegistrationStatus
     cancelReason?: string | null
     createdAt?: Date | string
@@ -36876,6 +36900,7 @@ export namespace Prisma {
     title: string
     objective: string
     expectedOutput?: string | null
+    teamMembers?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.RegistrationStatus
     cancelReason?: string | null
     createdAt?: Date | string
@@ -36902,6 +36927,7 @@ export namespace Prisma {
     title: string
     objective: string
     expectedOutput?: string | null
+    teamMembers?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.RegistrationStatus
     cancelReason?: string | null
     createdAt?: Date | string
@@ -36921,6 +36947,7 @@ export namespace Prisma {
     title: string
     objective: string
     expectedOutput?: string | null
+    teamMembers?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.RegistrationStatus
     cancelReason?: string | null
     createdAt?: Date | string
@@ -37004,6 +37031,7 @@ export namespace Prisma {
     title: string
     objective: string
     expectedOutput?: string | null
+    teamMembers?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.RegistrationStatus
     cancelReason?: string | null
     createdAt?: Date | string
@@ -37023,6 +37051,7 @@ export namespace Prisma {
     title: string
     objective: string
     expectedOutput?: string | null
+    teamMembers?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.RegistrationStatus
     cancelReason?: string | null
     createdAt?: Date | string
@@ -37356,6 +37385,7 @@ export namespace Prisma {
     title?: StringFilter<"ProjectRegistration"> | string
     objective?: StringFilter<"ProjectRegistration"> | string
     expectedOutput?: StringNullableFilter<"ProjectRegistration"> | string | null
+    teamMembers?: JsonNullableFilter<"ProjectRegistration">
     status?: EnumRegistrationStatusFilter<"ProjectRegistration"> | $Enums.RegistrationStatus
     cancelReason?: StringNullableFilter<"ProjectRegistration"> | string | null
     createdAt?: DateTimeFilter<"ProjectRegistration"> | Date | string
@@ -37588,6 +37618,7 @@ export namespace Prisma {
     title: string
     objective: string
     expectedOutput?: string | null
+    teamMembers?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.RegistrationStatus
     cancelReason?: string | null
     createdAt?: Date | string
@@ -37606,6 +37637,7 @@ export namespace Prisma {
     title: string
     objective: string
     expectedOutput?: string | null
+    teamMembers?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.RegistrationStatus
     cancelReason?: string | null
     createdAt?: Date | string
@@ -41559,6 +41591,7 @@ export namespace Prisma {
     title: string
     objective: string
     expectedOutput?: string | null
+    teamMembers?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.RegistrationStatus
     cancelReason?: string | null
     createdAt?: Date | string
@@ -41578,6 +41611,7 @@ export namespace Prisma {
     title: string
     objective: string
     expectedOutput?: string | null
+    teamMembers?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.RegistrationStatus
     cancelReason?: string | null
     createdAt?: Date | string
@@ -41640,6 +41674,7 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     objective?: StringFieldUpdateOperationsInput | string
     expectedOutput?: NullableStringFieldUpdateOperationsInput | string | null
+    teamMembers?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumRegistrationStatusFieldUpdateOperationsInput | $Enums.RegistrationStatus
     cancelReason?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -41659,6 +41694,7 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     objective?: StringFieldUpdateOperationsInput | string
     expectedOutput?: NullableStringFieldUpdateOperationsInput | string | null
+    teamMembers?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumRegistrationStatusFieldUpdateOperationsInput | $Enums.RegistrationStatus
     cancelReason?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -42406,6 +42442,7 @@ export namespace Prisma {
     title: string
     objective: string
     expectedOutput?: string | null
+    teamMembers?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.RegistrationStatus
     cancelReason?: string | null
     createdAt?: Date | string
@@ -42423,6 +42460,7 @@ export namespace Prisma {
     title: string
     objective: string
     expectedOutput?: string | null
+    teamMembers?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.RegistrationStatus
     cancelReason?: string | null
     createdAt?: Date | string
@@ -42459,6 +42497,7 @@ export namespace Prisma {
     title: string
     objective: string
     expectedOutput?: string | null
+    teamMembers?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.RegistrationStatus
     cancelReason?: string | null
     createdAt?: Date | string
@@ -42670,6 +42709,7 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     objective?: StringFieldUpdateOperationsInput | string
     expectedOutput?: NullableStringFieldUpdateOperationsInput | string | null
+    teamMembers?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumRegistrationStatusFieldUpdateOperationsInput | $Enums.RegistrationStatus
     cancelReason?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -42688,6 +42728,7 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     objective?: StringFieldUpdateOperationsInput | string
     expectedOutput?: NullableStringFieldUpdateOperationsInput | string | null
+    teamMembers?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumRegistrationStatusFieldUpdateOperationsInput | $Enums.RegistrationStatus
     cancelReason?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -42705,6 +42746,7 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     objective?: StringFieldUpdateOperationsInput | string
     expectedOutput?: NullableStringFieldUpdateOperationsInput | string | null
+    teamMembers?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumRegistrationStatusFieldUpdateOperationsInput | $Enums.RegistrationStatus
     cancelReason?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -42720,6 +42762,7 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     objective?: StringFieldUpdateOperationsInput | string
     expectedOutput?: NullableStringFieldUpdateOperationsInput | string | null
+    teamMembers?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumRegistrationStatusFieldUpdateOperationsInput | $Enums.RegistrationStatus
     cancelReason?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -42739,6 +42782,7 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     objective?: StringFieldUpdateOperationsInput | string
     expectedOutput?: NullableStringFieldUpdateOperationsInput | string | null
+    teamMembers?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumRegistrationStatusFieldUpdateOperationsInput | $Enums.RegistrationStatus
     cancelReason?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -42756,6 +42800,7 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     objective?: StringFieldUpdateOperationsInput | string
     expectedOutput?: NullableStringFieldUpdateOperationsInput | string | null
+    teamMembers?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumRegistrationStatusFieldUpdateOperationsInput | $Enums.RegistrationStatus
     cancelReason?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -42838,6 +42883,7 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     objective?: StringFieldUpdateOperationsInput | string
     expectedOutput?: NullableStringFieldUpdateOperationsInput | string | null
+    teamMembers?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumRegistrationStatusFieldUpdateOperationsInput | $Enums.RegistrationStatus
     cancelReason?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -42857,6 +42903,7 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     objective?: StringFieldUpdateOperationsInput | string
     expectedOutput?: NullableStringFieldUpdateOperationsInput | string | null
+    teamMembers?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumRegistrationStatusFieldUpdateOperationsInput | $Enums.RegistrationStatus
     cancelReason?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -42874,6 +42921,7 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     objective?: StringFieldUpdateOperationsInput | string
     expectedOutput?: NullableStringFieldUpdateOperationsInput | string | null
+    teamMembers?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumRegistrationStatusFieldUpdateOperationsInput | $Enums.RegistrationStatus
     cancelReason?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -43002,6 +43050,7 @@ export namespace Prisma {
     title: string
     objective: string
     expectedOutput?: string | null
+    teamMembers?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.RegistrationStatus
     cancelReason?: string | null
     createdAt?: Date | string
@@ -43105,6 +43154,7 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     objective?: StringFieldUpdateOperationsInput | string
     expectedOutput?: NullableStringFieldUpdateOperationsInput | string | null
+    teamMembers?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumRegistrationStatusFieldUpdateOperationsInput | $Enums.RegistrationStatus
     cancelReason?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -43123,6 +43173,7 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     objective?: StringFieldUpdateOperationsInput | string
     expectedOutput?: NullableStringFieldUpdateOperationsInput | string | null
+    teamMembers?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumRegistrationStatusFieldUpdateOperationsInput | $Enums.RegistrationStatus
     cancelReason?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -43140,6 +43191,7 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     objective?: StringFieldUpdateOperationsInput | string
     expectedOutput?: NullableStringFieldUpdateOperationsInput | string | null
+    teamMembers?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumRegistrationStatusFieldUpdateOperationsInput | $Enums.RegistrationStatus
     cancelReason?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string

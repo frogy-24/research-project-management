@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { toast } from 'sonner';
 import { useCallRounds, useCreateCallRound, useUpdateCallRound, useDeleteCallRound, useApproveCallRound, useRejectCallRound } from '@/hooks/useCallRounds';
 import { useProgressTemplates } from '@/hooks/useProgressTemplates';
@@ -20,6 +20,13 @@ import { Separator } from '@/components/ui/separator';
 import { Plus, Edit, Trash2, Calendar, Building2, Info, Clock, DollarSign, FileText, Lock, Unlock, Eye, AlertTriangle, CheckCircle, XCircle } from 'lucide-react';
 import { MoneyInput } from '@/components/ui/money-input';
 import type { CallRound } from '@/types/call-round.schema';
+
+const APPROVAL_STATUS_FILTERS = [
+    { value: 'ALL', label: 'Tất cả trạng thái' },
+    { value: 'PENDING_APPROVAL', label: 'Chờ duyệt' },
+    { value: 'APPROVED', label: 'Đã duyệt' },
+    { value: 'REJECTED', label: 'Bị từ chối' },
+];
 
 export default function CallRoundsPage() {
     const { data: callRounds = [], isLoading } = useCallRounds();
@@ -45,6 +52,8 @@ export default function CallRoundsPage() {
     const [selectedRoundForAction, setSelectedRoundForAction] = useState<any>(null);
     const [approvalNote, setApprovalNote] = useState('');
     const [errors, setErrors] = useState<Record<string, boolean>>({});
+    const [departmentFilter, setDepartmentFilter] = useState('ALL');
+    const [approvalStatusFilter, setApprovalStatusFilter] = useState('ALL');
 
     const [formData, setFormData] = useState<{
         name: string;
@@ -310,6 +319,33 @@ export default function CallRoundsPage() {
     };
 
     const isReadOnly = editingRound?.isLocked || false;
+    const isNonAdminCreatedRound = Boolean(
+        editingRound && editingRound.createdByRole && editingRound.createdByRole !== 'ADMIN',
+    );
+
+    const creatorRoleLabel: Record<string, string> = {
+        DEAN: 'Trưởng khoa',
+        LEADER: 'Ban giám hiệu',
+        LECTURER: 'Giảng viên',
+        STUDENT: 'Sinh viên',
+        COUNCIL: 'Hội đồng',
+        ADMIN: 'Phòng QLKH',
+    };
+
+    const filteredCallRounds = useMemo(() => {
+        return callRounds.filter((round: any) => {
+            const matchDepartment =
+                departmentFilter === 'ALL' ||
+                (round.departments ?? []).some((dept: any) => dept.id === departmentFilter);
+
+            const matchApprovalStatus =
+                approvalStatusFilter === 'ALL' || round.approvalStatus === approvalStatusFilter;
+
+            return matchDepartment && matchApprovalStatus;
+        });
+    }, [callRounds, departmentFilter, approvalStatusFilter]);
+
+    const hasActiveFilters = departmentFilter !== 'ALL' || approvalStatusFilter !== 'ALL';
 
     return (
         <div className="container mx-auto py-8 px-4 max-w-7xl">
@@ -325,14 +361,56 @@ export default function CallRoundsPage() {
                     </Button>
                 </CardHeader>
                 <CardContent>
+                    <div className="mb-4 flex flex-wrap items-center gap-3">
+                        <Select value={departmentFilter} onValueChange={setDepartmentFilter}>
+                            <SelectTrigger className="w-65">
+                                <SelectValue placeholder="Lọc theo khoa" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="ALL">Tất cả khoa</SelectItem>
+                                {departments.map((dept: any) => (
+                                    <SelectItem key={dept.id} value={dept.id}>
+                                        {dept.code} - {dept.name}
+                                    </SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
+
+                        <Select value={approvalStatusFilter} onValueChange={setApprovalStatusFilter}>
+                            <SelectTrigger className="w-55">
+                                <SelectValue placeholder="Lọc theo trạng thái" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                {APPROVAL_STATUS_FILTERS.map((status) => (
+                                    <SelectItem key={status.value} value={status.value}>
+                                        {status.label}
+                                    </SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
+
+                        {hasActiveFilters && (
+                            <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => {
+                                    setDepartmentFilter('ALL');
+                                    setApprovalStatusFilter('ALL');
+                                }}
+                            >
+                                Xóa bộ lọc
+                            </Button>
+                        )}
+                    </div>
+
                     {isLoading ? (
                         <div className="text-center py-12">
                             <div className="h-8 w-8 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto" />
                         </div>
-                    ) : callRounds.length === 0 ? (
+                    ) : filteredCallRounds.length === 0 ? (
                         <div className="text-center py-12 text-muted-foreground">
                             <Calendar className="h-12 w-12 mx-auto mb-3 opacity-30" />
-                            <p>Chưa có đợt đăng ký nào</p>
+                            <p>{hasActiveFilters ? 'Không có dữ liệu phù hợp bộ lọc' : 'Chưa có đợt đăng ký nào'}</p>
                         </div>
                     ) : (
                         <div className="rounded-md border">
@@ -349,7 +427,7 @@ export default function CallRoundsPage() {
                                     </TableRow>
                                 </TableHeader>
                                 <TableBody>
-                                    {callRounds.map((round: any) => {
+                                    {filteredCallRounds.map((round: any) => {
                                         const getApprovalBadge = () => {
                                             switch (round.approvalStatus) {
                                                 case 'PENDING_APPROVAL':
@@ -373,10 +451,10 @@ export default function CallRoundsPage() {
                                                             {round.description.length > 50 && '...'}
                                                         </div>
                                                     )}
-                                                    {round.creator && round.creator.role !== 'ADMIN' && (
+                                                    {round.createdByRole && round.createdByRole !== 'ADMIN' && (
                                                         <div className="text-xs text-blue-600 mt-1 flex items-center gap-1">
                                                             <Building2 className="h-3 w-3" />
-                                                            Tạo bởi: {round.creator.name} ({round.creator.department?.name || 'Khoa'})
+                                                            Nguồn tạo: {creatorRoleLabel[round.createdByRole] || round.createdByRole}
                                                         </div>
                                                     )}
                                                 </TableCell>
@@ -506,11 +584,29 @@ export default function CallRoundsPage() {
                         </DialogTitle>
                         <DialogDescription>
                             {editingRound 
-                                ? (isReadOnly ? 'Xem thông tin chi tiết đợt đăng ký' : 'Cập nhật thông tin đợt đăng ký') 
+                                ? (isReadOnly
+                                    ? 'Xem thông tin chi tiết đợt đăng ký'
+                                    : isNonAdminCreatedRound
+                                      ? 'Biểu mẫu tiếp nhận từ đơn vị tạo đợt, hiển thị theo chế độ thẩm định của Admin'
+                                      : 'Cập nhật thông tin đợt đăng ký') 
                                 : 'Nhập thông tin đợt đăng ký mới'}
                         </DialogDescription>
                     </DialogHeader>
                     <div className="space-y-6 pt-4 max-h-[70vh] overflow-y-auto px-1">
+                        {editingRound && isNonAdminCreatedRound && (
+                            <div className="rounded-lg border border-blue-200 bg-blue-50 p-4 space-y-2">
+                                <div className="flex items-center justify-between gap-3">
+                                    <p className="text-sm font-medium text-blue-900">Đợt do đơn vị khác khởi tạo</p>
+                                    <Badge variant="outline" className="border-blue-300 text-blue-700 bg-white">
+                                        Nguồn tạo: {creatorRoleLabel[editingRound.createdByRole || ''] || editingRound.createdByRole}
+                                    </Badge>
+                                </div>
+                                <p className="text-xs text-blue-700">
+                                    Admin đang chỉnh sửa theo chế độ tiếp nhận. Phạm vi tổ chức được hiển thị dạng xem để tránh lệch phạm vi đã đề xuất.
+                                </p>
+                            </div>
+                        )}
+
                         {/* Thông tin cơ bản */}
                         <div className="space-y-4">
                             <div className="flex items-center gap-2">
@@ -746,74 +842,127 @@ export default function CallRoundsPage() {
                         <div className="space-y-4">
                             <div className="flex items-center gap-2">
                                 <Building2 className="h-4 w-4" />
-                                <Label className="font-semibold">Phân quyền tổ chức (tùy chọn)</Label>
+                                <Label className="font-semibold">
+                                    {isNonAdminCreatedRound ? 'Phạm vi tổ chức đã đề xuất' : 'Phân quyền tổ chức (tùy chọn)'}
+                                </Label>
                             </div>
 
-                            <div className="space-y-2">
-                                <Label>Khoa</Label>
-                                <div className="border rounded-lg p-2 max-h-32 overflow-y-auto">
-                                    {departments.map((dept: any) => (
-                                        <div key={dept.id} className="flex items-center gap-2 p-1">
-                                            <input
-                                                type="checkbox"
-                                                id={`dept-${dept.id}`}
-                                                checked={formData.departmentIds.includes(dept.id)}
-                                                onChange={() => handleDepartmentChange(dept.id)}
-                                                className="h-4 w-4"
-                                                disabled={isReadOnly}
-                                            />
-                                            <Label htmlFor={`dept-${dept.id}`} className="text-sm cursor-pointer">
-                                                {dept.code} - {dept.name}
-                                            </Label>
+                            {isNonAdminCreatedRound ? (
+                                <div className="rounded-lg border bg-muted/30 p-4 space-y-4">
+                                    <div className="space-y-2">
+                                        <Label>Khoa</Label>
+                                        <div className="flex flex-wrap gap-2">
+                                            {(editingRound?.departments ?? []).length > 0 ? (
+                                                (editingRound?.departments ?? []).map((dept: any) => (
+                                                    <Badge key={dept.id} variant="secondary">
+                                                        {dept.code} - {dept.name}
+                                                    </Badge>
+                                                ))
+                                            ) : (
+                                                <span className="text-sm text-muted-foreground">Không giới hạn</span>
+                                            )}
                                         </div>
-                                    ))}
-                                </div>
-                            </div>
+                                    </div>
 
-                            {formData.departmentIds.length > 0 && (
-                                <div className="space-y-2">
-                                    <Label>Ngành học</Label>
-                                    <div className="border rounded-lg p-2 max-h-32 overflow-y-auto">
-                                        {filteredMajors.map((major: any) => (
-                                            <div key={major.id} className="flex items-center gap-2 p-1">
-                                                <input
-                                                    type="checkbox"
-                                                    id={`major-${major.id}`}
-                                                    checked={formData.majorIds.includes(major.id)}
-                                                    onChange={() => handleMajorChange(major.id)}
-                                                    className="h-4 w-4"
-                                                    disabled={isReadOnly}
-                                                />
-                                                <Label htmlFor={`major-${major.id}`} className="text-sm cursor-pointer">
-                                                    {major.code} - {major.name}
-                                                </Label>
-                                            </div>
-                                        ))}
+                                    <div className="space-y-2">
+                                        <Label>Ngành học</Label>
+                                        <div className="flex flex-wrap gap-2">
+                                            {(editingRound?.majors ?? []).length > 0 ? (
+                                                (editingRound?.majors ?? []).map((major: any) => (
+                                                    <Badge key={major.id} variant="secondary">
+                                                        {major.code} - {major.name}
+                                                    </Badge>
+                                                ))
+                                            ) : (
+                                                <span className="text-sm text-muted-foreground">Không giới hạn</span>
+                                            )}
+                                        </div>
+                                    </div>
+
+                                    <div className="space-y-2">
+                                        <Label>Lớp</Label>
+                                        <div className="flex flex-wrap gap-2">
+                                            {(editingRound?.classes ?? []).length > 0 ? (
+                                                (editingRound?.classes ?? []).map((cls: any) => (
+                                                    <Badge key={cls.id} variant="secondary">
+                                                        {cls.code} - {cls.name}
+                                                    </Badge>
+                                                ))
+                                            ) : (
+                                                <span className="text-sm text-muted-foreground">Không giới hạn</span>
+                                            )}
+                                        </div>
                                     </div>
                                 </div>
-                            )}
-
-                            {formData.majorIds.length > 0 && (
-                                <div className="space-y-2">
-                                    <Label>Lớp</Label>
-                                    <div className="border rounded-lg p-2 max-h-32 overflow-y-auto">
-                                        {filteredClasses.map((cls: any) => (
-                                            <div key={cls.id} className="flex items-center gap-2 p-1">
-                                                <input
-                                                    type="checkbox"
-                                                    id={`class-${cls.id}`}
-                                                    checked={formData.classIds.includes(cls.id)}
-                                                    onChange={() => handleClassChange(cls.id)}
-                                                    className="h-4 w-4"
-                                                    disabled={isReadOnly}
-                                                />
-                                                <Label htmlFor={`class-${cls.id}`} className="text-sm cursor-pointer">
-                                                    {cls.code} - {cls.name}
-                                                </Label>
-                                            </div>
-                                        ))}
+                            ) : (
+                                <>
+                                    <div className="space-y-2">
+                                        <Label>Khoa</Label>
+                                        <div className="border rounded-lg p-2 max-h-32 overflow-y-auto">
+                                            {departments.map((dept: any) => (
+                                                <div key={dept.id} className="flex items-center gap-2 p-1">
+                                                    <input
+                                                        type="checkbox"
+                                                        id={`dept-${dept.id}`}
+                                                        checked={formData.departmentIds.includes(dept.id)}
+                                                        onChange={() => handleDepartmentChange(dept.id)}
+                                                        className="h-4 w-4"
+                                                        disabled={isReadOnly}
+                                                    />
+                                                    <Label htmlFor={`dept-${dept.id}`} className="text-sm cursor-pointer">
+                                                        {dept.code} - {dept.name}
+                                                    </Label>
+                                                </div>
+                                            ))}
+                                        </div>
                                     </div>
-                                </div>
+
+                                    {formData.departmentIds.length > 0 && (
+                                        <div className="space-y-2">
+                                            <Label>Ngành học</Label>
+                                            <div className="border rounded-lg p-2 max-h-32 overflow-y-auto">
+                                                {filteredMajors.map((major: any) => (
+                                                    <div key={major.id} className="flex items-center gap-2 p-1">
+                                                        <input
+                                                            type="checkbox"
+                                                            id={`major-${major.id}`}
+                                                            checked={formData.majorIds.includes(major.id)}
+                                                            onChange={() => handleMajorChange(major.id)}
+                                                            className="h-4 w-4"
+                                                            disabled={isReadOnly}
+                                                        />
+                                                        <Label htmlFor={`major-${major.id}`} className="text-sm cursor-pointer">
+                                                            {major.code} - {major.name}
+                                                        </Label>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    )}
+
+                                    {formData.majorIds.length > 0 && (
+                                        <div className="space-y-2">
+                                            <Label>Lớp</Label>
+                                            <div className="border rounded-lg p-2 max-h-32 overflow-y-auto">
+                                                {filteredClasses.map((cls: any) => (
+                                                    <div key={cls.id} className="flex items-center gap-2 p-1">
+                                                        <input
+                                                            type="checkbox"
+                                                            id={`class-${cls.id}`}
+                                                            checked={formData.classIds.includes(cls.id)}
+                                                            onChange={() => handleClassChange(cls.id)}
+                                                            className="h-4 w-4"
+                                                            disabled={isReadOnly}
+                                                        />
+                                                        <Label htmlFor={`class-${cls.id}`} className="text-sm cursor-pointer">
+                                                            {cls.code} - {cls.name}
+                                                        </Label>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    )}
+                                </>
                             )}
                         </div>
 

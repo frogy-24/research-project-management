@@ -330,6 +330,7 @@ model ProjectRegistration {
   title            String
   objective        String
   expectedOutput   String?
+  teamMembers      Json?
   status           RegistrationStatus @default(PENDING)
   cancelReason     String?
   createdAt        DateTime           @default(now())

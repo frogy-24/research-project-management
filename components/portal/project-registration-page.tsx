@@ -10,22 +10,44 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { Skeleton } from '@/components/ui/skeleton';
 import {
     useCancelMyProjectRegistration,
     useCreateMyProjectRegistration,
     useMyProjectRegistrations,
+    useUpdateMyProjectRegistration,
 } from '@/hooks/useMyProjectRegistrations';
-import { FileText, MonitorX, PlusCircle, CalendarClock, AlertCircle } from 'lucide-react';
+import { FileText, MonitorX, PlusCircle, CalendarClock, AlertCircle, Pencil, Plus, Trash2, Users } from 'lucide-react';
 import { useUsers } from '@/hooks/useUsers';
 import { useAuthSession } from '@/hooks/useAuth';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { useCallRounds } from '@/hooks/useCallRounds';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { useMe } from '@/hooks/useMe';
 import type { CallRoundWithTemplate } from '@/types/call-round.schema';
+import type { ProjectRegistration } from '@/types/project-registration.schema';
+import type { User } from '@/types/user.schema';
+import { useDebounce } from '@/hooks/useDebounce';
+import { useMajors } from '@/hooks/useMajors';
+import { useClasses } from '@/hooks/useClasses';
 
 type ProjectRegistrationPageProps = {
     title: string;
 };
+
+type TeamMemberInput = {
+    name: string;
+    role: string;
+    studentId?: string;
+    invitationStatus?: 'PENDING' | 'ACCEPTED' | 'REJECTED';
+    invitedAt?: Date;
+    respondedAt?: Date | null;
+};
+
+type TeamMemberPickerMode = 'create' | 'edit';
+
+const MEMBER_PICKER_LIMIT = 7;
 
 const statusLabel: Record<string, string> = {
     PENDING: 'Chờ phê duyệt',
@@ -41,41 +63,148 @@ const statusVariant: Record<string, 'default' | 'secondary' | 'destructive' | 'o
     REJECTED: 'destructive',
 };
 
+type DisplayRegistrationStatus = 'PENDING_INSTRUCTOR' | 'PENDING_FACULTY' | 'APPROVED' | 'CANCELED' | 'REJECTED';
+
+const displayStatusLabel: Record<DisplayRegistrationStatus, string> = {
+    PENDING_INSTRUCTOR: 'Chờ giảng viên duyệt',
+    PENDING_FACULTY: 'Chờ khoa duyệt',
+    APPROVED: 'Đã phê duyệt',
+    CANCELED: 'Đã hủy',
+    REJECTED: 'Bị từ chối',
+};
+
+const displayStatusVariant: Record<DisplayRegistrationStatus, 'default' | 'secondary' | 'destructive' | 'outline'> = {
+    PENDING_INSTRUCTOR: 'secondary',
+    PENDING_FACULTY: 'secondary',
+    APPROVED: 'default',
+    CANCELED: 'outline',
+    REJECTED: 'destructive',
+};
+
+const invitationStatusLabel: Record<'PENDING' | 'ACCEPTED' | 'REJECTED', string> = {
+    PENDING: 'Chờ xác nhận',
+    ACCEPTED: 'Đã đồng ý',
+    REJECTED: 'Đã từ chối',
+};
+
+const invitationStatusVariant: Record<'PENDING' | 'ACCEPTED' | 'REJECTED', 'secondary' | 'default' | 'destructive'> = {
+    PENDING: 'secondary',
+    ACCEPTED: 'default',
+    REJECTED: 'destructive',
+};
+
+const getDisplayStatus = (item: ProjectRegistration): DisplayRegistrationStatus => {
+    if (item.status === 'CANCELED') {
+        return 'CANCELED';
+    }
+
+    if (item.status === 'APPROVED' || item.facultyStatus === 'APPROVED') {
+        return 'APPROVED';
+    }
+
+    if (item.status === 'REJECTED' || item.facultyStatus === 'REJECTED' || item.instructorStatus === 'REJECTED') {
+        return 'REJECTED';
+    }
+
+    if (item.instructorId && item.instructorStatus !== 'ACCEPTED') {
+        return 'PENDING_INSTRUCTOR';
+    }
+
+    return 'PENDING_FACULTY';
+};
+
 export function ProjectRegistrationPage({ title }: ProjectRegistrationPageProps) {
     const [projectTitle, setProjectTitle] = useState('');
     const [objective, setObjective] = useState('');
     const [expectedOutput, setExpectedOutput] = useState('');
     const [instructorId, setInstructorId] = useState('');
     const [selectedCallRoundId, setSelectedCallRoundId] = useState<string>('');
+    const [teamMembers, setTeamMembers] = useState<TeamMemberInput[]>([]);
+    const [editingRegistration, setEditingRegistration] = useState<ProjectRegistration | null>(null);
+    const [editTitle, setEditTitle] = useState('');
+    const [editObjective, setEditObjective] = useState('');
+    const [editExpectedOutput, setEditExpectedOutput] = useState('');
+    const [editTeamMembers, setEditTeamMembers] = useState<TeamMemberInput[]>([]);
+    const [memberPickerOpen, setMemberPickerOpen] = useState(false);
+    const [memberPickerMode, setMemberPickerMode] = useState<TeamMemberPickerMode>('create');
+    const [memberKeyword, setMemberKeyword] = useState('');
+    const [selectedMajorId, setSelectedMajorId] = useState<string>('all');
+    const [selectedClassId, setSelectedClassId] = useState<string>('all');
+    const [historySearchKeyword, setHistorySearchKeyword] = useState('');
+    const [historyCallRoundFilter, setHistoryCallRoundFilter] = useState('all');
+    const [historyStatusFilter, setHistoryStatusFilter] = useState<'all' | DisplayRegistrationStatus>('all');
     const { data: usersData } = useUsers();
     const users = usersData?.data ?? [];
+    const { data: me } = useMe();
     const { data: session } = useAuthSession();
+    const myDepartmentId = me?.departmentId ?? undefined;
+    const debouncedMemberKeyword = useDebounce(memberKeyword, 300);
+    const { data: majorsData } = useMajors(
+        {
+            departmentId: myDepartmentId,
+            page: 1,
+            limit: 200,
+        },
+        { enabled: Boolean(myDepartmentId) && memberPickerOpen },
+    );
+    const majors = majorsData?.data ?? [];
+    const selectedMajorFilter = selectedMajorId !== 'all' ? selectedMajorId : undefined;
+    const { data: classesData } = useClasses(
+        {
+            departmentId: myDepartmentId,
+            majorId: selectedMajorFilter,
+            page: 1,
+            limit: 200,
+        },
+        { enabled: Boolean(myDepartmentId) && memberPickerOpen },
+    );
+    const classes = classesData?.data ?? [];
+    const { data: departmentStudentsData, isLoading: isLoadingDepartmentStudents } = useUsers(
+        {
+            role: 'STUDENT',
+            departmentId: myDepartmentId,
+            majorId: selectedMajorFilter,
+            classId: selectedClassId !== 'all' ? selectedClassId : undefined,
+            search: debouncedMemberKeyword.trim() || undefined,
+            page: 1,
+            limit: MEMBER_PICKER_LIMIT,
+        },
+        { enabled: Boolean(myDepartmentId) && memberPickerOpen },
+    );
+    const departmentStudents = departmentStudentsData?.data ?? [];
     const [cancelReasonById, setCancelReasonById] = useState<Record<string, string>>({});
 
     const { data: registrations = [], isLoading } = useMyProjectRegistrations();
     const { data: callRounds = [] } = useCallRounds();
     const createMutation = useCreateMyProjectRegistration();
     const cancelMutation = useCancelMyProjectRegistration();
+    const updateMutation = useUpdateMyProjectRegistration();
 
-    // Filter call rounds that are currently open for registration
     const availableCallRounds = React.useMemo(() => {
         const now = new Date();
+        const role = session?.role;
+
+        if (role !== 'STUDENT' && role !== 'LECTURER') {
+            return [];
+        }
+
         return (callRounds as CallRoundWithTemplate[]).filter((round) => {
             if (!round.isActive) return false;
+            if (round.approvalStatus !== 'APPROVED') return false;
+            if (role === 'STUDENT' && !['STUDENT', 'BOTH'].includes(round.applicableFor)) return false;
+            if (role === 'LECTURER' && !['LECTURER', 'BOTH'].includes(round.applicableFor)) return false;
             const start = new Date(round.registrationStartDate);
             const end = new Date(round.registrationEndDate);
             return now >= start && now <= end;
         });
-    }, [callRounds]);
+    }, [callRounds, session?.role]);
 
-    // Auto-select if only one available, or find selected
     const activeCallRound = React.useMemo(() => {
         if (availableCallRounds.length === 0) return undefined;
         if (availableCallRounds.length === 1) return availableCallRounds[0];
         return availableCallRounds.find((r) => r.id === selectedCallRoundId) ?? undefined;
     }, [availableCallRounds, selectedCallRoundId]);
 
-    // Auto-select when only one round available
     React.useEffect(() => {
         if (availableCallRounds.length === 1 && selectedCallRoundId !== availableCallRounds[0].id) {
             setSelectedCallRoundId(availableCallRounds[0].id);
@@ -84,23 +213,186 @@ export function ProjectRegistrationPage({ title }: ProjectRegistrationPageProps)
 
     const sortedRegistrations = React.useMemo(() => {
         return [...registrations].sort((a, b) => {
-            const aConfirmed = a.status === 'APPROVED' || a.instructorStatus === 'ACCEPTED';
-            const bConfirmed = b.status === 'APPROVED' || b.instructorStatus === 'ACCEPTED';
+            const aConfirmed =
+                a.status === 'APPROVED' || a.facultyStatus === 'APPROVED' || a.instructorStatus === 'ACCEPTED';
+            const bConfirmed =
+                b.status === 'APPROVED' || b.facultyStatus === 'APPROVED' || b.instructorStatus === 'ACCEPTED';
             if (aConfirmed && !bConfirmed) return -1;
             if (!aConfirmed && bConfirmed) return 1;
             return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
         });
     }, [registrations]);
 
-    // Check if student already has an active registration (PENDING or APPROVED)
-    const hasActiveRegistration = React.useMemo(() => {
-        return registrations.some(
-            (r) => r.status === 'PENDING' || r.status === 'APPROVED'
-        );
-    }, [registrations]);
+    const historyCallRoundOptions = React.useMemo(() => {
+        const seen = new Set<string>();
+        return sortedRegistrations
+            .map((registration) => registration.callRound)
+            .filter((callRound): callRound is NonNullable<ProjectRegistration['callRound']> => Boolean(callRound))
+            .filter((callRound) => {
+                if (seen.has(callRound.id)) {
+                    return false;
+                }
 
-    // Check if form should be disabled
-    const isFormDisabled = !activeCallRound || hasActiveRegistration;
+                seen.add(callRound.id);
+                return true;
+            });
+    }, [sortedRegistrations]);
+
+    const filteredHistoryRegistrations = React.useMemo(() => {
+        const keyword = historySearchKeyword.trim().toLowerCase();
+
+        return sortedRegistrations.filter((registration) => {
+            const displayStatus = getDisplayStatus(registration);
+
+            if (historyCallRoundFilter !== 'all' && registration.callRoundId !== historyCallRoundFilter) {
+                return false;
+            }
+
+            if (historyStatusFilter !== 'all' && displayStatus !== historyStatusFilter) {
+                return false;
+            }
+
+            if (!keyword) {
+                return true;
+            }
+
+            const teamMembers = (registration.teamMembers as TeamMemberInput[] | null | undefined) ?? [];
+            const textPool = [
+                registration.title,
+                registration.objective,
+                registration.expectedOutput ?? '',
+                registration.instructor?.name ?? '',
+                registration.callRound?.name ?? '',
+                displayStatusLabel[displayStatus],
+                ...teamMembers.map((member) => `${member.name} ${member.role}`),
+            ]
+                .join(' ')
+                .toLowerCase();
+
+            return textPool.includes(keyword);
+        });
+    }, [historyCallRoundFilter, historySearchKeyword, historyStatusFilter, sortedRegistrations]);
+
+    const hasRegistrationInSelectedCallRound = React.useMemo(() => {
+        if (!activeCallRound) return false;
+
+        return registrations.some(
+            (r) =>
+                r.callRoundId === activeCallRound.id &&
+                (r.status === 'APPROVED' ||
+                    r.facultyStatus === 'APPROVED' ||
+                    (r.status === 'PENDING' && r.instructorStatus !== 'REJECTED')),
+        );
+    }, [activeCallRound, registrations]);
+
+    const isFormDisabled = !activeCallRound || hasRegistrationInSelectedCallRound;
+
+    const normalizeTeamMembers = (members: TeamMemberInput[]) => {
+        const trimmed = members.map((member) => ({
+            name: member.name.trim(),
+            role: member.role.trim(),
+            studentId: member.studentId,
+            invitationStatus: member.invitationStatus,
+            invitedAt: member.invitedAt,
+            respondedAt: member.respondedAt,
+        }));
+
+        const hasIncomplete = trimmed.some(
+            (member) =>
+                (member.name.length > 0 && member.role.length === 0) ||
+                (member.role.length > 0 && member.name.length === 0),
+        );
+
+        if (hasIncomplete) {
+            return { valid: false, data: [] as TeamMemberInput[] };
+        }
+
+        return {
+            valid: true,
+            data: trimmed.filter((member) => member.name.length > 0 && member.role.length > 0),
+        };
+    };
+
+    const openMemberPicker = (mode: TeamMemberPickerMode) => {
+        const targetMembers = mode === 'edit' ? editTeamMembers : teamMembers;
+        if (targetMembers.length >= 5) {
+            toast.error('Tối đa 5 thành viên nhóm');
+            return;
+        }
+
+        if (!myDepartmentId) {
+            toast.error('Không xác định được khoa của bạn để lọc sinh viên');
+            return;
+        }
+
+        setMemberPickerMode(mode);
+        setMemberKeyword('');
+        setSelectedMajorId('all');
+        setSelectedClassId('all');
+        setMemberPickerOpen(true);
+    };
+
+    const handleMajorFilterChange = (value: string) => {
+        setSelectedMajorId(value);
+        setSelectedClassId('all');
+    };
+
+    const filteredDepartmentStudents = React.useMemo(() => {
+        const targetMembers = memberPickerMode === 'edit' ? editTeamMembers : teamMembers;
+        const usedIds = new Set(
+            targetMembers.map((member) => member.studentId).filter((id): id is string => Boolean(id)),
+        );
+        const usedNames = new Set(targetMembers.map((member) => member.name.trim().toLowerCase()).filter(Boolean));
+        const keyword = memberKeyword.trim().toLowerCase();
+
+        return departmentStudents
+            .filter((student) => student.id !== session?.userId)
+            .filter((student) => {
+                const normalizedName = student.name.trim().toLowerCase();
+                if (usedIds.has(student.id) || usedNames.has(normalizedName)) {
+                    return false;
+                }
+
+                if (!keyword) {
+                    return true;
+                }
+
+                return (
+                    student.name.toLowerCase().includes(keyword) ||
+                    student.email.toLowerCase().includes(keyword) ||
+                    (student.code ?? '').toLowerCase().includes(keyword)
+                );
+            });
+    }, [departmentStudents, editTeamMembers, memberKeyword, memberPickerMode, session?.userId, teamMembers]);
+
+    const addStudentToTeam = (student: User) => {
+        const applyAdd = (members: TeamMemberInput[]): TeamMemberInput[] => {
+            if (members.length >= 5) {
+                toast.error('Tối đa 5 thành viên nhóm');
+                return members;
+            }
+
+            const normalizedName = student.name.trim().toLowerCase();
+            const isDuplicated = members.some(
+                (member) => member.studentId === student.id || member.name.trim().toLowerCase() === normalizedName,
+            );
+
+            if (isDuplicated) {
+                toast.error('Sinh viên này đã có trong nhóm');
+                return members;
+            }
+
+            return [...members, { name: student.name, role: 'Thành viên', studentId: student.id }];
+        };
+
+        if (memberPickerMode === 'edit') {
+            setEditTeamMembers((prev) => applyAdd(prev));
+        } else {
+            setTeamMembers((prev) => applyAdd(prev));
+        }
+
+        setMemberPickerOpen(false);
+    };
 
     const handleCreate = () => {
         if (!activeCallRound) {
@@ -115,13 +407,24 @@ export function ProjectRegistrationPage({ title }: ProjectRegistrationPageProps)
             toast.error('Vui lòng nhập mục tiêu nghiên cứu');
             return;
         }
+        if (!instructorId) {
+            toast.error('Vui lòng chọn giảng viên hướng dẫn');
+            return;
+        }
+
+        const normalizedMembers = normalizeTeamMembers(teamMembers);
+        if (!normalizedMembers.valid) {
+            toast.error('Vui lòng nhập đầy đủ tên và vai trò cho từng thành viên nhóm');
+            return;
+        }
 
         createMutation.mutate(
             {
                 title: projectTitle,
                 objective,
                 expectedOutput: expectedOutput.trim() ? expectedOutput : null,
-                instructorId: instructorId && instructorId !== 'none' ? instructorId : undefined,
+                teamMembers: normalizedMembers.data,
+                instructorId,
                 callRoundId: activeCallRound.id,
             },
             {
@@ -131,6 +434,7 @@ export function ProjectRegistrationPage({ title }: ProjectRegistrationPageProps)
                     setObjective('');
                     setExpectedOutput('');
                     setInstructorId('');
+                    setTeamMembers([]);
                 },
                 onError: (err: unknown) => {
                     const msg = err instanceof Error ? err.message : 'Không thể đăng ký đề tài';
@@ -162,20 +466,80 @@ export function ProjectRegistrationPage({ title }: ProjectRegistrationPageProps)
         );
     };
 
+    const canEditRegistration = (item: ProjectRegistration) => {
+        return item.status === 'PENDING' && item.instructorStatus === 'PENDING' && item.facultyStatus === 'PENDING';
+    };
+
+    const openEditDialog = (item: ProjectRegistration) => {
+        setEditingRegistration(item);
+        setEditTitle(item.title);
+        setEditObjective(item.objective);
+        setEditExpectedOutput(item.expectedOutput ?? '');
+        setEditTeamMembers((item.teamMembers as TeamMemberInput[] | null | undefined) ?? []);
+    };
+
+    const closeEditDialog = () => {
+        setEditingRegistration(null);
+        setEditTitle('');
+        setEditObjective('');
+        setEditExpectedOutput('');
+        setEditTeamMembers([]);
+    };
+
+    const handleUpdate = () => {
+        if (!editingRegistration) return;
+        if (!editTitle.trim()) {
+            toast.error('Vui lòng nhập tên đề tài');
+            return;
+        }
+        if (!editObjective.trim()) {
+            toast.error('Vui lòng nhập mục tiêu nghiên cứu');
+            return;
+        }
+
+        const normalizedMembers = normalizeTeamMembers(editTeamMembers);
+        if (!normalizedMembers.valid) {
+            toast.error('Vui lòng nhập đầy đủ tên và vai trò cho từng thành viên nhóm');
+            return;
+        }
+
+        updateMutation.mutate(
+            {
+                id: editingRegistration.id,
+                payload: {
+                    title: editTitle,
+                    objective: editObjective,
+                    expectedOutput: editExpectedOutput.trim() || null,
+                    teamMembers: normalizedMembers.data,
+                },
+            },
+            {
+                onSuccess: () => {
+                    toast.success('Cập nhật đề tài thành công');
+                    closeEditDialog();
+                },
+                onError: (err: unknown) => {
+                    const msg = err instanceof Error ? err.message : 'Không thể cập nhật đề tài';
+                    toast.error(msg);
+                },
+            },
+        );
+    };
+
     return (
-        <div className="p-6 md:p-8 max-w-6xl mx-auto space-y-8">
+        <div className="p-4 md:p-8 space-y-8">
             <div className="flex flex-col gap-2">
                 <h1 className="text-3xl font-bold tracking-tight text-primary">{title}</h1>
                 <p className="text-muted-foreground">Quản lý các đề xuất và thuyết minh nghiên cứu khoa học.</p>
             </div>
 
-            {/* Call Round Status */}
             {availableCallRounds.length === 0 ? (
                 <Alert variant="destructive">
                     <AlertCircle className="h-4 w-4" />
                     <AlertTitle>Chưa mở đợt đăng ký</AlertTitle>
                     <AlertDescription>
-                        Hiện tại chưa có đợt đăng ký nào đang mở. Vui lòng liên hệ quản trị viên để biết thêm chi tiết.
+                        Hiện tại chưa có đợt đăng ký phù hợp (đã duyệt và đúng đối tượng) đang mở. Vui lòng liên hệ quản
+                        trị viên để biết thêm chi tiết.
                     </AlertDescription>
                 </Alert>
             ) : availableCallRounds.length > 1 ? (
@@ -222,20 +586,18 @@ export function ProjectRegistrationPage({ title }: ProjectRegistrationPageProps)
                             <CardDescription>Điền thông tin cơ bản để đề xuất thuyết minh.</CardDescription>
                         </CardHeader>
                         <CardContent className="space-y-5 pt-6">
-                            {/* Warning when already registered */}
-                            {hasActiveRegistration && (
+                            {activeCallRound && hasRegistrationInSelectedCallRound && (
                                 <Alert variant="destructive" className="border-amber-500/50 bg-amber-50 text-amber-900">
                                     <AlertCircle className="h-4 w-4 text-amber-600" />
                                     <AlertTitle className="text-amber-800">Đã có đăng ký</AlertTitle>
                                     <AlertDescription className="text-amber-700">
-                                        Bạn đã có đề tài đang chờ duyệt hoặc đã được duyệt. Mỗi sinh viên chỉ được đăng ký 1 đề tài trong mỗi đợt.
+                                        Bạn đã có đề tài đang chờ duyệt hoặc đã được duyệt. Mỗi sinh viên chỉ được đăng
+                                        ký 1 đề tài trong mỗi đợt.
                                     </AlertDescription>
                                 </Alert>
                             )}
-
-                            {/* Call Round Selector - only shown when multiple available */}
                             {availableCallRounds.length > 1 && (
-                                <div className="space-y-2">
+                                <div className="space-y-2 flex flex-col">
                                     <Label className="text-muted-foreground">
                                         Chọn đợt đăng ký <span className="text-destructive">*</span>
                                     </Label>
@@ -243,10 +605,10 @@ export function ProjectRegistrationPage({ title }: ProjectRegistrationPageProps)
                                         <SelectTrigger className="bg-background">
                                             <SelectValue placeholder="-- Chọn đợt đăng ký --" />
                                         </SelectTrigger>
-                                        <SelectContent>
+                                        <SelectContent className="w-full">
                                             {availableCallRounds.map((round) => (
                                                 <SelectItem key={round.id} value={round.id}>
-                                                    <div className="flex flex-col">
+                                                    <div className="flex flex-col px-6">
                                                         <span>{round.name}</span>
                                                         <span className="text-xs text-muted-foreground">
                                                             {new Date(round.registrationStartDate).toLocaleDateString(
@@ -308,39 +670,103 @@ export function ProjectRegistrationPage({ title }: ProjectRegistrationPageProps)
                             </div>
 
                             <div className="space-y-2">
-                                <Label className="text-muted-foreground">Người hướng dẫn</Label>
-                                <Select
-                                    value={instructorId}
-                                    onValueChange={setInstructorId}
-                                    disabled={isFormDisabled}
-                                >
+                                <div className="flex items-center justify-between">
+                                    <Label className="text-muted-foreground">Thành viên nhóm (tối đa 5)</Label>
+                                    <Button
+                                        type="button"
+                                        variant="outline"
+                                        size="sm"
+                                        onClick={() => openMemberPicker('create')}
+                                        disabled={isFormDisabled || teamMembers.length >= 5}
+                                    >
+                                        <Plus className="h-4 w-4 mr-1" />
+                                        Thêm thành viên
+                                    </Button>
+                                </div>
+                                {teamMembers.length === 0 ? (
+                                    <p className="text-xs text-muted-foreground">
+                                        Bấm "Thêm thành viên" để chọn sinh viên cùng khoa.
+                                    </p>
+                                ) : (
+                                    <div className="space-y-2">
+                                        {teamMembers.map((member, index) => (
+                                            <div
+                                                key={`${index}-${member.name}`}
+                                                className="grid grid-cols-1 md:grid-cols-[1fr_1fr_auto] gap-2"
+                                            >
+                                                <Input
+                                                    value={member.name}
+                                                    onChange={(e) =>
+                                                        setTeamMembers((prev) =>
+                                                            prev.map((item, i) =>
+                                                                i === index ? { ...item, name: e.target.value } : item,
+                                                            ),
+                                                        )
+                                                    }
+                                                    placeholder="Tên thành viên"
+                                                    disabled={isFormDisabled}
+                                                />
+                                                <Input
+                                                    value={member.role}
+                                                    onChange={(e) =>
+                                                        setTeamMembers((prev) =>
+                                                            prev.map((item, i) =>
+                                                                i === index ? { ...item, role: e.target.value } : item,
+                                                            ),
+                                                        )
+                                                    }
+                                                    placeholder="Role (nhập tay)"
+                                                    disabled={isFormDisabled}
+                                                />
+                                                <Button
+                                                    type="button"
+                                                    variant="ghost"
+                                                    size="icon"
+                                                    onClick={() =>
+                                                        setTeamMembers((prev) => prev.filter((_, i) => i !== index))
+                                                    }
+                                                    disabled={isFormDisabled}
+                                                >
+                                                    <Trash2 className="h-4 w-4" />
+                                                </Button>
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
+                            </div>
+
+                            <div className="space-y-2">
+                                <Label className="text-muted-foreground">
+                                    Người hướng dẫn <span className="text-destructive">*</span>
+                                </Label>
+                                <Select value={instructorId} onValueChange={setInstructorId} disabled={isFormDisabled}>
                                     <SelectTrigger>
-                                        <SelectValue placeholder="Chọn người hướng dẫn (Tùy chọn)" />
+                                        <SelectValue placeholder="Chọn người hướng dẫn" />
                                     </SelectTrigger>
                                     <SelectContent>
-                                        <SelectItem value="none">-- Không có --</SelectItem>
-                                        {activeCallRound?.availableInstructors && activeCallRound.availableInstructors.length > 0 ? (
-                                            activeCallRound.availableInstructors.map((item) => (
-                                                <SelectItem key={item.instructor.id} value={item.instructor.id}>
-                                                    {item.instructor.name} - {item.instructor.email}
-                                                </SelectItem>
-                                            ))
-                                        ) : (
-                                            users
-                                                .filter((u) => u.role !== 'STUDENT' && u.id !== session?.userId)
-                                                .map((u) => (
-                                                    <SelectItem key={u.id} value={u.id}>
-                                                        {u.name} - {u.role === 'LECTURER' ? 'Giảng viên' : 'Cán bộ'}
-                                                    </SelectItem>
-                                                ))
-                                        )}
+                                        {activeCallRound?.availableInstructors &&
+                                        activeCallRound.availableInstructors.length > 0
+                                            ? activeCallRound.availableInstructors.map((item) => (
+                                                  <SelectItem key={item.instructor.id} value={item.instructor.id}>
+                                                      {item.instructor.name} - {item.instructor.email}
+                                                  </SelectItem>
+                                              ))
+                                            : users
+                                                  .filter((u) => u.role !== 'STUDENT' && u.id !== session?.userId)
+                                                  .map((u) => (
+                                                      <SelectItem key={u.id} value={u.id}>
+                                                          {u.name} - {u.role === 'LECTURER' ? 'Giảng viên' : 'Cán bộ'}
+                                                      </SelectItem>
+                                                  ))}
                                     </SelectContent>
                                 </Select>
-                                {activeCallRound?.availableInstructors && activeCallRound.availableInstructors.length > 0 && (
-                                    <p className="text-xs text-muted-foreground">
-                                        Chỉ hiển thị {activeCallRound.availableInstructors.length} giảng viên được chỉ định cho đợt này
-                                    </p>
-                                )}
+                                {activeCallRound?.availableInstructors &&
+                                    activeCallRound.availableInstructors.length > 0 && (
+                                        <p className="text-xs text-muted-foreground">
+                                            Chỉ hiển thị {activeCallRound.availableInstructors.length} giảng viên được
+                                            chỉ định cho đợt này
+                                        </p>
+                                    )}
                             </div>
 
                             <Button
@@ -348,7 +774,7 @@ export function ProjectRegistrationPage({ title }: ProjectRegistrationPageProps)
                                 disabled={createMutation.isPending || isFormDisabled}
                                 className="w-full"
                             >
-                                {hasActiveRegistration
+                                {hasRegistrationInSelectedCallRound
                                     ? 'Đã đăng ký đề tài'
                                     : !activeCallRound
                                       ? 'Chưa mở đợt đăng ký'
@@ -367,6 +793,44 @@ export function ProjectRegistrationPage({ title }: ProjectRegistrationPageProps)
                                 <FileText className="h-5 w-5 text-primary" />
                                 Lịch sử đề xuất
                             </CardTitle>
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-2 pt-2">
+                                <Input
+                                    value={historySearchKeyword}
+                                    onChange={(event) => setHistorySearchKeyword(event.target.value)}
+                                    placeholder="Tìm theo tên đề tài, mục tiêu, giảng viên..."
+                                />
+                                <Select value={historyCallRoundFilter} onValueChange={setHistoryCallRoundFilter}>
+                                    <SelectTrigger>
+                                        <SelectValue placeholder="Lọc theo đợt" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value="all">Tất cả đợt</SelectItem>
+                                        {historyCallRoundOptions.map((callRound) => (
+                                            <SelectItem key={callRound.id} value={callRound.id}>
+                                                {callRound.name}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
+                                <Select
+                                    value={historyStatusFilter}
+                                    onValueChange={(value) =>
+                                        setHistoryStatusFilter(value as 'all' | DisplayRegistrationStatus)
+                                    }
+                                >
+                                    <SelectTrigger>
+                                        <SelectValue placeholder="Lọc theo trạng thái" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value="all">Tất cả trạng thái</SelectItem>
+                                        <SelectItem value="PENDING_INSTRUCTOR">Chờ giảng viên duyệt</SelectItem>
+                                        <SelectItem value="PENDING_FACULTY">Chờ khoa duyệt</SelectItem>
+                                        <SelectItem value="APPROVED">Đã phê duyệt</SelectItem>
+                                        <SelectItem value="CANCELED">Đã hủy</SelectItem>
+                                        <SelectItem value="REJECTED">Bị từ chối</SelectItem>
+                                    </SelectContent>
+                                </Select>
+                            </div>
                         </CardHeader>
                         <CardContent className="p-0">
                             {isLoading ? (
@@ -394,61 +858,112 @@ export function ProjectRegistrationPage({ title }: ProjectRegistrationPageProps)
                                             </TableRow>
                                         </TableHeader>
                                         <TableBody>
-                                            {sortedRegistrations.map((item) => (
-                                                <TableRow key={item.id} className="group">
-                                                    <TableCell className="pl-6 py-4">
-                                                        <div className="flex flex-col gap-1">
-                                                            <p className="font-semibold text-primary leading-tight hover:underline cursor-pointer">
-                                                                <Dialog>
-                                                                    <DialogTrigger asChild>
-                                                                        <span>{item.title}</span>
-                                                                    </DialogTrigger>
-                                                                    <DialogContent className="sm:max-w-2xl">
-                                                                        <DialogHeader>
-                                                                            <DialogTitle>
-                                                                                Chi tiết đề xuất nghiên cứu
-                                                                            </DialogTitle>
-                                                                        </DialogHeader>
-                                                                        <div className="space-y-4 py-4">
-                                                                            <div>
-                                                                                <h4 className="font-medium text-sm text-muted-foreground mb-1">
-                                                                                    Tên đề tài
-                                                                                </h4>
-                                                                                <p className="text-sm font-medium">
-                                                                                    {item.title}
-                                                                                </p>
-                                                                            </div>
-                                                                            <div>
-                                                                                <h4 className="font-medium text-sm text-muted-foreground mb-1">
-                                                                                    Mục tiêu
-                                                                                </h4>
-                                                                                <p className="text-sm whitespace-pre-wrap">
-                                                                                    {item.objective ||
-                                                                                        'Chưa có thông tin'}
-                                                                                </p>
-                                                                            </div>
-                                                                            <div>
-                                                                                <h4 className="font-medium text-sm text-muted-foreground mb-1">
-                                                                                    Sản phẩm dự kiến
-                                                                                </h4>
-                                                                                <p className="text-sm whitespace-pre-wrap">
-                                                                                    {item.expectedOutput ||
-                                                                                        'Chưa có thông tin'}
-                                                                                </p>
-                                                                            </div>
-                                                                            <div>
-                                                                                <h4 className="font-medium text-sm text-muted-foreground mb-1">
-                                                                                    Người hướng dẫn
-                                                                                </h4>
-                                                                                <p className="text-sm">
-                                                                                    {item.instructor
-                                                                                        ? item.instructor.name
-                                                                                        : 'Không có'}
-                                                                                    {item.instructor && (
-                                                                                        <Badge
-                                                                                            variant="outline"
-                                                                                            className="ml-2"
-                                                                                        >
+                                            {filteredHistoryRegistrations.length === 0 ? (
+                                                <TableRow>
+                                                    <TableCell colSpan={4} className="text-center text-muted-foreground py-8">
+                                                        Không tìm thấy đề xuất phù hợp bộ lọc.
+                                                    </TableCell>
+                                                </TableRow>
+                                            ) : (
+                                                filteredHistoryRegistrations.map((item) => {
+                                                const displayStatus = getDisplayStatus(item);
+
+                                                return (
+                                                    <TableRow key={item.id} className="group">
+                                                        <TableCell className="pl-6 py-4">
+                                                            <div className="flex flex-col gap-1">
+                                                                <p className="font-semibold text-primary leading-tight hover:underline cursor-pointer">
+                                                                    <Dialog>
+                                                                        <DialogTrigger asChild>
+                                                                            <span>{item.title}</span>
+                                                                        </DialogTrigger>
+                                                                        <DialogContent className="sm:max-w-2xl">
+                                                                            <DialogHeader>
+                                                                                <DialogTitle>
+                                                                                    Chi tiết đề xuất nghiên cứu
+                                                                                </DialogTitle>
+                                                                            </DialogHeader>
+                                                                            <div className="space-y-4 py-4">
+                                                                                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 rounded-md border bg-muted/20 p-3">
+                                                                                    <div>
+                                                                                        <h4 className="font-medium text-sm text-muted-foreground mb-1">
+                                                                                            Mã đăng ký
+                                                                                        </h4>
+                                                                                        <p className="text-sm font-medium">{item.id}</p>
+                                                                                    </div>
+                                                                                    <div>
+                                                                                        <h4 className="font-medium text-sm text-muted-foreground mb-1">
+                                                                                            Đợt đăng ký
+                                                                                        </h4>
+                                                                                        <p className="text-sm font-medium">
+                                                                                            {item.callRound?.name ||
+                                                                                                'Chưa gắn đợt đề tài'}
+                                                                                        </p>
+                                                                                    </div>
+                                                                                    <div>
+                                                                                        <h4 className="font-medium text-sm text-muted-foreground mb-1">
+                                                                                            Ngày tạo
+                                                                                        </h4>
+                                                                                        <p className="text-sm">
+                                                                                            {new Date(item.createdAt).toLocaleString(
+                                                                                                'vi-VN',
+                                                                                            )}
+                                                                                        </p>
+                                                                                    </div>
+                                                                                    <div>
+                                                                                        <h4 className="font-medium text-sm text-muted-foreground mb-1">
+                                                                                            Cập nhật gần nhất
+                                                                                        </h4>
+                                                                                        <p className="text-sm">
+                                                                                            {new Date(item.updatedAt).toLocaleString(
+                                                                                                'vi-VN',
+                                                                                            )}
+                                                                                        </p>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div>
+                                                                                    <h4 className="font-medium text-sm text-muted-foreground mb-1">
+                                                                                        Tên đề tài
+                                                                                    </h4>
+                                                                                    <p className="text-sm font-medium">
+                                                                                        {item.title}
+                                                                                    </p>
+                                                                                </div>
+                                                                                <div>
+                                                                                    <h4 className="font-medium text-sm text-muted-foreground mb-1">
+                                                                                        Mục tiêu
+                                                                                    </h4>
+                                                                                    <p
+                                                                                        className="text-sm whitespace-pre-wrap"
+                                                                                        style={{
+                                                                                            whiteSpace:
+                                                                                                'pre-wrap !important',
+                                                                                        }}
+                                                                                    >
+                                                                                        {item.objective ||
+                                                                                            'Chưa có thông tin'}
+                                                                                    </p>
+                                                                                </div>
+                                                                                <div>
+                                                                                    <h4 className="font-medium text-sm text-muted-foreground mb-1">
+                                                                                        Sản phẩm dự kiến
+                                                                                    </h4>
+                                                                                    <p className="text-sm whitespace-pre-wrap">
+                                                                                        {item.expectedOutput ||
+                                                                                            'Chưa có thông tin'}
+                                                                                    </p>
+                                                                                </div>
+                                                                                <div>
+                                                                                    <h4 className="font-medium text-sm text-muted-foreground mb-1">
+                                                                                        Người hướng dẫn
+                                                                                    </h4>
+                                                                                    <div className="flex flex-wrap items-center gap-2 text-sm">
+                                                                                        <span>
+                                                                                            {item.instructor
+                                                                                                ? item.instructor.name
+                                                                                                : 'Chưa phân công'}
+                                                                                        </span>
+                                                                                        <Badge variant="outline">
                                                                                             {item.instructorStatus ===
                                                                                             'ACCEPTED'
                                                                                                 ? 'Đã đồng ý'
@@ -457,107 +972,238 @@ export function ProjectRegistrationPage({ title }: ProjectRegistrationPageProps)
                                                                                                   ? 'Từ chối'
                                                                                                   : 'Chờ xác nhận'}
                                                                                         </Badge>
-                                                                                    )}
-                                                                                </p>
-                                                                            </div>
-                                                                            <div>
-                                                                                <h4 className="font-medium text-sm text-muted-foreground mb-1">
-                                                                                    Trạng thái duyệt cấp khoa
-                                                                                </h4>
-                                                                                <Badge
-                                                                                    variant={
-                                                                                        statusVariant[item.status] ||
-                                                                                        'default'
-                                                                                    }
-                                                                                >
-                                                                                    {statusLabel[item.status] ??
-                                                                                        item.status}
-                                                                                </Badge>
-                                                                            </div>
-                                                                            {item.cancelReason && (
+                                                                                    </div>
+                                                                                </div>
                                                                                 <div>
                                                                                     <h4 className="font-medium text-sm text-muted-foreground mb-1">
-                                                                                        Lý do hủy/từ chối
+                                                                                        Thành viên nhóm
                                                                                     </h4>
-                                                                                    <p className="text-sm text-destructive">
-                                                                                        {item.cancelReason}
-                                                                                    </p>
+                                                                                    {(
+                                                                                        item.teamMembers as
+                                                                                            | TeamMemberInput[]
+                                                                                            | null
+                                                                                            | undefined
+                                                                                    )?.length ? (
+                                                                                        <div className="space-y-2">
+                                                                                            {(
+                                                                                                item.teamMembers as TeamMemberInput[]
+                                                                                            ).map((member, index) => (
+                                                                                                <div
+                                                                                                    key={`${member.name}-${index}`}
+                                                                                                    className="text-sm flex flex-wrap items-center gap-2"
+                                                                                                >
+                                                                                                    <Users className="h-4 w-4 text-muted-foreground" />
+                                                                                                    <span className="font-medium">
+                                                                                                        {member.name}
+                                                                                                    </span>
+                                                                                                    <Badge variant="outline">
+                                                                                                        {member.role}
+                                                                                                    </Badge>
+                                                                                                    {member.invitationStatus && (
+                                                                                                        <Badge
+                                                                                                            variant={
+                                                                                                                invitationStatusVariant[
+                                                                                                                    member.invitationStatus
+                                                                                                                ]
+                                                                                                            }
+                                                                                                        >
+                                                                                                            {
+                                                                                                                invitationStatusLabel[
+                                                                                                                    member.invitationStatus
+                                                                                                                ]
+                                                                                                            }
+                                                                                                        </Badge>
+                                                                                                    )}
+                                                                                                    {member.invitedAt && (
+                                                                                                        <span className="text-xs text-muted-foreground">
+                                                                                                            Mời:{' '}
+                                                                                                            {new Date(
+                                                                                                                member.invitedAt,
+                                                                                                            ).toLocaleString(
+                                                                                                                'vi-VN',
+                                                                                                            )}
+                                                                                                        </span>
+                                                                                                    )}
+                                                                                                </div>
+                                                                                            ))}
+                                                                                        </div>
+                                                                                    ) : (
+                                                                                        <p className="text-sm text-muted-foreground">
+                                                                                            Chưa có thành viên nhóm
+                                                                                        </p>
+                                                                                    )}
                                                                                 </div>
-                                                                            )}
-                                                                        </div>
-                                                                    </DialogContent>
-                                                                </Dialog>
-                                                            </p>
-                                                            <p className="text-sm text-muted-foreground line-clamp-2">
-                                                                {item.objective}
-                                                            </p>
-                                                        </div>
-                                                    </TableCell>
-                                                    <TableCell>
-                                                        {item.instructor ? (
-                                                            <div className="flex flex-col gap-1">
-                                                                <span className="font-medium text-sm">{item.instructor.name}</span>
-                                                                <Badge
-                                                                    variant={
-                                                                        item.instructorStatus === 'ACCEPTED'
-                                                                            ? 'default'
+                                                                                <div>
+                                                                                    <h4 className="font-medium text-sm text-muted-foreground mb-1">
+                                                                                        Trạng thái xử lý tổng quan
+                                                                                    </h4>
+                                                                                    <Badge
+                                                                                        variant={
+                                                                                            displayStatusVariant[
+                                                                                                displayStatus
+                                                                                            ]
+                                                                                        }
+                                                                                    >
+                                                                                        {
+                                                                                            displayStatusLabel[
+                                                                                                displayStatus
+                                                                                            ]
+                                                                                        }
+                                                                                    </Badge>
+                                                                                </div>
+                                                                                <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                                                                                    <div>
+                                                                                        <h4 className="font-medium text-sm text-muted-foreground mb-1">
+                                                                                            Trạng thái đăng ký
+                                                                                        </h4>
+                                                                                        <Badge
+                                                                                            variant={
+                                                                                                statusVariant[
+                                                                                                    item.status
+                                                                                                ] || 'default'
+                                                                                            }
+                                                                                        >
+                                                                                            {statusLabel[
+                                                                                                item.status
+                                                                                            ] || item.status}
+                                                                                        </Badge>
+                                                                                    </div>
+                                                                                    <div>
+                                                                                        <h4 className="font-medium text-sm text-muted-foreground mb-1">
+                                                                                            Trạng thái giảng viên
+                                                                                        </h4>
+                                                                                        <Badge variant="outline">
+                                                                                            {item.instructorStatus ===
+                                                                                            'ACCEPTED'
+                                                                                                ? 'Đã đồng ý'
+                                                                                                : item.instructorStatus ===
+                                                                                                    'REJECTED'
+                                                                                                  ? 'Từ chối'
+                                                                                                  : 'Chờ xác nhận'}
+                                                                                        </Badge>
+                                                                                    </div>
+                                                                                    <div>
+                                                                                        <h4 className="font-medium text-sm text-muted-foreground mb-1">
+                                                                                            Trạng thái cấp khoa
+                                                                                        </h4>
+                                                                                        <Badge variant="outline">
+                                                                                            {item.facultyStatus ===
+                                                                                            'APPROVED'
+                                                                                                ? 'Đã duyệt'
+                                                                                                : item.facultyStatus ===
+                                                                                                    'REJECTED'
+                                                                                                  ? 'Từ chối'
+                                                                                                  : 'Đang chờ'}
+                                                                                        </Badge>
+                                                                                    </div>
+                                                                                </div>
+                                                                                {item.cancelReason && (
+                                                                                    <div>
+                                                                                        <h4 className="font-medium text-sm text-muted-foreground mb-1">
+                                                                                            Lý do hủy/từ chối
+                                                                                        </h4>
+                                                                                        <p className="text-sm text-destructive">
+                                                                                            {item.cancelReason}
+                                                                                        </p>
+                                                                                    </div>
+                                                                                )}
+                                                                            </div>
+                                                                        </DialogContent>
+                                                                    </Dialog>
+                                                                </p>
+                                                                <p
+                                                                    className="text-sm text-muted-foreground truncate max-w-60"
+                                                                    title={item.objective}
+                                                                >
+                                                                    {item.objective}
+                                                                </p>
+                                                            </div>
+                                                        </TableCell>
+                                                        <TableCell>
+                                                            {item.instructor ? (
+                                                                <div className="flex flex-col gap-1">
+                                                                    <span className="font-medium text-sm">
+                                                                        {item.instructor.name}
+                                                                    </span>
+                                                                    <Badge
+                                                                        variant={
+                                                                            item.instructorStatus === 'ACCEPTED'
+                                                                                ? 'default'
+                                                                                : item.instructorStatus === 'REJECTED'
+                                                                                  ? 'destructive'
+                                                                                  : 'secondary'
+                                                                        }
+                                                                        className="w-fit text-xs"
+                                                                    >
+                                                                        {item.instructorStatus === 'ACCEPTED'
+                                                                            ? 'Đã đồng ý'
                                                                             : item.instructorStatus === 'REJECTED'
-                                                                              ? 'destructive'
-                                                                              : 'secondary'
-                                                                    }
-                                                                    className="w-fit text-xs"
-                                                                >
-                                                                    {item.instructorStatus === 'ACCEPTED'
-                                                                        ? 'Đã đồng ý'
-                                                                        : item.instructorStatus === 'REJECTED'
-                                                                          ? 'Từ chối'
-                                                                          : 'Chờ xác nhận'}
-                                                                </Badge>
-                                                            </div>
-                                                        ) : (
-                                                            <span className="text-muted-foreground text-sm">Chưa chọn</span>
-                                                        )}
-                                                    </TableCell>
-                                                    <TableCell>
-                                                        <Badge variant={statusVariant[item.status] || 'default'}>
-                                                            {statusLabel[item.status] ?? item.status}
-                                                        </Badge>
-                                                        {item.status !== 'PENDING' && item.cancelReason && (
-                                                            <p className="text-xs text-muted-foreground mt-2 line-clamp-1 italic">
-                                                                Lý do: {item.cancelReason}
-                                                            </p>
-                                                        )}
-                                                    </TableCell>
-                                                    <TableCell className="pr-6 align-top">
-                                                        {item.status === 'PENDING' &&
-                                                        item.instructorStatus !== 'ACCEPTED' ? (
-                                                            <div className="flex flex-col gap-2 w-max">
-                                                                <Input
-                                                                    size={1}
-                                                                    className="h-8 text-xs bg-background"
-                                                                    value={cancelReasonById[item.id] ?? ''}
-                                                                    onChange={(e) =>
-                                                                        setCancelReasonById((prev) => ({
-                                                                            ...prev,
-                                                                            [item.id]: e.target.value,
-                                                                        }))
-                                                                    }
-                                                                    placeholder="Lý do hủy..."
-                                                                />
+                                                                              ? 'Từ chối'
+                                                                              : 'Chờ xác nhận'}
+                                                                    </Badge>
+                                                                </div>
+                                                            ) : (
+                                                                <span className="text-muted-foreground text-sm">
+                                                                    Chưa chọn
+                                                                </span>
+                                                            )}
+                                                        </TableCell>
+                                                        <TableCell>
+                                                            <Badge variant={displayStatusVariant[displayStatus]}>
+                                                                {displayStatusLabel[displayStatus]}
+                                                            </Badge>
+                                                            {displayStatus !== 'PENDING_INSTRUCTOR' &&
+                                                                displayStatus !== 'PENDING_FACULTY' &&
+                                                                item.cancelReason && (
+                                                                    <p className="text-xs text-muted-foreground mt-2 line-clamp-1 italic">
+                                                                        Lý do: {item.cancelReason}
+                                                                    </p>
+                                                                )}
+                                                        </TableCell>
+                                                        <TableCell className="pr-6 align-top">
+                                                            {canEditRegistration(item) ? (
                                                                 <Button
-                                                                    variant="outline"
-                                                                    className="text-destructive border-destructive/30 hover:bg-destructive/10 h-8 self-end"
+                                                                    variant="secondary"
+                                                                    className="h-8 mb-2"
                                                                     size="sm"
-                                                                    onClick={() => handleCancel(item.id)}
-                                                                    disabled={cancelMutation.isPending}
+                                                                    onClick={() => openEditDialog(item)}
                                                                 >
-                                                                    Hủy đăng ký
+                                                                    <Pencil className="h-3.5 w-3.5 mr-1" />
+                                                                    Sửa
                                                                 </Button>
-                                                            </div>
-                                                        ) : null}
-                                                    </TableCell>
-                                                </TableRow>
-                                            ))}
+                                                            ) : null}
+
+                                                            {item.status === 'PENDING' &&
+                                                            item.instructorStatus !== 'ACCEPTED' &&
+                                                            item.instructorStatus !== 'REJECTED' ? (
+                                                                <div className="flex flex-col gap-2 w-max">
+                                                                    <Input
+                                                                        size={1}
+                                                                        className="h-8 text-xs bg-background"
+                                                                        value={cancelReasonById[item.id] ?? ''}
+                                                                        onChange={(e) =>
+                                                                            setCancelReasonById((prev) => ({
+                                                                                ...prev,
+                                                                                [item.id]: e.target.value,
+                                                                            }))
+                                                                        }
+                                                                        placeholder="Lý do hủy..."
+                                                                    />
+                                                                    <Button
+                                                                        variant="outline"
+                                                                        className="text-destructive border-destructive/30 hover:bg-destructive/10 h-8 self-end"
+                                                                        size="sm"
+                                                                        onClick={() => handleCancel(item.id)}
+                                                                        disabled={cancelMutation.isPending}
+                                                                    >
+                                                                        Hủy đăng ký
+                                                                    </Button>
+                                                                </div>
+                                                            ) : null}
+                                                        </TableCell>
+                                                    </TableRow>
+                                                );
+                                            }))}
                                         </TableBody>
                                     </Table>
                                 </div>
@@ -566,6 +1212,214 @@ export function ProjectRegistrationPage({ title }: ProjectRegistrationPageProps)
                     </Card>
                 </div>
             </div>
+
+            <Dialog open={memberPickerOpen} onOpenChange={setMemberPickerOpen}>
+                <DialogContent className="sm:max-w-2xl">
+                    <DialogHeader>
+                        <DialogTitle>Chọn thành viên cùng khoa</DialogTitle>
+                    </DialogHeader>
+
+                    <div className="space-y-3 py-1">
+                        <Input
+                            value={memberKeyword}
+                            onChange={(event) => setMemberKeyword(event.target.value)}
+                            placeholder="Tìm theo tên, email hoặc mã sinh viên..."
+                            className="h-10"
+                        />
+                        <div className="flex gap-2">
+                            <Select value={selectedMajorId} onValueChange={handleMajorFilterChange}>
+                                <SelectTrigger className="h-10">
+                                    <SelectValue placeholder="Lọc theo ngành" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="all">Tất cả ngành</SelectItem>
+                                    {majors.map((major) => (
+                                        <SelectItem key={major.id} value={major.id}>
+                                            {major.name}
+                                        </SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
+
+                            <Select
+                                value={selectedClassId}
+                                onValueChange={setSelectedClassId}
+                                disabled={classes.length === 0 && selectedMajorId !== 'all'}
+                            >
+                                <SelectTrigger className="h-10">
+                                    <SelectValue placeholder="Lọc theo lớp" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="all">Tất cả lớp</SelectItem>
+                                    {classes.map((classItem) => (
+                                        <SelectItem key={classItem.id} value={classItem.id}>
+                                            {classItem.name}
+                                        </SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
+                        </div>
+                        <p className="text-xs text-muted-foreground">
+                            Hiển thị tối đa {MEMBER_PICKER_LIMIT} sinh viên mỗi lần tải.
+                        </p>
+
+                        {!myDepartmentId ? (
+                            <p className="text-sm text-destructive">
+                                Không tìm thấy thông tin khoa của tài khoản hiện tại.
+                            </p>
+                        ) : isLoadingDepartmentStudents ? (
+                            <ScrollArea className="h-90 rounded-md border">
+                                <div className="p-2 space-y-2">
+                                    {Array.from({ length: MEMBER_PICKER_LIMIT }).map((_, index) => (
+                                        <div
+                                            key={`member-picker-skeleton-${index}`}
+                                            className="h-14 rounded-md border px-3 py-2"
+                                        >
+                                            <Skeleton className="h-4 w-40" />
+                                            <Skeleton className="mt-2 h-3 w-56" />
+                                        </div>
+                                    ))}
+                                </div>
+                            </ScrollArea>
+                        ) : (
+                            <ScrollArea className="h-90 rounded-md border">
+                                <div className="p-2 space-y-1">
+                                    {filteredDepartmentStudents.length === 0 ? (
+                                        <div className="h-14 rounded-md border px-3 py-2 text-sm text-muted-foreground text-center flex items-center justify-center">
+                                            Không có sinh viên phù hợp để thêm.
+                                        </div>
+                                    ) : (
+                                        filteredDepartmentStudents.map((student) => (
+                                            <div
+                                                key={student.id}
+                                                className="h-14 flex items-center justify-between gap-3 rounded-md border px-3 py-2"
+                                            >
+                                                <div className="min-w-0">
+                                                    <p className="font-medium truncate">{student.name}</p>
+                                                    <p className="text-xs text-muted-foreground truncate">
+                                                        {student.code ? `${student.code} • ` : ''}
+                                                        {student.email}
+                                                    </p>
+                                                </div>
+                                                <Button
+                                                    type="button"
+                                                    size="sm"
+                                                    className="w-20 shrink-0"
+                                                    onClick={() => addStudentToTeam(student)}
+                                                >
+                                                    Thêm
+                                                </Button>
+                                            </div>
+                                        ))
+                                    )}
+                                </div>
+                            </ScrollArea>
+                        )}
+                    </div>
+                </DialogContent>
+            </Dialog>
+
+            <Dialog open={Boolean(editingRegistration)} onOpenChange={(open) => !open && closeEditDialog()}>
+                <DialogContent className="sm:max-w-xl">
+                    <DialogHeader>
+                        <DialogTitle>Chỉnh sửa thông tin đề tài</DialogTitle>
+                    </DialogHeader>
+                    <div className="space-y-4 py-2">
+                        <div className="space-y-2">
+                            <Label>
+                                Tên đề tài <span className="text-destructive">*</span>
+                            </Label>
+                            <Input value={editTitle} onChange={(e) => setEditTitle(e.target.value)} />
+                        </div>
+                        <div className="space-y-2">
+                            <Label>
+                                Mục tiêu <span className="text-destructive">*</span>
+                            </Label>
+                            <Textarea
+                                value={editObjective}
+                                onChange={(e) => setEditObjective(e.target.value)}
+                                className="min-h-24"
+                            />
+                        </div>
+                        <div className="space-y-2">
+                            <Label>Sản phẩm dự kiến</Label>
+                            <Textarea
+                                value={editExpectedOutput}
+                                onChange={(e) => setEditExpectedOutput(e.target.value)}
+                                className="min-h-20"
+                            />
+                        </div>
+                        <div className="space-y-2">
+                            <div className="flex items-center justify-between">
+                                <Label>Thành viên nhóm (tối đa 5)</Label>
+                                <Button
+                                    type="button"
+                                    variant="outline"
+                                    size="sm"
+                                    onClick={() => openMemberPicker('edit')}
+                                    disabled={editTeamMembers.length >= 5}
+                                >
+                                    <Plus className="h-4 w-4 mr-1" />
+                                    Thêm thành viên
+                                </Button>
+                            </div>
+                            {editTeamMembers.length === 0 ? (
+                                <p className="text-xs text-muted-foreground">Chưa có thành viên nhóm.</p>
+                            ) : (
+                                <div className="space-y-2">
+                                    {editTeamMembers.map((member, index) => (
+                                        <div
+                                            key={`${index}-${member.name}`}
+                                            className="grid grid-cols-1 md:grid-cols-[1fr_1fr_auto] gap-2"
+                                        >
+                                            <Input
+                                                value={member.name}
+                                                onChange={(e) =>
+                                                    setEditTeamMembers((prev) =>
+                                                        prev.map((item, i) =>
+                                                            i === index ? { ...item, name: e.target.value } : item,
+                                                        ),
+                                                    )
+                                                }
+                                                placeholder="Tên thành viên"
+                                            />
+                                            <Input
+                                                value={member.role}
+                                                onChange={(e) =>
+                                                    setEditTeamMembers((prev) =>
+                                                        prev.map((item, i) =>
+                                                            i === index ? { ...item, role: e.target.value } : item,
+                                                        ),
+                                                    )
+                                                }
+                                                placeholder="Role (nhập tay)"
+                                            />
+                                            <Button
+                                                type="button"
+                                                variant="ghost"
+                                                size="icon"
+                                                onClick={() =>
+                                                    setEditTeamMembers((prev) => prev.filter((_, i) => i !== index))
+                                                }
+                                            >
+                                                <Trash2 className="h-4 w-4" />
+                                            </Button>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
+                        <div className="flex justify-end gap-2 pt-2">
+                            <Button variant="outline" onClick={closeEditDialog}>
+                                Hủy
+                            </Button>
+                            <Button onClick={handleUpdate} disabled={updateMutation.isPending}>
+                                {updateMutation.isPending ? 'Đang lưu...' : 'Lưu thay đổi'}
+                            </Button>
+                        </div>
+                    </div>
+                </DialogContent>
+            </Dialog>
         </div>
     );
 }

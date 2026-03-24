@@ -64,6 +64,14 @@ export async function POST(request: NextRequest) {
                             email: true,
                             code: true,
                             phone: true,
+                            majorId: true,
+                            major: {
+                                select: {
+                                    id: true,
+                                    code: true,
+                                    name: true,
+                                },
+                            },
                         },
                     },
                 },
@@ -98,6 +106,14 @@ export async function POST(request: NextRequest) {
                         email: true,
                         code: true,
                         phone: true,
+                        majorId: true,
+                        major: {
+                            select: {
+                                id: true,
+                                code: true,
+                                name: true,
+                            },
+                        },
                     },
                 },
             },

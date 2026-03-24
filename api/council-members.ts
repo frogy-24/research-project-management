@@ -10,6 +10,12 @@ export interface CouncilMember {
         name: string;
         email: string;
         code?: string;
+        majorId?: string | null;
+        major?: {
+            id: string;
+            code: string;
+            name: string;
+        } | null;
     };
 }
 

@@ -12,6 +12,7 @@ import {
     FolderKanban,
     Activity,
     ClipboardCheck,
+    Link2,
     FileText,
     Building2,
     BookOpen,
@@ -20,11 +21,13 @@ import {
     UserCog,
     UserRound,
     UsersRound,
+    Mail,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAuthSession, useLogout } from '@/hooks/useAuth';
 import { getDashboardRoute } from '@/lib/role-routes';
 import { NotificationBell } from '@/components/layout/notification-bell';
+import { useMyTeamInvitations } from '@/hooks/useMyTeamInvitations';
 import {
     Sidebar,
     SidebarContent,
@@ -40,6 +43,7 @@ import {
     SidebarGroupContent,
 } from '@/components/ui/sidebar';
 import { Separator } from '@/components/ui/separator';
+import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import {
     DropdownMenu,
@@ -69,8 +73,8 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     // If not logged in, show minimalist layout (header-only or pure auth)
     if (!session) {
         return (
-            <div className="min-h-screen bg-gradient-to-b from-background via-background to-accent/20 flex flex-col">
-                <header className="sticky top-0 z-40 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80">
+            <div className="min-h-screen bg-linear-to-b from-background via-background to-accent/20 flex flex-col">
+                <header className="sticky top-0 z-40 border-b bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/80">
                     <div className="container mx-auto flex h-16 items-center justify-between px-4">
                         <Link href="/" className="flex items-center gap-2 font-semibold text-primary">
                             <GraduationCap className="h-6 w-6" />
@@ -101,7 +105,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                 <div className="flex min-h-screen w-full bg-background selection:bg-primary/20">
                     <AppSidebar session={session} />
                     <div className="flex flex-1 flex-col overflow-hidden w-full">
-                        <header className="sticky top-0 z-10 flex h-16 shrink-0 items-center gap-4 border-b bg-background/95 backdrop-blur px-6 supports-[backdrop-filter]:bg-background/60">
+                        <header className="sticky top-0 z-10 flex h-16 shrink-0 items-center gap-4 border-b bg-background/95 backdrop-blur px-6 supports-backdrop-filter:bg-background/60">
                             <div className="flex items-center gap-3 w-full">
                                 <SidebarTrigger />
                                 <Separator orientation="vertical" className="h-6 mx-2" />
@@ -179,8 +183,13 @@ function AppSidebar({ session }: { session: AuthSession }) {
     const pathname = usePathname();
     const isPortal = session.role === 'STUDENT' || session.role === 'LECTURER';
     const portalPrefix = `/${session.role.toLowerCase()}`;
+    const { data: teamInvitations = [] } = useMyTeamInvitations({ enabled: session.role === 'STUDENT' });
+    const pendingInvitationCount =
+        session.role === 'STUDENT'
+            ? teamInvitations.filter((invitation) => invitation.invitationStatus === 'PENDING').length
+            : 0;
 
-    let navItems: Array<{ title: string; url: string; icon: any }> = isPortal
+    let navItems: Array<{ title: string; url: string; icon: any; badgeCount?: number }> = isPortal
         ? [
               { title: 'Hồ sơ cá nhân', url: `${portalPrefix}/profile`, icon: User },
               {
@@ -215,6 +224,13 @@ function AppSidebar({ session }: { session: AuthSession }) {
                 icon: ClipboardCheck,
             },
         );
+    } else if (session.role === 'STUDENT') {
+        navItems.push({
+            title: 'Lời mời nhóm',
+            url: '/student/team-invitations',
+            icon: Mail,
+            badgeCount: pendingInvitationCount,
+        });
     } else if (session.role === 'DEAN') {
         navItems.push(
             {
@@ -251,6 +267,11 @@ function AppSidebar({ session }: { session: AuthSession }) {
                 title: 'Quản lý Hội đồng',
                 url: '/dean/councils',
                 icon: UsersRound,
+            },
+            {
+                title: 'Gán đề tài hội đồng',
+                url: '/dean/council-projects',
+                icon: Link2,
             },
         );
     } else if (session.role === 'ADMIN') {
@@ -315,6 +336,14 @@ function AppSidebar({ session }: { session: AuthSession }) {
                                             <Link href={item.url}>
                                                 <item.icon className="h-4 w-4" />
                                                 <span>{item.title}</span>
+                                                {item.badgeCount && item.badgeCount > 0 && (
+                                                    <Badge
+                                                        variant="destructive"
+                                                        className="ml-auto h-5 min-w-5 px-1.5 text-[10px] leading-none group-data-[collapsible=icon]:hidden"
+                                                    >
+                                                        {item.badgeCount > 99 ? '99+' : item.badgeCount}
+                                                    </Badge>
+                                                )}
                                             </Link>
                                         </SidebarMenuButton>
                                     </SidebarMenuItem>

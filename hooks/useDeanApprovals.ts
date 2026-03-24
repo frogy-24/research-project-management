@@ -7,11 +7,34 @@ type DeanApprovalStatus = 'APPROVED' | 'REJECTED';
 interface DeanApproval {
     id: string;
     title: string;
+    objective?: string | null;
+    expectedOutput?: string | null;
+    createdAt: string;
     user: {
         name: string;
+        email: string;
+        code?: string | null;
         department: string | null;
+        class?: {
+            name: string;
+            code: string;
+        } | null;
+        major?: {
+            name: string;
+            code: string;
+        } | null;
     };
     instructor: {
+        name: string;
+        email?: string;
+        code?: string | null;
+        department?: string | null;
+        departmentRef?: {
+            name: string;
+            code: string;
+        } | null;
+    } | null;
+    callRound?: {
         name: string;
     } | null;
     instructorStatus: string;
@@ -33,7 +56,7 @@ interface DeanApprovalsResponse {
 export interface DeanApprovalsFilters {
     search?: string;
     facultyStatus?: string;
-    instructorStatus?: string;
+    callRoundId?: string;
 }
 
 // Hook to fetch dean approvals with pagination and filters
@@ -55,8 +78,8 @@ export function useDeanApprovals(
             if (filters.facultyStatus) {
                 params.append('facultyStatus', filters.facultyStatus);
             }
-            if (filters.instructorStatus) {
-                params.append('instructorStatus', filters.instructorStatus);
+            if (filters.callRoundId) {
+                params.append('callRoundId', filters.callRoundId);
             }
             
             const res = await api.get(`/dean/approvals?${params.toString()}`);

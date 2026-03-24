@@ -311,6 +311,7 @@ exports.Prisma.ProjectRegistrationScalarFieldEnum = {
   title: 'title',
   objective: 'objective',
   expectedOutput: 'expectedOutput',
+  teamMembers: 'teamMembers',
   status: 'status',
   cancelReason: 'cancelReason',
   createdAt: 'createdAt',

@@ -7,7 +7,8 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-sans);
+  --font-sans: var(--font-roboto);
+  --font-roboto: var(--font-roboto);
   --font-mono: var(--font-geist-mono);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
@@ -125,5 +126,21 @@
   }
   html {
     @apply font-sans;
+  }
+
+  /* Keep form typography consistent across pages and portal-based selects/dialog controls. */
+  form,
+  form *,
+  input,
+  textarea,
+  select,
+  button,
+  label,
+  [role='combobox'],
+  [role='listbox'],
+  [role='option'],
+  [data-radix-select-content],
+  [data-radix-select-trigger] {
+    font-family: var(--font-roboto), sans-serif;
   }
 }

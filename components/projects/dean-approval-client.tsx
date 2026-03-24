@@ -4,6 +4,7 @@ import { useState, useMemo } from 'react';
 import { toast } from 'sonner';
 import { Search, X } from 'lucide-react';
 import { useDeanApprovals, useUpdateDeanApprovalStatus, type DeanApprovalsFilters } from '@/hooks/useDeanApprovals';
+import { useCallRounds } from '@/hooks/useCallRounds';
 import { useDebounce } from '@/hooks/useDebounce';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -11,6 +12,7 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Skeleton } from '@/components/ui/skeleton';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import {
     Pagination,
     PaginationContent,
@@ -23,11 +25,34 @@ import {
 interface Registration {
     id: string;
     title: string;
+    objective?: string | null;
+    expectedOutput?: string | null;
+    createdAt: string;
     user: {
         name: string;
+        email: string;
+        code?: string | null;
         department: string | null;
+        class?: {
+            name: string;
+            code: string;
+        } | null;
+        major?: {
+            name: string;
+            code: string;
+        } | null;
     };
     instructor: {
+        name: string;
+        email?: string;
+        code?: string | null;
+        department?: string | null;
+        departmentRef?: {
+            name: string;
+            code: string;
+        } | null;
+    } | null;
+    callRound?: {
         name: string;
     } | null;
     instructorStatus: string;
@@ -43,18 +68,11 @@ const FACULTY_STATUS_OPTIONS = [
     { value: 'REJECTED', label: 'Đã từ chối' },
 ];
 
-const INSTRUCTOR_STATUS_OPTIONS = [
-    { value: 'ALL', label: 'Tất cả trạng thái GVHD' },
-    { value: 'PENDING', label: 'Chờ xác nhận' },
-    { value: 'ACCEPTED', label: 'Đã chấp nhận' },
-    { value: 'REJECTED', label: 'Đã từ chối' },
-];
-
 export function DeanApprovalClient() {
     const [currentPage, setCurrentPage] = useState(1);
     const [searchInput, setSearchInput] = useState('');
     const [facultyStatus, setFacultyStatus] = useState('');
-    const [instructorStatus, setInstructorStatus] = useState('');
+    const [callRoundId, setCallRoundId] = useState('');
 
     // Debounce search input for better performance
     const debouncedSearch = useDebounce(searchInput, 300);
@@ -64,10 +82,11 @@ export function DeanApprovalClient() {
     const filters: DeanApprovalsFilters = useMemo(() => ({
         search: debouncedSearch || undefined,
         facultyStatus: facultyStatus && facultyStatus !== 'ALL' ? facultyStatus : undefined,
-        instructorStatus: instructorStatus && instructorStatus !== 'ALL' ? instructorStatus : undefined,
-    }), [debouncedSearch, facultyStatus, instructorStatus]);
+        callRoundId: callRoundId && callRoundId !== 'ALL' ? callRoundId : undefined,
+    }), [debouncedSearch, facultyStatus, callRoundId]);
 
     const { data, isLoading } = useDeanApprovals(currentPage, PAGE_SIZE, filters);
+    const { data: callRounds = [] } = useCallRounds();
     const mutation = useUpdateDeanApprovalStatus();
 
     const registrations = data?.data ?? [];
@@ -83,11 +102,14 @@ export function DeanApprovalClient() {
     const clearFilters = () => {
         setSearchInput('');
         setFacultyStatus('');
-        setInstructorStatus('');
+        setCallRoundId('');
         setCurrentPage(1);
     };
 
-    const hasActiveFilters = searchInput || (facultyStatus && facultyStatus !== 'ALL') || (instructorStatus && instructorStatus !== 'ALL');
+    const hasActiveFilters =
+        Boolean(searchInput) ||
+        Boolean(facultyStatus && facultyStatus !== 'ALL') ||
+        Boolean(callRoundId && callRoundId !== 'ALL');
 
     return (
         <div className="space-y-4">
@@ -95,7 +117,7 @@ export function DeanApprovalClient() {
             <div className="flex flex-col gap-4 p-4 bg-muted/30 rounded-lg border">
                 <div className="flex flex-wrap items-center gap-4">
                     {/* Search Input */}
-                    <div className="relative flex-1 min-w-[250px]">
+                    <div className="relative flex-1 min-w-62.5">
                         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                         <Input
                             placeholder="Tìm kiếm theo tên đề tài hoặc chủ nhiệm..."
@@ -110,7 +132,7 @@ export function DeanApprovalClient() {
                         value={facultyStatus}
                         onValueChange={(value) => handleFilterChange(setFacultyStatus, value)}
                     >
-                        <SelectTrigger className="w-[200px]">
+                        <SelectTrigger className="w-50">
                             <SelectValue placeholder="Trạng thái Khoa" />
                         </SelectTrigger>
                         <SelectContent>
@@ -122,18 +144,19 @@ export function DeanApprovalClient() {
                         </SelectContent>
                     </Select>
 
-                    {/* Instructor Status Filter */}
+                    {/* Call Round Filter */}
                     <Select
-                        value={instructorStatus}
-                        onValueChange={(value) => handleFilterChange(setInstructorStatus, value)}
+                        value={callRoundId}
+                        onValueChange={(value) => handleFilterChange(setCallRoundId, value)}
                     >
-                        <SelectTrigger className="w-[200px]">
-                            <SelectValue placeholder="Trạng thái GVHD" />
+                        <SelectTrigger className="w-60">
+                            <SelectValue placeholder="Đợt đăng ký" />
                         </SelectTrigger>
                         <SelectContent>
-                            {INSTRUCTOR_STATUS_OPTIONS.map((option) => (
-                                <SelectItem key={option.value} value={option.value}>
-                                    {option.label}
+                            <SelectItem value="ALL">Tất cả đợt</SelectItem>
+                            {callRounds.map((round) => (
+                                <SelectItem key={round.id} value={round.id}>
+                                    {round.name}
                                 </SelectItem>
                             ))}
                         </SelectContent>
@@ -175,15 +198,16 @@ export function DeanApprovalClient() {
                                 />
                             </Badge>
                         )}
-                        {instructorStatus && instructorStatus !== 'ALL' && (
+                        {callRoundId && callRoundId !== 'ALL' && (
                             <Badge variant="secondary" className="gap-1">
-                                GVHD: {INSTRUCTOR_STATUS_OPTIONS.find(o => o.value === instructorStatus)?.label}
+                                Đợt: {callRounds.find((round) => round.id === callRoundId)?.name || 'Không xác định'}
                                 <X
                                     className="h-3 w-3 cursor-pointer"
-                                    onClick={() => handleFilterChange(setInstructorStatus, '')}
+                                    onClick={() => handleFilterChange(setCallRoundId, '')}
                                 />
                             </Badge>
                         )}
+                        <Badge variant="outline">GVHD: Đã chấp nhận</Badge>
                     </div>
                 )}
             </div>
@@ -239,7 +263,7 @@ export function DeanApprovalClient() {
                                         <TableCell className="text-muted-foreground">
                                             {(currentPage - 1) * PAGE_SIZE + index + 1}
                                         </TableCell>
-                                        <TableCell className="font-medium max-w-[300px] truncate">{req.title}</TableCell>
+                                        <TableCell className="font-medium max-w-75 truncate">{req.title}</TableCell>
                                         <TableCell>{req.user.name}</TableCell>
                                         <TableCell>
                                             {req.instructor ? (
@@ -278,6 +302,120 @@ export function DeanApprovalClient() {
                                             </Badge>
                                         </TableCell>
                                         <TableCell className="text-right space-x-2">
+                                            <Dialog>
+                                                <DialogTrigger asChild>
+                                                    <Button variant="outline" size="sm">Chi tiết</Button>
+                                                </DialogTrigger>
+                                                <DialogContent className="sm:max-w-2xl">
+                                                    <DialogHeader>
+                                                        <DialogTitle>Chi tiết đề tài đăng ký</DialogTitle>
+                                                    </DialogHeader>
+
+                                                    <div className="space-y-4 py-2">
+                                                        <div className="rounded-lg border bg-muted/30 p-4">
+                                                            <h4 className="text-sm font-medium mb-3">Thông tin sinh viên</h4>
+                                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
+                                                                <div>
+                                                                    <p className="text-muted-foreground text-xs">Họ và tên</p>
+                                                                    <p className="font-medium">{req.user.name}</p>
+                                                                </div>
+                                                                <div>
+                                                                    <p className="text-muted-foreground text-xs">Mã sinh viên</p>
+                                                                    <p className="font-medium">{req.user.code || 'N/A'}</p>
+                                                                </div>
+                                                                <div>
+                                                                    <p className="text-muted-foreground text-xs">Email</p>
+                                                                    <p className="font-medium">{req.user.email}</p>
+                                                                </div>
+                                                                <div>
+                                                                    <p className="text-muted-foreground text-xs">Khoa</p>
+                                                                    <p className="font-medium">{req.user.department || 'N/A'}</p>
+                                                                </div>
+                                                                <div>
+                                                                    <p className="text-muted-foreground text-xs">Lớp</p>
+                                                                    <p className="font-medium">{req.user.class?.name || 'N/A'}</p>
+                                                                </div>
+                                                                <div>
+                                                                    <p className="text-muted-foreground text-xs">Ngành</p>
+                                                                    <p className="font-medium">{req.user.major?.name || 'N/A'}</p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div className="rounded-lg border bg-muted/30 p-4">
+                                                            <h4 className="text-sm font-medium mb-3">Thông tin giảng viên hướng dẫn</h4>
+                                                            {req.instructor ? (
+                                                                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
+                                                                    <div>
+                                                                        <p className="text-muted-foreground text-xs">Họ và tên</p>
+                                                                        <p className="font-medium">{req.instructor.name}</p>
+                                                                    </div>
+                                                                    <div>
+                                                                        <p className="text-muted-foreground text-xs">Mã giảng viên</p>
+                                                                        <p className="font-medium">{req.instructor.code || 'N/A'}</p>
+                                                                    </div>
+                                                                    <div>
+                                                                        <p className="text-muted-foreground text-xs">Email</p>
+                                                                        <p className="font-medium">{req.instructor.email || 'N/A'}</p>
+                                                                    </div>
+                                                                    <div>
+                                                                        <p className="text-muted-foreground text-xs">Khoa/Đơn vị</p>
+                                                                        <p className="font-medium">
+                                                                            {req.instructor.departmentRef?.name || req.instructor.department || 'N/A'}
+                                                                        </p>
+                                                                    </div>
+                                                                </div>
+                                                            ) : (
+                                                                <p className="text-sm text-muted-foreground">Chưa có giảng viên hướng dẫn.</p>
+                                                            )}
+                                                        </div>
+
+                                                        <div className="rounded-lg border p-4 space-y-4">
+                                                            <div>
+                                                                <h4 className="text-sm font-medium text-muted-foreground mb-1">Tên đề tài</h4>
+                                                                <p className="text-sm font-semibold leading-6">{req.title}</p>
+                                                            </div>
+                                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
+                                                                <div>
+                                                                    <p className="text-muted-foreground text-xs mb-1">Đợt đăng ký</p>
+                                                                    <p className="font-medium">{req.callRound?.name || 'N/A'}</p>
+                                                                </div>
+                                                                <div>
+                                                                    <p className="text-muted-foreground text-xs mb-1">Trạng thái phản hồi GVHD</p>
+                                                                    <Badge
+                                                                        variant={
+                                                                            req.instructorStatus === 'ACCEPTED'
+                                                                                ? 'default'
+                                                                                : req.instructorStatus === 'REJECTED'
+                                                                                  ? 'destructive'
+                                                                                  : 'secondary'
+                                                                        }
+                                                                    >
+                                                                        {req.instructorStatus === 'ACCEPTED'
+                                                                            ? 'Đã chấp nhận'
+                                                                            : req.instructorStatus === 'REJECTED'
+                                                                              ? 'Đã từ chối'
+                                                                              : 'Chờ xác nhận'}
+                                                                    </Badge>
+                                                                </div>
+                                                            </div>
+                                                            <div>
+                                                                <h4 className="text-sm font-medium text-muted-foreground mb-1">Mục tiêu nghiên cứu</h4>
+                                                                <p className="text-sm whitespace-pre-wrap leading-6">
+                                                                    {req.objective || 'Chưa có thông tin'}
+                                                                </p>
+                                                            </div>
+                                                            <div>
+                                                                <h4 className="text-sm font-medium text-muted-foreground mb-1">Sản phẩm dự kiến</h4>
+                                                                <p className="text-sm whitespace-pre-wrap leading-6">
+                                                                    {req.expectedOutput || 'Chưa có thông tin'}
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </DialogContent>
+                                            </Dialog>
+
                                             {req.facultyStatus === 'PENDING' && (
                                                 <>
                                                     <Button

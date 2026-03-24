@@ -1,7 +1,11 @@
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { getActorRole, getActorUserId } from "@/lib/project-permissions";
-import { cancelProjectRegistrationSchema } from "@/types/project-registration.schema";
+import {
+  cancelProjectRegistrationSchema,
+  updateProjectRegistrationSchema,
+} from "@/types/project-registration.schema";
+import { createNotifications } from "@/lib/notification-service";
 import { ZodError } from "zod";
 
 type Params = {
@@ -20,6 +24,15 @@ const mapZodError = (zodError: ZodError) => {
 };
 
 const canManageOwnRegistrations = (role: string) => role === "STUDENT" || role === "LECTURER";
+
+type TeamMemberPayload = {
+  name: string;
+  role: string;
+  studentId?: string;
+  invitationStatus?: "PENDING" | "ACCEPTED" | "REJECTED";
+  invitedAt?: Date | string;
+  respondedAt?: Date | string | null;
+};
 
 export async function PATCH(request: Request, { params }: Params) {
   try {
@@ -49,7 +62,15 @@ export async function PATCH(request: Request, { params }: Params) {
     const { id } = await params;
     const registration = await prisma.projectRegistration.findUnique({
       where: { id },
-      select: { id: true, userId: true, status: true },
+      select: {
+        id: true,
+        userId: true,
+        title: true,
+        status: true,
+        instructorStatus: true,
+        facultyStatus: true,
+        teamMembers: true,
+      },
     });
 
     if (!registration) {
@@ -72,37 +93,131 @@ export async function PATCH(request: Request, { params }: Params) {
       );
     }
 
-    if (registration.status !== "PENDING") {
-      return NextResponse.json(
-        {
-          success: false,
-          error: "Chỉ được hủy đăng ký ở trạng thái PENDING.",
+    const body: unknown = await request.json();
+
+    const cancelParsed = cancelProjectRegistrationSchema.safeParse(body);
+    if (cancelParsed.success) {
+      if (registration.status !== "PENDING") {
+        return NextResponse.json(
+          {
+            success: false,
+            error: "Chỉ được hủy đăng ký ở trạng thái PENDING.",
+          },
+          { status: 409 }
+        );
+      }
+
+      const updated = await prisma.projectRegistration.update({
+        where: { id },
+        data: {
+          status: "CANCELED",
+          cancelReason: cancelParsed.data.cancelReason,
         },
-        { status: 409 }
-      );
+      });
+
+      return NextResponse.json({ success: true, data: updated });
     }
 
-    const body: unknown = await request.json();
-    const parsed = cancelProjectRegistrationSchema.safeParse(body);
+    const updateParsed = updateProjectRegistrationSchema.safeParse(body);
 
-    if (!parsed.success) {
+    if (!updateParsed.success) {
       return NextResponse.json(
         {
           success: false,
           error: "Invalid payload",
-          fields: mapZodError(parsed.error),
+          fields: mapZodError(updateParsed.error),
         },
         { status: 400 }
       );
     }
 
+    if (registration.status !== "PENDING") {
+      return NextResponse.json(
+        {
+          success: false,
+          error: "Chỉ được sửa đăng ký ở trạng thái PENDING.",
+        },
+        { status: 409 }
+      );
+    }
+
+    if (registration.instructorStatus !== "PENDING" || registration.facultyStatus !== "PENDING") {
+      return NextResponse.json(
+        {
+          success: false,
+          error: "Chỉ được sửa khi cả trạng thái giảng viên và duyệt khoa đều là PENDING.",
+        },
+        { status: 409 }
+      );
+    }
+
+    const currentMembers = Array.isArray(registration.teamMembers)
+      ? (registration.teamMembers as unknown as TeamMemberPayload[])
+      : [];
+    const currentMembersByStudentId = new Map(
+      currentMembers
+        .filter((member) => Boolean(member.studentId))
+        .map((member) => [member.studentId as string, member])
+    );
+    const nowIso = new Date().toISOString();
+    const normalizedTeamMembers = (updateParsed.data.teamMembers ?? []).map((member) => {
+      const mapped: TeamMemberPayload = {
+        name: member.name,
+        role: member.role,
+      };
+
+      if (!member.studentId) {
+        return mapped;
+      }
+
+      const existing = currentMembersByStudentId.get(member.studentId);
+      mapped.studentId = member.studentId;
+      mapped.invitationStatus = existing?.invitationStatus ?? "PENDING";
+      mapped.invitedAt = existing?.invitedAt ?? nowIso;
+      mapped.respondedAt = existing?.respondedAt ?? null;
+      return mapped;
+    });
+
     const updated = await prisma.projectRegistration.update({
       where: { id },
       data: {
-        status: "CANCELED",
-        cancelReason: parsed.data.cancelReason,
+        title: updateParsed.data.title,
+        objective: updateParsed.data.objective,
+        expectedOutput: updateParsed.data.expectedOutput ?? null,
+        teamMembers: normalizedTeamMembers,
       },
     });
+
+    const currentStudentIds = new Set(
+      currentMembers.map((member) => member.studentId).filter((studentId): studentId is string => Boolean(studentId))
+    );
+    const newInviteeIds = Array.from(
+      new Set(
+        normalizedTeamMembers
+          .map((member) => member.studentId)
+          .filter(
+            (studentId): studentId is string =>
+              Boolean(studentId && studentId !== actorUserId && !currentStudentIds.has(studentId))
+          )
+      )
+    );
+
+    if (newInviteeIds.length > 0) {
+      await createNotifications(
+        newInviteeIds.map((inviteeId) => ({
+          userId: inviteeId,
+          type: "REGISTRATION_STATUS_CHANGE" as const,
+          title: "Bạn được mời tham gia nhóm đề tài",
+          message: `Bạn vừa được thêm vào nhóm của đề tài \"${updated.title}\". Vui lòng xác nhận tham gia.`,
+          link: "/student/team-invitations",
+          metadata: {
+            registrationId: updated.id,
+            inviterId: actorUserId,
+            action: "TEAM_MEMBER_INVITATION",
+          },
+        }))
+      );
+    }
 
     return NextResponse.json({ success: true, data: updated });
   } catch (error) {

@@ -299,6 +299,47 @@ async function seedUsers(orgData: {
   }
   console.log(`✅ Created ${students.length} STUDENTs (15-20 per class)\n`);
 
+  // Đảm bảo có sẵn 2 tài khoản sinh viên test cùng khoa CNTT
+  const itDepartmentId = departments.find((dept) => dept.code === 'IT')?.id;
+  const itMajorId = majors.find((major) => major.code === 'SE')?.id;
+  const itClassId = classes.find((cls) => cls.code.startsWith('SE'))?.id;
+
+  if (itDepartmentId && itMajorId && itClassId) {
+    const studentTestAccounts = [
+      {
+        email: 'sv0002@university.edu',
+        code: 'SV0002',
+        name: 'Sinh viên Test 02',
+      },
+      {
+        email: 'sv0003@university.edu',
+        code: 'SV0003',
+        name: 'Sinh viên Test 03',
+      },
+    ];
+
+    for (const account of studentTestAccounts) {
+      const existing = await prisma.user.findUnique({ where: { email: account.email } });
+      if (!existing) {
+        const created = await prisma.user.create({
+          data: {
+            email: account.email,
+            password: '123456',
+            name: account.name,
+            role: Role.STUDENT,
+            code: account.code,
+            departmentId: itDepartmentId,
+            majorId: itMajorId,
+            classId: itClassId,
+            gender: Gender.MALE,
+          },
+        });
+        students.push(created);
+        allUsers.push(created);
+      }
+    }
+  }
+
   return { admin, deans, lecturers, councilMembers, students, allUsers };
 }
 

@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { getActorRole, getActorUserId } from "@/lib/project-permissions";
 import { createProjectRegistrationSchema } from "@/types/project-registration.schema";
+import { createNotifications } from "@/lib/notification-service";
 import { ZodError } from "zod";
 
 const mapZodError = (zodError: ZodError) => {
@@ -16,6 +17,15 @@ const mapZodError = (zodError: ZodError) => {
 };
 
 const canManageOwnRegistrations = (role: string) => role === "STUDENT" || role === "LECTURER";
+
+type TeamMemberPayload = {
+  name: string;
+  role: string;
+  studentId?: string;
+  invitationStatus?: "PENDING" | "ACCEPTED" | "REJECTED";
+  invitedAt?: Date | string;
+  respondedAt?: Date | string | null;
+};
 
 export async function GET(request: Request) {
   try {
@@ -41,6 +51,16 @@ export async function GET(request: Request) {
       orderBy: { createdAt: "desc" },
       include: {
         instructor: { select: { id: true, name: true } },
+        callRound: {
+          select: {
+            id: true,
+            name: true,
+            registrationStartDate: true,
+            registrationEndDate: true,
+            projectStartDate: true,
+            projectEndDate: true,
+          },
+        },
       },
     });
 
@@ -82,11 +102,18 @@ export async function POST(request: Request) {
         ? (rawBody as Record<string, unknown>).callRoundId
         : null;
 
-    // Find all call rounds currently open for registration (by registrationStartDate/registrationEndDate)
+    // Find all call rounds currently open, approved, and applicable for current actor role
+    const applicableFor =
+      actorRole === "STUDENT"
+        ? ["STUDENT", "BOTH"]
+        : ["LECTURER", "BOTH"];
+
     const now = new Date();
     const openCallRounds = await prisma.callRound.findMany({
       where: {
         isActive: true,
+        approvalStatus: "APPROVED",
+        applicableFor: { in: applicableFor },
         registrationStartDate: { lte: now },
         registrationEndDate: { gte: now },
       },
@@ -101,7 +128,7 @@ export async function POST(request: Request) {
       return NextResponse.json(
         {
           success: false,
-          error: "Hiện tại chưa có đợt đăng ký nào đang mở.",
+          error: "Hiện tại chưa có đợt đăng ký phù hợp (đã duyệt và đúng đối tượng) đang mở.",
         },
         { status: 400 }
       );
@@ -173,6 +200,34 @@ export async function POST(request: Request) {
       }
     }
 
+    const existingRegistrationInRound = await prisma.projectRegistration.findFirst({
+      where: {
+        userId: actorUserId,
+        callRoundId: activeCallRound.id,
+        OR: [
+          { status: "APPROVED" },
+          { facultyStatus: "APPROVED" },
+          {
+            AND: [
+              { status: "PENDING" },
+              { instructorStatus: { not: "REJECTED" } },
+            ],
+          },
+        ],
+      },
+      select: { id: true },
+    });
+
+    if (existingRegistrationInRound) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: "Bạn đã có đề tài đang chờ duyệt hoặc đã được duyệt trong đợt đăng ký này.",
+        },
+        { status: 400 }
+      );
+    }
+
     // Validate payload with schema (reuse rawBody already read)
     const parsed = createProjectRegistrationSchema.safeParse(rawBody);
 
@@ -187,16 +242,59 @@ export async function POST(request: Request) {
       );
     }
 
+    const nowIso = new Date().toISOString();
+    const normalizedTeamMembers = (parsed.data.teamMembers ?? []).map((member) => {
+      const mapped: TeamMemberPayload = {
+        name: member.name,
+        role: member.role,
+      };
+
+      if (member.studentId) {
+        mapped.studentId = member.studentId;
+        mapped.invitationStatus = "PENDING";
+        mapped.invitedAt = nowIso;
+        mapped.respondedAt = null;
+      }
+
+      return mapped;
+    });
+
     const created = await prisma.projectRegistration.create({
       data: {
         userId: actorUserId,
         title: parsed.data.title,
         objective: parsed.data.objective,
         expectedOutput: parsed.data.expectedOutput ?? null,
+        teamMembers: normalizedTeamMembers,
         instructorId: parsed.data.instructorId ?? null,
         callRoundId: activeCallRound.id,
       },
     });
+
+    const inviteeIds = Array.from(
+      new Set(
+        normalizedTeamMembers
+          .map((member) => member.studentId)
+          .filter((studentId): studentId is string => Boolean(studentId && studentId !== actorUserId))
+      )
+    );
+
+    if (inviteeIds.length > 0) {
+      await createNotifications(
+        inviteeIds.map((inviteeId) => ({
+          userId: inviteeId,
+          type: "REGISTRATION_STATUS_CHANGE" as const,
+          title: "Bạn được mời tham gia nhóm đề tài",
+          message: `Bạn vừa được thêm vào nhóm của đề tài \"${created.title}\". Vui lòng xác nhận tham gia.`,
+          link: "/student/team-invitations",
+          metadata: {
+            registrationId: created.id,
+            inviterId: actorUserId,
+            action: "TEAM_MEMBER_INVITATION",
+          },
+        }))
+      );
+    }
 
     return NextResponse.json({ success: true, data: created }, { status: 201 });
   } catch (error) {

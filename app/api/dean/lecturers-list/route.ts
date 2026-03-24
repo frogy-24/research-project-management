@@ -32,6 +32,14 @@ export async function GET(request: NextRequest) {
                 email: true,
                 code: true,
                 departmentId: true,
+                majorId: true,
+                major: {
+                    select: {
+                        id: true,
+                        code: true,
+                        name: true,
+                    },
+                },
             },
             orderBy: { name: 'asc' },
         });
