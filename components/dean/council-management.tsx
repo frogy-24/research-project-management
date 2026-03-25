@@ -17,6 +17,9 @@ import {
     Split,
     Loader2,
     UserCog,
+    Pencil,
+    Trash2,
+    Eye,
 } from 'lucide-react';
 import { useCallRounds } from '@/hooks/useCallRounds';
 import {
@@ -27,7 +30,7 @@ import {
 } from '@/hooks/useCouncilMembers';
 import { useDeanLecturers } from '@/hooks/useDeanLecturers';
 import { useCallRoundStats } from '@/hooks/useCallRoundStats';
-import { useCouncils, useAutoDivideCouncils, useCreateCouncil } from '@/hooks/useCouncils';
+import { useCouncils, useAutoDivideCouncils, useCreateCouncil, useUpdateCouncil, useDeleteCouncil } from '@/hooks/useCouncils';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -326,6 +329,13 @@ export function CouncilManagement() {
         phone: '',
         organization: '',
     });
+    const [isEditCouncilDialogOpen, setIsEditCouncilDialogOpen] = useState(false);
+    const [editingCouncilId, setEditingCouncilId] = useState<string | null>(null);
+    const [detailCouncilId, setDetailCouncilId] = useState<string | null>(null);
+    const [editCouncilName, setEditCouncilName] = useState('');
+    const [editCouncilDescription, setEditCouncilDescription] = useState('');
+    const [editSelectedMembers, setEditSelectedMembers] = useState<Array<{ councilMemberId: string; role: string }>>([]);
+    const [editSearchMember, setEditSearchMember] = useState('');
 
     // Fetch call rounds của khoa
     const { data: callRoundsData, isLoading: loadingCallRounds } = useCallRounds();
@@ -356,6 +366,8 @@ export function CouncilManagement() {
     const removeMutation = useRemoveCouncilMember();
     const createExternalMutation = useCreateExternalCouncilMember();
     const autoDivideMutation = useAutoDivideCouncils(selectedCallRoundId || '');
+    const updateCouncilMutation = useUpdateCouncil();
+    const deleteCouncilMutation = useDeleteCouncil(selectedCallRoundId);
 
     // Lọc giảng viên chưa có trong hội đồng
     const councilMemberIds = councilMembers.map((m) => m.councilMember.id);
@@ -390,6 +402,11 @@ export function CouncilManagement() {
 
     const handleRemoveMember = (memberId: string) => {
         if (!selectedCallRoundId) return;
+
+        const confirmed = window.confirm('Bạn có chắc chắn muốn xóa thành viên này khỏi danh sách hội đồng?');
+        if (!confirmed) {
+            return;
+        }
 
         removeMutation.mutate(
             { callRoundId: selectedCallRoundId, councilMemberId: memberId },
@@ -458,6 +475,131 @@ export function CouncilManagement() {
         );
     };
 
+    const handleOpenEditCouncil = (council: CouncilWithRelations) => {
+        setEditingCouncilId(council.id);
+        setEditCouncilName(council.name);
+        setEditCouncilDescription(council.description || '');
+        setEditSelectedMembers(
+            council.members.map((member) => ({
+                councilMemberId: member.councilMemberId,
+                role: member.role || 'Ủy viên',
+            })),
+        );
+        setEditSearchMember('');
+        setIsEditCouncilDialogOpen(true);
+    };
+
+    const handleSaveCouncilEdit = () => {
+        if (!editingCouncilId) {
+            return;
+        }
+
+        if (!editCouncilName.trim()) {
+            toast.error('Vui lòng nhập tên hội đồng');
+            return;
+        }
+
+        if (editSelectedMembers.length < 3) {
+            toast.error('Vui lòng chọn đủ 3 thành viên');
+            return;
+        }
+
+        updateCouncilMutation.mutate(
+            {
+                councilId: editingCouncilId,
+                payload: {
+                    name: editCouncilName.trim(),
+                    description: editCouncilDescription.trim() || undefined,
+                    members: editSelectedMembers,
+                },
+            },
+            {
+                onSuccess: () => {
+                    toast.success('Đã cập nhật hội đồng thành công');
+                    setIsEditCouncilDialogOpen(false);
+                    setEditingCouncilId(null);
+                    setEditCouncilName('');
+                    setEditCouncilDescription('');
+                },
+                onError: (error: any) => {
+                    toast.error(error.response?.data?.error || 'Lỗi khi cập nhật hội đồng');
+                },
+            },
+        );
+    };
+
+    const handleDeleteCouncil = (council: CouncilWithRelations) => {
+        const confirmed = window.confirm(
+            `Bạn có chắc chắn muốn xóa ${council.name}?\nTất cả phân công thành viên và đề tài trong hội đồng này sẽ bị xóa.`,
+        );
+
+        if (!confirmed) {
+            return;
+        }
+
+        deleteCouncilMutation.mutate(council.id, {
+            onSuccess: () => {
+                toast.success('Đã xóa hội đồng thành công');
+            },
+            onError: (error: any) => {
+                toast.error(error.response?.data?.error || 'Lỗi khi xóa hội đồng');
+            },
+        });
+    };
+
+    const roleOptions = ['Chủ tịch', 'Thư ký', 'Ủy viên'];
+
+    const handleAddEditMember = (memberId: string) => {
+        if (editSelectedMembers.length >= 3) {
+            toast.error('Hội đồng tối đa 3 thành viên');
+            return;
+        }
+
+        const roleIndex = editSelectedMembers.length;
+        setEditSelectedMembers((prev) => [
+            ...prev,
+            {
+                councilMemberId: memberId,
+                role: roleOptions[roleIndex],
+            },
+        ]);
+    };
+
+    const handleRemoveEditMember = (memberId: string) => {
+        setEditSelectedMembers((prev) => prev.filter((member) => member.councilMemberId !== memberId));
+    };
+
+    const handleUpdateEditMemberRole = (memberId: string, role: string) => {
+        setEditSelectedMembers((prev) =>
+            prev.map((member) => (member.councilMemberId === memberId ? { ...member, role } : member)),
+        );
+    };
+
+    const editingCouncil = councils?.find((council) => council.id === editingCouncilId);
+    const occupiedMemberIdsInOtherCouncils = new Set(
+        (councils ?? [])
+            .filter((council) => council.id !== editingCouncilId)
+            .flatMap((council) => council.members.map((member) => member.councilMemberId)),
+    );
+    const editAvailableMembers = councilMembers
+        .filter((member) => !occupiedMemberIdsInOtherCouncils.has(member.councilMember.id))
+        .filter((member) => !editSelectedMembers.some((selected) => selected.councilMemberId === member.councilMember.id))
+        .filter(
+            (member) =>
+                member.councilMember.name.toLowerCase().includes(editSearchMember.toLowerCase()) ||
+                member.councilMember.email.toLowerCase().includes(editSearchMember.toLowerCase()),
+        );
+
+    const getEditMemberInfo = (memberId: string) => {
+        const fromCouncilMembers = councilMembers.find((member) => member.councilMember.id === memberId)?.councilMember;
+        if (fromCouncilMembers) {
+            return fromCouncilMembers;
+        }
+
+        const fromCurrentCouncil = editingCouncil?.members.find((member) => member.councilMemberId === memberId)?.councilMember;
+        return fromCurrentCouncil;
+    };
+
     const toggleLecturerSelection = (lecturerId: string) => {
         setSelectedLecturers((prev) =>
             prev.includes(lecturerId) ? prev.filter((id) => id !== lecturerId) : [...prev, lecturerId],
@@ -465,11 +607,20 @@ export function CouncilManagement() {
     };
 
     const selectedCallRound = approvedCallRounds.find((cr: { id: string }) => cr.id === selectedCallRoundId);
+    const detailCouncil = councils?.find((council) => council.id === detailCouncilId) ?? null;
 
  
     const handleCallRoundChange = (value: string) => {
         setSelectedCallRoundId(value);
         setCurrentPage(1);
+    };
+
+    const formatDate = (value?: Date | string | null) => {
+        if (!value) {
+            return 'Chưa cập nhật';
+        }
+
+        return new Date(value).toLocaleDateString('vi-VN');
     };
 
     return (
@@ -1002,6 +1153,7 @@ export function CouncilManagement() {
                                         <TableHead>Đề tài được phân công</TableHead>
                                         <TableHead className="w-30 text-center">SL thành viên</TableHead>
                                         <TableHead className="w-30 text-center">SL đề tài</TableHead>
+                                        <TableHead className="w-35 text-right">Thao tác</TableHead>
                                     </TableRow>
                                 </TableHeader>
                                 <TableBody>
@@ -1049,6 +1201,35 @@ export function CouncilManagement() {
                                             <TableCell className="text-center">
                                                 <Badge>{council._count.projects}</Badge>
                                             </TableCell>
+                                            <TableCell className="text-right">
+                                                <div className="flex items-center justify-end gap-2">
+                                                    <Button
+                                                        variant="outline"
+                                                        size="sm"
+                                                        onClick={() => setDetailCouncilId(council.id)}
+                                                    >
+                                                        <Eye className="h-4 w-4 mr-1" />
+                                                        Chi tiết
+                                                    </Button>
+                                                    <Button
+                                                        variant="outline"
+                                                        size="sm"
+                                                        onClick={() => handleOpenEditCouncil(council)}
+                                                    >
+                                                        <Pencil className="h-4 w-4 mr-1" />
+                                                        Sửa
+                                                    </Button>
+                                                    <Button
+                                                        variant="destructive"
+                                                        size="sm"
+                                                        onClick={() => handleDeleteCouncil(council)}
+                                                        disabled={deleteCouncilMutation.isPending}
+                                                    >
+                                                        <Trash2 className="h-4 w-4 mr-1" />
+                                                        Xóa
+                                                    </Button>
+                                                </div>
+                                            </TableCell>
                                         </TableRow>
                                     ))}
                                 </TableBody>
@@ -1057,6 +1238,262 @@ export function CouncilManagement() {
                     </CardContent>
                 </Card>
             )}
+
+            <Dialog open={Boolean(detailCouncil)} onOpenChange={(open) => !open && setDetailCouncilId(null)}>
+                <DialogContent className="sm:max-w-4xl max-h-[85vh] overflow-y-auto">
+                    {detailCouncil && (
+                        <>
+                            <DialogHeader>
+                                <DialogTitle>{detailCouncil.name}</DialogTitle>
+                                <DialogDescription>
+                                    {(detailCouncil.callRoundName as string | undefined) || selectedCallRound?.name}
+                                </DialogDescription>
+                            </DialogHeader>
+
+                            <div className="space-y-4 text-sm">
+                                <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
+                                    <div className="rounded-md border p-3">
+                                        <p className="text-muted-foreground">Ngày bảo vệ</p>
+                                        <p className="font-medium mt-1">
+                                            {formatDate(detailCouncil.defenseDate as Date | string | null | undefined)}
+                                        </p>
+                                    </div>
+                                    <div className="rounded-md border p-3">
+                                        <p className="text-muted-foreground">Nơi bảo vệ</p>
+                                        <p className="font-medium mt-1">{detailCouncil.defenseLocation || 'Chưa cập nhật'}</p>
+                                    </div>
+                                    <div className="rounded-md border p-3">
+                                        <p className="text-muted-foreground">Số thành viên</p>
+                                        <p className="font-medium mt-1">{detailCouncil._count.members}</p>
+                                    </div>
+                                    <div className="rounded-md border p-3">
+                                        <p className="text-muted-foreground">Số đề tài</p>
+                                        <p className="font-medium mt-1">{detailCouncil._count.projects}</p>
+                                    </div>
+                                </div>
+
+                                <div className="space-y-2">
+                                    <h3 className="font-semibold">Thành viên hội đồng</h3>
+                                    {detailCouncil.members.length === 0 ? (
+                                        <p className="text-muted-foreground">Chưa có dữ liệu thành viên hội đồng.</p>
+                                    ) : (
+                                        <div className="space-y-2">
+                                            {detailCouncil.members.map((member) => (
+                                                <div key={member.id} className="rounded-md border p-3 flex flex-wrap items-center gap-2">
+                                                    <Badge variant="secondary">{member.role || 'Ủy viên'}</Badge>
+                                                    <span className="font-medium">{member.councilMember.name}</span>
+                                                    <span className="text-muted-foreground">{member.councilMember.code || '-'}</span>
+                                                    <span className="text-muted-foreground">{member.councilMember.email || '-'}</span>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
+                                </div>
+
+                                <div className="space-y-3">
+                                    <h3 className="font-semibold">Đề tài và thành viên thực hiện</h3>
+                                    {detailCouncil.projects.length === 0 ? (
+                                        <p className="text-muted-foreground">Hội đồng này chưa được phân công đề tài.</p>
+                                    ) : (
+                                        <div className="space-y-3">
+                                            {detailCouncil.projects.map((project, index) => (
+                                                <div key={project.id} className="rounded-md border p-3 space-y-2">
+                                                    <p className="font-medium">{index + 1}. {project.projectRegistration.title}</p>
+                                                    <div className="rounded-md bg-muted/30 p-2 text-sm">
+                                                        <p className="text-xs text-muted-foreground mb-1">Giảng viên hướng dẫn:</p>
+                                                        {project.projectRegistration.instructor ? (
+                                                            <div className="flex flex-wrap items-center gap-2">
+                                                                <span className="font-medium">
+                                                                    {project.projectRegistration.instructor.name}
+                                                                </span>
+                                                                <span className="text-muted-foreground">
+                                                                    {project.projectRegistration.instructor.code || '-'}
+                                                                </span>
+                                                                <span className="text-muted-foreground">
+                                                                    {project.projectRegistration.instructor.email || '-'}
+                                                                </span>
+                                                            </div>
+                                                        ) : (
+                                                            <p className="text-muted-foreground">Chưa cập nhật</p>
+                                                        )}
+                                                    </div>
+                                                    <div className="rounded-md bg-muted/40 p-2">
+                                                        <p className="text-xs text-muted-foreground mb-2">Sinh viên thuộc đề tài:</p>
+                                                        {project.projectRegistration.students &&
+                                                        project.projectRegistration.students.length > 0 ? (
+                                                            <div className="space-y-2">
+                                                                {project.projectRegistration.students.map((student) => (
+                                                                    <div
+                                                                        key={student.id}
+                                                                        className="text-sm flex flex-wrap items-center gap-2"
+                                                                    >
+                                                                        <Badge variant="secondary">{student.roleLabel}</Badge>
+                                                                        <span className="font-medium">{student.name}</span>
+                                                                        <span className="text-muted-foreground">
+                                                                            {student.code || '-'}
+                                                                        </span>
+                                                                        <span className="text-muted-foreground">
+                                                                            {student.email || '-'}
+                                                                        </span>
+                                                                    </div>
+                                                                ))}
+                                                            </div>
+                                                        ) : (
+                                                            <p className="text-muted-foreground">Chưa có dữ liệu sinh viên.</p>
+                                                        )}
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        </>
+                    )}
+                </DialogContent>
+            </Dialog>
+
+            <Dialog open={isEditCouncilDialogOpen} onOpenChange={setIsEditCouncilDialogOpen}>
+                <DialogContent className="max-w-2xl sm:max-w-1/2">
+                    <DialogHeader>
+                        <DialogTitle>Chỉnh sửa hội đồng</DialogTitle>
+                        <DialogDescription>Cập nhật tên, mô tả và thành viên hội đồng</DialogDescription>
+                    </DialogHeader>
+                    <div className="space-y-4">
+                        <div className="space-y-2">
+                            <Label>
+                                Tên hội đồng <span className="text-destructive">*</span>
+                            </Label>
+                            <Input
+                                value={editCouncilName}
+                                onChange={(e) => setEditCouncilName(e.target.value)}
+                                placeholder="Nhập tên hội đồng"
+                            />
+                        </div>
+                        <div className="space-y-2">
+                            <Label>Mô tả</Label>
+                            <Input
+                                value={editCouncilDescription}
+                                onChange={(e) => setEditCouncilDescription(e.target.value)}
+                                placeholder="Nhập mô tả (tùy chọn)"
+                            />
+                        </div>
+
+                        <div className="space-y-2">
+                            <Label>
+                                Thành viên đã chọn ({editSelectedMembers.length}/3){' '}
+                                <span className="text-destructive">*</span>
+                            </Label>
+                            {editSelectedMembers.length === 0 ? (
+                                <div className="text-sm text-muted-foreground border border-dashed rounded p-4 text-center">
+                                    Chưa chọn thành viên nào
+                                </div>
+                            ) : (
+                                <div className="space-y-2 border rounded-md p-2">
+                                    {editSelectedMembers.map((member) => {
+                                        const memberInfo = getEditMemberInfo(member.councilMemberId);
+                                        return (
+                                            <div
+                                                key={member.councilMemberId}
+                                                className="flex items-center gap-2 p-2 bg-muted rounded-md"
+                                            >
+                                                <div className="flex-1">
+                                                    <p className="font-medium text-sm">{memberInfo?.name || 'Không xác định'}</p>
+                                                    <p className="text-xs text-muted-foreground">{memberInfo?.email || '-'}</p>
+                                                    <p className="text-xs text-muted-foreground">
+                                                        Ngành:{' '}
+                                                        {memberInfo && 'major' in memberInfo
+                                                            ? memberInfo.major?.name || memberInfo.major?.code || 'Chưa cập nhật'
+                                                            : 'Chưa cập nhật'}
+                                                    </p>
+                                                </div>
+                                                <Select
+                                                    value={member.role}
+                                                    onValueChange={(role) =>
+                                                        handleUpdateEditMemberRole(member.councilMemberId, role)
+                                                    }
+                                                >
+                                                    <SelectTrigger className="w-32.5">
+                                                        <SelectValue />
+                                                    </SelectTrigger>
+                                                    <SelectContent>
+                                                        {roleOptions.map((role) => (
+                                                            <SelectItem key={role} value={role}>
+                                                                {role}
+                                                            </SelectItem>
+                                                        ))}
+                                                    </SelectContent>
+                                                </Select>
+                                                <Button
+                                                    variant="ghost"
+                                                    size="sm"
+                                                    onClick={() => handleRemoveEditMember(member.councilMemberId)}
+                                                >
+                                                    <UserMinus className="h-4 w-4" />
+                                                </Button>
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            )}
+                        </div>
+
+                        {editSelectedMembers.length < 3 && (
+                            <div className="space-y-2">
+                                <Label>Chọn thêm thành viên</Label>
+                                <div className="relative">
+                                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                                    <Input
+                                        placeholder="Tìm kiếm thành viên..."
+                                        value={editSearchMember}
+                                        onChange={(e) => setEditSearchMember(e.target.value)}
+                                        className="pl-10"
+                                    />
+                                </div>
+                                <ScrollArea className="h-50 border rounded-md p-2">
+                                    {editAvailableMembers.length === 0 ? (
+                                        <p className="text-center text-sm text-muted-foreground py-4">
+                                            Không còn thành viên khả dụng để thêm
+                                        </p>
+                                    ) : (
+                                        <div className="space-y-1">
+                                            {editAvailableMembers.map((member) => (
+                                                <div
+                                                    key={member.councilMember.id}
+                                                    className="flex items-center justify-between p-2 hover:bg-muted rounded-md cursor-pointer"
+                                                    onClick={() => handleAddEditMember(member.councilMember.id)}
+                                                >
+                                                    <div>
+                                                        <p className="font-medium text-sm">{member.councilMember.name}</p>
+                                                        <p className="text-xs text-muted-foreground">{member.councilMember.email}</p>
+                                                        <p className="text-xs text-muted-foreground">
+                                                            Ngành:{' '}
+                                                            {member.councilMember.major?.name ||
+                                                                member.councilMember.major?.code ||
+                                                                'Chưa cập nhật'}
+                                                        </p>
+                                                    </div>
+                                                    <Button variant="ghost" size="sm">
+                                                        <Plus className="h-4 w-4" />
+                                                    </Button>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
+                                </ScrollArea>
+                            </div>
+                        )}
+                    </div>
+                    <DialogFooter>
+                        <DialogClose asChild>
+                            <Button variant="outline">Hủy</Button>
+                        </DialogClose>
+                        <Button onClick={handleSaveCouncilEdit} disabled={updateCouncilMutation.isPending}>
+                            {updateCouncilMutation.isPending ? 'Đang lưu...' : 'Lưu thay đổi'}
+                        </Button>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
         </div>
     );
 }

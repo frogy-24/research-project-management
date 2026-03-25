@@ -335,6 +335,27 @@ exports.Prisma.NotificationScalarFieldEnum = {
   readAt: 'readAt'
 };
 
+exports.Prisma.OfficeMeetingScalarFieldEnum = {
+  id: 'id',
+  projectId: 'projectId',
+  instructorId: 'instructorId',
+  target: 'target',
+  memberUserIds: 'memberUserIds',
+  meetingAt: 'meetingAt',
+  location: 'location',
+  note: 'note',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.OfficeMeetingViewScalarFieldEnum = {
+  id: 'id',
+  meetingId: 'meetingId',
+  userId: 'userId',
+  isRead: 'isRead',
+  readAt: 'readAt'
+};
+
 exports.Prisma.CallRoundInstructorScalarFieldEnum = {
   id: 'id',
   callRoundId: 'callRoundId',
@@ -501,6 +522,8 @@ exports.Prisma.ModelName = {
   ExtensionRequest: 'ExtensionRequest',
   ProjectRegistration: 'ProjectRegistration',
   Notification: 'Notification',
+  OfficeMeeting: 'OfficeMeeting',
+  OfficeMeetingView: 'OfficeMeetingView',
   CallRoundInstructor: 'CallRoundInstructor',
   CallRoundCouncilMember: 'CallRoundCouncilMember',
   Council: 'Council',

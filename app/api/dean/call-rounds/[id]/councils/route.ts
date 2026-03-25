@@ -1,6 +1,21 @@
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 import { getAuthUser } from '@/lib/auth-helpers';
+import { registrationTeamMemberSchema } from '@/types/project-registration.schema';
+
+const teamMemberArraySchema = registrationTeamMemberSchema.array();
+
+const parseTeamMembers = (raw: unknown): Array<{ name: string; studentId?: string }> => {
+    const parsed = teamMemberArraySchema.safeParse(raw);
+    if (!parsed.success) {
+        return [];
+    }
+
+    return parsed.data.map((member) => ({
+        name: member.name,
+        studentId: member.studentId,
+    }));
+};
 
 // GET /api/dean/call-rounds/[id]/councils - Lấy danh sách hội đồng của đợt
 export async function GET(_request: Request, { params }: { params: Promise<{ id: string }> }) {
@@ -28,6 +43,14 @@ export async function GET(_request: Request, { params }: { params: Promise<{ id:
         const councils = await prisma.council.findMany({
             where: { callRoundId: id },
             include: {
+                callRound: {
+                    select: {
+                        name: true,
+                        reviewDeadline: true,
+                        projectEndDate: true,
+                        contactInfo: true,
+                    },
+                },
                 members: {
                     include: {
                         councilMember: {
@@ -36,6 +59,7 @@ export async function GET(_request: Request, { params }: { params: Promise<{ id:
                                 name: true,
                                 email: true,
                                 code: true,
+                                phone: true,
                             },
                         },
                     },
@@ -58,9 +82,20 @@ export async function GET(_request: Request, { params }: { params: Promise<{ id:
                                     select: {
                                         id: true,
                                         name: true,
+                                        email: true,
                                         code: true,
                                     },
                                 },
+                                instructor: {
+                                    select: {
+                                        id: true,
+                                        name: true,
+                                        email: true,
+                                        code: true,
+                                        phone: true,
+                                    },
+                                },
+                                teamMembers: true,
                             },
                         },
                     },
@@ -75,7 +110,38 @@ export async function GET(_request: Request, { params }: { params: Promise<{ id:
             orderBy: { name: 'asc' },
         });
 
-        return NextResponse.json(councils);
+        const data = councils.map((council) => ({
+            ...council,
+            callRoundName: council.callRound.name,
+            defenseDate: council.callRound.reviewDeadline ?? council.callRound.projectEndDate,
+            defenseLocation: council.callRound.contactInfo,
+            projects: council.projects.map((project) => ({
+                ...project,
+                projectRegistration: {
+                    ...project.projectRegistration,
+                    students: [
+                        {
+                            id: project.projectRegistration.user.id,
+                            name: project.projectRegistration.user.name,
+                            email: project.projectRegistration.user.email,
+                            code: project.projectRegistration.user.code,
+                            roleLabel: 'Trưởng nhóm',
+                        },
+                        ...parseTeamMembers(project.projectRegistration.teamMembers)
+                            .filter((member) => member.studentId !== project.projectRegistration.user.id)
+                            .map((member, index) => ({
+                                id: member.studentId ?? `${project.projectRegistration.id}-member-${index}`,
+                                name: member.name,
+                                email: null,
+                                code: null,
+                                roleLabel: 'Thành viên',
+                            })),
+                    ],
+                },
+            })),
+        }));
+
+        return NextResponse.json(data);
     } catch (error) {
         console.error('Error fetching councils:', error);
         return NextResponse.json({ error: 'Failed to fetch councils' }, { status: 500 });

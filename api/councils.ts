@@ -4,6 +4,7 @@ import type {
   AutoDivideCouncilsRequest,
   AutoDivideCouncilsResponse,
   CreateCouncilRequest,
+  UpdateCouncilRequest,
 } from '@/types/council.schema';
 
 // Get councils for a call round
@@ -31,5 +32,20 @@ export async function createCouncil(
   request: CreateCouncilRequest
 ): Promise<CouncilWithRelations> {
   const response = await api.post('/dean/councils', request);
+  return response.data;
+}
+
+// Update council info
+export async function updateCouncil(
+  councilId: string,
+  request: UpdateCouncilRequest
+): Promise<CouncilWithRelations> {
+  const response = await api.patch(`/dean/councils/${councilId}`, request);
+  return response.data;
+}
+
+// Delete council
+export async function deleteCouncil(councilId: string): Promise<{ success: true; id: string }> {
+  const response = await api.delete(`/dean/councils/${councilId}`);
   return response.data;
 }

@@ -19,6 +19,16 @@ type TeamMemberJson = {
 
 const canRespondInvitation = (role: string) => role === 'STUDENT';
 
+const hasAcceptedMembership = (rawMembers: unknown, userId: string) => {
+    if (!Array.isArray(rawMembers)) {
+        return false;
+    }
+
+    return (rawMembers as TeamMemberJson[]).some(
+        (member) => member.studentId === userId && (member.invitationStatus ?? 'PENDING') === 'ACCEPTED',
+    );
+};
+
 export async function PATCH(request: Request, { params }: Params) {
     try {
         const actorUserId = getActorUserId(request);
@@ -77,6 +87,54 @@ export async function PATCH(request: Request, { params }: Params) {
 
         if ((currentMembers[targetIndex].invitationStatus ?? 'PENDING') !== 'PENDING') {
             return NextResponse.json({ success: false, error: 'Lời mời này đã được xác nhận trước đó.' }, { status: 409 });
+        }
+
+        if (parsed.data.decision === 'ACCEPTED') {
+            const ownRegistrationInRound = await prisma.projectRegistration.findFirst({
+                where: {
+                    callRoundId: registration.callRoundId,
+                    userId: actorUserId,
+                    status: { not: 'CANCELED' },
+                },
+                select: { id: true },
+            });
+
+            if (ownRegistrationInRound && ownRegistrationInRound.id !== registration.id) {
+                return NextResponse.json(
+                    {
+                        success: false,
+                        error: 'Bạn đã có đề tài trong đợt đăng ký này, không thể nhận thêm lời mời nhóm khác.',
+                    },
+                    { status: 409 },
+                );
+            }
+
+            const registrationsInRound = await prisma.projectRegistration.findMany({
+                where: {
+                    callRoundId: registration.callRoundId,
+                    status: { not: 'CANCELED' },
+                    id: { not: registration.id },
+                },
+                select: {
+                    id: true,
+                    teamMembers: true,
+                },
+            });
+
+            const acceptedElsewhere = registrationsInRound.some((item) =>
+                hasAcceptedMembership(item.teamMembers, actorUserId),
+            );
+
+            if (acceptedElsewhere) {
+                return NextResponse.json(
+                    {
+                        success: false,
+                        error:
+                            'Bạn đã tham gia một đề tài khác trong cùng đợt đăng ký, không thể nhận thêm lời mời này.',
+                    },
+                    { status: 409 },
+                );
+            }
         }
 
         const actorUser = await prisma.user.findUnique({

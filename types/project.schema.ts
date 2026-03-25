@@ -16,8 +16,10 @@ export const ProjectStatusEnum = z.enum([
 
 const relatedUserSchema = z.object({
   id: z.string().cuid(),
+  code: z.string().nullable().optional(),
   name: z.string(),
   email: z.string().email(),
+  phone: z.string().nullable().optional(),
   role: z.string().optional(),
   department: z.string().nullable().optional(),
 });

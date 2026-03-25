@@ -65,6 +65,11 @@ export async function POST(request: Request) {
             hour12: false,
         });
 
+        const currentUser = await prisma.user.findUnique({
+            where: { id: session.userId },
+            select: { name: true, email: true }
+        });
+
         const registration = await prisma.projectRegistration.findFirst({
             where: {
                 userId: project.leaderId,
@@ -98,25 +103,55 @@ export async function POST(request: Request) {
                     : candidateRecipientIds
                 : [project.leaderId];
 
+        const recipientIdsWithCreator = Array.from(new Set([...recipientIds, session.userId]));
+
+        // Lưu bản ghi gốc vào bảng riêng
+        const newOfficeMeeting = await prisma.officeMeeting.create({
+            data: {
+                projectId: project.id,
+                instructorId: session.userId,
+                target: parsed.data.meetingTarget,
+                memberUserIds: requestedMemberIds.length > 0 ? requestedMemberIds : [],
+                meetingAt: meetingDate,
+                location: parsed.data.location,
+                note: parsed.data.note || null,
+                views: {
+                    create: recipientIdsWithCreator.map((id) => ({
+                        userId: id,
+                        isRead: false,
+                    })),
+                },
+            },
+        });
+
+        // Vẫn gửi thông báo kèm reference tới ID của cuộc họp ở bảng mới
         const notifications = await prisma.$transaction(
-            recipientIds.map((recipientId) =>
+            recipientIdsWithCreator.map((recipientId) =>
                 prisma.notification.create({
                     data: {
                         userId: recipientId,
                         type: 'PROJECT_STATUS_CHANGE',
-                        title: 'Lịch họp Office mới',
+                        title: 'Lịch họp mới',
                         message:
-                            parsed.data.meetingTarget === 'GROUP'
-                                ? `Giảng viên đã hẹn họp office cho đề tài "${project.title}" vào ${formattedTime} tại ${parsed.data.location}.`
-                                : `Giảng viên đã hẹn họp office với sinh viên phụ trách đề tài "${project.title}" vào ${formattedTime} tại ${parsed.data.location}.`,
-                        link: '/student/progress',
+                            recipientId === session.userId
+                                ? `Bạn đã tạo lịch họp cho đề tài "${project.title}" vào ${formattedTime} tại ${parsed.data.location}.`
+                                : parsed.data.meetingTarget === 'GROUP'
+                                    ? `Giảng viên đã hẹn họp cho đề tài "${project.title}" vào ${formattedTime} tại ${parsed.data.location}.`
+                                    : `Giảng viên đã hẹn họp với sinh viên phụ trách đề tài "${project.title}" vào ${formattedTime} tại ${parsed.data.location}.`,
+                        link: recipientId === session.userId ? '/lecturer/meetings' : '/student/meetings',
                         metadata: {
+                            officeMeetingId: newOfficeMeeting.id, // Linking back
                             projectId: project.id,
                             meetingTarget: parsed.data.meetingTarget,
                             meetingAt: meetingDate.toISOString(),
                             location: parsed.data.location,
                             note: parsed.data.note || null,
                             kind: 'OFFICE_MEETING',
+                            scheduledBy: {
+                                id: session.userId,
+                                name: currentUser?.name || 'Giảng viên hướng dẫn',
+                                email: currentUser?.email || null,
+                            },
                         },
                     },
                     select: {

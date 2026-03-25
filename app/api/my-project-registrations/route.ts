@@ -27,6 +27,19 @@ type TeamMemberPayload = {
   respondedAt?: Date | string | null;
 };
 
+const isAcceptedTeamMember = (
+  rawMembers: unknown,
+  userId: string
+): boolean => {
+  if (!Array.isArray(rawMembers)) {
+    return false;
+  }
+
+  return (rawMembers as TeamMemberPayload[]).some(
+    (member) => member.studentId === userId && member.invitationStatus === "ACCEPTED"
+  );
+};
+
 export async function GET(request: Request) {
   try {
     const actorUserId = getActorUserId(request);
@@ -223,6 +236,33 @@ export async function POST(request: Request) {
         {
           success: false,
           error: "Bạn đã có đề tài đang chờ duyệt hoặc đã được duyệt trong đợt đăng ký này.",
+        },
+        { status: 400 }
+      );
+    }
+
+    const registrationsInRound = await prisma.projectRegistration.findMany({
+      where: {
+        callRoundId: activeCallRound.id,
+        status: { not: "CANCELED" },
+      },
+      select: {
+        id: true,
+        title: true,
+        teamMembers: true,
+      },
+    });
+
+    const acceptedMembership = registrationsInRound.find((registration) =>
+      isAcceptedTeamMember(registration.teamMembers, actorUserId)
+    );
+
+    if (acceptedMembership) {
+      return NextResponse.json(
+        {
+          success: false,
+          error:
+            "Bạn đã tham gia một đề tài trong đợt này (đã xác nhận lời mời nhóm), không thể đăng ký thêm đề tài khác.",
         },
         { status: 400 }
       );

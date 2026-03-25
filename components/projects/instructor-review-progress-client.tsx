@@ -4,11 +4,11 @@
 import { useEffect, useMemo, useState } from 'react';
 import { toast } from 'sonner';
 import { useProjects } from '@/hooks/useProjects';
-import { useUsers } from '@/hooks/useUsers';
 import { useAuthSession } from '@/hooks/useAuth';
 import { useCallRounds } from '@/hooks/useCallRounds';
 import { useCreateOfficeMeeting, useOfficeMeetingMembers } from '@/hooks/useOfficeMeetings';
 import { ProgressReportPanel } from '@/components/projects/progress-report-panel';
+import type { Project } from '@/types/project.schema';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -47,23 +47,20 @@ type ProjectWithLeader = {
 export function InstructorReviewProgressClient() {
     const { data: session } = useAuthSession();
     const { data: projects = [], isLoading: projectsLoading } = useProjects();
-    const { data: usersData, isLoading: usersLoading } = useUsers();
     const { data: callRounds = [] } = useCallRounds();
     const createOfficeMeeting = useCreateOfficeMeeting();
-    const users = usersData?.data ?? [];
     const [selectedProjectId, setSelectedProjectId] = useState<string | null>(null);
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedCallRoundId, setSelectedCallRoundId] = useState<string>('ALL');
     const [meetingDialogOpen, setMeetingDialogOpen] = useState(false);
     const [meetingCallRoundId, setMeetingCallRoundId] = useState<string>('ALL');
     const [meetingProjectId, setMeetingProjectId] = useState('');
-    const [meetingTarget, setMeetingTarget] = useState<'STUDENT' | 'GROUP'>('STUDENT');
     const [selectedMeetingMemberIds, setSelectedMeetingMemberIds] = useState<string[]>([]);
     const [meetingAt, setMeetingAt] = useState('');
     const [meetingLocation, setMeetingLocation] = useState('');
     const [meetingNote, setMeetingNote] = useState('');
 
-    const isLoading = projectsLoading || usersLoading;
+    const isLoading = projectsLoading;
 
     const instructorProjects = useMemo(() => {
         return projects.filter((p) => p.instructorId === session?.userId);
@@ -82,13 +79,22 @@ export function InstructorReviewProgressClient() {
 
     const projectsWithLeader = useMemo<ProjectWithLeader[]>(() => {
         return instructorProjects.map((project) => {
-            const leader = users.find((u) => u.id === project.leaderId);
+            const projectWithRelations = project as Project;
+            const leader = projectWithRelations.leader;
             return {
                 ...project,
-                leaderInfo: leader,
+                leaderInfo: leader
+                    ? {
+                          id: leader.id,
+                          name: leader.name,
+                          email: leader.email,
+                          code: leader.code ?? null,
+                          phone: leader.phone ?? null,
+                      }
+                    : undefined,
             };
         });
-    }, [instructorProjects, users]);
+    }, [instructorProjects]);
 
     const filteredProjects = useMemo(() => {
         const callRoundFiltered =
@@ -113,7 +119,10 @@ export function InstructorReviewProgressClient() {
         [projectsWithLeader, meetingProjectId],
     );
 
-    const meetingCallRoundOptions = useMemo(() => callRoundOptions, [callRoundOptions]);
+    const meetingCallRoundOptions = useMemo(
+        () => callRounds.map((round) => ({ id: round.id, name: round.name })),
+        [callRounds],
+    );
 
     const meetingProjects = useMemo(() => {
         if (meetingCallRoundId === 'ALL') {
@@ -147,7 +156,6 @@ export function InstructorReviewProgressClient() {
         const nextCallRoundId = project?.callRoundId ?? 'ALL';
         setMeetingCallRoundId(nextCallRoundId);
         setMeetingProjectId(project?.id ?? '');
-        setMeetingTarget('STUDENT');
         setSelectedMeetingMemberIds([]);
         setMeetingAt('');
         setMeetingLocation('');
@@ -198,19 +206,15 @@ export function InstructorReviewProgressClient() {
         createOfficeMeeting.mutate(
             {
                 projectId: meetingProjectId,
-                meetingTarget,
+                meetingTarget: 'GROUP',
                 meetingAt,
                 location: meetingLocation,
                 note: meetingNote.trim() || undefined,
-                memberUserIds: meetingTarget === 'GROUP' && selectedMeetingMemberIds.length > 0 ? selectedMeetingMemberIds : undefined,
+                memberUserIds: selectedMeetingMemberIds.length > 0 ? selectedMeetingMemberIds : undefined,
             },
             {
                 onSuccess: () => {
-                    toast.success(
-                        meetingTarget === 'GROUP'
-                            ? 'Đã đặt lịch họp office cho nhóm đề tài'
-                            : 'Đã đặt lịch họp office cho sinh viên',
-                    );
+                    toast.success('Đã đặt lịch họp thành công');
                     setMeetingDialogOpen(false);
                 },
                 onError: (error: unknown) => {
@@ -252,7 +256,7 @@ export function InstructorReviewProgressClient() {
                                 <CardTitle className="text-xl">{selectedProject.title}</CardTitle>
                                 <Button variant="outline" size="sm" onClick={() => openMeetingDialog(selectedProject)}>
                                     <CalendarPlus className="h-4 w-4 mr-2" />
-                                    Đặt lịch office
+                                    Đặt lịch họp
                                 </Button>
                             </div>
                             <div className="flex flex-wrap gap-4 text-sm text-muted-foreground mt-2">
@@ -302,11 +306,6 @@ export function InstructorReviewProgressClient() {
                             </SelectTrigger>
                             <SelectContent>
                                 <SelectItem value="ALL">Tất cả đợt đề tài</SelectItem>
-                                {callRoundOptions.map((option) => (
-                                    <SelectItem key={option.id} value={option.id}>
-                                        {option.name}
-                                    </SelectItem>
-                                ))}
                             </SelectContent>
                         </Select>
 
@@ -427,9 +426,9 @@ export function InstructorReviewProgressClient() {
             <Dialog open={meetingDialogOpen} onOpenChange={setMeetingDialogOpen}>
                 <DialogContent className='sm:max-w-1/2'>
                     <DialogHeader>
-                        <DialogTitle>Đặt lịch họp office</DialogTitle>
+                        <DialogTitle>Đặt lịch họp</DialogTitle>
                         <DialogDescription>
-                            Chọn đề tài và đối tượng (sinh viên hoặc nhóm đề tài) để tạo lịch hẹn.
+                            Chọn đợt, đề tài và người nhận lịch họp.
                         </DialogDescription>
                     </DialogHeader>
 
@@ -442,11 +441,6 @@ export function InstructorReviewProgressClient() {
                                 </SelectTrigger>
                                 <SelectContent>
                                     <SelectItem value="ALL">Tất cả đợt đề tài</SelectItem>
-                                    {meetingCallRoundOptions.map((option) => (
-                                        <SelectItem key={option.id} value={option.id}>
-                                            {option.name}
-                                        </SelectItem>
-                                    ))}
                                 </SelectContent>
                             </Select>
                         </div>
@@ -472,43 +466,19 @@ export function InstructorReviewProgressClient() {
                             )}
                         </div>
 
-                        <div className="space-y-2">
-                            <Label>Đối tượng lịch hẹn</Label>
-                            <Select
-                                value={meetingTarget}
-                                onValueChange={(value) => setMeetingTarget(value as 'STUDENT' | 'GROUP')}
-                            >
-                                <SelectTrigger>
-                                    <SelectValue placeholder="Chọn đối tượng" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectItem value="STUDENT">Sinh viên phụ trách đề tài</SelectItem>
-                                    <SelectItem value="GROUP">Nhóm đề tài</SelectItem>
-                                </SelectContent>
-                            </Select>
-                        </div>
-
                         {selectedMeetingProject && (
                             <div className="rounded-md border bg-muted/40 p-3 text-sm space-y-1">
                                 <p className="font-medium">{selectedMeetingProject.title}</p>
                                 <p className="text-muted-foreground">
-                                    {meetingTarget === 'GROUP' ? (
-                                        <span className="inline-flex items-center gap-1">
-                                            <Users className="h-4 w-4" />
-                                            Gửi lịch cho đại diện nhóm:{' '}
-                                            {selectedMeetingProject.leaderInfo?.name || 'N/A'}
-                                        </span>
-                                    ) : (
-                                        <span className="inline-flex items-center gap-1">
-                                            <User className="h-4 w-4" />
-                                            Sinh viên: {selectedMeetingProject.leaderInfo?.name || 'N/A'}
-                                        </span>
-                                    )}
+                                    <span className="inline-flex items-center gap-1">
+                                        <Users className="h-4 w-4" />
+                                        Chọn người nhận lịch trong danh sách bên dưới.
+                                    </span>
                                 </p>
                             </div>
                         )}
 
-                        {selectedMeetingProject && meetingTarget === 'GROUP' && (
+                        {selectedMeetingProject && (
                             <div className="space-y-2 rounded-md border p-3">
                                 <div className="flex items-center justify-between gap-2">
                                     <Label className="text-sm font-medium">Thành viên nhận lịch</Label>
@@ -551,11 +521,6 @@ export function InstructorReviewProgressClient() {
                                                         </p>
                                                     </div>
                                                 </div>
-                                                {member.invitationStatus && (
-                                                    <Badge variant="secondary" className="text-xs">
-                                                        {member.invitationStatus}
-                                                    </Badge>
-                                                )}
                                             </label>
                                         ))}
                                     </div>
@@ -564,7 +529,7 @@ export function InstructorReviewProgressClient() {
                                 <p className="text-xs text-muted-foreground">
                                     {hasAnyMemberSelected
                                         ? `Đã chọn ${selectedMeetingMemberIds.length} thành viên nhận lịch.`
-                                        : 'Nếu không chọn thành viên cụ thể, hệ thống sẽ gửi lịch cho toàn bộ nhóm.'}
+                                        : 'Nếu không chọn thành viên cụ thể, hệ thống sẽ gửi lịch cho toàn bộ đề tài.'}
                                 </p>
                             </div>
                         )}

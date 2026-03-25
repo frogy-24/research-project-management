@@ -89,6 +89,16 @@ export type ProjectRegistration = $Result.DefaultSelection<Prisma.$ProjectRegist
  */
 export type Notification = $Result.DefaultSelection<Prisma.$NotificationPayload>
 /**
+ * Model OfficeMeeting
+ * 
+ */
+export type OfficeMeeting = $Result.DefaultSelection<Prisma.$OfficeMeetingPayload>
+/**
+ * Model OfficeMeetingView
+ * 
+ */
+export type OfficeMeetingView = $Result.DefaultSelection<Prisma.$OfficeMeetingViewPayload>
+/**
  * Model CallRoundInstructor
  * 
  */
@@ -553,6 +563,26 @@ export class PrismaClient<
     * ```
     */
   get notification(): Prisma.NotificationDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.officeMeeting`: Exposes CRUD operations for the **OfficeMeeting** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more OfficeMeetings
+    * const officeMeetings = await prisma.officeMeeting.findMany()
+    * ```
+    */
+  get officeMeeting(): Prisma.OfficeMeetingDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.officeMeetingView`: Exposes CRUD operations for the **OfficeMeetingView** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more OfficeMeetingViews
+    * const officeMeetingViews = await prisma.officeMeetingView.findMany()
+    * ```
+    */
+  get officeMeetingView(): Prisma.OfficeMeetingViewDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.callRoundInstructor`: Exposes CRUD operations for the **CallRoundInstructor** model.
@@ -1052,6 +1082,8 @@ export namespace Prisma {
     ExtensionRequest: 'ExtensionRequest',
     ProjectRegistration: 'ProjectRegistration',
     Notification: 'Notification',
+    OfficeMeeting: 'OfficeMeeting',
+    OfficeMeetingView: 'OfficeMeetingView',
     CallRoundInstructor: 'CallRoundInstructor',
     CallRoundCouncilMember: 'CallRoundCouncilMember',
     Council: 'Council',
@@ -1072,7 +1104,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "department" | "major" | "class" | "user" | "callRound" | "projectType" | "project" | "progressReportTemplate" | "progressReportTemplateItem" | "progressReport" | "councilEvaluation" | "fundingDisbursement" | "extensionRequest" | "projectRegistration" | "notification" | "callRoundInstructor" | "callRoundCouncilMember" | "council" | "councilMemberAssignment" | "projectCouncilAssignment"
+      modelProps: "department" | "major" | "class" | "user" | "callRound" | "projectType" | "project" | "progressReportTemplate" | "progressReportTemplateItem" | "progressReport" | "councilEvaluation" | "fundingDisbursement" | "extensionRequest" | "projectRegistration" | "notification" | "officeMeeting" | "officeMeetingView" | "callRoundInstructor" | "callRoundCouncilMember" | "council" | "councilMemberAssignment" | "projectCouncilAssignment"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -2186,6 +2218,154 @@ export namespace Prisma {
           }
         }
       }
+      OfficeMeeting: {
+        payload: Prisma.$OfficeMeetingPayload<ExtArgs>
+        fields: Prisma.OfficeMeetingFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.OfficeMeetingFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OfficeMeetingPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.OfficeMeetingFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OfficeMeetingPayload>
+          }
+          findFirst: {
+            args: Prisma.OfficeMeetingFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OfficeMeetingPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.OfficeMeetingFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OfficeMeetingPayload>
+          }
+          findMany: {
+            args: Prisma.OfficeMeetingFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OfficeMeetingPayload>[]
+          }
+          create: {
+            args: Prisma.OfficeMeetingCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OfficeMeetingPayload>
+          }
+          createMany: {
+            args: Prisma.OfficeMeetingCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.OfficeMeetingCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OfficeMeetingPayload>[]
+          }
+          delete: {
+            args: Prisma.OfficeMeetingDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OfficeMeetingPayload>
+          }
+          update: {
+            args: Prisma.OfficeMeetingUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OfficeMeetingPayload>
+          }
+          deleteMany: {
+            args: Prisma.OfficeMeetingDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.OfficeMeetingUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.OfficeMeetingUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OfficeMeetingPayload>[]
+          }
+          upsert: {
+            args: Prisma.OfficeMeetingUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OfficeMeetingPayload>
+          }
+          aggregate: {
+            args: Prisma.OfficeMeetingAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateOfficeMeeting>
+          }
+          groupBy: {
+            args: Prisma.OfficeMeetingGroupByArgs<ExtArgs>
+            result: $Utils.Optional<OfficeMeetingGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.OfficeMeetingCountArgs<ExtArgs>
+            result: $Utils.Optional<OfficeMeetingCountAggregateOutputType> | number
+          }
+        }
+      }
+      OfficeMeetingView: {
+        payload: Prisma.$OfficeMeetingViewPayload<ExtArgs>
+        fields: Prisma.OfficeMeetingViewFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.OfficeMeetingViewFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OfficeMeetingViewPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.OfficeMeetingViewFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OfficeMeetingViewPayload>
+          }
+          findFirst: {
+            args: Prisma.OfficeMeetingViewFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OfficeMeetingViewPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.OfficeMeetingViewFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OfficeMeetingViewPayload>
+          }
+          findMany: {
+            args: Prisma.OfficeMeetingViewFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OfficeMeetingViewPayload>[]
+          }
+          create: {
+            args: Prisma.OfficeMeetingViewCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OfficeMeetingViewPayload>
+          }
+          createMany: {
+            args: Prisma.OfficeMeetingViewCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.OfficeMeetingViewCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OfficeMeetingViewPayload>[]
+          }
+          delete: {
+            args: Prisma.OfficeMeetingViewDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OfficeMeetingViewPayload>
+          }
+          update: {
+            args: Prisma.OfficeMeetingViewUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OfficeMeetingViewPayload>
+          }
+          deleteMany: {
+            args: Prisma.OfficeMeetingViewDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.OfficeMeetingViewUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.OfficeMeetingViewUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OfficeMeetingViewPayload>[]
+          }
+          upsert: {
+            args: Prisma.OfficeMeetingViewUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OfficeMeetingViewPayload>
+          }
+          aggregate: {
+            args: Prisma.OfficeMeetingViewAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateOfficeMeetingView>
+          }
+          groupBy: {
+            args: Prisma.OfficeMeetingViewGroupByArgs<ExtArgs>
+            result: $Utils.Optional<OfficeMeetingViewGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.OfficeMeetingViewCountArgs<ExtArgs>
+            result: $Utils.Optional<OfficeMeetingViewCountAggregateOutputType> | number
+          }
+        }
+      }
       CallRoundInstructor: {
         payload: Prisma.$CallRoundInstructorPayload<ExtArgs>
         fields: Prisma.CallRoundInstructorFieldRefs
@@ -2679,6 +2859,8 @@ export namespace Prisma {
     extensionRequest?: ExtensionRequestOmit
     projectRegistration?: ProjectRegistrationOmit
     notification?: NotificationOmit
+    officeMeeting?: OfficeMeetingOmit
+    officeMeetingView?: OfficeMeetingViewOmit
     callRoundInstructor?: CallRoundInstructorOmit
     callRoundCouncilMember?: CallRoundCouncilMemberOmit
     council?: CouncilOmit
@@ -2913,6 +3095,8 @@ export namespace Prisma {
     callRoundInstructors: number
     callRoundCouncilMembers: number
     councilAssignments: number
+    officeMeetingsAsInstructor: number
+    officeMeetingViews: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2927,6 +3111,8 @@ export namespace Prisma {
     callRoundInstructors?: boolean | UserCountOutputTypeCountCallRoundInstructorsArgs
     callRoundCouncilMembers?: boolean | UserCountOutputTypeCountCallRoundCouncilMembersArgs
     councilAssignments?: boolean | UserCountOutputTypeCountCouncilAssignmentsArgs
+    officeMeetingsAsInstructor?: boolean | UserCountOutputTypeCountOfficeMeetingsAsInstructorArgs
+    officeMeetingViews?: boolean | UserCountOutputTypeCountOfficeMeetingViewsArgs
   }
 
   // Custom InputTypes
@@ -3015,6 +3201,20 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountCouncilAssignmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: CouncilMemberAssignmentWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountOfficeMeetingsAsInstructorArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: OfficeMeetingWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountOfficeMeetingViewsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: OfficeMeetingViewWhereInput
   }
 
 
@@ -3152,6 +3352,7 @@ export namespace Prisma {
     councilEvaluations: number
     disbursements: number
     extensionRequests: number
+    officeMeetings: number
   }
 
   export type ProjectCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -3159,6 +3360,7 @@ export namespace Prisma {
     councilEvaluations?: boolean | ProjectCountOutputTypeCountCouncilEvaluationsArgs
     disbursements?: boolean | ProjectCountOutputTypeCountDisbursementsArgs
     extensionRequests?: boolean | ProjectCountOutputTypeCountExtensionRequestsArgs
+    officeMeetings?: boolean | ProjectCountOutputTypeCountOfficeMeetingsArgs
   }
 
   // Custom InputTypes
@@ -3200,6 +3402,13 @@ export namespace Prisma {
     where?: ExtensionRequestWhereInput
   }
 
+  /**
+   * ProjectCountOutputType without action
+   */
+  export type ProjectCountOutputTypeCountOfficeMeetingsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: OfficeMeetingWhereInput
+  }
+
 
   /**
    * Count Type ProgressReportTemplateCountOutputType
@@ -3238,6 +3447,37 @@ export namespace Prisma {
    */
   export type ProgressReportTemplateCountOutputTypeCountCallRoundsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: CallRoundWhereInput
+  }
+
+
+  /**
+   * Count Type OfficeMeetingCountOutputType
+   */
+
+  export type OfficeMeetingCountOutputType = {
+    views: number
+  }
+
+  export type OfficeMeetingCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    views?: boolean | OfficeMeetingCountOutputTypeCountViewsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * OfficeMeetingCountOutputType without action
+   */
+  export type OfficeMeetingCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OfficeMeetingCountOutputType
+     */
+    select?: OfficeMeetingCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * OfficeMeetingCountOutputType without action
+   */
+  export type OfficeMeetingCountOutputTypeCountViewsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: OfficeMeetingViewWhereInput
   }
 
 
@@ -7004,6 +7244,8 @@ export namespace Prisma {
     callRoundInstructors?: boolean | User$callRoundInstructorsArgs<ExtArgs>
     callRoundCouncilMembers?: boolean | User$callRoundCouncilMembersArgs<ExtArgs>
     councilAssignments?: boolean | User$councilAssignmentsArgs<ExtArgs>
+    officeMeetingsAsInstructor?: boolean | User$officeMeetingsAsInstructorArgs<ExtArgs>
+    officeMeetingViews?: boolean | User$officeMeetingViewsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -7086,6 +7328,8 @@ export namespace Prisma {
     callRoundInstructors?: boolean | User$callRoundInstructorsArgs<ExtArgs>
     callRoundCouncilMembers?: boolean | User$callRoundCouncilMembersArgs<ExtArgs>
     councilAssignments?: boolean | User$councilAssignmentsArgs<ExtArgs>
+    officeMeetingsAsInstructor?: boolean | User$officeMeetingsAsInstructorArgs<ExtArgs>
+    officeMeetingViews?: boolean | User$officeMeetingViewsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -7116,6 +7360,8 @@ export namespace Prisma {
       callRoundInstructors: Prisma.$CallRoundInstructorPayload<ExtArgs>[]
       callRoundCouncilMembers: Prisma.$CallRoundCouncilMemberPayload<ExtArgs>[]
       councilAssignments: Prisma.$CouncilMemberAssignmentPayload<ExtArgs>[]
+      officeMeetingsAsInstructor: Prisma.$OfficeMeetingPayload<ExtArgs>[]
+      officeMeetingViews: Prisma.$OfficeMeetingViewPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -7542,6 +7788,8 @@ export namespace Prisma {
     callRoundInstructors<T extends User$callRoundInstructorsArgs<ExtArgs> = {}>(args?: Subset<T, User$callRoundInstructorsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CallRoundInstructorPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     callRoundCouncilMembers<T extends User$callRoundCouncilMembersArgs<ExtArgs> = {}>(args?: Subset<T, User$callRoundCouncilMembersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CallRoundCouncilMemberPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     councilAssignments<T extends User$councilAssignmentsArgs<ExtArgs> = {}>(args?: Subset<T, User$councilAssignmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CouncilMemberAssignmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    officeMeetingsAsInstructor<T extends User$officeMeetingsAsInstructorArgs<ExtArgs> = {}>(args?: Subset<T, User$officeMeetingsAsInstructorArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OfficeMeetingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    officeMeetingViews<T extends User$officeMeetingViewsArgs<ExtArgs> = {}>(args?: Subset<T, User$officeMeetingViewsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OfficeMeetingViewPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -8306,6 +8554,54 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: CouncilMemberAssignmentScalarFieldEnum | CouncilMemberAssignmentScalarFieldEnum[]
+  }
+
+  /**
+   * User.officeMeetingsAsInstructor
+   */
+  export type User$officeMeetingsAsInstructorArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OfficeMeeting
+     */
+    select?: OfficeMeetingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OfficeMeeting
+     */
+    omit?: OfficeMeetingOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OfficeMeetingInclude<ExtArgs> | null
+    where?: OfficeMeetingWhereInput
+    orderBy?: OfficeMeetingOrderByWithRelationInput | OfficeMeetingOrderByWithRelationInput[]
+    cursor?: OfficeMeetingWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: OfficeMeetingScalarFieldEnum | OfficeMeetingScalarFieldEnum[]
+  }
+
+  /**
+   * User.officeMeetingViews
+   */
+  export type User$officeMeetingViewsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OfficeMeetingView
+     */
+    select?: OfficeMeetingViewSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OfficeMeetingView
+     */
+    omit?: OfficeMeetingViewOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OfficeMeetingViewInclude<ExtArgs> | null
+    where?: OfficeMeetingViewWhereInput
+    orderBy?: OfficeMeetingViewOrderByWithRelationInput | OfficeMeetingViewOrderByWithRelationInput[]
+    cursor?: OfficeMeetingViewWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: OfficeMeetingViewScalarFieldEnum | OfficeMeetingViewScalarFieldEnum[]
   }
 
   /**
@@ -11400,6 +11696,7 @@ export namespace Prisma {
     disbursements?: boolean | Project$disbursementsArgs<ExtArgs>
     extensionRequests?: boolean | Project$extensionRequestsArgs<ExtArgs>
     instructor?: boolean | Project$instructorArgs<ExtArgs>
+    officeMeetings?: boolean | Project$officeMeetingsArgs<ExtArgs>
     _count?: boolean | ProjectCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["project"]>
 
@@ -11487,6 +11784,7 @@ export namespace Prisma {
     disbursements?: boolean | Project$disbursementsArgs<ExtArgs>
     extensionRequests?: boolean | Project$extensionRequestsArgs<ExtArgs>
     instructor?: boolean | Project$instructorArgs<ExtArgs>
+    officeMeetings?: boolean | Project$officeMeetingsArgs<ExtArgs>
     _count?: boolean | ProjectCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type ProjectIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -11516,6 +11814,7 @@ export namespace Prisma {
       disbursements: Prisma.$FundingDisbursementPayload<ExtArgs>[]
       extensionRequests: Prisma.$ExtensionRequestPayload<ExtArgs>[]
       instructor: Prisma.$UserPayload<ExtArgs> | null
+      officeMeetings: Prisma.$OfficeMeetingPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -11939,6 +12238,7 @@ export namespace Prisma {
     disbursements<T extends Project$disbursementsArgs<ExtArgs> = {}>(args?: Subset<T, Project$disbursementsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FundingDisbursementPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     extensionRequests<T extends Project$extensionRequestsArgs<ExtArgs> = {}>(args?: Subset<T, Project$extensionRequestsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ExtensionRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     instructor<T extends Project$instructorArgs<ExtArgs> = {}>(args?: Subset<T, Project$instructorArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    officeMeetings<T extends Project$officeMeetingsArgs<ExtArgs> = {}>(args?: Subset<T, Project$officeMeetingsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OfficeMeetingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -12556,6 +12856,30 @@ export namespace Prisma {
      */
     include?: UserInclude<ExtArgs> | null
     where?: UserWhereInput
+  }
+
+  /**
+   * Project.officeMeetings
+   */
+  export type Project$officeMeetingsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OfficeMeeting
+     */
+    select?: OfficeMeetingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OfficeMeeting
+     */
+    omit?: OfficeMeetingOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OfficeMeetingInclude<ExtArgs> | null
+    where?: OfficeMeetingWhereInput
+    orderBy?: OfficeMeetingOrderByWithRelationInput | OfficeMeetingOrderByWithRelationInput[]
+    cursor?: OfficeMeetingWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: OfficeMeetingScalarFieldEnum | OfficeMeetingScalarFieldEnum[]
   }
 
   /**
@@ -21976,6 +22300,2239 @@ export namespace Prisma {
 
 
   /**
+   * Model OfficeMeeting
+   */
+
+  export type AggregateOfficeMeeting = {
+    _count: OfficeMeetingCountAggregateOutputType | null
+    _min: OfficeMeetingMinAggregateOutputType | null
+    _max: OfficeMeetingMaxAggregateOutputType | null
+  }
+
+  export type OfficeMeetingMinAggregateOutputType = {
+    id: string | null
+    projectId: string | null
+    instructorId: string | null
+    target: string | null
+    meetingAt: Date | null
+    location: string | null
+    note: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type OfficeMeetingMaxAggregateOutputType = {
+    id: string | null
+    projectId: string | null
+    instructorId: string | null
+    target: string | null
+    meetingAt: Date | null
+    location: string | null
+    note: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type OfficeMeetingCountAggregateOutputType = {
+    id: number
+    projectId: number
+    instructorId: number
+    target: number
+    memberUserIds: number
+    meetingAt: number
+    location: number
+    note: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type OfficeMeetingMinAggregateInputType = {
+    id?: true
+    projectId?: true
+    instructorId?: true
+    target?: true
+    meetingAt?: true
+    location?: true
+    note?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type OfficeMeetingMaxAggregateInputType = {
+    id?: true
+    projectId?: true
+    instructorId?: true
+    target?: true
+    meetingAt?: true
+    location?: true
+    note?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type OfficeMeetingCountAggregateInputType = {
+    id?: true
+    projectId?: true
+    instructorId?: true
+    target?: true
+    memberUserIds?: true
+    meetingAt?: true
+    location?: true
+    note?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type OfficeMeetingAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which OfficeMeeting to aggregate.
+     */
+    where?: OfficeMeetingWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of OfficeMeetings to fetch.
+     */
+    orderBy?: OfficeMeetingOrderByWithRelationInput | OfficeMeetingOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: OfficeMeetingWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` OfficeMeetings from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` OfficeMeetings.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned OfficeMeetings
+    **/
+    _count?: true | OfficeMeetingCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: OfficeMeetingMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: OfficeMeetingMaxAggregateInputType
+  }
+
+  export type GetOfficeMeetingAggregateType<T extends OfficeMeetingAggregateArgs> = {
+        [P in keyof T & keyof AggregateOfficeMeeting]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateOfficeMeeting[P]>
+      : GetScalarType<T[P], AggregateOfficeMeeting[P]>
+  }
+
+
+
+
+  export type OfficeMeetingGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: OfficeMeetingWhereInput
+    orderBy?: OfficeMeetingOrderByWithAggregationInput | OfficeMeetingOrderByWithAggregationInput[]
+    by: OfficeMeetingScalarFieldEnum[] | OfficeMeetingScalarFieldEnum
+    having?: OfficeMeetingScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: OfficeMeetingCountAggregateInputType | true
+    _min?: OfficeMeetingMinAggregateInputType
+    _max?: OfficeMeetingMaxAggregateInputType
+  }
+
+  export type OfficeMeetingGroupByOutputType = {
+    id: string
+    projectId: string
+    instructorId: string
+    target: string
+    memberUserIds: string[]
+    meetingAt: Date
+    location: string
+    note: string | null
+    createdAt: Date
+    updatedAt: Date
+    _count: OfficeMeetingCountAggregateOutputType | null
+    _min: OfficeMeetingMinAggregateOutputType | null
+    _max: OfficeMeetingMaxAggregateOutputType | null
+  }
+
+  type GetOfficeMeetingGroupByPayload<T extends OfficeMeetingGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<OfficeMeetingGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof OfficeMeetingGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], OfficeMeetingGroupByOutputType[P]>
+            : GetScalarType<T[P], OfficeMeetingGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type OfficeMeetingSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    projectId?: boolean
+    instructorId?: boolean
+    target?: boolean
+    memberUserIds?: boolean
+    meetingAt?: boolean
+    location?: boolean
+    note?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    project?: boolean | ProjectDefaultArgs<ExtArgs>
+    instructor?: boolean | UserDefaultArgs<ExtArgs>
+    views?: boolean | OfficeMeeting$viewsArgs<ExtArgs>
+    _count?: boolean | OfficeMeetingCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["officeMeeting"]>
+
+  export type OfficeMeetingSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    projectId?: boolean
+    instructorId?: boolean
+    target?: boolean
+    memberUserIds?: boolean
+    meetingAt?: boolean
+    location?: boolean
+    note?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    project?: boolean | ProjectDefaultArgs<ExtArgs>
+    instructor?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["officeMeeting"]>
+
+  export type OfficeMeetingSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    projectId?: boolean
+    instructorId?: boolean
+    target?: boolean
+    memberUserIds?: boolean
+    meetingAt?: boolean
+    location?: boolean
+    note?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    project?: boolean | ProjectDefaultArgs<ExtArgs>
+    instructor?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["officeMeeting"]>
+
+  export type OfficeMeetingSelectScalar = {
+    id?: boolean
+    projectId?: boolean
+    instructorId?: boolean
+    target?: boolean
+    memberUserIds?: boolean
+    meetingAt?: boolean
+    location?: boolean
+    note?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type OfficeMeetingOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "projectId" | "instructorId" | "target" | "memberUserIds" | "meetingAt" | "location" | "note" | "createdAt" | "updatedAt", ExtArgs["result"]["officeMeeting"]>
+  export type OfficeMeetingInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    project?: boolean | ProjectDefaultArgs<ExtArgs>
+    instructor?: boolean | UserDefaultArgs<ExtArgs>
+    views?: boolean | OfficeMeeting$viewsArgs<ExtArgs>
+    _count?: boolean | OfficeMeetingCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type OfficeMeetingIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    project?: boolean | ProjectDefaultArgs<ExtArgs>
+    instructor?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type OfficeMeetingIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    project?: boolean | ProjectDefaultArgs<ExtArgs>
+    instructor?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $OfficeMeetingPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "OfficeMeeting"
+    objects: {
+      project: Prisma.$ProjectPayload<ExtArgs>
+      instructor: Prisma.$UserPayload<ExtArgs>
+      views: Prisma.$OfficeMeetingViewPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      projectId: string
+      instructorId: string
+      target: string
+      memberUserIds: string[]
+      meetingAt: Date
+      location: string
+      note: string | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["officeMeeting"]>
+    composites: {}
+  }
+
+  type OfficeMeetingGetPayload<S extends boolean | null | undefined | OfficeMeetingDefaultArgs> = $Result.GetResult<Prisma.$OfficeMeetingPayload, S>
+
+  type OfficeMeetingCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<OfficeMeetingFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: OfficeMeetingCountAggregateInputType | true
+    }
+
+  export interface OfficeMeetingDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['OfficeMeeting'], meta: { name: 'OfficeMeeting' } }
+    /**
+     * Find zero or one OfficeMeeting that matches the filter.
+     * @param {OfficeMeetingFindUniqueArgs} args - Arguments to find a OfficeMeeting
+     * @example
+     * // Get one OfficeMeeting
+     * const officeMeeting = await prisma.officeMeeting.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends OfficeMeetingFindUniqueArgs>(args: SelectSubset<T, OfficeMeetingFindUniqueArgs<ExtArgs>>): Prisma__OfficeMeetingClient<$Result.GetResult<Prisma.$OfficeMeetingPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one OfficeMeeting that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {OfficeMeetingFindUniqueOrThrowArgs} args - Arguments to find a OfficeMeeting
+     * @example
+     * // Get one OfficeMeeting
+     * const officeMeeting = await prisma.officeMeeting.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends OfficeMeetingFindUniqueOrThrowArgs>(args: SelectSubset<T, OfficeMeetingFindUniqueOrThrowArgs<ExtArgs>>): Prisma__OfficeMeetingClient<$Result.GetResult<Prisma.$OfficeMeetingPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first OfficeMeeting that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OfficeMeetingFindFirstArgs} args - Arguments to find a OfficeMeeting
+     * @example
+     * // Get one OfficeMeeting
+     * const officeMeeting = await prisma.officeMeeting.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends OfficeMeetingFindFirstArgs>(args?: SelectSubset<T, OfficeMeetingFindFirstArgs<ExtArgs>>): Prisma__OfficeMeetingClient<$Result.GetResult<Prisma.$OfficeMeetingPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first OfficeMeeting that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OfficeMeetingFindFirstOrThrowArgs} args - Arguments to find a OfficeMeeting
+     * @example
+     * // Get one OfficeMeeting
+     * const officeMeeting = await prisma.officeMeeting.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends OfficeMeetingFindFirstOrThrowArgs>(args?: SelectSubset<T, OfficeMeetingFindFirstOrThrowArgs<ExtArgs>>): Prisma__OfficeMeetingClient<$Result.GetResult<Prisma.$OfficeMeetingPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more OfficeMeetings that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OfficeMeetingFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all OfficeMeetings
+     * const officeMeetings = await prisma.officeMeeting.findMany()
+     * 
+     * // Get first 10 OfficeMeetings
+     * const officeMeetings = await prisma.officeMeeting.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const officeMeetingWithIdOnly = await prisma.officeMeeting.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends OfficeMeetingFindManyArgs>(args?: SelectSubset<T, OfficeMeetingFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OfficeMeetingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a OfficeMeeting.
+     * @param {OfficeMeetingCreateArgs} args - Arguments to create a OfficeMeeting.
+     * @example
+     * // Create one OfficeMeeting
+     * const OfficeMeeting = await prisma.officeMeeting.create({
+     *   data: {
+     *     // ... data to create a OfficeMeeting
+     *   }
+     * })
+     * 
+     */
+    create<T extends OfficeMeetingCreateArgs>(args: SelectSubset<T, OfficeMeetingCreateArgs<ExtArgs>>): Prisma__OfficeMeetingClient<$Result.GetResult<Prisma.$OfficeMeetingPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many OfficeMeetings.
+     * @param {OfficeMeetingCreateManyArgs} args - Arguments to create many OfficeMeetings.
+     * @example
+     * // Create many OfficeMeetings
+     * const officeMeeting = await prisma.officeMeeting.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends OfficeMeetingCreateManyArgs>(args?: SelectSubset<T, OfficeMeetingCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many OfficeMeetings and returns the data saved in the database.
+     * @param {OfficeMeetingCreateManyAndReturnArgs} args - Arguments to create many OfficeMeetings.
+     * @example
+     * // Create many OfficeMeetings
+     * const officeMeeting = await prisma.officeMeeting.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many OfficeMeetings and only return the `id`
+     * const officeMeetingWithIdOnly = await prisma.officeMeeting.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends OfficeMeetingCreateManyAndReturnArgs>(args?: SelectSubset<T, OfficeMeetingCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OfficeMeetingPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a OfficeMeeting.
+     * @param {OfficeMeetingDeleteArgs} args - Arguments to delete one OfficeMeeting.
+     * @example
+     * // Delete one OfficeMeeting
+     * const OfficeMeeting = await prisma.officeMeeting.delete({
+     *   where: {
+     *     // ... filter to delete one OfficeMeeting
+     *   }
+     * })
+     * 
+     */
+    delete<T extends OfficeMeetingDeleteArgs>(args: SelectSubset<T, OfficeMeetingDeleteArgs<ExtArgs>>): Prisma__OfficeMeetingClient<$Result.GetResult<Prisma.$OfficeMeetingPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one OfficeMeeting.
+     * @param {OfficeMeetingUpdateArgs} args - Arguments to update one OfficeMeeting.
+     * @example
+     * // Update one OfficeMeeting
+     * const officeMeeting = await prisma.officeMeeting.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends OfficeMeetingUpdateArgs>(args: SelectSubset<T, OfficeMeetingUpdateArgs<ExtArgs>>): Prisma__OfficeMeetingClient<$Result.GetResult<Prisma.$OfficeMeetingPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more OfficeMeetings.
+     * @param {OfficeMeetingDeleteManyArgs} args - Arguments to filter OfficeMeetings to delete.
+     * @example
+     * // Delete a few OfficeMeetings
+     * const { count } = await prisma.officeMeeting.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends OfficeMeetingDeleteManyArgs>(args?: SelectSubset<T, OfficeMeetingDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more OfficeMeetings.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OfficeMeetingUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many OfficeMeetings
+     * const officeMeeting = await prisma.officeMeeting.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends OfficeMeetingUpdateManyArgs>(args: SelectSubset<T, OfficeMeetingUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more OfficeMeetings and returns the data updated in the database.
+     * @param {OfficeMeetingUpdateManyAndReturnArgs} args - Arguments to update many OfficeMeetings.
+     * @example
+     * // Update many OfficeMeetings
+     * const officeMeeting = await prisma.officeMeeting.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more OfficeMeetings and only return the `id`
+     * const officeMeetingWithIdOnly = await prisma.officeMeeting.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends OfficeMeetingUpdateManyAndReturnArgs>(args: SelectSubset<T, OfficeMeetingUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OfficeMeetingPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one OfficeMeeting.
+     * @param {OfficeMeetingUpsertArgs} args - Arguments to update or create a OfficeMeeting.
+     * @example
+     * // Update or create a OfficeMeeting
+     * const officeMeeting = await prisma.officeMeeting.upsert({
+     *   create: {
+     *     // ... data to create a OfficeMeeting
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the OfficeMeeting we want to update
+     *   }
+     * })
+     */
+    upsert<T extends OfficeMeetingUpsertArgs>(args: SelectSubset<T, OfficeMeetingUpsertArgs<ExtArgs>>): Prisma__OfficeMeetingClient<$Result.GetResult<Prisma.$OfficeMeetingPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of OfficeMeetings.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OfficeMeetingCountArgs} args - Arguments to filter OfficeMeetings to count.
+     * @example
+     * // Count the number of OfficeMeetings
+     * const count = await prisma.officeMeeting.count({
+     *   where: {
+     *     // ... the filter for the OfficeMeetings we want to count
+     *   }
+     * })
+    **/
+    count<T extends OfficeMeetingCountArgs>(
+      args?: Subset<T, OfficeMeetingCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], OfficeMeetingCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a OfficeMeeting.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OfficeMeetingAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends OfficeMeetingAggregateArgs>(args: Subset<T, OfficeMeetingAggregateArgs>): Prisma.PrismaPromise<GetOfficeMeetingAggregateType<T>>
+
+    /**
+     * Group by OfficeMeeting.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OfficeMeetingGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends OfficeMeetingGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: OfficeMeetingGroupByArgs['orderBy'] }
+        : { orderBy?: OfficeMeetingGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, OfficeMeetingGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetOfficeMeetingGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the OfficeMeeting model
+   */
+  readonly fields: OfficeMeetingFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for OfficeMeeting.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__OfficeMeetingClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    project<T extends ProjectDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ProjectDefaultArgs<ExtArgs>>): Prisma__ProjectClient<$Result.GetResult<Prisma.$ProjectPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    instructor<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    views<T extends OfficeMeeting$viewsArgs<ExtArgs> = {}>(args?: Subset<T, OfficeMeeting$viewsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OfficeMeetingViewPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the OfficeMeeting model
+   */
+  interface OfficeMeetingFieldRefs {
+    readonly id: FieldRef<"OfficeMeeting", 'String'>
+    readonly projectId: FieldRef<"OfficeMeeting", 'String'>
+    readonly instructorId: FieldRef<"OfficeMeeting", 'String'>
+    readonly target: FieldRef<"OfficeMeeting", 'String'>
+    readonly memberUserIds: FieldRef<"OfficeMeeting", 'String[]'>
+    readonly meetingAt: FieldRef<"OfficeMeeting", 'DateTime'>
+    readonly location: FieldRef<"OfficeMeeting", 'String'>
+    readonly note: FieldRef<"OfficeMeeting", 'String'>
+    readonly createdAt: FieldRef<"OfficeMeeting", 'DateTime'>
+    readonly updatedAt: FieldRef<"OfficeMeeting", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * OfficeMeeting findUnique
+   */
+  export type OfficeMeetingFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OfficeMeeting
+     */
+    select?: OfficeMeetingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OfficeMeeting
+     */
+    omit?: OfficeMeetingOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OfficeMeetingInclude<ExtArgs> | null
+    /**
+     * Filter, which OfficeMeeting to fetch.
+     */
+    where: OfficeMeetingWhereUniqueInput
+  }
+
+  /**
+   * OfficeMeeting findUniqueOrThrow
+   */
+  export type OfficeMeetingFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OfficeMeeting
+     */
+    select?: OfficeMeetingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OfficeMeeting
+     */
+    omit?: OfficeMeetingOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OfficeMeetingInclude<ExtArgs> | null
+    /**
+     * Filter, which OfficeMeeting to fetch.
+     */
+    where: OfficeMeetingWhereUniqueInput
+  }
+
+  /**
+   * OfficeMeeting findFirst
+   */
+  export type OfficeMeetingFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OfficeMeeting
+     */
+    select?: OfficeMeetingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OfficeMeeting
+     */
+    omit?: OfficeMeetingOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OfficeMeetingInclude<ExtArgs> | null
+    /**
+     * Filter, which OfficeMeeting to fetch.
+     */
+    where?: OfficeMeetingWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of OfficeMeetings to fetch.
+     */
+    orderBy?: OfficeMeetingOrderByWithRelationInput | OfficeMeetingOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for OfficeMeetings.
+     */
+    cursor?: OfficeMeetingWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` OfficeMeetings from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` OfficeMeetings.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of OfficeMeetings.
+     */
+    distinct?: OfficeMeetingScalarFieldEnum | OfficeMeetingScalarFieldEnum[]
+  }
+
+  /**
+   * OfficeMeeting findFirstOrThrow
+   */
+  export type OfficeMeetingFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OfficeMeeting
+     */
+    select?: OfficeMeetingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OfficeMeeting
+     */
+    omit?: OfficeMeetingOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OfficeMeetingInclude<ExtArgs> | null
+    /**
+     * Filter, which OfficeMeeting to fetch.
+     */
+    where?: OfficeMeetingWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of OfficeMeetings to fetch.
+     */
+    orderBy?: OfficeMeetingOrderByWithRelationInput | OfficeMeetingOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for OfficeMeetings.
+     */
+    cursor?: OfficeMeetingWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` OfficeMeetings from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` OfficeMeetings.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of OfficeMeetings.
+     */
+    distinct?: OfficeMeetingScalarFieldEnum | OfficeMeetingScalarFieldEnum[]
+  }
+
+  /**
+   * OfficeMeeting findMany
+   */
+  export type OfficeMeetingFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OfficeMeeting
+     */
+    select?: OfficeMeetingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OfficeMeeting
+     */
+    omit?: OfficeMeetingOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OfficeMeetingInclude<ExtArgs> | null
+    /**
+     * Filter, which OfficeMeetings to fetch.
+     */
+    where?: OfficeMeetingWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of OfficeMeetings to fetch.
+     */
+    orderBy?: OfficeMeetingOrderByWithRelationInput | OfficeMeetingOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing OfficeMeetings.
+     */
+    cursor?: OfficeMeetingWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` OfficeMeetings from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` OfficeMeetings.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of OfficeMeetings.
+     */
+    distinct?: OfficeMeetingScalarFieldEnum | OfficeMeetingScalarFieldEnum[]
+  }
+
+  /**
+   * OfficeMeeting create
+   */
+  export type OfficeMeetingCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OfficeMeeting
+     */
+    select?: OfficeMeetingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OfficeMeeting
+     */
+    omit?: OfficeMeetingOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OfficeMeetingInclude<ExtArgs> | null
+    /**
+     * The data needed to create a OfficeMeeting.
+     */
+    data: XOR<OfficeMeetingCreateInput, OfficeMeetingUncheckedCreateInput>
+  }
+
+  /**
+   * OfficeMeeting createMany
+   */
+  export type OfficeMeetingCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many OfficeMeetings.
+     */
+    data: OfficeMeetingCreateManyInput | OfficeMeetingCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * OfficeMeeting createManyAndReturn
+   */
+  export type OfficeMeetingCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OfficeMeeting
+     */
+    select?: OfficeMeetingSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the OfficeMeeting
+     */
+    omit?: OfficeMeetingOmit<ExtArgs> | null
+    /**
+     * The data used to create many OfficeMeetings.
+     */
+    data: OfficeMeetingCreateManyInput | OfficeMeetingCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OfficeMeetingIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * OfficeMeeting update
+   */
+  export type OfficeMeetingUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OfficeMeeting
+     */
+    select?: OfficeMeetingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OfficeMeeting
+     */
+    omit?: OfficeMeetingOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OfficeMeetingInclude<ExtArgs> | null
+    /**
+     * The data needed to update a OfficeMeeting.
+     */
+    data: XOR<OfficeMeetingUpdateInput, OfficeMeetingUncheckedUpdateInput>
+    /**
+     * Choose, which OfficeMeeting to update.
+     */
+    where: OfficeMeetingWhereUniqueInput
+  }
+
+  /**
+   * OfficeMeeting updateMany
+   */
+  export type OfficeMeetingUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update OfficeMeetings.
+     */
+    data: XOR<OfficeMeetingUpdateManyMutationInput, OfficeMeetingUncheckedUpdateManyInput>
+    /**
+     * Filter which OfficeMeetings to update
+     */
+    where?: OfficeMeetingWhereInput
+    /**
+     * Limit how many OfficeMeetings to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * OfficeMeeting updateManyAndReturn
+   */
+  export type OfficeMeetingUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OfficeMeeting
+     */
+    select?: OfficeMeetingSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the OfficeMeeting
+     */
+    omit?: OfficeMeetingOmit<ExtArgs> | null
+    /**
+     * The data used to update OfficeMeetings.
+     */
+    data: XOR<OfficeMeetingUpdateManyMutationInput, OfficeMeetingUncheckedUpdateManyInput>
+    /**
+     * Filter which OfficeMeetings to update
+     */
+    where?: OfficeMeetingWhereInput
+    /**
+     * Limit how many OfficeMeetings to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OfficeMeetingIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * OfficeMeeting upsert
+   */
+  export type OfficeMeetingUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OfficeMeeting
+     */
+    select?: OfficeMeetingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OfficeMeeting
+     */
+    omit?: OfficeMeetingOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OfficeMeetingInclude<ExtArgs> | null
+    /**
+     * The filter to search for the OfficeMeeting to update in case it exists.
+     */
+    where: OfficeMeetingWhereUniqueInput
+    /**
+     * In case the OfficeMeeting found by the `where` argument doesn't exist, create a new OfficeMeeting with this data.
+     */
+    create: XOR<OfficeMeetingCreateInput, OfficeMeetingUncheckedCreateInput>
+    /**
+     * In case the OfficeMeeting was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<OfficeMeetingUpdateInput, OfficeMeetingUncheckedUpdateInput>
+  }
+
+  /**
+   * OfficeMeeting delete
+   */
+  export type OfficeMeetingDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OfficeMeeting
+     */
+    select?: OfficeMeetingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OfficeMeeting
+     */
+    omit?: OfficeMeetingOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OfficeMeetingInclude<ExtArgs> | null
+    /**
+     * Filter which OfficeMeeting to delete.
+     */
+    where: OfficeMeetingWhereUniqueInput
+  }
+
+  /**
+   * OfficeMeeting deleteMany
+   */
+  export type OfficeMeetingDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which OfficeMeetings to delete
+     */
+    where?: OfficeMeetingWhereInput
+    /**
+     * Limit how many OfficeMeetings to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * OfficeMeeting.views
+   */
+  export type OfficeMeeting$viewsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OfficeMeetingView
+     */
+    select?: OfficeMeetingViewSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OfficeMeetingView
+     */
+    omit?: OfficeMeetingViewOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OfficeMeetingViewInclude<ExtArgs> | null
+    where?: OfficeMeetingViewWhereInput
+    orderBy?: OfficeMeetingViewOrderByWithRelationInput | OfficeMeetingViewOrderByWithRelationInput[]
+    cursor?: OfficeMeetingViewWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: OfficeMeetingViewScalarFieldEnum | OfficeMeetingViewScalarFieldEnum[]
+  }
+
+  /**
+   * OfficeMeeting without action
+   */
+  export type OfficeMeetingDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OfficeMeeting
+     */
+    select?: OfficeMeetingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OfficeMeeting
+     */
+    omit?: OfficeMeetingOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OfficeMeetingInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model OfficeMeetingView
+   */
+
+  export type AggregateOfficeMeetingView = {
+    _count: OfficeMeetingViewCountAggregateOutputType | null
+    _min: OfficeMeetingViewMinAggregateOutputType | null
+    _max: OfficeMeetingViewMaxAggregateOutputType | null
+  }
+
+  export type OfficeMeetingViewMinAggregateOutputType = {
+    id: string | null
+    meetingId: string | null
+    userId: string | null
+    isRead: boolean | null
+    readAt: Date | null
+  }
+
+  export type OfficeMeetingViewMaxAggregateOutputType = {
+    id: string | null
+    meetingId: string | null
+    userId: string | null
+    isRead: boolean | null
+    readAt: Date | null
+  }
+
+  export type OfficeMeetingViewCountAggregateOutputType = {
+    id: number
+    meetingId: number
+    userId: number
+    isRead: number
+    readAt: number
+    _all: number
+  }
+
+
+  export type OfficeMeetingViewMinAggregateInputType = {
+    id?: true
+    meetingId?: true
+    userId?: true
+    isRead?: true
+    readAt?: true
+  }
+
+  export type OfficeMeetingViewMaxAggregateInputType = {
+    id?: true
+    meetingId?: true
+    userId?: true
+    isRead?: true
+    readAt?: true
+  }
+
+  export type OfficeMeetingViewCountAggregateInputType = {
+    id?: true
+    meetingId?: true
+    userId?: true
+    isRead?: true
+    readAt?: true
+    _all?: true
+  }
+
+  export type OfficeMeetingViewAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which OfficeMeetingView to aggregate.
+     */
+    where?: OfficeMeetingViewWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of OfficeMeetingViews to fetch.
+     */
+    orderBy?: OfficeMeetingViewOrderByWithRelationInput | OfficeMeetingViewOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: OfficeMeetingViewWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` OfficeMeetingViews from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` OfficeMeetingViews.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned OfficeMeetingViews
+    **/
+    _count?: true | OfficeMeetingViewCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: OfficeMeetingViewMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: OfficeMeetingViewMaxAggregateInputType
+  }
+
+  export type GetOfficeMeetingViewAggregateType<T extends OfficeMeetingViewAggregateArgs> = {
+        [P in keyof T & keyof AggregateOfficeMeetingView]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateOfficeMeetingView[P]>
+      : GetScalarType<T[P], AggregateOfficeMeetingView[P]>
+  }
+
+
+
+
+  export type OfficeMeetingViewGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: OfficeMeetingViewWhereInput
+    orderBy?: OfficeMeetingViewOrderByWithAggregationInput | OfficeMeetingViewOrderByWithAggregationInput[]
+    by: OfficeMeetingViewScalarFieldEnum[] | OfficeMeetingViewScalarFieldEnum
+    having?: OfficeMeetingViewScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: OfficeMeetingViewCountAggregateInputType | true
+    _min?: OfficeMeetingViewMinAggregateInputType
+    _max?: OfficeMeetingViewMaxAggregateInputType
+  }
+
+  export type OfficeMeetingViewGroupByOutputType = {
+    id: string
+    meetingId: string
+    userId: string
+    isRead: boolean
+    readAt: Date | null
+    _count: OfficeMeetingViewCountAggregateOutputType | null
+    _min: OfficeMeetingViewMinAggregateOutputType | null
+    _max: OfficeMeetingViewMaxAggregateOutputType | null
+  }
+
+  type GetOfficeMeetingViewGroupByPayload<T extends OfficeMeetingViewGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<OfficeMeetingViewGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof OfficeMeetingViewGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], OfficeMeetingViewGroupByOutputType[P]>
+            : GetScalarType<T[P], OfficeMeetingViewGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type OfficeMeetingViewSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    meetingId?: boolean
+    userId?: boolean
+    isRead?: boolean
+    readAt?: boolean
+    meeting?: boolean | OfficeMeetingDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["officeMeetingView"]>
+
+  export type OfficeMeetingViewSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    meetingId?: boolean
+    userId?: boolean
+    isRead?: boolean
+    readAt?: boolean
+    meeting?: boolean | OfficeMeetingDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["officeMeetingView"]>
+
+  export type OfficeMeetingViewSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    meetingId?: boolean
+    userId?: boolean
+    isRead?: boolean
+    readAt?: boolean
+    meeting?: boolean | OfficeMeetingDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["officeMeetingView"]>
+
+  export type OfficeMeetingViewSelectScalar = {
+    id?: boolean
+    meetingId?: boolean
+    userId?: boolean
+    isRead?: boolean
+    readAt?: boolean
+  }
+
+  export type OfficeMeetingViewOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "meetingId" | "userId" | "isRead" | "readAt", ExtArgs["result"]["officeMeetingView"]>
+  export type OfficeMeetingViewInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    meeting?: boolean | OfficeMeetingDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type OfficeMeetingViewIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    meeting?: boolean | OfficeMeetingDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type OfficeMeetingViewIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    meeting?: boolean | OfficeMeetingDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $OfficeMeetingViewPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "OfficeMeetingView"
+    objects: {
+      meeting: Prisma.$OfficeMeetingPayload<ExtArgs>
+      user: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      meetingId: string
+      userId: string
+      isRead: boolean
+      readAt: Date | null
+    }, ExtArgs["result"]["officeMeetingView"]>
+    composites: {}
+  }
+
+  type OfficeMeetingViewGetPayload<S extends boolean | null | undefined | OfficeMeetingViewDefaultArgs> = $Result.GetResult<Prisma.$OfficeMeetingViewPayload, S>
+
+  type OfficeMeetingViewCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<OfficeMeetingViewFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: OfficeMeetingViewCountAggregateInputType | true
+    }
+
+  export interface OfficeMeetingViewDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['OfficeMeetingView'], meta: { name: 'OfficeMeetingView' } }
+    /**
+     * Find zero or one OfficeMeetingView that matches the filter.
+     * @param {OfficeMeetingViewFindUniqueArgs} args - Arguments to find a OfficeMeetingView
+     * @example
+     * // Get one OfficeMeetingView
+     * const officeMeetingView = await prisma.officeMeetingView.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends OfficeMeetingViewFindUniqueArgs>(args: SelectSubset<T, OfficeMeetingViewFindUniqueArgs<ExtArgs>>): Prisma__OfficeMeetingViewClient<$Result.GetResult<Prisma.$OfficeMeetingViewPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one OfficeMeetingView that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {OfficeMeetingViewFindUniqueOrThrowArgs} args - Arguments to find a OfficeMeetingView
+     * @example
+     * // Get one OfficeMeetingView
+     * const officeMeetingView = await prisma.officeMeetingView.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends OfficeMeetingViewFindUniqueOrThrowArgs>(args: SelectSubset<T, OfficeMeetingViewFindUniqueOrThrowArgs<ExtArgs>>): Prisma__OfficeMeetingViewClient<$Result.GetResult<Prisma.$OfficeMeetingViewPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first OfficeMeetingView that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OfficeMeetingViewFindFirstArgs} args - Arguments to find a OfficeMeetingView
+     * @example
+     * // Get one OfficeMeetingView
+     * const officeMeetingView = await prisma.officeMeetingView.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends OfficeMeetingViewFindFirstArgs>(args?: SelectSubset<T, OfficeMeetingViewFindFirstArgs<ExtArgs>>): Prisma__OfficeMeetingViewClient<$Result.GetResult<Prisma.$OfficeMeetingViewPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first OfficeMeetingView that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OfficeMeetingViewFindFirstOrThrowArgs} args - Arguments to find a OfficeMeetingView
+     * @example
+     * // Get one OfficeMeetingView
+     * const officeMeetingView = await prisma.officeMeetingView.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends OfficeMeetingViewFindFirstOrThrowArgs>(args?: SelectSubset<T, OfficeMeetingViewFindFirstOrThrowArgs<ExtArgs>>): Prisma__OfficeMeetingViewClient<$Result.GetResult<Prisma.$OfficeMeetingViewPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more OfficeMeetingViews that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OfficeMeetingViewFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all OfficeMeetingViews
+     * const officeMeetingViews = await prisma.officeMeetingView.findMany()
+     * 
+     * // Get first 10 OfficeMeetingViews
+     * const officeMeetingViews = await prisma.officeMeetingView.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const officeMeetingViewWithIdOnly = await prisma.officeMeetingView.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends OfficeMeetingViewFindManyArgs>(args?: SelectSubset<T, OfficeMeetingViewFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OfficeMeetingViewPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a OfficeMeetingView.
+     * @param {OfficeMeetingViewCreateArgs} args - Arguments to create a OfficeMeetingView.
+     * @example
+     * // Create one OfficeMeetingView
+     * const OfficeMeetingView = await prisma.officeMeetingView.create({
+     *   data: {
+     *     // ... data to create a OfficeMeetingView
+     *   }
+     * })
+     * 
+     */
+    create<T extends OfficeMeetingViewCreateArgs>(args: SelectSubset<T, OfficeMeetingViewCreateArgs<ExtArgs>>): Prisma__OfficeMeetingViewClient<$Result.GetResult<Prisma.$OfficeMeetingViewPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many OfficeMeetingViews.
+     * @param {OfficeMeetingViewCreateManyArgs} args - Arguments to create many OfficeMeetingViews.
+     * @example
+     * // Create many OfficeMeetingViews
+     * const officeMeetingView = await prisma.officeMeetingView.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends OfficeMeetingViewCreateManyArgs>(args?: SelectSubset<T, OfficeMeetingViewCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many OfficeMeetingViews and returns the data saved in the database.
+     * @param {OfficeMeetingViewCreateManyAndReturnArgs} args - Arguments to create many OfficeMeetingViews.
+     * @example
+     * // Create many OfficeMeetingViews
+     * const officeMeetingView = await prisma.officeMeetingView.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many OfficeMeetingViews and only return the `id`
+     * const officeMeetingViewWithIdOnly = await prisma.officeMeetingView.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends OfficeMeetingViewCreateManyAndReturnArgs>(args?: SelectSubset<T, OfficeMeetingViewCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OfficeMeetingViewPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a OfficeMeetingView.
+     * @param {OfficeMeetingViewDeleteArgs} args - Arguments to delete one OfficeMeetingView.
+     * @example
+     * // Delete one OfficeMeetingView
+     * const OfficeMeetingView = await prisma.officeMeetingView.delete({
+     *   where: {
+     *     // ... filter to delete one OfficeMeetingView
+     *   }
+     * })
+     * 
+     */
+    delete<T extends OfficeMeetingViewDeleteArgs>(args: SelectSubset<T, OfficeMeetingViewDeleteArgs<ExtArgs>>): Prisma__OfficeMeetingViewClient<$Result.GetResult<Prisma.$OfficeMeetingViewPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one OfficeMeetingView.
+     * @param {OfficeMeetingViewUpdateArgs} args - Arguments to update one OfficeMeetingView.
+     * @example
+     * // Update one OfficeMeetingView
+     * const officeMeetingView = await prisma.officeMeetingView.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends OfficeMeetingViewUpdateArgs>(args: SelectSubset<T, OfficeMeetingViewUpdateArgs<ExtArgs>>): Prisma__OfficeMeetingViewClient<$Result.GetResult<Prisma.$OfficeMeetingViewPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more OfficeMeetingViews.
+     * @param {OfficeMeetingViewDeleteManyArgs} args - Arguments to filter OfficeMeetingViews to delete.
+     * @example
+     * // Delete a few OfficeMeetingViews
+     * const { count } = await prisma.officeMeetingView.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends OfficeMeetingViewDeleteManyArgs>(args?: SelectSubset<T, OfficeMeetingViewDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more OfficeMeetingViews.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OfficeMeetingViewUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many OfficeMeetingViews
+     * const officeMeetingView = await prisma.officeMeetingView.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends OfficeMeetingViewUpdateManyArgs>(args: SelectSubset<T, OfficeMeetingViewUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more OfficeMeetingViews and returns the data updated in the database.
+     * @param {OfficeMeetingViewUpdateManyAndReturnArgs} args - Arguments to update many OfficeMeetingViews.
+     * @example
+     * // Update many OfficeMeetingViews
+     * const officeMeetingView = await prisma.officeMeetingView.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more OfficeMeetingViews and only return the `id`
+     * const officeMeetingViewWithIdOnly = await prisma.officeMeetingView.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends OfficeMeetingViewUpdateManyAndReturnArgs>(args: SelectSubset<T, OfficeMeetingViewUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OfficeMeetingViewPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one OfficeMeetingView.
+     * @param {OfficeMeetingViewUpsertArgs} args - Arguments to update or create a OfficeMeetingView.
+     * @example
+     * // Update or create a OfficeMeetingView
+     * const officeMeetingView = await prisma.officeMeetingView.upsert({
+     *   create: {
+     *     // ... data to create a OfficeMeetingView
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the OfficeMeetingView we want to update
+     *   }
+     * })
+     */
+    upsert<T extends OfficeMeetingViewUpsertArgs>(args: SelectSubset<T, OfficeMeetingViewUpsertArgs<ExtArgs>>): Prisma__OfficeMeetingViewClient<$Result.GetResult<Prisma.$OfficeMeetingViewPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of OfficeMeetingViews.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OfficeMeetingViewCountArgs} args - Arguments to filter OfficeMeetingViews to count.
+     * @example
+     * // Count the number of OfficeMeetingViews
+     * const count = await prisma.officeMeetingView.count({
+     *   where: {
+     *     // ... the filter for the OfficeMeetingViews we want to count
+     *   }
+     * })
+    **/
+    count<T extends OfficeMeetingViewCountArgs>(
+      args?: Subset<T, OfficeMeetingViewCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], OfficeMeetingViewCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a OfficeMeetingView.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OfficeMeetingViewAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends OfficeMeetingViewAggregateArgs>(args: Subset<T, OfficeMeetingViewAggregateArgs>): Prisma.PrismaPromise<GetOfficeMeetingViewAggregateType<T>>
+
+    /**
+     * Group by OfficeMeetingView.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OfficeMeetingViewGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends OfficeMeetingViewGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: OfficeMeetingViewGroupByArgs['orderBy'] }
+        : { orderBy?: OfficeMeetingViewGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, OfficeMeetingViewGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetOfficeMeetingViewGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the OfficeMeetingView model
+   */
+  readonly fields: OfficeMeetingViewFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for OfficeMeetingView.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__OfficeMeetingViewClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    meeting<T extends OfficeMeetingDefaultArgs<ExtArgs> = {}>(args?: Subset<T, OfficeMeetingDefaultArgs<ExtArgs>>): Prisma__OfficeMeetingClient<$Result.GetResult<Prisma.$OfficeMeetingPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the OfficeMeetingView model
+   */
+  interface OfficeMeetingViewFieldRefs {
+    readonly id: FieldRef<"OfficeMeetingView", 'String'>
+    readonly meetingId: FieldRef<"OfficeMeetingView", 'String'>
+    readonly userId: FieldRef<"OfficeMeetingView", 'String'>
+    readonly isRead: FieldRef<"OfficeMeetingView", 'Boolean'>
+    readonly readAt: FieldRef<"OfficeMeetingView", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * OfficeMeetingView findUnique
+   */
+  export type OfficeMeetingViewFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OfficeMeetingView
+     */
+    select?: OfficeMeetingViewSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OfficeMeetingView
+     */
+    omit?: OfficeMeetingViewOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OfficeMeetingViewInclude<ExtArgs> | null
+    /**
+     * Filter, which OfficeMeetingView to fetch.
+     */
+    where: OfficeMeetingViewWhereUniqueInput
+  }
+
+  /**
+   * OfficeMeetingView findUniqueOrThrow
+   */
+  export type OfficeMeetingViewFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OfficeMeetingView
+     */
+    select?: OfficeMeetingViewSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OfficeMeetingView
+     */
+    omit?: OfficeMeetingViewOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OfficeMeetingViewInclude<ExtArgs> | null
+    /**
+     * Filter, which OfficeMeetingView to fetch.
+     */
+    where: OfficeMeetingViewWhereUniqueInput
+  }
+
+  /**
+   * OfficeMeetingView findFirst
+   */
+  export type OfficeMeetingViewFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OfficeMeetingView
+     */
+    select?: OfficeMeetingViewSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OfficeMeetingView
+     */
+    omit?: OfficeMeetingViewOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OfficeMeetingViewInclude<ExtArgs> | null
+    /**
+     * Filter, which OfficeMeetingView to fetch.
+     */
+    where?: OfficeMeetingViewWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of OfficeMeetingViews to fetch.
+     */
+    orderBy?: OfficeMeetingViewOrderByWithRelationInput | OfficeMeetingViewOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for OfficeMeetingViews.
+     */
+    cursor?: OfficeMeetingViewWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` OfficeMeetingViews from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` OfficeMeetingViews.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of OfficeMeetingViews.
+     */
+    distinct?: OfficeMeetingViewScalarFieldEnum | OfficeMeetingViewScalarFieldEnum[]
+  }
+
+  /**
+   * OfficeMeetingView findFirstOrThrow
+   */
+  export type OfficeMeetingViewFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OfficeMeetingView
+     */
+    select?: OfficeMeetingViewSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OfficeMeetingView
+     */
+    omit?: OfficeMeetingViewOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OfficeMeetingViewInclude<ExtArgs> | null
+    /**
+     * Filter, which OfficeMeetingView to fetch.
+     */
+    where?: OfficeMeetingViewWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of OfficeMeetingViews to fetch.
+     */
+    orderBy?: OfficeMeetingViewOrderByWithRelationInput | OfficeMeetingViewOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for OfficeMeetingViews.
+     */
+    cursor?: OfficeMeetingViewWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` OfficeMeetingViews from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` OfficeMeetingViews.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of OfficeMeetingViews.
+     */
+    distinct?: OfficeMeetingViewScalarFieldEnum | OfficeMeetingViewScalarFieldEnum[]
+  }
+
+  /**
+   * OfficeMeetingView findMany
+   */
+  export type OfficeMeetingViewFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OfficeMeetingView
+     */
+    select?: OfficeMeetingViewSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OfficeMeetingView
+     */
+    omit?: OfficeMeetingViewOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OfficeMeetingViewInclude<ExtArgs> | null
+    /**
+     * Filter, which OfficeMeetingViews to fetch.
+     */
+    where?: OfficeMeetingViewWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of OfficeMeetingViews to fetch.
+     */
+    orderBy?: OfficeMeetingViewOrderByWithRelationInput | OfficeMeetingViewOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing OfficeMeetingViews.
+     */
+    cursor?: OfficeMeetingViewWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` OfficeMeetingViews from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` OfficeMeetingViews.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of OfficeMeetingViews.
+     */
+    distinct?: OfficeMeetingViewScalarFieldEnum | OfficeMeetingViewScalarFieldEnum[]
+  }
+
+  /**
+   * OfficeMeetingView create
+   */
+  export type OfficeMeetingViewCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OfficeMeetingView
+     */
+    select?: OfficeMeetingViewSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OfficeMeetingView
+     */
+    omit?: OfficeMeetingViewOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OfficeMeetingViewInclude<ExtArgs> | null
+    /**
+     * The data needed to create a OfficeMeetingView.
+     */
+    data: XOR<OfficeMeetingViewCreateInput, OfficeMeetingViewUncheckedCreateInput>
+  }
+
+  /**
+   * OfficeMeetingView createMany
+   */
+  export type OfficeMeetingViewCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many OfficeMeetingViews.
+     */
+    data: OfficeMeetingViewCreateManyInput | OfficeMeetingViewCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * OfficeMeetingView createManyAndReturn
+   */
+  export type OfficeMeetingViewCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OfficeMeetingView
+     */
+    select?: OfficeMeetingViewSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the OfficeMeetingView
+     */
+    omit?: OfficeMeetingViewOmit<ExtArgs> | null
+    /**
+     * The data used to create many OfficeMeetingViews.
+     */
+    data: OfficeMeetingViewCreateManyInput | OfficeMeetingViewCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OfficeMeetingViewIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * OfficeMeetingView update
+   */
+  export type OfficeMeetingViewUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OfficeMeetingView
+     */
+    select?: OfficeMeetingViewSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OfficeMeetingView
+     */
+    omit?: OfficeMeetingViewOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OfficeMeetingViewInclude<ExtArgs> | null
+    /**
+     * The data needed to update a OfficeMeetingView.
+     */
+    data: XOR<OfficeMeetingViewUpdateInput, OfficeMeetingViewUncheckedUpdateInput>
+    /**
+     * Choose, which OfficeMeetingView to update.
+     */
+    where: OfficeMeetingViewWhereUniqueInput
+  }
+
+  /**
+   * OfficeMeetingView updateMany
+   */
+  export type OfficeMeetingViewUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update OfficeMeetingViews.
+     */
+    data: XOR<OfficeMeetingViewUpdateManyMutationInput, OfficeMeetingViewUncheckedUpdateManyInput>
+    /**
+     * Filter which OfficeMeetingViews to update
+     */
+    where?: OfficeMeetingViewWhereInput
+    /**
+     * Limit how many OfficeMeetingViews to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * OfficeMeetingView updateManyAndReturn
+   */
+  export type OfficeMeetingViewUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OfficeMeetingView
+     */
+    select?: OfficeMeetingViewSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the OfficeMeetingView
+     */
+    omit?: OfficeMeetingViewOmit<ExtArgs> | null
+    /**
+     * The data used to update OfficeMeetingViews.
+     */
+    data: XOR<OfficeMeetingViewUpdateManyMutationInput, OfficeMeetingViewUncheckedUpdateManyInput>
+    /**
+     * Filter which OfficeMeetingViews to update
+     */
+    where?: OfficeMeetingViewWhereInput
+    /**
+     * Limit how many OfficeMeetingViews to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OfficeMeetingViewIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * OfficeMeetingView upsert
+   */
+  export type OfficeMeetingViewUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OfficeMeetingView
+     */
+    select?: OfficeMeetingViewSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OfficeMeetingView
+     */
+    omit?: OfficeMeetingViewOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OfficeMeetingViewInclude<ExtArgs> | null
+    /**
+     * The filter to search for the OfficeMeetingView to update in case it exists.
+     */
+    where: OfficeMeetingViewWhereUniqueInput
+    /**
+     * In case the OfficeMeetingView found by the `where` argument doesn't exist, create a new OfficeMeetingView with this data.
+     */
+    create: XOR<OfficeMeetingViewCreateInput, OfficeMeetingViewUncheckedCreateInput>
+    /**
+     * In case the OfficeMeetingView was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<OfficeMeetingViewUpdateInput, OfficeMeetingViewUncheckedUpdateInput>
+  }
+
+  /**
+   * OfficeMeetingView delete
+   */
+  export type OfficeMeetingViewDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OfficeMeetingView
+     */
+    select?: OfficeMeetingViewSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OfficeMeetingView
+     */
+    omit?: OfficeMeetingViewOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OfficeMeetingViewInclude<ExtArgs> | null
+    /**
+     * Filter which OfficeMeetingView to delete.
+     */
+    where: OfficeMeetingViewWhereUniqueInput
+  }
+
+  /**
+   * OfficeMeetingView deleteMany
+   */
+  export type OfficeMeetingViewDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which OfficeMeetingViews to delete
+     */
+    where?: OfficeMeetingViewWhereInput
+    /**
+     * Limit how many OfficeMeetingViews to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * OfficeMeetingView without action
+   */
+  export type OfficeMeetingViewDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OfficeMeetingView
+     */
+    select?: OfficeMeetingViewSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OfficeMeetingView
+     */
+    omit?: OfficeMeetingViewOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OfficeMeetingViewInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Model CallRoundInstructor
    */
 
@@ -27628,6 +30185,33 @@ export namespace Prisma {
   export type NotificationScalarFieldEnum = (typeof NotificationScalarFieldEnum)[keyof typeof NotificationScalarFieldEnum]
 
 
+  export const OfficeMeetingScalarFieldEnum: {
+    id: 'id',
+    projectId: 'projectId',
+    instructorId: 'instructorId',
+    target: 'target',
+    memberUserIds: 'memberUserIds',
+    meetingAt: 'meetingAt',
+    location: 'location',
+    note: 'note',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type OfficeMeetingScalarFieldEnum = (typeof OfficeMeetingScalarFieldEnum)[keyof typeof OfficeMeetingScalarFieldEnum]
+
+
+  export const OfficeMeetingViewScalarFieldEnum: {
+    id: 'id',
+    meetingId: 'meetingId',
+    userId: 'userId',
+    isRead: 'isRead',
+    readAt: 'readAt'
+  };
+
+  export type OfficeMeetingViewScalarFieldEnum = (typeof OfficeMeetingViewScalarFieldEnum)[keyof typeof OfficeMeetingViewScalarFieldEnum]
+
+
   export const CallRoundInstructorScalarFieldEnum: {
     id: 'id',
     callRoundId: 'callRoundId',
@@ -28215,6 +30799,8 @@ export namespace Prisma {
     callRoundInstructors?: CallRoundInstructorListRelationFilter
     callRoundCouncilMembers?: CallRoundCouncilMemberListRelationFilter
     councilAssignments?: CouncilMemberAssignmentListRelationFilter
+    officeMeetingsAsInstructor?: OfficeMeetingListRelationFilter
+    officeMeetingViews?: OfficeMeetingViewListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -28248,6 +30834,8 @@ export namespace Prisma {
     callRoundInstructors?: CallRoundInstructorOrderByRelationAggregateInput
     callRoundCouncilMembers?: CallRoundCouncilMemberOrderByRelationAggregateInput
     councilAssignments?: CouncilMemberAssignmentOrderByRelationAggregateInput
+    officeMeetingsAsInstructor?: OfficeMeetingOrderByRelationAggregateInput
+    officeMeetingViews?: OfficeMeetingViewOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -28284,6 +30872,8 @@ export namespace Prisma {
     callRoundInstructors?: CallRoundInstructorListRelationFilter
     callRoundCouncilMembers?: CallRoundCouncilMemberListRelationFilter
     councilAssignments?: CouncilMemberAssignmentListRelationFilter
+    officeMeetingsAsInstructor?: OfficeMeetingListRelationFilter
+    officeMeetingViews?: OfficeMeetingViewListRelationFilter
   }, "id" | "code" | "email">
 
   export type UserOrderByWithAggregationInput = {
@@ -28614,6 +31204,7 @@ export namespace Prisma {
     disbursements?: FundingDisbursementListRelationFilter
     extensionRequests?: ExtensionRequestListRelationFilter
     instructor?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+    officeMeetings?: OfficeMeetingListRelationFilter
   }
 
   export type ProjectOrderByWithRelationInput = {
@@ -28644,6 +31235,7 @@ export namespace Prisma {
     disbursements?: FundingDisbursementOrderByRelationAggregateInput
     extensionRequests?: ExtensionRequestOrderByRelationAggregateInput
     instructor?: UserOrderByWithRelationInput
+    officeMeetings?: OfficeMeetingOrderByRelationAggregateInput
   }
 
   export type ProjectWhereUniqueInput = Prisma.AtLeast<{
@@ -28677,6 +31269,7 @@ export namespace Prisma {
     disbursements?: FundingDisbursementListRelationFilter
     extensionRequests?: ExtensionRequestListRelationFilter
     instructor?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+    officeMeetings?: OfficeMeetingListRelationFilter
   }, "id" | "code">
 
   export type ProjectOrderByWithAggregationInput = {
@@ -29418,6 +32011,151 @@ export namespace Prisma {
     readAt?: DateTimeNullableWithAggregatesFilter<"Notification"> | Date | string | null
   }
 
+  export type OfficeMeetingWhereInput = {
+    AND?: OfficeMeetingWhereInput | OfficeMeetingWhereInput[]
+    OR?: OfficeMeetingWhereInput[]
+    NOT?: OfficeMeetingWhereInput | OfficeMeetingWhereInput[]
+    id?: StringFilter<"OfficeMeeting"> | string
+    projectId?: StringFilter<"OfficeMeeting"> | string
+    instructorId?: StringFilter<"OfficeMeeting"> | string
+    target?: StringFilter<"OfficeMeeting"> | string
+    memberUserIds?: StringNullableListFilter<"OfficeMeeting">
+    meetingAt?: DateTimeFilter<"OfficeMeeting"> | Date | string
+    location?: StringFilter<"OfficeMeeting"> | string
+    note?: StringNullableFilter<"OfficeMeeting"> | string | null
+    createdAt?: DateTimeFilter<"OfficeMeeting"> | Date | string
+    updatedAt?: DateTimeFilter<"OfficeMeeting"> | Date | string
+    project?: XOR<ProjectScalarRelationFilter, ProjectWhereInput>
+    instructor?: XOR<UserScalarRelationFilter, UserWhereInput>
+    views?: OfficeMeetingViewListRelationFilter
+  }
+
+  export type OfficeMeetingOrderByWithRelationInput = {
+    id?: SortOrder
+    projectId?: SortOrder
+    instructorId?: SortOrder
+    target?: SortOrder
+    memberUserIds?: SortOrder
+    meetingAt?: SortOrder
+    location?: SortOrder
+    note?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    project?: ProjectOrderByWithRelationInput
+    instructor?: UserOrderByWithRelationInput
+    views?: OfficeMeetingViewOrderByRelationAggregateInput
+  }
+
+  export type OfficeMeetingWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: OfficeMeetingWhereInput | OfficeMeetingWhereInput[]
+    OR?: OfficeMeetingWhereInput[]
+    NOT?: OfficeMeetingWhereInput | OfficeMeetingWhereInput[]
+    projectId?: StringFilter<"OfficeMeeting"> | string
+    instructorId?: StringFilter<"OfficeMeeting"> | string
+    target?: StringFilter<"OfficeMeeting"> | string
+    memberUserIds?: StringNullableListFilter<"OfficeMeeting">
+    meetingAt?: DateTimeFilter<"OfficeMeeting"> | Date | string
+    location?: StringFilter<"OfficeMeeting"> | string
+    note?: StringNullableFilter<"OfficeMeeting"> | string | null
+    createdAt?: DateTimeFilter<"OfficeMeeting"> | Date | string
+    updatedAt?: DateTimeFilter<"OfficeMeeting"> | Date | string
+    project?: XOR<ProjectScalarRelationFilter, ProjectWhereInput>
+    instructor?: XOR<UserScalarRelationFilter, UserWhereInput>
+    views?: OfficeMeetingViewListRelationFilter
+  }, "id">
+
+  export type OfficeMeetingOrderByWithAggregationInput = {
+    id?: SortOrder
+    projectId?: SortOrder
+    instructorId?: SortOrder
+    target?: SortOrder
+    memberUserIds?: SortOrder
+    meetingAt?: SortOrder
+    location?: SortOrder
+    note?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: OfficeMeetingCountOrderByAggregateInput
+    _max?: OfficeMeetingMaxOrderByAggregateInput
+    _min?: OfficeMeetingMinOrderByAggregateInput
+  }
+
+  export type OfficeMeetingScalarWhereWithAggregatesInput = {
+    AND?: OfficeMeetingScalarWhereWithAggregatesInput | OfficeMeetingScalarWhereWithAggregatesInput[]
+    OR?: OfficeMeetingScalarWhereWithAggregatesInput[]
+    NOT?: OfficeMeetingScalarWhereWithAggregatesInput | OfficeMeetingScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"OfficeMeeting"> | string
+    projectId?: StringWithAggregatesFilter<"OfficeMeeting"> | string
+    instructorId?: StringWithAggregatesFilter<"OfficeMeeting"> | string
+    target?: StringWithAggregatesFilter<"OfficeMeeting"> | string
+    memberUserIds?: StringNullableListFilter<"OfficeMeeting">
+    meetingAt?: DateTimeWithAggregatesFilter<"OfficeMeeting"> | Date | string
+    location?: StringWithAggregatesFilter<"OfficeMeeting"> | string
+    note?: StringNullableWithAggregatesFilter<"OfficeMeeting"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"OfficeMeeting"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"OfficeMeeting"> | Date | string
+  }
+
+  export type OfficeMeetingViewWhereInput = {
+    AND?: OfficeMeetingViewWhereInput | OfficeMeetingViewWhereInput[]
+    OR?: OfficeMeetingViewWhereInput[]
+    NOT?: OfficeMeetingViewWhereInput | OfficeMeetingViewWhereInput[]
+    id?: StringFilter<"OfficeMeetingView"> | string
+    meetingId?: StringFilter<"OfficeMeetingView"> | string
+    userId?: StringFilter<"OfficeMeetingView"> | string
+    isRead?: BoolFilter<"OfficeMeetingView"> | boolean
+    readAt?: DateTimeNullableFilter<"OfficeMeetingView"> | Date | string | null
+    meeting?: XOR<OfficeMeetingScalarRelationFilter, OfficeMeetingWhereInput>
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }
+
+  export type OfficeMeetingViewOrderByWithRelationInput = {
+    id?: SortOrder
+    meetingId?: SortOrder
+    userId?: SortOrder
+    isRead?: SortOrder
+    readAt?: SortOrderInput | SortOrder
+    meeting?: OfficeMeetingOrderByWithRelationInput
+    user?: UserOrderByWithRelationInput
+  }
+
+  export type OfficeMeetingViewWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    meetingId_userId?: OfficeMeetingViewMeetingIdUserIdCompoundUniqueInput
+    AND?: OfficeMeetingViewWhereInput | OfficeMeetingViewWhereInput[]
+    OR?: OfficeMeetingViewWhereInput[]
+    NOT?: OfficeMeetingViewWhereInput | OfficeMeetingViewWhereInput[]
+    meetingId?: StringFilter<"OfficeMeetingView"> | string
+    userId?: StringFilter<"OfficeMeetingView"> | string
+    isRead?: BoolFilter<"OfficeMeetingView"> | boolean
+    readAt?: DateTimeNullableFilter<"OfficeMeetingView"> | Date | string | null
+    meeting?: XOR<OfficeMeetingScalarRelationFilter, OfficeMeetingWhereInput>
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }, "id" | "meetingId_userId">
+
+  export type OfficeMeetingViewOrderByWithAggregationInput = {
+    id?: SortOrder
+    meetingId?: SortOrder
+    userId?: SortOrder
+    isRead?: SortOrder
+    readAt?: SortOrderInput | SortOrder
+    _count?: OfficeMeetingViewCountOrderByAggregateInput
+    _max?: OfficeMeetingViewMaxOrderByAggregateInput
+    _min?: OfficeMeetingViewMinOrderByAggregateInput
+  }
+
+  export type OfficeMeetingViewScalarWhereWithAggregatesInput = {
+    AND?: OfficeMeetingViewScalarWhereWithAggregatesInput | OfficeMeetingViewScalarWhereWithAggregatesInput[]
+    OR?: OfficeMeetingViewScalarWhereWithAggregatesInput[]
+    NOT?: OfficeMeetingViewScalarWhereWithAggregatesInput | OfficeMeetingViewScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"OfficeMeetingView"> | string
+    meetingId?: StringWithAggregatesFilter<"OfficeMeetingView"> | string
+    userId?: StringWithAggregatesFilter<"OfficeMeetingView"> | string
+    isRead?: BoolWithAggregatesFilter<"OfficeMeetingView"> | boolean
+    readAt?: DateTimeNullableWithAggregatesFilter<"OfficeMeetingView"> | Date | string | null
+  }
+
   export type CallRoundInstructorWhereInput = {
     AND?: CallRoundInstructorWhereInput | CallRoundInstructorWhereInput[]
     OR?: CallRoundInstructorWhereInput[]
@@ -29958,6 +32696,8 @@ export namespace Prisma {
     callRoundInstructors?: CallRoundInstructorCreateNestedManyWithoutInstructorInput
     callRoundCouncilMembers?: CallRoundCouncilMemberCreateNestedManyWithoutCouncilMemberInput
     councilAssignments?: CouncilMemberAssignmentCreateNestedManyWithoutCouncilMemberInput
+    officeMeetingsAsInstructor?: OfficeMeetingCreateNestedManyWithoutInstructorInput
+    officeMeetingViews?: OfficeMeetingViewCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -29988,6 +32728,8 @@ export namespace Prisma {
     callRoundInstructors?: CallRoundInstructorUncheckedCreateNestedManyWithoutInstructorInput
     callRoundCouncilMembers?: CallRoundCouncilMemberUncheckedCreateNestedManyWithoutCouncilMemberInput
     councilAssignments?: CouncilMemberAssignmentUncheckedCreateNestedManyWithoutCouncilMemberInput
+    officeMeetingsAsInstructor?: OfficeMeetingUncheckedCreateNestedManyWithoutInstructorInput
+    officeMeetingViews?: OfficeMeetingViewUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserUpdateInput = {
@@ -30018,6 +32760,8 @@ export namespace Prisma {
     callRoundInstructors?: CallRoundInstructorUpdateManyWithoutInstructorNestedInput
     callRoundCouncilMembers?: CallRoundCouncilMemberUpdateManyWithoutCouncilMemberNestedInput
     councilAssignments?: CouncilMemberAssignmentUpdateManyWithoutCouncilMemberNestedInput
+    officeMeetingsAsInstructor?: OfficeMeetingUpdateManyWithoutInstructorNestedInput
+    officeMeetingViews?: OfficeMeetingViewUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -30048,6 +32792,8 @@ export namespace Prisma {
     callRoundInstructors?: CallRoundInstructorUncheckedUpdateManyWithoutInstructorNestedInput
     callRoundCouncilMembers?: CallRoundCouncilMemberUncheckedUpdateManyWithoutCouncilMemberNestedInput
     councilAssignments?: CouncilMemberAssignmentUncheckedUpdateManyWithoutCouncilMemberNestedInput
+    officeMeetingsAsInstructor?: OfficeMeetingUncheckedUpdateManyWithoutInstructorNestedInput
+    officeMeetingViews?: OfficeMeetingViewUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -30435,6 +33181,7 @@ export namespace Prisma {
     disbursements?: FundingDisbursementCreateNestedManyWithoutProjectInput
     extensionRequests?: ExtensionRequestCreateNestedManyWithoutProjectInput
     instructor?: UserCreateNestedOneWithoutInstructedProjectsInput
+    officeMeetings?: OfficeMeetingCreateNestedManyWithoutProjectInput
   }
 
   export type ProjectUncheckedCreateInput = {
@@ -30460,6 +33207,7 @@ export namespace Prisma {
     councilEvaluations?: CouncilEvaluationUncheckedCreateNestedManyWithoutProjectInput
     disbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutProjectInput
     extensionRequests?: ExtensionRequestUncheckedCreateNestedManyWithoutProjectInput
+    officeMeetings?: OfficeMeetingUncheckedCreateNestedManyWithoutProjectInput
   }
 
   export type ProjectUpdateInput = {
@@ -30485,6 +33233,7 @@ export namespace Prisma {
     disbursements?: FundingDisbursementUpdateManyWithoutProjectNestedInput
     extensionRequests?: ExtensionRequestUpdateManyWithoutProjectNestedInput
     instructor?: UserUpdateOneWithoutInstructedProjectsNestedInput
+    officeMeetings?: OfficeMeetingUpdateManyWithoutProjectNestedInput
   }
 
   export type ProjectUncheckedUpdateInput = {
@@ -30510,6 +33259,7 @@ export namespace Prisma {
     councilEvaluations?: CouncilEvaluationUncheckedUpdateManyWithoutProjectNestedInput
     disbursements?: FundingDisbursementUncheckedUpdateManyWithoutProjectNestedInput
     extensionRequests?: ExtensionRequestUncheckedUpdateManyWithoutProjectNestedInput
+    officeMeetings?: OfficeMeetingUncheckedUpdateManyWithoutProjectNestedInput
   }
 
   export type ProjectCreateManyInput = {
@@ -31327,6 +34077,153 @@ export namespace Prisma {
     readAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
+  export type OfficeMeetingCreateInput = {
+    id?: string
+    target: string
+    memberUserIds?: OfficeMeetingCreatememberUserIdsInput | string[]
+    meetingAt: Date | string
+    location: string
+    note?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    project: ProjectCreateNestedOneWithoutOfficeMeetingsInput
+    instructor: UserCreateNestedOneWithoutOfficeMeetingsAsInstructorInput
+    views?: OfficeMeetingViewCreateNestedManyWithoutMeetingInput
+  }
+
+  export type OfficeMeetingUncheckedCreateInput = {
+    id?: string
+    projectId: string
+    instructorId: string
+    target: string
+    memberUserIds?: OfficeMeetingCreatememberUserIdsInput | string[]
+    meetingAt: Date | string
+    location: string
+    note?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    views?: OfficeMeetingViewUncheckedCreateNestedManyWithoutMeetingInput
+  }
+
+  export type OfficeMeetingUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    target?: StringFieldUpdateOperationsInput | string
+    memberUserIds?: OfficeMeetingUpdatememberUserIdsInput | string[]
+    meetingAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    location?: StringFieldUpdateOperationsInput | string
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    project?: ProjectUpdateOneRequiredWithoutOfficeMeetingsNestedInput
+    instructor?: UserUpdateOneRequiredWithoutOfficeMeetingsAsInstructorNestedInput
+    views?: OfficeMeetingViewUpdateManyWithoutMeetingNestedInput
+  }
+
+  export type OfficeMeetingUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    projectId?: StringFieldUpdateOperationsInput | string
+    instructorId?: StringFieldUpdateOperationsInput | string
+    target?: StringFieldUpdateOperationsInput | string
+    memberUserIds?: OfficeMeetingUpdatememberUserIdsInput | string[]
+    meetingAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    location?: StringFieldUpdateOperationsInput | string
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    views?: OfficeMeetingViewUncheckedUpdateManyWithoutMeetingNestedInput
+  }
+
+  export type OfficeMeetingCreateManyInput = {
+    id?: string
+    projectId: string
+    instructorId: string
+    target: string
+    memberUserIds?: OfficeMeetingCreatememberUserIdsInput | string[]
+    meetingAt: Date | string
+    location: string
+    note?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type OfficeMeetingUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    target?: StringFieldUpdateOperationsInput | string
+    memberUserIds?: OfficeMeetingUpdatememberUserIdsInput | string[]
+    meetingAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    location?: StringFieldUpdateOperationsInput | string
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type OfficeMeetingUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    projectId?: StringFieldUpdateOperationsInput | string
+    instructorId?: StringFieldUpdateOperationsInput | string
+    target?: StringFieldUpdateOperationsInput | string
+    memberUserIds?: OfficeMeetingUpdatememberUserIdsInput | string[]
+    meetingAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    location?: StringFieldUpdateOperationsInput | string
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type OfficeMeetingViewCreateInput = {
+    id?: string
+    isRead?: boolean
+    readAt?: Date | string | null
+    meeting: OfficeMeetingCreateNestedOneWithoutViewsInput
+    user: UserCreateNestedOneWithoutOfficeMeetingViewsInput
+  }
+
+  export type OfficeMeetingViewUncheckedCreateInput = {
+    id?: string
+    meetingId: string
+    userId: string
+    isRead?: boolean
+    readAt?: Date | string | null
+  }
+
+  export type OfficeMeetingViewUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    isRead?: BoolFieldUpdateOperationsInput | boolean
+    readAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    meeting?: OfficeMeetingUpdateOneRequiredWithoutViewsNestedInput
+    user?: UserUpdateOneRequiredWithoutOfficeMeetingViewsNestedInput
+  }
+
+  export type OfficeMeetingViewUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    meetingId?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    isRead?: BoolFieldUpdateOperationsInput | boolean
+    readAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type OfficeMeetingViewCreateManyInput = {
+    id?: string
+    meetingId: string
+    userId: string
+    isRead?: boolean
+    readAt?: Date | string | null
+  }
+
+  export type OfficeMeetingViewUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    isRead?: BoolFieldUpdateOperationsInput | boolean
+    readAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type OfficeMeetingViewUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    meetingId?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    isRead?: BoolFieldUpdateOperationsInput | boolean
+    readAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
   export type CallRoundInstructorCreateInput = {
     id?: string
     createdAt?: Date | string
@@ -31904,6 +34801,18 @@ export namespace Prisma {
     none?: CouncilMemberAssignmentWhereInput
   }
 
+  export type OfficeMeetingListRelationFilter = {
+    every?: OfficeMeetingWhereInput
+    some?: OfficeMeetingWhereInput
+    none?: OfficeMeetingWhereInput
+  }
+
+  export type OfficeMeetingViewListRelationFilter = {
+    every?: OfficeMeetingViewWhereInput
+    some?: OfficeMeetingViewWhereInput
+    none?: OfficeMeetingViewWhereInput
+  }
+
   export type ProjectOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -31929,6 +34838,14 @@ export namespace Prisma {
   }
 
   export type CouncilMemberAssignmentOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type OfficeMeetingOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type OfficeMeetingViewOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -33069,6 +35986,85 @@ export namespace Prisma {
     _max?: NestedEnumNotificationTypeFilter<$PrismaModel>
   }
 
+  export type StringNullableListFilter<$PrismaModel = never> = {
+    equals?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    has?: string | StringFieldRefInput<$PrismaModel> | null
+    hasEvery?: string[] | ListStringFieldRefInput<$PrismaModel>
+    hasSome?: string[] | ListStringFieldRefInput<$PrismaModel>
+    isEmpty?: boolean
+  }
+
+  export type OfficeMeetingCountOrderByAggregateInput = {
+    id?: SortOrder
+    projectId?: SortOrder
+    instructorId?: SortOrder
+    target?: SortOrder
+    memberUserIds?: SortOrder
+    meetingAt?: SortOrder
+    location?: SortOrder
+    note?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type OfficeMeetingMaxOrderByAggregateInput = {
+    id?: SortOrder
+    projectId?: SortOrder
+    instructorId?: SortOrder
+    target?: SortOrder
+    meetingAt?: SortOrder
+    location?: SortOrder
+    note?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type OfficeMeetingMinOrderByAggregateInput = {
+    id?: SortOrder
+    projectId?: SortOrder
+    instructorId?: SortOrder
+    target?: SortOrder
+    meetingAt?: SortOrder
+    location?: SortOrder
+    note?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type OfficeMeetingScalarRelationFilter = {
+    is?: OfficeMeetingWhereInput
+    isNot?: OfficeMeetingWhereInput
+  }
+
+  export type OfficeMeetingViewMeetingIdUserIdCompoundUniqueInput = {
+    meetingId: string
+    userId: string
+  }
+
+  export type OfficeMeetingViewCountOrderByAggregateInput = {
+    id?: SortOrder
+    meetingId?: SortOrder
+    userId?: SortOrder
+    isRead?: SortOrder
+    readAt?: SortOrder
+  }
+
+  export type OfficeMeetingViewMaxOrderByAggregateInput = {
+    id?: SortOrder
+    meetingId?: SortOrder
+    userId?: SortOrder
+    isRead?: SortOrder
+    readAt?: SortOrder
+  }
+
+  export type OfficeMeetingViewMinOrderByAggregateInput = {
+    id?: SortOrder
+    meetingId?: SortOrder
+    userId?: SortOrder
+    isRead?: SortOrder
+    readAt?: SortOrder
+  }
+
   export type CallRoundScalarRelationFilter = {
     is?: CallRoundWhereInput
     isNot?: CallRoundWhereInput
@@ -33682,6 +36678,20 @@ export namespace Prisma {
     connect?: CouncilMemberAssignmentWhereUniqueInput | CouncilMemberAssignmentWhereUniqueInput[]
   }
 
+  export type OfficeMeetingCreateNestedManyWithoutInstructorInput = {
+    create?: XOR<OfficeMeetingCreateWithoutInstructorInput, OfficeMeetingUncheckedCreateWithoutInstructorInput> | OfficeMeetingCreateWithoutInstructorInput[] | OfficeMeetingUncheckedCreateWithoutInstructorInput[]
+    connectOrCreate?: OfficeMeetingCreateOrConnectWithoutInstructorInput | OfficeMeetingCreateOrConnectWithoutInstructorInput[]
+    createMany?: OfficeMeetingCreateManyInstructorInputEnvelope
+    connect?: OfficeMeetingWhereUniqueInput | OfficeMeetingWhereUniqueInput[]
+  }
+
+  export type OfficeMeetingViewCreateNestedManyWithoutUserInput = {
+    create?: XOR<OfficeMeetingViewCreateWithoutUserInput, OfficeMeetingViewUncheckedCreateWithoutUserInput> | OfficeMeetingViewCreateWithoutUserInput[] | OfficeMeetingViewUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: OfficeMeetingViewCreateOrConnectWithoutUserInput | OfficeMeetingViewCreateOrConnectWithoutUserInput[]
+    createMany?: OfficeMeetingViewCreateManyUserInputEnvelope
+    connect?: OfficeMeetingViewWhereUniqueInput | OfficeMeetingViewWhereUniqueInput[]
+  }
+
   export type ProjectUncheckedCreateNestedManyWithoutLeaderInput = {
     create?: XOR<ProjectCreateWithoutLeaderInput, ProjectUncheckedCreateWithoutLeaderInput> | ProjectCreateWithoutLeaderInput[] | ProjectUncheckedCreateWithoutLeaderInput[]
     connectOrCreate?: ProjectCreateOrConnectWithoutLeaderInput | ProjectCreateOrConnectWithoutLeaderInput[]
@@ -33757,6 +36767,20 @@ export namespace Prisma {
     connectOrCreate?: CouncilMemberAssignmentCreateOrConnectWithoutCouncilMemberInput | CouncilMemberAssignmentCreateOrConnectWithoutCouncilMemberInput[]
     createMany?: CouncilMemberAssignmentCreateManyCouncilMemberInputEnvelope
     connect?: CouncilMemberAssignmentWhereUniqueInput | CouncilMemberAssignmentWhereUniqueInput[]
+  }
+
+  export type OfficeMeetingUncheckedCreateNestedManyWithoutInstructorInput = {
+    create?: XOR<OfficeMeetingCreateWithoutInstructorInput, OfficeMeetingUncheckedCreateWithoutInstructorInput> | OfficeMeetingCreateWithoutInstructorInput[] | OfficeMeetingUncheckedCreateWithoutInstructorInput[]
+    connectOrCreate?: OfficeMeetingCreateOrConnectWithoutInstructorInput | OfficeMeetingCreateOrConnectWithoutInstructorInput[]
+    createMany?: OfficeMeetingCreateManyInstructorInputEnvelope
+    connect?: OfficeMeetingWhereUniqueInput | OfficeMeetingWhereUniqueInput[]
+  }
+
+  export type OfficeMeetingViewUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<OfficeMeetingViewCreateWithoutUserInput, OfficeMeetingViewUncheckedCreateWithoutUserInput> | OfficeMeetingViewCreateWithoutUserInput[] | OfficeMeetingViewUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: OfficeMeetingViewCreateOrConnectWithoutUserInput | OfficeMeetingViewCreateOrConnectWithoutUserInput[]
+    createMany?: OfficeMeetingViewCreateManyUserInputEnvelope
+    connect?: OfficeMeetingViewWhereUniqueInput | OfficeMeetingViewWhereUniqueInput[]
   }
 
   export type NullableDateTimeFieldUpdateOperationsInput = {
@@ -33955,6 +36979,34 @@ export namespace Prisma {
     deleteMany?: CouncilMemberAssignmentScalarWhereInput | CouncilMemberAssignmentScalarWhereInput[]
   }
 
+  export type OfficeMeetingUpdateManyWithoutInstructorNestedInput = {
+    create?: XOR<OfficeMeetingCreateWithoutInstructorInput, OfficeMeetingUncheckedCreateWithoutInstructorInput> | OfficeMeetingCreateWithoutInstructorInput[] | OfficeMeetingUncheckedCreateWithoutInstructorInput[]
+    connectOrCreate?: OfficeMeetingCreateOrConnectWithoutInstructorInput | OfficeMeetingCreateOrConnectWithoutInstructorInput[]
+    upsert?: OfficeMeetingUpsertWithWhereUniqueWithoutInstructorInput | OfficeMeetingUpsertWithWhereUniqueWithoutInstructorInput[]
+    createMany?: OfficeMeetingCreateManyInstructorInputEnvelope
+    set?: OfficeMeetingWhereUniqueInput | OfficeMeetingWhereUniqueInput[]
+    disconnect?: OfficeMeetingWhereUniqueInput | OfficeMeetingWhereUniqueInput[]
+    delete?: OfficeMeetingWhereUniqueInput | OfficeMeetingWhereUniqueInput[]
+    connect?: OfficeMeetingWhereUniqueInput | OfficeMeetingWhereUniqueInput[]
+    update?: OfficeMeetingUpdateWithWhereUniqueWithoutInstructorInput | OfficeMeetingUpdateWithWhereUniqueWithoutInstructorInput[]
+    updateMany?: OfficeMeetingUpdateManyWithWhereWithoutInstructorInput | OfficeMeetingUpdateManyWithWhereWithoutInstructorInput[]
+    deleteMany?: OfficeMeetingScalarWhereInput | OfficeMeetingScalarWhereInput[]
+  }
+
+  export type OfficeMeetingViewUpdateManyWithoutUserNestedInput = {
+    create?: XOR<OfficeMeetingViewCreateWithoutUserInput, OfficeMeetingViewUncheckedCreateWithoutUserInput> | OfficeMeetingViewCreateWithoutUserInput[] | OfficeMeetingViewUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: OfficeMeetingViewCreateOrConnectWithoutUserInput | OfficeMeetingViewCreateOrConnectWithoutUserInput[]
+    upsert?: OfficeMeetingViewUpsertWithWhereUniqueWithoutUserInput | OfficeMeetingViewUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: OfficeMeetingViewCreateManyUserInputEnvelope
+    set?: OfficeMeetingViewWhereUniqueInput | OfficeMeetingViewWhereUniqueInput[]
+    disconnect?: OfficeMeetingViewWhereUniqueInput | OfficeMeetingViewWhereUniqueInput[]
+    delete?: OfficeMeetingViewWhereUniqueInput | OfficeMeetingViewWhereUniqueInput[]
+    connect?: OfficeMeetingViewWhereUniqueInput | OfficeMeetingViewWhereUniqueInput[]
+    update?: OfficeMeetingViewUpdateWithWhereUniqueWithoutUserInput | OfficeMeetingViewUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: OfficeMeetingViewUpdateManyWithWhereWithoutUserInput | OfficeMeetingViewUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: OfficeMeetingViewScalarWhereInput | OfficeMeetingViewScalarWhereInput[]
+  }
+
   export type ProjectUncheckedUpdateManyWithoutLeaderNestedInput = {
     create?: XOR<ProjectCreateWithoutLeaderInput, ProjectUncheckedCreateWithoutLeaderInput> | ProjectCreateWithoutLeaderInput[] | ProjectUncheckedCreateWithoutLeaderInput[]
     connectOrCreate?: ProjectCreateOrConnectWithoutLeaderInput | ProjectCreateOrConnectWithoutLeaderInput[]
@@ -34107,6 +37159,34 @@ export namespace Prisma {
     update?: CouncilMemberAssignmentUpdateWithWhereUniqueWithoutCouncilMemberInput | CouncilMemberAssignmentUpdateWithWhereUniqueWithoutCouncilMemberInput[]
     updateMany?: CouncilMemberAssignmentUpdateManyWithWhereWithoutCouncilMemberInput | CouncilMemberAssignmentUpdateManyWithWhereWithoutCouncilMemberInput[]
     deleteMany?: CouncilMemberAssignmentScalarWhereInput | CouncilMemberAssignmentScalarWhereInput[]
+  }
+
+  export type OfficeMeetingUncheckedUpdateManyWithoutInstructorNestedInput = {
+    create?: XOR<OfficeMeetingCreateWithoutInstructorInput, OfficeMeetingUncheckedCreateWithoutInstructorInput> | OfficeMeetingCreateWithoutInstructorInput[] | OfficeMeetingUncheckedCreateWithoutInstructorInput[]
+    connectOrCreate?: OfficeMeetingCreateOrConnectWithoutInstructorInput | OfficeMeetingCreateOrConnectWithoutInstructorInput[]
+    upsert?: OfficeMeetingUpsertWithWhereUniqueWithoutInstructorInput | OfficeMeetingUpsertWithWhereUniqueWithoutInstructorInput[]
+    createMany?: OfficeMeetingCreateManyInstructorInputEnvelope
+    set?: OfficeMeetingWhereUniqueInput | OfficeMeetingWhereUniqueInput[]
+    disconnect?: OfficeMeetingWhereUniqueInput | OfficeMeetingWhereUniqueInput[]
+    delete?: OfficeMeetingWhereUniqueInput | OfficeMeetingWhereUniqueInput[]
+    connect?: OfficeMeetingWhereUniqueInput | OfficeMeetingWhereUniqueInput[]
+    update?: OfficeMeetingUpdateWithWhereUniqueWithoutInstructorInput | OfficeMeetingUpdateWithWhereUniqueWithoutInstructorInput[]
+    updateMany?: OfficeMeetingUpdateManyWithWhereWithoutInstructorInput | OfficeMeetingUpdateManyWithWhereWithoutInstructorInput[]
+    deleteMany?: OfficeMeetingScalarWhereInput | OfficeMeetingScalarWhereInput[]
+  }
+
+  export type OfficeMeetingViewUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<OfficeMeetingViewCreateWithoutUserInput, OfficeMeetingViewUncheckedCreateWithoutUserInput> | OfficeMeetingViewCreateWithoutUserInput[] | OfficeMeetingViewUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: OfficeMeetingViewCreateOrConnectWithoutUserInput | OfficeMeetingViewCreateOrConnectWithoutUserInput[]
+    upsert?: OfficeMeetingViewUpsertWithWhereUniqueWithoutUserInput | OfficeMeetingViewUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: OfficeMeetingViewCreateManyUserInputEnvelope
+    set?: OfficeMeetingViewWhereUniqueInput | OfficeMeetingViewWhereUniqueInput[]
+    disconnect?: OfficeMeetingViewWhereUniqueInput | OfficeMeetingViewWhereUniqueInput[]
+    delete?: OfficeMeetingViewWhereUniqueInput | OfficeMeetingViewWhereUniqueInput[]
+    connect?: OfficeMeetingViewWhereUniqueInput | OfficeMeetingViewWhereUniqueInput[]
+    update?: OfficeMeetingViewUpdateWithWhereUniqueWithoutUserInput | OfficeMeetingViewUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: OfficeMeetingViewUpdateManyWithWhereWithoutUserInput | OfficeMeetingViewUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: OfficeMeetingViewScalarWhereInput | OfficeMeetingViewScalarWhereInput[]
   }
 
   export type ProjectCreateNestedManyWithoutCallRoundInput = {
@@ -34581,6 +37661,13 @@ export namespace Prisma {
     connect?: UserWhereUniqueInput
   }
 
+  export type OfficeMeetingCreateNestedManyWithoutProjectInput = {
+    create?: XOR<OfficeMeetingCreateWithoutProjectInput, OfficeMeetingUncheckedCreateWithoutProjectInput> | OfficeMeetingCreateWithoutProjectInput[] | OfficeMeetingUncheckedCreateWithoutProjectInput[]
+    connectOrCreate?: OfficeMeetingCreateOrConnectWithoutProjectInput | OfficeMeetingCreateOrConnectWithoutProjectInput[]
+    createMany?: OfficeMeetingCreateManyProjectInputEnvelope
+    connect?: OfficeMeetingWhereUniqueInput | OfficeMeetingWhereUniqueInput[]
+  }
+
   export type ProgressReportUncheckedCreateNestedManyWithoutProjectInput = {
     create?: XOR<ProgressReportCreateWithoutProjectInput, ProgressReportUncheckedCreateWithoutProjectInput> | ProgressReportCreateWithoutProjectInput[] | ProgressReportUncheckedCreateWithoutProjectInput[]
     connectOrCreate?: ProgressReportCreateOrConnectWithoutProjectInput | ProgressReportCreateOrConnectWithoutProjectInput[]
@@ -34607,6 +37694,13 @@ export namespace Prisma {
     connectOrCreate?: ExtensionRequestCreateOrConnectWithoutProjectInput | ExtensionRequestCreateOrConnectWithoutProjectInput[]
     createMany?: ExtensionRequestCreateManyProjectInputEnvelope
     connect?: ExtensionRequestWhereUniqueInput | ExtensionRequestWhereUniqueInput[]
+  }
+
+  export type OfficeMeetingUncheckedCreateNestedManyWithoutProjectInput = {
+    create?: XOR<OfficeMeetingCreateWithoutProjectInput, OfficeMeetingUncheckedCreateWithoutProjectInput> | OfficeMeetingCreateWithoutProjectInput[] | OfficeMeetingUncheckedCreateWithoutProjectInput[]
+    connectOrCreate?: OfficeMeetingCreateOrConnectWithoutProjectInput | OfficeMeetingCreateOrConnectWithoutProjectInput[]
+    createMany?: OfficeMeetingCreateManyProjectInputEnvelope
+    connect?: OfficeMeetingWhereUniqueInput | OfficeMeetingWhereUniqueInput[]
   }
 
   export type EnumProjectStatusFieldUpdateOperationsInput = {
@@ -34725,6 +37819,20 @@ export namespace Prisma {
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutInstructedProjectsInput, UserUpdateWithoutInstructedProjectsInput>, UserUncheckedUpdateWithoutInstructedProjectsInput>
   }
 
+  export type OfficeMeetingUpdateManyWithoutProjectNestedInput = {
+    create?: XOR<OfficeMeetingCreateWithoutProjectInput, OfficeMeetingUncheckedCreateWithoutProjectInput> | OfficeMeetingCreateWithoutProjectInput[] | OfficeMeetingUncheckedCreateWithoutProjectInput[]
+    connectOrCreate?: OfficeMeetingCreateOrConnectWithoutProjectInput | OfficeMeetingCreateOrConnectWithoutProjectInput[]
+    upsert?: OfficeMeetingUpsertWithWhereUniqueWithoutProjectInput | OfficeMeetingUpsertWithWhereUniqueWithoutProjectInput[]
+    createMany?: OfficeMeetingCreateManyProjectInputEnvelope
+    set?: OfficeMeetingWhereUniqueInput | OfficeMeetingWhereUniqueInput[]
+    disconnect?: OfficeMeetingWhereUniqueInput | OfficeMeetingWhereUniqueInput[]
+    delete?: OfficeMeetingWhereUniqueInput | OfficeMeetingWhereUniqueInput[]
+    connect?: OfficeMeetingWhereUniqueInput | OfficeMeetingWhereUniqueInput[]
+    update?: OfficeMeetingUpdateWithWhereUniqueWithoutProjectInput | OfficeMeetingUpdateWithWhereUniqueWithoutProjectInput[]
+    updateMany?: OfficeMeetingUpdateManyWithWhereWithoutProjectInput | OfficeMeetingUpdateManyWithWhereWithoutProjectInput[]
+    deleteMany?: OfficeMeetingScalarWhereInput | OfficeMeetingScalarWhereInput[]
+  }
+
   export type ProgressReportUncheckedUpdateManyWithoutProjectNestedInput = {
     create?: XOR<ProgressReportCreateWithoutProjectInput, ProgressReportUncheckedCreateWithoutProjectInput> | ProgressReportCreateWithoutProjectInput[] | ProgressReportUncheckedCreateWithoutProjectInput[]
     connectOrCreate?: ProgressReportCreateOrConnectWithoutProjectInput | ProgressReportCreateOrConnectWithoutProjectInput[]
@@ -34779,6 +37887,20 @@ export namespace Prisma {
     update?: ExtensionRequestUpdateWithWhereUniqueWithoutProjectInput | ExtensionRequestUpdateWithWhereUniqueWithoutProjectInput[]
     updateMany?: ExtensionRequestUpdateManyWithWhereWithoutProjectInput | ExtensionRequestUpdateManyWithWhereWithoutProjectInput[]
     deleteMany?: ExtensionRequestScalarWhereInput | ExtensionRequestScalarWhereInput[]
+  }
+
+  export type OfficeMeetingUncheckedUpdateManyWithoutProjectNestedInput = {
+    create?: XOR<OfficeMeetingCreateWithoutProjectInput, OfficeMeetingUncheckedCreateWithoutProjectInput> | OfficeMeetingCreateWithoutProjectInput[] | OfficeMeetingUncheckedCreateWithoutProjectInput[]
+    connectOrCreate?: OfficeMeetingCreateOrConnectWithoutProjectInput | OfficeMeetingCreateOrConnectWithoutProjectInput[]
+    upsert?: OfficeMeetingUpsertWithWhereUniqueWithoutProjectInput | OfficeMeetingUpsertWithWhereUniqueWithoutProjectInput[]
+    createMany?: OfficeMeetingCreateManyProjectInputEnvelope
+    set?: OfficeMeetingWhereUniqueInput | OfficeMeetingWhereUniqueInput[]
+    disconnect?: OfficeMeetingWhereUniqueInput | OfficeMeetingWhereUniqueInput[]
+    delete?: OfficeMeetingWhereUniqueInput | OfficeMeetingWhereUniqueInput[]
+    connect?: OfficeMeetingWhereUniqueInput | OfficeMeetingWhereUniqueInput[]
+    update?: OfficeMeetingUpdateWithWhereUniqueWithoutProjectInput | OfficeMeetingUpdateWithWhereUniqueWithoutProjectInput[]
+    updateMany?: OfficeMeetingUpdateManyWithWhereWithoutProjectInput | OfficeMeetingUpdateManyWithWhereWithoutProjectInput[]
+    deleteMany?: OfficeMeetingScalarWhereInput | OfficeMeetingScalarWhereInput[]
   }
 
   export type ProgressReportTemplateItemCreateNestedManyWithoutTemplateInput = {
@@ -35095,6 +38217,113 @@ export namespace Prisma {
     upsert?: UserUpsertWithoutNotificationsInput
     connect?: UserWhereUniqueInput
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutNotificationsInput, UserUpdateWithoutNotificationsInput>, UserUncheckedUpdateWithoutNotificationsInput>
+  }
+
+  export type OfficeMeetingCreatememberUserIdsInput = {
+    set: string[]
+  }
+
+  export type ProjectCreateNestedOneWithoutOfficeMeetingsInput = {
+    create?: XOR<ProjectCreateWithoutOfficeMeetingsInput, ProjectUncheckedCreateWithoutOfficeMeetingsInput>
+    connectOrCreate?: ProjectCreateOrConnectWithoutOfficeMeetingsInput
+    connect?: ProjectWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutOfficeMeetingsAsInstructorInput = {
+    create?: XOR<UserCreateWithoutOfficeMeetingsAsInstructorInput, UserUncheckedCreateWithoutOfficeMeetingsAsInstructorInput>
+    connectOrCreate?: UserCreateOrConnectWithoutOfficeMeetingsAsInstructorInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type OfficeMeetingViewCreateNestedManyWithoutMeetingInput = {
+    create?: XOR<OfficeMeetingViewCreateWithoutMeetingInput, OfficeMeetingViewUncheckedCreateWithoutMeetingInput> | OfficeMeetingViewCreateWithoutMeetingInput[] | OfficeMeetingViewUncheckedCreateWithoutMeetingInput[]
+    connectOrCreate?: OfficeMeetingViewCreateOrConnectWithoutMeetingInput | OfficeMeetingViewCreateOrConnectWithoutMeetingInput[]
+    createMany?: OfficeMeetingViewCreateManyMeetingInputEnvelope
+    connect?: OfficeMeetingViewWhereUniqueInput | OfficeMeetingViewWhereUniqueInput[]
+  }
+
+  export type OfficeMeetingViewUncheckedCreateNestedManyWithoutMeetingInput = {
+    create?: XOR<OfficeMeetingViewCreateWithoutMeetingInput, OfficeMeetingViewUncheckedCreateWithoutMeetingInput> | OfficeMeetingViewCreateWithoutMeetingInput[] | OfficeMeetingViewUncheckedCreateWithoutMeetingInput[]
+    connectOrCreate?: OfficeMeetingViewCreateOrConnectWithoutMeetingInput | OfficeMeetingViewCreateOrConnectWithoutMeetingInput[]
+    createMany?: OfficeMeetingViewCreateManyMeetingInputEnvelope
+    connect?: OfficeMeetingViewWhereUniqueInput | OfficeMeetingViewWhereUniqueInput[]
+  }
+
+  export type OfficeMeetingUpdatememberUserIdsInput = {
+    set?: string[]
+    push?: string | string[]
+  }
+
+  export type ProjectUpdateOneRequiredWithoutOfficeMeetingsNestedInput = {
+    create?: XOR<ProjectCreateWithoutOfficeMeetingsInput, ProjectUncheckedCreateWithoutOfficeMeetingsInput>
+    connectOrCreate?: ProjectCreateOrConnectWithoutOfficeMeetingsInput
+    upsert?: ProjectUpsertWithoutOfficeMeetingsInput
+    connect?: ProjectWhereUniqueInput
+    update?: XOR<XOR<ProjectUpdateToOneWithWhereWithoutOfficeMeetingsInput, ProjectUpdateWithoutOfficeMeetingsInput>, ProjectUncheckedUpdateWithoutOfficeMeetingsInput>
+  }
+
+  export type UserUpdateOneRequiredWithoutOfficeMeetingsAsInstructorNestedInput = {
+    create?: XOR<UserCreateWithoutOfficeMeetingsAsInstructorInput, UserUncheckedCreateWithoutOfficeMeetingsAsInstructorInput>
+    connectOrCreate?: UserCreateOrConnectWithoutOfficeMeetingsAsInstructorInput
+    upsert?: UserUpsertWithoutOfficeMeetingsAsInstructorInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutOfficeMeetingsAsInstructorInput, UserUpdateWithoutOfficeMeetingsAsInstructorInput>, UserUncheckedUpdateWithoutOfficeMeetingsAsInstructorInput>
+  }
+
+  export type OfficeMeetingViewUpdateManyWithoutMeetingNestedInput = {
+    create?: XOR<OfficeMeetingViewCreateWithoutMeetingInput, OfficeMeetingViewUncheckedCreateWithoutMeetingInput> | OfficeMeetingViewCreateWithoutMeetingInput[] | OfficeMeetingViewUncheckedCreateWithoutMeetingInput[]
+    connectOrCreate?: OfficeMeetingViewCreateOrConnectWithoutMeetingInput | OfficeMeetingViewCreateOrConnectWithoutMeetingInput[]
+    upsert?: OfficeMeetingViewUpsertWithWhereUniqueWithoutMeetingInput | OfficeMeetingViewUpsertWithWhereUniqueWithoutMeetingInput[]
+    createMany?: OfficeMeetingViewCreateManyMeetingInputEnvelope
+    set?: OfficeMeetingViewWhereUniqueInput | OfficeMeetingViewWhereUniqueInput[]
+    disconnect?: OfficeMeetingViewWhereUniqueInput | OfficeMeetingViewWhereUniqueInput[]
+    delete?: OfficeMeetingViewWhereUniqueInput | OfficeMeetingViewWhereUniqueInput[]
+    connect?: OfficeMeetingViewWhereUniqueInput | OfficeMeetingViewWhereUniqueInput[]
+    update?: OfficeMeetingViewUpdateWithWhereUniqueWithoutMeetingInput | OfficeMeetingViewUpdateWithWhereUniqueWithoutMeetingInput[]
+    updateMany?: OfficeMeetingViewUpdateManyWithWhereWithoutMeetingInput | OfficeMeetingViewUpdateManyWithWhereWithoutMeetingInput[]
+    deleteMany?: OfficeMeetingViewScalarWhereInput | OfficeMeetingViewScalarWhereInput[]
+  }
+
+  export type OfficeMeetingViewUncheckedUpdateManyWithoutMeetingNestedInput = {
+    create?: XOR<OfficeMeetingViewCreateWithoutMeetingInput, OfficeMeetingViewUncheckedCreateWithoutMeetingInput> | OfficeMeetingViewCreateWithoutMeetingInput[] | OfficeMeetingViewUncheckedCreateWithoutMeetingInput[]
+    connectOrCreate?: OfficeMeetingViewCreateOrConnectWithoutMeetingInput | OfficeMeetingViewCreateOrConnectWithoutMeetingInput[]
+    upsert?: OfficeMeetingViewUpsertWithWhereUniqueWithoutMeetingInput | OfficeMeetingViewUpsertWithWhereUniqueWithoutMeetingInput[]
+    createMany?: OfficeMeetingViewCreateManyMeetingInputEnvelope
+    set?: OfficeMeetingViewWhereUniqueInput | OfficeMeetingViewWhereUniqueInput[]
+    disconnect?: OfficeMeetingViewWhereUniqueInput | OfficeMeetingViewWhereUniqueInput[]
+    delete?: OfficeMeetingViewWhereUniqueInput | OfficeMeetingViewWhereUniqueInput[]
+    connect?: OfficeMeetingViewWhereUniqueInput | OfficeMeetingViewWhereUniqueInput[]
+    update?: OfficeMeetingViewUpdateWithWhereUniqueWithoutMeetingInput | OfficeMeetingViewUpdateWithWhereUniqueWithoutMeetingInput[]
+    updateMany?: OfficeMeetingViewUpdateManyWithWhereWithoutMeetingInput | OfficeMeetingViewUpdateManyWithWhereWithoutMeetingInput[]
+    deleteMany?: OfficeMeetingViewScalarWhereInput | OfficeMeetingViewScalarWhereInput[]
+  }
+
+  export type OfficeMeetingCreateNestedOneWithoutViewsInput = {
+    create?: XOR<OfficeMeetingCreateWithoutViewsInput, OfficeMeetingUncheckedCreateWithoutViewsInput>
+    connectOrCreate?: OfficeMeetingCreateOrConnectWithoutViewsInput
+    connect?: OfficeMeetingWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutOfficeMeetingViewsInput = {
+    create?: XOR<UserCreateWithoutOfficeMeetingViewsInput, UserUncheckedCreateWithoutOfficeMeetingViewsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutOfficeMeetingViewsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type OfficeMeetingUpdateOneRequiredWithoutViewsNestedInput = {
+    create?: XOR<OfficeMeetingCreateWithoutViewsInput, OfficeMeetingUncheckedCreateWithoutViewsInput>
+    connectOrCreate?: OfficeMeetingCreateOrConnectWithoutViewsInput
+    upsert?: OfficeMeetingUpsertWithoutViewsInput
+    connect?: OfficeMeetingWhereUniqueInput
+    update?: XOR<XOR<OfficeMeetingUpdateToOneWithWhereWithoutViewsInput, OfficeMeetingUpdateWithoutViewsInput>, OfficeMeetingUncheckedUpdateWithoutViewsInput>
+  }
+
+  export type UserUpdateOneRequiredWithoutOfficeMeetingViewsNestedInput = {
+    create?: XOR<UserCreateWithoutOfficeMeetingViewsInput, UserUncheckedCreateWithoutOfficeMeetingViewsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutOfficeMeetingViewsInput
+    upsert?: UserUpsertWithoutOfficeMeetingViewsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutOfficeMeetingViewsInput, UserUpdateWithoutOfficeMeetingViewsInput>, UserUncheckedUpdateWithoutOfficeMeetingViewsInput>
   }
 
   export type CallRoundCreateNestedOneWithoutAvailableInstructorsInput = {
@@ -35866,6 +39095,8 @@ export namespace Prisma {
     callRoundInstructors?: CallRoundInstructorCreateNestedManyWithoutInstructorInput
     callRoundCouncilMembers?: CallRoundCouncilMemberCreateNestedManyWithoutCouncilMemberInput
     councilAssignments?: CouncilMemberAssignmentCreateNestedManyWithoutCouncilMemberInput
+    officeMeetingsAsInstructor?: OfficeMeetingCreateNestedManyWithoutInstructorInput
+    officeMeetingViews?: OfficeMeetingViewCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutDepartmentRefInput = {
@@ -35895,6 +39126,8 @@ export namespace Prisma {
     callRoundInstructors?: CallRoundInstructorUncheckedCreateNestedManyWithoutInstructorInput
     callRoundCouncilMembers?: CallRoundCouncilMemberUncheckedCreateNestedManyWithoutCouncilMemberInput
     councilAssignments?: CouncilMemberAssignmentUncheckedCreateNestedManyWithoutCouncilMemberInput
+    officeMeetingsAsInstructor?: OfficeMeetingUncheckedCreateNestedManyWithoutInstructorInput
+    officeMeetingViews?: OfficeMeetingViewUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutDepartmentRefInput = {
@@ -36189,6 +39422,8 @@ export namespace Prisma {
     callRoundInstructors?: CallRoundInstructorCreateNestedManyWithoutInstructorInput
     callRoundCouncilMembers?: CallRoundCouncilMemberCreateNestedManyWithoutCouncilMemberInput
     councilAssignments?: CouncilMemberAssignmentCreateNestedManyWithoutCouncilMemberInput
+    officeMeetingsAsInstructor?: OfficeMeetingCreateNestedManyWithoutInstructorInput
+    officeMeetingViews?: OfficeMeetingViewCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutMajorInput = {
@@ -36218,6 +39453,8 @@ export namespace Prisma {
     callRoundInstructors?: CallRoundInstructorUncheckedCreateNestedManyWithoutInstructorInput
     callRoundCouncilMembers?: CallRoundCouncilMemberUncheckedCreateNestedManyWithoutCouncilMemberInput
     councilAssignments?: CouncilMemberAssignmentUncheckedCreateNestedManyWithoutCouncilMemberInput
+    officeMeetingsAsInstructor?: OfficeMeetingUncheckedCreateNestedManyWithoutInstructorInput
+    officeMeetingViews?: OfficeMeetingViewUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutMajorInput = {
@@ -36460,6 +39697,8 @@ export namespace Prisma {
     callRoundInstructors?: CallRoundInstructorCreateNestedManyWithoutInstructorInput
     callRoundCouncilMembers?: CallRoundCouncilMemberCreateNestedManyWithoutCouncilMemberInput
     councilAssignments?: CouncilMemberAssignmentCreateNestedManyWithoutCouncilMemberInput
+    officeMeetingsAsInstructor?: OfficeMeetingCreateNestedManyWithoutInstructorInput
+    officeMeetingViews?: OfficeMeetingViewCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutClassInput = {
@@ -36489,6 +39728,8 @@ export namespace Prisma {
     callRoundInstructors?: CallRoundInstructorUncheckedCreateNestedManyWithoutInstructorInput
     callRoundCouncilMembers?: CallRoundCouncilMemberUncheckedCreateNestedManyWithoutCouncilMemberInput
     councilAssignments?: CouncilMemberAssignmentUncheckedCreateNestedManyWithoutCouncilMemberInput
+    officeMeetingsAsInstructor?: OfficeMeetingUncheckedCreateNestedManyWithoutInstructorInput
+    officeMeetingViews?: OfficeMeetingViewUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutClassInput = {
@@ -36752,6 +39993,7 @@ export namespace Prisma {
     disbursements?: FundingDisbursementCreateNestedManyWithoutProjectInput
     extensionRequests?: ExtensionRequestCreateNestedManyWithoutProjectInput
     instructor?: UserCreateNestedOneWithoutInstructedProjectsInput
+    officeMeetings?: OfficeMeetingCreateNestedManyWithoutProjectInput
   }
 
   export type ProjectUncheckedCreateWithoutLeaderInput = {
@@ -36776,6 +40018,7 @@ export namespace Prisma {
     councilEvaluations?: CouncilEvaluationUncheckedCreateNestedManyWithoutProjectInput
     disbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutProjectInput
     extensionRequests?: ExtensionRequestUncheckedCreateNestedManyWithoutProjectInput
+    officeMeetings?: OfficeMeetingUncheckedCreateNestedManyWithoutProjectInput
   }
 
   export type ProjectCreateOrConnectWithoutLeaderInput = {
@@ -36810,6 +40053,7 @@ export namespace Prisma {
     disbursements?: FundingDisbursementCreateNestedManyWithoutProjectInput
     extensionRequests?: ExtensionRequestCreateNestedManyWithoutProjectInput
     instructor?: UserCreateNestedOneWithoutInstructedProjectsInput
+    officeMeetings?: OfficeMeetingCreateNestedManyWithoutProjectInput
   }
 
   export type ProjectUncheckedCreateWithoutDeanReviewerInput = {
@@ -36834,6 +40078,7 @@ export namespace Prisma {
     councilEvaluations?: CouncilEvaluationUncheckedCreateNestedManyWithoutProjectInput
     disbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutProjectInput
     extensionRequests?: ExtensionRequestUncheckedCreateNestedManyWithoutProjectInput
+    officeMeetings?: OfficeMeetingUncheckedCreateNestedManyWithoutProjectInput
   }
 
   export type ProjectCreateOrConnectWithoutDeanReviewerInput = {
@@ -36990,6 +40235,7 @@ export namespace Prisma {
     councilEvaluations?: CouncilEvaluationCreateNestedManyWithoutProjectInput
     disbursements?: FundingDisbursementCreateNestedManyWithoutProjectInput
     extensionRequests?: ExtensionRequestCreateNestedManyWithoutProjectInput
+    officeMeetings?: OfficeMeetingCreateNestedManyWithoutProjectInput
   }
 
   export type ProjectUncheckedCreateWithoutInstructorInput = {
@@ -37014,6 +40260,7 @@ export namespace Prisma {
     councilEvaluations?: CouncilEvaluationUncheckedCreateNestedManyWithoutProjectInput
     disbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutProjectInput
     extensionRequests?: ExtensionRequestUncheckedCreateNestedManyWithoutProjectInput
+    officeMeetings?: OfficeMeetingUncheckedCreateNestedManyWithoutProjectInput
   }
 
   export type ProjectCreateOrConnectWithoutInstructorInput = {
@@ -37171,6 +40418,66 @@ export namespace Prisma {
 
   export type CouncilMemberAssignmentCreateManyCouncilMemberInputEnvelope = {
     data: CouncilMemberAssignmentCreateManyCouncilMemberInput | CouncilMemberAssignmentCreateManyCouncilMemberInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type OfficeMeetingCreateWithoutInstructorInput = {
+    id?: string
+    target: string
+    memberUserIds?: OfficeMeetingCreatememberUserIdsInput | string[]
+    meetingAt: Date | string
+    location: string
+    note?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    project: ProjectCreateNestedOneWithoutOfficeMeetingsInput
+    views?: OfficeMeetingViewCreateNestedManyWithoutMeetingInput
+  }
+
+  export type OfficeMeetingUncheckedCreateWithoutInstructorInput = {
+    id?: string
+    projectId: string
+    target: string
+    memberUserIds?: OfficeMeetingCreatememberUserIdsInput | string[]
+    meetingAt: Date | string
+    location: string
+    note?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    views?: OfficeMeetingViewUncheckedCreateNestedManyWithoutMeetingInput
+  }
+
+  export type OfficeMeetingCreateOrConnectWithoutInstructorInput = {
+    where: OfficeMeetingWhereUniqueInput
+    create: XOR<OfficeMeetingCreateWithoutInstructorInput, OfficeMeetingUncheckedCreateWithoutInstructorInput>
+  }
+
+  export type OfficeMeetingCreateManyInstructorInputEnvelope = {
+    data: OfficeMeetingCreateManyInstructorInput | OfficeMeetingCreateManyInstructorInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type OfficeMeetingViewCreateWithoutUserInput = {
+    id?: string
+    isRead?: boolean
+    readAt?: Date | string | null
+    meeting: OfficeMeetingCreateNestedOneWithoutViewsInput
+  }
+
+  export type OfficeMeetingViewUncheckedCreateWithoutUserInput = {
+    id?: string
+    meetingId: string
+    isRead?: boolean
+    readAt?: Date | string | null
+  }
+
+  export type OfficeMeetingViewCreateOrConnectWithoutUserInput = {
+    where: OfficeMeetingViewWhereUniqueInput
+    create: XOR<OfficeMeetingViewCreateWithoutUserInput, OfficeMeetingViewUncheckedCreateWithoutUserInput>
+  }
+
+  export type OfficeMeetingViewCreateManyUserInputEnvelope = {
+    data: OfficeMeetingViewCreateManyUserInput | OfficeMeetingViewCreateManyUserInput[]
     skipDuplicates?: boolean
   }
 
@@ -37555,6 +40862,65 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"CouncilMemberAssignment"> | Date | string
   }
 
+  export type OfficeMeetingUpsertWithWhereUniqueWithoutInstructorInput = {
+    where: OfficeMeetingWhereUniqueInput
+    update: XOR<OfficeMeetingUpdateWithoutInstructorInput, OfficeMeetingUncheckedUpdateWithoutInstructorInput>
+    create: XOR<OfficeMeetingCreateWithoutInstructorInput, OfficeMeetingUncheckedCreateWithoutInstructorInput>
+  }
+
+  export type OfficeMeetingUpdateWithWhereUniqueWithoutInstructorInput = {
+    where: OfficeMeetingWhereUniqueInput
+    data: XOR<OfficeMeetingUpdateWithoutInstructorInput, OfficeMeetingUncheckedUpdateWithoutInstructorInput>
+  }
+
+  export type OfficeMeetingUpdateManyWithWhereWithoutInstructorInput = {
+    where: OfficeMeetingScalarWhereInput
+    data: XOR<OfficeMeetingUpdateManyMutationInput, OfficeMeetingUncheckedUpdateManyWithoutInstructorInput>
+  }
+
+  export type OfficeMeetingScalarWhereInput = {
+    AND?: OfficeMeetingScalarWhereInput | OfficeMeetingScalarWhereInput[]
+    OR?: OfficeMeetingScalarWhereInput[]
+    NOT?: OfficeMeetingScalarWhereInput | OfficeMeetingScalarWhereInput[]
+    id?: StringFilter<"OfficeMeeting"> | string
+    projectId?: StringFilter<"OfficeMeeting"> | string
+    instructorId?: StringFilter<"OfficeMeeting"> | string
+    target?: StringFilter<"OfficeMeeting"> | string
+    memberUserIds?: StringNullableListFilter<"OfficeMeeting">
+    meetingAt?: DateTimeFilter<"OfficeMeeting"> | Date | string
+    location?: StringFilter<"OfficeMeeting"> | string
+    note?: StringNullableFilter<"OfficeMeeting"> | string | null
+    createdAt?: DateTimeFilter<"OfficeMeeting"> | Date | string
+    updatedAt?: DateTimeFilter<"OfficeMeeting"> | Date | string
+  }
+
+  export type OfficeMeetingViewUpsertWithWhereUniqueWithoutUserInput = {
+    where: OfficeMeetingViewWhereUniqueInput
+    update: XOR<OfficeMeetingViewUpdateWithoutUserInput, OfficeMeetingViewUncheckedUpdateWithoutUserInput>
+    create: XOR<OfficeMeetingViewCreateWithoutUserInput, OfficeMeetingViewUncheckedCreateWithoutUserInput>
+  }
+
+  export type OfficeMeetingViewUpdateWithWhereUniqueWithoutUserInput = {
+    where: OfficeMeetingViewWhereUniqueInput
+    data: XOR<OfficeMeetingViewUpdateWithoutUserInput, OfficeMeetingViewUncheckedUpdateWithoutUserInput>
+  }
+
+  export type OfficeMeetingViewUpdateManyWithWhereWithoutUserInput = {
+    where: OfficeMeetingViewScalarWhereInput
+    data: XOR<OfficeMeetingViewUpdateManyMutationInput, OfficeMeetingViewUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type OfficeMeetingViewScalarWhereInput = {
+    AND?: OfficeMeetingViewScalarWhereInput | OfficeMeetingViewScalarWhereInput[]
+    OR?: OfficeMeetingViewScalarWhereInput[]
+    NOT?: OfficeMeetingViewScalarWhereInput | OfficeMeetingViewScalarWhereInput[]
+    id?: StringFilter<"OfficeMeetingView"> | string
+    meetingId?: StringFilter<"OfficeMeetingView"> | string
+    userId?: StringFilter<"OfficeMeetingView"> | string
+    isRead?: BoolFilter<"OfficeMeetingView"> | boolean
+    readAt?: DateTimeNullableFilter<"OfficeMeetingView"> | Date | string | null
+  }
+
   export type ProjectCreateWithoutCallRoundInput = {
     id?: string
     code?: string | null
@@ -37577,6 +40943,7 @@ export namespace Prisma {
     disbursements?: FundingDisbursementCreateNestedManyWithoutProjectInput
     extensionRequests?: ExtensionRequestCreateNestedManyWithoutProjectInput
     instructor?: UserCreateNestedOneWithoutInstructedProjectsInput
+    officeMeetings?: OfficeMeetingCreateNestedManyWithoutProjectInput
   }
 
   export type ProjectUncheckedCreateWithoutCallRoundInput = {
@@ -37601,6 +40968,7 @@ export namespace Prisma {
     councilEvaluations?: CouncilEvaluationUncheckedCreateNestedManyWithoutProjectInput
     disbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutProjectInput
     extensionRequests?: ExtensionRequestUncheckedCreateNestedManyWithoutProjectInput
+    officeMeetings?: OfficeMeetingUncheckedCreateNestedManyWithoutProjectInput
   }
 
   export type ProjectCreateOrConnectWithoutCallRoundInput = {
@@ -38052,6 +41420,7 @@ export namespace Prisma {
     disbursements?: FundingDisbursementCreateNestedManyWithoutProjectInput
     extensionRequests?: ExtensionRequestCreateNestedManyWithoutProjectInput
     instructor?: UserCreateNestedOneWithoutInstructedProjectsInput
+    officeMeetings?: OfficeMeetingCreateNestedManyWithoutProjectInput
   }
 
   export type ProjectUncheckedCreateWithoutProjectTypeInput = {
@@ -38076,6 +41445,7 @@ export namespace Prisma {
     councilEvaluations?: CouncilEvaluationUncheckedCreateNestedManyWithoutProjectInput
     disbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutProjectInput
     extensionRequests?: ExtensionRequestUncheckedCreateNestedManyWithoutProjectInput
+    officeMeetings?: OfficeMeetingUncheckedCreateNestedManyWithoutProjectInput
   }
 
   export type ProjectCreateOrConnectWithoutProjectTypeInput = {
@@ -38131,6 +41501,8 @@ export namespace Prisma {
     callRoundInstructors?: CallRoundInstructorCreateNestedManyWithoutInstructorInput
     callRoundCouncilMembers?: CallRoundCouncilMemberCreateNestedManyWithoutCouncilMemberInput
     councilAssignments?: CouncilMemberAssignmentCreateNestedManyWithoutCouncilMemberInput
+    officeMeetingsAsInstructor?: OfficeMeetingCreateNestedManyWithoutInstructorInput
+    officeMeetingViews?: OfficeMeetingViewCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutLeadProjectsInput = {
@@ -38160,6 +41532,8 @@ export namespace Prisma {
     callRoundInstructors?: CallRoundInstructorUncheckedCreateNestedManyWithoutInstructorInput
     callRoundCouncilMembers?: CallRoundCouncilMemberUncheckedCreateNestedManyWithoutCouncilMemberInput
     councilAssignments?: CouncilMemberAssignmentUncheckedCreateNestedManyWithoutCouncilMemberInput
+    officeMeetingsAsInstructor?: OfficeMeetingUncheckedCreateNestedManyWithoutInstructorInput
+    officeMeetingViews?: OfficeMeetingViewUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutLeadProjectsInput = {
@@ -38194,6 +41568,8 @@ export namespace Prisma {
     callRoundInstructors?: CallRoundInstructorCreateNestedManyWithoutInstructorInput
     callRoundCouncilMembers?: CallRoundCouncilMemberCreateNestedManyWithoutCouncilMemberInput
     councilAssignments?: CouncilMemberAssignmentCreateNestedManyWithoutCouncilMemberInput
+    officeMeetingsAsInstructor?: OfficeMeetingCreateNestedManyWithoutInstructorInput
+    officeMeetingViews?: OfficeMeetingViewCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutDeanReviewsInput = {
@@ -38223,6 +41599,8 @@ export namespace Prisma {
     callRoundInstructors?: CallRoundInstructorUncheckedCreateNestedManyWithoutInstructorInput
     callRoundCouncilMembers?: CallRoundCouncilMemberUncheckedCreateNestedManyWithoutCouncilMemberInput
     councilAssignments?: CouncilMemberAssignmentUncheckedCreateNestedManyWithoutCouncilMemberInput
+    officeMeetingsAsInstructor?: OfficeMeetingUncheckedCreateNestedManyWithoutInstructorInput
+    officeMeetingViews?: OfficeMeetingViewUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutDeanReviewsInput = {
@@ -38497,6 +41875,8 @@ export namespace Prisma {
     callRoundInstructors?: CallRoundInstructorCreateNestedManyWithoutInstructorInput
     callRoundCouncilMembers?: CallRoundCouncilMemberCreateNestedManyWithoutCouncilMemberInput
     councilAssignments?: CouncilMemberAssignmentCreateNestedManyWithoutCouncilMemberInput
+    officeMeetingsAsInstructor?: OfficeMeetingCreateNestedManyWithoutInstructorInput
+    officeMeetingViews?: OfficeMeetingViewCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutInstructedProjectsInput = {
@@ -38526,11 +41906,49 @@ export namespace Prisma {
     callRoundInstructors?: CallRoundInstructorUncheckedCreateNestedManyWithoutInstructorInput
     callRoundCouncilMembers?: CallRoundCouncilMemberUncheckedCreateNestedManyWithoutCouncilMemberInput
     councilAssignments?: CouncilMemberAssignmentUncheckedCreateNestedManyWithoutCouncilMemberInput
+    officeMeetingsAsInstructor?: OfficeMeetingUncheckedCreateNestedManyWithoutInstructorInput
+    officeMeetingViews?: OfficeMeetingViewUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutInstructedProjectsInput = {
     where: UserWhereUniqueInput
     create: XOR<UserCreateWithoutInstructedProjectsInput, UserUncheckedCreateWithoutInstructedProjectsInput>
+  }
+
+  export type OfficeMeetingCreateWithoutProjectInput = {
+    id?: string
+    target: string
+    memberUserIds?: OfficeMeetingCreatememberUserIdsInput | string[]
+    meetingAt: Date | string
+    location: string
+    note?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    instructor: UserCreateNestedOneWithoutOfficeMeetingsAsInstructorInput
+    views?: OfficeMeetingViewCreateNestedManyWithoutMeetingInput
+  }
+
+  export type OfficeMeetingUncheckedCreateWithoutProjectInput = {
+    id?: string
+    instructorId: string
+    target: string
+    memberUserIds?: OfficeMeetingCreatememberUserIdsInput | string[]
+    meetingAt: Date | string
+    location: string
+    note?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    views?: OfficeMeetingViewUncheckedCreateNestedManyWithoutMeetingInput
+  }
+
+  export type OfficeMeetingCreateOrConnectWithoutProjectInput = {
+    where: OfficeMeetingWhereUniqueInput
+    create: XOR<OfficeMeetingCreateWithoutProjectInput, OfficeMeetingUncheckedCreateWithoutProjectInput>
+  }
+
+  export type OfficeMeetingCreateManyProjectInputEnvelope = {
+    data: OfficeMeetingCreateManyProjectInput | OfficeMeetingCreateManyProjectInput[]
+    skipDuplicates?: boolean
   }
 
   export type UserUpsertWithoutLeadProjectsInput = {
@@ -38571,6 +41989,8 @@ export namespace Prisma {
     callRoundInstructors?: CallRoundInstructorUpdateManyWithoutInstructorNestedInput
     callRoundCouncilMembers?: CallRoundCouncilMemberUpdateManyWithoutCouncilMemberNestedInput
     councilAssignments?: CouncilMemberAssignmentUpdateManyWithoutCouncilMemberNestedInput
+    officeMeetingsAsInstructor?: OfficeMeetingUpdateManyWithoutInstructorNestedInput
+    officeMeetingViews?: OfficeMeetingViewUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutLeadProjectsInput = {
@@ -38600,6 +42020,8 @@ export namespace Prisma {
     callRoundInstructors?: CallRoundInstructorUncheckedUpdateManyWithoutInstructorNestedInput
     callRoundCouncilMembers?: CallRoundCouncilMemberUncheckedUpdateManyWithoutCouncilMemberNestedInput
     councilAssignments?: CouncilMemberAssignmentUncheckedUpdateManyWithoutCouncilMemberNestedInput
+    officeMeetingsAsInstructor?: OfficeMeetingUncheckedUpdateManyWithoutInstructorNestedInput
+    officeMeetingViews?: OfficeMeetingViewUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUpsertWithoutDeanReviewsInput = {
@@ -38640,6 +42062,8 @@ export namespace Prisma {
     callRoundInstructors?: CallRoundInstructorUpdateManyWithoutInstructorNestedInput
     callRoundCouncilMembers?: CallRoundCouncilMemberUpdateManyWithoutCouncilMemberNestedInput
     councilAssignments?: CouncilMemberAssignmentUpdateManyWithoutCouncilMemberNestedInput
+    officeMeetingsAsInstructor?: OfficeMeetingUpdateManyWithoutInstructorNestedInput
+    officeMeetingViews?: OfficeMeetingViewUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutDeanReviewsInput = {
@@ -38669,6 +42093,8 @@ export namespace Prisma {
     callRoundInstructors?: CallRoundInstructorUncheckedUpdateManyWithoutInstructorNestedInput
     callRoundCouncilMembers?: CallRoundCouncilMemberUncheckedUpdateManyWithoutCouncilMemberNestedInput
     councilAssignments?: CouncilMemberAssignmentUncheckedUpdateManyWithoutCouncilMemberNestedInput
+    officeMeetingsAsInstructor?: OfficeMeetingUncheckedUpdateManyWithoutInstructorNestedInput
+    officeMeetingViews?: OfficeMeetingViewUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type CallRoundUpsertWithoutProjectsInput = {
@@ -38938,6 +42364,8 @@ export namespace Prisma {
     callRoundInstructors?: CallRoundInstructorUpdateManyWithoutInstructorNestedInput
     callRoundCouncilMembers?: CallRoundCouncilMemberUpdateManyWithoutCouncilMemberNestedInput
     councilAssignments?: CouncilMemberAssignmentUpdateManyWithoutCouncilMemberNestedInput
+    officeMeetingsAsInstructor?: OfficeMeetingUpdateManyWithoutInstructorNestedInput
+    officeMeetingViews?: OfficeMeetingViewUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutInstructedProjectsInput = {
@@ -38967,6 +42395,24 @@ export namespace Prisma {
     callRoundInstructors?: CallRoundInstructorUncheckedUpdateManyWithoutInstructorNestedInput
     callRoundCouncilMembers?: CallRoundCouncilMemberUncheckedUpdateManyWithoutCouncilMemberNestedInput
     councilAssignments?: CouncilMemberAssignmentUncheckedUpdateManyWithoutCouncilMemberNestedInput
+    officeMeetingsAsInstructor?: OfficeMeetingUncheckedUpdateManyWithoutInstructorNestedInput
+    officeMeetingViews?: OfficeMeetingViewUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type OfficeMeetingUpsertWithWhereUniqueWithoutProjectInput = {
+    where: OfficeMeetingWhereUniqueInput
+    update: XOR<OfficeMeetingUpdateWithoutProjectInput, OfficeMeetingUncheckedUpdateWithoutProjectInput>
+    create: XOR<OfficeMeetingCreateWithoutProjectInput, OfficeMeetingUncheckedCreateWithoutProjectInput>
+  }
+
+  export type OfficeMeetingUpdateWithWhereUniqueWithoutProjectInput = {
+    where: OfficeMeetingWhereUniqueInput
+    data: XOR<OfficeMeetingUpdateWithoutProjectInput, OfficeMeetingUncheckedUpdateWithoutProjectInput>
+  }
+
+  export type OfficeMeetingUpdateManyWithWhereWithoutProjectInput = {
+    where: OfficeMeetingScalarWhereInput
+    data: XOR<OfficeMeetingUpdateManyMutationInput, OfficeMeetingUncheckedUpdateManyWithoutProjectInput>
   }
 
   export type ProgressReportTemplateItemCreateWithoutTemplateInput = {
@@ -39223,6 +42669,7 @@ export namespace Prisma {
     disbursements?: FundingDisbursementCreateNestedManyWithoutProjectInput
     extensionRequests?: ExtensionRequestCreateNestedManyWithoutProjectInput
     instructor?: UserCreateNestedOneWithoutInstructedProjectsInput
+    officeMeetings?: OfficeMeetingCreateNestedManyWithoutProjectInput
   }
 
   export type ProjectUncheckedCreateWithoutProgressReportsInput = {
@@ -39247,6 +42694,7 @@ export namespace Prisma {
     councilEvaluations?: CouncilEvaluationUncheckedCreateNestedManyWithoutProjectInput
     disbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutProjectInput
     extensionRequests?: ExtensionRequestUncheckedCreateNestedManyWithoutProjectInput
+    officeMeetings?: OfficeMeetingUncheckedCreateNestedManyWithoutProjectInput
   }
 
   export type ProjectCreateOrConnectWithoutProgressReportsInput = {
@@ -39287,6 +42735,7 @@ export namespace Prisma {
     disbursements?: FundingDisbursementUpdateManyWithoutProjectNestedInput
     extensionRequests?: ExtensionRequestUpdateManyWithoutProjectNestedInput
     instructor?: UserUpdateOneWithoutInstructedProjectsNestedInput
+    officeMeetings?: OfficeMeetingUpdateManyWithoutProjectNestedInput
   }
 
   export type ProjectUncheckedUpdateWithoutProgressReportsInput = {
@@ -39311,6 +42760,7 @@ export namespace Prisma {
     councilEvaluations?: CouncilEvaluationUncheckedUpdateManyWithoutProjectNestedInput
     disbursements?: FundingDisbursementUncheckedUpdateManyWithoutProjectNestedInput
     extensionRequests?: ExtensionRequestUncheckedUpdateManyWithoutProjectNestedInput
+    officeMeetings?: OfficeMeetingUncheckedUpdateManyWithoutProjectNestedInput
   }
 
   export type ProjectCreateWithoutCouncilEvaluationsInput = {
@@ -39335,6 +42785,7 @@ export namespace Prisma {
     disbursements?: FundingDisbursementCreateNestedManyWithoutProjectInput
     extensionRequests?: ExtensionRequestCreateNestedManyWithoutProjectInput
     instructor?: UserCreateNestedOneWithoutInstructedProjectsInput
+    officeMeetings?: OfficeMeetingCreateNestedManyWithoutProjectInput
   }
 
   export type ProjectUncheckedCreateWithoutCouncilEvaluationsInput = {
@@ -39359,6 +42810,7 @@ export namespace Prisma {
     progressReports?: ProgressReportUncheckedCreateNestedManyWithoutProjectInput
     disbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutProjectInput
     extensionRequests?: ExtensionRequestUncheckedCreateNestedManyWithoutProjectInput
+    officeMeetings?: OfficeMeetingUncheckedCreateNestedManyWithoutProjectInput
   }
 
   export type ProjectCreateOrConnectWithoutCouncilEvaluationsInput = {
@@ -39393,6 +42845,8 @@ export namespace Prisma {
     callRoundInstructors?: CallRoundInstructorCreateNestedManyWithoutInstructorInput
     callRoundCouncilMembers?: CallRoundCouncilMemberCreateNestedManyWithoutCouncilMemberInput
     councilAssignments?: CouncilMemberAssignmentCreateNestedManyWithoutCouncilMemberInput
+    officeMeetingsAsInstructor?: OfficeMeetingCreateNestedManyWithoutInstructorInput
+    officeMeetingViews?: OfficeMeetingViewCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutCouncilEvaluationsInput = {
@@ -39422,6 +42876,8 @@ export namespace Prisma {
     callRoundInstructors?: CallRoundInstructorUncheckedCreateNestedManyWithoutInstructorInput
     callRoundCouncilMembers?: CallRoundCouncilMemberUncheckedCreateNestedManyWithoutCouncilMemberInput
     councilAssignments?: CouncilMemberAssignmentUncheckedCreateNestedManyWithoutCouncilMemberInput
+    officeMeetingsAsInstructor?: OfficeMeetingUncheckedCreateNestedManyWithoutInstructorInput
+    officeMeetingViews?: OfficeMeetingViewUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutCouncilEvaluationsInput = {
@@ -39462,6 +42918,7 @@ export namespace Prisma {
     disbursements?: FundingDisbursementUpdateManyWithoutProjectNestedInput
     extensionRequests?: ExtensionRequestUpdateManyWithoutProjectNestedInput
     instructor?: UserUpdateOneWithoutInstructedProjectsNestedInput
+    officeMeetings?: OfficeMeetingUpdateManyWithoutProjectNestedInput
   }
 
   export type ProjectUncheckedUpdateWithoutCouncilEvaluationsInput = {
@@ -39486,6 +42943,7 @@ export namespace Prisma {
     progressReports?: ProgressReportUncheckedUpdateManyWithoutProjectNestedInput
     disbursements?: FundingDisbursementUncheckedUpdateManyWithoutProjectNestedInput
     extensionRequests?: ExtensionRequestUncheckedUpdateManyWithoutProjectNestedInput
+    officeMeetings?: OfficeMeetingUncheckedUpdateManyWithoutProjectNestedInput
   }
 
   export type UserUpsertWithoutCouncilEvaluationsInput = {
@@ -39526,6 +42984,8 @@ export namespace Prisma {
     callRoundInstructors?: CallRoundInstructorUpdateManyWithoutInstructorNestedInput
     callRoundCouncilMembers?: CallRoundCouncilMemberUpdateManyWithoutCouncilMemberNestedInput
     councilAssignments?: CouncilMemberAssignmentUpdateManyWithoutCouncilMemberNestedInput
+    officeMeetingsAsInstructor?: OfficeMeetingUpdateManyWithoutInstructorNestedInput
+    officeMeetingViews?: OfficeMeetingViewUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCouncilEvaluationsInput = {
@@ -39555,6 +43015,8 @@ export namespace Prisma {
     callRoundInstructors?: CallRoundInstructorUncheckedUpdateManyWithoutInstructorNestedInput
     callRoundCouncilMembers?: CallRoundCouncilMemberUncheckedUpdateManyWithoutCouncilMemberNestedInput
     councilAssignments?: CouncilMemberAssignmentUncheckedUpdateManyWithoutCouncilMemberNestedInput
+    officeMeetingsAsInstructor?: OfficeMeetingUncheckedUpdateManyWithoutInstructorNestedInput
+    officeMeetingViews?: OfficeMeetingViewUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type ProjectCreateWithoutDisbursementsInput = {
@@ -39579,6 +43041,7 @@ export namespace Prisma {
     councilEvaluations?: CouncilEvaluationCreateNestedManyWithoutProjectInput
     extensionRequests?: ExtensionRequestCreateNestedManyWithoutProjectInput
     instructor?: UserCreateNestedOneWithoutInstructedProjectsInput
+    officeMeetings?: OfficeMeetingCreateNestedManyWithoutProjectInput
   }
 
   export type ProjectUncheckedCreateWithoutDisbursementsInput = {
@@ -39603,6 +43066,7 @@ export namespace Prisma {
     progressReports?: ProgressReportUncheckedCreateNestedManyWithoutProjectInput
     councilEvaluations?: CouncilEvaluationUncheckedCreateNestedManyWithoutProjectInput
     extensionRequests?: ExtensionRequestUncheckedCreateNestedManyWithoutProjectInput
+    officeMeetings?: OfficeMeetingUncheckedCreateNestedManyWithoutProjectInput
   }
 
   export type ProjectCreateOrConnectWithoutDisbursementsInput = {
@@ -39643,6 +43107,7 @@ export namespace Prisma {
     councilEvaluations?: CouncilEvaluationUpdateManyWithoutProjectNestedInput
     extensionRequests?: ExtensionRequestUpdateManyWithoutProjectNestedInput
     instructor?: UserUpdateOneWithoutInstructedProjectsNestedInput
+    officeMeetings?: OfficeMeetingUpdateManyWithoutProjectNestedInput
   }
 
   export type ProjectUncheckedUpdateWithoutDisbursementsInput = {
@@ -39667,6 +43132,7 @@ export namespace Prisma {
     progressReports?: ProgressReportUncheckedUpdateManyWithoutProjectNestedInput
     councilEvaluations?: CouncilEvaluationUncheckedUpdateManyWithoutProjectNestedInput
     extensionRequests?: ExtensionRequestUncheckedUpdateManyWithoutProjectNestedInput
+    officeMeetings?: OfficeMeetingUncheckedUpdateManyWithoutProjectNestedInput
   }
 
   export type ProjectCreateWithoutExtensionRequestsInput = {
@@ -39691,6 +43157,7 @@ export namespace Prisma {
     councilEvaluations?: CouncilEvaluationCreateNestedManyWithoutProjectInput
     disbursements?: FundingDisbursementCreateNestedManyWithoutProjectInput
     instructor?: UserCreateNestedOneWithoutInstructedProjectsInput
+    officeMeetings?: OfficeMeetingCreateNestedManyWithoutProjectInput
   }
 
   export type ProjectUncheckedCreateWithoutExtensionRequestsInput = {
@@ -39715,6 +43182,7 @@ export namespace Prisma {
     progressReports?: ProgressReportUncheckedCreateNestedManyWithoutProjectInput
     councilEvaluations?: CouncilEvaluationUncheckedCreateNestedManyWithoutProjectInput
     disbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutProjectInput
+    officeMeetings?: OfficeMeetingUncheckedCreateNestedManyWithoutProjectInput
   }
 
   export type ProjectCreateOrConnectWithoutExtensionRequestsInput = {
@@ -39755,6 +43223,7 @@ export namespace Prisma {
     councilEvaluations?: CouncilEvaluationUpdateManyWithoutProjectNestedInput
     disbursements?: FundingDisbursementUpdateManyWithoutProjectNestedInput
     instructor?: UserUpdateOneWithoutInstructedProjectsNestedInput
+    officeMeetings?: OfficeMeetingUpdateManyWithoutProjectNestedInput
   }
 
   export type ProjectUncheckedUpdateWithoutExtensionRequestsInput = {
@@ -39779,6 +43248,7 @@ export namespace Prisma {
     progressReports?: ProgressReportUncheckedUpdateManyWithoutProjectNestedInput
     councilEvaluations?: CouncilEvaluationUncheckedUpdateManyWithoutProjectNestedInput
     disbursements?: FundingDisbursementUncheckedUpdateManyWithoutProjectNestedInput
+    officeMeetings?: OfficeMeetingUncheckedUpdateManyWithoutProjectNestedInput
   }
 
   export type UserCreateWithoutRegistrationsInput = {
@@ -39808,6 +43278,8 @@ export namespace Prisma {
     callRoundInstructors?: CallRoundInstructorCreateNestedManyWithoutInstructorInput
     callRoundCouncilMembers?: CallRoundCouncilMemberCreateNestedManyWithoutCouncilMemberInput
     councilAssignments?: CouncilMemberAssignmentCreateNestedManyWithoutCouncilMemberInput
+    officeMeetingsAsInstructor?: OfficeMeetingCreateNestedManyWithoutInstructorInput
+    officeMeetingViews?: OfficeMeetingViewCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutRegistrationsInput = {
@@ -39837,6 +43309,8 @@ export namespace Prisma {
     callRoundInstructors?: CallRoundInstructorUncheckedCreateNestedManyWithoutInstructorInput
     callRoundCouncilMembers?: CallRoundCouncilMemberUncheckedCreateNestedManyWithoutCouncilMemberInput
     councilAssignments?: CouncilMemberAssignmentUncheckedCreateNestedManyWithoutCouncilMemberInput
+    officeMeetingsAsInstructor?: OfficeMeetingUncheckedCreateNestedManyWithoutInstructorInput
+    officeMeetingViews?: OfficeMeetingViewUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutRegistrationsInput = {
@@ -39871,6 +43345,8 @@ export namespace Prisma {
     callRoundInstructors?: CallRoundInstructorCreateNestedManyWithoutInstructorInput
     callRoundCouncilMembers?: CallRoundCouncilMemberCreateNestedManyWithoutCouncilMemberInput
     councilAssignments?: CouncilMemberAssignmentCreateNestedManyWithoutCouncilMemberInput
+    officeMeetingsAsInstructor?: OfficeMeetingCreateNestedManyWithoutInstructorInput
+    officeMeetingViews?: OfficeMeetingViewCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutInstructedRegistrationsInput = {
@@ -39900,6 +43376,8 @@ export namespace Prisma {
     callRoundInstructors?: CallRoundInstructorUncheckedCreateNestedManyWithoutInstructorInput
     callRoundCouncilMembers?: CallRoundCouncilMemberUncheckedCreateNestedManyWithoutCouncilMemberInput
     councilAssignments?: CouncilMemberAssignmentUncheckedCreateNestedManyWithoutCouncilMemberInput
+    officeMeetingsAsInstructor?: OfficeMeetingUncheckedCreateNestedManyWithoutInstructorInput
+    officeMeetingViews?: OfficeMeetingViewUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutInstructedRegistrationsInput = {
@@ -40015,6 +43493,8 @@ export namespace Prisma {
     callRoundInstructors?: CallRoundInstructorCreateNestedManyWithoutInstructorInput
     callRoundCouncilMembers?: CallRoundCouncilMemberCreateNestedManyWithoutCouncilMemberInput
     councilAssignments?: CouncilMemberAssignmentCreateNestedManyWithoutCouncilMemberInput
+    officeMeetingsAsInstructor?: OfficeMeetingCreateNestedManyWithoutInstructorInput
+    officeMeetingViews?: OfficeMeetingViewCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutFacultyReviewsInput = {
@@ -40044,6 +43524,8 @@ export namespace Prisma {
     callRoundInstructors?: CallRoundInstructorUncheckedCreateNestedManyWithoutInstructorInput
     callRoundCouncilMembers?: CallRoundCouncilMemberUncheckedCreateNestedManyWithoutCouncilMemberInput
     councilAssignments?: CouncilMemberAssignmentUncheckedCreateNestedManyWithoutCouncilMemberInput
+    officeMeetingsAsInstructor?: OfficeMeetingUncheckedCreateNestedManyWithoutInstructorInput
+    officeMeetingViews?: OfficeMeetingViewUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutFacultyReviewsInput = {
@@ -40106,6 +43588,8 @@ export namespace Prisma {
     callRoundInstructors?: CallRoundInstructorUpdateManyWithoutInstructorNestedInput
     callRoundCouncilMembers?: CallRoundCouncilMemberUpdateManyWithoutCouncilMemberNestedInput
     councilAssignments?: CouncilMemberAssignmentUpdateManyWithoutCouncilMemberNestedInput
+    officeMeetingsAsInstructor?: OfficeMeetingUpdateManyWithoutInstructorNestedInput
+    officeMeetingViews?: OfficeMeetingViewUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutRegistrationsInput = {
@@ -40135,6 +43619,8 @@ export namespace Prisma {
     callRoundInstructors?: CallRoundInstructorUncheckedUpdateManyWithoutInstructorNestedInput
     callRoundCouncilMembers?: CallRoundCouncilMemberUncheckedUpdateManyWithoutCouncilMemberNestedInput
     councilAssignments?: CouncilMemberAssignmentUncheckedUpdateManyWithoutCouncilMemberNestedInput
+    officeMeetingsAsInstructor?: OfficeMeetingUncheckedUpdateManyWithoutInstructorNestedInput
+    officeMeetingViews?: OfficeMeetingViewUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUpsertWithoutInstructedRegistrationsInput = {
@@ -40175,6 +43661,8 @@ export namespace Prisma {
     callRoundInstructors?: CallRoundInstructorUpdateManyWithoutInstructorNestedInput
     callRoundCouncilMembers?: CallRoundCouncilMemberUpdateManyWithoutCouncilMemberNestedInput
     councilAssignments?: CouncilMemberAssignmentUpdateManyWithoutCouncilMemberNestedInput
+    officeMeetingsAsInstructor?: OfficeMeetingUpdateManyWithoutInstructorNestedInput
+    officeMeetingViews?: OfficeMeetingViewUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutInstructedRegistrationsInput = {
@@ -40204,6 +43692,8 @@ export namespace Prisma {
     callRoundInstructors?: CallRoundInstructorUncheckedUpdateManyWithoutInstructorNestedInput
     callRoundCouncilMembers?: CallRoundCouncilMemberUncheckedUpdateManyWithoutCouncilMemberNestedInput
     councilAssignments?: CouncilMemberAssignmentUncheckedUpdateManyWithoutCouncilMemberNestedInput
+    officeMeetingsAsInstructor?: OfficeMeetingUncheckedUpdateManyWithoutInstructorNestedInput
+    officeMeetingViews?: OfficeMeetingViewUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type CallRoundUpsertWithoutRegistrationsInput = {
@@ -40331,6 +43821,8 @@ export namespace Prisma {
     callRoundInstructors?: CallRoundInstructorUpdateManyWithoutInstructorNestedInput
     callRoundCouncilMembers?: CallRoundCouncilMemberUpdateManyWithoutCouncilMemberNestedInput
     councilAssignments?: CouncilMemberAssignmentUpdateManyWithoutCouncilMemberNestedInput
+    officeMeetingsAsInstructor?: OfficeMeetingUpdateManyWithoutInstructorNestedInput
+    officeMeetingViews?: OfficeMeetingViewUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutFacultyReviewsInput = {
@@ -40360,6 +43852,8 @@ export namespace Prisma {
     callRoundInstructors?: CallRoundInstructorUncheckedUpdateManyWithoutInstructorNestedInput
     callRoundCouncilMembers?: CallRoundCouncilMemberUncheckedUpdateManyWithoutCouncilMemberNestedInput
     councilAssignments?: CouncilMemberAssignmentUncheckedUpdateManyWithoutCouncilMemberNestedInput
+    officeMeetingsAsInstructor?: OfficeMeetingUncheckedUpdateManyWithoutInstructorNestedInput
+    officeMeetingViews?: OfficeMeetingViewUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type ProjectCouncilAssignmentUpsertWithoutProjectRegistrationInput = {
@@ -40412,6 +43906,8 @@ export namespace Prisma {
     callRoundInstructors?: CallRoundInstructorCreateNestedManyWithoutInstructorInput
     callRoundCouncilMembers?: CallRoundCouncilMemberCreateNestedManyWithoutCouncilMemberInput
     councilAssignments?: CouncilMemberAssignmentCreateNestedManyWithoutCouncilMemberInput
+    officeMeetingsAsInstructor?: OfficeMeetingCreateNestedManyWithoutInstructorInput
+    officeMeetingViews?: OfficeMeetingViewCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutNotificationsInput = {
@@ -40441,6 +43937,8 @@ export namespace Prisma {
     callRoundInstructors?: CallRoundInstructorUncheckedCreateNestedManyWithoutInstructorInput
     callRoundCouncilMembers?: CallRoundCouncilMemberUncheckedCreateNestedManyWithoutCouncilMemberInput
     councilAssignments?: CouncilMemberAssignmentUncheckedCreateNestedManyWithoutCouncilMemberInput
+    officeMeetingsAsInstructor?: OfficeMeetingUncheckedCreateNestedManyWithoutInstructorInput
+    officeMeetingViews?: OfficeMeetingViewUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutNotificationsInput = {
@@ -40486,6 +43984,8 @@ export namespace Prisma {
     callRoundInstructors?: CallRoundInstructorUpdateManyWithoutInstructorNestedInput
     callRoundCouncilMembers?: CallRoundCouncilMemberUpdateManyWithoutCouncilMemberNestedInput
     councilAssignments?: CouncilMemberAssignmentUpdateManyWithoutCouncilMemberNestedInput
+    officeMeetingsAsInstructor?: OfficeMeetingUpdateManyWithoutInstructorNestedInput
+    officeMeetingViews?: OfficeMeetingViewUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutNotificationsInput = {
@@ -40515,6 +44015,512 @@ export namespace Prisma {
     callRoundInstructors?: CallRoundInstructorUncheckedUpdateManyWithoutInstructorNestedInput
     callRoundCouncilMembers?: CallRoundCouncilMemberUncheckedUpdateManyWithoutCouncilMemberNestedInput
     councilAssignments?: CouncilMemberAssignmentUncheckedUpdateManyWithoutCouncilMemberNestedInput
+    officeMeetingsAsInstructor?: OfficeMeetingUncheckedUpdateManyWithoutInstructorNestedInput
+    officeMeetingViews?: OfficeMeetingViewUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type ProjectCreateWithoutOfficeMeetingsInput = {
+    id?: string
+    code?: string | null
+    title: string
+    objective: string
+    expectedOutput?: string | null
+    proposalFileUrl?: string | null
+    budgetRequested?: Decimal | DecimalJsLike | number | string | null
+    budgetApproved?: Decimal | DecimalJsLike | number | string | null
+    status?: $Enums.ProjectStatus
+    overdueReportCount?: number
+    budgetSuspended?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    leader: UserCreateNestedOneWithoutLeadProjectsInput
+    deanReviewer?: UserCreateNestedOneWithoutDeanReviewsInput
+    callRound?: CallRoundCreateNestedOneWithoutProjectsInput
+    projectType?: ProjectTypeCreateNestedOneWithoutProjectsInput
+    progressReports?: ProgressReportCreateNestedManyWithoutProjectInput
+    councilEvaluations?: CouncilEvaluationCreateNestedManyWithoutProjectInput
+    disbursements?: FundingDisbursementCreateNestedManyWithoutProjectInput
+    extensionRequests?: ExtensionRequestCreateNestedManyWithoutProjectInput
+    instructor?: UserCreateNestedOneWithoutInstructedProjectsInput
+  }
+
+  export type ProjectUncheckedCreateWithoutOfficeMeetingsInput = {
+    id?: string
+    code?: string | null
+    title: string
+    objective: string
+    expectedOutput?: string | null
+    proposalFileUrl?: string | null
+    budgetRequested?: Decimal | DecimalJsLike | number | string | null
+    budgetApproved?: Decimal | DecimalJsLike | number | string | null
+    status?: $Enums.ProjectStatus
+    overdueReportCount?: number
+    budgetSuspended?: boolean
+    leaderId: string
+    deanReviewerId?: string | null
+    callRoundId?: string | null
+    projectTypeId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    instructorId?: string | null
+    progressReports?: ProgressReportUncheckedCreateNestedManyWithoutProjectInput
+    councilEvaluations?: CouncilEvaluationUncheckedCreateNestedManyWithoutProjectInput
+    disbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutProjectInput
+    extensionRequests?: ExtensionRequestUncheckedCreateNestedManyWithoutProjectInput
+  }
+
+  export type ProjectCreateOrConnectWithoutOfficeMeetingsInput = {
+    where: ProjectWhereUniqueInput
+    create: XOR<ProjectCreateWithoutOfficeMeetingsInput, ProjectUncheckedCreateWithoutOfficeMeetingsInput>
+  }
+
+  export type UserCreateWithoutOfficeMeetingsAsInstructorInput = {
+    id?: string
+    code?: string | null
+    name: string
+    email: string
+    password?: string | null
+    dateOfBirth?: Date | string | null
+    gender?: $Enums.Gender | null
+    phone?: string | null
+    address?: string | null
+    role?: $Enums.Role
+    department?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    departmentRef?: DepartmentCreateNestedOneWithoutUsersInput
+    major?: MajorCreateNestedOneWithoutUsersInput
+    class?: ClassCreateNestedOneWithoutUsersInput
+    leadProjects?: ProjectCreateNestedManyWithoutLeaderInput
+    deanReviews?: ProjectCreateNestedManyWithoutDeanReviewerInput
+    councilEvaluations?: CouncilEvaluationCreateNestedManyWithoutCouncilMemberInput
+    registrations?: ProjectRegistrationCreateNestedManyWithoutUserInput
+    instructedRegistrations?: ProjectRegistrationCreateNestedManyWithoutInstructorInput
+    instructedProjects?: ProjectCreateNestedManyWithoutInstructorInput
+    facultyReviews?: ProjectRegistrationCreateNestedManyWithoutFacultyReviewerInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    callRoundInstructors?: CallRoundInstructorCreateNestedManyWithoutInstructorInput
+    callRoundCouncilMembers?: CallRoundCouncilMemberCreateNestedManyWithoutCouncilMemberInput
+    councilAssignments?: CouncilMemberAssignmentCreateNestedManyWithoutCouncilMemberInput
+    officeMeetingViews?: OfficeMeetingViewCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutOfficeMeetingsAsInstructorInput = {
+    id?: string
+    code?: string | null
+    name: string
+    email: string
+    password?: string | null
+    dateOfBirth?: Date | string | null
+    gender?: $Enums.Gender | null
+    phone?: string | null
+    address?: string | null
+    role?: $Enums.Role
+    department?: string | null
+    departmentId?: string | null
+    majorId?: string | null
+    classId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    leadProjects?: ProjectUncheckedCreateNestedManyWithoutLeaderInput
+    deanReviews?: ProjectUncheckedCreateNestedManyWithoutDeanReviewerInput
+    councilEvaluations?: CouncilEvaluationUncheckedCreateNestedManyWithoutCouncilMemberInput
+    registrations?: ProjectRegistrationUncheckedCreateNestedManyWithoutUserInput
+    instructedRegistrations?: ProjectRegistrationUncheckedCreateNestedManyWithoutInstructorInput
+    instructedProjects?: ProjectUncheckedCreateNestedManyWithoutInstructorInput
+    facultyReviews?: ProjectRegistrationUncheckedCreateNestedManyWithoutFacultyReviewerInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    callRoundInstructors?: CallRoundInstructorUncheckedCreateNestedManyWithoutInstructorInput
+    callRoundCouncilMembers?: CallRoundCouncilMemberUncheckedCreateNestedManyWithoutCouncilMemberInput
+    councilAssignments?: CouncilMemberAssignmentUncheckedCreateNestedManyWithoutCouncilMemberInput
+    officeMeetingViews?: OfficeMeetingViewUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutOfficeMeetingsAsInstructorInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutOfficeMeetingsAsInstructorInput, UserUncheckedCreateWithoutOfficeMeetingsAsInstructorInput>
+  }
+
+  export type OfficeMeetingViewCreateWithoutMeetingInput = {
+    id?: string
+    isRead?: boolean
+    readAt?: Date | string | null
+    user: UserCreateNestedOneWithoutOfficeMeetingViewsInput
+  }
+
+  export type OfficeMeetingViewUncheckedCreateWithoutMeetingInput = {
+    id?: string
+    userId: string
+    isRead?: boolean
+    readAt?: Date | string | null
+  }
+
+  export type OfficeMeetingViewCreateOrConnectWithoutMeetingInput = {
+    where: OfficeMeetingViewWhereUniqueInput
+    create: XOR<OfficeMeetingViewCreateWithoutMeetingInput, OfficeMeetingViewUncheckedCreateWithoutMeetingInput>
+  }
+
+  export type OfficeMeetingViewCreateManyMeetingInputEnvelope = {
+    data: OfficeMeetingViewCreateManyMeetingInput | OfficeMeetingViewCreateManyMeetingInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type ProjectUpsertWithoutOfficeMeetingsInput = {
+    update: XOR<ProjectUpdateWithoutOfficeMeetingsInput, ProjectUncheckedUpdateWithoutOfficeMeetingsInput>
+    create: XOR<ProjectCreateWithoutOfficeMeetingsInput, ProjectUncheckedCreateWithoutOfficeMeetingsInput>
+    where?: ProjectWhereInput
+  }
+
+  export type ProjectUpdateToOneWithWhereWithoutOfficeMeetingsInput = {
+    where?: ProjectWhereInput
+    data: XOR<ProjectUpdateWithoutOfficeMeetingsInput, ProjectUncheckedUpdateWithoutOfficeMeetingsInput>
+  }
+
+  export type ProjectUpdateWithoutOfficeMeetingsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    title?: StringFieldUpdateOperationsInput | string
+    objective?: StringFieldUpdateOperationsInput | string
+    expectedOutput?: NullableStringFieldUpdateOperationsInput | string | null
+    proposalFileUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    budgetRequested?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    budgetApproved?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    status?: EnumProjectStatusFieldUpdateOperationsInput | $Enums.ProjectStatus
+    overdueReportCount?: IntFieldUpdateOperationsInput | number
+    budgetSuspended?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    leader?: UserUpdateOneRequiredWithoutLeadProjectsNestedInput
+    deanReviewer?: UserUpdateOneWithoutDeanReviewsNestedInput
+    callRound?: CallRoundUpdateOneWithoutProjectsNestedInput
+    projectType?: ProjectTypeUpdateOneWithoutProjectsNestedInput
+    progressReports?: ProgressReportUpdateManyWithoutProjectNestedInput
+    councilEvaluations?: CouncilEvaluationUpdateManyWithoutProjectNestedInput
+    disbursements?: FundingDisbursementUpdateManyWithoutProjectNestedInput
+    extensionRequests?: ExtensionRequestUpdateManyWithoutProjectNestedInput
+    instructor?: UserUpdateOneWithoutInstructedProjectsNestedInput
+  }
+
+  export type ProjectUncheckedUpdateWithoutOfficeMeetingsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    title?: StringFieldUpdateOperationsInput | string
+    objective?: StringFieldUpdateOperationsInput | string
+    expectedOutput?: NullableStringFieldUpdateOperationsInput | string | null
+    proposalFileUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    budgetRequested?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    budgetApproved?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    status?: EnumProjectStatusFieldUpdateOperationsInput | $Enums.ProjectStatus
+    overdueReportCount?: IntFieldUpdateOperationsInput | number
+    budgetSuspended?: BoolFieldUpdateOperationsInput | boolean
+    leaderId?: StringFieldUpdateOperationsInput | string
+    deanReviewerId?: NullableStringFieldUpdateOperationsInput | string | null
+    callRoundId?: NullableStringFieldUpdateOperationsInput | string | null
+    projectTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    instructorId?: NullableStringFieldUpdateOperationsInput | string | null
+    progressReports?: ProgressReportUncheckedUpdateManyWithoutProjectNestedInput
+    councilEvaluations?: CouncilEvaluationUncheckedUpdateManyWithoutProjectNestedInput
+    disbursements?: FundingDisbursementUncheckedUpdateManyWithoutProjectNestedInput
+    extensionRequests?: ExtensionRequestUncheckedUpdateManyWithoutProjectNestedInput
+  }
+
+  export type UserUpsertWithoutOfficeMeetingsAsInstructorInput = {
+    update: XOR<UserUpdateWithoutOfficeMeetingsAsInstructorInput, UserUncheckedUpdateWithoutOfficeMeetingsAsInstructorInput>
+    create: XOR<UserCreateWithoutOfficeMeetingsAsInstructorInput, UserUncheckedCreateWithoutOfficeMeetingsAsInstructorInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutOfficeMeetingsAsInstructorInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutOfficeMeetingsAsInstructorInput, UserUncheckedUpdateWithoutOfficeMeetingsAsInstructorInput>
+  }
+
+  export type UserUpdateWithoutOfficeMeetingsAsInstructorInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    departmentRef?: DepartmentUpdateOneWithoutUsersNestedInput
+    major?: MajorUpdateOneWithoutUsersNestedInput
+    class?: ClassUpdateOneWithoutUsersNestedInput
+    leadProjects?: ProjectUpdateManyWithoutLeaderNestedInput
+    deanReviews?: ProjectUpdateManyWithoutDeanReviewerNestedInput
+    councilEvaluations?: CouncilEvaluationUpdateManyWithoutCouncilMemberNestedInput
+    registrations?: ProjectRegistrationUpdateManyWithoutUserNestedInput
+    instructedRegistrations?: ProjectRegistrationUpdateManyWithoutInstructorNestedInput
+    instructedProjects?: ProjectUpdateManyWithoutInstructorNestedInput
+    facultyReviews?: ProjectRegistrationUpdateManyWithoutFacultyReviewerNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    callRoundInstructors?: CallRoundInstructorUpdateManyWithoutInstructorNestedInput
+    callRoundCouncilMembers?: CallRoundCouncilMemberUpdateManyWithoutCouncilMemberNestedInput
+    councilAssignments?: CouncilMemberAssignmentUpdateManyWithoutCouncilMemberNestedInput
+    officeMeetingViews?: OfficeMeetingViewUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutOfficeMeetingsAsInstructorInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    departmentId?: NullableStringFieldUpdateOperationsInput | string | null
+    majorId?: NullableStringFieldUpdateOperationsInput | string | null
+    classId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    leadProjects?: ProjectUncheckedUpdateManyWithoutLeaderNestedInput
+    deanReviews?: ProjectUncheckedUpdateManyWithoutDeanReviewerNestedInput
+    councilEvaluations?: CouncilEvaluationUncheckedUpdateManyWithoutCouncilMemberNestedInput
+    registrations?: ProjectRegistrationUncheckedUpdateManyWithoutUserNestedInput
+    instructedRegistrations?: ProjectRegistrationUncheckedUpdateManyWithoutInstructorNestedInput
+    instructedProjects?: ProjectUncheckedUpdateManyWithoutInstructorNestedInput
+    facultyReviews?: ProjectRegistrationUncheckedUpdateManyWithoutFacultyReviewerNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    callRoundInstructors?: CallRoundInstructorUncheckedUpdateManyWithoutInstructorNestedInput
+    callRoundCouncilMembers?: CallRoundCouncilMemberUncheckedUpdateManyWithoutCouncilMemberNestedInput
+    councilAssignments?: CouncilMemberAssignmentUncheckedUpdateManyWithoutCouncilMemberNestedInput
+    officeMeetingViews?: OfficeMeetingViewUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type OfficeMeetingViewUpsertWithWhereUniqueWithoutMeetingInput = {
+    where: OfficeMeetingViewWhereUniqueInput
+    update: XOR<OfficeMeetingViewUpdateWithoutMeetingInput, OfficeMeetingViewUncheckedUpdateWithoutMeetingInput>
+    create: XOR<OfficeMeetingViewCreateWithoutMeetingInput, OfficeMeetingViewUncheckedCreateWithoutMeetingInput>
+  }
+
+  export type OfficeMeetingViewUpdateWithWhereUniqueWithoutMeetingInput = {
+    where: OfficeMeetingViewWhereUniqueInput
+    data: XOR<OfficeMeetingViewUpdateWithoutMeetingInput, OfficeMeetingViewUncheckedUpdateWithoutMeetingInput>
+  }
+
+  export type OfficeMeetingViewUpdateManyWithWhereWithoutMeetingInput = {
+    where: OfficeMeetingViewScalarWhereInput
+    data: XOR<OfficeMeetingViewUpdateManyMutationInput, OfficeMeetingViewUncheckedUpdateManyWithoutMeetingInput>
+  }
+
+  export type OfficeMeetingCreateWithoutViewsInput = {
+    id?: string
+    target: string
+    memberUserIds?: OfficeMeetingCreatememberUserIdsInput | string[]
+    meetingAt: Date | string
+    location: string
+    note?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    project: ProjectCreateNestedOneWithoutOfficeMeetingsInput
+    instructor: UserCreateNestedOneWithoutOfficeMeetingsAsInstructorInput
+  }
+
+  export type OfficeMeetingUncheckedCreateWithoutViewsInput = {
+    id?: string
+    projectId: string
+    instructorId: string
+    target: string
+    memberUserIds?: OfficeMeetingCreatememberUserIdsInput | string[]
+    meetingAt: Date | string
+    location: string
+    note?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type OfficeMeetingCreateOrConnectWithoutViewsInput = {
+    where: OfficeMeetingWhereUniqueInput
+    create: XOR<OfficeMeetingCreateWithoutViewsInput, OfficeMeetingUncheckedCreateWithoutViewsInput>
+  }
+
+  export type UserCreateWithoutOfficeMeetingViewsInput = {
+    id?: string
+    code?: string | null
+    name: string
+    email: string
+    password?: string | null
+    dateOfBirth?: Date | string | null
+    gender?: $Enums.Gender | null
+    phone?: string | null
+    address?: string | null
+    role?: $Enums.Role
+    department?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    departmentRef?: DepartmentCreateNestedOneWithoutUsersInput
+    major?: MajorCreateNestedOneWithoutUsersInput
+    class?: ClassCreateNestedOneWithoutUsersInput
+    leadProjects?: ProjectCreateNestedManyWithoutLeaderInput
+    deanReviews?: ProjectCreateNestedManyWithoutDeanReviewerInput
+    councilEvaluations?: CouncilEvaluationCreateNestedManyWithoutCouncilMemberInput
+    registrations?: ProjectRegistrationCreateNestedManyWithoutUserInput
+    instructedRegistrations?: ProjectRegistrationCreateNestedManyWithoutInstructorInput
+    instructedProjects?: ProjectCreateNestedManyWithoutInstructorInput
+    facultyReviews?: ProjectRegistrationCreateNestedManyWithoutFacultyReviewerInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    callRoundInstructors?: CallRoundInstructorCreateNestedManyWithoutInstructorInput
+    callRoundCouncilMembers?: CallRoundCouncilMemberCreateNestedManyWithoutCouncilMemberInput
+    councilAssignments?: CouncilMemberAssignmentCreateNestedManyWithoutCouncilMemberInput
+    officeMeetingsAsInstructor?: OfficeMeetingCreateNestedManyWithoutInstructorInput
+  }
+
+  export type UserUncheckedCreateWithoutOfficeMeetingViewsInput = {
+    id?: string
+    code?: string | null
+    name: string
+    email: string
+    password?: string | null
+    dateOfBirth?: Date | string | null
+    gender?: $Enums.Gender | null
+    phone?: string | null
+    address?: string | null
+    role?: $Enums.Role
+    department?: string | null
+    departmentId?: string | null
+    majorId?: string | null
+    classId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    leadProjects?: ProjectUncheckedCreateNestedManyWithoutLeaderInput
+    deanReviews?: ProjectUncheckedCreateNestedManyWithoutDeanReviewerInput
+    councilEvaluations?: CouncilEvaluationUncheckedCreateNestedManyWithoutCouncilMemberInput
+    registrations?: ProjectRegistrationUncheckedCreateNestedManyWithoutUserInput
+    instructedRegistrations?: ProjectRegistrationUncheckedCreateNestedManyWithoutInstructorInput
+    instructedProjects?: ProjectUncheckedCreateNestedManyWithoutInstructorInput
+    facultyReviews?: ProjectRegistrationUncheckedCreateNestedManyWithoutFacultyReviewerInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    callRoundInstructors?: CallRoundInstructorUncheckedCreateNestedManyWithoutInstructorInput
+    callRoundCouncilMembers?: CallRoundCouncilMemberUncheckedCreateNestedManyWithoutCouncilMemberInput
+    councilAssignments?: CouncilMemberAssignmentUncheckedCreateNestedManyWithoutCouncilMemberInput
+    officeMeetingsAsInstructor?: OfficeMeetingUncheckedCreateNestedManyWithoutInstructorInput
+  }
+
+  export type UserCreateOrConnectWithoutOfficeMeetingViewsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutOfficeMeetingViewsInput, UserUncheckedCreateWithoutOfficeMeetingViewsInput>
+  }
+
+  export type OfficeMeetingUpsertWithoutViewsInput = {
+    update: XOR<OfficeMeetingUpdateWithoutViewsInput, OfficeMeetingUncheckedUpdateWithoutViewsInput>
+    create: XOR<OfficeMeetingCreateWithoutViewsInput, OfficeMeetingUncheckedCreateWithoutViewsInput>
+    where?: OfficeMeetingWhereInput
+  }
+
+  export type OfficeMeetingUpdateToOneWithWhereWithoutViewsInput = {
+    where?: OfficeMeetingWhereInput
+    data: XOR<OfficeMeetingUpdateWithoutViewsInput, OfficeMeetingUncheckedUpdateWithoutViewsInput>
+  }
+
+  export type OfficeMeetingUpdateWithoutViewsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    target?: StringFieldUpdateOperationsInput | string
+    memberUserIds?: OfficeMeetingUpdatememberUserIdsInput | string[]
+    meetingAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    location?: StringFieldUpdateOperationsInput | string
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    project?: ProjectUpdateOneRequiredWithoutOfficeMeetingsNestedInput
+    instructor?: UserUpdateOneRequiredWithoutOfficeMeetingsAsInstructorNestedInput
+  }
+
+  export type OfficeMeetingUncheckedUpdateWithoutViewsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    projectId?: StringFieldUpdateOperationsInput | string
+    instructorId?: StringFieldUpdateOperationsInput | string
+    target?: StringFieldUpdateOperationsInput | string
+    memberUserIds?: OfficeMeetingUpdatememberUserIdsInput | string[]
+    meetingAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    location?: StringFieldUpdateOperationsInput | string
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserUpsertWithoutOfficeMeetingViewsInput = {
+    update: XOR<UserUpdateWithoutOfficeMeetingViewsInput, UserUncheckedUpdateWithoutOfficeMeetingViewsInput>
+    create: XOR<UserCreateWithoutOfficeMeetingViewsInput, UserUncheckedCreateWithoutOfficeMeetingViewsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutOfficeMeetingViewsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutOfficeMeetingViewsInput, UserUncheckedUpdateWithoutOfficeMeetingViewsInput>
+  }
+
+  export type UserUpdateWithoutOfficeMeetingViewsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    departmentRef?: DepartmentUpdateOneWithoutUsersNestedInput
+    major?: MajorUpdateOneWithoutUsersNestedInput
+    class?: ClassUpdateOneWithoutUsersNestedInput
+    leadProjects?: ProjectUpdateManyWithoutLeaderNestedInput
+    deanReviews?: ProjectUpdateManyWithoutDeanReviewerNestedInput
+    councilEvaluations?: CouncilEvaluationUpdateManyWithoutCouncilMemberNestedInput
+    registrations?: ProjectRegistrationUpdateManyWithoutUserNestedInput
+    instructedRegistrations?: ProjectRegistrationUpdateManyWithoutInstructorNestedInput
+    instructedProjects?: ProjectUpdateManyWithoutInstructorNestedInput
+    facultyReviews?: ProjectRegistrationUpdateManyWithoutFacultyReviewerNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    callRoundInstructors?: CallRoundInstructorUpdateManyWithoutInstructorNestedInput
+    callRoundCouncilMembers?: CallRoundCouncilMemberUpdateManyWithoutCouncilMemberNestedInput
+    councilAssignments?: CouncilMemberAssignmentUpdateManyWithoutCouncilMemberNestedInput
+    officeMeetingsAsInstructor?: OfficeMeetingUpdateManyWithoutInstructorNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutOfficeMeetingViewsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    departmentId?: NullableStringFieldUpdateOperationsInput | string | null
+    majorId?: NullableStringFieldUpdateOperationsInput | string | null
+    classId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    leadProjects?: ProjectUncheckedUpdateManyWithoutLeaderNestedInput
+    deanReviews?: ProjectUncheckedUpdateManyWithoutDeanReviewerNestedInput
+    councilEvaluations?: CouncilEvaluationUncheckedUpdateManyWithoutCouncilMemberNestedInput
+    registrations?: ProjectRegistrationUncheckedUpdateManyWithoutUserNestedInput
+    instructedRegistrations?: ProjectRegistrationUncheckedUpdateManyWithoutInstructorNestedInput
+    instructedProjects?: ProjectUncheckedUpdateManyWithoutInstructorNestedInput
+    facultyReviews?: ProjectRegistrationUncheckedUpdateManyWithoutFacultyReviewerNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    callRoundInstructors?: CallRoundInstructorUncheckedUpdateManyWithoutInstructorNestedInput
+    callRoundCouncilMembers?: CallRoundCouncilMemberUncheckedUpdateManyWithoutCouncilMemberNestedInput
+    councilAssignments?: CouncilMemberAssignmentUncheckedUpdateManyWithoutCouncilMemberNestedInput
+    officeMeetingsAsInstructor?: OfficeMeetingUncheckedUpdateManyWithoutInstructorNestedInput
   }
 
   export type CallRoundCreateWithoutAvailableInstructorsInput = {
@@ -40625,6 +44631,8 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     callRoundCouncilMembers?: CallRoundCouncilMemberCreateNestedManyWithoutCouncilMemberInput
     councilAssignments?: CouncilMemberAssignmentCreateNestedManyWithoutCouncilMemberInput
+    officeMeetingsAsInstructor?: OfficeMeetingCreateNestedManyWithoutInstructorInput
+    officeMeetingViews?: OfficeMeetingViewCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutCallRoundInstructorsInput = {
@@ -40654,6 +44662,8 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     callRoundCouncilMembers?: CallRoundCouncilMemberUncheckedCreateNestedManyWithoutCouncilMemberInput
     councilAssignments?: CouncilMemberAssignmentUncheckedCreateNestedManyWithoutCouncilMemberInput
+    officeMeetingsAsInstructor?: OfficeMeetingUncheckedCreateNestedManyWithoutInstructorInput
+    officeMeetingViews?: OfficeMeetingViewUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutCallRoundInstructorsInput = {
@@ -40786,6 +44796,8 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     callRoundCouncilMembers?: CallRoundCouncilMemberUpdateManyWithoutCouncilMemberNestedInput
     councilAssignments?: CouncilMemberAssignmentUpdateManyWithoutCouncilMemberNestedInput
+    officeMeetingsAsInstructor?: OfficeMeetingUpdateManyWithoutInstructorNestedInput
+    officeMeetingViews?: OfficeMeetingViewUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCallRoundInstructorsInput = {
@@ -40815,6 +44827,8 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     callRoundCouncilMembers?: CallRoundCouncilMemberUncheckedUpdateManyWithoutCouncilMemberNestedInput
     councilAssignments?: CouncilMemberAssignmentUncheckedUpdateManyWithoutCouncilMemberNestedInput
+    officeMeetingsAsInstructor?: OfficeMeetingUncheckedUpdateManyWithoutInstructorNestedInput
+    officeMeetingViews?: OfficeMeetingViewUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type CallRoundCreateWithoutAvailableCouncilMembersInput = {
@@ -40925,6 +44939,8 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     callRoundInstructors?: CallRoundInstructorCreateNestedManyWithoutInstructorInput
     councilAssignments?: CouncilMemberAssignmentCreateNestedManyWithoutCouncilMemberInput
+    officeMeetingsAsInstructor?: OfficeMeetingCreateNestedManyWithoutInstructorInput
+    officeMeetingViews?: OfficeMeetingViewCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutCallRoundCouncilMembersInput = {
@@ -40954,6 +44970,8 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     callRoundInstructors?: CallRoundInstructorUncheckedCreateNestedManyWithoutInstructorInput
     councilAssignments?: CouncilMemberAssignmentUncheckedCreateNestedManyWithoutCouncilMemberInput
+    officeMeetingsAsInstructor?: OfficeMeetingUncheckedCreateNestedManyWithoutInstructorInput
+    officeMeetingViews?: OfficeMeetingViewUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutCallRoundCouncilMembersInput = {
@@ -41086,6 +45104,8 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     callRoundInstructors?: CallRoundInstructorUpdateManyWithoutInstructorNestedInput
     councilAssignments?: CouncilMemberAssignmentUpdateManyWithoutCouncilMemberNestedInput
+    officeMeetingsAsInstructor?: OfficeMeetingUpdateManyWithoutInstructorNestedInput
+    officeMeetingViews?: OfficeMeetingViewUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCallRoundCouncilMembersInput = {
@@ -41115,6 +45135,8 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     callRoundInstructors?: CallRoundInstructorUncheckedUpdateManyWithoutInstructorNestedInput
     councilAssignments?: CouncilMemberAssignmentUncheckedUpdateManyWithoutCouncilMemberNestedInput
+    officeMeetingsAsInstructor?: OfficeMeetingUncheckedUpdateManyWithoutInstructorNestedInput
+    officeMeetingViews?: OfficeMeetingViewUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type CallRoundCreateWithoutCouncilsInput = {
@@ -41425,6 +45447,8 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     callRoundInstructors?: CallRoundInstructorCreateNestedManyWithoutInstructorInput
     callRoundCouncilMembers?: CallRoundCouncilMemberCreateNestedManyWithoutCouncilMemberInput
+    officeMeetingsAsInstructor?: OfficeMeetingCreateNestedManyWithoutInstructorInput
+    officeMeetingViews?: OfficeMeetingViewCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutCouncilAssignmentsInput = {
@@ -41454,6 +45478,8 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     callRoundInstructors?: CallRoundInstructorUncheckedCreateNestedManyWithoutInstructorInput
     callRoundCouncilMembers?: CallRoundCouncilMemberUncheckedCreateNestedManyWithoutCouncilMemberInput
+    officeMeetingsAsInstructor?: OfficeMeetingUncheckedCreateNestedManyWithoutInstructorInput
+    officeMeetingViews?: OfficeMeetingViewUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutCouncilAssignmentsInput = {
@@ -41530,6 +45556,8 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     callRoundInstructors?: CallRoundInstructorUpdateManyWithoutInstructorNestedInput
     callRoundCouncilMembers?: CallRoundCouncilMemberUpdateManyWithoutCouncilMemberNestedInput
+    officeMeetingsAsInstructor?: OfficeMeetingUpdateManyWithoutInstructorNestedInput
+    officeMeetingViews?: OfficeMeetingViewUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCouncilAssignmentsInput = {
@@ -41559,6 +45587,8 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     callRoundInstructors?: CallRoundInstructorUncheckedUpdateManyWithoutInstructorNestedInput
     callRoundCouncilMembers?: CallRoundCouncilMemberUncheckedUpdateManyWithoutCouncilMemberNestedInput
+    officeMeetingsAsInstructor?: OfficeMeetingUncheckedUpdateManyWithoutInstructorNestedInput
+    officeMeetingViews?: OfficeMeetingViewUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type CouncilCreateWithoutProjectsInput = {
@@ -41792,6 +45822,8 @@ export namespace Prisma {
     callRoundInstructors?: CallRoundInstructorUpdateManyWithoutInstructorNestedInput
     callRoundCouncilMembers?: CallRoundCouncilMemberUpdateManyWithoutCouncilMemberNestedInput
     councilAssignments?: CouncilMemberAssignmentUpdateManyWithoutCouncilMemberNestedInput
+    officeMeetingsAsInstructor?: OfficeMeetingUpdateManyWithoutInstructorNestedInput
+    officeMeetingViews?: OfficeMeetingViewUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutDepartmentRefInput = {
@@ -41821,6 +45853,8 @@ export namespace Prisma {
     callRoundInstructors?: CallRoundInstructorUncheckedUpdateManyWithoutInstructorNestedInput
     callRoundCouncilMembers?: CallRoundCouncilMemberUncheckedUpdateManyWithoutCouncilMemberNestedInput
     councilAssignments?: CouncilMemberAssignmentUncheckedUpdateManyWithoutCouncilMemberNestedInput
+    officeMeetingsAsInstructor?: OfficeMeetingUncheckedUpdateManyWithoutInstructorNestedInput
+    officeMeetingViews?: OfficeMeetingViewUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutDepartmentRefInput = {
@@ -42029,6 +46063,8 @@ export namespace Prisma {
     callRoundInstructors?: CallRoundInstructorUpdateManyWithoutInstructorNestedInput
     callRoundCouncilMembers?: CallRoundCouncilMemberUpdateManyWithoutCouncilMemberNestedInput
     councilAssignments?: CouncilMemberAssignmentUpdateManyWithoutCouncilMemberNestedInput
+    officeMeetingsAsInstructor?: OfficeMeetingUpdateManyWithoutInstructorNestedInput
+    officeMeetingViews?: OfficeMeetingViewUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutMajorInput = {
@@ -42058,6 +46094,8 @@ export namespace Prisma {
     callRoundInstructors?: CallRoundInstructorUncheckedUpdateManyWithoutInstructorNestedInput
     callRoundCouncilMembers?: CallRoundCouncilMemberUncheckedUpdateManyWithoutCouncilMemberNestedInput
     councilAssignments?: CouncilMemberAssignmentUncheckedUpdateManyWithoutCouncilMemberNestedInput
+    officeMeetingsAsInstructor?: OfficeMeetingUncheckedUpdateManyWithoutInstructorNestedInput
+    officeMeetingViews?: OfficeMeetingViewUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutMajorInput = {
@@ -42230,6 +46268,8 @@ export namespace Prisma {
     callRoundInstructors?: CallRoundInstructorUpdateManyWithoutInstructorNestedInput
     callRoundCouncilMembers?: CallRoundCouncilMemberUpdateManyWithoutCouncilMemberNestedInput
     councilAssignments?: CouncilMemberAssignmentUpdateManyWithoutCouncilMemberNestedInput
+    officeMeetingsAsInstructor?: OfficeMeetingUpdateManyWithoutInstructorNestedInput
+    officeMeetingViews?: OfficeMeetingViewUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutClassInput = {
@@ -42259,6 +46299,8 @@ export namespace Prisma {
     callRoundInstructors?: CallRoundInstructorUncheckedUpdateManyWithoutInstructorNestedInput
     callRoundCouncilMembers?: CallRoundCouncilMemberUncheckedUpdateManyWithoutCouncilMemberNestedInput
     councilAssignments?: CouncilMemberAssignmentUncheckedUpdateManyWithoutCouncilMemberNestedInput
+    officeMeetingsAsInstructor?: OfficeMeetingUncheckedUpdateManyWithoutInstructorNestedInput
+    officeMeetingViews?: OfficeMeetingViewUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutClassInput = {
@@ -42538,6 +46580,25 @@ export namespace Prisma {
     createdAt?: Date | string
   }
 
+  export type OfficeMeetingCreateManyInstructorInput = {
+    id?: string
+    projectId: string
+    target: string
+    memberUserIds?: OfficeMeetingCreatememberUserIdsInput | string[]
+    meetingAt: Date | string
+    location: string
+    note?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type OfficeMeetingViewCreateManyUserInput = {
+    id?: string
+    meetingId: string
+    isRead?: boolean
+    readAt?: Date | string | null
+  }
+
   export type ProjectUpdateWithoutLeaderInput = {
     id?: StringFieldUpdateOperationsInput | string
     code?: NullableStringFieldUpdateOperationsInput | string | null
@@ -42560,6 +46621,7 @@ export namespace Prisma {
     disbursements?: FundingDisbursementUpdateManyWithoutProjectNestedInput
     extensionRequests?: ExtensionRequestUpdateManyWithoutProjectNestedInput
     instructor?: UserUpdateOneWithoutInstructedProjectsNestedInput
+    officeMeetings?: OfficeMeetingUpdateManyWithoutProjectNestedInput
   }
 
   export type ProjectUncheckedUpdateWithoutLeaderInput = {
@@ -42584,6 +46646,7 @@ export namespace Prisma {
     councilEvaluations?: CouncilEvaluationUncheckedUpdateManyWithoutProjectNestedInput
     disbursements?: FundingDisbursementUncheckedUpdateManyWithoutProjectNestedInput
     extensionRequests?: ExtensionRequestUncheckedUpdateManyWithoutProjectNestedInput
+    officeMeetings?: OfficeMeetingUncheckedUpdateManyWithoutProjectNestedInput
   }
 
   export type ProjectUncheckedUpdateManyWithoutLeaderInput = {
@@ -42628,6 +46691,7 @@ export namespace Prisma {
     disbursements?: FundingDisbursementUpdateManyWithoutProjectNestedInput
     extensionRequests?: ExtensionRequestUpdateManyWithoutProjectNestedInput
     instructor?: UserUpdateOneWithoutInstructedProjectsNestedInput
+    officeMeetings?: OfficeMeetingUpdateManyWithoutProjectNestedInput
   }
 
   export type ProjectUncheckedUpdateWithoutDeanReviewerInput = {
@@ -42652,6 +46716,7 @@ export namespace Prisma {
     councilEvaluations?: CouncilEvaluationUncheckedUpdateManyWithoutProjectNestedInput
     disbursements?: FundingDisbursementUncheckedUpdateManyWithoutProjectNestedInput
     extensionRequests?: ExtensionRequestUncheckedUpdateManyWithoutProjectNestedInput
+    officeMeetings?: OfficeMeetingUncheckedUpdateManyWithoutProjectNestedInput
   }
 
   export type ProjectUncheckedUpdateManyWithoutDeanReviewerInput = {
@@ -42832,6 +46897,7 @@ export namespace Prisma {
     councilEvaluations?: CouncilEvaluationUpdateManyWithoutProjectNestedInput
     disbursements?: FundingDisbursementUpdateManyWithoutProjectNestedInput
     extensionRequests?: ExtensionRequestUpdateManyWithoutProjectNestedInput
+    officeMeetings?: OfficeMeetingUpdateManyWithoutProjectNestedInput
   }
 
   export type ProjectUncheckedUpdateWithoutInstructorInput = {
@@ -42856,6 +46922,7 @@ export namespace Prisma {
     councilEvaluations?: CouncilEvaluationUncheckedUpdateManyWithoutProjectNestedInput
     disbursements?: FundingDisbursementUncheckedUpdateManyWithoutProjectNestedInput
     extensionRequests?: ExtensionRequestUncheckedUpdateManyWithoutProjectNestedInput
+    officeMeetings?: OfficeMeetingUncheckedUpdateManyWithoutProjectNestedInput
   }
 
   export type ProjectUncheckedUpdateManyWithoutInstructorInput = {
@@ -43024,6 +47091,65 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type OfficeMeetingUpdateWithoutInstructorInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    target?: StringFieldUpdateOperationsInput | string
+    memberUserIds?: OfficeMeetingUpdatememberUserIdsInput | string[]
+    meetingAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    location?: StringFieldUpdateOperationsInput | string
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    project?: ProjectUpdateOneRequiredWithoutOfficeMeetingsNestedInput
+    views?: OfficeMeetingViewUpdateManyWithoutMeetingNestedInput
+  }
+
+  export type OfficeMeetingUncheckedUpdateWithoutInstructorInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    projectId?: StringFieldUpdateOperationsInput | string
+    target?: StringFieldUpdateOperationsInput | string
+    memberUserIds?: OfficeMeetingUpdatememberUserIdsInput | string[]
+    meetingAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    location?: StringFieldUpdateOperationsInput | string
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    views?: OfficeMeetingViewUncheckedUpdateManyWithoutMeetingNestedInput
+  }
+
+  export type OfficeMeetingUncheckedUpdateManyWithoutInstructorInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    projectId?: StringFieldUpdateOperationsInput | string
+    target?: StringFieldUpdateOperationsInput | string
+    memberUserIds?: OfficeMeetingUpdatememberUserIdsInput | string[]
+    meetingAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    location?: StringFieldUpdateOperationsInput | string
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type OfficeMeetingViewUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    isRead?: BoolFieldUpdateOperationsInput | boolean
+    readAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    meeting?: OfficeMeetingUpdateOneRequiredWithoutViewsNestedInput
+  }
+
+  export type OfficeMeetingViewUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    meetingId?: StringFieldUpdateOperationsInput | string
+    isRead?: BoolFieldUpdateOperationsInput | boolean
+    readAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type OfficeMeetingViewUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    meetingId?: StringFieldUpdateOperationsInput | string
+    isRead?: BoolFieldUpdateOperationsInput | boolean
+    readAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
   export type ProjectCreateManyCallRoundInput = {
     id?: string
     code?: string | null
@@ -43103,6 +47229,7 @@ export namespace Prisma {
     disbursements?: FundingDisbursementUpdateManyWithoutProjectNestedInput
     extensionRequests?: ExtensionRequestUpdateManyWithoutProjectNestedInput
     instructor?: UserUpdateOneWithoutInstructedProjectsNestedInput
+    officeMeetings?: OfficeMeetingUpdateManyWithoutProjectNestedInput
   }
 
   export type ProjectUncheckedUpdateWithoutCallRoundInput = {
@@ -43127,6 +47254,7 @@ export namespace Prisma {
     councilEvaluations?: CouncilEvaluationUncheckedUpdateManyWithoutProjectNestedInput
     disbursements?: FundingDisbursementUncheckedUpdateManyWithoutProjectNestedInput
     extensionRequests?: ExtensionRequestUncheckedUpdateManyWithoutProjectNestedInput
+    officeMeetings?: OfficeMeetingUncheckedUpdateManyWithoutProjectNestedInput
   }
 
   export type ProjectUncheckedUpdateManyWithoutCallRoundInput = {
@@ -43402,6 +47530,7 @@ export namespace Prisma {
     disbursements?: FundingDisbursementUpdateManyWithoutProjectNestedInput
     extensionRequests?: ExtensionRequestUpdateManyWithoutProjectNestedInput
     instructor?: UserUpdateOneWithoutInstructedProjectsNestedInput
+    officeMeetings?: OfficeMeetingUpdateManyWithoutProjectNestedInput
   }
 
   export type ProjectUncheckedUpdateWithoutProjectTypeInput = {
@@ -43426,6 +47555,7 @@ export namespace Prisma {
     councilEvaluations?: CouncilEvaluationUncheckedUpdateManyWithoutProjectNestedInput
     disbursements?: FundingDisbursementUncheckedUpdateManyWithoutProjectNestedInput
     extensionRequests?: ExtensionRequestUncheckedUpdateManyWithoutProjectNestedInput
+    officeMeetings?: OfficeMeetingUncheckedUpdateManyWithoutProjectNestedInput
   }
 
   export type ProjectUncheckedUpdateManyWithoutProjectTypeInput = {
@@ -43493,6 +47623,18 @@ export namespace Prisma {
     status?: $Enums.RequestStatus
     submittedAt?: Date | string
     reviewedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type OfficeMeetingCreateManyProjectInput = {
+    id?: string
+    instructorId: string
+    target: string
+    memberUserIds?: OfficeMeetingCreatememberUserIdsInput | string[]
+    meetingAt: Date | string
+    location: string
+    note?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -43640,6 +47782,44 @@ export namespace Prisma {
     status?: EnumRequestStatusFieldUpdateOperationsInput | $Enums.RequestStatus
     submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type OfficeMeetingUpdateWithoutProjectInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    target?: StringFieldUpdateOperationsInput | string
+    memberUserIds?: OfficeMeetingUpdatememberUserIdsInput | string[]
+    meetingAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    location?: StringFieldUpdateOperationsInput | string
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    instructor?: UserUpdateOneRequiredWithoutOfficeMeetingsAsInstructorNestedInput
+    views?: OfficeMeetingViewUpdateManyWithoutMeetingNestedInput
+  }
+
+  export type OfficeMeetingUncheckedUpdateWithoutProjectInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    instructorId?: StringFieldUpdateOperationsInput | string
+    target?: StringFieldUpdateOperationsInput | string
+    memberUserIds?: OfficeMeetingUpdatememberUserIdsInput | string[]
+    meetingAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    location?: StringFieldUpdateOperationsInput | string
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    views?: OfficeMeetingViewUncheckedUpdateManyWithoutMeetingNestedInput
+  }
+
+  export type OfficeMeetingUncheckedUpdateManyWithoutProjectInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    instructorId?: StringFieldUpdateOperationsInput | string
+    target?: StringFieldUpdateOperationsInput | string
+    memberUserIds?: OfficeMeetingUpdatememberUserIdsInput | string[]
+    meetingAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    location?: StringFieldUpdateOperationsInput | string
+    note?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -43826,6 +48006,34 @@ export namespace Prisma {
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type OfficeMeetingViewCreateManyMeetingInput = {
+    id?: string
+    userId: string
+    isRead?: boolean
+    readAt?: Date | string | null
+  }
+
+  export type OfficeMeetingViewUpdateWithoutMeetingInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    isRead?: BoolFieldUpdateOperationsInput | boolean
+    readAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    user?: UserUpdateOneRequiredWithoutOfficeMeetingViewsNestedInput
+  }
+
+  export type OfficeMeetingViewUncheckedUpdateWithoutMeetingInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    isRead?: BoolFieldUpdateOperationsInput | boolean
+    readAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type OfficeMeetingViewUncheckedUpdateManyWithoutMeetingInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    isRead?: BoolFieldUpdateOperationsInput | boolean
+    readAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type CouncilMemberAssignmentCreateManyCouncilInput = {

@@ -49,15 +49,15 @@ enum RequestStatus {
 }
 
 enum CallRoundApprovalStatus {
-  PENDING_APPROVAL  // Trưởng khoa tạo, chờ admin duyệt
-  APPROVED          // Admin đã duyệt (hoặc admin tự tạo)
-  REJECTED          // Admin từ chối
+  PENDING_APPROVAL // Trưởng khoa tạo, chờ admin duyệt
+  APPROVED // Admin đã duyệt (hoặc admin tự tạo)
+  REJECTED // Admin từ chối
 }
 
 enum ApplicableFor {
-  STUDENT           // Áp dụng cho sinh viên
-  LECTURER          // Áp dụng cho giảng viên
-  BOTH              // Áp dụng cho cả hai
+  STUDENT // Áp dụng cho sinh viên
+  LECTURER // Áp dụng cho giảng viên
+  BOTH // Áp dụng cho cả hai
 }
 
 enum RegistrationStatus {
@@ -94,105 +94,107 @@ model Major {
 }
 
 model Class {
-  id          String      @id @default(cuid())
-  code        String      @unique
-  name        String
-  majorId     String
-  major       Major       @relation(fields: [majorId], references: [id], onDelete: Cascade)
-  users       User[]
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
-  callRounds  CallRound[] @relation("CallRoundClasses")
+  id         String      @id @default(cuid())
+  code       String      @unique
+  name       String
+  majorId    String
+  major      Major       @relation(fields: [majorId], references: [id], onDelete: Cascade)
+  users      User[]
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+  callRounds CallRound[] @relation("CallRoundClasses")
 }
 
 model User {
-  id                      String                   @id @default(cuid())
-  code                    String?                  @unique
-  name                    String
-  email                   String                   @unique
-  password                String?
-  dateOfBirth             DateTime?
-  gender                  Gender?
-  phone                   String?
-  address                 String?
-  role                    Role                     @default(LECTURER)
-  department              String?                  // Legacy field, keep for backward compatibility
-  departmentId            String?
-  departmentRef           Department?              @relation(fields: [departmentId], references: [id])
-  majorId                 String?
-  major                   Major?                   @relation(fields: [majorId], references: [id])
-  classId                 String?
-  class                   Class?                   @relation(fields: [classId], references: [id])
-  createdAt               DateTime                 @default(now())
-  updatedAt               DateTime                 @updatedAt
-  leadProjects            Project[]                @relation("ProjectLeader")
-  deanReviews             Project[]                @relation("DeanReviewer")
-  councilEvaluations      CouncilEvaluation[]
-  registrations           ProjectRegistration[]
-  instructedRegistrations ProjectRegistration[]    @relation("ProjectRegistrationInstructor")
-  instructedProjects      Project[]                @relation("ProjectInstructor")
-  facultyReviews          ProjectRegistration[]    @relation("FacultyReviewer")
-  notifications           Notification[]
-  callRoundInstructors    CallRoundInstructor[]    // Danh sách đợt đăng ký mà giảng viên được chỉ định hướng dẫn
-  callRoundCouncilMembers CallRoundCouncilMember[] // Danh sách đợt đăng ký mà thành viên hội đồng được chỉ định
-  councilAssignments      CouncilMemberAssignment[] @relation("CouncilMemberAssignments") // Phân công vào các hội đồng cụ thể
+  id                         String                    @id @default(cuid())
+  code                       String?                   @unique
+  name                       String
+  email                      String                    @unique
+  password                   String?
+  dateOfBirth                DateTime?
+  gender                     Gender?
+  phone                      String?
+  address                    String?
+  role                       Role                      @default(LECTURER)
+  department                 String? // Legacy field, keep for backward compatibility
+  departmentId               String?
+  departmentRef              Department?               @relation(fields: [departmentId], references: [id])
+  majorId                    String?
+  major                      Major?                    @relation(fields: [majorId], references: [id])
+  classId                    String?
+  class                      Class?                    @relation(fields: [classId], references: [id])
+  createdAt                  DateTime                  @default(now())
+  updatedAt                  DateTime                  @updatedAt
+  leadProjects               Project[]                 @relation("ProjectLeader")
+  deanReviews                Project[]                 @relation("DeanReviewer")
+  councilEvaluations         CouncilEvaluation[]
+  registrations              ProjectRegistration[]
+  instructedRegistrations    ProjectRegistration[]     @relation("ProjectRegistrationInstructor")
+  instructedProjects         Project[]                 @relation("ProjectInstructor")
+  facultyReviews             ProjectRegistration[]     @relation("FacultyReviewer")
+  notifications              Notification[]
+  callRoundInstructors       CallRoundInstructor[] // Danh sách đợt đăng ký mà giảng viên được chỉ định hướng dẫn
+  callRoundCouncilMembers    CallRoundCouncilMember[] // Danh sách đợt đăng ký mà thành viên hội đồng được chỉ định
+  councilAssignments         CouncilMemberAssignment[] @relation("CouncilMemberAssignments") // Phân công vào các hội đồng cụ thể
+  officeMeetingsAsInstructor OfficeMeeting[]           @relation("OfficeMeetingInstructor")
+  officeMeetingViews         OfficeMeetingView[]
 }
 
 model CallRound {
-  id                     String                  @id @default(cuid())
-  name                   String
-  description            String?                 // Mô tả chi tiết về đợt đăng ký
-  
+  id          String  @id @default(cuid())
+  name        String
+  description String? // Mô tả chi tiết về đợt đăng ký
+
   // Thời gian đăng ký
-  registrationStartDate  DateTime                // Thời gian bắt đầu đăng ký
-  registrationEndDate    DateTime                // Thời gian kết thúc đăng ký
-  
+  registrationStartDate DateTime // Thời gian bắt đầu đăng ký
+  registrationEndDate   DateTime // Thời gian kết thúc đăng ký
+
   // Thời gian thực hiện đề tài
-  projectStartDate       DateTime?               // Thời gian bắt đầu thực hiện đề tài
-  projectEndDate         DateTime?               // Thời gian dự kiến kết thúc đề tài
-  
+  projectStartDate DateTime? // Thời gian bắt đầu thực hiện đề tài
+  projectEndDate   DateTime? // Thời gian dự kiến kết thúc đề tài
+
   // Các mốc thời gian khác
-  reviewDeadline         DateTime?               // Hạn chót duyệt đề tài
-  reportingStartDate     DateTime?               // Thời gian bắt đầu báo cáo tiến độ
-  
+  reviewDeadline     DateTime? // Hạn chót duyệt đề tài
+  reportingStartDate DateTime? // Thời gian bắt đầu báo cáo tiến độ
+
   // Legacy fields (keep for backward compatibility)
-  startDate              DateTime                // Maps to registrationStartDate
-  endDate                DateTime                // Maps to registrationEndDate
-  
+  startDate DateTime // Maps to registrationStartDate
+  endDate   DateTime // Maps to registrationEndDate
+
   // Thông tin bổ sung
-  maxProjects            Int?                    // Số lượng đề tài tối đa được chấp nhận
-  budgetLimit            Decimal?                @db.Decimal(12, 2) // Ngân sách tối đa cho đợt
-  requirements           String?                 // Yêu cầu, điều kiện đăng ký
-  guidelines             String?                 // Hướng dẫn đăng ký
-  contactInfo            String?                 // Thông tin liên hệ
-  
-  isActive               Boolean                 @default(true)
-  isLocked               Boolean                 @default(false) // Khóa chỉnh sửa
-  
+  maxProjects  Int? // Số lượng đề tài tối đa được chấp nhận
+  budgetLimit  Decimal? @db.Decimal(12, 2) // Ngân sách tối đa cho đợt
+  requirements String? // Yêu cầu, điều kiện đăng ký
+  guidelines   String? // Hướng dẫn đăng ký
+  contactInfo  String? // Thông tin liên hệ
+
+  isActive Boolean @default(true)
+  isLocked Boolean @default(false) // Khóa chỉnh sửa
+
   // Áp dụng cho đối tượng nào
-  applicableFor          ApplicableFor           @default(STUDENT) // STUDENT, LECTURER, hoặc BOTH
-  
+  applicableFor ApplicableFor @default(STUDENT) // STUDENT, LECTURER, hoặc BOTH
+
   // Approval workflow: DEAN creates -> PENDING_APPROVAL, ADMIN creates -> APPROVED
-  approvalStatus         CallRoundApprovalStatus @default(APPROVED)
-  createdById            String?                 // ID người tạo
-  createdByRole          Role?                   // Role người tạo
-  approvedById           String?                 // ID admin duyệt
-  approvalNote           String?                 // Ghi chú khi duyệt/từ chối
-  approvedAt             DateTime?               // Thời điểm duyệt
-  
-  templateId             String?
-  createdAt              DateTime                @default(now())
-  updatedAt              DateTime                @updatedAt
-  
-  projects               Project[]
-  registrations          ProjectRegistration[]
-  template               ProgressReportTemplate? @relation(fields: [templateId], references: [id])
-  departments            Department[]            @relation("CallRoundDepartments")
-  majors                 Major[]                 @relation("CallRoundMajors")
-  classes                Class[]                 @relation("CallRoundClasses")
-  availableInstructors   CallRoundInstructor[]   // Danh sách giảng viên hướng dẫn được chỉ định cho đợt này
+  approvalStatus CallRoundApprovalStatus @default(APPROVED)
+  createdById    String? // ID người tạo
+  createdByRole  Role? // Role người tạo
+  approvedById   String? // ID admin duyệt
+  approvalNote   String? // Ghi chú khi duyệt/từ chối
+  approvedAt     DateTime? // Thời điểm duyệt
+
+  templateId String?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  projects                Project[]
+  registrations           ProjectRegistration[]
+  template                ProgressReportTemplate?  @relation(fields: [templateId], references: [id])
+  departments             Department[]             @relation("CallRoundDepartments")
+  majors                  Major[]                  @relation("CallRoundMajors")
+  classes                 Class[]                  @relation("CallRoundClasses")
+  availableInstructors    CallRoundInstructor[] // Danh sách giảng viên hướng dẫn được chỉ định cho đợt này
   availableCouncilMembers CallRoundCouncilMember[] // Danh sách thành viên hội đồng được chỉ định cho đợt này
-  councils                Council[]                 // Các hội đồng được tạo trong đợt này
+  councils                Council[] // Các hội đồng được tạo trong đợt này
 }
 
 model ProjectType {
@@ -232,6 +234,7 @@ model Project {
   extensionRequests  ExtensionRequest[]
   instructorId       String?
   instructor         User?                 @relation("ProjectInstructor", fields: [instructorId], references: [id])
+  officeMeetings     OfficeMeeting[]
 }
 
 model ProgressReportTemplate {
@@ -239,8 +242,8 @@ model ProgressReportTemplate {
   name          String
   description   String?
   isActive      Boolean                      @default(true)
-  createdById   String?                      // ID người tạo
-  createdByRole Role?                        // Role người tạo
+  createdById   String? // ID người tạo
+  createdByRole Role? // Role người tạo
   createdAt     DateTime                     @default(now())
   updatedAt     DateTime                     @updatedAt
   items         ProgressReportTemplateItem[]
@@ -248,7 +251,7 @@ model ProgressReportTemplate {
 }
 
 model ProgressReportTemplateItem {
-  id               String                   @id @default(cuid())
+  id               String                 @id @default(cuid())
   templateId       String
   weekNumber       Int
   weekLabel        String
@@ -256,9 +259,9 @@ model ProgressReportTemplateItem {
   contentGuideline String?
   expectedResult   String?
   orderIndex       Int
-  createdAt        DateTime                 @default(now())
-  updatedAt        DateTime                 @updatedAt
-  template         ProgressReportTemplate   @relation(fields: [templateId], references: [id], onDelete: Cascade)
+  createdAt        DateTime               @default(now())
+  updatedAt        DateTime               @updatedAt
+  template         ProgressReportTemplate @relation(fields: [templateId], references: [id], onDelete: Cascade)
 
   @@unique([templateId, weekNumber])
   @@index([templateId, orderIndex])
@@ -341,10 +344,10 @@ model ProjectRegistration {
   instructor       User?              @relation("ProjectRegistrationInstructor", fields: [instructorId], references: [id])
   callRound        CallRound?         @relation(fields: [callRoundId], references: [id])
 
-  facultyStatus     FacultyStatus @default(PENDING)
+  facultyStatus     FacultyStatus             @default(PENDING)
   facultyReviewerId String?
-  facultyReviewer   User?                        @relation("FacultyReviewer", fields: [facultyReviewerId], references: [id])
-  councilAssignment ProjectCouncilAssignment?    // Hội đồng được phân công đánh giá đề tài này
+  facultyReviewer   User?                     @relation("FacultyReviewer", fields: [facultyReviewerId], references: [id])
+  councilAssignment ProjectCouncilAssignment? // Hội đồng được phân công đánh giá đề tài này
 }
 
 enum InstructorStatus {
@@ -375,32 +378,66 @@ enum NotificationType {
 }
 
 model Notification {
-  id           String           @id @default(cuid())
-  userId       String
-  type         NotificationType
-  title        String
-  message      String
-  link         String?          // URL to navigate to when clicked
-  isRead       Boolean          @default(false)
-  metadata     Json?            // Additional data like projectId, registrationId, etc.
-  createdAt    DateTime         @default(now())
-  readAt       DateTime?
-  user         User             @relation(fields: [userId], references: [id], onDelete: Cascade)
-  
+  id        String           @id @default(cuid())
+  userId    String
+  type      NotificationType
+  title     String
+  message   String
+  link      String? // URL to navigate to when clicked
+  isRead    Boolean          @default(false)
+  metadata  Json? // Additional data like projectId, registrationId, etc.
+  createdAt DateTime         @default(now())
+  readAt    DateTime?
+  user      User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+
   @@index([userId, isRead])
   @@index([userId, createdAt])
 }
 
+model OfficeMeeting {
+  id            String   @id @default(cuid())
+  projectId     String
+  project       Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  instructorId  String
+  instructor    User     @relation("OfficeMeetingInstructor", fields: [instructorId], references: [id])
+  target        String // "GROUP" or "LEADER"
+  memberUserIds String[] // List of user IDs for invited members
+  meetingAt     DateTime
+  location      String
+  note          String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  // Quan hệ cho phần receipt status
+  views OfficeMeetingView[]
+
+  @@index([projectId])
+  @@index([instructorId])
+}
+
+model OfficeMeetingView {
+  id        String        @id @default(cuid())
+  meetingId String
+  meeting   OfficeMeeting @relation(fields: [meetingId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  isRead    Boolean       @default(false)
+  readAt    DateTime?
+
+  @@unique([meetingId, userId])
+  @@index([userId])
+}
+
 // Junction table: Danh sách giảng viên hướng dẫn được chỉ định cho mỗi đợt đăng ký
 model CallRoundInstructor {
-  id           String    @id @default(cuid())
+  id           String   @id @default(cuid())
   callRoundId  String
   instructorId String
-  createdAt    DateTime  @default(now())
-  
-  callRound    CallRound @relation(fields: [callRoundId], references: [id], onDelete: Cascade)
-  instructor   User      @relation(fields: [instructorId], references: [id], onDelete: Cascade)
-  
+  createdAt    DateTime @default(now())
+
+  callRound  CallRound @relation(fields: [callRoundId], references: [id], onDelete: Cascade)
+  instructor User      @relation(fields: [instructorId], references: [id], onDelete: Cascade)
+
   @@unique([callRoundId, instructorId])
   @@index([callRoundId])
   @@index([instructorId])
@@ -408,14 +445,14 @@ model CallRoundInstructor {
 
 // Junction table: Danh sách thành viên hội đồng được chỉ định cho mỗi đợt đăng ký
 model CallRoundCouncilMember {
-  id              String    @id @default(cuid())
+  id              String   @id @default(cuid())
   callRoundId     String
   councilMemberId String
-  createdAt       DateTime  @default(now())
-  
-  callRound       CallRound @relation(fields: [callRoundId], references: [id], onDelete: Cascade)
-  councilMember   User      @relation(fields: [councilMemberId], references: [id], onDelete: Cascade)
-  
+  createdAt       DateTime @default(now())
+
+  callRound     CallRound @relation(fields: [callRoundId], references: [id], onDelete: Cascade)
+  councilMember User      @relation(fields: [councilMemberId], references: [id], onDelete: Cascade)
+
   @@unique([callRoundId, councilMemberId])
   @@index([callRoundId])
   @@index([councilMemberId])
@@ -423,31 +460,31 @@ model CallRoundCouncilMember {
 
 // Model: Hội đồng đánh giá (được chia tự động hoặc thủ công)
 model Council {
-  id           String                      @id @default(cuid())
-  callRoundId  String
-  name         String                      // VD: "Hội đồng 1", "Hội đồng A"
-  description  String?
-  createdAt    DateTime                    @default(now())
-  updatedAt    DateTime                    @updatedAt
-  
-  callRound    CallRound                   @relation(fields: [callRoundId], references: [id], onDelete: Cascade)
-  members      CouncilMemberAssignment[]   // Thành viên của hội đồng này
-  projects     ProjectCouncilAssignment[]  // Đề tài được phân cho hội đồng này
-  
+  id          String   @id @default(cuid())
+  callRoundId String
+  name        String // VD: "Hội đồng 1", "Hội đồng A"
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  callRound CallRound                  @relation(fields: [callRoundId], references: [id], onDelete: Cascade)
+  members   CouncilMemberAssignment[] // Thành viên của hội đồng này
+  projects  ProjectCouncilAssignment[] // Đề tài được phân cho hội đồng này
+
   @@index([callRoundId])
 }
 
 // Junction table: Phân công thành viên vào hội đồng cụ thể
 model CouncilMemberAssignment {
-  id              String    @id @default(cuid())
+  id              String   @id @default(cuid())
   councilId       String
   councilMemberId String
-  role            String?   // VD: "Chủ tịch", "Thư ký", "Ủy viên"
-  createdAt       DateTime  @default(now())
-  
-  council         Council   @relation(fields: [councilId], references: [id], onDelete: Cascade)
-  councilMember   User      @relation("CouncilMemberAssignments", fields: [councilMemberId], references: [id], onDelete: Cascade)
-  
+  role            String? // VD: "Chủ tịch", "Thư ký", "Ủy viên"
+  createdAt       DateTime @default(now())
+
+  council       Council @relation(fields: [councilId], references: [id], onDelete: Cascade)
+  councilMember User    @relation("CouncilMemberAssignments", fields: [councilMemberId], references: [id], onDelete: Cascade)
+
   @@unique([councilId, councilMemberId])
   @@index([councilId])
   @@index([councilMemberId])
@@ -455,14 +492,14 @@ model CouncilMemberAssignment {
 
 // Junction table: Phân công đề tài cho hội đồng
 model ProjectCouncilAssignment {
-  id                    String              @id @default(cuid())
+  id                    String   @id @default(cuid())
   councilId             String
   projectRegistrationId String
-  createdAt             DateTime            @default(now())
-  
-  council               Council             @relation(fields: [councilId], references: [id], onDelete: Cascade)
-  projectRegistration   ProjectRegistration @relation(fields: [projectRegistrationId], references: [id], onDelete: Cascade)
-  
+  createdAt             DateTime @default(now())
+
+  council             Council             @relation(fields: [councilId], references: [id], onDelete: Cascade)
+  projectRegistration ProjectRegistration @relation(fields: [projectRegistrationId], references: [id], onDelete: Cascade)
+
   @@unique([projectRegistrationId]) // Mỗi đề tài chỉ thuộc 1 hội đồng
   @@index([councilId])
 }

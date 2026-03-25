@@ -2,6 +2,8 @@ import { api } from '@/lib/axios';
 import type {
     AssignProjectsToCouncilInput,
     CouncilProjectAssignmentsResponse,
+    FinalizeCouncilAssignmentsInput,
+    UnassignProjectsFromCouncilInput,
 } from '@/types/council-project-assignment.schema';
 
 export const councilProjectAssignmentsApi = {
@@ -12,6 +14,16 @@ export const councilProjectAssignmentsApi = {
 
     assignProjects: async (payload: AssignProjectsToCouncilInput): Promise<{ success: boolean }> => {
         const response = await api.post('/dean/council-project-assignments', payload);
+        return response.data;
+    },
+
+    unassignProjects: async (payload: UnassignProjectsFromCouncilInput): Promise<{ success: boolean }> => {
+        const response = await api.delete('/dean/council-project-assignments', { data: payload });
+        return response.data;
+    },
+
+    finalize: async (payload: FinalizeCouncilAssignmentsInput): Promise<{ success: boolean }> => {
+        const response = await api.patch('/dean/council-project-assignments', payload);
         return response.data;
     },
 };

@@ -1,6 +1,10 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { councilProjectAssignmentsApi } from '@/api/council-project-assignments';
-import type { AssignProjectsToCouncilInput } from '@/types/council-project-assignment.schema';
+import type {
+    AssignProjectsToCouncilInput,
+    FinalizeCouncilAssignmentsInput,
+    UnassignProjectsFromCouncilInput,
+} from '@/types/council-project-assignment.schema';
 
 export const councilProjectAssignmentKeys = {
     all: ['council-project-assignments'] as const,
@@ -25,6 +29,36 @@ export function useAssignProjectsToCouncil() {
                 queryKey: councilProjectAssignmentKeys.byCallRound(variables.callRoundId),
             });
             queryClient.invalidateQueries({ queryKey: ['councils'] });
+        },
+    });
+}
+
+export function useUnassignProjectsFromCouncil() {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: (payload: UnassignProjectsFromCouncilInput) => councilProjectAssignmentsApi.unassignProjects(payload),
+        onSuccess: (_, variables) => {
+            queryClient.invalidateQueries({
+                queryKey: councilProjectAssignmentKeys.byCallRound(variables.callRoundId),
+            });
+            queryClient.invalidateQueries({ queryKey: ['councils'] });
+            queryClient.invalidateQueries({ queryKey: ['lecturer-councils'] });
+        },
+    });
+}
+
+export function useFinalizeCouncilProjectAssignments() {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: (payload: FinalizeCouncilAssignmentsInput) => councilProjectAssignmentsApi.finalize(payload),
+        onSuccess: (_, variables) => {
+            queryClient.invalidateQueries({
+                queryKey: councilProjectAssignmentKeys.byCallRound(variables.callRoundId),
+            });
+            queryClient.invalidateQueries({ queryKey: ['councils'] });
+            queryClient.invalidateQueries({ queryKey: ['lecturer-councils'] });
         },
     });
 }

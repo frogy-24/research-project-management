@@ -1,7 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 import { getAuthUser } from '@/lib/auth-helpers';
-import { assignProjectsToCouncilSchema } from '@/types/council-project-assignment.schema';
+import {
+    assignProjectsToCouncilSchema,
+    finalizeCouncilAssignmentsSchema,
+    unassignProjectsFromCouncilSchema,
+} from '@/types/council-project-assignment.schema';
 
 export async function GET(request: NextRequest) {
     try {
@@ -17,7 +21,7 @@ export async function GET(request: NextRequest) {
 
         const callRound = await prisma.callRound.findUnique({
             where: { id: callRoundId },
-            select: { id: true, approvalStatus: true },
+            select: { id: true, approvalStatus: true, isLocked: true },
         });
 
         if (!callRound) {
@@ -72,7 +76,7 @@ export async function GET(request: NextRequest) {
             orderBy: { createdAt: 'asc' },
         });
 
-        return NextResponse.json({ councils, approvedProjects });
+        return NextResponse.json({ councils, approvedProjects, isFinalized: callRound.isLocked });
     } catch (error) {
         console.error('Error fetching council project assignments:', error);
         return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
@@ -100,7 +104,7 @@ export async function POST(request: NextRequest) {
 
         const callRound = await prisma.callRound.findUnique({
             where: { id: callRoundId },
-            select: { id: true, approvalStatus: true },
+            select: { id: true, approvalStatus: true, isLocked: true },
         });
 
         if (!callRound) {
@@ -109,6 +113,13 @@ export async function POST(request: NextRequest) {
 
         if (callRound.approvalStatus !== 'APPROVED') {
             return NextResponse.json({ error: 'Call round must be APPROVED' }, { status: 400 });
+        }
+
+        if (callRound.isLocked) {
+            return NextResponse.json(
+                { error: 'Đợt này đã hoàn tất phân công. Không thể chỉnh sửa.' },
+                { status: 400 },
+            );
         }
 
         const council = await prisma.council.findUnique({
@@ -169,6 +180,129 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ success: true });
     } catch (error) {
         console.error('Error assigning projects to council:', error);
+        return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    }
+}
+
+export async function DELETE(request: NextRequest) {
+    try {
+        const session = await getAuthUser();
+        if (!session || session.role !== 'DEAN') {
+            return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+        }
+
+        const body = await request.json();
+        const parsed = unassignProjectsFromCouncilSchema.safeParse(body);
+
+        if (!parsed.success) {
+            return NextResponse.json(
+                { error: 'Invalid payload', fields: parsed.error.flatten().fieldErrors },
+                { status: 400 },
+            );
+        }
+
+        const { callRoundId, projectRegistrationIds } = parsed.data;
+
+        const callRound = await prisma.callRound.findUnique({
+            where: { id: callRoundId },
+            select: { id: true, approvalStatus: true, isLocked: true },
+        });
+
+        if (!callRound) {
+            return NextResponse.json({ error: 'Call round not found' }, { status: 404 });
+        }
+
+        if (callRound.approvalStatus !== 'APPROVED') {
+            return NextResponse.json({ error: 'Call round must be APPROVED' }, { status: 400 });
+        }
+
+        if (callRound.isLocked) {
+            return NextResponse.json(
+                { error: 'Đợt này đã hoàn tất phân công. Không thể chỉnh sửa.' },
+                { status: 400 },
+            );
+        }
+
+        await prisma.projectCouncilAssignment.deleteMany({
+            where: {
+                projectRegistrationId: { in: projectRegistrationIds },
+                council: {
+                    callRoundId,
+                },
+            },
+        });
+
+        return NextResponse.json({ success: true });
+    } catch (error) {
+        console.error('Error unassigning projects from council:', error);
+        return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    }
+}
+
+export async function PATCH(request: NextRequest) {
+    try {
+        const session = await getAuthUser();
+        if (!session || session.role !== 'DEAN') {
+            return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+        }
+
+        const body = await request.json();
+        const parsed = finalizeCouncilAssignmentsSchema.safeParse(body);
+
+        if (!parsed.success) {
+            return NextResponse.json(
+                { error: 'Invalid payload', fields: parsed.error.flatten().fieldErrors },
+                { status: 400 },
+            );
+        }
+
+        const { callRoundId } = parsed.data;
+
+        const callRound = await prisma.callRound.findUnique({
+            where: { id: callRoundId },
+            select: { id: true, approvalStatus: true, isLocked: true },
+        });
+
+        if (!callRound) {
+            return NextResponse.json({ error: 'Call round not found' }, { status: 404 });
+        }
+
+        if (callRound.approvalStatus !== 'APPROVED') {
+            return NextResponse.json({ error: 'Call round must be APPROVED' }, { status: 400 });
+        }
+
+        if (callRound.isLocked) {
+            return NextResponse.json({ success: true });
+        }
+
+        const totalApprovedProjects = await prisma.projectRegistration.count({
+            where: {
+                callRoundId,
+                facultyStatus: 'APPROVED',
+            },
+        });
+
+        const assignedProjects = await prisma.projectCouncilAssignment.count({
+            where: {
+                council: { callRoundId },
+            },
+        });
+
+        if (totalApprovedProjects !== assignedProjects) {
+            return NextResponse.json(
+                { error: 'Vui lòng gán đủ tất cả đề tài đã duyệt trước khi hoàn tất.' },
+                { status: 400 },
+            );
+        }
+
+        await prisma.callRound.update({
+            where: { id: callRoundId },
+            data: { isLocked: true },
+        });
+
+        return NextResponse.json({ success: true });
+    } catch (error) {
+        console.error('Error finalizing council project assignments:', error);
         return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
     }
 }

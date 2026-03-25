@@ -18,6 +18,7 @@ import {
     useMyProjectRegistrations,
     useUpdateMyProjectRegistration,
 } from '@/hooks/useMyProjectRegistrations';
+import { useMyTeamInvitations } from '@/hooks/useMyTeamInvitations';
 import { FileText, MonitorX, PlusCircle, CalendarClock, AlertCircle, Pencil, Plus, Trash2, Users } from 'lucide-react';
 import { useUsers } from '@/hooks/useUsers';
 import { useAuthSession } from '@/hooks/useAuth';
@@ -175,6 +176,7 @@ export function ProjectRegistrationPage({ title }: ProjectRegistrationPageProps)
     const [cancelReasonById, setCancelReasonById] = useState<Record<string, string>>({});
 
     const { data: registrations = [], isLoading } = useMyProjectRegistrations();
+    const { data: myTeamInvitations = [] } = useMyTeamInvitations();
     const { data: callRounds = [] } = useCallRounds();
     const createMutation = useCreateMyProjectRegistration();
     const cancelMutation = useCancelMyProjectRegistration();
@@ -285,7 +287,17 @@ export function ProjectRegistrationPage({ title }: ProjectRegistrationPageProps)
         );
     }, [activeCallRound, registrations]);
 
-    const isFormDisabled = !activeCallRound || hasRegistrationInSelectedCallRound;
+    const hasAcceptedInvitationInSelectedCallRound = React.useMemo(() => {
+        if (!activeCallRound) return false;
+
+        return myTeamInvitations.some(
+            (invitation) =>
+                invitation.callRoundId === activeCallRound.id && invitation.invitationStatus === 'ACCEPTED',
+        );
+    }, [activeCallRound, myTeamInvitations]);
+
+    const isFormDisabled =
+        !activeCallRound || hasRegistrationInSelectedCallRound || hasAcceptedInvitationInSelectedCallRound;
 
     const normalizeTeamMembers = (members: TeamMemberInput[]) => {
         const trimmed = members.map((member) => ({
@@ -596,6 +608,15 @@ export function ProjectRegistrationPage({ title }: ProjectRegistrationPageProps)
                                     </AlertDescription>
                                 </Alert>
                             )}
+                            {activeCallRound && hasAcceptedInvitationInSelectedCallRound && (
+                                <Alert variant="destructive" className="border-amber-500/50 bg-amber-50 text-amber-900">
+                                    <AlertCircle className="h-4 w-4 text-amber-600" />
+                                    <AlertTitle className="text-amber-800">Đã tham gia nhóm đề tài</AlertTitle>
+                                    <AlertDescription className="text-amber-700">
+                                        Bạn đã xác nhận tham gia một đề tài trong đợt đăng ký này, nên không thể đăng ký thêm đề tài mới.
+                                    </AlertDescription>
+                                </Alert>
+                            )}
                             {availableCallRounds.length > 1 && (
                                 <div className="space-y-2 flex flex-col">
                                     <Label className="text-muted-foreground">
@@ -776,6 +797,8 @@ export function ProjectRegistrationPage({ title }: ProjectRegistrationPageProps)
                             >
                                 {hasRegistrationInSelectedCallRound
                                     ? 'Đã đăng ký đề tài'
+                                                                        : hasAcceptedInvitationInSelectedCallRound
+                                                                            ? 'Đã tham gia đề tài trong đợt này'
                                     : !activeCallRound
                                       ? 'Chưa mở đợt đăng ký'
                                       : createMutation.isPending

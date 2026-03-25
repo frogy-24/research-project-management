@@ -44,13 +44,13 @@ export async function GET(req: Request) {
       where: whereClause,
       include: {
         leader: {
-          select: { id: true, name: true, email: true, role: true, department: true },
+          select: { id: true, name: true, email: true, code: true, phone: true, role: true, department: true },
         },
         instructor: {
-          select: { id: true, name: true, email: true, role: true, department: true },
+          select: { id: true, name: true, email: true, code: true, phone: true, role: true, department: true },
         },
         deanReviewer: {
-          select: { id: true, name: true, email: true, role: true, department: true },
+          select: { id: true, name: true, email: true, code: true, phone: true, role: true, department: true },
         },
         projectType: true,
         callRound: {

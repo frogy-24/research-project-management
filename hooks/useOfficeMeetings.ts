@@ -15,3 +15,10 @@ export function useOfficeMeetingMembers(projectId?: string) {
         enabled: Boolean(projectId),
     });
 }
+
+export function useOfficeMeetingsList(limit: number = 200) {
+    return useQuery({
+        queryKey: ['office-meetings', limit],
+        queryFn: () => officeMeetingsApi.getList(limit),
+    });
+}

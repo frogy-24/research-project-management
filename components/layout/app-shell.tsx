@@ -22,6 +22,7 @@ import {
     UserRound,
     UsersRound,
     Mail,
+    CalendarClock,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAuthSession, useLogout } from '@/hooks/useAuth';
@@ -223,6 +224,11 @@ function AppSidebar({ session }: { session: AuthSession }) {
                 url: '/lecturer/review-progress',
                 icon: ClipboardCheck,
             },
+            {
+                title: 'Hội đồng',
+                url: '/lecturer/councils',
+                icon: UsersRound,
+            },
         );
     } else if (session.role === 'STUDENT') {
         navItems.push({
@@ -308,6 +314,12 @@ function AppSidebar({ session }: { session: AuthSession }) {
             },
         );
     }
+
+    navItems.push({
+        title: 'Xem lịch hẹn',
+        url: `/${session.role.toLowerCase()}/meetings`,
+        icon: CalendarClock,
+    });
 
     return (
         <Sidebar variant="sidebar" collapsible="icon">

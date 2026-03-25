@@ -23,7 +23,8 @@ export const councilMemberAssignmentSchema = z.object({
     id: z.string(),
     name: z.string(),
     email: z.string(),
-    code: z.string(),
+    code: z.string().nullable().optional(),
+    phone: z.string().nullable().optional(),
   }),
 });
 
@@ -43,8 +44,30 @@ export const projectCouncilAssignmentSchema = z.object({
     user: z.object({
       id: z.string(),
       name: z.string(),
-      code: z.string(),
+      email: z.string().email().nullable().optional(),
+      code: z.string().nullable().optional(),
     }),
+    instructor: z
+      .object({
+        id: z.string(),
+        name: z.string(),
+        email: z.string().email().nullable().optional(),
+        code: z.string().nullable().optional(),
+        phone: z.string().nullable().optional(),
+      })
+      .nullable()
+      .optional(),
+    students: z
+      .array(
+        z.object({
+          id: z.string(),
+          name: z.string(),
+          email: z.string().email().nullable().optional(),
+          code: z.string().nullable().optional(),
+          roleLabel: z.string(),
+        })
+      )
+      .optional(),
   }),
 });
 
@@ -52,6 +75,9 @@ export type ProjectCouncilAssignment = z.infer<typeof projectCouncilAssignmentSc
 
 // Council with relations
 export const councilWithRelationsSchema = councilSchema.extend({
+  callRoundName: z.string().optional(),
+  defenseDate: z.coerce.date().nullable().optional(),
+  defenseLocation: z.string().nullable().optional(),
   members: z.array(councilMemberAssignmentSchema),
   projects: z.array(projectCouncilAssignmentSchema),
   _count: z.object({
@@ -100,3 +126,71 @@ export const createCouncilRequestSchema = z.object({
 });
 
 export type CreateCouncilRequest = z.infer<typeof createCouncilRequestSchema>;
+
+export const updateCouncilRequestSchema = z.object({
+  name: z.string().min(1, 'Tên hội đồng là bắt buộc'),
+  description: z.string().optional(),
+  members: z.array(
+    z.object({
+      councilMemberId: z.string(),
+      role: z.string().optional(),
+    })
+  ).min(1, 'Phải có ít nhất 1 thành viên').optional(),
+});
+
+export type UpdateCouncilRequest = z.infer<typeof updateCouncilRequestSchema>;
+
+export const lecturerCouncilItemSchema = z.object({
+  assignmentId: z.string(),
+  role: z.string().nullable().optional(),
+  joinedAt: z.coerce.date(),
+  council: z.object({
+    id: z.string(),
+    name: z.string(),
+    description: z.string().nullable(),
+    callRoundId: z.string(),
+    callRoundName: z.string(),
+    defenseDate: z.coerce.date().nullable().optional(),
+    defenseLocation: z.string().nullable().optional(),
+    memberCount: z.number(),
+    projectCount: z.number(),
+    members: z.array(
+      z.object({
+        id: z.string(),
+        name: z.string(),
+        email: z.string().email().nullable().optional(),
+        code: z.string().nullable().optional(),
+        role: z.string().nullable().optional(),
+      })
+    ),
+    projects: z.array(
+      z.object({
+        id: z.string(),
+        title: z.string(),
+        advisor: z
+          .object({
+            id: z.string(),
+            name: z.string(),
+            email: z.string().email().nullable().optional(),
+            code: z.string().nullable().optional(),
+            phone: z.string().nullable().optional(),
+          })
+          .nullable()
+          .optional(),
+        students: z.array(
+          z.object({
+            id: z.string(),
+            name: z.string(),
+            email: z.string().email().nullable().optional(),
+            code: z.string().nullable().optional(),
+            roleLabel: z.string(),
+          })
+        ),
+      })
+    ),
+  }),
+});
+
+export const lecturerCouncilListSchema = z.array(lecturerCouncilItemSchema);
+
+export type LecturerCouncilItem = z.infer<typeof lecturerCouncilItemSchema>;

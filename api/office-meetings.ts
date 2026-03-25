@@ -21,4 +21,10 @@ export const officeMeetingsApi = {
         const parsed = officeMeetingMembersResponseSchema.parse(response.data);
         return parsed.data;
     },
+    getList: async (limit: number = 200) => {
+        const response = await api.get('/office-meetings', {
+            params: { limit }
+        });
+        return response.data;
+    }
 };

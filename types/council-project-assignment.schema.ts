@@ -6,6 +6,15 @@ export const assignProjectsToCouncilSchema = z.object({
     projectRegistrationIds: z.array(z.string().min(1)).min(1),
 });
 
+export const unassignProjectsFromCouncilSchema = z.object({
+    callRoundId: z.string().min(1),
+    projectRegistrationIds: z.array(z.string().min(1)).min(1),
+});
+
+export const finalizeCouncilAssignmentsSchema = z.object({
+    callRoundId: z.string().min(1),
+});
+
 export const councilAssignmentProjectSchema = z.object({
     id: z.string(),
     title: z.string(),
@@ -37,11 +46,14 @@ export const councilAssignmentCouncilSchema = z.object({
 });
 
 export const councilProjectAssignmentsResponseSchema = z.object({
+    isFinalized: z.boolean().default(false),
     councils: z.array(councilAssignmentCouncilSchema),
     approvedProjects: z.array(councilAssignmentProjectSchema),
 });
 
 export type AssignProjectsToCouncilInput = z.infer<typeof assignProjectsToCouncilSchema>;
+export type UnassignProjectsFromCouncilInput = z.infer<typeof unassignProjectsFromCouncilSchema>;
+export type FinalizeCouncilAssignmentsInput = z.infer<typeof finalizeCouncilAssignmentsSchema>;
 export type CouncilAssignmentProject = z.infer<typeof councilAssignmentProjectSchema>;
 export type CouncilAssignmentCouncil = z.infer<typeof councilAssignmentCouncilSchema>;
 export type CouncilProjectAssignmentsResponse = z.infer<typeof councilProjectAssignmentsResponseSchema>;

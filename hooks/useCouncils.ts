@@ -1,9 +1,10 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { getCouncilsByCallRound, autoDivideCouncils, createCouncil } from '@/api/councils';
+import { getCouncilsByCallRound, autoDivideCouncils, createCouncil, updateCouncil, deleteCouncil } from '@/api/councils';
 import type {
   CouncilWithRelations,
   AutoDivideCouncilsRequest,
   CreateCouncilRequest,
+  UpdateCouncilRequest,
 } from '@/types/council.schema';
 
 // Query key factory
@@ -51,6 +52,34 @@ export function useCreateCouncil() {
       // Invalidate councils query to refetch
       queryClient.invalidateQueries({
         queryKey: councilKeys.byCallRound(data.callRoundId),
+      });
+    },
+  });
+}
+
+export function useUpdateCouncil() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ councilId, payload }: { councilId: string; payload: UpdateCouncilRequest }) =>
+      updateCouncil(councilId, payload),
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({
+        queryKey: councilKeys.byCallRound(data.callRoundId),
+      });
+    },
+  });
+}
+
+export function useDeleteCouncil(callRoundId: string | undefined) {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (councilId: string) => deleteCouncil(councilId),
+    onSuccess: () => {
+      if (!callRoundId) return;
+      queryClient.invalidateQueries({
+        queryKey: councilKeys.byCallRound(callRoundId),
       });
     },
   });
