@@ -35,6 +35,34 @@ bot/
 
 ## 🚀 Cài đặt & Chạy
 
+### Cài nhanh bản GPU (khuyến nghị cho Linux)
+
+Nếu bạn gặp lỗi `uv sync --extra gpu` tự nhảy sang Python 3.12 hoặc báo unsatisfiable, dùng đúng quy trình sau:
+
+```bash
+# 1) Cài Python 3.10
+uv python install 3.10
+
+# 2) Tạo lại virtual env bằng Python 3.10
+uv venv --python 3.10
+source .venv/bin/activate
+
+# 3) Sync dependencies GPU
+uv lock
+uv sync --extra gpu
+```
+
+Kiểm tra nhanh backend GPU của Paddle:
+
+```bash
+python -c "import paddle; print(paddle.__version__); print(paddle.is_compiled_with_cuda()); print(paddle.device.cuda.device_count()); print(paddle.device.get_device())"
+```
+
+Kỳ vọng:
+- `True` ở `is_compiled_with_cuda()`
+- `cuda.device_count() >= 1`
+- device là `gpu:0`
+
 ### 1. Cài đặt dependencies
 
 ```bash

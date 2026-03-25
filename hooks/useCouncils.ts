@@ -1,10 +1,22 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { getCouncilsByCallRound, autoDivideCouncils, createCouncil, updateCouncil, deleteCouncil } from '@/api/councils';
+import {
+  getCouncilsByCallRound,
+  autoDivideCouncils,
+  createCouncil,
+  updateCouncil,
+  deleteCouncil,
+  quickAddCouncilsWithAI,
+  confirmQuickAddCouncils,
+} from '@/api/councils';
 import type {
   CouncilWithRelations,
   AutoDivideCouncilsRequest,
   CreateCouncilRequest,
   UpdateCouncilRequest,
+  QuickAddCouncilsInput,
+  QuickAddCouncilsResponse,
+  ConfirmQuickAddCouncilsInput,
+  ConfirmQuickAddCouncilsResponse,
 } from '@/types/council.schema';
 
 // Query key factory
@@ -76,6 +88,34 @@ export function useDeleteCouncil(callRoundId: string | undefined) {
 
   return useMutation({
     mutationFn: (councilId: string) => deleteCouncil(councilId),
+    onSuccess: () => {
+      if (!callRoundId) return;
+      queryClient.invalidateQueries({
+        queryKey: councilKeys.byCallRound(callRoundId),
+      });
+    },
+  });
+}
+
+export function useQuickAddCouncilsAI(callRoundId: string | undefined) {
+  const queryClient = useQueryClient();
+
+  return useMutation<QuickAddCouncilsResponse, Error, QuickAddCouncilsInput>({
+    mutationFn: (request) => quickAddCouncilsWithAI(request),
+    onSuccess: () => {
+      if (!callRoundId) return;
+      queryClient.invalidateQueries({
+        queryKey: councilKeys.byCallRound(callRoundId),
+      });
+    },
+  });
+}
+
+export function useConfirmQuickAddCouncilsAI(callRoundId: string | undefined) {
+  const queryClient = useQueryClient();
+
+  return useMutation<ConfirmQuickAddCouncilsResponse, Error, ConfirmQuickAddCouncilsInput>({
+    mutationFn: (request) => confirmQuickAddCouncils(request),
     onSuccess: () => {
       if (!callRoundId) return;
       queryClient.invalidateQueries({

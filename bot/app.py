@@ -9,12 +9,12 @@ os.environ['FLAGS_enable_pir_api'] = '0'
 os.environ['MKLDNN_VERBOSE'] = '0'
 os.environ['GLOG_v'] = '0'
 
-from fastapi import FastAPI, UploadFile, File, Form, HTTPException, Request
-from fastapi.responses import HTMLResponse, JSONResponse
-from fastapi.staticfiles import StaticFiles
-from fastapi.templating import Jinja2Templates
+from fastapi import FastAPI, UploadFile, File, HTTPException
+from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel, Field
 from pathlib import Path
+from typing import Optional
 import shutil
 import os
 import logging
@@ -25,6 +25,8 @@ load_dotenv()
 
 from src.server.tools.ocr import extract_text_from_image
 from src.agent.chatbot import OCRChatbot
+from src.server.tools.council import auto_divide_councils, get_councils_by_call_round
+from src.agent.council_agent import DeanCouncilAgent
 
 # Setup logging
 logging.basicConfig(level=logging.INFO)
@@ -46,22 +48,13 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Mount static files
-static_dir = Path("static")
-static_dir.mkdir(exist_ok=True)
-app.mount("/static", StaticFiles(directory="static"), name="static")
-
-# Setup templates
-templates_dir = Path("templates")
-templates_dir.mkdir(exist_ok=True)
-templates = Jinja2Templates(directory="templates")
-
 # Upload directory
 UPLOAD_DIR = Path("uploads")
 UPLOAD_DIR.mkdir(exist_ok=True)
 
 # Khởi tạo chatbot (lazy loading)
 chatbot = None
+dean_council_agent = None
 
 def get_chatbot():
     """Lazy loading chatbot để tránh lỗi khi chưa có API key"""
@@ -75,10 +68,34 @@ def get_chatbot():
     return chatbot
 
 
-@app.get("/", response_class=HTMLResponse)
-async def index(request: Request):
-    """Trang chủ với form upload ảnh"""
-    return templates.TemplateResponse(request, "index.html")
+def get_dean_council_agent() -> Optional[DeanCouncilAgent]:
+    """Lazy loading DeanCouncilAgent để xử lý dữ liệu hội đồng."""
+    global dean_council_agent
+    if dean_council_agent is None:
+        try:
+            dean_council_agent = DeanCouncilAgent()
+        except Exception as e:
+            logger.warning(f"Could not initialize DeanCouncilAgent: {e}")
+            return None
+    return dean_council_agent
+
+
+class QuickAddCouncilsRequest(BaseModel):
+    api_base_url: str = Field(default="http://localhost:3000")
+    call_round_id: str
+    min_projects_per_council: int = Field(default=5, ge=1)
+    max_projects_per_council: int = Field(default=10, ge=1)
+    clear_existing: bool = False
+    auth_token: Optional[str] = None
+    cookie: Optional[str] = None
+
+
+class ConfirmQuickAddRequest(BaseModel):
+    api_base_url: str = Field(default="http://localhost:3000")
+    call_round_id: str
+    selected_council_ids: list[str] = Field(default_factory=list)
+    auth_token: Optional[str] = None
+    cookie: Optional[str] = None
 
 
 @app.post("/api/upload")
@@ -177,6 +194,91 @@ async def process_url(data: dict):
     except Exception as e:
         logger.error(f"URL processing error: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.post("/api/dean/councils/quick-add")
+async def quick_add_councils(request_data: QuickAddCouncilsRequest):
+    """
+    Flow thêm nhanh hội đồng:
+    input điều kiện -> MCP gọi API -> AI Agent chuẩn hóa -> trả về view cho client.
+    """
+    mcp_result = await auto_divide_councils(
+        api_base_url=request_data.api_base_url,
+        call_round_id=request_data.call_round_id,
+        min_projects_per_council=request_data.min_projects_per_council,
+        max_projects_per_council=request_data.max_projects_per_council,
+        clear_existing=request_data.clear_existing,
+        auth_token=request_data.auth_token,
+        cookie=request_data.cookie,
+    )
+
+    if not mcp_result.get("success"):
+        raise HTTPException(
+            status_code=502,
+            detail={
+                "message": "MCP call failed",
+                "mcp_result": mcp_result,
+            },
+        )
+
+    agent = get_dean_council_agent()
+    if not agent:
+        raise HTTPException(status_code=500, detail="DeanCouncilAgent not available")
+
+    ai_result = await agent.build_quick_add_view(
+        mcp_data=mcp_result,
+        request_input=request_data.model_dump(exclude={"auth_token", "cookie"}),
+    )
+
+    return JSONResponse(
+        {
+            "success": True,
+            "source": "mcp+ai-agent",
+            "client_view": ai_result.get("data", {}),
+            "mcp_meta": {
+                "endpoint": mcp_result.get("endpoint"),
+                "status_code": mcp_result.get("status_code"),
+            },
+        }
+    )
+
+
+@app.post("/api/dean/councils/quick-add/confirm")
+async def confirm_quick_add_councils(request_data: ConfirmQuickAddRequest):
+    """
+    Endpoint để client gọi khi bấm nút "Đồng ý".
+    """
+    current_list = await get_councils_by_call_round(
+        api_base_url=request_data.api_base_url,
+        call_round_id=request_data.call_round_id,
+        auth_token=request_data.auth_token,
+        cookie=request_data.cookie,
+    )
+
+    if not current_list.get("success"):
+        raise HTTPException(
+            status_code=502,
+            detail={
+                "message": "Fetch councils failed",
+                "mcp_result": current_list,
+            },
+        )
+
+    councils = current_list.get("data", [])
+    if not isinstance(councils, list):
+        councils = []
+
+    selected_set = set(request_data.selected_council_ids)
+    selected_items = [item for item in councils if str(item.get("id", "")) in selected_set]
+
+    return JSONResponse(
+        {
+            "success": True,
+            "message": "Đã xác nhận danh sách hội đồng.",
+            "confirmed_count": len(selected_items),
+            "confirmed_items": selected_items,
+        }
+    )
 
 
 @app.get("/health")

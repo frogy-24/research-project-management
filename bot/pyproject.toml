@@ -21,7 +21,7 @@ dependencies = [
 [project.optional-dependencies]
 # Chọn 1 trong 2 profile runtime khi cài:
 # CPU: uv sync --extra cpu
-# GPU: uv sync --extra gpu --index-url https://www.paddlepaddle.org.cn/packages/stable/cu118/
+# GPU: uv sync --extra gpu
 cpu = [
     "paddlepaddle>=3.3.0",
 ]
@@ -34,6 +34,17 @@ bot = "app:main"
 
 [tool.uv]
 package = true
+environments = ["sys_platform == 'linux' and python_full_version >= '3.10' and python_full_version < '3.11'"]
+
+[tool.uv.sources]
+paddlepaddle-gpu = [
+    { index = "paddle-cu118", marker = "extra == 'gpu'" },
+]
+
+[[tool.uv.index]]
+name = "paddle-cu118"
+url = "https://www.paddlepaddle.org.cn/packages/stable/cu118/"
+explicit = true
 
 [build-system]
 requires = ["hatchling"]

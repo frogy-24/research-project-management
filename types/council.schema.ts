@@ -194,3 +194,67 @@ export const lecturerCouncilItemSchema = z.object({
 export const lecturerCouncilListSchema = z.array(lecturerCouncilItemSchema);
 
 export type LecturerCouncilItem = z.infer<typeof lecturerCouncilItemSchema>;
+
+export const quickAddCouncilsInputSchema = z.object({
+  callRoundId: z.string().min(1),
+  minProjectsPerCouncil: z.number().min(1).max(20).default(5),
+  maxProjectsPerCouncil: z.number().min(1).max(20).default(10),
+  clearExisting: z.boolean().default(false),
+});
+
+export type QuickAddCouncilsInput = z.infer<typeof quickAddCouncilsInputSchema>;
+
+export const quickAddCouncilItemSchema = z.object({
+  councilId: z.string(),
+  name: z.string(),
+  description: z.string().nullable().optional(),
+  projectCount: z.number(),
+  memberCount: z.number(),
+  agreeButton: z.object({
+    label: z.string(),
+    action: z.string(),
+    payload: z.object({
+      councilId: z.string(),
+    }),
+  }),
+});
+
+export const quickAddCouncilsViewSchema = z.object({
+  summary: z.string(),
+  callRoundId: z.string().optional().default(''),
+  totalCouncils: z.number(),
+  totalProjects: z.number(),
+  items: z.array(quickAddCouncilItemSchema),
+});
+
+export type QuickAddCouncilsView = z.infer<typeof quickAddCouncilsViewSchema>;
+
+export const quickAddCouncilsResponseSchema = z.object({
+  success: z.boolean(),
+  source: z.string(),
+  client_view: quickAddCouncilsViewSchema,
+  mcp_meta: z
+    .object({
+      endpoint: z.string().optional(),
+      status_code: z.number().optional(),
+    })
+    .optional(),
+});
+
+export type QuickAddCouncilsResponse = z.infer<typeof quickAddCouncilsResponseSchema>;
+
+export const confirmQuickAddCouncilsInputSchema = z.object({
+  callRoundId: z.string().min(1),
+  selectedCouncilIds: z.array(z.string()).min(1),
+});
+
+export type ConfirmQuickAddCouncilsInput = z.infer<typeof confirmQuickAddCouncilsInputSchema>;
+
+export const confirmQuickAddCouncilsResponseSchema = z.object({
+  success: z.boolean(),
+  message: z.string(),
+  confirmed_count: z.number(),
+  confirmed_items: z.array(z.unknown()),
+});
+
+export type ConfirmQuickAddCouncilsResponse = z.infer<typeof confirmQuickAddCouncilsResponseSchema>;

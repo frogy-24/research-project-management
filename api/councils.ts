@@ -5,6 +5,10 @@ import type {
   AutoDivideCouncilsResponse,
   CreateCouncilRequest,
   UpdateCouncilRequest,
+  QuickAddCouncilsInput,
+  QuickAddCouncilsResponse,
+  ConfirmQuickAddCouncilsInput,
+  ConfirmQuickAddCouncilsResponse,
 } from '@/types/council.schema';
 
 // Get councils for a call round
@@ -47,5 +51,19 @@ export async function updateCouncil(
 // Delete council
 export async function deleteCouncil(councilId: string): Promise<{ success: true; id: string }> {
   const response = await api.delete(`/dean/councils/${councilId}`);
+  return response.data;
+}
+
+export async function quickAddCouncilsWithAI(
+  request: QuickAddCouncilsInput
+): Promise<QuickAddCouncilsResponse> {
+  const response = await api.post('/dean/councils/quick-add', request);
+  return response.data;
+}
+
+export async function confirmQuickAddCouncils(
+  request: ConfirmQuickAddCouncilsInput
+): Promise<ConfirmQuickAddCouncilsResponse> {
+  const response = await api.post('/dean/councils/quick-add/confirm', request);
   return response.data;
 }

@@ -20,6 +20,7 @@ import {
     Pencil,
     Trash2,
     Eye,
+    Sparkles,
 } from 'lucide-react';
 import { useCallRounds } from '@/hooks/useCallRounds';
 import {
@@ -30,7 +31,15 @@ import {
 } from '@/hooks/useCouncilMembers';
 import { useDeanLecturers } from '@/hooks/useDeanLecturers';
 import { useCallRoundStats } from '@/hooks/useCallRoundStats';
-import { useCouncils, useAutoDivideCouncils, useCreateCouncil, useUpdateCouncil, useDeleteCouncil } from '@/hooks/useCouncils';
+import {
+    useCouncils,
+    useAutoDivideCouncils,
+    useCreateCouncil,
+    useUpdateCouncil,
+    useDeleteCouncil,
+    useQuickAddCouncilsAI,
+    useConfirmQuickAddCouncilsAI,
+} from '@/hooks/useCouncils';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -307,6 +316,232 @@ function CreateCouncilDialog({
                             </>
                         ) : (
                             'Tạo hội đồng'
+                        )}
+                    </Button>
+                </DialogFooter>
+            </DialogContent>
+        </Dialog>
+    );
+}
+
+function QuickAddCouncilsDialog({ callRoundId }: { callRoundId: string }) {
+    const [isOpen, setIsOpen] = useState(false);
+    const [minProjectsPerCouncil, setMinProjectsPerCouncil] = useState(5);
+    const [maxProjectsPerCouncil, setMaxProjectsPerCouncil] = useState(10);
+    const [clearExisting, setClearExisting] = useState(false);
+    const [previewItems, setPreviewItems] = useState<
+        Array<{
+            councilId: string;
+            name: string;
+            description?: string | null;
+            projectCount: number;
+            memberCount: number;
+            agreeButton: { label: string; action: string; payload: { councilId: string } };
+        }>
+    >([]);
+    const [selectedCouncilIds, setSelectedCouncilIds] = useState<string[]>([]);
+    const [summary, setSummary] = useState('');
+
+    const quickAddMutation = useQuickAddCouncilsAI(callRoundId);
+    const confirmMutation = useConfirmQuickAddCouncilsAI(callRoundId);
+
+    const handleGenerate = () => {
+        if (!callRoundId) {
+            toast.error('Vui lòng chọn đợt đăng ký');
+            return;
+        }
+
+        if (minProjectsPerCouncil > maxProjectsPerCouncil) {
+            toast.error('Giá trị tối thiểu không được lớn hơn tối đa');
+            return;
+        }
+
+        quickAddMutation.mutate(
+            {
+                callRoundId,
+                minProjectsPerCouncil,
+                maxProjectsPerCouncil,
+                clearExisting,
+            },
+            {
+                onSuccess: (result) => {
+                    const items = result.client_view.items ?? [];
+                    setPreviewItems(items);
+                    setSelectedCouncilIds(items.map((item) => item.councilId));
+                    setSummary(result.client_view.summary || 'Danh sách hội đồng đề xuất');
+                    toast.success('Đã tạo danh sách hội đồng đề xuất');
+                },
+                onError: (error: any) => {
+                    toast.error(error.response?.data?.error || 'Lỗi khi tạo hội đồng nhanh');
+                },
+            },
+        );
+    };
+
+    const toggleCouncilSelection = (councilId: string) => {
+        setSelectedCouncilIds((prev) =>
+            prev.includes(councilId) ? prev.filter((id) => id !== councilId) : [...prev, councilId],
+        );
+    };
+
+    const handleConfirmSelected = () => {
+        if (selectedCouncilIds.length === 0) {
+            toast.error('Vui lòng chọn ít nhất 1 hội đồng để xác nhận');
+            return;
+        }
+
+        confirmMutation.mutate(
+            {
+                callRoundId,
+                selectedCouncilIds,
+            },
+            {
+                onSuccess: (result) => {
+                    toast.success(result.message || 'Đã xác nhận hội đồng thành công');
+                    setIsOpen(false);
+                    setPreviewItems([]);
+                    setSelectedCouncilIds([]);
+                    setSummary('');
+                },
+                onError: (error: any) => {
+                    toast.error(error.response?.data?.error || 'Lỗi khi xác nhận hội đồng');
+                },
+            },
+        );
+    };
+
+    const handleConfirmSingle = (councilId: string) => {
+        confirmMutation.mutate(
+            {
+                callRoundId,
+                selectedCouncilIds: [councilId],
+            },
+            {
+                onSuccess: (result) => {
+                    toast.success(result.message || 'Đã xác nhận hội đồng');
+                    setSelectedCouncilIds((prev) => prev.filter((id) => id !== councilId));
+                },
+                onError: (error: any) => {
+                    toast.error(error.response?.data?.error || 'Lỗi khi xác nhận hội đồng');
+                },
+            },
+        );
+    };
+
+    return (
+        <Dialog open={isOpen} onOpenChange={setIsOpen}>
+            <DialogTrigger asChild>
+                <Button variant="outline">
+                    <Sparkles className="h-4 w-4 mr-2" />
+                    Thêm nhanh hội đồng (AI)
+                </Button>
+            </DialogTrigger>
+            <DialogContent className="max-w-3xl">
+                <DialogHeader>
+                    <DialogTitle>Thêm nhanh hội đồng</DialogTitle>
+                    <DialogDescription>
+                        Nhập điều kiện phân chia, hệ thống sẽ tạo danh sách hội đồng gợi ý và bạn bấm "Đồng ý" để xác nhận.
+                    </DialogDescription>
+                </DialogHeader>
+
+                <div className="space-y-4">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                        <div className="space-y-2">
+                            <Label>Số đề tài tối thiểu / hội đồng</Label>
+                            <Input
+                                type="number"
+                                min={1}
+                                max={20}
+                                value={minProjectsPerCouncil}
+                                onChange={(e) => setMinProjectsPerCouncil(Number(e.target.value || 1))}
+                            />
+                        </div>
+                        <div className="space-y-2">
+                            <Label>Số đề tài tối đa / hội đồng</Label>
+                            <Input
+                                type="number"
+                                min={1}
+                                max={20}
+                                value={maxProjectsPerCouncil}
+                                onChange={(e) => setMaxProjectsPerCouncil(Number(e.target.value || 1))}
+                            />
+                        </div>
+                        <div className="space-y-2">
+                            <Label>Tùy chọn</Label>
+                            <div className="h-10 px-3 border rounded-md flex items-center gap-2">
+                                <Checkbox checked={clearExisting} onCheckedChange={(checked) => setClearExisting(Boolean(checked))} />
+                                <span className="text-sm">Xóa hội đồng cũ trước khi tạo</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="flex items-center gap-2">
+                        <Button onClick={handleGenerate} disabled={quickAddMutation.isPending}>
+                            {quickAddMutation.isPending ? (
+                                <>
+                                    <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                                    Đang xử lý...
+                                </>
+                            ) : (
+                                <>
+                                    <Sparkles className="h-4 w-4 mr-2" />
+                                    Tạo danh sách gợi ý
+                                </>
+                            )}
+                        </Button>
+                        {summary && <p className="text-sm text-muted-foreground">{summary}</p>}
+                    </div>
+
+                    {previewItems.length > 0 && (
+                        <div className="border rounded-md">
+                            <div className="px-3 py-2 border-b bg-muted/30 text-sm text-muted-foreground">
+                                Danh sách hội đồng đề xuất ({previewItems.length})
+                            </div>
+                            <ScrollArea className="h-72">
+                                <div className="p-2 space-y-2">
+                                    {previewItems.map((item) => (
+                                        <div key={item.councilId} className="border rounded-md p-3 flex items-start gap-3">
+                                            <Checkbox
+                                                checked={selectedCouncilIds.includes(item.councilId)}
+                                                onCheckedChange={() => toggleCouncilSelection(item.councilId)}
+                                            />
+                                            <div className="flex-1 min-w-0">
+                                                <p className="font-medium">{item.name}</p>
+                                                {item.description && (
+                                                    <p className="text-xs text-muted-foreground mt-1">{item.description}</p>
+                                                )}
+                                                <div className="mt-2 flex items-center gap-2">
+                                                    <Badge variant="secondary">{item.memberCount} thành viên</Badge>
+                                                    <Badge>{item.projectCount} đề tài</Badge>
+                                                </div>
+                                            </div>
+                                            <Button
+                                                size="sm"
+                                                onClick={() => handleConfirmSingle(item.councilId)}
+                                                disabled={confirmMutation.isPending}
+                                            >
+                                                {item.agreeButton.label || 'Đồng ý'}
+                                            </Button>
+                                        </div>
+                                    ))}
+                                </div>
+                            </ScrollArea>
+                        </div>
+                    )}
+                </div>
+
+                <DialogFooter>
+                    <DialogClose asChild>
+                        <Button variant="outline">Đóng</Button>
+                    </DialogClose>
+                    <Button onClick={handleConfirmSelected} disabled={confirmMutation.isPending || selectedCouncilIds.length === 0}>
+                        {confirmMutation.isPending ? (
+                            <>
+                                <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                                Đang xác nhận...
+                            </>
+                        ) : (
+                            `Đồng ý (${selectedCouncilIds.length})`
                         )}
                     </Button>
                 </DialogFooter>
@@ -1124,11 +1359,14 @@ export function CouncilManagement() {
                             </CardTitle>
                             <CardDescription>Các hội đồng đã được phân công thành viên và đề tài</CardDescription>
                         </div>
-                        <CreateCouncilDialog
-                            callRoundId={selectedCallRoundId}
-                            councilMembers={councilMembers}
-                            councils={councils ?? []}
-                        />
+                        <div className="flex items-center gap-2">
+                            <QuickAddCouncilsDialog callRoundId={selectedCallRoundId} />
+                            <CreateCouncilDialog
+                                callRoundId={selectedCallRoundId}
+                                councilMembers={councilMembers}
+                                councils={councils ?? []}
+                            />
+                        </div>
                     </CardHeader>
                     <CardContent>
                         {loadingCouncils ? (
