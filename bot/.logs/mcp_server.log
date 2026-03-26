@@ -1,0 +1,27 @@
+<frozen runpy>:128: RuntimeWarning: 'src.mcp.server' found in sys.modules after import of package 'src.mcp', but prior to execution of 'src.mcp.server'; this may result in unpredictable behaviour
+
+
+╭──────────────────────────────────────────────────────────────────────────────╮
+│                                                                              │
+│                                                                              │
+│                         ▄▀▀ ▄▀█ █▀▀ ▀█▀ █▀▄▀█ █▀▀ █▀█                        │
+│                         █▀  █▀█ ▄▄█  █  █ ▀ █ █▄▄ █▀▀                        │
+│                                                                              │
+│                                                                              │
+│                                FastMCP 3.1.1                                 │
+│                            https://gofastmcp.com                             │
+│                                                                              │
+│                  🖥  Server:      user-db-mcp-server, 3.1.1                   │
+│                  🚀 Deploy free: https://fastmcp.cloud                       │
+│                                                                              │
+╰──────────────────────────────────────────────────────────────────────────────╯
+
+
+[03/27/26 00:59:12] INFO     Starting MCP server                transport.py:273
+                             'user-db-mcp-server' with                          
+                             transport 'http' on                                
+                             http://127.0.0.1:9000/mcp                          
+INFO:     Started server process [75919]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:9000 (Press CTRL+C to quit)

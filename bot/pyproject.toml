@@ -1,54 +1,15 @@
 [project]
 name = "bot"
 version = "0.1.0"
-description = "OCR Bot với PaddleOCR và LLM"
+description = "Add your description here"
 readme = "README.md"
-requires-python = ">=3.10,<3.13"
+requires-python = ">=3.12"
 dependencies = [
-    "fastapi>=0.135.2",
-    "fastmcp>=3.1.1",
-    "hatchling>=1.29.0",
-    "httpx>=0.28.1",
-    "jinja2>=3.1.6",
-    "langchain-openai>=1.1.11",
-    "paddleocr>=3.4.0",
-    "pillow>=12.1.1",
-    "python-dotenv>=1.2.2",
-    "python-multipart>=0.0.22",
-    "uvicorn>=0.42.0",
+	"asyncpg>=0.30.0",
+	"fastmcp>=2.10.6",
+	"mcp>=1.26.0",
+	"openai>=1.76.0",
+	"python-dotenv>=1.2.2",
+	"fastapi>=0.116.1",
+	"uvicorn>=0.42.0",
 ]
-
-[project.optional-dependencies]
-# Chọn 1 trong 2 profile runtime khi cài:
-# CPU: uv sync --extra cpu
-# GPU: uv sync --extra gpu
-cpu = [
-    "paddlepaddle>=3.3.0",
-]
-gpu = [
-    "paddlepaddle-gpu>=3.3.0",
-]
-
-[project.scripts]
-bot = "app:main"
-
-[tool.uv]
-package = true
-environments = ["sys_platform == 'linux' and python_full_version >= '3.10' and python_full_version < '3.11'"]
-
-[tool.uv.sources]
-paddlepaddle-gpu = [
-    { index = "paddle-cu118", marker = "extra == 'gpu'" },
-]
-
-[[tool.uv.index]]
-name = "paddle-cu118"
-url = "https://www.paddlepaddle.org.cn/packages/stable/cu118/"
-explicit = true
-
-[build-system]
-requires = ["hatchling"]
-build-backend = "hatchling.build"
-
-[tool.hatch.build.targets.wheel]
-packages = ["src", "app.py"]

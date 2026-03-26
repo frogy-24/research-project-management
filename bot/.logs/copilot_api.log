@@ -1,0 +1,56 @@
+ℹ Using VSCode version: 1.113.0
+ℹ Logged in as caoviet24
+ℹ Available models: 
+- claude-opus-4.6-fast
+- claude-opus-4.6
+- claude-sonnet-4.6
+- gemini-3.1-pro-preview
+- gpt-5.2-codex
+- gpt-5.3-codex
+- gpt-5.4-mini
+- gpt-5.4
+- gpt-5-mini
+- gpt-4o-mini-2024-07-18
+- gpt-4o-2024-11-20
+- gpt-4o-2024-08-06
+- grok-code-fast-1
+- gpt-5.1
+- gpt-5.1-codex
+- gpt-5.1-codex-mini
+- gpt-5.1-codex-max
+- text-embedding-3-small
+- text-embedding-3-small-inference
+- claude-sonnet-4
+- claude-sonnet-4.5
+- claude-opus-4.5
+- claude-haiku-4.5
+- gemini-3-pro-preview
+- gemini-3-flash-preview
+- gemini-2.5-pro
+- gpt-4.1-2025-04-14
+- oswe-vscode-prime
+- oswe-vscode-secondary
+- gpt-5.2
+- gpt-41-copilot
+- gpt-3.5-turbo-0613
+- gpt-4
+- gpt-4-0613
+- gpt-4-0125-preview
+- gpt-4o-2024-05-13
+- gpt-4-o-preview
+- gpt-4.1
+- gpt-3.5-turbo
+- gpt-4o-mini
+- gpt-4
+- gpt-4o
+- gpt-4-o-preview
+- text-embedding-ada-002
+
+ ╭────────────────────────────────────────────────────────────────────────────────────────────────╮
+ │                                                                                                │
+ │  🌐 Usage Viewer: https://ericc-ch.github.io/copilot-api?endpoint=http://localhost:4141/usage  │
+ │                                                                                                │
+ ╰────────────────────────────────────────────────────────────────────────────────────────────────╯
+
+➜ Listening on: http://localhost:4141/ (all interfaces)
+Killed
