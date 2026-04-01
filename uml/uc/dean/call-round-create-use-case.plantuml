@@ -1,0 +1,95 @@
+@startuml
+!theme plain
+!option handwritten true
+skinparam backgroundColor #F8FAFC
+skinparam defaultFontName "Inter"
+skinparam shadowing false
+
+' Define custom colors
+skinparam actor {
+    BackgroundColor #0F172A
+    BorderColor #0F172A
+    FontColor #FFFFFF
+}
+
+skinparam usecase {
+    BackgroundColor #FFFFFF
+    BorderColor #2563EB
+    FontColor #0F172A
+    BorderThickness 2
+}
+
+skinparam package {
+    BackgroundColor #E2E8F0
+    BorderColor #94A3B8
+    FontColor #0F172A
+}
+
+' Title
+title
+    <size:20><b>Biểu đồ Use Case - Tạo Đợt Đăng Ký</b></size>
+    <size:14>Hệ thống Quản lý Nghiên cứu Khoa học</size>
+end title
+
+' Actor
+actor "Trưởng Khoa" as DEAN
+
+' Main Package
+package "Chức năng Tạo Đợt Đăng Ký" {
+    
+    ' Main Use Case
+    usecase "Tạo đợt đăng ký mới" as UC_CREATE
+    
+    ' Sub Use Cases (included)
+    usecase "Nhập thông tin cơ bản" as UC_BASIC
+    usecase "Thiết lập thời gian" as UC_TIME
+    usecase "Thiết lập yêu cầu & biểu mẫu" as UC_REQUIREMENTS
+    usecase "Chỉ định giảng viên & hội đồng" as UC_PERSONNEL
+}
+
+' Relationship
+DEAN --> UC_CREATE
+
+' Include relationships
+UC_CREATE ..> UC_BASIC : <<include>>
+UC_CREATE ..> UC_TIME : <<include>>
+UC_CREATE ..> UC_REQUIREMENTS : <<include>>
+UC_CREATE ..> UC_PERSONNEL : <<include>>
+
+' Notes
+note right of UC_CREATE
+  <b>Chức năng chính</b>
+  • Trưởng Khoa tạo đợt đăng ký
+  • Trạng thái: PENDING_APPROVAL
+  • Cần Admin phê duyệt
+end note
+
+note bottom of UC_BASIC
+  <b>Thông tin cơ bản</b>
+  • Tên đợt đăng ký
+  • Mô tả
+  • Số lượng đề tài tối đa
+end note
+
+note bottom of UC_TIME
+  <b>Thời gian</b>
+  • Ngày bắt đầu đăng ký
+  • Ngày kết thúc đăng ký
+  • Ngày bắt đầu thực hiện
+  • Ngày kết thúc thực hiện
+end note
+
+note bottom of UC_REQUIREMENTS
+  <b>Yêu cầu & Biểu mẫu</b>
+  • Đối tượng áp dụng (Sinh viên/Giảng viên/Cả hai)
+  • Yêu cầu & điều kiện đăng ký
+  • Biểu mẫu báo cáo tiến độ
+end note
+
+note bottom of UC_PERSONNEL
+  <b>Chỉ định Giảng viên & Hội đồng</b>
+  • Chỉ định giảng viên hướng dẫn
+  • Chỉ định thành viên hội đồng
+end note
+
+@enduml

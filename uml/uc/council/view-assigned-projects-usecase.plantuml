@@ -1,0 +1,98 @@
+@startuml
+!theme plain
+skinparam backgroundColor #F8FAFC
+skinparam handwritten false
+skinparam shadowing false
+
+' Define custom colors
+skinparam actor {
+    BackgroundColor #0F172A
+    BorderColor #0F172A
+    FontColor #FFFFFF
+}
+
+skinparam usecase {
+    BackgroundColor #FFFFFF
+    BorderColor #2563EB
+    FontColor #0F172A
+    BorderThickness 2
+}
+
+skinparam package {
+    BackgroundColor #E2E8F0
+    BorderColor #94A3B8
+    FontColor #0F172A
+}
+
+' Title
+title
+    <size:20><b>Biểu đồ Use Case - Xem Danh Sách Đề Tài Được Phân Công</b></size>
+    <size:14>Hệ thống Quản lý Nghiên cứu Khoa học</size>
+end title
+
+' Actors
+actor "Giảng viên/\nThành viên HĐ" as LECTURER
+
+' Main Package
+package "Chức năng Xem Đề Tài Được Phân Công" {
+    
+    ' Main Use Cases
+    usecase "Xem danh sách hội đồng" as UC_VIEW_COUNCILS
+    usecase "Xem chi tiết hội đồng" as UC_VIEW_DETAIL
+    
+    ' Sub Use Cases (included)
+    usecase "Xem thông tin hội đồng" as UC_VIEW_INFO
+    usecase "Xem danh sách thành viên" as UC_VIEW_MEMBERS
+    usecase "Xem danh sách đề tài" as UC_VIEW_PROJECTS
+    usecase "Xem thông tin sinh viên" as UC_VIEW_STUDENTS
+    usecase "Xem giảng viên hướng dẫn" as UC_VIEW_ADVISOR
+}
+
+' Relationships
+LECTURER --> UC_VIEW_COUNCILS
+LECTURER --> UC_VIEW_DETAIL
+
+' Include relationships
+UC_VIEW_COUNCILS ..> UC_VIEW_INFO : <<include>>
+
+UC_VIEW_DETAIL ..> UC_VIEW_INFO : <<include>>
+UC_VIEW_DETAIL ..> UC_VIEW_MEMBERS : <<include>>
+UC_VIEW_DETAIL ..> UC_VIEW_PROJECTS : <<include>>
+
+UC_VIEW_PROJECTS ..> UC_VIEW_STUDENTS : <<include>>
+UC_VIEW_PROJECTS ..> UC_VIEW_ADVISOR : <<include>>
+
+' Notes
+note right of UC_VIEW_COUNCILS
+  <b>Danh sách hội đồng</b>
+  • Hiển thị tất cả hội đồng mà giảng viên tham gia
+  • Thông tin: Tên HĐ, Đợt, Vai trò, Số thành viên, Số đề tài
+  • Sắp xếp theo ngày tham gia
+  • Chỉ xem, không chỉnh sửa
+end note
+
+note right of UC_VIEW_DETAIL
+  <b>Chi tiết hội đồng</b>
+  • Mở Dialog khi click "Hiển thị chi tiết"
+  • Thông tin đầy đủ: Ngày bảo vệ, Nơi bảo vệ
+  • Danh sách thành viên với vai trò
+  • Danh sách đề tài được phân công
+  • Thông tin GVHD và sinh viên của từng đề tài
+end note
+
+note bottom of UC_VIEW_PROJECTS
+  <b>Danh sách đề tài</b>
+  • Tên đề tài
+  • Giảng viên hướng dẫn (tên, mã, email)
+  • Sinh viên (vai trò, tên, mã, email)
+  • Hiển thị theo thứ tự
+end note
+
+note bottom of UC_VIEW_MEMBERS
+  <b>Thành viên hội đồng</b>
+  • Vai trò: Chủ tịch, Thư ký, Ủy viên
+  • Tên, mã, email
+  • Badge màu để phân biệt vai trò
+end note
+
+@enduml

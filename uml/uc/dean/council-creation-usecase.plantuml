@@ -1,0 +1,107 @@
+@startuml
+!theme plain
+skinparam backgroundColor #F8FAFC
+skinparam handwritten false
+skinparam shadowing false
+
+' Define custom colors
+skinparam actor {
+    BackgroundColor #0F172A
+    BorderColor #0F172A
+    FontColor #FFFFFF
+}
+
+skinparam usecase {
+    BackgroundColor #FFFFFF
+    BorderColor #2563EB
+    FontColor #0F172A
+    BorderThickness 2
+}
+
+skinparam package {
+    BackgroundColor #E2E8F0
+    BorderColor #94A3B8
+    FontColor #0F172A
+}
+
+' Title
+title
+    <size:20><b>Biểu đồ Use Case - Tạo Hội Đồng Đánh Giá</b></size>
+    <size:14>Hệ thống Quản lý Nghiên cứu Khoa học</size>
+end title
+
+' Actor
+actor "Trưởng Khoa" as DEAN
+
+' Main Package
+package "Chức năng Quản lý Hội Đồng Đánh Giá" {
+    
+    ' Main Use Cases
+    usecase "Tạo hội đồng thủ công" as UC_CREATE_MANUAL
+    usecase "Tạo hội đồng nhanh (AI)" as UC_CREATE_AI
+    usecase "Chỉnh sửa hội đồng" as UC_EDIT
+    usecase "Xóa hội đồng" as UC_DELETE
+    
+    ' Sub Use Cases (included)
+    usecase "Quản lý thành viên hội đồng" as UC_MANAGE_MEMBERS
+    usecase "Thêm thành viên từ khoa" as UC_ADD_INTERNAL
+    usecase "Tạo thành viên bên ngoài" as UC_ADD_EXTERNAL
+    usecase "Chọn 3 thành viên" as UC_SELECT_3
+    usecase "Phân vai trò thành viên" as UC_ASSIGN_ROLE
+    usecase "Xem chi tiết hội đồng" as UC_VIEW_DETAIL
+}
+
+' Relationships
+DEAN --> UC_CREATE_MANUAL
+DEAN --> UC_CREATE_AI
+DEAN --> UC_EDIT
+DEAN --> UC_DELETE
+DEAN --> UC_MANAGE_MEMBERS
+
+' Include relationships
+UC_CREATE_MANUAL ..> UC_SELECT_3 : <<include>>
+UC_CREATE_MANUAL ..> UC_ASSIGN_ROLE : <<include>>
+
+UC_EDIT ..> UC_SELECT_3 : <<include>>
+UC_EDIT ..> UC_ASSIGN_ROLE : <<include>>
+
+UC_MANAGE_MEMBERS ..> UC_ADD_INTERNAL : <<extend>>
+UC_MANAGE_MEMBERS ..> UC_ADD_EXTERNAL : <<extend>>
+
+UC_CREATE_AI ..> UC_VIEW_DETAIL : <<include>>
+
+' Notes
+note right of UC_CREATE_MANUAL
+  <b>Tạo thủ công</b>
+  • Nhập tên hội đồng
+  • Chọn đúng 3 thành viên
+  • Phân vai trò: Chủ tịch, Thư ký, Ủy viên
+  • Thành viên không được trùng với hội đồng khác
+end note
+
+note right of UC_CREATE_AI
+  <b>Tạo nhanh (AI)</b>
+  • Cấu hình số đề tài/hội đồng (min-max)
+  • AI tự động phân chia
+  • Xem trước danh sách đề xuất
+  • Chọn hội đồng để xác nhận
+  • Có thể xóa hội đồng cũ trước khi tạo
+end note
+
+note bottom of UC_MANAGE_MEMBERS
+  <b>Quản lý thành viên</b>
+  • Thêm giảng viên trong khoa
+  • Tạo thành viên bên ngoài
+  • Xóa thành viên khỏi danh sách
+  • Phân trang 10 thành viên/trang
+end note
+
+note bottom of UC_EDIT
+  <b>Chỉnh sửa</b>
+  • Đổi tên, mô tả hội đồng
+  • Thay đổi thành viên
+  • Cập nhật vai trò
+  • Yêu cầu đủ 3 thành viên
+end note
+
+@enduml

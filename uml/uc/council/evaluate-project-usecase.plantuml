@@ -1,0 +1,104 @@
+@startuml
+!theme plain
+skinparam backgroundColor #F8FAFC
+skinparam handwritten false
+skinparam shadowing false
+
+' Define custom colors
+skinparam actor {
+    BackgroundColor #0F172A
+    BorderColor #0F172A
+    FontColor #FFFFFF
+}
+
+skinparam usecase {
+    BackgroundColor #FFFFFF
+    BorderColor #2563EB
+    FontColor #0F172A
+    BorderThickness 2
+}
+
+skinparam package {
+    BackgroundColor #E2E8F0
+    BorderColor #94A3B8
+    FontColor #0F172A
+}
+
+' Title
+title
+    <size:20><b>Biểu đồ Use Case - Chấm Điểm Đề Tài</b></size>
+    <size:14>Hệ thống Quản lý Nghiên cứu Khoa học</size>
+end title
+
+' Actors
+actor "Thành viên\nHội đồng" as COUNCIL_MEMBER
+
+' Main Package
+package "Chức năng Chấm Điểm Đề Tài" {
+    
+    ' Main Use Cases
+    usecase "Xem danh sách đề tài\ncần chấm" as UC_VIEW_PROJECTS
+    usecase "Chấm điểm đề tài" as UC_EVALUATE
+    usecase "Xem kết quả chấm điểm" as UC_VIEW_RESULTS
+    
+    ' Sub Use Cases (included)
+    usecase "Xem thông tin đề tài" as UC_VIEW_PROJECT_INFO
+    usecase "Nhập điểm số" as UC_INPUT_SCORE
+    usecase "Chọn quyết định" as UC_SELECT_DECISION
+    usecase "Nhập nhận xét" as UC_INPUT_COMMENT
+    usecase "Xác nhận chấm điểm" as UC_CONFIRM
+    usecase "Kiểm tra đã chấm" as UC_CHECK_EVALUATED
+}
+
+' Relationships
+COUNCIL_MEMBER --> UC_VIEW_PROJECTS
+COUNCIL_MEMBER --> UC_EVALUATE
+COUNCIL_MEMBER --> UC_VIEW_RESULTS
+
+' Include relationships
+UC_VIEW_PROJECTS ..> UC_VIEW_PROJECT_INFO : <<include>>
+UC_VIEW_PROJECTS ..> UC_CHECK_EVALUATED : <<include>>
+
+UC_EVALUATE ..> UC_VIEW_PROJECT_INFO : <<include>>
+UC_EVALUATE ..> UC_INPUT_SCORE : <<include>>
+UC_EVALUATE ..> UC_SELECT_DECISION : <<include>>
+UC_EVALUATE ..> UC_INPUT_COMMENT : <<include>>
+UC_EVALUATE ..> UC_CONFIRM : <<include>>
+
+UC_VIEW_RESULTS ..> UC_VIEW_PROJECT_INFO : <<include>>
+
+' Notes
+note right of UC_VIEW_PROJECTS
+  <b>Danh sách đề tài</b>
+  • Hiển thị đề tài được phân công
+  • Chỉ xem đề tài của hội đồng mình tham gia
+  • Phân biệt: Đã chấm / Chưa chấm
+  • Thông tin: Tên đề tài, Sinh viên, GVHD
+end note
+
+note right of UC_EVALUATE
+  <b>Form chấm điểm</b>
+  • Điểm số: 0-100 (bắt buộc)
+  • Quyết định: PASS / NEED_REVISION / FAIL
+  • Nhận xét: Tùy chọn (textarea)
+  • Validate: Không cho chấm 2 lần
+  • Lưu vào CouncilEvaluation
+end note
+
+note bottom of UC_INPUT_SCORE
+  <b>Điểm số</b>
+  • Kiểu: Number
+  • Min: 0, Max: 100
+  • Bắt buộc nhập
+  • Hiển thị lỗi nếu ngoài phạm vi
+end note
+
+note bottom of UC_SELECT_DECISION
+  <b>Quyết định</b>
+  • PASS: Đạt
+  • NEED_REVISION: Cần sửa đổi
+  • FAIL: Không đạt
+  • Hiển thị dạng Radio hoặc Select
+end note
+
+@enduml

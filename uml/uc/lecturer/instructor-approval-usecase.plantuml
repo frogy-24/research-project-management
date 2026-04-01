@@ -1,0 +1,110 @@
+@startuml
+!theme plain
+skinparam backgroundColor #F8FAFC
+skinparam handwritten false
+skinparam shadowing false
+
+' Define custom colors
+skinparam actor {
+    BackgroundColor #0F172A
+    BorderColor #0F172A
+    FontColor #FFFFFF
+}
+
+skinparam usecase {
+    BackgroundColor #FFFFFF
+    BorderColor #2563EB
+    FontColor #0F172A
+    BorderThickness 2
+}
+
+skinparam package {
+    BackgroundColor #E2E8F0
+    BorderColor #94A3B8
+    FontColor #0F172A
+}
+
+' Title
+title
+    <size:20><b>Biểu đồ Use Case - Duyệt Hướng Dẫn Đề Tài</b></size>
+    <size:14>Hệ thống Quản lý Nghiên cứu Khoa học</size>
+end title
+
+' Actors
+actor "Giảng viên\nHướng dẫn" as LECTURER
+
+' Main Package
+package "Chức năng Duyệt Hướng Dẫn" {
+    
+    ' Main Use Cases
+    usecase "Xem danh sách\nyêu cầu hướng dẫn" as UC_VIEW_REQUESTS
+    usecase "Chấp nhận\nhướng dẫn" as UC_ACCEPT
+    usecase "Từ chối\nhướng dẫn" as UC_REJECT
+    
+    ' Sub Use Cases (included)
+    usecase "Xem thông tin\nđề tài" as UC_VIEW_PROJECT_INFO
+    usecase "Xem thông tin\nsinh viên" as UC_VIEW_STUDENT_INFO
+    usecase "Lọc theo trạng thái" as UC_FILTER_STATUS
+    usecase "Lọc theo đợt" as UC_FILTER_ROUND
+    usecase "Tìm kiếm đề tài" as UC_SEARCH
+    usecase "Xác nhận quyết định" as UC_CONFIRM
+    usecase "Cập nhật trạng thái" as UC_UPDATE_STATUS
+}
+
+' Relationships
+LECTURER --> UC_VIEW_REQUESTS
+LECTURER --> UC_ACCEPT
+LECTURER --> UC_REJECT
+
+' Include relationships
+UC_VIEW_REQUESTS ..> UC_VIEW_PROJECT_INFO : <<include>>
+UC_VIEW_REQUESTS ..> UC_VIEW_STUDENT_INFO : <<include>>
+UC_VIEW_REQUESTS ..> UC_FILTER_STATUS : <<include>>
+UC_VIEW_REQUESTS ..> UC_FILTER_ROUND : <<include>>
+UC_VIEW_REQUESTS ..> UC_SEARCH : <<include>>
+
+UC_ACCEPT ..> UC_VIEW_PROJECT_INFO : <<include>>
+UC_ACCEPT ..> UC_CONFIRM : <<include>>
+UC_ACCEPT ..> UC_UPDATE_STATUS : <<include>>
+
+UC_REJECT ..> UC_VIEW_PROJECT_INFO : <<include>>
+UC_REJECT ..> UC_CONFIRM : <<include>>
+UC_REJECT ..> UC_UPDATE_STATUS : <<include>>
+
+' Notes
+note right of UC_VIEW_REQUESTS
+  <b>Danh sách yêu cầu</b>
+  • Hiển thị đề tài sinh viên mời hướng dẫn
+  • Chỉ xem đề tài có instructorId = mình
+  • Phân loại: PENDING / ACCEPTED / REJECTED
+  • Thông tin: Tên đề tài, Sinh viên, Đợt
+  • Hỗ trợ: Lọc, Tìm kiếm, Phân trang
+end note
+
+note right of UC_ACCEPT
+  <b>Chấp nhận hướng dẫn</b>
+  • Cập nhật instructorStatus = ACCEPTED
+  • Không thay đổi status đăng ký
+  • Đề tài tiếp tục chờ duyệt Khoa
+  • Gửi thông báo cho sinh viên
+  • Không thể hoàn tác
+end note
+
+note right of UC_REJECT
+  <b>Từ chối hướng dẫn</b>
+  • Cập nhật instructorStatus = REJECTED
+  • Đồng thời set status = REJECTED
+  • Đề tài bị từ chối hoàn toàn
+  • Sinh viên phải đăng ký lại
+  • Không thể hoàn tác
+end note
+
+note bottom of UC_FILTER_STATUS
+  <b>Lọc trạng thái</b>
+  • PENDING: Chờ duyệt
+  • ACCEPTED: Đã chấp nhận
+  • REJECTED: Đã từ chối
+  • Mặc định: Tất cả
+end note
+
+@enduml

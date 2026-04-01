@@ -16,6 +16,9 @@ if "src" not in sys.modules and str(Path(__file__).resolve().parents[2]) not in 
     sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
 from src.clients.llm_mcp_client import run_llm_with_mcp
+from src.utilities import get_logger, log_api_request, log_async_execution, log_execution
+
+logger = get_logger(__name__)
 
 
 class McpCallRequest(BaseModel):
@@ -41,9 +44,14 @@ MCP_SERVER_URL = os.getenv("MCP_SERVER_URL", "http://127.0.0.1:9000/mcp")
 
 app = FastAPI(title="FastAPI -> FastMCP Bridge", version="1.0.0")
 
+logger.info("🚀 FastAPI Application khởi tạo thành công")
+logger.info(f"MCP Server URL: {MCP_SERVER_URL}")
+
 
 @app.get("/health")
+@log_api_request("/health", "GET")
 async def health() -> dict[str, str]:
+    logger.info("🏥 Health check endpoint được gọi")
     return {"status": "ok"}
 
 
@@ -55,12 +63,17 @@ async def open_mcp_session() -> Any:
             yield session
 
 
+@log_async_execution
 async def _call_mcp_tool(tool_name: str, arguments: dict[str, Any]) -> Any:
+    logger.info(f"🔧 Gọi MCP tool: {tool_name}")
+    logger.debug(f"Tool arguments: {arguments}")
+    
     async with open_mcp_session() as session:
         result = await session.call_tool(tool_name, arguments)
 
     structured = getattr(result, "structuredContent", None)
     if structured is not None:
+        logger.debug("Trả về structured content")
         return structured
 
     content_items = getattr(result, "content", None)
@@ -73,15 +86,22 @@ async def _call_mcp_tool(tool_name: str, arguments: dict[str, Any]) -> Any:
         if texts:
             if len(texts) == 1:
                 try:
-                    return json.loads(texts[0])
+                    parsed = json.loads(texts[0])
+                    logger.debug("Trả về parsed JSON từ text")
+                    return parsed
                 except json.JSONDecodeError:
+                    logger.debug("Trả về raw text")
                     return texts[0]
+            logger.debug(f"Trả về {len(texts)} text items")
             return texts
 
+    logger.debug("Trả về string representation")
     return str(result)
 
 
+@log_execution
 def _extract_candidate_name(message: str) -> str | None:
+    logger.debug(f"Trích xuất tên từ message: {message[:50]}...")
     normalized = " ".join(message.strip().split())
     patterns = [
         r"nguoi\s+dung\s+(.+?)\s+co\s+trong",
@@ -91,15 +111,22 @@ def _extract_candidate_name(message: str) -> str | None:
     for pattern in patterns:
         match = re.search(pattern, normalized, flags=re.IGNORECASE)
         if match:
-            return match.group(1).strip(" .,!?")
+            name = match.group(1).strip(" .,!?")
+            logger.info(f"✅ Tìm thấy tên: {name}")
+            return name
+    logger.debug("Không tìm thấy tên trong message")
     return None
 
 
+@log_async_execution
 async def _fallback_chat_answer(message: str) -> str | None:
+    logger.info("🔄 Thử fallback chat answer")
     candidate_name = _extract_candidate_name(message)
     if not candidate_name:
+        logger.debug("Không có candidate name, bỏ qua fallback")
         return None
 
+    logger.info(f"🔍 Tìm kiếm user với tên: {candidate_name}")
     rows = await _call_mcp_tool(
         "run_raw_sql",
         {
@@ -109,9 +136,11 @@ async def _fallback_chat_answer(message: str) -> str | None:
     )
 
     if not isinstance(rows, list):
+        logger.warning("Query result không phải list")
         return None
 
     if not rows:
+        logger.info(f"Không tìm thấy user với tên: {candidate_name}")
         return f"Khong tim thay nguoi dung ten gan dung '{candidate_name}' trong DB."
 
     head = rows[0]
@@ -119,6 +148,7 @@ async def _fallback_chat_answer(message: str) -> str | None:
     email = head.get("email", "Unknown")
     user_id = head.get("id", "Unknown")
 
+    logger.info(f"✅ Tìm thấy {len(rows)} users, trả về thông tin user đầu tiên")
     return (
         f"Co tim thay nguoi dung trong DB. Ket qua dau tien: id={user_id}, "
         f"name={name}, email={email}. Tong so ket qua phu hop: {len(rows)}."
@@ -126,18 +156,26 @@ async def _fallback_chat_answer(message: str) -> str | None:
 
 
 @app.post("/mcp/call", response_model=McpCallResponse)
+@log_api_request("/mcp/call", "POST")
 async def call_mcp_tool(payload: McpCallRequest) -> McpCallResponse:
+    logger.info(f"📨 MCP Call API - Tool: {payload.tool}")
     try:
         tool_result = await _call_mcp_tool(payload.tool, payload.arguments)
+        logger.info(f"✅ MCP Call thành công - Tool: {payload.tool}")
     except Exception as exc:
+        logger.error(f"❌ MCP Call failed - Tool: {payload.tool} - Error: {str(exc)}")
         raise HTTPException(status_code=400, detail=str(exc)) from exc
 
     return McpCallResponse(tool=payload.tool, result=tool_result)
 
 
 @app.post("/chat", response_model=ChatResponse)
+@log_api_request("/chat", "POST")
 async def chat(payload: ChatRequest) -> ChatResponse:
+    logger.info(f"💬 Chat API - Message: {payload.message[:100]}...")
+    
     if not payload.message.strip():
+        logger.warning("❌ Empty message received")
         raise HTTPException(status_code=400, detail="message must not be empty")
 
     model_name = os.getenv("OPENAI_MODEL", "gpt-5-mini")
@@ -149,10 +187,14 @@ async def chat(payload: ChatRequest) -> ChatResponse:
             model=model_name,
             max_rounds=max_rounds,
         )
+        logger.info(f"✅ Chat API thành công - Answer: {answer[:100]}...")
     except Exception as exc:
+        logger.warning(f"⚠️ LLM failed, trying fallback - Error: {str(exc)}")
         fallback = await _fallback_chat_answer(payload.message)
         if fallback is not None:
+            logger.info("✅ Fallback answer thành công")
             return ChatResponse(message=payload.message, answer=fallback)
+        logger.error(f"❌ Chat API failed completely - Error: {str(exc)}")
         raise HTTPException(status_code=400, detail=str(exc)) from exc
 
     return ChatResponse(message=payload.message, answer=answer)
@@ -161,4 +203,5 @@ async def chat(payload: ChatRequest) -> ChatResponse:
 if __name__ == "__main__":
     import uvicorn
 
+    logger.info("🚀 Starting FastAPI server on http://127.0.0.1:8000")
     uvicorn.run(app, host="127.0.0.1", port=8000)

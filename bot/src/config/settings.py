@@ -4,7 +4,12 @@ from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
 
 from dotenv import load_dotenv
 
+from src.utilities import get_logger, log_execution
+
 load_dotenv()
+
+# Logger cho module này
+logger = get_logger(__name__)
 
 DEFAULT_DATABASE_URL = "postgresql://postgres:example@localhost:5432/postgres?schema=public"
 
@@ -15,6 +20,7 @@ class DatabaseConfig:
     schema: str
 
 
+@log_execution
 def _extract_schema_from_dsn(dsn: str) -> tuple[str, str]:
     parts = urlsplit(dsn)
     query_items = parse_qsl(parts.query, keep_blank_values=True)
@@ -32,7 +38,10 @@ def _extract_schema_from_dsn(dsn: str) -> tuple[str, str]:
     return normalized_dsn, schema
 
 
+@log_execution
 def load_database_config() -> DatabaseConfig:
+    logger.info("Đang tải cấu hình database từ environment variables")
     raw_dsn = os.getenv("DATABASE_URL", DEFAULT_DATABASE_URL)
     normalized_dsn, schema = _extract_schema_from_dsn(raw_dsn)
+    logger.info(f"Database config loaded - Schema: {schema}")
     return DatabaseConfig(dsn=normalized_dsn, schema=schema)

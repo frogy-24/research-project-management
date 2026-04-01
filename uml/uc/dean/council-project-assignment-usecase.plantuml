@@ -1,0 +1,101 @@
+@startuml
+!theme plain
+skinparam backgroundColor #F8FAFC
+skinparam handwritten false
+skinparam shadowing false
+
+' Define custom colors
+skinparam actor {
+    BackgroundColor #0F172A
+    BorderColor #0F172A
+    FontColor #FFFFFF
+}
+
+skinparam usecase {
+    BackgroundColor #FFFFFF
+    BorderColor #2563EB
+    FontColor #0F172A
+    BorderThickness 2
+}
+
+skinparam package {
+    BackgroundColor #E2E8F0
+    BorderColor #94A3B8
+    FontColor #0F172A
+}
+
+' Title
+title
+    <size:20><b>Biểu đồ Use Case - Phân Công Đề Tài Cho Hội Đồng</b></size>
+    <size:14>Hệ thống Quản lý Nghiên cứu Khoa học</size>
+end title
+
+' Actor
+actor "Trưởng Khoa" as DEAN
+
+' Main Package
+package "Chức năng Phân Công Đề Tài" {
+    
+    ' Main Use Cases
+    usecase "Gán đề tài vào hội đồng" as UC_ASSIGN
+    usecase "Bỏ gán đề tài khỏi hội đồng" as UC_UNASSIGN
+    usecase "Hoàn tất phân công" as UC_FINALIZE
+    
+    ' Sub Use Cases (included)
+    usecase "Chọn đợt đăng ký" as UC_SELECT_ROUND
+    usecase "Chọn hội đồng" as UC_SELECT_COUNCIL
+    usecase "Xem đề tài chưa gán" as UC_VIEW_UNASSIGNED
+    usecase "Xem đề tài đã gán" as UC_VIEW_ASSIGNED
+    usecase "Tìm kiếm đề tài" as UC_SEARCH
+}
+
+' Relationships
+DEAN --> UC_ASSIGN
+DEAN --> UC_UNASSIGN
+DEAN --> UC_FINALIZE
+
+' Include relationships
+UC_ASSIGN ..> UC_SELECT_ROUND : <<include>>
+UC_ASSIGN ..> UC_SELECT_COUNCIL : <<include>>
+UC_ASSIGN ..> UC_VIEW_UNASSIGNED : <<include>>
+
+UC_UNASSIGN ..> UC_SELECT_ROUND : <<include>>
+UC_UNASSIGN ..> UC_SELECT_COUNCIL : <<include>>
+UC_UNASSIGN ..> UC_VIEW_ASSIGNED : <<include>>
+
+UC_VIEW_UNASSIGNED ..> UC_SEARCH : <<extend>>
+
+' Notes
+note right of UC_ASSIGN
+  <b>Gán đề tài</b>
+  • Chọn nhiều đề tài chưa gán
+  • Gán vào hội đồng đã chọn
+  • Chỉ gán được đề tài đã duyệt
+  • Không thể gán nếu đã hoàn tất
+end note
+
+note right of UC_UNASSIGN
+  <b>Bỏ gán</b>
+  • Chọn đề tài đã gán trong hội đồng
+  • Xóa khỏi hội đồng
+  • Đề tài quay về danh sách chưa gán
+  • Yêu cầu xác nhận trước khi xóa
+end note
+
+note bottom of UC_FINALIZE
+  <b>Hoàn tất phân công</b>
+  • Công bố phân công cho toàn đợt
+  • Hội đồng/GVHD/Thành viên nhìn thấy
+  • Không thể chỉnh sửa sau khi hoàn tất
+  • Trạng thái: "Đang xếp ảo" → "Đã hoàn tất"
+end note
+
+note bottom of UC_SEARCH
+  <b>Tìm kiếm</b>
+  • Tìm theo tên đề tài
+  • Tìm theo tên sinh viên
+  • Tìm theo mã sinh viên
+  • Lọc real-time
+end note
+
+@enduml

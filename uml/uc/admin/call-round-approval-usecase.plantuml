@@ -1,0 +1,98 @@
+@startuml
+!theme plain
+skinparam backgroundColor #F8FAFC
+skinparam defaultFontName "Inter"
+skinparam shadowing false
+
+' Define custom colors
+skinparam actor {
+    BackgroundColor #0F172A
+    BorderColor #0F172A
+    FontColor #FFFFFF
+}
+
+skinparam usecase {
+    BackgroundColor #FFFFFF
+    BorderColor #2563EB
+    FontColor #0F172A
+    BorderThickness 2
+}
+
+skinparam package {
+    BackgroundColor #E2E8F0
+    BorderColor #94A3B8
+    FontColor #0F172A
+}
+
+' Title
+title
+    <size:20><b>Biểu đồ Use Case - Phê Duyệt Đợt Đăng Ký</b></size>
+    <size:14>Hệ thống Quản lý Nghiên cứu Khoa học</size>
+end title
+
+' Actor
+actor "Admin" as ADMIN
+
+' Main Package
+package "Chức năng Phê Duyệt Đợt Đăng Ký" {
+    
+    ' Main Use Cases
+    usecase "Phê duyệt đợt đăng ký" as UC_APPROVE
+    usecase "Từ chối đợt đăng ký" as UC_REJECT
+    
+    ' Sub Use Cases (included)
+    usecase "Xem danh sách đợt chờ duyệt" as UC_VIEW_LIST
+    usecase "Xem chi tiết đợt đăng ký" as UC_VIEW_DETAIL
+    usecase "Lọc theo trạng thái" as UC_FILTER
+    usecase "Nhập ghi chú phê duyệt" as UC_NOTE
+}
+
+' Relationships
+ADMIN --> UC_APPROVE
+ADMIN --> UC_REJECT
+
+' Include relationships
+UC_APPROVE ..> UC_VIEW_LIST : <<include>>
+UC_APPROVE ..> UC_VIEW_DETAIL : <<include>>
+UC_APPROVE ..> UC_NOTE : <<include>>
+
+UC_REJECT ..> UC_VIEW_LIST : <<include>>
+UC_REJECT ..> UC_VIEW_DETAIL : <<include>>
+UC_REJECT ..> UC_NOTE : <<include>>
+
+UC_VIEW_LIST ..> UC_FILTER : <<include>>
+
+' Notes
+note right of UC_APPROVE
+  <b>Phê duyệt</b>
+  • Chuyển trạng thái: APPROVED
+  • Đợt đăng ký được kích hoạt
+  • Sinh viên/Giảng viên có thể đăng ký
+  • Gửi thông báo cho Trưởng Khoa
+end note
+
+note right of UC_REJECT
+  <b>Từ chối</b>
+  • Chuyển trạng thái: REJECTED
+  • Ghi chú lý do từ chối
+  • Trưởng Khoa cần tạo lại
+  • Gửi thông báo cho Trưởng Khoa
+end note
+
+note bottom of UC_VIEW_DETAIL
+  <b>Chi tiết đợt đăng ký</b>
+  • Thông tin cơ bản
+  • Thời gian đăng ký & thực hiện
+  • Yêu cầu & điều kiện
+  • Giảng viên & hội đồng
+  • Phạm vi tổ chức
+end note
+
+note bottom of UC_FILTER
+  <b>Bộ lọc</b>
+  • Lọc theo khoa
+  • Lọc theo trạng thái duyệt
+  • Chờ duyệt / Đã duyệt / Bị từ chối
+end note
+
+@enduml

@@ -1,0 +1,99 @@
+@startuml
+!theme plain
+!option handwritten true
+skinparam backgroundColor #F8FAFC
+skinparam handwritten false
+skinparam shadowing false
+
+' Define custom colors
+skinparam actor {
+    BackgroundColor #0F172A
+    BorderColor #0F172A
+    FontColor #FFFFFF
+}
+
+skinparam usecase {
+    BackgroundColor #FFFFFF
+    BorderColor #2563EB
+    FontColor #0F172A
+    BorderThickness 2
+}
+
+skinparam package {
+    BackgroundColor #E2E8F0
+    BorderColor #94A3B8
+    FontColor #0F172A
+}
+
+' Title
+title
+    <size:20><b>Biểu đồ Use Case - Duyệt Đề Tài Cấp Khoa</b></size>
+    <size:14>Hệ thống Quản lý Nghiên cứu Khoa học</size>
+end title
+
+' Actor
+actor "Trưởng Khoa" as DEAN
+
+' Main Package
+package "Chức năng Duyệt Đề Tài Cấp Khoa" {
+    
+    ' Main Use Cases
+    usecase "Phê duyệt đề tài" as UC_APPROVE
+    usecase "Từ chối đề tài" as UC_REJECT
+    
+    ' Sub Use Cases (included)
+    usecase "Xem danh sách đề tài chờ duyệt" as UC_VIEW_LIST
+    usecase "Lọc và tìm kiếm đề tài" as UC_FILTER
+    usecase "Xem chi tiết đề tài" as UC_VIEW_DETAIL
+    usecase "Kiểm tra trạng thái GVHD" as UC_CHECK_INSTRUCTOR
+}
+
+' Relationships
+DEAN --> UC_APPROVE
+DEAN --> UC_REJECT
+
+' Include relationships
+UC_APPROVE ..> UC_VIEW_LIST : <<include>>
+UC_APPROVE ..> UC_VIEW_DETAIL : <<include>>
+UC_APPROVE ..> UC_CHECK_INSTRUCTOR : <<include>>
+
+UC_REJECT ..> UC_VIEW_LIST : <<include>>
+UC_REJECT ..> UC_VIEW_DETAIL : <<include>>
+
+UC_VIEW_LIST ..> UC_FILTER : <<include>>
+
+' Notes
+note right of UC_APPROVE
+  <b>Phê duyệt</b>
+  • Chuyển trạng thái: APPROVED
+  • Yêu cầu: GVHD đã chấp nhận
+  • Đề tài được chuyển sang giai đoạn thực hiện
+  • Gửi thông báo cho sinh viên
+end note
+
+note right of UC_REJECT
+  <b>Từ chối</b>
+  • Chuyển trạng thái: REJECTED
+  • Sinh viên cần chỉnh sửa lại
+  • Gửi thông báo cho sinh viên
+end note
+
+note bottom of UC_FILTER
+  <b>Bộ lọc</b>
+  • Tìm kiếm theo tên đề tài/chủ nhiệm
+  • Lọc theo trạng thái Khoa
+  • Lọc theo đợt đăng ký
+  • Chỉ hiển thị GVHD đã chấp nhận
+end note
+
+note bottom of UC_VIEW_DETAIL
+  <b>Chi tiết đề tài</b>
+  • Thông tin sinh viên
+  • Thông tin GVHD
+  • Tên đề tài
+  • Mục tiêu nghiên cứu
+  • Sản phẩm dự kiến
+  • Trạng thái GVHD
+end note
+
+@enduml

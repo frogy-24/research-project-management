@@ -77,6 +77,7 @@ model Department {
   majors      Major[]
   users       User[]
   callRounds  CallRound[] @relation("CallRoundDepartments")
+  rooms       Room[]
 }
 
 model Major {
@@ -394,6 +395,24 @@ model Notification {
   @@index([userId, createdAt])
 }
 
+model Room {
+  id           String   @id @default(cuid())
+  name         String   // VD: "Phòng họp A", "Phòng B201"
+  code         String   // Mã phòng, VD: "B201"
+  capacity     Int?     // Sức chứa (tùy chọn)
+  description  String?  // Mô tả thêm
+  departmentId String
+  department   Department @relation(fields: [departmentId], references: [id], onDelete: Cascade)
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  officeMeetings OfficeMeeting[]
+
+  @@unique([code, departmentId])
+  @@index([departmentId])
+}
+
 model OfficeMeeting {
   id            String   @id @default(cuid())
   projectId     String
@@ -404,6 +423,8 @@ model OfficeMeeting {
   memberUserIds String[] // List of user IDs for invited members
   meetingAt     DateTime
   location      String
+  roomId        String?  // Tham chiếu tới phòng họp (tùy chọn)
+  room          Room?    @relation(fields: [roomId], references: [id], onDelete: SetNull)
   note          String?
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
@@ -413,6 +434,7 @@ model OfficeMeeting {
 
   @@index([projectId])
   @@index([instructorId])
+  @@index([roomId])
 }
 
 model OfficeMeetingView {

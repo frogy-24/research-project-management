@@ -23,6 +23,7 @@ import {
     UsersRound,
     Mail,
     CalendarClock,
+    DoorOpen,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAuthSession, useLogout } from '@/hooks/useAuth';
@@ -278,6 +279,11 @@ function AppSidebar({ session }: { session: AuthSession }) {
                 title: 'Gán đề tài hội đồng',
                 url: '/dean/council-projects',
                 icon: Link2,
+            },
+            {
+                title: 'Quản lý Phòng họp',
+                url: '/dean/rooms',
+                icon: DoorOpen,
             },
         );
     } else if (session.role === 'ADMIN') {
