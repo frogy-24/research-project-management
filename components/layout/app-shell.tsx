@@ -24,6 +24,7 @@ import {
     Mail,
     CalendarClock,
     DoorOpen,
+    Newspaper,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAuthSession, useLogout } from '@/hooks/useAuth';
@@ -320,6 +321,12 @@ function AppSidebar({ session }: { session: AuthSession }) {
             },
         );
     }
+
+    navItems.push({
+        title: 'Bài viết',
+        url: `/${session.role.toLowerCase()}/posts`,
+        icon: Newspaper,
+    });
 
     navItems.push({
         title: 'Xem lịch hẹn',

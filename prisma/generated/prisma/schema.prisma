@@ -77,6 +77,8 @@ model Department {
   majors      Major[]
   users       User[]
   callRounds  CallRound[] @relation("CallRoundDepartments")
+  rooms       Room[]
+  posts       Post[]
 }
 
 model Major {
@@ -138,6 +140,8 @@ model User {
   councilAssignments         CouncilMemberAssignment[] @relation("CouncilMemberAssignments") // Phân công vào các hội đồng cụ thể
   officeMeetingsAsInstructor OfficeMeeting[]           @relation("OfficeMeetingInstructor")
   officeMeetingViews         OfficeMeetingView[]
+  posts                      Post[]                    @relation("PostAuthor")
+  approvedPosts              Post[]                    @relation("PostApprover")
 }
 
 model CallRound {
@@ -377,6 +381,19 @@ enum NotificationType {
   FUNDING_DISBURSED
 }
 
+enum PostAudience {
+  LECTURERS
+  STUDENTS
+  DEPARTMENT
+  ALL
+}
+
+enum PostStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
 model Notification {
   id        String           @id @default(cuid())
   userId    String
@@ -394,6 +411,49 @@ model Notification {
   @@index([userId, createdAt])
 }
 
+model Post {
+  id              String       @id @default(cuid())
+  title           String
+  content         String
+  audience        PostAudience @default(ALL)
+  status          PostStatus   @default(PENDING)
+  authorId        String
+  authorRole      Role
+  author          User         @relation("PostAuthor", fields: [authorId], references: [id], onDelete: Cascade)
+  departmentId    String?
+  department      Department?  @relation(fields: [departmentId], references: [id], onDelete: SetNull)
+  approvedById    String?
+  approvedBy      User?        @relation("PostApprover", fields: [approvedById], references: [id], onDelete: SetNull)
+  approvedAt      DateTime?
+  rejectionReason String?
+  publishedAt     DateTime?
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+
+  @@index([status, createdAt])
+  @@index([audience, status])
+  @@index([departmentId, status])
+  @@index([authorId, createdAt])
+}
+
+model Room {
+  id           String     @id @default(cuid())
+  name         String // VD: "Phòng họp A", "Phòng B201"
+  code         String // Mã phòng, VD: "B201"
+  capacity     Int? // Sức chứa (tùy chọn)
+  description  String? // Mô tả thêm
+  departmentId String
+  department   Department @relation(fields: [departmentId], references: [id], onDelete: Cascade)
+  isActive     Boolean    @default(true)
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  officeMeetings OfficeMeeting[]
+
+  @@unique([code, departmentId])
+  @@index([departmentId])
+}
+
 model OfficeMeeting {
   id            String   @id @default(cuid())
   projectId     String
@@ -404,6 +464,8 @@ model OfficeMeeting {
   memberUserIds String[] // List of user IDs for invited members
   meetingAt     DateTime
   location      String
+  roomId        String? // Tham chiếu tới phòng họp (tùy chọn)
+  room          Room?    @relation(fields: [roomId], references: [id], onDelete: SetNull)
   note          String?
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
@@ -413,6 +475,7 @@ model OfficeMeeting {
 
   @@index([projectId])
   @@index([instructorId])
+  @@index([roomId])
 }
 
 model OfficeMeetingView {

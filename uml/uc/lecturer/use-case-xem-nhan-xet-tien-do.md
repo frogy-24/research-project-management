@@ -1,0 +1,245 @@
+# MÔ TẢ USE CASE: XEM VÀ NHẬN XÉT TIẾN ĐỘ ĐỀ TÀI
+
+## Thông tin Use Case
+
+| Mục | Tên yêu cầu | Mô tả yêu cầu |
+|-----|-------------|---------------|
+| 1 | **Tên use-case** | Xem và nhận xét tiến độ đề tài |
+| 2 | **Tác nhân** | Giảng viên Hướng dẫn (Lecturer / Instructor) |
+| 3 | **Mô tả** | Use-case này cho phép Giảng viên xem danh sách các đề tài đang hướng dẫn, theo dõi báo cáo tiến độ tuần của sinh viên, nhận xét và chấm điểm từng báo cáo. Giảng viên có thể xem chi tiết nội dung báo cáo (công việc được giao, nội dung thực hiện, kết quả đạt được), xem file đính kèm, và đặt lịch họp với sinh viên. Hệ thống hỗ trợ mẫu tiến độ (template) từ đợt đăng ký để sinh viên nộp báo cáo theo tuần. Sau khi nhận xét, hệ thống tự động gửi thông báo cho sinh viên |
+| 4 | **Tiền điều kiện** | 1. Giảng viên đã đăng nhập vào hệ thống<br>2. Giảng viên có role = LECTURER (hoặc DEAN, ADMIN, LEADER, COUNCIL)<br>3. Có ít nhất một đề tài với instructorId = ID giảng viên<br>4. Đề tài đã được phê duyệt (status = APPROVED hoặc IN_PROGRESS)<br>5. Sinh viên đã nộp ít nhất một báo cáo tiến độ<br>6. Báo cáo có trạng thái submittedAt (đã nộp) |
+| 5 | **Hậu điều kiện** | **Sau khi xem danh sách:**<br>1. Hiển thị tất cả đề tài có instructorId = giảng viên<br>2. Thông tin đầy đủ: Tên đề tài, Sinh viên, MSSV, Email, SĐT<br>3. Hỗ trợ lọc theo đợt và tìm kiếm<br>4. Có thể chọn đề tài để xem báo cáo<br><br>**Sau khi xem báo cáo:**<br>1. Hiển thị danh sách báo cáo tuần của đề tài<br>2. Mỗi báo cáo: Tuần, Thời gian, Điểm, Trạng thái<br>3. Có thể xem chi tiết từng báo cáo<br>4. Xem file đính kèm trong iframe hoặc tab mới<br>5. Xem mẫu tiến độ (nếu có)<br><br>**Sau khi nhận xét:**<br>1. Cập nhật mentorReview (nhận xét)<br>2. Cập nhật mentorScore (điểm số 0-10)<br>3. Trạng thái báo cáo chuyển sang "Đã đánh giá"<br>4. Hệ thống gửi thông báo cho sinh viên<br>5. Không thể sửa đánh giá sau khi lưu<br>6. Hiển thị đánh giá trong chi tiết báo cáo<br><br>**Sau khi đặt lịch họp:**<br>1. Tạo OfficeMeeting mới<br>2. Gửi thông báo cho thành viên được chọn<br>3. Lưu thông tin: Thời gian, Địa điểm, Ghi chú<br>4. Đóng dialog đặt lịch |
+| 6 | **Luồng sự kiện chính** | **LUỒNG 1: XEM DANH SÁCH ĐỀ TÀI HƯỚNG DẪN**<br><br>**Bước 1: Truy cập trang**<br>1. Giảng viên đăng nhập và truy cập menu "Xem báo cáo sinh viên"<br>2. Hệ thống chuyển đến trang `/lecturer/review-progress`<br>3. Hệ thống load danh sách projects có `instructorId = userId`<br><br>**Bước 2: Hiển thị danh sách**<br>4. Hiển thị Card "Danh sách đề tài hướng dẫn"<br>5. Hiển thị tổng số đề tài đang hướng dẫn<br>6. Hiển thị dropdown lọc theo đợt đăng ký<br>7. Hiển thị ô tìm kiếm<br>8. Hiển thị nút "Đặt lịch" (tổng quát)<br><br>**Bước 3: Hiển thị Table**<br>9. Table có các cột: STT, Tên đề tài, Trưởng nhóm, MSSV, Email, SĐT, Trạng thái, Thao tác<br>10. Mỗi dòng hiển thị thông tin đầy đủ của đề tài<br>11. Cột Thao tác có 2 nút: "Đặt lịch", "Xem báo cáo"<br><br>**Bước 4: Lọc và tìm kiếm**<br>12. Giảng viên có thể chọn đợt từ dropdown<br>13. Hệ thống filter danh sách theo callRoundId<br>14. Giảng viên có thể nhập từ khóa tìm kiếm<br>15. Hệ thống search theo: tên đề tài, tên sinh viên, MSSV, email<br>16. Kết quả hiển thị real-time (client-side)<br><br>**LUỒNG 2: XEM CHI TIẾT BÁO CÁO TIẾN ĐỘ**<br><br>**Bước 1: Chọn đề tài**<br>1. Giảng viên click "Xem báo cáo" hoặc click vào dòng đề tài<br>2. Hệ thống set `selectedProjectId = project.id`<br>3. Hiển thị nút "Quay lại danh sách"<br><br>**Bước 2: Hiển thị thông tin đề tài**<br>4. Hiển thị Card thông tin đề tài (bg-primary/5)<br>5. Hiển thị: Tên đề tài, Trưởng nhóm, MSSV, Email, Badge trạng thái<br>6. Hiển thị nút "Đặt lịch họp" (góc phải)<br><br>**Bước 3: Load báo cáo tiến độ**<br>7. Hệ thống gọi `GET /api/projects/[id]/progress-reports`<br>8. Render component `<ProgressReportPanel projectId={selectedProjectId} />`<br><br>**Bước 4: Hiển thị thông tin đề tài chi tiết**<br>9. Phần 1: Card "Thông tin đề tài"<br>10. Hiển thị: Tên đề tài, Giảng viên hướng dẫn, Đợt đăng ký<br>11. Nếu có mẫu tiến độ: Hiển thị tên mẫu và số tuần<br><br>**Bước 5: Hiển thị danh sách báo cáo tuần**<br>12. Phần 3: Card "Danh sách báo cáo tuần"<br>13. Table có các cột: STT, Tên báo cáo, Tuần, Thời gian, Điểm, Trạng thái, Thao tác<br>14. Mỗi báo cáo hiển thị:<br>&nbsp;&nbsp;&nbsp;• periodLabel (VD: "Tuần 1")<br>&nbsp;&nbsp;&nbsp;• week (số tuần)<br>&nbsp;&nbsp;&nbsp;• fromDate - toDate<br>&nbsp;&nbsp;&nbsp;• mentorScore/10 hoặc "Chưa chấm"<br>&nbsp;&nbsp;&nbsp;• Badge "Đã đánh giá" (green) hoặc "Chưa đánh giá" (gray)<br>&nbsp;&nbsp;&nbsp;• Icon "Xem file" (nếu có fileUrl)<br>&nbsp;&nbsp;&nbsp;• Nút "Xem"<br><br>**LUỒNG 3: XEM CHI TIẾT VÀ NHẬN XÉT BÁO CÁO**<br><br>**Bước 1: Mở dialog chi tiết**<br>1. Giảng viên click nút "Xem" trên một báo cáo<br>2. Hệ thống set `selectedReport = report`<br>3. Mở Dialog (max-w-66vw, max-h-90vh)<br>4. DialogTitle: "Chi tiết {periodLabel}"<br>5. DialogDescription: "Thời gian: {fromDate} - {toDate}"<br><br>**Bước 2: Hiển thị file đính kèm (nếu có)**<br>6. Nếu có fileUrl, hiển thị section "File báo cáo đính kèm"<br>7. Header với icon FileText<br>8. Link "Mở trong tab mới" (target="_blank")<br>9. iframe hiển thị file (h-100)<br><br>**Bước 3: Hiển thị nội dung báo cáo**<br>10. Section 1: "Công việc được giao" (text, bg-muted/30)<br>11. Section 2: "Nội dung đã thực hiện" (HTML, prose)<br>12. Section 3: "Kết quả đạt được" (HTML, prose)<br>13. Section 4: "Nội dung báo cáo chi tiết" (HTML, prose)<br><br>**Bước 4: Hiển thị phần đánh giá**<br>14. Nếu `mentorReview` tồn tại:<br>&nbsp;&nbsp;&nbsp;• Hiển thị nhận xét (read-only, bg-primary/5)<br>&nbsp;&nbsp;&nbsp;• Hiển thị điểm số (font-semibold, text-lg)<br>15. Nếu chưa có và `isMentor = true`:<br>&nbsp;&nbsp;&nbsp;• Hiển thị form nhập (bg-muted/30)<br>&nbsp;&nbsp;&nbsp;• Textarea cho nhận xét<br>&nbsp;&nbsp;&nbsp;• Input number cho điểm (0-10, step 0.5)<br>&nbsp;&nbsp;&nbsp;• Nút "Lưu đánh giá"<br>16. Nếu không phải mentor:<br>&nbsp;&nbsp;&nbsp;• Hiển thị "Chưa có đánh giá từ người hướng dẫn"<br><br>**Bước 5: Nhập nhận xét**<br>17. Giảng viên nhập nhận xét vào Textarea<br>18. Hệ thống update state `reviewNote`<br>19. Giảng viên nhập điểm số (0-10, step 0.5)<br>20. Hệ thống update state `reviewScore`<br><br>**LUỒNG 4: LƯU ĐÁNH GIÁ BÁO CÁO**<br><br>**Bước 1: Validate**<br>1. Giảng viên click "Lưu đánh giá"<br>2. Hệ thống validate `reviewScore` (0-10)<br>3. Hệ thống validate `reviewNote` (không rỗng)<br>4. Nếu fail: Toast error, dừng lại<br><br>**Bước 2: Gửi request**<br>5. Gọi `reviewMutation.mutate()`<br>6. Frontend gửi `PATCH /api/progress-reports/[id]`<br>7. Body: `{ mentorReview, mentorScore }`<br><br>**Bước 3: Backend xử lý**<br>8. Lấy `actorRole` và `actorUserId` từ request<br>9. Kiểm tra unauthorized (401)<br>10. Parse body với `reviewProgressReportSchema`<br>11. Tìm report trong DB (include project)<br>12. Kiểm tra role (ADMIN/DEAN/COUNCIL/LEADER/LECTURER)<br>13. Nếu không có quyền: 403 "Không có quyền nhận xét"<br>14. Update report: `mentorReview`, `mentorScore`<br>15. Gọi `notifyProgressReportReviewed()` gửi thông báo<br>16. Return success với data updated<br><br>**Bước 4: Frontend nhận response**<br>17. onSuccess:<br>&nbsp;&nbsp;&nbsp;• Toast success: "Đã lưu đánh giá báo cáo"<br>&nbsp;&nbsp;&nbsp;• Đóng dialog<br>&nbsp;&nbsp;&nbsp;• React Query tự động refetch<br>18. onError:<br>&nbsp;&nbsp;&nbsp;• Toast error: "Lỗi khi lưu đánh giá"<br><br>**Bước 5: Cập nhật UI**<br>19. Danh sách báo cáo refresh<br>20. Báo cáo vừa nhận xét hiển thị:<br>&nbsp;&nbsp;&nbsp;• Điểm số: Badge "{score}/10"<br>&nbsp;&nbsp;&nbsp;• Trạng thái: Badge "Đã đánh giá" (bg-green-600)<br><br>**LUỒNG 5: ĐẶT LỊCH HỌP VỚI SINH VIÊN**<br><br>**Bước 1: Mở dialog đặt lịch**<br>1. Giảng viên click "Đặt lịch" (từ danh sách hoặc chi tiết)<br>2. Hệ thống gọi `openMeetingDialog(project?)`<br>3. Mở Dialog "Đặt lịch họp" (sm:max-w-1/2)<br>4. Set `meetingCallRoundId` = project.callRoundId hoặc 'ALL'<br>5. Set `meetingProjectId` = project.id hoặc ''<br>6. Reset các state khác<br><br>**Bước 2: Hiển thị form**<br>7. Trường 1: Đợt đề tài (Select dropdown)<br>8. Trường 2: Đề tài (Select dropdown, filter theo đợt)<br>9. Trường 3: Thông tin đề tài đã chọn (Card, nếu có)<br>10. Trường 4: Thành viên nhận lịch (Checkbox list)<br>11. Trường 5: Thời gian họp (datetime-local)<br>12. Trường 6: Địa điểm / Link họp (Input text)<br>13. Trường 7: Ghi chú (Textarea)<br><br>**Bước 3: Chọn đợt và đề tài**<br>14. Giảng viên chọn đợt đề tài<br>15. Hệ thống filter danh sách đề tài theo `callRoundId`<br>16. Giảng viên chọn đề tài<br>17. Hệ thống load: `GET /api/office-meetings/[projectId]/members`<br>18. Hiển thị Card thông tin đề tài<br><br>**Bước 4: Chọn thành viên**<br>19. Hiển thị section "Thành viên nhận lịch"<br>20. Checkbox cho từng thành viên<br>21. Nút "Chọn tất cả" / "Bỏ chọn"<br>22. Text: "Đã chọn X thành viên" hoặc "Gửi cho toàn bộ"<br>23. Giảng viên chọn/bỏ chọn thành viên<br>24. Hệ thống update `selectedMeetingMemberIds` array<br><br>**Bước 5: Nhập thông tin họp**<br>25. Giảng viên nhập thời gian họp<br>26. Giảng viên nhập địa điểm/link<br>27. Giảng viên nhập ghi chú (tùy chọn)<br>28. Hệ thống update các state tương ứng<br><br>**Bước 6: Xác nhận đặt lịch**<br>29. Giảng viên click "Xác nhận đặt lịch"<br>30. Hệ thống validate:<br>&nbsp;&nbsp;&nbsp;• Đã chọn đề tài<br>&nbsp;&nbsp;&nbsp;• Có thời gian họp<br>&nbsp;&nbsp;&nbsp;• Có địa điểm<br>31. Nếu fail: Toast error, dừng lại<br><br>**Bước 7: Gửi request**<br>32. Gọi `createOfficeMeeting.mutate()`<br>33. Frontend gửi `POST /api/office-meetings`<br>34. Body: `{ projectId, meetingTarget: "GROUP", meetingAt, location, note, memberUserIds }`<br><br>**Bước 8: Backend xử lý**<br>35. Validate payload<br>36. Tạo OfficeMeeting mới<br>37. Gửi thông báo cho các thành viên<br>38. Return success<br><br>**Bước 9: Frontend nhận response**<br>39. onSuccess:<br>&nbsp;&nbsp;&nbsp;• Toast success: "Đã đặt lịch họp thành công"<br>&nbsp;&nbsp;&nbsp;• Đóng dialog<br>40. onError:<br>&nbsp;&nbsp;&nbsp;• Toast error với message |
+| 7 | **Luồng sự kiện rẽ nhánh** | **A1. Không có đề tài nào**<br>1. Giảng viên chưa được phân công hướng dẫn đề tài<br>2. Card hiển thị: "Có 0 đề tài bạn đang hướng dẫn"<br>3. Empty state: "Bạn chưa được phân công hướng dẫn đề tài nào."<br><br>**A2. Không tìm thấy kết quả tìm kiếm**<br>1. Giảng viên nhập từ khóa không khớp<br>2. Danh sách trống<br>3. Empty state: "Không tìm thấy kết quả phù hợp."<br><br>**A3. Đề tài chưa có báo cáo nào**<br>1. Sinh viên chưa nộp báo cáo tiến độ<br>2. Phần 3 hiển thị empty state<br>3. Icon FileText (opacity-30)<br>4. Text: "Chưa có báo cáo nào được nộp."<br><br>**A4. Báo cáo không có file đính kèm**<br>1. `report.fileUrl = null`<br>2. Không hiển thị section "File báo cáo đính kèm"<br>3. Không hiển thị icon FileText trong Table<br><br>**A5. Báo cáo đã được đánh giá**<br>1. `report.mentorReview` và `mentorScore` đã tồn tại<br>2. Hiển thị phần đánh giá read-only<br>3. Card với bg-primary/5, border-primary/20<br>4. Nhận xét (text)<br>5. Điểm số (font-semibold, text-lg)<br>6. Không hiển thị form nhập<br><br>**A6. Người xem không phải mentor**<br>1. `isMentor = false`<br>2. Nếu đã có đánh giá: Hiển thị read-only<br>3. Nếu chưa có: Text "Chưa có đánh giá từ người hướng dẫn" (italic, bg-muted/20)<br><br>**A7. Đặt lịch không chọn thành viên cụ thể**<br>1. `selectedMeetingMemberIds.length = 0`<br>2. Backend nhận `memberUserIds = undefined`<br>3. Hệ thống gửi thông báo cho toàn bộ thành viên đề tài<br><br>**A8. Đợt đề tài không có project nào**<br>1. Chọn đợt nhưng không có đề tài phù hợp<br>2. Dropdown "Đề tài" rỗng<br>3. Text: "Không có đề tài phù hợp trong đợt đã chọn."<br><br>**A9. Xem file trong tab mới**<br>1. Giảng viên click link "Mở trong tab mới"<br>2. Mở `report.fileUrl` trong tab mới<br>3. Sử dụng `target="_blank" rel="noopener noreferrer"`<br><br>**A10. Đề tài có mẫu tiến độ**<br>1. `project.callRound.template` tồn tại<br>2. Phần 1 thêm dòng "Mẫu báo cáo tiến độ"<br>3. Text: "{templateName} ({X} tuần)" với màu primary |
+| 8 | **Luồng sự kiện ngoại lệ** | **E1. Lỗi khi load danh sách đề tài**<br>1. API `/api/projects` fail<br>2. Loading spinner với text "Đang tải dữ liệu..."<br>3. React Query tự động retry 3 lần<br><br>**E2. Lỗi khi load báo cáo tiến độ**<br>1. API `/api/projects/[id]/progress-reports` fail<br>2. Loading spinner trong Card<br>3. Nếu lỗi: Empty state với message lỗi<br><br>**E3. Lỗi validation khi nhận xét**<br>1. Điểm số không hợp lệ hoặc nhận xét rỗng<br>2. Toast error: "Điểm không hợp lệ (0-10)" hoặc "Vui lòng nhập nhận xét"<br>3. Form không submit<br><br>**E4. Lỗi 401 Unauthorized**<br>1. Token hết hạn hoặc không hợp lệ<br>2. Backend return 401<br>3. Frontend redirect về `/login`<br><br>**E5. Lỗi 403 Forbidden**<br>1. Không có quyền nhận xét báo cáo<br>2. Toast error: "Không có quyền nhận xét."<br>3. Không hiển thị form nhập đánh giá<br><br>**E6. Lỗi 404 Not Found**<br>1. Báo cáo không tồn tại<br>2. Toast error: "Report not found"<br>3. Đóng dialog<br><br>**E7. Lỗi 500 Server Error**<br>1. Lỗi server khi lưu đánh giá<br>2. Toast error: "Failed to update review"<br>3. Form vẫn mở để user thử lại<br><br>**E8. Lỗi khi gửi thông báo**<br>1. `notifyProgressReportReviewed()` fail<br>2. Backend log error nhưng không fail request<br>3. Đánh giá vẫn được lưu thành công<br>4. Console.error: "Failed to send notification"<br><br>**E9. Lỗi validation khi đặt lịch**<br>1. Thiếu thông tin bắt buộc<br>2. Toast error:<br>&nbsp;&nbsp;&nbsp;• "Vui lòng chọn đề tài"<br>&nbsp;&nbsp;&nbsp;• "Đề tài không hợp lệ"<br>&nbsp;&nbsp;&nbsp;• "Vui lòng chọn thời gian họp"<br>&nbsp;&nbsp;&nbsp;• "Vui lòng nhập địa điểm họp"<br>3. Dialog không đóng<br><br>**E10. Lỗi khi load danh sách thành viên**<br>1. API `/api/office-meetings/[projectId]/members` fail<br>2. Text: "Đang tải danh sách thành viên..."<br>3. Nếu lỗi: "Không có dữ liệu thành viên để lựa chọn."<br><br>**E11. Lỗi khi upload file (nếu có)**<br>1. API `/api/upload` fail<br>2. Toast error: "Lỗi tải file" hoặc message từ server<br>3. Input file reset<br><br>**E12. Lỗi network timeout**<br>1. Request quá lâu không response<br>2. React Query timeout sau 30s<br>3. Toast error: "Kết nối bị gián đoạn"<br>4. User có thể thử lại |
+
+## Sơ đồ Use Case
+
+Xem file: `uml/uc/lecturer/progress-review-usecase.plantuml`
+
+## Các bảng liên quan trong Database
+
+1. **Project** - Đề tài
+   - `id`: ID đề tài
+   - `title`: Tên đề tài
+   - `leaderId`: Trưởng nhóm (sinh viên)
+   - `instructorId`: Giảng viên hướng dẫn
+   - `status`: Trạng thái đề tài
+   - `callRoundId`: Đợt đăng ký
+   - `deanReviewerId`: Trưởng Khoa duyệt
+
+2. **ProgressReport** - Báo cáo tiến độ
+   - `id`: ID báo cáo
+   - `projectId`: Đề tài
+   - `week`: Số tuần
+   - `periodLabel`: Nhãn tuần (VD: "Tuần 1")
+   - `summary`: Tóm tắt
+   - `fromDate`: Từ ngày
+   - `toDate`: Đến ngày
+   - `tasks`: Công việc được giao
+   - `performedContent`: Nội dung thực hiện (HTML)
+   - `results`: Kết quả đạt được (HTML)
+   - `reportContent`: Nội dung báo cáo chi tiết (HTML)
+   - `fileUrl`: File đính kèm
+   - `mentorReview`: Nhận xét của GVHD
+   - `mentorScore`: Điểm số (0-10)
+   - `submittedAt`: Thời gian nộp
+   - `createdAt`: Thời gian tạo
+   - `updatedAt`: Thời gian cập nhật
+
+3. **User** - Người dùng
+   - `id`: ID người dùng
+   - `name`: Họ tên
+   - `email`: Email
+   - `code`: Mã số (MSSV)
+   - `phone`: Số điện thoại
+   - `role`: Vai trò
+
+4. **CallRound** - Đợt đăng ký
+   - `id`: ID đợt
+   - `name`: Tên đợt
+   - `templateId`: Mẫu tiến độ
+
+5. **ProgressTemplate** - Mẫu tiến độ
+   - `id`: ID mẫu
+   - `name`: Tên mẫu
+   - `items`: Danh sách tuần (JSON)
+
+6. **ProgressTemplateItem** - Tuần trong mẫu
+   - `id`: ID tuần
+   - `templateId`: Mẫu
+   - `weekNumber`: Số tuần
+   - `weekLabel`: Nhãn tuần
+   - `taskDescription`: Mô tả công việc
+   - `contentGuideline`: Hướng dẫn nội dung
+   - `expectedResult`: Kết quả mong đợi
+   - `orderIndex`: Thứ tự
+
+7. **OfficeMeeting** - Lịch họp
+   - `id`: ID lịch họp
+   - `projectId`: Đề tài
+   - `meetingTarget`: Đối tượng (GROUP/INDIVIDUAL)
+   - `meetingAt`: Thời gian họp
+   - `location`: Địa điểm/Link
+   - `note`: Ghi chú
+   - `memberUserIds`: Danh sách thành viên (JSON)
+
+## Quy tắc nghiệp vụ
+
+1. Chỉ giảng viên có instructorId = userId mới xem được đề tài
+2. Giảng viên có thể xem tất cả báo cáo của đề tài mình hướng dẫn
+3. Chỉ role LECTURER, DEAN, ADMIN, LEADER, COUNCIL mới nhận xét được
+4. Nhận xét bắt buộc phải có: mentorReview (text) và mentorScore (0-10)
+5. Điểm số phải từ 0 đến 10, có thể có 0.5 (VD: 7.5)
+6. Một khi đã nhận xét, không thể sửa (hiển thị read-only)
+7. Sau khi nhận xét, hệ thống tự động gửi thông báo cho sinh viên
+8. File đính kèm hiển thị trong iframe (PDF, Word, Image)
+9. Nội dung báo cáo hỗ trợ Rich Text (HTML)
+10. Mẫu tiến độ từ CallRound, sinh viên chọn tuần để nộp
+11. Mỗi tuần chỉ nộp được 1 lần (đã nộp thì disable)
+12. Đặt lịch họp có thể chọn thành viên cụ thể hoặc toàn bộ
+13. Lọc theo đợt chỉ hiển thị đề tài của đợt đó
+14. Tìm kiếm theo: Tên đề tài, Tên sinh viên, MSSV, Email
+
+## Ghi chú kỹ thuật
+
+- **API Endpoints**:
+  - `GET /api/projects` - Lấy danh sách đề tài (filter instructorId)
+  - `GET /api/projects/[id]/progress-reports` - Lấy báo cáo tiến độ
+  - `PATCH /api/progress-reports/[id]` - Nhận xét báo cáo
+  - `POST /api/office-meetings` - Đặt lịch họp
+  - `GET /api/office-meetings/[projectId]/members` - Lấy danh sách thành viên
+
+- **Frontend Components**:
+  - `InstructorReviewProgressClient`: Component chính
+  - `ProgressReportPanel`: Panel xem và nhận xét báo cáo
+  - `RichTextEditor`: Editor cho nội dung HTML
+  - `DocumentViewer`: Xem file đính kèm
+
+- **Hooks**:
+  - `useProjects()`: Lấy danh sách đề tài
+  - `useProgressReports(projectId)`: Lấy báo cáo tiến độ
+  - `useReviewProgressReport(projectId)`: Nhận xét báo cáo
+  - `useCreateOfficeMeeting()`: Đặt lịch họp
+  - `useOfficeMeetingMembers(projectId)`: Lấy thành viên
+
+- **Schema Validation**:
+  - `reviewProgressReportSchema`: Validate nhận xét
+    - mentorReview: string, min 1 character
+    - mentorScore: number, 0-10
+
+- **Authorization**:
+  - Kiểm tra role: LECTURER, DEAN, ADMIN, LEADER, COUNCIL
+  - Kiểm tra instructorId = userId
+
+- **Notification**:
+  - `notifyProgressReportReviewed()`: Gửi thông báo sau khi nhận xét
+  - Thông báo gửi cho leaderId của project
+
+## Workflow tổng thể
+
+```
+[Giảng viên đăng nhập]
+    ↓
+[Truy cập "Xem báo cáo sinh viên"]
+    ↓
+[LUỒNG 1: XEM DANH SÁCH ĐỀ TÀI]
+    ├─→ Load projects có instructorId = mình
+    ├─→ Hiển thị Table: Tên đề tài, Sinh viên, MSSV, Email, SĐT
+    ├─→ Lọc theo đợt đăng ký
+    ├─→ Tìm kiếm theo tên đề tài/sinh viên
+    └─→ Nút: "Xem báo cáo", "Đặt lịch"
+    ↓
+[Chọn đề tài → Xem báo cáo]
+    ↓
+[LUỒNG 2: XEM THÔNG TIN ĐỀ TÀI]
+    ├─→ Hiển thị Card: Tên đề tài, GVHD, Đợt, Mẫu tiến độ
+    ├─→ Thông tin sinh viên: Tên, MSSV, Email, Lớp, Ngành, Khoa
+    └─→ Nút "Đặt lịch họp"
+    ↓
+[LUỒNG 3: XEM DANH SÁCH BÁO CÁO TUẦN]
+    ├─→ Load progress reports của projectId
+    ├─→ Hiển thị Table: STT, Tên báo cáo, Tuần, Thời gian
+    ├─→ Điểm số (nếu có), Trạng thái (Đã/Chưa đánh giá)
+    ├─→ Nút: "Xem file", "Xem chi tiết"
+    └─→ Nếu chưa có báo cáo: "Chưa có báo cáo nào"
+    ↓
+[Chọn báo cáo → Xem chi tiết]
+    ↓
+[LUỒNG 4: XEM CHI TIẾT BÁO CÁO]
+    ├─→ Mở Dialog (66% màn hình)
+    ├─→ Hiển thị: Tên báo cáo, Thời gian (từ-đến)
+    ├─→ **File đính kèm** (nếu có):
+    │   ├─→ Hiển thị trong iframe
+    │   └─→ Link "Mở trong tab mới"
+    ├─→ **Nội dung báo cáo**:
+    │   ├─→ Công việc được giao (text)
+    │   ├─→ Nội dung đã thực hiện (HTML)
+    │   ├─→ Kết quả đạt được (HTML)
+    │   └─→ Nội dung báo cáo chi tiết (HTML)
+    └─→ **Phần đánh giá**:
+        ├─→ Nếu đã đánh giá: Hiển thị nhận xét + điểm
+        └─→ Nếu chưa: Hiển thị form nhập
+    ↓
+[LUỒNG 5: NHẬN XÉT VÀ CHẤM ĐIỂM]
+    ├─→ Nhập nhận xét (Textarea, bắt buộc)
+    ├─→ Nhập điểm số (Input number, 0-10, bắt buộc)
+    ├─→ Nhấn "Lưu đánh giá"
+    ├─→ Validate:
+    │   ├─→ Nhận xét không rỗng
+    │   └─→ Điểm từ 0-10
+    ├─→ PATCH /api/progress-reports/[id]
+    ├─→ Backend:
+    │   ├─→ Kiểm tra role (LECTURER/DEAN/ADMIN/LEADER/COUNCIL)
+    │   ├─→ Tìm report
+    │   ├─→ Update mentorReview, mentorScore
+    │   └─→ Gửi thông báo cho sinh viên
+    ├─→ Toast: "Đã lưu đánh giá báo cáo"
+    ├─→ Đóng dialog
+    └─→ Refresh danh sách (báo cáo chuyển sang "Đã đánh giá")
+    ↓
+[LUỒNG 6: ĐẶT LỊCH HỌP]
+    ├─→ Nhấn "Đặt lịch" (từ danh sách hoặc chi tiết)
+    ├─→ Mở Dialog đặt lịch
+    ├─→ **Chọn đợt đề tài** (dropdown)
+    ├─→ **Chọn đề tài** (dropdown, filter theo đợt)
+    ├─→ **Chọn thành viên nhận lịch**:
+    │   ├─→ Load danh sách thành viên từ project
+    │   ├─→ Checkbox cho từng thành viên
+    │   ├─→ Nút "Chọn tất cả" / "Bỏ chọn"
+    │   └─→ Nếu không chọn: Gửi cho toàn bộ
+    ├─→ **Nhập thông tin họp**:
+    │   ├─→ Thời gian (datetime-local, bắt buộc)
+    │   ├─→ Địa điểm/Link (text, bắt buộc)
+    │   └─→ Ghi chú (textarea, tùy chọn)
+    ├─→ Nhấn "Xác nhận đặt lịch"
+    ├─→ Validate:
+    │   ├─→ Đã chọn đề tài
+    │   ├─→ Có thời gian
+    │   └─→ Có địa điểm
+    ├─→ POST /api/office-meetings
+    ├─→ Toast: "Đã đặt lịch họp thành công"
+    ├─→ Đóng dialog
+    └─→ Hệ thống gửi thông báo cho thành viên
+```
+
+## So sánh với các Use Case khác
+
+| Tiêu chí | Xem và nhận xét tiến độ | Duyệt đề tài cấp Khoa | Chấm điểm đề tài (Hội đồng) |
+|----------|-------------------------|------------------------|------------------------------|
+| **Actor** | Giảng viên Hướng dẫn | Trưởng Khoa | Thành viên Hội đồng |
+| **Đối tượng** | Báo cáo tiến độ tuần | Đề tài nghiên cứu | Đề tài nghiệm thu |
+| **Phạm vi** | Đề tài mình hướng dẫn | Đề tài thuộc khoa | Đề tài được phân công |
+| **Điều kiện** | Sinh viên đã nộp báo cáo | GVHD đã chấp nhận | Đề tài đã hoàn thành |
+| **Trạng thái** | mentorReview, mentorScore | facultyStatus | councilScore, councilComment |
+| **Thông báo** | Gửi sinh viên (leader) | Gửi sinh viên/giảng viên | Gửi sinh viên/GVHD |
+| **Có ghi chú** | Có (nhận xét bắt buộc) | Không | Có (nhận xét bắt buộc) |
+| **Phân trang** | Không (hiển thị tất cả) | Có (10/trang) | Có (theo hội đồng) |
+| **Tìm kiếm** | Có (client-side) | Có (debounce) | Có (theo đề tài) |
+| **Điểm số** | 0-10 (step 0.5) | Không có | 0-100 |
+| **File đính kèm** | Xem trong iframe | Không | Xem trong iframe |
+| **Có thể sửa** | Không (sau khi lưu) | Không (sau khi duyệt) | Không (sau khi lưu) |
+| **Tính năng đặc biệt** | Đặt lịch họp, Mẫu tiến độ | Lọc theo đợt, trạng thái | Chấm theo tiêu chí |
+| **Real-time** | Có (React Query refetch) | Có (auto refresh) | Có (WebSocket) |
+| **Validation** | Zod schema | API validation | Zod schema |
+

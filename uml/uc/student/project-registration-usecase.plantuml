@@ -1,0 +1,163 @@
+@startuml
+!theme plain
+skinparam backgroundColor #F8FAFC
+skinparam defaultFontName "Inter"
+skinparam shadowing false
+
+' Define custom colors
+skinparam actor {
+    BackgroundColor #0F172A
+    BorderColor #0F172A
+    FontColor #FFFFFF
+}
+
+skinparam usecase {
+    BackgroundColor #FFFFFF
+    BorderColor #2563EB
+    FontColor #0F172A
+    BorderThickness 2
+}
+
+skinparam package {
+    BackgroundColor #E2E8F0
+    BorderColor #94A3B8
+    FontColor #0F172A
+}
+
+' Title
+title
+    <size:20><b>Biểu đồ Use Case - Đăng Ký Đề Tài Nghiên Cứu</b></size>
+    <size:14>Hệ thống Quản lý Nghiên cứu Khoa học - Phân hệ Sinh viên</size>
+end title
+
+' Actor
+actor "Sinh viên\n(Student)" as STUDENT
+
+' Main Package
+package "Chức năng Đăng Ký Đề Tài" {
+    
+    ' Main Use Cases
+    usecase "Đăng ký đề tài mới" as UC_REGISTER
+    usecase "Xem lịch sử đăng ký" as UC_VIEW_HISTORY
+    usecase "Chỉnh sửa đề tài" as UC_EDIT
+    usecase "Hủy đăng ký" as UC_CANCEL
+    
+    ' Sub Use Cases (included)
+    usecase "Kiểm tra đợt đăng ký" as UC_CHECK_ROUND
+    usecase "Nhập thông tin đề tài" as UC_INPUT_INFO
+    usecase "Thêm thành viên nhóm" as UC_ADD_MEMBERS
+    usecase "Chọn giảng viên hướng dẫn" as UC_SELECT_INSTRUCTOR
+    usecase "Validate dữ liệu" as UC_VALIDATE
+    usecase "Xem chi tiết đề tài" as UC_VIEW_DETAIL
+    usecase "Lọc và tìm kiếm" as UC_FILTER
+    usecase "Nhập lý do hủy" as UC_INPUT_REASON
+}
+
+' Secondary Package
+package "Quản lý Thành Viên" {
+    usecase "Tìm kiếm sinh viên" as UC_SEARCH_STUDENT
+    usecase "Lọc theo ngành/lớp" as UC_FILTER_MAJOR
+    usecase "Chọn sinh viên vào nhóm" as UC_SELECT_STUDENT
+}
+
+' Relationships - Main flows
+STUDENT --> UC_REGISTER
+STUDENT --> UC_VIEW_HISTORY
+STUDENT --> UC_EDIT
+STUDENT --> UC_CANCEL
+
+' Include relationships for Register
+UC_REGISTER ..> UC_CHECK_ROUND : <<include>>
+UC_REGISTER ..> UC_INPUT_INFO : <<include>>
+UC_REGISTER ..> UC_ADD_MEMBERS : <<include>>
+UC_REGISTER ..> UC_SELECT_INSTRUCTOR : <<include>>
+UC_REGISTER ..> UC_VALIDATE : <<include>>
+
+' Include relationships for Add Members
+UC_ADD_MEMBERS ..> UC_SEARCH_STUDENT : <<include>>
+UC_ADD_MEMBERS ..> UC_FILTER_MAJOR : <<include>>
+UC_ADD_MEMBERS ..> UC_SELECT_STUDENT : <<include>>
+
+' Include relationships for View History
+UC_VIEW_HISTORY ..> UC_VIEW_DETAIL : <<include>>
+UC_VIEW_HISTORY ..> UC_FILTER : <<include>>
+
+' Include relationships for Edit
+UC_EDIT ..> UC_INPUT_INFO : <<include>>
+UC_EDIT ..> UC_VALIDATE : <<include>>
+
+' Include relationships for Cancel
+UC_CANCEL ..> UC_INPUT_REASON : <<include>>
+
+' Extend relationships
+UC_VIEW_DETAIL ..> UC_EDIT : <<extend>>
+UC_VIEW_DETAIL ..> UC_CANCEL : <<extend>>
+
+' Notes
+note right of UC_REGISTER
+  <b>Đăng ký đề tài mới</b>
+  • Nhập: Tên, mục tiêu, sản phẩm dự kiến
+  • Chọn giảng viên hướng dẫn
+  • Thêm thành viên (tối đa 5 người)
+  • Trạng thái: PENDING
+  • Gửi thông báo cho GVHD
+  • Gửi lời mời cho thành viên
+end note
+
+note right of UC_CHECK_ROUND
+  <b>Kiểm tra điều kiện</b>
+  • Đợt đang mở (isActive = true)
+  • Trong thời gian đăng ký
+  • Chưa có đăng ký trong đợt
+  • Chưa tham gia nhóm khác
+  • applicableFor = STUDENT/BOTH
+end note
+
+note bottom of UC_ADD_MEMBERS
+  <b>Quản lý nhóm</b>
+  • Tối đa 5 thành viên
+  • Chỉ chọn sinh viên cùng khoa
+  • Có thể nhập tay hoặc chọn từ hệ thống
+  • Không trùng lặp thành viên
+  • Gửi TeamInvitation cho thành viên
+end note
+
+note left of UC_EDIT
+  <b>Điều kiện chỉnh sửa</b>
+  • status = PENDING
+  • instructorStatus = PENDING
+  • facultyStatus = PENDING
+  • Chỉ sửa: title, objective,
+    expectedOutput, teamMembers
+  • Không đổi: instructor, callRound
+end note
+
+note left of UC_CANCEL
+  <b>Hủy đăng ký</b>
+  • Bắt buộc nhập lý do
+  • Chuyển status = CANCELED
+  • Lưu cancelReason
+  • Không thể hoàn tác
+end note
+
+note bottom of UC_VIEW_HISTORY
+  <b>Lịch sử đăng ký</b>
+  • Hiển thị tất cả đăng ký
+  • Lọc theo: Đợt, Trạng thái
+  • Tìm kiếm theo tên đề tài
+  • Xem chi tiết từng đề tài
+  • Trạng thái duyệt 3 cấp
+end note
+
+note bottom of UC_FILTER
+  <b>Bộ lọc</b>
+  • Lọc theo đợt đăng ký
+  • Lọc theo trạng thái:
+    - PENDING (Chờ duyệt)
+    - APPROVED (Đã duyệt)
+    - CANCELED (Đã hủy)
+    - REJECTED (Bị từ chối)
+  • Tìm kiếm real-time (debounce 300ms)
+end note
+
+@enduml

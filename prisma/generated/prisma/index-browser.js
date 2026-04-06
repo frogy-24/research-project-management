@@ -335,6 +335,35 @@ exports.Prisma.NotificationScalarFieldEnum = {
   readAt: 'readAt'
 };
 
+exports.Prisma.PostScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  content: 'content',
+  audience: 'audience',
+  status: 'status',
+  authorId: 'authorId',
+  authorRole: 'authorRole',
+  departmentId: 'departmentId',
+  approvedById: 'approvedById',
+  approvedAt: 'approvedAt',
+  rejectionReason: 'rejectionReason',
+  publishedAt: 'publishedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.RoomScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  code: 'code',
+  capacity: 'capacity',
+  description: 'description',
+  departmentId: 'departmentId',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.OfficeMeetingScalarFieldEnum = {
   id: 'id',
   projectId: 'projectId',
@@ -343,6 +372,7 @@ exports.Prisma.OfficeMeetingScalarFieldEnum = {
   memberUserIds: 'memberUserIds',
   meetingAt: 'meetingAt',
   location: 'location',
+  roomId: 'roomId',
   note: 'note',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -506,6 +536,19 @@ exports.NotificationType = exports.$Enums.NotificationType = {
   FUNDING_DISBURSED: 'FUNDING_DISBURSED'
 };
 
+exports.PostAudience = exports.$Enums.PostAudience = {
+  LECTURERS: 'LECTURERS',
+  STUDENTS: 'STUDENTS',
+  DEPARTMENT: 'DEPARTMENT',
+  ALL: 'ALL'
+};
+
+exports.PostStatus = exports.$Enums.PostStatus = {
+  PENDING: 'PENDING',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED'
+};
+
 exports.Prisma.ModelName = {
   Department: 'Department',
   Major: 'Major',
@@ -522,6 +565,8 @@ exports.Prisma.ModelName = {
   ExtensionRequest: 'ExtensionRequest',
   ProjectRegistration: 'ProjectRegistration',
   Notification: 'Notification',
+  Post: 'Post',
+  Room: 'Room',
   OfficeMeeting: 'OfficeMeeting',
   OfficeMeetingView: 'OfficeMeetingView',
   CallRoundInstructor: 'CallRoundInstructor',

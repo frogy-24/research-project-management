@@ -1,0 +1,163 @@
+@startuml
+!theme plain
+skinparam backgroundColor #F8FAFC
+skinparam defaultFontName "Inter"
+skinparam shadowing false
+
+' Define custom colors
+skinparam actor {
+    BackgroundColor #0F172A
+    BorderColor #0F172A
+    FontColor #FFFFFF
+}
+
+skinparam usecase {
+    BackgroundColor #FFFFFF
+    BorderColor #2563EB
+    FontColor #0F172A
+    BorderThickness 2
+}
+
+skinparam package {
+    BackgroundColor #E2E8F0
+    BorderColor #94A3B8
+    FontColor #0F172A
+}
+
+' Title
+title
+    <size:20><b>Biểu đồ Use Case - Nộp Báo Cáo Tiến Độ</b></size>
+    <size:14>Hệ thống Quản lý Nghiên cứu Khoa học - Phân hệ Sinh viên</size>
+end title
+
+' Actor
+actor "Sinh viên\n(Student/Leader)" as STUDENT
+
+' Main Package
+package "Chức năng Nộp Báo Cáo Tiến Độ" {
+    
+    ' Main Use Cases
+    usecase "Nộp báo cáo tiến độ" as UC_SUBMIT
+    usecase "Xem lịch sử báo cáo" as UC_VIEW_HISTORY
+    usecase "Xem chi tiết báo cáo" as UC_VIEW_DETAIL
+    usecase "Xem đánh giá của GVHD" as UC_VIEW_REVIEW
+    
+    ' Sub Use Cases (included)
+    usecase "Kiểm tra đề tài" as UC_CHECK_PROJECT
+    usecase "Tự động tính tuần" as UC_AUTO_WEEK
+    usecase "Nhập nội dung báo cáo" as UC_INPUT_CONTENT
+    usecase "Upload file đính kèm" as UC_UPLOAD_FILE
+    usecase "Validate dữ liệu" as UC_VALIDATE
+    usecase "Xem file đính kèm" as UC_VIEW_FILE
+}
+
+' Secondary Package
+package "Quản lý Nội dung" {
+    usecase "Nhập công việc được giao" as UC_INPUT_TASKS
+    usecase "Nhập nội dung thực hiện" as UC_INPUT_PERFORMED
+    usecase "Nhập kết quả đạt được" as UC_INPUT_RESULTS
+    usecase "Nhập báo cáo chi tiết" as UC_INPUT_REPORT
+}
+
+' Relationships - Main flows
+STUDENT --> UC_SUBMIT
+STUDENT --> UC_VIEW_HISTORY
+STUDENT --> UC_VIEW_DETAIL
+STUDENT --> UC_VIEW_REVIEW
+
+' Include relationships for Submit
+UC_SUBMIT ..> UC_CHECK_PROJECT : <<include>>
+UC_SUBMIT ..> UC_AUTO_WEEK : <<include>>
+UC_SUBMIT ..> UC_INPUT_CONTENT : <<include>>
+UC_SUBMIT ..> UC_UPLOAD_FILE : <<include>>
+UC_SUBMIT ..> UC_VALIDATE : <<include>>
+
+' Include relationships for Input Content
+UC_INPUT_CONTENT ..> UC_INPUT_TASKS : <<include>>
+UC_INPUT_CONTENT ..> UC_INPUT_PERFORMED : <<include>>
+UC_INPUT_CONTENT ..> UC_INPUT_RESULTS : <<include>>
+UC_INPUT_CONTENT ..> UC_INPUT_REPORT : <<include>>
+
+' Include relationships for View Detail
+UC_VIEW_DETAIL ..> UC_VIEW_FILE : <<include>>
+UC_VIEW_DETAIL ..> UC_VIEW_REVIEW : <<include>>
+
+' Extend relationships
+UC_VIEW_HISTORY ..> UC_VIEW_DETAIL : <<extend>>
+
+' Notes
+note right of UC_SUBMIT
+  <b>Nộp báo cáo tuần</b>
+  • Tự động tính tuần hiện tại
+  • Tính thời gian (fromDate - toDate)
+  • Nhập 4 phần nội dung
+  • Upload file đính kèm (tùy chọn)
+  • Gửi thông báo cho GVHD
+  • Trạng thái: Đã nộp
+end note
+
+note right of UC_CHECK_PROJECT
+  <b>Kiểm tra điều kiện</b>
+  • Đề tài đã được phê duyệt
+  • status = APPROVED/IN_PROGRESS
+  • Là trưởng nhóm (leader)
+  • Chưa nộp báo cáo tuần này
+  • Trong thời gian thực hiện
+end note
+
+note bottom of UC_AUTO_WEEK
+  <b>Tự động tính tuần</b>
+  • Tuần = Số báo cáo đã nộp + 1
+  • fromDate = projectStartDate + (week-1) tuần
+  • toDate = projectStartDate + week tuần
+  • periodLabel = "Tuần {week}"
+  • summary = "Báo cáo tuần {week}"
+end note
+
+note bottom of UC_INPUT_CONTENT
+  <b>4 phần nội dung bắt buộc</b>
+  1. Công việc được giao (Textarea)
+  2. Nội dung đã thực hiện (Rich Text)
+  3. Kết quả đạt được (Rich Text)
+  4. Nội dung báo cáo chi tiết (Rich Text)
+  • Hỗ trợ định dạng HTML
+  • Tối thiểu 10 ký tự mỗi phần
+end note
+
+note left of UC_UPLOAD_FILE
+  <b>Upload file</b>
+  • Định dạng: PDF, DOC, DOCX
+  • Kích thước tối đa: 10MB
+  • Lưu vào /public/uploads
+  • Trả về URL file
+  • Hiển thị trong iframe
+end note
+
+note left of UC_VIEW_HISTORY
+  <b>Lịch sử báo cáo</b>
+  • Hiển thị tất cả báo cáo đã nộp
+  • Sắp xếp theo tuần (mới nhất trước)
+  • Thông tin: Tuần, Thời gian, Điểm
+  • Trạng thái đánh giá
+  • Icon file (nếu có đính kèm)
+end note
+
+note bottom of UC_VIEW_REVIEW
+  <b>Đánh giá từ GVHD</b>
+  • mentorReview (nhận xét)
+  • mentorScore (điểm 0-10)
+  • Badge "Đã đánh giá" (green)
+  • Badge "Chưa đánh giá" (gray)
+  • Hiển thị trong chi tiết báo cáo
+end note
+
+note bottom of UC_VALIDATE
+  <b>Validation</b>
+  • Tất cả 4 phần nội dung không rỗng
+  • Mỗi phần tối thiểu 10 ký tự
+  • File upload hợp lệ (nếu có)
+  • Tuần chưa được nộp
+  • Toast error nếu validation fail
+end note
+
+@enduml

@@ -89,6 +89,16 @@ export type ProjectRegistration = $Result.DefaultSelection<Prisma.$ProjectRegist
  */
 export type Notification = $Result.DefaultSelection<Prisma.$NotificationPayload>
 /**
+ * Model Post
+ * 
+ */
+export type Post = $Result.DefaultSelection<Prisma.$PostPayload>
+/**
+ * Model Room
+ * 
+ */
+export type Room = $Result.DefaultSelection<Prisma.$RoomPayload>
+/**
  * Model OfficeMeeting
  * 
  */
@@ -247,6 +257,25 @@ export const NotificationType: {
 
 export type NotificationType = (typeof NotificationType)[keyof typeof NotificationType]
 
+
+export const PostAudience: {
+  LECTURERS: 'LECTURERS',
+  STUDENTS: 'STUDENTS',
+  DEPARTMENT: 'DEPARTMENT',
+  ALL: 'ALL'
+};
+
+export type PostAudience = (typeof PostAudience)[keyof typeof PostAudience]
+
+
+export const PostStatus: {
+  PENDING: 'PENDING',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED'
+};
+
+export type PostStatus = (typeof PostStatus)[keyof typeof PostStatus]
+
 }
 
 export type Role = $Enums.Role
@@ -292,6 +321,14 @@ export const FacultyStatus: typeof $Enums.FacultyStatus
 export type NotificationType = $Enums.NotificationType
 
 export const NotificationType: typeof $Enums.NotificationType
+
+export type PostAudience = $Enums.PostAudience
+
+export const PostAudience: typeof $Enums.PostAudience
+
+export type PostStatus = $Enums.PostStatus
+
+export const PostStatus: typeof $Enums.PostStatus
 
 /**
  * ##  Prisma Client ʲˢ
@@ -563,6 +600,26 @@ export class PrismaClient<
     * ```
     */
   get notification(): Prisma.NotificationDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.post`: Exposes CRUD operations for the **Post** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Posts
+    * const posts = await prisma.post.findMany()
+    * ```
+    */
+  get post(): Prisma.PostDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.room`: Exposes CRUD operations for the **Room** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Rooms
+    * const rooms = await prisma.room.findMany()
+    * ```
+    */
+  get room(): Prisma.RoomDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.officeMeeting`: Exposes CRUD operations for the **OfficeMeeting** model.
@@ -1082,6 +1139,8 @@ export namespace Prisma {
     ExtensionRequest: 'ExtensionRequest',
     ProjectRegistration: 'ProjectRegistration',
     Notification: 'Notification',
+    Post: 'Post',
+    Room: 'Room',
     OfficeMeeting: 'OfficeMeeting',
     OfficeMeetingView: 'OfficeMeetingView',
     CallRoundInstructor: 'CallRoundInstructor',
@@ -1104,7 +1163,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "department" | "major" | "class" | "user" | "callRound" | "projectType" | "project" | "progressReportTemplate" | "progressReportTemplateItem" | "progressReport" | "councilEvaluation" | "fundingDisbursement" | "extensionRequest" | "projectRegistration" | "notification" | "officeMeeting" | "officeMeetingView" | "callRoundInstructor" | "callRoundCouncilMember" | "council" | "councilMemberAssignment" | "projectCouncilAssignment"
+      modelProps: "department" | "major" | "class" | "user" | "callRound" | "projectType" | "project" | "progressReportTemplate" | "progressReportTemplateItem" | "progressReport" | "councilEvaluation" | "fundingDisbursement" | "extensionRequest" | "projectRegistration" | "notification" | "post" | "room" | "officeMeeting" | "officeMeetingView" | "callRoundInstructor" | "callRoundCouncilMember" | "council" | "councilMemberAssignment" | "projectCouncilAssignment"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -2218,6 +2277,154 @@ export namespace Prisma {
           }
         }
       }
+      Post: {
+        payload: Prisma.$PostPayload<ExtArgs>
+        fields: Prisma.PostFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.PostFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PostPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.PostFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PostPayload>
+          }
+          findFirst: {
+            args: Prisma.PostFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PostPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.PostFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PostPayload>
+          }
+          findMany: {
+            args: Prisma.PostFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PostPayload>[]
+          }
+          create: {
+            args: Prisma.PostCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PostPayload>
+          }
+          createMany: {
+            args: Prisma.PostCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.PostCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PostPayload>[]
+          }
+          delete: {
+            args: Prisma.PostDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PostPayload>
+          }
+          update: {
+            args: Prisma.PostUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PostPayload>
+          }
+          deleteMany: {
+            args: Prisma.PostDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.PostUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.PostUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PostPayload>[]
+          }
+          upsert: {
+            args: Prisma.PostUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PostPayload>
+          }
+          aggregate: {
+            args: Prisma.PostAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregatePost>
+          }
+          groupBy: {
+            args: Prisma.PostGroupByArgs<ExtArgs>
+            result: $Utils.Optional<PostGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.PostCountArgs<ExtArgs>
+            result: $Utils.Optional<PostCountAggregateOutputType> | number
+          }
+        }
+      }
+      Room: {
+        payload: Prisma.$RoomPayload<ExtArgs>
+        fields: Prisma.RoomFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.RoomFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RoomPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.RoomFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RoomPayload>
+          }
+          findFirst: {
+            args: Prisma.RoomFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RoomPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.RoomFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RoomPayload>
+          }
+          findMany: {
+            args: Prisma.RoomFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RoomPayload>[]
+          }
+          create: {
+            args: Prisma.RoomCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RoomPayload>
+          }
+          createMany: {
+            args: Prisma.RoomCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.RoomCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RoomPayload>[]
+          }
+          delete: {
+            args: Prisma.RoomDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RoomPayload>
+          }
+          update: {
+            args: Prisma.RoomUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RoomPayload>
+          }
+          deleteMany: {
+            args: Prisma.RoomDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.RoomUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.RoomUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RoomPayload>[]
+          }
+          upsert: {
+            args: Prisma.RoomUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RoomPayload>
+          }
+          aggregate: {
+            args: Prisma.RoomAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateRoom>
+          }
+          groupBy: {
+            args: Prisma.RoomGroupByArgs<ExtArgs>
+            result: $Utils.Optional<RoomGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.RoomCountArgs<ExtArgs>
+            result: $Utils.Optional<RoomCountAggregateOutputType> | number
+          }
+        }
+      }
       OfficeMeeting: {
         payload: Prisma.$OfficeMeetingPayload<ExtArgs>
         fields: Prisma.OfficeMeetingFieldRefs
@@ -2859,6 +3066,8 @@ export namespace Prisma {
     extensionRequest?: ExtensionRequestOmit
     projectRegistration?: ProjectRegistrationOmit
     notification?: NotificationOmit
+    post?: PostOmit
+    room?: RoomOmit
     officeMeeting?: OfficeMeetingOmit
     officeMeetingView?: OfficeMeetingViewOmit
     callRoundInstructor?: CallRoundInstructorOmit
@@ -2949,12 +3158,16 @@ export namespace Prisma {
     majors: number
     users: number
     callRounds: number
+    rooms: number
+    posts: number
   }
 
   export type DepartmentCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     majors?: boolean | DepartmentCountOutputTypeCountMajorsArgs
     users?: boolean | DepartmentCountOutputTypeCountUsersArgs
     callRounds?: boolean | DepartmentCountOutputTypeCountCallRoundsArgs
+    rooms?: boolean | DepartmentCountOutputTypeCountRoomsArgs
+    posts?: boolean | DepartmentCountOutputTypeCountPostsArgs
   }
 
   // Custom InputTypes
@@ -2987,6 +3200,20 @@ export namespace Prisma {
    */
   export type DepartmentCountOutputTypeCountCallRoundsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: CallRoundWhereInput
+  }
+
+  /**
+   * DepartmentCountOutputType without action
+   */
+  export type DepartmentCountOutputTypeCountRoomsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: RoomWhereInput
+  }
+
+  /**
+   * DepartmentCountOutputType without action
+   */
+  export type DepartmentCountOutputTypeCountPostsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PostWhereInput
   }
 
 
@@ -3097,6 +3324,8 @@ export namespace Prisma {
     councilAssignments: number
     officeMeetingsAsInstructor: number
     officeMeetingViews: number
+    posts: number
+    approvedPosts: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -3113,6 +3342,8 @@ export namespace Prisma {
     councilAssignments?: boolean | UserCountOutputTypeCountCouncilAssignmentsArgs
     officeMeetingsAsInstructor?: boolean | UserCountOutputTypeCountOfficeMeetingsAsInstructorArgs
     officeMeetingViews?: boolean | UserCountOutputTypeCountOfficeMeetingViewsArgs
+    posts?: boolean | UserCountOutputTypeCountPostsArgs
+    approvedPosts?: boolean | UserCountOutputTypeCountApprovedPostsArgs
   }
 
   // Custom InputTypes
@@ -3215,6 +3446,20 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountOfficeMeetingViewsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: OfficeMeetingViewWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountPostsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PostWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountApprovedPostsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PostWhereInput
   }
 
 
@@ -3447,6 +3692,37 @@ export namespace Prisma {
    */
   export type ProgressReportTemplateCountOutputTypeCountCallRoundsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: CallRoundWhereInput
+  }
+
+
+  /**
+   * Count Type RoomCountOutputType
+   */
+
+  export type RoomCountOutputType = {
+    officeMeetings: number
+  }
+
+  export type RoomCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    officeMeetings?: boolean | RoomCountOutputTypeCountOfficeMeetingsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * RoomCountOutputType without action
+   */
+  export type RoomCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RoomCountOutputType
+     */
+    select?: RoomCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * RoomCountOutputType without action
+   */
+  export type RoomCountOutputTypeCountOfficeMeetingsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: OfficeMeetingWhereInput
   }
 
 
@@ -3700,6 +3976,8 @@ export namespace Prisma {
     majors?: boolean | Department$majorsArgs<ExtArgs>
     users?: boolean | Department$usersArgs<ExtArgs>
     callRounds?: boolean | Department$callRoundsArgs<ExtArgs>
+    rooms?: boolean | Department$roomsArgs<ExtArgs>
+    posts?: boolean | Department$postsArgs<ExtArgs>
     _count?: boolean | DepartmentCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["department"]>
 
@@ -3735,6 +4013,8 @@ export namespace Prisma {
     majors?: boolean | Department$majorsArgs<ExtArgs>
     users?: boolean | Department$usersArgs<ExtArgs>
     callRounds?: boolean | Department$callRoundsArgs<ExtArgs>
+    rooms?: boolean | Department$roomsArgs<ExtArgs>
+    posts?: boolean | Department$postsArgs<ExtArgs>
     _count?: boolean | DepartmentCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type DepartmentIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -3746,6 +4026,8 @@ export namespace Prisma {
       majors: Prisma.$MajorPayload<ExtArgs>[]
       users: Prisma.$UserPayload<ExtArgs>[]
       callRounds: Prisma.$CallRoundPayload<ExtArgs>[]
+      rooms: Prisma.$RoomPayload<ExtArgs>[]
+      posts: Prisma.$PostPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -4151,6 +4433,8 @@ export namespace Prisma {
     majors<T extends Department$majorsArgs<ExtArgs> = {}>(args?: Subset<T, Department$majorsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MajorPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     users<T extends Department$usersArgs<ExtArgs> = {}>(args?: Subset<T, Department$usersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     callRounds<T extends Department$callRoundsArgs<ExtArgs> = {}>(args?: Subset<T, Department$callRoundsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CallRoundPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    rooms<T extends Department$roomsArgs<ExtArgs> = {}>(args?: Subset<T, Department$roomsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RoomPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    posts<T extends Department$postsArgs<ExtArgs> = {}>(args?: Subset<T, Department$postsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PostPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -4648,6 +4932,54 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: CallRoundScalarFieldEnum | CallRoundScalarFieldEnum[]
+  }
+
+  /**
+   * Department.rooms
+   */
+  export type Department$roomsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Room
+     */
+    select?: RoomSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Room
+     */
+    omit?: RoomOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RoomInclude<ExtArgs> | null
+    where?: RoomWhereInput
+    orderBy?: RoomOrderByWithRelationInput | RoomOrderByWithRelationInput[]
+    cursor?: RoomWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: RoomScalarFieldEnum | RoomScalarFieldEnum[]
+  }
+
+  /**
+   * Department.posts
+   */
+  export type Department$postsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Post
+     */
+    select?: PostSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Post
+     */
+    omit?: PostOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PostInclude<ExtArgs> | null
+    where?: PostWhereInput
+    orderBy?: PostOrderByWithRelationInput | PostOrderByWithRelationInput[]
+    cursor?: PostWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: PostScalarFieldEnum | PostScalarFieldEnum[]
   }
 
   /**
@@ -7246,6 +7578,8 @@ export namespace Prisma {
     councilAssignments?: boolean | User$councilAssignmentsArgs<ExtArgs>
     officeMeetingsAsInstructor?: boolean | User$officeMeetingsAsInstructorArgs<ExtArgs>
     officeMeetingViews?: boolean | User$officeMeetingViewsArgs<ExtArgs>
+    posts?: boolean | User$postsArgs<ExtArgs>
+    approvedPosts?: boolean | User$approvedPostsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -7330,6 +7664,8 @@ export namespace Prisma {
     councilAssignments?: boolean | User$councilAssignmentsArgs<ExtArgs>
     officeMeetingsAsInstructor?: boolean | User$officeMeetingsAsInstructorArgs<ExtArgs>
     officeMeetingViews?: boolean | User$officeMeetingViewsArgs<ExtArgs>
+    posts?: boolean | User$postsArgs<ExtArgs>
+    approvedPosts?: boolean | User$approvedPostsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -7362,6 +7698,8 @@ export namespace Prisma {
       councilAssignments: Prisma.$CouncilMemberAssignmentPayload<ExtArgs>[]
       officeMeetingsAsInstructor: Prisma.$OfficeMeetingPayload<ExtArgs>[]
       officeMeetingViews: Prisma.$OfficeMeetingViewPayload<ExtArgs>[]
+      posts: Prisma.$PostPayload<ExtArgs>[]
+      approvedPosts: Prisma.$PostPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -7790,6 +8128,8 @@ export namespace Prisma {
     councilAssignments<T extends User$councilAssignmentsArgs<ExtArgs> = {}>(args?: Subset<T, User$councilAssignmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CouncilMemberAssignmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     officeMeetingsAsInstructor<T extends User$officeMeetingsAsInstructorArgs<ExtArgs> = {}>(args?: Subset<T, User$officeMeetingsAsInstructorArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OfficeMeetingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     officeMeetingViews<T extends User$officeMeetingViewsArgs<ExtArgs> = {}>(args?: Subset<T, User$officeMeetingViewsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OfficeMeetingViewPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    posts<T extends User$postsArgs<ExtArgs> = {}>(args?: Subset<T, User$postsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PostPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    approvedPosts<T extends User$approvedPostsArgs<ExtArgs> = {}>(args?: Subset<T, User$approvedPostsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PostPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -8602,6 +8942,54 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: OfficeMeetingViewScalarFieldEnum | OfficeMeetingViewScalarFieldEnum[]
+  }
+
+  /**
+   * User.posts
+   */
+  export type User$postsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Post
+     */
+    select?: PostSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Post
+     */
+    omit?: PostOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PostInclude<ExtArgs> | null
+    where?: PostWhereInput
+    orderBy?: PostOrderByWithRelationInput | PostOrderByWithRelationInput[]
+    cursor?: PostWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: PostScalarFieldEnum | PostScalarFieldEnum[]
+  }
+
+  /**
+   * User.approvedPosts
+   */
+  export type User$approvedPostsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Post
+     */
+    select?: PostSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Post
+     */
+    omit?: PostOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PostInclude<ExtArgs> | null
+    where?: PostWhereInput
+    orderBy?: PostOrderByWithRelationInput | PostOrderByWithRelationInput[]
+    cursor?: PostWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: PostScalarFieldEnum | PostScalarFieldEnum[]
   }
 
   /**
@@ -22300,6 +22688,2419 @@ export namespace Prisma {
 
 
   /**
+   * Model Post
+   */
+
+  export type AggregatePost = {
+    _count: PostCountAggregateOutputType | null
+    _min: PostMinAggregateOutputType | null
+    _max: PostMaxAggregateOutputType | null
+  }
+
+  export type PostMinAggregateOutputType = {
+    id: string | null
+    title: string | null
+    content: string | null
+    audience: $Enums.PostAudience | null
+    status: $Enums.PostStatus | null
+    authorId: string | null
+    authorRole: $Enums.Role | null
+    departmentId: string | null
+    approvedById: string | null
+    approvedAt: Date | null
+    rejectionReason: string | null
+    publishedAt: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type PostMaxAggregateOutputType = {
+    id: string | null
+    title: string | null
+    content: string | null
+    audience: $Enums.PostAudience | null
+    status: $Enums.PostStatus | null
+    authorId: string | null
+    authorRole: $Enums.Role | null
+    departmentId: string | null
+    approvedById: string | null
+    approvedAt: Date | null
+    rejectionReason: string | null
+    publishedAt: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type PostCountAggregateOutputType = {
+    id: number
+    title: number
+    content: number
+    audience: number
+    status: number
+    authorId: number
+    authorRole: number
+    departmentId: number
+    approvedById: number
+    approvedAt: number
+    rejectionReason: number
+    publishedAt: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type PostMinAggregateInputType = {
+    id?: true
+    title?: true
+    content?: true
+    audience?: true
+    status?: true
+    authorId?: true
+    authorRole?: true
+    departmentId?: true
+    approvedById?: true
+    approvedAt?: true
+    rejectionReason?: true
+    publishedAt?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type PostMaxAggregateInputType = {
+    id?: true
+    title?: true
+    content?: true
+    audience?: true
+    status?: true
+    authorId?: true
+    authorRole?: true
+    departmentId?: true
+    approvedById?: true
+    approvedAt?: true
+    rejectionReason?: true
+    publishedAt?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type PostCountAggregateInputType = {
+    id?: true
+    title?: true
+    content?: true
+    audience?: true
+    status?: true
+    authorId?: true
+    authorRole?: true
+    departmentId?: true
+    approvedById?: true
+    approvedAt?: true
+    rejectionReason?: true
+    publishedAt?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type PostAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Post to aggregate.
+     */
+    where?: PostWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Posts to fetch.
+     */
+    orderBy?: PostOrderByWithRelationInput | PostOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: PostWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Posts from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Posts.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Posts
+    **/
+    _count?: true | PostCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: PostMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: PostMaxAggregateInputType
+  }
+
+  export type GetPostAggregateType<T extends PostAggregateArgs> = {
+        [P in keyof T & keyof AggregatePost]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregatePost[P]>
+      : GetScalarType<T[P], AggregatePost[P]>
+  }
+
+
+
+
+  export type PostGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PostWhereInput
+    orderBy?: PostOrderByWithAggregationInput | PostOrderByWithAggregationInput[]
+    by: PostScalarFieldEnum[] | PostScalarFieldEnum
+    having?: PostScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: PostCountAggregateInputType | true
+    _min?: PostMinAggregateInputType
+    _max?: PostMaxAggregateInputType
+  }
+
+  export type PostGroupByOutputType = {
+    id: string
+    title: string
+    content: string
+    audience: $Enums.PostAudience
+    status: $Enums.PostStatus
+    authorId: string
+    authorRole: $Enums.Role
+    departmentId: string | null
+    approvedById: string | null
+    approvedAt: Date | null
+    rejectionReason: string | null
+    publishedAt: Date | null
+    createdAt: Date
+    updatedAt: Date
+    _count: PostCountAggregateOutputType | null
+    _min: PostMinAggregateOutputType | null
+    _max: PostMaxAggregateOutputType | null
+  }
+
+  type GetPostGroupByPayload<T extends PostGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<PostGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof PostGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], PostGroupByOutputType[P]>
+            : GetScalarType<T[P], PostGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type PostSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    title?: boolean
+    content?: boolean
+    audience?: boolean
+    status?: boolean
+    authorId?: boolean
+    authorRole?: boolean
+    departmentId?: boolean
+    approvedById?: boolean
+    approvedAt?: boolean
+    rejectionReason?: boolean
+    publishedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    author?: boolean | UserDefaultArgs<ExtArgs>
+    department?: boolean | Post$departmentArgs<ExtArgs>
+    approvedBy?: boolean | Post$approvedByArgs<ExtArgs>
+  }, ExtArgs["result"]["post"]>
+
+  export type PostSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    title?: boolean
+    content?: boolean
+    audience?: boolean
+    status?: boolean
+    authorId?: boolean
+    authorRole?: boolean
+    departmentId?: boolean
+    approvedById?: boolean
+    approvedAt?: boolean
+    rejectionReason?: boolean
+    publishedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    author?: boolean | UserDefaultArgs<ExtArgs>
+    department?: boolean | Post$departmentArgs<ExtArgs>
+    approvedBy?: boolean | Post$approvedByArgs<ExtArgs>
+  }, ExtArgs["result"]["post"]>
+
+  export type PostSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    title?: boolean
+    content?: boolean
+    audience?: boolean
+    status?: boolean
+    authorId?: boolean
+    authorRole?: boolean
+    departmentId?: boolean
+    approvedById?: boolean
+    approvedAt?: boolean
+    rejectionReason?: boolean
+    publishedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    author?: boolean | UserDefaultArgs<ExtArgs>
+    department?: boolean | Post$departmentArgs<ExtArgs>
+    approvedBy?: boolean | Post$approvedByArgs<ExtArgs>
+  }, ExtArgs["result"]["post"]>
+
+  export type PostSelectScalar = {
+    id?: boolean
+    title?: boolean
+    content?: boolean
+    audience?: boolean
+    status?: boolean
+    authorId?: boolean
+    authorRole?: boolean
+    departmentId?: boolean
+    approvedById?: boolean
+    approvedAt?: boolean
+    rejectionReason?: boolean
+    publishedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type PostOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "content" | "audience" | "status" | "authorId" | "authorRole" | "departmentId" | "approvedById" | "approvedAt" | "rejectionReason" | "publishedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["post"]>
+  export type PostInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    author?: boolean | UserDefaultArgs<ExtArgs>
+    department?: boolean | Post$departmentArgs<ExtArgs>
+    approvedBy?: boolean | Post$approvedByArgs<ExtArgs>
+  }
+  export type PostIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    author?: boolean | UserDefaultArgs<ExtArgs>
+    department?: boolean | Post$departmentArgs<ExtArgs>
+    approvedBy?: boolean | Post$approvedByArgs<ExtArgs>
+  }
+  export type PostIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    author?: boolean | UserDefaultArgs<ExtArgs>
+    department?: boolean | Post$departmentArgs<ExtArgs>
+    approvedBy?: boolean | Post$approvedByArgs<ExtArgs>
+  }
+
+  export type $PostPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Post"
+    objects: {
+      author: Prisma.$UserPayload<ExtArgs>
+      department: Prisma.$DepartmentPayload<ExtArgs> | null
+      approvedBy: Prisma.$UserPayload<ExtArgs> | null
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      title: string
+      content: string
+      audience: $Enums.PostAudience
+      status: $Enums.PostStatus
+      authorId: string
+      authorRole: $Enums.Role
+      departmentId: string | null
+      approvedById: string | null
+      approvedAt: Date | null
+      rejectionReason: string | null
+      publishedAt: Date | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["post"]>
+    composites: {}
+  }
+
+  type PostGetPayload<S extends boolean | null | undefined | PostDefaultArgs> = $Result.GetResult<Prisma.$PostPayload, S>
+
+  type PostCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<PostFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: PostCountAggregateInputType | true
+    }
+
+  export interface PostDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Post'], meta: { name: 'Post' } }
+    /**
+     * Find zero or one Post that matches the filter.
+     * @param {PostFindUniqueArgs} args - Arguments to find a Post
+     * @example
+     * // Get one Post
+     * const post = await prisma.post.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends PostFindUniqueArgs>(args: SelectSubset<T, PostFindUniqueArgs<ExtArgs>>): Prisma__PostClient<$Result.GetResult<Prisma.$PostPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Post that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {PostFindUniqueOrThrowArgs} args - Arguments to find a Post
+     * @example
+     * // Get one Post
+     * const post = await prisma.post.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends PostFindUniqueOrThrowArgs>(args: SelectSubset<T, PostFindUniqueOrThrowArgs<ExtArgs>>): Prisma__PostClient<$Result.GetResult<Prisma.$PostPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Post that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PostFindFirstArgs} args - Arguments to find a Post
+     * @example
+     * // Get one Post
+     * const post = await prisma.post.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends PostFindFirstArgs>(args?: SelectSubset<T, PostFindFirstArgs<ExtArgs>>): Prisma__PostClient<$Result.GetResult<Prisma.$PostPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Post that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PostFindFirstOrThrowArgs} args - Arguments to find a Post
+     * @example
+     * // Get one Post
+     * const post = await prisma.post.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends PostFindFirstOrThrowArgs>(args?: SelectSubset<T, PostFindFirstOrThrowArgs<ExtArgs>>): Prisma__PostClient<$Result.GetResult<Prisma.$PostPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Posts that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PostFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Posts
+     * const posts = await prisma.post.findMany()
+     * 
+     * // Get first 10 Posts
+     * const posts = await prisma.post.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const postWithIdOnly = await prisma.post.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends PostFindManyArgs>(args?: SelectSubset<T, PostFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PostPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Post.
+     * @param {PostCreateArgs} args - Arguments to create a Post.
+     * @example
+     * // Create one Post
+     * const Post = await prisma.post.create({
+     *   data: {
+     *     // ... data to create a Post
+     *   }
+     * })
+     * 
+     */
+    create<T extends PostCreateArgs>(args: SelectSubset<T, PostCreateArgs<ExtArgs>>): Prisma__PostClient<$Result.GetResult<Prisma.$PostPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Posts.
+     * @param {PostCreateManyArgs} args - Arguments to create many Posts.
+     * @example
+     * // Create many Posts
+     * const post = await prisma.post.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends PostCreateManyArgs>(args?: SelectSubset<T, PostCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Posts and returns the data saved in the database.
+     * @param {PostCreateManyAndReturnArgs} args - Arguments to create many Posts.
+     * @example
+     * // Create many Posts
+     * const post = await prisma.post.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Posts and only return the `id`
+     * const postWithIdOnly = await prisma.post.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends PostCreateManyAndReturnArgs>(args?: SelectSubset<T, PostCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PostPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Post.
+     * @param {PostDeleteArgs} args - Arguments to delete one Post.
+     * @example
+     * // Delete one Post
+     * const Post = await prisma.post.delete({
+     *   where: {
+     *     // ... filter to delete one Post
+     *   }
+     * })
+     * 
+     */
+    delete<T extends PostDeleteArgs>(args: SelectSubset<T, PostDeleteArgs<ExtArgs>>): Prisma__PostClient<$Result.GetResult<Prisma.$PostPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Post.
+     * @param {PostUpdateArgs} args - Arguments to update one Post.
+     * @example
+     * // Update one Post
+     * const post = await prisma.post.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends PostUpdateArgs>(args: SelectSubset<T, PostUpdateArgs<ExtArgs>>): Prisma__PostClient<$Result.GetResult<Prisma.$PostPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Posts.
+     * @param {PostDeleteManyArgs} args - Arguments to filter Posts to delete.
+     * @example
+     * // Delete a few Posts
+     * const { count } = await prisma.post.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends PostDeleteManyArgs>(args?: SelectSubset<T, PostDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Posts.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PostUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Posts
+     * const post = await prisma.post.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends PostUpdateManyArgs>(args: SelectSubset<T, PostUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Posts and returns the data updated in the database.
+     * @param {PostUpdateManyAndReturnArgs} args - Arguments to update many Posts.
+     * @example
+     * // Update many Posts
+     * const post = await prisma.post.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Posts and only return the `id`
+     * const postWithIdOnly = await prisma.post.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends PostUpdateManyAndReturnArgs>(args: SelectSubset<T, PostUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PostPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Post.
+     * @param {PostUpsertArgs} args - Arguments to update or create a Post.
+     * @example
+     * // Update or create a Post
+     * const post = await prisma.post.upsert({
+     *   create: {
+     *     // ... data to create a Post
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Post we want to update
+     *   }
+     * })
+     */
+    upsert<T extends PostUpsertArgs>(args: SelectSubset<T, PostUpsertArgs<ExtArgs>>): Prisma__PostClient<$Result.GetResult<Prisma.$PostPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Posts.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PostCountArgs} args - Arguments to filter Posts to count.
+     * @example
+     * // Count the number of Posts
+     * const count = await prisma.post.count({
+     *   where: {
+     *     // ... the filter for the Posts we want to count
+     *   }
+     * })
+    **/
+    count<T extends PostCountArgs>(
+      args?: Subset<T, PostCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], PostCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Post.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PostAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends PostAggregateArgs>(args: Subset<T, PostAggregateArgs>): Prisma.PrismaPromise<GetPostAggregateType<T>>
+
+    /**
+     * Group by Post.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PostGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends PostGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: PostGroupByArgs['orderBy'] }
+        : { orderBy?: PostGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, PostGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetPostGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Post model
+   */
+  readonly fields: PostFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Post.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__PostClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    author<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    department<T extends Post$departmentArgs<ExtArgs> = {}>(args?: Subset<T, Post$departmentArgs<ExtArgs>>): Prisma__DepartmentClient<$Result.GetResult<Prisma.$DepartmentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    approvedBy<T extends Post$approvedByArgs<ExtArgs> = {}>(args?: Subset<T, Post$approvedByArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Post model
+   */
+  interface PostFieldRefs {
+    readonly id: FieldRef<"Post", 'String'>
+    readonly title: FieldRef<"Post", 'String'>
+    readonly content: FieldRef<"Post", 'String'>
+    readonly audience: FieldRef<"Post", 'PostAudience'>
+    readonly status: FieldRef<"Post", 'PostStatus'>
+    readonly authorId: FieldRef<"Post", 'String'>
+    readonly authorRole: FieldRef<"Post", 'Role'>
+    readonly departmentId: FieldRef<"Post", 'String'>
+    readonly approvedById: FieldRef<"Post", 'String'>
+    readonly approvedAt: FieldRef<"Post", 'DateTime'>
+    readonly rejectionReason: FieldRef<"Post", 'String'>
+    readonly publishedAt: FieldRef<"Post", 'DateTime'>
+    readonly createdAt: FieldRef<"Post", 'DateTime'>
+    readonly updatedAt: FieldRef<"Post", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Post findUnique
+   */
+  export type PostFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Post
+     */
+    select?: PostSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Post
+     */
+    omit?: PostOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PostInclude<ExtArgs> | null
+    /**
+     * Filter, which Post to fetch.
+     */
+    where: PostWhereUniqueInput
+  }
+
+  /**
+   * Post findUniqueOrThrow
+   */
+  export type PostFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Post
+     */
+    select?: PostSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Post
+     */
+    omit?: PostOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PostInclude<ExtArgs> | null
+    /**
+     * Filter, which Post to fetch.
+     */
+    where: PostWhereUniqueInput
+  }
+
+  /**
+   * Post findFirst
+   */
+  export type PostFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Post
+     */
+    select?: PostSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Post
+     */
+    omit?: PostOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PostInclude<ExtArgs> | null
+    /**
+     * Filter, which Post to fetch.
+     */
+    where?: PostWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Posts to fetch.
+     */
+    orderBy?: PostOrderByWithRelationInput | PostOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Posts.
+     */
+    cursor?: PostWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Posts from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Posts.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Posts.
+     */
+    distinct?: PostScalarFieldEnum | PostScalarFieldEnum[]
+  }
+
+  /**
+   * Post findFirstOrThrow
+   */
+  export type PostFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Post
+     */
+    select?: PostSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Post
+     */
+    omit?: PostOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PostInclude<ExtArgs> | null
+    /**
+     * Filter, which Post to fetch.
+     */
+    where?: PostWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Posts to fetch.
+     */
+    orderBy?: PostOrderByWithRelationInput | PostOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Posts.
+     */
+    cursor?: PostWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Posts from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Posts.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Posts.
+     */
+    distinct?: PostScalarFieldEnum | PostScalarFieldEnum[]
+  }
+
+  /**
+   * Post findMany
+   */
+  export type PostFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Post
+     */
+    select?: PostSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Post
+     */
+    omit?: PostOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PostInclude<ExtArgs> | null
+    /**
+     * Filter, which Posts to fetch.
+     */
+    where?: PostWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Posts to fetch.
+     */
+    orderBy?: PostOrderByWithRelationInput | PostOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Posts.
+     */
+    cursor?: PostWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Posts from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Posts.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Posts.
+     */
+    distinct?: PostScalarFieldEnum | PostScalarFieldEnum[]
+  }
+
+  /**
+   * Post create
+   */
+  export type PostCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Post
+     */
+    select?: PostSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Post
+     */
+    omit?: PostOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PostInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Post.
+     */
+    data: XOR<PostCreateInput, PostUncheckedCreateInput>
+  }
+
+  /**
+   * Post createMany
+   */
+  export type PostCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Posts.
+     */
+    data: PostCreateManyInput | PostCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Post createManyAndReturn
+   */
+  export type PostCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Post
+     */
+    select?: PostSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Post
+     */
+    omit?: PostOmit<ExtArgs> | null
+    /**
+     * The data used to create many Posts.
+     */
+    data: PostCreateManyInput | PostCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PostIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Post update
+   */
+  export type PostUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Post
+     */
+    select?: PostSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Post
+     */
+    omit?: PostOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PostInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Post.
+     */
+    data: XOR<PostUpdateInput, PostUncheckedUpdateInput>
+    /**
+     * Choose, which Post to update.
+     */
+    where: PostWhereUniqueInput
+  }
+
+  /**
+   * Post updateMany
+   */
+  export type PostUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Posts.
+     */
+    data: XOR<PostUpdateManyMutationInput, PostUncheckedUpdateManyInput>
+    /**
+     * Filter which Posts to update
+     */
+    where?: PostWhereInput
+    /**
+     * Limit how many Posts to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Post updateManyAndReturn
+   */
+  export type PostUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Post
+     */
+    select?: PostSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Post
+     */
+    omit?: PostOmit<ExtArgs> | null
+    /**
+     * The data used to update Posts.
+     */
+    data: XOR<PostUpdateManyMutationInput, PostUncheckedUpdateManyInput>
+    /**
+     * Filter which Posts to update
+     */
+    where?: PostWhereInput
+    /**
+     * Limit how many Posts to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PostIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Post upsert
+   */
+  export type PostUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Post
+     */
+    select?: PostSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Post
+     */
+    omit?: PostOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PostInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Post to update in case it exists.
+     */
+    where: PostWhereUniqueInput
+    /**
+     * In case the Post found by the `where` argument doesn't exist, create a new Post with this data.
+     */
+    create: XOR<PostCreateInput, PostUncheckedCreateInput>
+    /**
+     * In case the Post was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<PostUpdateInput, PostUncheckedUpdateInput>
+  }
+
+  /**
+   * Post delete
+   */
+  export type PostDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Post
+     */
+    select?: PostSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Post
+     */
+    omit?: PostOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PostInclude<ExtArgs> | null
+    /**
+     * Filter which Post to delete.
+     */
+    where: PostWhereUniqueInput
+  }
+
+  /**
+   * Post deleteMany
+   */
+  export type PostDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Posts to delete
+     */
+    where?: PostWhereInput
+    /**
+     * Limit how many Posts to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Post.department
+   */
+  export type Post$departmentArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Department
+     */
+    select?: DepartmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Department
+     */
+    omit?: DepartmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DepartmentInclude<ExtArgs> | null
+    where?: DepartmentWhereInput
+  }
+
+  /**
+   * Post.approvedBy
+   */
+  export type Post$approvedByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
+  }
+
+  /**
+   * Post without action
+   */
+  export type PostDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Post
+     */
+    select?: PostSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Post
+     */
+    omit?: PostOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PostInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model Room
+   */
+
+  export type AggregateRoom = {
+    _count: RoomCountAggregateOutputType | null
+    _avg: RoomAvgAggregateOutputType | null
+    _sum: RoomSumAggregateOutputType | null
+    _min: RoomMinAggregateOutputType | null
+    _max: RoomMaxAggregateOutputType | null
+  }
+
+  export type RoomAvgAggregateOutputType = {
+    capacity: number | null
+  }
+
+  export type RoomSumAggregateOutputType = {
+    capacity: number | null
+  }
+
+  export type RoomMinAggregateOutputType = {
+    id: string | null
+    name: string | null
+    code: string | null
+    capacity: number | null
+    description: string | null
+    departmentId: string | null
+    isActive: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type RoomMaxAggregateOutputType = {
+    id: string | null
+    name: string | null
+    code: string | null
+    capacity: number | null
+    description: string | null
+    departmentId: string | null
+    isActive: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type RoomCountAggregateOutputType = {
+    id: number
+    name: number
+    code: number
+    capacity: number
+    description: number
+    departmentId: number
+    isActive: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type RoomAvgAggregateInputType = {
+    capacity?: true
+  }
+
+  export type RoomSumAggregateInputType = {
+    capacity?: true
+  }
+
+  export type RoomMinAggregateInputType = {
+    id?: true
+    name?: true
+    code?: true
+    capacity?: true
+    description?: true
+    departmentId?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type RoomMaxAggregateInputType = {
+    id?: true
+    name?: true
+    code?: true
+    capacity?: true
+    description?: true
+    departmentId?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type RoomCountAggregateInputType = {
+    id?: true
+    name?: true
+    code?: true
+    capacity?: true
+    description?: true
+    departmentId?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type RoomAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Room to aggregate.
+     */
+    where?: RoomWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Rooms to fetch.
+     */
+    orderBy?: RoomOrderByWithRelationInput | RoomOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: RoomWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Rooms from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Rooms.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Rooms
+    **/
+    _count?: true | RoomCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: RoomAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: RoomSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: RoomMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: RoomMaxAggregateInputType
+  }
+
+  export type GetRoomAggregateType<T extends RoomAggregateArgs> = {
+        [P in keyof T & keyof AggregateRoom]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateRoom[P]>
+      : GetScalarType<T[P], AggregateRoom[P]>
+  }
+
+
+
+
+  export type RoomGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: RoomWhereInput
+    orderBy?: RoomOrderByWithAggregationInput | RoomOrderByWithAggregationInput[]
+    by: RoomScalarFieldEnum[] | RoomScalarFieldEnum
+    having?: RoomScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: RoomCountAggregateInputType | true
+    _avg?: RoomAvgAggregateInputType
+    _sum?: RoomSumAggregateInputType
+    _min?: RoomMinAggregateInputType
+    _max?: RoomMaxAggregateInputType
+  }
+
+  export type RoomGroupByOutputType = {
+    id: string
+    name: string
+    code: string
+    capacity: number | null
+    description: string | null
+    departmentId: string
+    isActive: boolean
+    createdAt: Date
+    updatedAt: Date
+    _count: RoomCountAggregateOutputType | null
+    _avg: RoomAvgAggregateOutputType | null
+    _sum: RoomSumAggregateOutputType | null
+    _min: RoomMinAggregateOutputType | null
+    _max: RoomMaxAggregateOutputType | null
+  }
+
+  type GetRoomGroupByPayload<T extends RoomGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<RoomGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof RoomGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], RoomGroupByOutputType[P]>
+            : GetScalarType<T[P], RoomGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type RoomSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    code?: boolean
+    capacity?: boolean
+    description?: boolean
+    departmentId?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    department?: boolean | DepartmentDefaultArgs<ExtArgs>
+    officeMeetings?: boolean | Room$officeMeetingsArgs<ExtArgs>
+    _count?: boolean | RoomCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["room"]>
+
+  export type RoomSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    code?: boolean
+    capacity?: boolean
+    description?: boolean
+    departmentId?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    department?: boolean | DepartmentDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["room"]>
+
+  export type RoomSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    code?: boolean
+    capacity?: boolean
+    description?: boolean
+    departmentId?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    department?: boolean | DepartmentDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["room"]>
+
+  export type RoomSelectScalar = {
+    id?: boolean
+    name?: boolean
+    code?: boolean
+    capacity?: boolean
+    description?: boolean
+    departmentId?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type RoomOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "code" | "capacity" | "description" | "departmentId" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["room"]>
+  export type RoomInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    department?: boolean | DepartmentDefaultArgs<ExtArgs>
+    officeMeetings?: boolean | Room$officeMeetingsArgs<ExtArgs>
+    _count?: boolean | RoomCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type RoomIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    department?: boolean | DepartmentDefaultArgs<ExtArgs>
+  }
+  export type RoomIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    department?: boolean | DepartmentDefaultArgs<ExtArgs>
+  }
+
+  export type $RoomPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Room"
+    objects: {
+      department: Prisma.$DepartmentPayload<ExtArgs>
+      officeMeetings: Prisma.$OfficeMeetingPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      name: string
+      code: string
+      capacity: number | null
+      description: string | null
+      departmentId: string
+      isActive: boolean
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["room"]>
+    composites: {}
+  }
+
+  type RoomGetPayload<S extends boolean | null | undefined | RoomDefaultArgs> = $Result.GetResult<Prisma.$RoomPayload, S>
+
+  type RoomCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<RoomFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: RoomCountAggregateInputType | true
+    }
+
+  export interface RoomDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Room'], meta: { name: 'Room' } }
+    /**
+     * Find zero or one Room that matches the filter.
+     * @param {RoomFindUniqueArgs} args - Arguments to find a Room
+     * @example
+     * // Get one Room
+     * const room = await prisma.room.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends RoomFindUniqueArgs>(args: SelectSubset<T, RoomFindUniqueArgs<ExtArgs>>): Prisma__RoomClient<$Result.GetResult<Prisma.$RoomPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Room that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {RoomFindUniqueOrThrowArgs} args - Arguments to find a Room
+     * @example
+     * // Get one Room
+     * const room = await prisma.room.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends RoomFindUniqueOrThrowArgs>(args: SelectSubset<T, RoomFindUniqueOrThrowArgs<ExtArgs>>): Prisma__RoomClient<$Result.GetResult<Prisma.$RoomPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Room that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RoomFindFirstArgs} args - Arguments to find a Room
+     * @example
+     * // Get one Room
+     * const room = await prisma.room.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends RoomFindFirstArgs>(args?: SelectSubset<T, RoomFindFirstArgs<ExtArgs>>): Prisma__RoomClient<$Result.GetResult<Prisma.$RoomPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Room that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RoomFindFirstOrThrowArgs} args - Arguments to find a Room
+     * @example
+     * // Get one Room
+     * const room = await prisma.room.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends RoomFindFirstOrThrowArgs>(args?: SelectSubset<T, RoomFindFirstOrThrowArgs<ExtArgs>>): Prisma__RoomClient<$Result.GetResult<Prisma.$RoomPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Rooms that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RoomFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Rooms
+     * const rooms = await prisma.room.findMany()
+     * 
+     * // Get first 10 Rooms
+     * const rooms = await prisma.room.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const roomWithIdOnly = await prisma.room.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends RoomFindManyArgs>(args?: SelectSubset<T, RoomFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RoomPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Room.
+     * @param {RoomCreateArgs} args - Arguments to create a Room.
+     * @example
+     * // Create one Room
+     * const Room = await prisma.room.create({
+     *   data: {
+     *     // ... data to create a Room
+     *   }
+     * })
+     * 
+     */
+    create<T extends RoomCreateArgs>(args: SelectSubset<T, RoomCreateArgs<ExtArgs>>): Prisma__RoomClient<$Result.GetResult<Prisma.$RoomPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Rooms.
+     * @param {RoomCreateManyArgs} args - Arguments to create many Rooms.
+     * @example
+     * // Create many Rooms
+     * const room = await prisma.room.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends RoomCreateManyArgs>(args?: SelectSubset<T, RoomCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Rooms and returns the data saved in the database.
+     * @param {RoomCreateManyAndReturnArgs} args - Arguments to create many Rooms.
+     * @example
+     * // Create many Rooms
+     * const room = await prisma.room.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Rooms and only return the `id`
+     * const roomWithIdOnly = await prisma.room.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends RoomCreateManyAndReturnArgs>(args?: SelectSubset<T, RoomCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RoomPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Room.
+     * @param {RoomDeleteArgs} args - Arguments to delete one Room.
+     * @example
+     * // Delete one Room
+     * const Room = await prisma.room.delete({
+     *   where: {
+     *     // ... filter to delete one Room
+     *   }
+     * })
+     * 
+     */
+    delete<T extends RoomDeleteArgs>(args: SelectSubset<T, RoomDeleteArgs<ExtArgs>>): Prisma__RoomClient<$Result.GetResult<Prisma.$RoomPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Room.
+     * @param {RoomUpdateArgs} args - Arguments to update one Room.
+     * @example
+     * // Update one Room
+     * const room = await prisma.room.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends RoomUpdateArgs>(args: SelectSubset<T, RoomUpdateArgs<ExtArgs>>): Prisma__RoomClient<$Result.GetResult<Prisma.$RoomPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Rooms.
+     * @param {RoomDeleteManyArgs} args - Arguments to filter Rooms to delete.
+     * @example
+     * // Delete a few Rooms
+     * const { count } = await prisma.room.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends RoomDeleteManyArgs>(args?: SelectSubset<T, RoomDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Rooms.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RoomUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Rooms
+     * const room = await prisma.room.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends RoomUpdateManyArgs>(args: SelectSubset<T, RoomUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Rooms and returns the data updated in the database.
+     * @param {RoomUpdateManyAndReturnArgs} args - Arguments to update many Rooms.
+     * @example
+     * // Update many Rooms
+     * const room = await prisma.room.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Rooms and only return the `id`
+     * const roomWithIdOnly = await prisma.room.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends RoomUpdateManyAndReturnArgs>(args: SelectSubset<T, RoomUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RoomPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Room.
+     * @param {RoomUpsertArgs} args - Arguments to update or create a Room.
+     * @example
+     * // Update or create a Room
+     * const room = await prisma.room.upsert({
+     *   create: {
+     *     // ... data to create a Room
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Room we want to update
+     *   }
+     * })
+     */
+    upsert<T extends RoomUpsertArgs>(args: SelectSubset<T, RoomUpsertArgs<ExtArgs>>): Prisma__RoomClient<$Result.GetResult<Prisma.$RoomPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Rooms.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RoomCountArgs} args - Arguments to filter Rooms to count.
+     * @example
+     * // Count the number of Rooms
+     * const count = await prisma.room.count({
+     *   where: {
+     *     // ... the filter for the Rooms we want to count
+     *   }
+     * })
+    **/
+    count<T extends RoomCountArgs>(
+      args?: Subset<T, RoomCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], RoomCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Room.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RoomAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends RoomAggregateArgs>(args: Subset<T, RoomAggregateArgs>): Prisma.PrismaPromise<GetRoomAggregateType<T>>
+
+    /**
+     * Group by Room.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RoomGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends RoomGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: RoomGroupByArgs['orderBy'] }
+        : { orderBy?: RoomGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, RoomGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetRoomGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Room model
+   */
+  readonly fields: RoomFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Room.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__RoomClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    department<T extends DepartmentDefaultArgs<ExtArgs> = {}>(args?: Subset<T, DepartmentDefaultArgs<ExtArgs>>): Prisma__DepartmentClient<$Result.GetResult<Prisma.$DepartmentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    officeMeetings<T extends Room$officeMeetingsArgs<ExtArgs> = {}>(args?: Subset<T, Room$officeMeetingsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OfficeMeetingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Room model
+   */
+  interface RoomFieldRefs {
+    readonly id: FieldRef<"Room", 'String'>
+    readonly name: FieldRef<"Room", 'String'>
+    readonly code: FieldRef<"Room", 'String'>
+    readonly capacity: FieldRef<"Room", 'Int'>
+    readonly description: FieldRef<"Room", 'String'>
+    readonly departmentId: FieldRef<"Room", 'String'>
+    readonly isActive: FieldRef<"Room", 'Boolean'>
+    readonly createdAt: FieldRef<"Room", 'DateTime'>
+    readonly updatedAt: FieldRef<"Room", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Room findUnique
+   */
+  export type RoomFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Room
+     */
+    select?: RoomSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Room
+     */
+    omit?: RoomOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RoomInclude<ExtArgs> | null
+    /**
+     * Filter, which Room to fetch.
+     */
+    where: RoomWhereUniqueInput
+  }
+
+  /**
+   * Room findUniqueOrThrow
+   */
+  export type RoomFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Room
+     */
+    select?: RoomSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Room
+     */
+    omit?: RoomOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RoomInclude<ExtArgs> | null
+    /**
+     * Filter, which Room to fetch.
+     */
+    where: RoomWhereUniqueInput
+  }
+
+  /**
+   * Room findFirst
+   */
+  export type RoomFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Room
+     */
+    select?: RoomSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Room
+     */
+    omit?: RoomOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RoomInclude<ExtArgs> | null
+    /**
+     * Filter, which Room to fetch.
+     */
+    where?: RoomWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Rooms to fetch.
+     */
+    orderBy?: RoomOrderByWithRelationInput | RoomOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Rooms.
+     */
+    cursor?: RoomWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Rooms from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Rooms.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Rooms.
+     */
+    distinct?: RoomScalarFieldEnum | RoomScalarFieldEnum[]
+  }
+
+  /**
+   * Room findFirstOrThrow
+   */
+  export type RoomFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Room
+     */
+    select?: RoomSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Room
+     */
+    omit?: RoomOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RoomInclude<ExtArgs> | null
+    /**
+     * Filter, which Room to fetch.
+     */
+    where?: RoomWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Rooms to fetch.
+     */
+    orderBy?: RoomOrderByWithRelationInput | RoomOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Rooms.
+     */
+    cursor?: RoomWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Rooms from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Rooms.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Rooms.
+     */
+    distinct?: RoomScalarFieldEnum | RoomScalarFieldEnum[]
+  }
+
+  /**
+   * Room findMany
+   */
+  export type RoomFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Room
+     */
+    select?: RoomSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Room
+     */
+    omit?: RoomOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RoomInclude<ExtArgs> | null
+    /**
+     * Filter, which Rooms to fetch.
+     */
+    where?: RoomWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Rooms to fetch.
+     */
+    orderBy?: RoomOrderByWithRelationInput | RoomOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Rooms.
+     */
+    cursor?: RoomWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Rooms from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Rooms.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Rooms.
+     */
+    distinct?: RoomScalarFieldEnum | RoomScalarFieldEnum[]
+  }
+
+  /**
+   * Room create
+   */
+  export type RoomCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Room
+     */
+    select?: RoomSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Room
+     */
+    omit?: RoomOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RoomInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Room.
+     */
+    data: XOR<RoomCreateInput, RoomUncheckedCreateInput>
+  }
+
+  /**
+   * Room createMany
+   */
+  export type RoomCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Rooms.
+     */
+    data: RoomCreateManyInput | RoomCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Room createManyAndReturn
+   */
+  export type RoomCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Room
+     */
+    select?: RoomSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Room
+     */
+    omit?: RoomOmit<ExtArgs> | null
+    /**
+     * The data used to create many Rooms.
+     */
+    data: RoomCreateManyInput | RoomCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RoomIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Room update
+   */
+  export type RoomUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Room
+     */
+    select?: RoomSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Room
+     */
+    omit?: RoomOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RoomInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Room.
+     */
+    data: XOR<RoomUpdateInput, RoomUncheckedUpdateInput>
+    /**
+     * Choose, which Room to update.
+     */
+    where: RoomWhereUniqueInput
+  }
+
+  /**
+   * Room updateMany
+   */
+  export type RoomUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Rooms.
+     */
+    data: XOR<RoomUpdateManyMutationInput, RoomUncheckedUpdateManyInput>
+    /**
+     * Filter which Rooms to update
+     */
+    where?: RoomWhereInput
+    /**
+     * Limit how many Rooms to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Room updateManyAndReturn
+   */
+  export type RoomUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Room
+     */
+    select?: RoomSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Room
+     */
+    omit?: RoomOmit<ExtArgs> | null
+    /**
+     * The data used to update Rooms.
+     */
+    data: XOR<RoomUpdateManyMutationInput, RoomUncheckedUpdateManyInput>
+    /**
+     * Filter which Rooms to update
+     */
+    where?: RoomWhereInput
+    /**
+     * Limit how many Rooms to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RoomIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Room upsert
+   */
+  export type RoomUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Room
+     */
+    select?: RoomSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Room
+     */
+    omit?: RoomOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RoomInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Room to update in case it exists.
+     */
+    where: RoomWhereUniqueInput
+    /**
+     * In case the Room found by the `where` argument doesn't exist, create a new Room with this data.
+     */
+    create: XOR<RoomCreateInput, RoomUncheckedCreateInput>
+    /**
+     * In case the Room was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<RoomUpdateInput, RoomUncheckedUpdateInput>
+  }
+
+  /**
+   * Room delete
+   */
+  export type RoomDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Room
+     */
+    select?: RoomSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Room
+     */
+    omit?: RoomOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RoomInclude<ExtArgs> | null
+    /**
+     * Filter which Room to delete.
+     */
+    where: RoomWhereUniqueInput
+  }
+
+  /**
+   * Room deleteMany
+   */
+  export type RoomDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Rooms to delete
+     */
+    where?: RoomWhereInput
+    /**
+     * Limit how many Rooms to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Room.officeMeetings
+   */
+  export type Room$officeMeetingsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OfficeMeeting
+     */
+    select?: OfficeMeetingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OfficeMeeting
+     */
+    omit?: OfficeMeetingOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OfficeMeetingInclude<ExtArgs> | null
+    where?: OfficeMeetingWhereInput
+    orderBy?: OfficeMeetingOrderByWithRelationInput | OfficeMeetingOrderByWithRelationInput[]
+    cursor?: OfficeMeetingWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: OfficeMeetingScalarFieldEnum | OfficeMeetingScalarFieldEnum[]
+  }
+
+  /**
+   * Room without action
+   */
+  export type RoomDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Room
+     */
+    select?: RoomSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Room
+     */
+    omit?: RoomOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RoomInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Model OfficeMeeting
    */
 
@@ -22316,6 +25117,7 @@ export namespace Prisma {
     target: string | null
     meetingAt: Date | null
     location: string | null
+    roomId: string | null
     note: string | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -22328,6 +25130,7 @@ export namespace Prisma {
     target: string | null
     meetingAt: Date | null
     location: string | null
+    roomId: string | null
     note: string | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -22341,6 +25144,7 @@ export namespace Prisma {
     memberUserIds: number
     meetingAt: number
     location: number
+    roomId: number
     note: number
     createdAt: number
     updatedAt: number
@@ -22355,6 +25159,7 @@ export namespace Prisma {
     target?: true
     meetingAt?: true
     location?: true
+    roomId?: true
     note?: true
     createdAt?: true
     updatedAt?: true
@@ -22367,6 +25172,7 @@ export namespace Prisma {
     target?: true
     meetingAt?: true
     location?: true
+    roomId?: true
     note?: true
     createdAt?: true
     updatedAt?: true
@@ -22380,6 +25186,7 @@ export namespace Prisma {
     memberUserIds?: true
     meetingAt?: true
     location?: true
+    roomId?: true
     note?: true
     createdAt?: true
     updatedAt?: true
@@ -22466,6 +25273,7 @@ export namespace Prisma {
     memberUserIds: string[]
     meetingAt: Date
     location: string
+    roomId: string | null
     note: string | null
     createdAt: Date
     updatedAt: Date
@@ -22496,11 +25304,13 @@ export namespace Prisma {
     memberUserIds?: boolean
     meetingAt?: boolean
     location?: boolean
+    roomId?: boolean
     note?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     project?: boolean | ProjectDefaultArgs<ExtArgs>
     instructor?: boolean | UserDefaultArgs<ExtArgs>
+    room?: boolean | OfficeMeeting$roomArgs<ExtArgs>
     views?: boolean | OfficeMeeting$viewsArgs<ExtArgs>
     _count?: boolean | OfficeMeetingCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["officeMeeting"]>
@@ -22513,11 +25323,13 @@ export namespace Prisma {
     memberUserIds?: boolean
     meetingAt?: boolean
     location?: boolean
+    roomId?: boolean
     note?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     project?: boolean | ProjectDefaultArgs<ExtArgs>
     instructor?: boolean | UserDefaultArgs<ExtArgs>
+    room?: boolean | OfficeMeeting$roomArgs<ExtArgs>
   }, ExtArgs["result"]["officeMeeting"]>
 
   export type OfficeMeetingSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -22528,11 +25340,13 @@ export namespace Prisma {
     memberUserIds?: boolean
     meetingAt?: boolean
     location?: boolean
+    roomId?: boolean
     note?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     project?: boolean | ProjectDefaultArgs<ExtArgs>
     instructor?: boolean | UserDefaultArgs<ExtArgs>
+    room?: boolean | OfficeMeeting$roomArgs<ExtArgs>
   }, ExtArgs["result"]["officeMeeting"]>
 
   export type OfficeMeetingSelectScalar = {
@@ -22543,25 +25357,29 @@ export namespace Prisma {
     memberUserIds?: boolean
     meetingAt?: boolean
     location?: boolean
+    roomId?: boolean
     note?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type OfficeMeetingOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "projectId" | "instructorId" | "target" | "memberUserIds" | "meetingAt" | "location" | "note" | "createdAt" | "updatedAt", ExtArgs["result"]["officeMeeting"]>
+  export type OfficeMeetingOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "projectId" | "instructorId" | "target" | "memberUserIds" | "meetingAt" | "location" | "roomId" | "note" | "createdAt" | "updatedAt", ExtArgs["result"]["officeMeeting"]>
   export type OfficeMeetingInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     project?: boolean | ProjectDefaultArgs<ExtArgs>
     instructor?: boolean | UserDefaultArgs<ExtArgs>
+    room?: boolean | OfficeMeeting$roomArgs<ExtArgs>
     views?: boolean | OfficeMeeting$viewsArgs<ExtArgs>
     _count?: boolean | OfficeMeetingCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type OfficeMeetingIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     project?: boolean | ProjectDefaultArgs<ExtArgs>
     instructor?: boolean | UserDefaultArgs<ExtArgs>
+    room?: boolean | OfficeMeeting$roomArgs<ExtArgs>
   }
   export type OfficeMeetingIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     project?: boolean | ProjectDefaultArgs<ExtArgs>
     instructor?: boolean | UserDefaultArgs<ExtArgs>
+    room?: boolean | OfficeMeeting$roomArgs<ExtArgs>
   }
 
   export type $OfficeMeetingPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -22569,6 +25387,7 @@ export namespace Prisma {
     objects: {
       project: Prisma.$ProjectPayload<ExtArgs>
       instructor: Prisma.$UserPayload<ExtArgs>
+      room: Prisma.$RoomPayload<ExtArgs> | null
       views: Prisma.$OfficeMeetingViewPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
@@ -22579,6 +25398,7 @@ export namespace Prisma {
       memberUserIds: string[]
       meetingAt: Date
       location: string
+      roomId: string | null
       note: string | null
       createdAt: Date
       updatedAt: Date
@@ -22978,6 +25798,7 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     project<T extends ProjectDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ProjectDefaultArgs<ExtArgs>>): Prisma__ProjectClient<$Result.GetResult<Prisma.$ProjectPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     instructor<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    room<T extends OfficeMeeting$roomArgs<ExtArgs> = {}>(args?: Subset<T, OfficeMeeting$roomArgs<ExtArgs>>): Prisma__RoomClient<$Result.GetResult<Prisma.$RoomPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     views<T extends OfficeMeeting$viewsArgs<ExtArgs> = {}>(args?: Subset<T, OfficeMeeting$viewsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OfficeMeetingViewPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -23015,6 +25836,7 @@ export namespace Prisma {
     readonly memberUserIds: FieldRef<"OfficeMeeting", 'String[]'>
     readonly meetingAt: FieldRef<"OfficeMeeting", 'DateTime'>
     readonly location: FieldRef<"OfficeMeeting", 'String'>
+    readonly roomId: FieldRef<"OfficeMeeting", 'String'>
     readonly note: FieldRef<"OfficeMeeting", 'String'>
     readonly createdAt: FieldRef<"OfficeMeeting", 'DateTime'>
     readonly updatedAt: FieldRef<"OfficeMeeting", 'DateTime'>
@@ -23416,6 +26238,25 @@ export namespace Prisma {
      * Limit how many OfficeMeetings to delete.
      */
     limit?: number
+  }
+
+  /**
+   * OfficeMeeting.room
+   */
+  export type OfficeMeeting$roomArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Room
+     */
+    select?: RoomSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Room
+     */
+    omit?: RoomOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RoomInclude<ExtArgs> | null
+    where?: RoomWhereInput
   }
 
   /**
@@ -30185,6 +33026,41 @@ export namespace Prisma {
   export type NotificationScalarFieldEnum = (typeof NotificationScalarFieldEnum)[keyof typeof NotificationScalarFieldEnum]
 
 
+  export const PostScalarFieldEnum: {
+    id: 'id',
+    title: 'title',
+    content: 'content',
+    audience: 'audience',
+    status: 'status',
+    authorId: 'authorId',
+    authorRole: 'authorRole',
+    departmentId: 'departmentId',
+    approvedById: 'approvedById',
+    approvedAt: 'approvedAt',
+    rejectionReason: 'rejectionReason',
+    publishedAt: 'publishedAt',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type PostScalarFieldEnum = (typeof PostScalarFieldEnum)[keyof typeof PostScalarFieldEnum]
+
+
+  export const RoomScalarFieldEnum: {
+    id: 'id',
+    name: 'name',
+    code: 'code',
+    capacity: 'capacity',
+    description: 'description',
+    departmentId: 'departmentId',
+    isActive: 'isActive',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type RoomScalarFieldEnum = (typeof RoomScalarFieldEnum)[keyof typeof RoomScalarFieldEnum]
+
+
   export const OfficeMeetingScalarFieldEnum: {
     id: 'id',
     projectId: 'projectId',
@@ -30193,6 +33069,7 @@ export namespace Prisma {
     memberUserIds: 'memberUserIds',
     meetingAt: 'meetingAt',
     location: 'location',
+    roomId: 'roomId',
     note: 'note',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
@@ -30554,6 +33431,34 @@ export namespace Prisma {
    */
   export type ListEnumNotificationTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'NotificationType[]'>
     
+
+
+  /**
+   * Reference to a field of type 'PostAudience'
+   */
+  export type EnumPostAudienceFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PostAudience'>
+    
+
+
+  /**
+   * Reference to a field of type 'PostAudience[]'
+   */
+  export type ListEnumPostAudienceFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PostAudience[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'PostStatus'
+   */
+  export type EnumPostStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PostStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'PostStatus[]'
+   */
+  export type ListEnumPostStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PostStatus[]'>
+    
   /**
    * Deep Input Types
    */
@@ -30572,6 +33477,8 @@ export namespace Prisma {
     majors?: MajorListRelationFilter
     users?: UserListRelationFilter
     callRounds?: CallRoundListRelationFilter
+    rooms?: RoomListRelationFilter
+    posts?: PostListRelationFilter
   }
 
   export type DepartmentOrderByWithRelationInput = {
@@ -30584,6 +33491,8 @@ export namespace Prisma {
     majors?: MajorOrderByRelationAggregateInput
     users?: UserOrderByRelationAggregateInput
     callRounds?: CallRoundOrderByRelationAggregateInput
+    rooms?: RoomOrderByRelationAggregateInput
+    posts?: PostOrderByRelationAggregateInput
   }
 
   export type DepartmentWhereUniqueInput = Prisma.AtLeast<{
@@ -30599,6 +33508,8 @@ export namespace Prisma {
     majors?: MajorListRelationFilter
     users?: UserListRelationFilter
     callRounds?: CallRoundListRelationFilter
+    rooms?: RoomListRelationFilter
+    posts?: PostListRelationFilter
   }, "id" | "code">
 
   export type DepartmentOrderByWithAggregationInput = {
@@ -30801,6 +33712,8 @@ export namespace Prisma {
     councilAssignments?: CouncilMemberAssignmentListRelationFilter
     officeMeetingsAsInstructor?: OfficeMeetingListRelationFilter
     officeMeetingViews?: OfficeMeetingViewListRelationFilter
+    posts?: PostListRelationFilter
+    approvedPosts?: PostListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -30836,6 +33749,8 @@ export namespace Prisma {
     councilAssignments?: CouncilMemberAssignmentOrderByRelationAggregateInput
     officeMeetingsAsInstructor?: OfficeMeetingOrderByRelationAggregateInput
     officeMeetingViews?: OfficeMeetingViewOrderByRelationAggregateInput
+    posts?: PostOrderByRelationAggregateInput
+    approvedPosts?: PostOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -30874,6 +33789,8 @@ export namespace Prisma {
     councilAssignments?: CouncilMemberAssignmentListRelationFilter
     officeMeetingsAsInstructor?: OfficeMeetingListRelationFilter
     officeMeetingViews?: OfficeMeetingViewListRelationFilter
+    posts?: PostListRelationFilter
+    approvedPosts?: PostListRelationFilter
   }, "id" | "code" | "email">
 
   export type UserOrderByWithAggregationInput = {
@@ -32011,6 +34928,193 @@ export namespace Prisma {
     readAt?: DateTimeNullableWithAggregatesFilter<"Notification"> | Date | string | null
   }
 
+  export type PostWhereInput = {
+    AND?: PostWhereInput | PostWhereInput[]
+    OR?: PostWhereInput[]
+    NOT?: PostWhereInput | PostWhereInput[]
+    id?: StringFilter<"Post"> | string
+    title?: StringFilter<"Post"> | string
+    content?: StringFilter<"Post"> | string
+    audience?: EnumPostAudienceFilter<"Post"> | $Enums.PostAudience
+    status?: EnumPostStatusFilter<"Post"> | $Enums.PostStatus
+    authorId?: StringFilter<"Post"> | string
+    authorRole?: EnumRoleFilter<"Post"> | $Enums.Role
+    departmentId?: StringNullableFilter<"Post"> | string | null
+    approvedById?: StringNullableFilter<"Post"> | string | null
+    approvedAt?: DateTimeNullableFilter<"Post"> | Date | string | null
+    rejectionReason?: StringNullableFilter<"Post"> | string | null
+    publishedAt?: DateTimeNullableFilter<"Post"> | Date | string | null
+    createdAt?: DateTimeFilter<"Post"> | Date | string
+    updatedAt?: DateTimeFilter<"Post"> | Date | string
+    author?: XOR<UserScalarRelationFilter, UserWhereInput>
+    department?: XOR<DepartmentNullableScalarRelationFilter, DepartmentWhereInput> | null
+    approvedBy?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+  }
+
+  export type PostOrderByWithRelationInput = {
+    id?: SortOrder
+    title?: SortOrder
+    content?: SortOrder
+    audience?: SortOrder
+    status?: SortOrder
+    authorId?: SortOrder
+    authorRole?: SortOrder
+    departmentId?: SortOrderInput | SortOrder
+    approvedById?: SortOrderInput | SortOrder
+    approvedAt?: SortOrderInput | SortOrder
+    rejectionReason?: SortOrderInput | SortOrder
+    publishedAt?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    author?: UserOrderByWithRelationInput
+    department?: DepartmentOrderByWithRelationInput
+    approvedBy?: UserOrderByWithRelationInput
+  }
+
+  export type PostWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: PostWhereInput | PostWhereInput[]
+    OR?: PostWhereInput[]
+    NOT?: PostWhereInput | PostWhereInput[]
+    title?: StringFilter<"Post"> | string
+    content?: StringFilter<"Post"> | string
+    audience?: EnumPostAudienceFilter<"Post"> | $Enums.PostAudience
+    status?: EnumPostStatusFilter<"Post"> | $Enums.PostStatus
+    authorId?: StringFilter<"Post"> | string
+    authorRole?: EnumRoleFilter<"Post"> | $Enums.Role
+    departmentId?: StringNullableFilter<"Post"> | string | null
+    approvedById?: StringNullableFilter<"Post"> | string | null
+    approvedAt?: DateTimeNullableFilter<"Post"> | Date | string | null
+    rejectionReason?: StringNullableFilter<"Post"> | string | null
+    publishedAt?: DateTimeNullableFilter<"Post"> | Date | string | null
+    createdAt?: DateTimeFilter<"Post"> | Date | string
+    updatedAt?: DateTimeFilter<"Post"> | Date | string
+    author?: XOR<UserScalarRelationFilter, UserWhereInput>
+    department?: XOR<DepartmentNullableScalarRelationFilter, DepartmentWhereInput> | null
+    approvedBy?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+  }, "id">
+
+  export type PostOrderByWithAggregationInput = {
+    id?: SortOrder
+    title?: SortOrder
+    content?: SortOrder
+    audience?: SortOrder
+    status?: SortOrder
+    authorId?: SortOrder
+    authorRole?: SortOrder
+    departmentId?: SortOrderInput | SortOrder
+    approvedById?: SortOrderInput | SortOrder
+    approvedAt?: SortOrderInput | SortOrder
+    rejectionReason?: SortOrderInput | SortOrder
+    publishedAt?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: PostCountOrderByAggregateInput
+    _max?: PostMaxOrderByAggregateInput
+    _min?: PostMinOrderByAggregateInput
+  }
+
+  export type PostScalarWhereWithAggregatesInput = {
+    AND?: PostScalarWhereWithAggregatesInput | PostScalarWhereWithAggregatesInput[]
+    OR?: PostScalarWhereWithAggregatesInput[]
+    NOT?: PostScalarWhereWithAggregatesInput | PostScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Post"> | string
+    title?: StringWithAggregatesFilter<"Post"> | string
+    content?: StringWithAggregatesFilter<"Post"> | string
+    audience?: EnumPostAudienceWithAggregatesFilter<"Post"> | $Enums.PostAudience
+    status?: EnumPostStatusWithAggregatesFilter<"Post"> | $Enums.PostStatus
+    authorId?: StringWithAggregatesFilter<"Post"> | string
+    authorRole?: EnumRoleWithAggregatesFilter<"Post"> | $Enums.Role
+    departmentId?: StringNullableWithAggregatesFilter<"Post"> | string | null
+    approvedById?: StringNullableWithAggregatesFilter<"Post"> | string | null
+    approvedAt?: DateTimeNullableWithAggregatesFilter<"Post"> | Date | string | null
+    rejectionReason?: StringNullableWithAggregatesFilter<"Post"> | string | null
+    publishedAt?: DateTimeNullableWithAggregatesFilter<"Post"> | Date | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"Post"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Post"> | Date | string
+  }
+
+  export type RoomWhereInput = {
+    AND?: RoomWhereInput | RoomWhereInput[]
+    OR?: RoomWhereInput[]
+    NOT?: RoomWhereInput | RoomWhereInput[]
+    id?: StringFilter<"Room"> | string
+    name?: StringFilter<"Room"> | string
+    code?: StringFilter<"Room"> | string
+    capacity?: IntNullableFilter<"Room"> | number | null
+    description?: StringNullableFilter<"Room"> | string | null
+    departmentId?: StringFilter<"Room"> | string
+    isActive?: BoolFilter<"Room"> | boolean
+    createdAt?: DateTimeFilter<"Room"> | Date | string
+    updatedAt?: DateTimeFilter<"Room"> | Date | string
+    department?: XOR<DepartmentScalarRelationFilter, DepartmentWhereInput>
+    officeMeetings?: OfficeMeetingListRelationFilter
+  }
+
+  export type RoomOrderByWithRelationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    code?: SortOrder
+    capacity?: SortOrderInput | SortOrder
+    description?: SortOrderInput | SortOrder
+    departmentId?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    department?: DepartmentOrderByWithRelationInput
+    officeMeetings?: OfficeMeetingOrderByRelationAggregateInput
+  }
+
+  export type RoomWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    code_departmentId?: RoomCodeDepartmentIdCompoundUniqueInput
+    AND?: RoomWhereInput | RoomWhereInput[]
+    OR?: RoomWhereInput[]
+    NOT?: RoomWhereInput | RoomWhereInput[]
+    name?: StringFilter<"Room"> | string
+    code?: StringFilter<"Room"> | string
+    capacity?: IntNullableFilter<"Room"> | number | null
+    description?: StringNullableFilter<"Room"> | string | null
+    departmentId?: StringFilter<"Room"> | string
+    isActive?: BoolFilter<"Room"> | boolean
+    createdAt?: DateTimeFilter<"Room"> | Date | string
+    updatedAt?: DateTimeFilter<"Room"> | Date | string
+    department?: XOR<DepartmentScalarRelationFilter, DepartmentWhereInput>
+    officeMeetings?: OfficeMeetingListRelationFilter
+  }, "id" | "code_departmentId">
+
+  export type RoomOrderByWithAggregationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    code?: SortOrder
+    capacity?: SortOrderInput | SortOrder
+    description?: SortOrderInput | SortOrder
+    departmentId?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: RoomCountOrderByAggregateInput
+    _avg?: RoomAvgOrderByAggregateInput
+    _max?: RoomMaxOrderByAggregateInput
+    _min?: RoomMinOrderByAggregateInput
+    _sum?: RoomSumOrderByAggregateInput
+  }
+
+  export type RoomScalarWhereWithAggregatesInput = {
+    AND?: RoomScalarWhereWithAggregatesInput | RoomScalarWhereWithAggregatesInput[]
+    OR?: RoomScalarWhereWithAggregatesInput[]
+    NOT?: RoomScalarWhereWithAggregatesInput | RoomScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Room"> | string
+    name?: StringWithAggregatesFilter<"Room"> | string
+    code?: StringWithAggregatesFilter<"Room"> | string
+    capacity?: IntNullableWithAggregatesFilter<"Room"> | number | null
+    description?: StringNullableWithAggregatesFilter<"Room"> | string | null
+    departmentId?: StringWithAggregatesFilter<"Room"> | string
+    isActive?: BoolWithAggregatesFilter<"Room"> | boolean
+    createdAt?: DateTimeWithAggregatesFilter<"Room"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Room"> | Date | string
+  }
+
   export type OfficeMeetingWhereInput = {
     AND?: OfficeMeetingWhereInput | OfficeMeetingWhereInput[]
     OR?: OfficeMeetingWhereInput[]
@@ -32022,11 +35126,13 @@ export namespace Prisma {
     memberUserIds?: StringNullableListFilter<"OfficeMeeting">
     meetingAt?: DateTimeFilter<"OfficeMeeting"> | Date | string
     location?: StringFilter<"OfficeMeeting"> | string
+    roomId?: StringNullableFilter<"OfficeMeeting"> | string | null
     note?: StringNullableFilter<"OfficeMeeting"> | string | null
     createdAt?: DateTimeFilter<"OfficeMeeting"> | Date | string
     updatedAt?: DateTimeFilter<"OfficeMeeting"> | Date | string
     project?: XOR<ProjectScalarRelationFilter, ProjectWhereInput>
     instructor?: XOR<UserScalarRelationFilter, UserWhereInput>
+    room?: XOR<RoomNullableScalarRelationFilter, RoomWhereInput> | null
     views?: OfficeMeetingViewListRelationFilter
   }
 
@@ -32038,11 +35144,13 @@ export namespace Prisma {
     memberUserIds?: SortOrder
     meetingAt?: SortOrder
     location?: SortOrder
+    roomId?: SortOrderInput | SortOrder
     note?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     project?: ProjectOrderByWithRelationInput
     instructor?: UserOrderByWithRelationInput
+    room?: RoomOrderByWithRelationInput
     views?: OfficeMeetingViewOrderByRelationAggregateInput
   }
 
@@ -32057,11 +35165,13 @@ export namespace Prisma {
     memberUserIds?: StringNullableListFilter<"OfficeMeeting">
     meetingAt?: DateTimeFilter<"OfficeMeeting"> | Date | string
     location?: StringFilter<"OfficeMeeting"> | string
+    roomId?: StringNullableFilter<"OfficeMeeting"> | string | null
     note?: StringNullableFilter<"OfficeMeeting"> | string | null
     createdAt?: DateTimeFilter<"OfficeMeeting"> | Date | string
     updatedAt?: DateTimeFilter<"OfficeMeeting"> | Date | string
     project?: XOR<ProjectScalarRelationFilter, ProjectWhereInput>
     instructor?: XOR<UserScalarRelationFilter, UserWhereInput>
+    room?: XOR<RoomNullableScalarRelationFilter, RoomWhereInput> | null
     views?: OfficeMeetingViewListRelationFilter
   }, "id">
 
@@ -32073,6 +35183,7 @@ export namespace Prisma {
     memberUserIds?: SortOrder
     meetingAt?: SortOrder
     location?: SortOrder
+    roomId?: SortOrderInput | SortOrder
     note?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -32092,6 +35203,7 @@ export namespace Prisma {
     memberUserIds?: StringNullableListFilter<"OfficeMeeting">
     meetingAt?: DateTimeWithAggregatesFilter<"OfficeMeeting"> | Date | string
     location?: StringWithAggregatesFilter<"OfficeMeeting"> | string
+    roomId?: StringNullableWithAggregatesFilter<"OfficeMeeting"> | string | null
     note?: StringNullableWithAggregatesFilter<"OfficeMeeting"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"OfficeMeeting"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"OfficeMeeting"> | Date | string
@@ -32452,6 +35564,8 @@ export namespace Prisma {
     majors?: MajorCreateNestedManyWithoutDepartmentInput
     users?: UserCreateNestedManyWithoutDepartmentRefInput
     callRounds?: CallRoundCreateNestedManyWithoutDepartmentsInput
+    rooms?: RoomCreateNestedManyWithoutDepartmentInput
+    posts?: PostCreateNestedManyWithoutDepartmentInput
   }
 
   export type DepartmentUncheckedCreateInput = {
@@ -32464,6 +35578,8 @@ export namespace Prisma {
     majors?: MajorUncheckedCreateNestedManyWithoutDepartmentInput
     users?: UserUncheckedCreateNestedManyWithoutDepartmentRefInput
     callRounds?: CallRoundUncheckedCreateNestedManyWithoutDepartmentsInput
+    rooms?: RoomUncheckedCreateNestedManyWithoutDepartmentInput
+    posts?: PostUncheckedCreateNestedManyWithoutDepartmentInput
   }
 
   export type DepartmentUpdateInput = {
@@ -32476,6 +35592,8 @@ export namespace Prisma {
     majors?: MajorUpdateManyWithoutDepartmentNestedInput
     users?: UserUpdateManyWithoutDepartmentRefNestedInput
     callRounds?: CallRoundUpdateManyWithoutDepartmentsNestedInput
+    rooms?: RoomUpdateManyWithoutDepartmentNestedInput
+    posts?: PostUpdateManyWithoutDepartmentNestedInput
   }
 
   export type DepartmentUncheckedUpdateInput = {
@@ -32488,6 +35606,8 @@ export namespace Prisma {
     majors?: MajorUncheckedUpdateManyWithoutDepartmentNestedInput
     users?: UserUncheckedUpdateManyWithoutDepartmentRefNestedInput
     callRounds?: CallRoundUncheckedUpdateManyWithoutDepartmentsNestedInput
+    rooms?: RoomUncheckedUpdateManyWithoutDepartmentNestedInput
+    posts?: PostUncheckedUpdateManyWithoutDepartmentNestedInput
   }
 
   export type DepartmentCreateManyInput = {
@@ -32698,6 +35818,8 @@ export namespace Prisma {
     councilAssignments?: CouncilMemberAssignmentCreateNestedManyWithoutCouncilMemberInput
     officeMeetingsAsInstructor?: OfficeMeetingCreateNestedManyWithoutInstructorInput
     officeMeetingViews?: OfficeMeetingViewCreateNestedManyWithoutUserInput
+    posts?: PostCreateNestedManyWithoutAuthorInput
+    approvedPosts?: PostCreateNestedManyWithoutApprovedByInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -32730,6 +35852,8 @@ export namespace Prisma {
     councilAssignments?: CouncilMemberAssignmentUncheckedCreateNestedManyWithoutCouncilMemberInput
     officeMeetingsAsInstructor?: OfficeMeetingUncheckedCreateNestedManyWithoutInstructorInput
     officeMeetingViews?: OfficeMeetingViewUncheckedCreateNestedManyWithoutUserInput
+    posts?: PostUncheckedCreateNestedManyWithoutAuthorInput
+    approvedPosts?: PostUncheckedCreateNestedManyWithoutApprovedByInput
   }
 
   export type UserUpdateInput = {
@@ -32762,6 +35886,8 @@ export namespace Prisma {
     councilAssignments?: CouncilMemberAssignmentUpdateManyWithoutCouncilMemberNestedInput
     officeMeetingsAsInstructor?: OfficeMeetingUpdateManyWithoutInstructorNestedInput
     officeMeetingViews?: OfficeMeetingViewUpdateManyWithoutUserNestedInput
+    posts?: PostUpdateManyWithoutAuthorNestedInput
+    approvedPosts?: PostUpdateManyWithoutApprovedByNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -32794,6 +35920,8 @@ export namespace Prisma {
     councilAssignments?: CouncilMemberAssignmentUncheckedUpdateManyWithoutCouncilMemberNestedInput
     officeMeetingsAsInstructor?: OfficeMeetingUncheckedUpdateManyWithoutInstructorNestedInput
     officeMeetingViews?: OfficeMeetingViewUncheckedUpdateManyWithoutUserNestedInput
+    posts?: PostUncheckedUpdateManyWithoutAuthorNestedInput
+    approvedPosts?: PostUncheckedUpdateManyWithoutApprovedByNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -34077,6 +37205,209 @@ export namespace Prisma {
     readAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
+  export type PostCreateInput = {
+    id?: string
+    title: string
+    content: string
+    audience?: $Enums.PostAudience
+    status?: $Enums.PostStatus
+    authorRole: $Enums.Role
+    approvedAt?: Date | string | null
+    rejectionReason?: string | null
+    publishedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    author: UserCreateNestedOneWithoutPostsInput
+    department?: DepartmentCreateNestedOneWithoutPostsInput
+    approvedBy?: UserCreateNestedOneWithoutApprovedPostsInput
+  }
+
+  export type PostUncheckedCreateInput = {
+    id?: string
+    title: string
+    content: string
+    audience?: $Enums.PostAudience
+    status?: $Enums.PostStatus
+    authorId: string
+    authorRole: $Enums.Role
+    departmentId?: string | null
+    approvedById?: string | null
+    approvedAt?: Date | string | null
+    rejectionReason?: string | null
+    publishedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PostUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    audience?: EnumPostAudienceFieldUpdateOperationsInput | $Enums.PostAudience
+    status?: EnumPostStatusFieldUpdateOperationsInput | $Enums.PostStatus
+    authorRole?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    author?: UserUpdateOneRequiredWithoutPostsNestedInput
+    department?: DepartmentUpdateOneWithoutPostsNestedInput
+    approvedBy?: UserUpdateOneWithoutApprovedPostsNestedInput
+  }
+
+  export type PostUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    audience?: EnumPostAudienceFieldUpdateOperationsInput | $Enums.PostAudience
+    status?: EnumPostStatusFieldUpdateOperationsInput | $Enums.PostStatus
+    authorId?: StringFieldUpdateOperationsInput | string
+    authorRole?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    departmentId?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedById?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PostCreateManyInput = {
+    id?: string
+    title: string
+    content: string
+    audience?: $Enums.PostAudience
+    status?: $Enums.PostStatus
+    authorId: string
+    authorRole: $Enums.Role
+    departmentId?: string | null
+    approvedById?: string | null
+    approvedAt?: Date | string | null
+    rejectionReason?: string | null
+    publishedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PostUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    audience?: EnumPostAudienceFieldUpdateOperationsInput | $Enums.PostAudience
+    status?: EnumPostStatusFieldUpdateOperationsInput | $Enums.PostStatus
+    authorRole?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PostUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    audience?: EnumPostAudienceFieldUpdateOperationsInput | $Enums.PostAudience
+    status?: EnumPostStatusFieldUpdateOperationsInput | $Enums.PostStatus
+    authorId?: StringFieldUpdateOperationsInput | string
+    authorRole?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    departmentId?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedById?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type RoomCreateInput = {
+    id?: string
+    name: string
+    code: string
+    capacity?: number | null
+    description?: string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    department: DepartmentCreateNestedOneWithoutRoomsInput
+    officeMeetings?: OfficeMeetingCreateNestedManyWithoutRoomInput
+  }
+
+  export type RoomUncheckedCreateInput = {
+    id?: string
+    name: string
+    code: string
+    capacity?: number | null
+    description?: string | null
+    departmentId: string
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    officeMeetings?: OfficeMeetingUncheckedCreateNestedManyWithoutRoomInput
+  }
+
+  export type RoomUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    capacity?: NullableIntFieldUpdateOperationsInput | number | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    department?: DepartmentUpdateOneRequiredWithoutRoomsNestedInput
+    officeMeetings?: OfficeMeetingUpdateManyWithoutRoomNestedInput
+  }
+
+  export type RoomUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    capacity?: NullableIntFieldUpdateOperationsInput | number | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    departmentId?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    officeMeetings?: OfficeMeetingUncheckedUpdateManyWithoutRoomNestedInput
+  }
+
+  export type RoomCreateManyInput = {
+    id?: string
+    name: string
+    code: string
+    capacity?: number | null
+    description?: string | null
+    departmentId: string
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type RoomUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    capacity?: NullableIntFieldUpdateOperationsInput | number | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type RoomUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    capacity?: NullableIntFieldUpdateOperationsInput | number | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    departmentId?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type OfficeMeetingCreateInput = {
     id?: string
     target: string
@@ -34088,6 +37419,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     project: ProjectCreateNestedOneWithoutOfficeMeetingsInput
     instructor: UserCreateNestedOneWithoutOfficeMeetingsAsInstructorInput
+    room?: RoomCreateNestedOneWithoutOfficeMeetingsInput
     views?: OfficeMeetingViewCreateNestedManyWithoutMeetingInput
   }
 
@@ -34099,6 +37431,7 @@ export namespace Prisma {
     memberUserIds?: OfficeMeetingCreatememberUserIdsInput | string[]
     meetingAt: Date | string
     location: string
+    roomId?: string | null
     note?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -34116,6 +37449,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     project?: ProjectUpdateOneRequiredWithoutOfficeMeetingsNestedInput
     instructor?: UserUpdateOneRequiredWithoutOfficeMeetingsAsInstructorNestedInput
+    room?: RoomUpdateOneWithoutOfficeMeetingsNestedInput
     views?: OfficeMeetingViewUpdateManyWithoutMeetingNestedInput
   }
 
@@ -34127,6 +37461,7 @@ export namespace Prisma {
     memberUserIds?: OfficeMeetingUpdatememberUserIdsInput | string[]
     meetingAt?: DateTimeFieldUpdateOperationsInput | Date | string
     location?: StringFieldUpdateOperationsInput | string
+    roomId?: NullableStringFieldUpdateOperationsInput | string | null
     note?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -34141,6 +37476,7 @@ export namespace Prisma {
     memberUserIds?: OfficeMeetingCreatememberUserIdsInput | string[]
     meetingAt: Date | string
     location: string
+    roomId?: string | null
     note?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -34165,6 +37501,7 @@ export namespace Prisma {
     memberUserIds?: OfficeMeetingUpdatememberUserIdsInput | string[]
     meetingAt?: DateTimeFieldUpdateOperationsInput | Date | string
     location?: StringFieldUpdateOperationsInput | string
+    roomId?: NullableStringFieldUpdateOperationsInput | string | null
     note?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -34548,6 +37885,18 @@ export namespace Prisma {
     none?: CallRoundWhereInput
   }
 
+  export type RoomListRelationFilter = {
+    every?: RoomWhereInput
+    some?: RoomWhereInput
+    none?: RoomWhereInput
+  }
+
+  export type PostListRelationFilter = {
+    every?: PostWhereInput
+    some?: PostWhereInput
+    none?: PostWhereInput
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
@@ -34562,6 +37911,14 @@ export namespace Prisma {
   }
 
   export type CallRoundOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type RoomOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type PostOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -35986,12 +39343,151 @@ export namespace Prisma {
     _max?: NestedEnumNotificationTypeFilter<$PrismaModel>
   }
 
+  export type EnumPostAudienceFilter<$PrismaModel = never> = {
+    equals?: $Enums.PostAudience | EnumPostAudienceFieldRefInput<$PrismaModel>
+    in?: $Enums.PostAudience[] | ListEnumPostAudienceFieldRefInput<$PrismaModel>
+    notIn?: $Enums.PostAudience[] | ListEnumPostAudienceFieldRefInput<$PrismaModel>
+    not?: NestedEnumPostAudienceFilter<$PrismaModel> | $Enums.PostAudience
+  }
+
+  export type EnumPostStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.PostStatus | EnumPostStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.PostStatus[] | ListEnumPostStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.PostStatus[] | ListEnumPostStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumPostStatusFilter<$PrismaModel> | $Enums.PostStatus
+  }
+
+  export type PostCountOrderByAggregateInput = {
+    id?: SortOrder
+    title?: SortOrder
+    content?: SortOrder
+    audience?: SortOrder
+    status?: SortOrder
+    authorId?: SortOrder
+    authorRole?: SortOrder
+    departmentId?: SortOrder
+    approvedById?: SortOrder
+    approvedAt?: SortOrder
+    rejectionReason?: SortOrder
+    publishedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type PostMaxOrderByAggregateInput = {
+    id?: SortOrder
+    title?: SortOrder
+    content?: SortOrder
+    audience?: SortOrder
+    status?: SortOrder
+    authorId?: SortOrder
+    authorRole?: SortOrder
+    departmentId?: SortOrder
+    approvedById?: SortOrder
+    approvedAt?: SortOrder
+    rejectionReason?: SortOrder
+    publishedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type PostMinOrderByAggregateInput = {
+    id?: SortOrder
+    title?: SortOrder
+    content?: SortOrder
+    audience?: SortOrder
+    status?: SortOrder
+    authorId?: SortOrder
+    authorRole?: SortOrder
+    departmentId?: SortOrder
+    approvedById?: SortOrder
+    approvedAt?: SortOrder
+    rejectionReason?: SortOrder
+    publishedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type EnumPostAudienceWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.PostAudience | EnumPostAudienceFieldRefInput<$PrismaModel>
+    in?: $Enums.PostAudience[] | ListEnumPostAudienceFieldRefInput<$PrismaModel>
+    notIn?: $Enums.PostAudience[] | ListEnumPostAudienceFieldRefInput<$PrismaModel>
+    not?: NestedEnumPostAudienceWithAggregatesFilter<$PrismaModel> | $Enums.PostAudience
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumPostAudienceFilter<$PrismaModel>
+    _max?: NestedEnumPostAudienceFilter<$PrismaModel>
+  }
+
+  export type EnumPostStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.PostStatus | EnumPostStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.PostStatus[] | ListEnumPostStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.PostStatus[] | ListEnumPostStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumPostStatusWithAggregatesFilter<$PrismaModel> | $Enums.PostStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumPostStatusFilter<$PrismaModel>
+    _max?: NestedEnumPostStatusFilter<$PrismaModel>
+  }
+
+  export type RoomCodeDepartmentIdCompoundUniqueInput = {
+    code: string
+    departmentId: string
+  }
+
+  export type RoomCountOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    code?: SortOrder
+    capacity?: SortOrder
+    description?: SortOrder
+    departmentId?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type RoomAvgOrderByAggregateInput = {
+    capacity?: SortOrder
+  }
+
+  export type RoomMaxOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    code?: SortOrder
+    capacity?: SortOrder
+    description?: SortOrder
+    departmentId?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type RoomMinOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    code?: SortOrder
+    capacity?: SortOrder
+    description?: SortOrder
+    departmentId?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type RoomSumOrderByAggregateInput = {
+    capacity?: SortOrder
+  }
+
   export type StringNullableListFilter<$PrismaModel = never> = {
     equals?: string[] | ListStringFieldRefInput<$PrismaModel> | null
     has?: string | StringFieldRefInput<$PrismaModel> | null
     hasEvery?: string[] | ListStringFieldRefInput<$PrismaModel>
     hasSome?: string[] | ListStringFieldRefInput<$PrismaModel>
     isEmpty?: boolean
+  }
+
+  export type RoomNullableScalarRelationFilter = {
+    is?: RoomWhereInput | null
+    isNot?: RoomWhereInput | null
   }
 
   export type OfficeMeetingCountOrderByAggregateInput = {
@@ -36002,6 +39498,7 @@ export namespace Prisma {
     memberUserIds?: SortOrder
     meetingAt?: SortOrder
     location?: SortOrder
+    roomId?: SortOrder
     note?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -36014,6 +39511,7 @@ export namespace Prisma {
     target?: SortOrder
     meetingAt?: SortOrder
     location?: SortOrder
+    roomId?: SortOrder
     note?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -36026,6 +39524,7 @@ export namespace Prisma {
     target?: SortOrder
     meetingAt?: SortOrder
     location?: SortOrder
+    roomId?: SortOrder
     note?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -36239,6 +39738,20 @@ export namespace Prisma {
     connect?: CallRoundWhereUniqueInput | CallRoundWhereUniqueInput[]
   }
 
+  export type RoomCreateNestedManyWithoutDepartmentInput = {
+    create?: XOR<RoomCreateWithoutDepartmentInput, RoomUncheckedCreateWithoutDepartmentInput> | RoomCreateWithoutDepartmentInput[] | RoomUncheckedCreateWithoutDepartmentInput[]
+    connectOrCreate?: RoomCreateOrConnectWithoutDepartmentInput | RoomCreateOrConnectWithoutDepartmentInput[]
+    createMany?: RoomCreateManyDepartmentInputEnvelope
+    connect?: RoomWhereUniqueInput | RoomWhereUniqueInput[]
+  }
+
+  export type PostCreateNestedManyWithoutDepartmentInput = {
+    create?: XOR<PostCreateWithoutDepartmentInput, PostUncheckedCreateWithoutDepartmentInput> | PostCreateWithoutDepartmentInput[] | PostUncheckedCreateWithoutDepartmentInput[]
+    connectOrCreate?: PostCreateOrConnectWithoutDepartmentInput | PostCreateOrConnectWithoutDepartmentInput[]
+    createMany?: PostCreateManyDepartmentInputEnvelope
+    connect?: PostWhereUniqueInput | PostWhereUniqueInput[]
+  }
+
   export type MajorUncheckedCreateNestedManyWithoutDepartmentInput = {
     create?: XOR<MajorCreateWithoutDepartmentInput, MajorUncheckedCreateWithoutDepartmentInput> | MajorCreateWithoutDepartmentInput[] | MajorUncheckedCreateWithoutDepartmentInput[]
     connectOrCreate?: MajorCreateOrConnectWithoutDepartmentInput | MajorCreateOrConnectWithoutDepartmentInput[]
@@ -36257,6 +39770,20 @@ export namespace Prisma {
     create?: XOR<CallRoundCreateWithoutDepartmentsInput, CallRoundUncheckedCreateWithoutDepartmentsInput> | CallRoundCreateWithoutDepartmentsInput[] | CallRoundUncheckedCreateWithoutDepartmentsInput[]
     connectOrCreate?: CallRoundCreateOrConnectWithoutDepartmentsInput | CallRoundCreateOrConnectWithoutDepartmentsInput[]
     connect?: CallRoundWhereUniqueInput | CallRoundWhereUniqueInput[]
+  }
+
+  export type RoomUncheckedCreateNestedManyWithoutDepartmentInput = {
+    create?: XOR<RoomCreateWithoutDepartmentInput, RoomUncheckedCreateWithoutDepartmentInput> | RoomCreateWithoutDepartmentInput[] | RoomUncheckedCreateWithoutDepartmentInput[]
+    connectOrCreate?: RoomCreateOrConnectWithoutDepartmentInput | RoomCreateOrConnectWithoutDepartmentInput[]
+    createMany?: RoomCreateManyDepartmentInputEnvelope
+    connect?: RoomWhereUniqueInput | RoomWhereUniqueInput[]
+  }
+
+  export type PostUncheckedCreateNestedManyWithoutDepartmentInput = {
+    create?: XOR<PostCreateWithoutDepartmentInput, PostUncheckedCreateWithoutDepartmentInput> | PostCreateWithoutDepartmentInput[] | PostUncheckedCreateWithoutDepartmentInput[]
+    connectOrCreate?: PostCreateOrConnectWithoutDepartmentInput | PostCreateOrConnectWithoutDepartmentInput[]
+    createMany?: PostCreateManyDepartmentInputEnvelope
+    connect?: PostWhereUniqueInput | PostWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -36312,6 +39839,34 @@ export namespace Prisma {
     deleteMany?: CallRoundScalarWhereInput | CallRoundScalarWhereInput[]
   }
 
+  export type RoomUpdateManyWithoutDepartmentNestedInput = {
+    create?: XOR<RoomCreateWithoutDepartmentInput, RoomUncheckedCreateWithoutDepartmentInput> | RoomCreateWithoutDepartmentInput[] | RoomUncheckedCreateWithoutDepartmentInput[]
+    connectOrCreate?: RoomCreateOrConnectWithoutDepartmentInput | RoomCreateOrConnectWithoutDepartmentInput[]
+    upsert?: RoomUpsertWithWhereUniqueWithoutDepartmentInput | RoomUpsertWithWhereUniqueWithoutDepartmentInput[]
+    createMany?: RoomCreateManyDepartmentInputEnvelope
+    set?: RoomWhereUniqueInput | RoomWhereUniqueInput[]
+    disconnect?: RoomWhereUniqueInput | RoomWhereUniqueInput[]
+    delete?: RoomWhereUniqueInput | RoomWhereUniqueInput[]
+    connect?: RoomWhereUniqueInput | RoomWhereUniqueInput[]
+    update?: RoomUpdateWithWhereUniqueWithoutDepartmentInput | RoomUpdateWithWhereUniqueWithoutDepartmentInput[]
+    updateMany?: RoomUpdateManyWithWhereWithoutDepartmentInput | RoomUpdateManyWithWhereWithoutDepartmentInput[]
+    deleteMany?: RoomScalarWhereInput | RoomScalarWhereInput[]
+  }
+
+  export type PostUpdateManyWithoutDepartmentNestedInput = {
+    create?: XOR<PostCreateWithoutDepartmentInput, PostUncheckedCreateWithoutDepartmentInput> | PostCreateWithoutDepartmentInput[] | PostUncheckedCreateWithoutDepartmentInput[]
+    connectOrCreate?: PostCreateOrConnectWithoutDepartmentInput | PostCreateOrConnectWithoutDepartmentInput[]
+    upsert?: PostUpsertWithWhereUniqueWithoutDepartmentInput | PostUpsertWithWhereUniqueWithoutDepartmentInput[]
+    createMany?: PostCreateManyDepartmentInputEnvelope
+    set?: PostWhereUniqueInput | PostWhereUniqueInput[]
+    disconnect?: PostWhereUniqueInput | PostWhereUniqueInput[]
+    delete?: PostWhereUniqueInput | PostWhereUniqueInput[]
+    connect?: PostWhereUniqueInput | PostWhereUniqueInput[]
+    update?: PostUpdateWithWhereUniqueWithoutDepartmentInput | PostUpdateWithWhereUniqueWithoutDepartmentInput[]
+    updateMany?: PostUpdateManyWithWhereWithoutDepartmentInput | PostUpdateManyWithWhereWithoutDepartmentInput[]
+    deleteMany?: PostScalarWhereInput | PostScalarWhereInput[]
+  }
+
   export type MajorUncheckedUpdateManyWithoutDepartmentNestedInput = {
     create?: XOR<MajorCreateWithoutDepartmentInput, MajorUncheckedCreateWithoutDepartmentInput> | MajorCreateWithoutDepartmentInput[] | MajorUncheckedCreateWithoutDepartmentInput[]
     connectOrCreate?: MajorCreateOrConnectWithoutDepartmentInput | MajorCreateOrConnectWithoutDepartmentInput[]
@@ -36351,6 +39906,34 @@ export namespace Prisma {
     update?: CallRoundUpdateWithWhereUniqueWithoutDepartmentsInput | CallRoundUpdateWithWhereUniqueWithoutDepartmentsInput[]
     updateMany?: CallRoundUpdateManyWithWhereWithoutDepartmentsInput | CallRoundUpdateManyWithWhereWithoutDepartmentsInput[]
     deleteMany?: CallRoundScalarWhereInput | CallRoundScalarWhereInput[]
+  }
+
+  export type RoomUncheckedUpdateManyWithoutDepartmentNestedInput = {
+    create?: XOR<RoomCreateWithoutDepartmentInput, RoomUncheckedCreateWithoutDepartmentInput> | RoomCreateWithoutDepartmentInput[] | RoomUncheckedCreateWithoutDepartmentInput[]
+    connectOrCreate?: RoomCreateOrConnectWithoutDepartmentInput | RoomCreateOrConnectWithoutDepartmentInput[]
+    upsert?: RoomUpsertWithWhereUniqueWithoutDepartmentInput | RoomUpsertWithWhereUniqueWithoutDepartmentInput[]
+    createMany?: RoomCreateManyDepartmentInputEnvelope
+    set?: RoomWhereUniqueInput | RoomWhereUniqueInput[]
+    disconnect?: RoomWhereUniqueInput | RoomWhereUniqueInput[]
+    delete?: RoomWhereUniqueInput | RoomWhereUniqueInput[]
+    connect?: RoomWhereUniqueInput | RoomWhereUniqueInput[]
+    update?: RoomUpdateWithWhereUniqueWithoutDepartmentInput | RoomUpdateWithWhereUniqueWithoutDepartmentInput[]
+    updateMany?: RoomUpdateManyWithWhereWithoutDepartmentInput | RoomUpdateManyWithWhereWithoutDepartmentInput[]
+    deleteMany?: RoomScalarWhereInput | RoomScalarWhereInput[]
+  }
+
+  export type PostUncheckedUpdateManyWithoutDepartmentNestedInput = {
+    create?: XOR<PostCreateWithoutDepartmentInput, PostUncheckedCreateWithoutDepartmentInput> | PostCreateWithoutDepartmentInput[] | PostUncheckedCreateWithoutDepartmentInput[]
+    connectOrCreate?: PostCreateOrConnectWithoutDepartmentInput | PostCreateOrConnectWithoutDepartmentInput[]
+    upsert?: PostUpsertWithWhereUniqueWithoutDepartmentInput | PostUpsertWithWhereUniqueWithoutDepartmentInput[]
+    createMany?: PostCreateManyDepartmentInputEnvelope
+    set?: PostWhereUniqueInput | PostWhereUniqueInput[]
+    disconnect?: PostWhereUniqueInput | PostWhereUniqueInput[]
+    delete?: PostWhereUniqueInput | PostWhereUniqueInput[]
+    connect?: PostWhereUniqueInput | PostWhereUniqueInput[]
+    update?: PostUpdateWithWhereUniqueWithoutDepartmentInput | PostUpdateWithWhereUniqueWithoutDepartmentInput[]
+    updateMany?: PostUpdateManyWithWhereWithoutDepartmentInput | PostUpdateManyWithWhereWithoutDepartmentInput[]
+    deleteMany?: PostScalarWhereInput | PostScalarWhereInput[]
   }
 
   export type DepartmentCreateNestedOneWithoutMajorsInput = {
@@ -36692,6 +40275,20 @@ export namespace Prisma {
     connect?: OfficeMeetingViewWhereUniqueInput | OfficeMeetingViewWhereUniqueInput[]
   }
 
+  export type PostCreateNestedManyWithoutAuthorInput = {
+    create?: XOR<PostCreateWithoutAuthorInput, PostUncheckedCreateWithoutAuthorInput> | PostCreateWithoutAuthorInput[] | PostUncheckedCreateWithoutAuthorInput[]
+    connectOrCreate?: PostCreateOrConnectWithoutAuthorInput | PostCreateOrConnectWithoutAuthorInput[]
+    createMany?: PostCreateManyAuthorInputEnvelope
+    connect?: PostWhereUniqueInput | PostWhereUniqueInput[]
+  }
+
+  export type PostCreateNestedManyWithoutApprovedByInput = {
+    create?: XOR<PostCreateWithoutApprovedByInput, PostUncheckedCreateWithoutApprovedByInput> | PostCreateWithoutApprovedByInput[] | PostUncheckedCreateWithoutApprovedByInput[]
+    connectOrCreate?: PostCreateOrConnectWithoutApprovedByInput | PostCreateOrConnectWithoutApprovedByInput[]
+    createMany?: PostCreateManyApprovedByInputEnvelope
+    connect?: PostWhereUniqueInput | PostWhereUniqueInput[]
+  }
+
   export type ProjectUncheckedCreateNestedManyWithoutLeaderInput = {
     create?: XOR<ProjectCreateWithoutLeaderInput, ProjectUncheckedCreateWithoutLeaderInput> | ProjectCreateWithoutLeaderInput[] | ProjectUncheckedCreateWithoutLeaderInput[]
     connectOrCreate?: ProjectCreateOrConnectWithoutLeaderInput | ProjectCreateOrConnectWithoutLeaderInput[]
@@ -36781,6 +40378,20 @@ export namespace Prisma {
     connectOrCreate?: OfficeMeetingViewCreateOrConnectWithoutUserInput | OfficeMeetingViewCreateOrConnectWithoutUserInput[]
     createMany?: OfficeMeetingViewCreateManyUserInputEnvelope
     connect?: OfficeMeetingViewWhereUniqueInput | OfficeMeetingViewWhereUniqueInput[]
+  }
+
+  export type PostUncheckedCreateNestedManyWithoutAuthorInput = {
+    create?: XOR<PostCreateWithoutAuthorInput, PostUncheckedCreateWithoutAuthorInput> | PostCreateWithoutAuthorInput[] | PostUncheckedCreateWithoutAuthorInput[]
+    connectOrCreate?: PostCreateOrConnectWithoutAuthorInput | PostCreateOrConnectWithoutAuthorInput[]
+    createMany?: PostCreateManyAuthorInputEnvelope
+    connect?: PostWhereUniqueInput | PostWhereUniqueInput[]
+  }
+
+  export type PostUncheckedCreateNestedManyWithoutApprovedByInput = {
+    create?: XOR<PostCreateWithoutApprovedByInput, PostUncheckedCreateWithoutApprovedByInput> | PostCreateWithoutApprovedByInput[] | PostUncheckedCreateWithoutApprovedByInput[]
+    connectOrCreate?: PostCreateOrConnectWithoutApprovedByInput | PostCreateOrConnectWithoutApprovedByInput[]
+    createMany?: PostCreateManyApprovedByInputEnvelope
+    connect?: PostWhereUniqueInput | PostWhereUniqueInput[]
   }
 
   export type NullableDateTimeFieldUpdateOperationsInput = {
@@ -37007,6 +40618,34 @@ export namespace Prisma {
     deleteMany?: OfficeMeetingViewScalarWhereInput | OfficeMeetingViewScalarWhereInput[]
   }
 
+  export type PostUpdateManyWithoutAuthorNestedInput = {
+    create?: XOR<PostCreateWithoutAuthorInput, PostUncheckedCreateWithoutAuthorInput> | PostCreateWithoutAuthorInput[] | PostUncheckedCreateWithoutAuthorInput[]
+    connectOrCreate?: PostCreateOrConnectWithoutAuthorInput | PostCreateOrConnectWithoutAuthorInput[]
+    upsert?: PostUpsertWithWhereUniqueWithoutAuthorInput | PostUpsertWithWhereUniqueWithoutAuthorInput[]
+    createMany?: PostCreateManyAuthorInputEnvelope
+    set?: PostWhereUniqueInput | PostWhereUniqueInput[]
+    disconnect?: PostWhereUniqueInput | PostWhereUniqueInput[]
+    delete?: PostWhereUniqueInput | PostWhereUniqueInput[]
+    connect?: PostWhereUniqueInput | PostWhereUniqueInput[]
+    update?: PostUpdateWithWhereUniqueWithoutAuthorInput | PostUpdateWithWhereUniqueWithoutAuthorInput[]
+    updateMany?: PostUpdateManyWithWhereWithoutAuthorInput | PostUpdateManyWithWhereWithoutAuthorInput[]
+    deleteMany?: PostScalarWhereInput | PostScalarWhereInput[]
+  }
+
+  export type PostUpdateManyWithoutApprovedByNestedInput = {
+    create?: XOR<PostCreateWithoutApprovedByInput, PostUncheckedCreateWithoutApprovedByInput> | PostCreateWithoutApprovedByInput[] | PostUncheckedCreateWithoutApprovedByInput[]
+    connectOrCreate?: PostCreateOrConnectWithoutApprovedByInput | PostCreateOrConnectWithoutApprovedByInput[]
+    upsert?: PostUpsertWithWhereUniqueWithoutApprovedByInput | PostUpsertWithWhereUniqueWithoutApprovedByInput[]
+    createMany?: PostCreateManyApprovedByInputEnvelope
+    set?: PostWhereUniqueInput | PostWhereUniqueInput[]
+    disconnect?: PostWhereUniqueInput | PostWhereUniqueInput[]
+    delete?: PostWhereUniqueInput | PostWhereUniqueInput[]
+    connect?: PostWhereUniqueInput | PostWhereUniqueInput[]
+    update?: PostUpdateWithWhereUniqueWithoutApprovedByInput | PostUpdateWithWhereUniqueWithoutApprovedByInput[]
+    updateMany?: PostUpdateManyWithWhereWithoutApprovedByInput | PostUpdateManyWithWhereWithoutApprovedByInput[]
+    deleteMany?: PostScalarWhereInput | PostScalarWhereInput[]
+  }
+
   export type ProjectUncheckedUpdateManyWithoutLeaderNestedInput = {
     create?: XOR<ProjectCreateWithoutLeaderInput, ProjectUncheckedCreateWithoutLeaderInput> | ProjectCreateWithoutLeaderInput[] | ProjectUncheckedCreateWithoutLeaderInput[]
     connectOrCreate?: ProjectCreateOrConnectWithoutLeaderInput | ProjectCreateOrConnectWithoutLeaderInput[]
@@ -37187,6 +40826,34 @@ export namespace Prisma {
     update?: OfficeMeetingViewUpdateWithWhereUniqueWithoutUserInput | OfficeMeetingViewUpdateWithWhereUniqueWithoutUserInput[]
     updateMany?: OfficeMeetingViewUpdateManyWithWhereWithoutUserInput | OfficeMeetingViewUpdateManyWithWhereWithoutUserInput[]
     deleteMany?: OfficeMeetingViewScalarWhereInput | OfficeMeetingViewScalarWhereInput[]
+  }
+
+  export type PostUncheckedUpdateManyWithoutAuthorNestedInput = {
+    create?: XOR<PostCreateWithoutAuthorInput, PostUncheckedCreateWithoutAuthorInput> | PostCreateWithoutAuthorInput[] | PostUncheckedCreateWithoutAuthorInput[]
+    connectOrCreate?: PostCreateOrConnectWithoutAuthorInput | PostCreateOrConnectWithoutAuthorInput[]
+    upsert?: PostUpsertWithWhereUniqueWithoutAuthorInput | PostUpsertWithWhereUniqueWithoutAuthorInput[]
+    createMany?: PostCreateManyAuthorInputEnvelope
+    set?: PostWhereUniqueInput | PostWhereUniqueInput[]
+    disconnect?: PostWhereUniqueInput | PostWhereUniqueInput[]
+    delete?: PostWhereUniqueInput | PostWhereUniqueInput[]
+    connect?: PostWhereUniqueInput | PostWhereUniqueInput[]
+    update?: PostUpdateWithWhereUniqueWithoutAuthorInput | PostUpdateWithWhereUniqueWithoutAuthorInput[]
+    updateMany?: PostUpdateManyWithWhereWithoutAuthorInput | PostUpdateManyWithWhereWithoutAuthorInput[]
+    deleteMany?: PostScalarWhereInput | PostScalarWhereInput[]
+  }
+
+  export type PostUncheckedUpdateManyWithoutApprovedByNestedInput = {
+    create?: XOR<PostCreateWithoutApprovedByInput, PostUncheckedCreateWithoutApprovedByInput> | PostCreateWithoutApprovedByInput[] | PostUncheckedCreateWithoutApprovedByInput[]
+    connectOrCreate?: PostCreateOrConnectWithoutApprovedByInput | PostCreateOrConnectWithoutApprovedByInput[]
+    upsert?: PostUpsertWithWhereUniqueWithoutApprovedByInput | PostUpsertWithWhereUniqueWithoutApprovedByInput[]
+    createMany?: PostCreateManyApprovedByInputEnvelope
+    set?: PostWhereUniqueInput | PostWhereUniqueInput[]
+    disconnect?: PostWhereUniqueInput | PostWhereUniqueInput[]
+    delete?: PostWhereUniqueInput | PostWhereUniqueInput[]
+    connect?: PostWhereUniqueInput | PostWhereUniqueInput[]
+    update?: PostUpdateWithWhereUniqueWithoutApprovedByInput | PostUpdateWithWhereUniqueWithoutApprovedByInput[]
+    updateMany?: PostUpdateManyWithWhereWithoutApprovedByInput | PostUpdateManyWithWhereWithoutApprovedByInput[]
+    deleteMany?: PostScalarWhereInput | PostScalarWhereInput[]
   }
 
   export type ProjectCreateNestedManyWithoutCallRoundInput = {
@@ -38219,6 +41886,116 @@ export namespace Prisma {
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutNotificationsInput, UserUpdateWithoutNotificationsInput>, UserUncheckedUpdateWithoutNotificationsInput>
   }
 
+  export type UserCreateNestedOneWithoutPostsInput = {
+    create?: XOR<UserCreateWithoutPostsInput, UserUncheckedCreateWithoutPostsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutPostsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type DepartmentCreateNestedOneWithoutPostsInput = {
+    create?: XOR<DepartmentCreateWithoutPostsInput, DepartmentUncheckedCreateWithoutPostsInput>
+    connectOrCreate?: DepartmentCreateOrConnectWithoutPostsInput
+    connect?: DepartmentWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutApprovedPostsInput = {
+    create?: XOR<UserCreateWithoutApprovedPostsInput, UserUncheckedCreateWithoutApprovedPostsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutApprovedPostsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type EnumPostAudienceFieldUpdateOperationsInput = {
+    set?: $Enums.PostAudience
+  }
+
+  export type EnumPostStatusFieldUpdateOperationsInput = {
+    set?: $Enums.PostStatus
+  }
+
+  export type UserUpdateOneRequiredWithoutPostsNestedInput = {
+    create?: XOR<UserCreateWithoutPostsInput, UserUncheckedCreateWithoutPostsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutPostsInput
+    upsert?: UserUpsertWithoutPostsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutPostsInput, UserUpdateWithoutPostsInput>, UserUncheckedUpdateWithoutPostsInput>
+  }
+
+  export type DepartmentUpdateOneWithoutPostsNestedInput = {
+    create?: XOR<DepartmentCreateWithoutPostsInput, DepartmentUncheckedCreateWithoutPostsInput>
+    connectOrCreate?: DepartmentCreateOrConnectWithoutPostsInput
+    upsert?: DepartmentUpsertWithoutPostsInput
+    disconnect?: DepartmentWhereInput | boolean
+    delete?: DepartmentWhereInput | boolean
+    connect?: DepartmentWhereUniqueInput
+    update?: XOR<XOR<DepartmentUpdateToOneWithWhereWithoutPostsInput, DepartmentUpdateWithoutPostsInput>, DepartmentUncheckedUpdateWithoutPostsInput>
+  }
+
+  export type UserUpdateOneWithoutApprovedPostsNestedInput = {
+    create?: XOR<UserCreateWithoutApprovedPostsInput, UserUncheckedCreateWithoutApprovedPostsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutApprovedPostsInput
+    upsert?: UserUpsertWithoutApprovedPostsInput
+    disconnect?: UserWhereInput | boolean
+    delete?: UserWhereInput | boolean
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutApprovedPostsInput, UserUpdateWithoutApprovedPostsInput>, UserUncheckedUpdateWithoutApprovedPostsInput>
+  }
+
+  export type DepartmentCreateNestedOneWithoutRoomsInput = {
+    create?: XOR<DepartmentCreateWithoutRoomsInput, DepartmentUncheckedCreateWithoutRoomsInput>
+    connectOrCreate?: DepartmentCreateOrConnectWithoutRoomsInput
+    connect?: DepartmentWhereUniqueInput
+  }
+
+  export type OfficeMeetingCreateNestedManyWithoutRoomInput = {
+    create?: XOR<OfficeMeetingCreateWithoutRoomInput, OfficeMeetingUncheckedCreateWithoutRoomInput> | OfficeMeetingCreateWithoutRoomInput[] | OfficeMeetingUncheckedCreateWithoutRoomInput[]
+    connectOrCreate?: OfficeMeetingCreateOrConnectWithoutRoomInput | OfficeMeetingCreateOrConnectWithoutRoomInput[]
+    createMany?: OfficeMeetingCreateManyRoomInputEnvelope
+    connect?: OfficeMeetingWhereUniqueInput | OfficeMeetingWhereUniqueInput[]
+  }
+
+  export type OfficeMeetingUncheckedCreateNestedManyWithoutRoomInput = {
+    create?: XOR<OfficeMeetingCreateWithoutRoomInput, OfficeMeetingUncheckedCreateWithoutRoomInput> | OfficeMeetingCreateWithoutRoomInput[] | OfficeMeetingUncheckedCreateWithoutRoomInput[]
+    connectOrCreate?: OfficeMeetingCreateOrConnectWithoutRoomInput | OfficeMeetingCreateOrConnectWithoutRoomInput[]
+    createMany?: OfficeMeetingCreateManyRoomInputEnvelope
+    connect?: OfficeMeetingWhereUniqueInput | OfficeMeetingWhereUniqueInput[]
+  }
+
+  export type DepartmentUpdateOneRequiredWithoutRoomsNestedInput = {
+    create?: XOR<DepartmentCreateWithoutRoomsInput, DepartmentUncheckedCreateWithoutRoomsInput>
+    connectOrCreate?: DepartmentCreateOrConnectWithoutRoomsInput
+    upsert?: DepartmentUpsertWithoutRoomsInput
+    connect?: DepartmentWhereUniqueInput
+    update?: XOR<XOR<DepartmentUpdateToOneWithWhereWithoutRoomsInput, DepartmentUpdateWithoutRoomsInput>, DepartmentUncheckedUpdateWithoutRoomsInput>
+  }
+
+  export type OfficeMeetingUpdateManyWithoutRoomNestedInput = {
+    create?: XOR<OfficeMeetingCreateWithoutRoomInput, OfficeMeetingUncheckedCreateWithoutRoomInput> | OfficeMeetingCreateWithoutRoomInput[] | OfficeMeetingUncheckedCreateWithoutRoomInput[]
+    connectOrCreate?: OfficeMeetingCreateOrConnectWithoutRoomInput | OfficeMeetingCreateOrConnectWithoutRoomInput[]
+    upsert?: OfficeMeetingUpsertWithWhereUniqueWithoutRoomInput | OfficeMeetingUpsertWithWhereUniqueWithoutRoomInput[]
+    createMany?: OfficeMeetingCreateManyRoomInputEnvelope
+    set?: OfficeMeetingWhereUniqueInput | OfficeMeetingWhereUniqueInput[]
+    disconnect?: OfficeMeetingWhereUniqueInput | OfficeMeetingWhereUniqueInput[]
+    delete?: OfficeMeetingWhereUniqueInput | OfficeMeetingWhereUniqueInput[]
+    connect?: OfficeMeetingWhereUniqueInput | OfficeMeetingWhereUniqueInput[]
+    update?: OfficeMeetingUpdateWithWhereUniqueWithoutRoomInput | OfficeMeetingUpdateWithWhereUniqueWithoutRoomInput[]
+    updateMany?: OfficeMeetingUpdateManyWithWhereWithoutRoomInput | OfficeMeetingUpdateManyWithWhereWithoutRoomInput[]
+    deleteMany?: OfficeMeetingScalarWhereInput | OfficeMeetingScalarWhereInput[]
+  }
+
+  export type OfficeMeetingUncheckedUpdateManyWithoutRoomNestedInput = {
+    create?: XOR<OfficeMeetingCreateWithoutRoomInput, OfficeMeetingUncheckedCreateWithoutRoomInput> | OfficeMeetingCreateWithoutRoomInput[] | OfficeMeetingUncheckedCreateWithoutRoomInput[]
+    connectOrCreate?: OfficeMeetingCreateOrConnectWithoutRoomInput | OfficeMeetingCreateOrConnectWithoutRoomInput[]
+    upsert?: OfficeMeetingUpsertWithWhereUniqueWithoutRoomInput | OfficeMeetingUpsertWithWhereUniqueWithoutRoomInput[]
+    createMany?: OfficeMeetingCreateManyRoomInputEnvelope
+    set?: OfficeMeetingWhereUniqueInput | OfficeMeetingWhereUniqueInput[]
+    disconnect?: OfficeMeetingWhereUniqueInput | OfficeMeetingWhereUniqueInput[]
+    delete?: OfficeMeetingWhereUniqueInput | OfficeMeetingWhereUniqueInput[]
+    connect?: OfficeMeetingWhereUniqueInput | OfficeMeetingWhereUniqueInput[]
+    update?: OfficeMeetingUpdateWithWhereUniqueWithoutRoomInput | OfficeMeetingUpdateWithWhereUniqueWithoutRoomInput[]
+    updateMany?: OfficeMeetingUpdateManyWithWhereWithoutRoomInput | OfficeMeetingUpdateManyWithWhereWithoutRoomInput[]
+    deleteMany?: OfficeMeetingScalarWhereInput | OfficeMeetingScalarWhereInput[]
+  }
+
   export type OfficeMeetingCreatememberUserIdsInput = {
     set: string[]
   }
@@ -38233,6 +42010,12 @@ export namespace Prisma {
     create?: XOR<UserCreateWithoutOfficeMeetingsAsInstructorInput, UserUncheckedCreateWithoutOfficeMeetingsAsInstructorInput>
     connectOrCreate?: UserCreateOrConnectWithoutOfficeMeetingsAsInstructorInput
     connect?: UserWhereUniqueInput
+  }
+
+  export type RoomCreateNestedOneWithoutOfficeMeetingsInput = {
+    create?: XOR<RoomCreateWithoutOfficeMeetingsInput, RoomUncheckedCreateWithoutOfficeMeetingsInput>
+    connectOrCreate?: RoomCreateOrConnectWithoutOfficeMeetingsInput
+    connect?: RoomWhereUniqueInput
   }
 
   export type OfficeMeetingViewCreateNestedManyWithoutMeetingInput = {
@@ -38268,6 +42051,16 @@ export namespace Prisma {
     upsert?: UserUpsertWithoutOfficeMeetingsAsInstructorInput
     connect?: UserWhereUniqueInput
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutOfficeMeetingsAsInstructorInput, UserUpdateWithoutOfficeMeetingsAsInstructorInput>, UserUncheckedUpdateWithoutOfficeMeetingsAsInstructorInput>
+  }
+
+  export type RoomUpdateOneWithoutOfficeMeetingsNestedInput = {
+    create?: XOR<RoomCreateWithoutOfficeMeetingsInput, RoomUncheckedCreateWithoutOfficeMeetingsInput>
+    connectOrCreate?: RoomCreateOrConnectWithoutOfficeMeetingsInput
+    upsert?: RoomUpsertWithoutOfficeMeetingsInput
+    disconnect?: RoomWhereInput | boolean
+    delete?: RoomWhereInput | boolean
+    connect?: RoomWhereUniqueInput
+    update?: XOR<XOR<RoomUpdateToOneWithWhereWithoutOfficeMeetingsInput, RoomUpdateWithoutOfficeMeetingsInput>, RoomUncheckedUpdateWithoutOfficeMeetingsInput>
   }
 
   export type OfficeMeetingViewUpdateManyWithoutMeetingNestedInput = {
@@ -39034,6 +42827,40 @@ export namespace Prisma {
     _max?: NestedEnumNotificationTypeFilter<$PrismaModel>
   }
 
+  export type NestedEnumPostAudienceFilter<$PrismaModel = never> = {
+    equals?: $Enums.PostAudience | EnumPostAudienceFieldRefInput<$PrismaModel>
+    in?: $Enums.PostAudience[] | ListEnumPostAudienceFieldRefInput<$PrismaModel>
+    notIn?: $Enums.PostAudience[] | ListEnumPostAudienceFieldRefInput<$PrismaModel>
+    not?: NestedEnumPostAudienceFilter<$PrismaModel> | $Enums.PostAudience
+  }
+
+  export type NestedEnumPostStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.PostStatus | EnumPostStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.PostStatus[] | ListEnumPostStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.PostStatus[] | ListEnumPostStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumPostStatusFilter<$PrismaModel> | $Enums.PostStatus
+  }
+
+  export type NestedEnumPostAudienceWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.PostAudience | EnumPostAudienceFieldRefInput<$PrismaModel>
+    in?: $Enums.PostAudience[] | ListEnumPostAudienceFieldRefInput<$PrismaModel>
+    notIn?: $Enums.PostAudience[] | ListEnumPostAudienceFieldRefInput<$PrismaModel>
+    not?: NestedEnumPostAudienceWithAggregatesFilter<$PrismaModel> | $Enums.PostAudience
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumPostAudienceFilter<$PrismaModel>
+    _max?: NestedEnumPostAudienceFilter<$PrismaModel>
+  }
+
+  export type NestedEnumPostStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.PostStatus | EnumPostStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.PostStatus[] | ListEnumPostStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.PostStatus[] | ListEnumPostStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumPostStatusWithAggregatesFilter<$PrismaModel> | $Enums.PostStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumPostStatusFilter<$PrismaModel>
+    _max?: NestedEnumPostStatusFilter<$PrismaModel>
+  }
+
   export type MajorCreateWithoutDepartmentInput = {
     id?: string
     code: string
@@ -39097,6 +42924,8 @@ export namespace Prisma {
     councilAssignments?: CouncilMemberAssignmentCreateNestedManyWithoutCouncilMemberInput
     officeMeetingsAsInstructor?: OfficeMeetingCreateNestedManyWithoutInstructorInput
     officeMeetingViews?: OfficeMeetingViewCreateNestedManyWithoutUserInput
+    posts?: PostCreateNestedManyWithoutAuthorInput
+    approvedPosts?: PostCreateNestedManyWithoutApprovedByInput
   }
 
   export type UserUncheckedCreateWithoutDepartmentRefInput = {
@@ -39128,6 +42957,8 @@ export namespace Prisma {
     councilAssignments?: CouncilMemberAssignmentUncheckedCreateNestedManyWithoutCouncilMemberInput
     officeMeetingsAsInstructor?: OfficeMeetingUncheckedCreateNestedManyWithoutInstructorInput
     officeMeetingViews?: OfficeMeetingViewUncheckedCreateNestedManyWithoutUserInput
+    posts?: PostUncheckedCreateNestedManyWithoutAuthorInput
+    approvedPosts?: PostUncheckedCreateNestedManyWithoutApprovedByInput
   }
 
   export type UserCreateOrConnectWithoutDepartmentRefInput = {
@@ -39219,6 +43050,82 @@ export namespace Prisma {
   export type CallRoundCreateOrConnectWithoutDepartmentsInput = {
     where: CallRoundWhereUniqueInput
     create: XOR<CallRoundCreateWithoutDepartmentsInput, CallRoundUncheckedCreateWithoutDepartmentsInput>
+  }
+
+  export type RoomCreateWithoutDepartmentInput = {
+    id?: string
+    name: string
+    code: string
+    capacity?: number | null
+    description?: string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    officeMeetings?: OfficeMeetingCreateNestedManyWithoutRoomInput
+  }
+
+  export type RoomUncheckedCreateWithoutDepartmentInput = {
+    id?: string
+    name: string
+    code: string
+    capacity?: number | null
+    description?: string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    officeMeetings?: OfficeMeetingUncheckedCreateNestedManyWithoutRoomInput
+  }
+
+  export type RoomCreateOrConnectWithoutDepartmentInput = {
+    where: RoomWhereUniqueInput
+    create: XOR<RoomCreateWithoutDepartmentInput, RoomUncheckedCreateWithoutDepartmentInput>
+  }
+
+  export type RoomCreateManyDepartmentInputEnvelope = {
+    data: RoomCreateManyDepartmentInput | RoomCreateManyDepartmentInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type PostCreateWithoutDepartmentInput = {
+    id?: string
+    title: string
+    content: string
+    audience?: $Enums.PostAudience
+    status?: $Enums.PostStatus
+    authorRole: $Enums.Role
+    approvedAt?: Date | string | null
+    rejectionReason?: string | null
+    publishedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    author: UserCreateNestedOneWithoutPostsInput
+    approvedBy?: UserCreateNestedOneWithoutApprovedPostsInput
+  }
+
+  export type PostUncheckedCreateWithoutDepartmentInput = {
+    id?: string
+    title: string
+    content: string
+    audience?: $Enums.PostAudience
+    status?: $Enums.PostStatus
+    authorId: string
+    authorRole: $Enums.Role
+    approvedById?: string | null
+    approvedAt?: Date | string | null
+    rejectionReason?: string | null
+    publishedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PostCreateOrConnectWithoutDepartmentInput = {
+    where: PostWhereUniqueInput
+    create: XOR<PostCreateWithoutDepartmentInput, PostUncheckedCreateWithoutDepartmentInput>
+  }
+
+  export type PostCreateManyDepartmentInputEnvelope = {
+    data: PostCreateManyDepartmentInput | PostCreateManyDepartmentInput[]
+    skipDuplicates?: boolean
   }
 
   export type MajorUpsertWithWhereUniqueWithoutDepartmentInput = {
@@ -39338,6 +43245,73 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"CallRound"> | Date | string
   }
 
+  export type RoomUpsertWithWhereUniqueWithoutDepartmentInput = {
+    where: RoomWhereUniqueInput
+    update: XOR<RoomUpdateWithoutDepartmentInput, RoomUncheckedUpdateWithoutDepartmentInput>
+    create: XOR<RoomCreateWithoutDepartmentInput, RoomUncheckedCreateWithoutDepartmentInput>
+  }
+
+  export type RoomUpdateWithWhereUniqueWithoutDepartmentInput = {
+    where: RoomWhereUniqueInput
+    data: XOR<RoomUpdateWithoutDepartmentInput, RoomUncheckedUpdateWithoutDepartmentInput>
+  }
+
+  export type RoomUpdateManyWithWhereWithoutDepartmentInput = {
+    where: RoomScalarWhereInput
+    data: XOR<RoomUpdateManyMutationInput, RoomUncheckedUpdateManyWithoutDepartmentInput>
+  }
+
+  export type RoomScalarWhereInput = {
+    AND?: RoomScalarWhereInput | RoomScalarWhereInput[]
+    OR?: RoomScalarWhereInput[]
+    NOT?: RoomScalarWhereInput | RoomScalarWhereInput[]
+    id?: StringFilter<"Room"> | string
+    name?: StringFilter<"Room"> | string
+    code?: StringFilter<"Room"> | string
+    capacity?: IntNullableFilter<"Room"> | number | null
+    description?: StringNullableFilter<"Room"> | string | null
+    departmentId?: StringFilter<"Room"> | string
+    isActive?: BoolFilter<"Room"> | boolean
+    createdAt?: DateTimeFilter<"Room"> | Date | string
+    updatedAt?: DateTimeFilter<"Room"> | Date | string
+  }
+
+  export type PostUpsertWithWhereUniqueWithoutDepartmentInput = {
+    where: PostWhereUniqueInput
+    update: XOR<PostUpdateWithoutDepartmentInput, PostUncheckedUpdateWithoutDepartmentInput>
+    create: XOR<PostCreateWithoutDepartmentInput, PostUncheckedCreateWithoutDepartmentInput>
+  }
+
+  export type PostUpdateWithWhereUniqueWithoutDepartmentInput = {
+    where: PostWhereUniqueInput
+    data: XOR<PostUpdateWithoutDepartmentInput, PostUncheckedUpdateWithoutDepartmentInput>
+  }
+
+  export type PostUpdateManyWithWhereWithoutDepartmentInput = {
+    where: PostScalarWhereInput
+    data: XOR<PostUpdateManyMutationInput, PostUncheckedUpdateManyWithoutDepartmentInput>
+  }
+
+  export type PostScalarWhereInput = {
+    AND?: PostScalarWhereInput | PostScalarWhereInput[]
+    OR?: PostScalarWhereInput[]
+    NOT?: PostScalarWhereInput | PostScalarWhereInput[]
+    id?: StringFilter<"Post"> | string
+    title?: StringFilter<"Post"> | string
+    content?: StringFilter<"Post"> | string
+    audience?: EnumPostAudienceFilter<"Post"> | $Enums.PostAudience
+    status?: EnumPostStatusFilter<"Post"> | $Enums.PostStatus
+    authorId?: StringFilter<"Post"> | string
+    authorRole?: EnumRoleFilter<"Post"> | $Enums.Role
+    departmentId?: StringNullableFilter<"Post"> | string | null
+    approvedById?: StringNullableFilter<"Post"> | string | null
+    approvedAt?: DateTimeNullableFilter<"Post"> | Date | string | null
+    rejectionReason?: StringNullableFilter<"Post"> | string | null
+    publishedAt?: DateTimeNullableFilter<"Post"> | Date | string | null
+    createdAt?: DateTimeFilter<"Post"> | Date | string
+    updatedAt?: DateTimeFilter<"Post"> | Date | string
+  }
+
   export type DepartmentCreateWithoutMajorsInput = {
     id?: string
     code: string
@@ -39347,6 +43321,8 @@ export namespace Prisma {
     updatedAt?: Date | string
     users?: UserCreateNestedManyWithoutDepartmentRefInput
     callRounds?: CallRoundCreateNestedManyWithoutDepartmentsInput
+    rooms?: RoomCreateNestedManyWithoutDepartmentInput
+    posts?: PostCreateNestedManyWithoutDepartmentInput
   }
 
   export type DepartmentUncheckedCreateWithoutMajorsInput = {
@@ -39358,6 +43334,8 @@ export namespace Prisma {
     updatedAt?: Date | string
     users?: UserUncheckedCreateNestedManyWithoutDepartmentRefInput
     callRounds?: CallRoundUncheckedCreateNestedManyWithoutDepartmentsInput
+    rooms?: RoomUncheckedCreateNestedManyWithoutDepartmentInput
+    posts?: PostUncheckedCreateNestedManyWithoutDepartmentInput
   }
 
   export type DepartmentCreateOrConnectWithoutMajorsInput = {
@@ -39424,6 +43402,8 @@ export namespace Prisma {
     councilAssignments?: CouncilMemberAssignmentCreateNestedManyWithoutCouncilMemberInput
     officeMeetingsAsInstructor?: OfficeMeetingCreateNestedManyWithoutInstructorInput
     officeMeetingViews?: OfficeMeetingViewCreateNestedManyWithoutUserInput
+    posts?: PostCreateNestedManyWithoutAuthorInput
+    approvedPosts?: PostCreateNestedManyWithoutApprovedByInput
   }
 
   export type UserUncheckedCreateWithoutMajorInput = {
@@ -39455,6 +43435,8 @@ export namespace Prisma {
     councilAssignments?: CouncilMemberAssignmentUncheckedCreateNestedManyWithoutCouncilMemberInput
     officeMeetingsAsInstructor?: OfficeMeetingUncheckedCreateNestedManyWithoutInstructorInput
     officeMeetingViews?: OfficeMeetingViewUncheckedCreateNestedManyWithoutUserInput
+    posts?: PostUncheckedCreateNestedManyWithoutAuthorInput
+    approvedPosts?: PostUncheckedCreateNestedManyWithoutApprovedByInput
   }
 
   export type UserCreateOrConnectWithoutMajorInput = {
@@ -39568,6 +43550,8 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     users?: UserUpdateManyWithoutDepartmentRefNestedInput
     callRounds?: CallRoundUpdateManyWithoutDepartmentsNestedInput
+    rooms?: RoomUpdateManyWithoutDepartmentNestedInput
+    posts?: PostUpdateManyWithoutDepartmentNestedInput
   }
 
   export type DepartmentUncheckedUpdateWithoutMajorsInput = {
@@ -39579,6 +43563,8 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     users?: UserUncheckedUpdateManyWithoutDepartmentRefNestedInput
     callRounds?: CallRoundUncheckedUpdateManyWithoutDepartmentsNestedInput
+    rooms?: RoomUncheckedUpdateManyWithoutDepartmentNestedInput
+    posts?: PostUncheckedUpdateManyWithoutDepartmentNestedInput
   }
 
   export type ClassUpsertWithWhereUniqueWithoutMajorInput = {
@@ -39699,6 +43685,8 @@ export namespace Prisma {
     councilAssignments?: CouncilMemberAssignmentCreateNestedManyWithoutCouncilMemberInput
     officeMeetingsAsInstructor?: OfficeMeetingCreateNestedManyWithoutInstructorInput
     officeMeetingViews?: OfficeMeetingViewCreateNestedManyWithoutUserInput
+    posts?: PostCreateNestedManyWithoutAuthorInput
+    approvedPosts?: PostCreateNestedManyWithoutApprovedByInput
   }
 
   export type UserUncheckedCreateWithoutClassInput = {
@@ -39730,6 +43718,8 @@ export namespace Prisma {
     councilAssignments?: CouncilMemberAssignmentUncheckedCreateNestedManyWithoutCouncilMemberInput
     officeMeetingsAsInstructor?: OfficeMeetingUncheckedCreateNestedManyWithoutInstructorInput
     officeMeetingViews?: OfficeMeetingViewUncheckedCreateNestedManyWithoutUserInput
+    posts?: PostUncheckedCreateNestedManyWithoutAuthorInput
+    approvedPosts?: PostUncheckedCreateNestedManyWithoutApprovedByInput
   }
 
   export type UserCreateOrConnectWithoutClassInput = {
@@ -39899,6 +43889,8 @@ export namespace Prisma {
     updatedAt?: Date | string
     majors?: MajorCreateNestedManyWithoutDepartmentInput
     callRounds?: CallRoundCreateNestedManyWithoutDepartmentsInput
+    rooms?: RoomCreateNestedManyWithoutDepartmentInput
+    posts?: PostCreateNestedManyWithoutDepartmentInput
   }
 
   export type DepartmentUncheckedCreateWithoutUsersInput = {
@@ -39910,6 +43902,8 @@ export namespace Prisma {
     updatedAt?: Date | string
     majors?: MajorUncheckedCreateNestedManyWithoutDepartmentInput
     callRounds?: CallRoundUncheckedCreateNestedManyWithoutDepartmentsInput
+    rooms?: RoomUncheckedCreateNestedManyWithoutDepartmentInput
+    posts?: PostUncheckedCreateNestedManyWithoutDepartmentInput
   }
 
   export type DepartmentCreateOrConnectWithoutUsersInput = {
@@ -40431,6 +44425,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     project: ProjectCreateNestedOneWithoutOfficeMeetingsInput
+    room?: RoomCreateNestedOneWithoutOfficeMeetingsInput
     views?: OfficeMeetingViewCreateNestedManyWithoutMeetingInput
   }
 
@@ -40441,6 +44436,7 @@ export namespace Prisma {
     memberUserIds?: OfficeMeetingCreatememberUserIdsInput | string[]
     meetingAt: Date | string
     location: string
+    roomId?: string | null
     note?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -40481,6 +44477,90 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type PostCreateWithoutAuthorInput = {
+    id?: string
+    title: string
+    content: string
+    audience?: $Enums.PostAudience
+    status?: $Enums.PostStatus
+    authorRole: $Enums.Role
+    approvedAt?: Date | string | null
+    rejectionReason?: string | null
+    publishedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    department?: DepartmentCreateNestedOneWithoutPostsInput
+    approvedBy?: UserCreateNestedOneWithoutApprovedPostsInput
+  }
+
+  export type PostUncheckedCreateWithoutAuthorInput = {
+    id?: string
+    title: string
+    content: string
+    audience?: $Enums.PostAudience
+    status?: $Enums.PostStatus
+    authorRole: $Enums.Role
+    departmentId?: string | null
+    approvedById?: string | null
+    approvedAt?: Date | string | null
+    rejectionReason?: string | null
+    publishedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PostCreateOrConnectWithoutAuthorInput = {
+    where: PostWhereUniqueInput
+    create: XOR<PostCreateWithoutAuthorInput, PostUncheckedCreateWithoutAuthorInput>
+  }
+
+  export type PostCreateManyAuthorInputEnvelope = {
+    data: PostCreateManyAuthorInput | PostCreateManyAuthorInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type PostCreateWithoutApprovedByInput = {
+    id?: string
+    title: string
+    content: string
+    audience?: $Enums.PostAudience
+    status?: $Enums.PostStatus
+    authorRole: $Enums.Role
+    approvedAt?: Date | string | null
+    rejectionReason?: string | null
+    publishedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    author: UserCreateNestedOneWithoutPostsInput
+    department?: DepartmentCreateNestedOneWithoutPostsInput
+  }
+
+  export type PostUncheckedCreateWithoutApprovedByInput = {
+    id?: string
+    title: string
+    content: string
+    audience?: $Enums.PostAudience
+    status?: $Enums.PostStatus
+    authorId: string
+    authorRole: $Enums.Role
+    departmentId?: string | null
+    approvedAt?: Date | string | null
+    rejectionReason?: string | null
+    publishedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PostCreateOrConnectWithoutApprovedByInput = {
+    where: PostWhereUniqueInput
+    create: XOR<PostCreateWithoutApprovedByInput, PostUncheckedCreateWithoutApprovedByInput>
+  }
+
+  export type PostCreateManyApprovedByInputEnvelope = {
+    data: PostCreateManyApprovedByInput | PostCreateManyApprovedByInput[]
+    skipDuplicates?: boolean
+  }
+
   export type DepartmentUpsertWithoutUsersInput = {
     update: XOR<DepartmentUpdateWithoutUsersInput, DepartmentUncheckedUpdateWithoutUsersInput>
     create: XOR<DepartmentCreateWithoutUsersInput, DepartmentUncheckedCreateWithoutUsersInput>
@@ -40501,6 +44581,8 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     majors?: MajorUpdateManyWithoutDepartmentNestedInput
     callRounds?: CallRoundUpdateManyWithoutDepartmentsNestedInput
+    rooms?: RoomUpdateManyWithoutDepartmentNestedInput
+    posts?: PostUpdateManyWithoutDepartmentNestedInput
   }
 
   export type DepartmentUncheckedUpdateWithoutUsersInput = {
@@ -40512,6 +44594,8 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     majors?: MajorUncheckedUpdateManyWithoutDepartmentNestedInput
     callRounds?: CallRoundUncheckedUpdateManyWithoutDepartmentsNestedInput
+    rooms?: RoomUncheckedUpdateManyWithoutDepartmentNestedInput
+    posts?: PostUncheckedUpdateManyWithoutDepartmentNestedInput
   }
 
   export type MajorUpsertWithoutUsersInput = {
@@ -40889,6 +44973,7 @@ export namespace Prisma {
     memberUserIds?: StringNullableListFilter<"OfficeMeeting">
     meetingAt?: DateTimeFilter<"OfficeMeeting"> | Date | string
     location?: StringFilter<"OfficeMeeting"> | string
+    roomId?: StringNullableFilter<"OfficeMeeting"> | string | null
     note?: StringNullableFilter<"OfficeMeeting"> | string | null
     createdAt?: DateTimeFilter<"OfficeMeeting"> | Date | string
     updatedAt?: DateTimeFilter<"OfficeMeeting"> | Date | string
@@ -40919,6 +45004,38 @@ export namespace Prisma {
     userId?: StringFilter<"OfficeMeetingView"> | string
     isRead?: BoolFilter<"OfficeMeetingView"> | boolean
     readAt?: DateTimeNullableFilter<"OfficeMeetingView"> | Date | string | null
+  }
+
+  export type PostUpsertWithWhereUniqueWithoutAuthorInput = {
+    where: PostWhereUniqueInput
+    update: XOR<PostUpdateWithoutAuthorInput, PostUncheckedUpdateWithoutAuthorInput>
+    create: XOR<PostCreateWithoutAuthorInput, PostUncheckedCreateWithoutAuthorInput>
+  }
+
+  export type PostUpdateWithWhereUniqueWithoutAuthorInput = {
+    where: PostWhereUniqueInput
+    data: XOR<PostUpdateWithoutAuthorInput, PostUncheckedUpdateWithoutAuthorInput>
+  }
+
+  export type PostUpdateManyWithWhereWithoutAuthorInput = {
+    where: PostScalarWhereInput
+    data: XOR<PostUpdateManyMutationInput, PostUncheckedUpdateManyWithoutAuthorInput>
+  }
+
+  export type PostUpsertWithWhereUniqueWithoutApprovedByInput = {
+    where: PostWhereUniqueInput
+    update: XOR<PostUpdateWithoutApprovedByInput, PostUncheckedUpdateWithoutApprovedByInput>
+    create: XOR<PostCreateWithoutApprovedByInput, PostUncheckedCreateWithoutApprovedByInput>
+  }
+
+  export type PostUpdateWithWhereUniqueWithoutApprovedByInput = {
+    where: PostWhereUniqueInput
+    data: XOR<PostUpdateWithoutApprovedByInput, PostUncheckedUpdateWithoutApprovedByInput>
+  }
+
+  export type PostUpdateManyWithWhereWithoutApprovedByInput = {
+    where: PostScalarWhereInput
+    data: XOR<PostUpdateManyMutationInput, PostUncheckedUpdateManyWithoutApprovedByInput>
   }
 
   export type ProjectCreateWithoutCallRoundInput = {
@@ -41065,6 +45182,8 @@ export namespace Prisma {
     updatedAt?: Date | string
     majors?: MajorCreateNestedManyWithoutDepartmentInput
     users?: UserCreateNestedManyWithoutDepartmentRefInput
+    rooms?: RoomCreateNestedManyWithoutDepartmentInput
+    posts?: PostCreateNestedManyWithoutDepartmentInput
   }
 
   export type DepartmentUncheckedCreateWithoutCallRoundsInput = {
@@ -41076,6 +45195,8 @@ export namespace Prisma {
     updatedAt?: Date | string
     majors?: MajorUncheckedCreateNestedManyWithoutDepartmentInput
     users?: UserUncheckedCreateNestedManyWithoutDepartmentRefInput
+    rooms?: RoomUncheckedCreateNestedManyWithoutDepartmentInput
+    posts?: PostUncheckedCreateNestedManyWithoutDepartmentInput
   }
 
   export type DepartmentCreateOrConnectWithoutCallRoundsInput = {
@@ -41503,6 +45624,8 @@ export namespace Prisma {
     councilAssignments?: CouncilMemberAssignmentCreateNestedManyWithoutCouncilMemberInput
     officeMeetingsAsInstructor?: OfficeMeetingCreateNestedManyWithoutInstructorInput
     officeMeetingViews?: OfficeMeetingViewCreateNestedManyWithoutUserInput
+    posts?: PostCreateNestedManyWithoutAuthorInput
+    approvedPosts?: PostCreateNestedManyWithoutApprovedByInput
   }
 
   export type UserUncheckedCreateWithoutLeadProjectsInput = {
@@ -41534,6 +45657,8 @@ export namespace Prisma {
     councilAssignments?: CouncilMemberAssignmentUncheckedCreateNestedManyWithoutCouncilMemberInput
     officeMeetingsAsInstructor?: OfficeMeetingUncheckedCreateNestedManyWithoutInstructorInput
     officeMeetingViews?: OfficeMeetingViewUncheckedCreateNestedManyWithoutUserInput
+    posts?: PostUncheckedCreateNestedManyWithoutAuthorInput
+    approvedPosts?: PostUncheckedCreateNestedManyWithoutApprovedByInput
   }
 
   export type UserCreateOrConnectWithoutLeadProjectsInput = {
@@ -41570,6 +45695,8 @@ export namespace Prisma {
     councilAssignments?: CouncilMemberAssignmentCreateNestedManyWithoutCouncilMemberInput
     officeMeetingsAsInstructor?: OfficeMeetingCreateNestedManyWithoutInstructorInput
     officeMeetingViews?: OfficeMeetingViewCreateNestedManyWithoutUserInput
+    posts?: PostCreateNestedManyWithoutAuthorInput
+    approvedPosts?: PostCreateNestedManyWithoutApprovedByInput
   }
 
   export type UserUncheckedCreateWithoutDeanReviewsInput = {
@@ -41601,6 +45728,8 @@ export namespace Prisma {
     councilAssignments?: CouncilMemberAssignmentUncheckedCreateNestedManyWithoutCouncilMemberInput
     officeMeetingsAsInstructor?: OfficeMeetingUncheckedCreateNestedManyWithoutInstructorInput
     officeMeetingViews?: OfficeMeetingViewUncheckedCreateNestedManyWithoutUserInput
+    posts?: PostUncheckedCreateNestedManyWithoutAuthorInput
+    approvedPosts?: PostUncheckedCreateNestedManyWithoutApprovedByInput
   }
 
   export type UserCreateOrConnectWithoutDeanReviewsInput = {
@@ -41877,6 +46006,8 @@ export namespace Prisma {
     councilAssignments?: CouncilMemberAssignmentCreateNestedManyWithoutCouncilMemberInput
     officeMeetingsAsInstructor?: OfficeMeetingCreateNestedManyWithoutInstructorInput
     officeMeetingViews?: OfficeMeetingViewCreateNestedManyWithoutUserInput
+    posts?: PostCreateNestedManyWithoutAuthorInput
+    approvedPosts?: PostCreateNestedManyWithoutApprovedByInput
   }
 
   export type UserUncheckedCreateWithoutInstructedProjectsInput = {
@@ -41908,6 +46039,8 @@ export namespace Prisma {
     councilAssignments?: CouncilMemberAssignmentUncheckedCreateNestedManyWithoutCouncilMemberInput
     officeMeetingsAsInstructor?: OfficeMeetingUncheckedCreateNestedManyWithoutInstructorInput
     officeMeetingViews?: OfficeMeetingViewUncheckedCreateNestedManyWithoutUserInput
+    posts?: PostUncheckedCreateNestedManyWithoutAuthorInput
+    approvedPosts?: PostUncheckedCreateNestedManyWithoutApprovedByInput
   }
 
   export type UserCreateOrConnectWithoutInstructedProjectsInput = {
@@ -41925,6 +46058,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     instructor: UserCreateNestedOneWithoutOfficeMeetingsAsInstructorInput
+    room?: RoomCreateNestedOneWithoutOfficeMeetingsInput
     views?: OfficeMeetingViewCreateNestedManyWithoutMeetingInput
   }
 
@@ -41935,6 +46069,7 @@ export namespace Prisma {
     memberUserIds?: OfficeMeetingCreatememberUserIdsInput | string[]
     meetingAt: Date | string
     location: string
+    roomId?: string | null
     note?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -41991,6 +46126,8 @@ export namespace Prisma {
     councilAssignments?: CouncilMemberAssignmentUpdateManyWithoutCouncilMemberNestedInput
     officeMeetingsAsInstructor?: OfficeMeetingUpdateManyWithoutInstructorNestedInput
     officeMeetingViews?: OfficeMeetingViewUpdateManyWithoutUserNestedInput
+    posts?: PostUpdateManyWithoutAuthorNestedInput
+    approvedPosts?: PostUpdateManyWithoutApprovedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutLeadProjectsInput = {
@@ -42022,6 +46159,8 @@ export namespace Prisma {
     councilAssignments?: CouncilMemberAssignmentUncheckedUpdateManyWithoutCouncilMemberNestedInput
     officeMeetingsAsInstructor?: OfficeMeetingUncheckedUpdateManyWithoutInstructorNestedInput
     officeMeetingViews?: OfficeMeetingViewUncheckedUpdateManyWithoutUserNestedInput
+    posts?: PostUncheckedUpdateManyWithoutAuthorNestedInput
+    approvedPosts?: PostUncheckedUpdateManyWithoutApprovedByNestedInput
   }
 
   export type UserUpsertWithoutDeanReviewsInput = {
@@ -42064,6 +46203,8 @@ export namespace Prisma {
     councilAssignments?: CouncilMemberAssignmentUpdateManyWithoutCouncilMemberNestedInput
     officeMeetingsAsInstructor?: OfficeMeetingUpdateManyWithoutInstructorNestedInput
     officeMeetingViews?: OfficeMeetingViewUpdateManyWithoutUserNestedInput
+    posts?: PostUpdateManyWithoutAuthorNestedInput
+    approvedPosts?: PostUpdateManyWithoutApprovedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutDeanReviewsInput = {
@@ -42095,6 +46236,8 @@ export namespace Prisma {
     councilAssignments?: CouncilMemberAssignmentUncheckedUpdateManyWithoutCouncilMemberNestedInput
     officeMeetingsAsInstructor?: OfficeMeetingUncheckedUpdateManyWithoutInstructorNestedInput
     officeMeetingViews?: OfficeMeetingViewUncheckedUpdateManyWithoutUserNestedInput
+    posts?: PostUncheckedUpdateManyWithoutAuthorNestedInput
+    approvedPosts?: PostUncheckedUpdateManyWithoutApprovedByNestedInput
   }
 
   export type CallRoundUpsertWithoutProjectsInput = {
@@ -42366,6 +46509,8 @@ export namespace Prisma {
     councilAssignments?: CouncilMemberAssignmentUpdateManyWithoutCouncilMemberNestedInput
     officeMeetingsAsInstructor?: OfficeMeetingUpdateManyWithoutInstructorNestedInput
     officeMeetingViews?: OfficeMeetingViewUpdateManyWithoutUserNestedInput
+    posts?: PostUpdateManyWithoutAuthorNestedInput
+    approvedPosts?: PostUpdateManyWithoutApprovedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutInstructedProjectsInput = {
@@ -42397,6 +46542,8 @@ export namespace Prisma {
     councilAssignments?: CouncilMemberAssignmentUncheckedUpdateManyWithoutCouncilMemberNestedInput
     officeMeetingsAsInstructor?: OfficeMeetingUncheckedUpdateManyWithoutInstructorNestedInput
     officeMeetingViews?: OfficeMeetingViewUncheckedUpdateManyWithoutUserNestedInput
+    posts?: PostUncheckedUpdateManyWithoutAuthorNestedInput
+    approvedPosts?: PostUncheckedUpdateManyWithoutApprovedByNestedInput
   }
 
   export type OfficeMeetingUpsertWithWhereUniqueWithoutProjectInput = {
@@ -42847,6 +46994,8 @@ export namespace Prisma {
     councilAssignments?: CouncilMemberAssignmentCreateNestedManyWithoutCouncilMemberInput
     officeMeetingsAsInstructor?: OfficeMeetingCreateNestedManyWithoutInstructorInput
     officeMeetingViews?: OfficeMeetingViewCreateNestedManyWithoutUserInput
+    posts?: PostCreateNestedManyWithoutAuthorInput
+    approvedPosts?: PostCreateNestedManyWithoutApprovedByInput
   }
 
   export type UserUncheckedCreateWithoutCouncilEvaluationsInput = {
@@ -42878,6 +47027,8 @@ export namespace Prisma {
     councilAssignments?: CouncilMemberAssignmentUncheckedCreateNestedManyWithoutCouncilMemberInput
     officeMeetingsAsInstructor?: OfficeMeetingUncheckedCreateNestedManyWithoutInstructorInput
     officeMeetingViews?: OfficeMeetingViewUncheckedCreateNestedManyWithoutUserInput
+    posts?: PostUncheckedCreateNestedManyWithoutAuthorInput
+    approvedPosts?: PostUncheckedCreateNestedManyWithoutApprovedByInput
   }
 
   export type UserCreateOrConnectWithoutCouncilEvaluationsInput = {
@@ -42986,6 +47137,8 @@ export namespace Prisma {
     councilAssignments?: CouncilMemberAssignmentUpdateManyWithoutCouncilMemberNestedInput
     officeMeetingsAsInstructor?: OfficeMeetingUpdateManyWithoutInstructorNestedInput
     officeMeetingViews?: OfficeMeetingViewUpdateManyWithoutUserNestedInput
+    posts?: PostUpdateManyWithoutAuthorNestedInput
+    approvedPosts?: PostUpdateManyWithoutApprovedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCouncilEvaluationsInput = {
@@ -43017,6 +47170,8 @@ export namespace Prisma {
     councilAssignments?: CouncilMemberAssignmentUncheckedUpdateManyWithoutCouncilMemberNestedInput
     officeMeetingsAsInstructor?: OfficeMeetingUncheckedUpdateManyWithoutInstructorNestedInput
     officeMeetingViews?: OfficeMeetingViewUncheckedUpdateManyWithoutUserNestedInput
+    posts?: PostUncheckedUpdateManyWithoutAuthorNestedInput
+    approvedPosts?: PostUncheckedUpdateManyWithoutApprovedByNestedInput
   }
 
   export type ProjectCreateWithoutDisbursementsInput = {
@@ -43280,6 +47435,8 @@ export namespace Prisma {
     councilAssignments?: CouncilMemberAssignmentCreateNestedManyWithoutCouncilMemberInput
     officeMeetingsAsInstructor?: OfficeMeetingCreateNestedManyWithoutInstructorInput
     officeMeetingViews?: OfficeMeetingViewCreateNestedManyWithoutUserInput
+    posts?: PostCreateNestedManyWithoutAuthorInput
+    approvedPosts?: PostCreateNestedManyWithoutApprovedByInput
   }
 
   export type UserUncheckedCreateWithoutRegistrationsInput = {
@@ -43311,6 +47468,8 @@ export namespace Prisma {
     councilAssignments?: CouncilMemberAssignmentUncheckedCreateNestedManyWithoutCouncilMemberInput
     officeMeetingsAsInstructor?: OfficeMeetingUncheckedCreateNestedManyWithoutInstructorInput
     officeMeetingViews?: OfficeMeetingViewUncheckedCreateNestedManyWithoutUserInput
+    posts?: PostUncheckedCreateNestedManyWithoutAuthorInput
+    approvedPosts?: PostUncheckedCreateNestedManyWithoutApprovedByInput
   }
 
   export type UserCreateOrConnectWithoutRegistrationsInput = {
@@ -43347,6 +47506,8 @@ export namespace Prisma {
     councilAssignments?: CouncilMemberAssignmentCreateNestedManyWithoutCouncilMemberInput
     officeMeetingsAsInstructor?: OfficeMeetingCreateNestedManyWithoutInstructorInput
     officeMeetingViews?: OfficeMeetingViewCreateNestedManyWithoutUserInput
+    posts?: PostCreateNestedManyWithoutAuthorInput
+    approvedPosts?: PostCreateNestedManyWithoutApprovedByInput
   }
 
   export type UserUncheckedCreateWithoutInstructedRegistrationsInput = {
@@ -43378,6 +47539,8 @@ export namespace Prisma {
     councilAssignments?: CouncilMemberAssignmentUncheckedCreateNestedManyWithoutCouncilMemberInput
     officeMeetingsAsInstructor?: OfficeMeetingUncheckedCreateNestedManyWithoutInstructorInput
     officeMeetingViews?: OfficeMeetingViewUncheckedCreateNestedManyWithoutUserInput
+    posts?: PostUncheckedCreateNestedManyWithoutAuthorInput
+    approvedPosts?: PostUncheckedCreateNestedManyWithoutApprovedByInput
   }
 
   export type UserCreateOrConnectWithoutInstructedRegistrationsInput = {
@@ -43495,6 +47658,8 @@ export namespace Prisma {
     councilAssignments?: CouncilMemberAssignmentCreateNestedManyWithoutCouncilMemberInput
     officeMeetingsAsInstructor?: OfficeMeetingCreateNestedManyWithoutInstructorInput
     officeMeetingViews?: OfficeMeetingViewCreateNestedManyWithoutUserInput
+    posts?: PostCreateNestedManyWithoutAuthorInput
+    approvedPosts?: PostCreateNestedManyWithoutApprovedByInput
   }
 
   export type UserUncheckedCreateWithoutFacultyReviewsInput = {
@@ -43526,6 +47691,8 @@ export namespace Prisma {
     councilAssignments?: CouncilMemberAssignmentUncheckedCreateNestedManyWithoutCouncilMemberInput
     officeMeetingsAsInstructor?: OfficeMeetingUncheckedCreateNestedManyWithoutInstructorInput
     officeMeetingViews?: OfficeMeetingViewUncheckedCreateNestedManyWithoutUserInput
+    posts?: PostUncheckedCreateNestedManyWithoutAuthorInput
+    approvedPosts?: PostUncheckedCreateNestedManyWithoutApprovedByInput
   }
 
   export type UserCreateOrConnectWithoutFacultyReviewsInput = {
@@ -43590,6 +47757,8 @@ export namespace Prisma {
     councilAssignments?: CouncilMemberAssignmentUpdateManyWithoutCouncilMemberNestedInput
     officeMeetingsAsInstructor?: OfficeMeetingUpdateManyWithoutInstructorNestedInput
     officeMeetingViews?: OfficeMeetingViewUpdateManyWithoutUserNestedInput
+    posts?: PostUpdateManyWithoutAuthorNestedInput
+    approvedPosts?: PostUpdateManyWithoutApprovedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutRegistrationsInput = {
@@ -43621,6 +47790,8 @@ export namespace Prisma {
     councilAssignments?: CouncilMemberAssignmentUncheckedUpdateManyWithoutCouncilMemberNestedInput
     officeMeetingsAsInstructor?: OfficeMeetingUncheckedUpdateManyWithoutInstructorNestedInput
     officeMeetingViews?: OfficeMeetingViewUncheckedUpdateManyWithoutUserNestedInput
+    posts?: PostUncheckedUpdateManyWithoutAuthorNestedInput
+    approvedPosts?: PostUncheckedUpdateManyWithoutApprovedByNestedInput
   }
 
   export type UserUpsertWithoutInstructedRegistrationsInput = {
@@ -43663,6 +47834,8 @@ export namespace Prisma {
     councilAssignments?: CouncilMemberAssignmentUpdateManyWithoutCouncilMemberNestedInput
     officeMeetingsAsInstructor?: OfficeMeetingUpdateManyWithoutInstructorNestedInput
     officeMeetingViews?: OfficeMeetingViewUpdateManyWithoutUserNestedInput
+    posts?: PostUpdateManyWithoutAuthorNestedInput
+    approvedPosts?: PostUpdateManyWithoutApprovedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutInstructedRegistrationsInput = {
@@ -43694,6 +47867,8 @@ export namespace Prisma {
     councilAssignments?: CouncilMemberAssignmentUncheckedUpdateManyWithoutCouncilMemberNestedInput
     officeMeetingsAsInstructor?: OfficeMeetingUncheckedUpdateManyWithoutInstructorNestedInput
     officeMeetingViews?: OfficeMeetingViewUncheckedUpdateManyWithoutUserNestedInput
+    posts?: PostUncheckedUpdateManyWithoutAuthorNestedInput
+    approvedPosts?: PostUncheckedUpdateManyWithoutApprovedByNestedInput
   }
 
   export type CallRoundUpsertWithoutRegistrationsInput = {
@@ -43823,6 +47998,8 @@ export namespace Prisma {
     councilAssignments?: CouncilMemberAssignmentUpdateManyWithoutCouncilMemberNestedInput
     officeMeetingsAsInstructor?: OfficeMeetingUpdateManyWithoutInstructorNestedInput
     officeMeetingViews?: OfficeMeetingViewUpdateManyWithoutUserNestedInput
+    posts?: PostUpdateManyWithoutAuthorNestedInput
+    approvedPosts?: PostUpdateManyWithoutApprovedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutFacultyReviewsInput = {
@@ -43854,6 +48031,8 @@ export namespace Prisma {
     councilAssignments?: CouncilMemberAssignmentUncheckedUpdateManyWithoutCouncilMemberNestedInput
     officeMeetingsAsInstructor?: OfficeMeetingUncheckedUpdateManyWithoutInstructorNestedInput
     officeMeetingViews?: OfficeMeetingViewUncheckedUpdateManyWithoutUserNestedInput
+    posts?: PostUncheckedUpdateManyWithoutAuthorNestedInput
+    approvedPosts?: PostUncheckedUpdateManyWithoutApprovedByNestedInput
   }
 
   export type ProjectCouncilAssignmentUpsertWithoutProjectRegistrationInput = {
@@ -43908,6 +48087,8 @@ export namespace Prisma {
     councilAssignments?: CouncilMemberAssignmentCreateNestedManyWithoutCouncilMemberInput
     officeMeetingsAsInstructor?: OfficeMeetingCreateNestedManyWithoutInstructorInput
     officeMeetingViews?: OfficeMeetingViewCreateNestedManyWithoutUserInput
+    posts?: PostCreateNestedManyWithoutAuthorInput
+    approvedPosts?: PostCreateNestedManyWithoutApprovedByInput
   }
 
   export type UserUncheckedCreateWithoutNotificationsInput = {
@@ -43939,6 +48120,8 @@ export namespace Prisma {
     councilAssignments?: CouncilMemberAssignmentUncheckedCreateNestedManyWithoutCouncilMemberInput
     officeMeetingsAsInstructor?: OfficeMeetingUncheckedCreateNestedManyWithoutInstructorInput
     officeMeetingViews?: OfficeMeetingViewUncheckedCreateNestedManyWithoutUserInput
+    posts?: PostUncheckedCreateNestedManyWithoutAuthorInput
+    approvedPosts?: PostUncheckedCreateNestedManyWithoutApprovedByInput
   }
 
   export type UserCreateOrConnectWithoutNotificationsInput = {
@@ -43986,6 +48169,8 @@ export namespace Prisma {
     councilAssignments?: CouncilMemberAssignmentUpdateManyWithoutCouncilMemberNestedInput
     officeMeetingsAsInstructor?: OfficeMeetingUpdateManyWithoutInstructorNestedInput
     officeMeetingViews?: OfficeMeetingViewUpdateManyWithoutUserNestedInput
+    posts?: PostUpdateManyWithoutAuthorNestedInput
+    approvedPosts?: PostUpdateManyWithoutApprovedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutNotificationsInput = {
@@ -44017,6 +48202,494 @@ export namespace Prisma {
     councilAssignments?: CouncilMemberAssignmentUncheckedUpdateManyWithoutCouncilMemberNestedInput
     officeMeetingsAsInstructor?: OfficeMeetingUncheckedUpdateManyWithoutInstructorNestedInput
     officeMeetingViews?: OfficeMeetingViewUncheckedUpdateManyWithoutUserNestedInput
+    posts?: PostUncheckedUpdateManyWithoutAuthorNestedInput
+    approvedPosts?: PostUncheckedUpdateManyWithoutApprovedByNestedInput
+  }
+
+  export type UserCreateWithoutPostsInput = {
+    id?: string
+    code?: string | null
+    name: string
+    email: string
+    password?: string | null
+    dateOfBirth?: Date | string | null
+    gender?: $Enums.Gender | null
+    phone?: string | null
+    address?: string | null
+    role?: $Enums.Role
+    department?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    departmentRef?: DepartmentCreateNestedOneWithoutUsersInput
+    major?: MajorCreateNestedOneWithoutUsersInput
+    class?: ClassCreateNestedOneWithoutUsersInput
+    leadProjects?: ProjectCreateNestedManyWithoutLeaderInput
+    deanReviews?: ProjectCreateNestedManyWithoutDeanReviewerInput
+    councilEvaluations?: CouncilEvaluationCreateNestedManyWithoutCouncilMemberInput
+    registrations?: ProjectRegistrationCreateNestedManyWithoutUserInput
+    instructedRegistrations?: ProjectRegistrationCreateNestedManyWithoutInstructorInput
+    instructedProjects?: ProjectCreateNestedManyWithoutInstructorInput
+    facultyReviews?: ProjectRegistrationCreateNestedManyWithoutFacultyReviewerInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    callRoundInstructors?: CallRoundInstructorCreateNestedManyWithoutInstructorInput
+    callRoundCouncilMembers?: CallRoundCouncilMemberCreateNestedManyWithoutCouncilMemberInput
+    councilAssignments?: CouncilMemberAssignmentCreateNestedManyWithoutCouncilMemberInput
+    officeMeetingsAsInstructor?: OfficeMeetingCreateNestedManyWithoutInstructorInput
+    officeMeetingViews?: OfficeMeetingViewCreateNestedManyWithoutUserInput
+    approvedPosts?: PostCreateNestedManyWithoutApprovedByInput
+  }
+
+  export type UserUncheckedCreateWithoutPostsInput = {
+    id?: string
+    code?: string | null
+    name: string
+    email: string
+    password?: string | null
+    dateOfBirth?: Date | string | null
+    gender?: $Enums.Gender | null
+    phone?: string | null
+    address?: string | null
+    role?: $Enums.Role
+    department?: string | null
+    departmentId?: string | null
+    majorId?: string | null
+    classId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    leadProjects?: ProjectUncheckedCreateNestedManyWithoutLeaderInput
+    deanReviews?: ProjectUncheckedCreateNestedManyWithoutDeanReviewerInput
+    councilEvaluations?: CouncilEvaluationUncheckedCreateNestedManyWithoutCouncilMemberInput
+    registrations?: ProjectRegistrationUncheckedCreateNestedManyWithoutUserInput
+    instructedRegistrations?: ProjectRegistrationUncheckedCreateNestedManyWithoutInstructorInput
+    instructedProjects?: ProjectUncheckedCreateNestedManyWithoutInstructorInput
+    facultyReviews?: ProjectRegistrationUncheckedCreateNestedManyWithoutFacultyReviewerInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    callRoundInstructors?: CallRoundInstructorUncheckedCreateNestedManyWithoutInstructorInput
+    callRoundCouncilMembers?: CallRoundCouncilMemberUncheckedCreateNestedManyWithoutCouncilMemberInput
+    councilAssignments?: CouncilMemberAssignmentUncheckedCreateNestedManyWithoutCouncilMemberInput
+    officeMeetingsAsInstructor?: OfficeMeetingUncheckedCreateNestedManyWithoutInstructorInput
+    officeMeetingViews?: OfficeMeetingViewUncheckedCreateNestedManyWithoutUserInput
+    approvedPosts?: PostUncheckedCreateNestedManyWithoutApprovedByInput
+  }
+
+  export type UserCreateOrConnectWithoutPostsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutPostsInput, UserUncheckedCreateWithoutPostsInput>
+  }
+
+  export type DepartmentCreateWithoutPostsInput = {
+    id?: string
+    code: string
+    name: string
+    description?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    majors?: MajorCreateNestedManyWithoutDepartmentInput
+    users?: UserCreateNestedManyWithoutDepartmentRefInput
+    callRounds?: CallRoundCreateNestedManyWithoutDepartmentsInput
+    rooms?: RoomCreateNestedManyWithoutDepartmentInput
+  }
+
+  export type DepartmentUncheckedCreateWithoutPostsInput = {
+    id?: string
+    code: string
+    name: string
+    description?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    majors?: MajorUncheckedCreateNestedManyWithoutDepartmentInput
+    users?: UserUncheckedCreateNestedManyWithoutDepartmentRefInput
+    callRounds?: CallRoundUncheckedCreateNestedManyWithoutDepartmentsInput
+    rooms?: RoomUncheckedCreateNestedManyWithoutDepartmentInput
+  }
+
+  export type DepartmentCreateOrConnectWithoutPostsInput = {
+    where: DepartmentWhereUniqueInput
+    create: XOR<DepartmentCreateWithoutPostsInput, DepartmentUncheckedCreateWithoutPostsInput>
+  }
+
+  export type UserCreateWithoutApprovedPostsInput = {
+    id?: string
+    code?: string | null
+    name: string
+    email: string
+    password?: string | null
+    dateOfBirth?: Date | string | null
+    gender?: $Enums.Gender | null
+    phone?: string | null
+    address?: string | null
+    role?: $Enums.Role
+    department?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    departmentRef?: DepartmentCreateNestedOneWithoutUsersInput
+    major?: MajorCreateNestedOneWithoutUsersInput
+    class?: ClassCreateNestedOneWithoutUsersInput
+    leadProjects?: ProjectCreateNestedManyWithoutLeaderInput
+    deanReviews?: ProjectCreateNestedManyWithoutDeanReviewerInput
+    councilEvaluations?: CouncilEvaluationCreateNestedManyWithoutCouncilMemberInput
+    registrations?: ProjectRegistrationCreateNestedManyWithoutUserInput
+    instructedRegistrations?: ProjectRegistrationCreateNestedManyWithoutInstructorInput
+    instructedProjects?: ProjectCreateNestedManyWithoutInstructorInput
+    facultyReviews?: ProjectRegistrationCreateNestedManyWithoutFacultyReviewerInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    callRoundInstructors?: CallRoundInstructorCreateNestedManyWithoutInstructorInput
+    callRoundCouncilMembers?: CallRoundCouncilMemberCreateNestedManyWithoutCouncilMemberInput
+    councilAssignments?: CouncilMemberAssignmentCreateNestedManyWithoutCouncilMemberInput
+    officeMeetingsAsInstructor?: OfficeMeetingCreateNestedManyWithoutInstructorInput
+    officeMeetingViews?: OfficeMeetingViewCreateNestedManyWithoutUserInput
+    posts?: PostCreateNestedManyWithoutAuthorInput
+  }
+
+  export type UserUncheckedCreateWithoutApprovedPostsInput = {
+    id?: string
+    code?: string | null
+    name: string
+    email: string
+    password?: string | null
+    dateOfBirth?: Date | string | null
+    gender?: $Enums.Gender | null
+    phone?: string | null
+    address?: string | null
+    role?: $Enums.Role
+    department?: string | null
+    departmentId?: string | null
+    majorId?: string | null
+    classId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    leadProjects?: ProjectUncheckedCreateNestedManyWithoutLeaderInput
+    deanReviews?: ProjectUncheckedCreateNestedManyWithoutDeanReviewerInput
+    councilEvaluations?: CouncilEvaluationUncheckedCreateNestedManyWithoutCouncilMemberInput
+    registrations?: ProjectRegistrationUncheckedCreateNestedManyWithoutUserInput
+    instructedRegistrations?: ProjectRegistrationUncheckedCreateNestedManyWithoutInstructorInput
+    instructedProjects?: ProjectUncheckedCreateNestedManyWithoutInstructorInput
+    facultyReviews?: ProjectRegistrationUncheckedCreateNestedManyWithoutFacultyReviewerInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    callRoundInstructors?: CallRoundInstructorUncheckedCreateNestedManyWithoutInstructorInput
+    callRoundCouncilMembers?: CallRoundCouncilMemberUncheckedCreateNestedManyWithoutCouncilMemberInput
+    councilAssignments?: CouncilMemberAssignmentUncheckedCreateNestedManyWithoutCouncilMemberInput
+    officeMeetingsAsInstructor?: OfficeMeetingUncheckedCreateNestedManyWithoutInstructorInput
+    officeMeetingViews?: OfficeMeetingViewUncheckedCreateNestedManyWithoutUserInput
+    posts?: PostUncheckedCreateNestedManyWithoutAuthorInput
+  }
+
+  export type UserCreateOrConnectWithoutApprovedPostsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutApprovedPostsInput, UserUncheckedCreateWithoutApprovedPostsInput>
+  }
+
+  export type UserUpsertWithoutPostsInput = {
+    update: XOR<UserUpdateWithoutPostsInput, UserUncheckedUpdateWithoutPostsInput>
+    create: XOR<UserCreateWithoutPostsInput, UserUncheckedCreateWithoutPostsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutPostsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutPostsInput, UserUncheckedUpdateWithoutPostsInput>
+  }
+
+  export type UserUpdateWithoutPostsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    departmentRef?: DepartmentUpdateOneWithoutUsersNestedInput
+    major?: MajorUpdateOneWithoutUsersNestedInput
+    class?: ClassUpdateOneWithoutUsersNestedInput
+    leadProjects?: ProjectUpdateManyWithoutLeaderNestedInput
+    deanReviews?: ProjectUpdateManyWithoutDeanReviewerNestedInput
+    councilEvaluations?: CouncilEvaluationUpdateManyWithoutCouncilMemberNestedInput
+    registrations?: ProjectRegistrationUpdateManyWithoutUserNestedInput
+    instructedRegistrations?: ProjectRegistrationUpdateManyWithoutInstructorNestedInput
+    instructedProjects?: ProjectUpdateManyWithoutInstructorNestedInput
+    facultyReviews?: ProjectRegistrationUpdateManyWithoutFacultyReviewerNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    callRoundInstructors?: CallRoundInstructorUpdateManyWithoutInstructorNestedInput
+    callRoundCouncilMembers?: CallRoundCouncilMemberUpdateManyWithoutCouncilMemberNestedInput
+    councilAssignments?: CouncilMemberAssignmentUpdateManyWithoutCouncilMemberNestedInput
+    officeMeetingsAsInstructor?: OfficeMeetingUpdateManyWithoutInstructorNestedInput
+    officeMeetingViews?: OfficeMeetingViewUpdateManyWithoutUserNestedInput
+    approvedPosts?: PostUpdateManyWithoutApprovedByNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutPostsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    departmentId?: NullableStringFieldUpdateOperationsInput | string | null
+    majorId?: NullableStringFieldUpdateOperationsInput | string | null
+    classId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    leadProjects?: ProjectUncheckedUpdateManyWithoutLeaderNestedInput
+    deanReviews?: ProjectUncheckedUpdateManyWithoutDeanReviewerNestedInput
+    councilEvaluations?: CouncilEvaluationUncheckedUpdateManyWithoutCouncilMemberNestedInput
+    registrations?: ProjectRegistrationUncheckedUpdateManyWithoutUserNestedInput
+    instructedRegistrations?: ProjectRegistrationUncheckedUpdateManyWithoutInstructorNestedInput
+    instructedProjects?: ProjectUncheckedUpdateManyWithoutInstructorNestedInput
+    facultyReviews?: ProjectRegistrationUncheckedUpdateManyWithoutFacultyReviewerNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    callRoundInstructors?: CallRoundInstructorUncheckedUpdateManyWithoutInstructorNestedInput
+    callRoundCouncilMembers?: CallRoundCouncilMemberUncheckedUpdateManyWithoutCouncilMemberNestedInput
+    councilAssignments?: CouncilMemberAssignmentUncheckedUpdateManyWithoutCouncilMemberNestedInput
+    officeMeetingsAsInstructor?: OfficeMeetingUncheckedUpdateManyWithoutInstructorNestedInput
+    officeMeetingViews?: OfficeMeetingViewUncheckedUpdateManyWithoutUserNestedInput
+    approvedPosts?: PostUncheckedUpdateManyWithoutApprovedByNestedInput
+  }
+
+  export type DepartmentUpsertWithoutPostsInput = {
+    update: XOR<DepartmentUpdateWithoutPostsInput, DepartmentUncheckedUpdateWithoutPostsInput>
+    create: XOR<DepartmentCreateWithoutPostsInput, DepartmentUncheckedCreateWithoutPostsInput>
+    where?: DepartmentWhereInput
+  }
+
+  export type DepartmentUpdateToOneWithWhereWithoutPostsInput = {
+    where?: DepartmentWhereInput
+    data: XOR<DepartmentUpdateWithoutPostsInput, DepartmentUncheckedUpdateWithoutPostsInput>
+  }
+
+  export type DepartmentUpdateWithoutPostsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    majors?: MajorUpdateManyWithoutDepartmentNestedInput
+    users?: UserUpdateManyWithoutDepartmentRefNestedInput
+    callRounds?: CallRoundUpdateManyWithoutDepartmentsNestedInput
+    rooms?: RoomUpdateManyWithoutDepartmentNestedInput
+  }
+
+  export type DepartmentUncheckedUpdateWithoutPostsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    majors?: MajorUncheckedUpdateManyWithoutDepartmentNestedInput
+    users?: UserUncheckedUpdateManyWithoutDepartmentRefNestedInput
+    callRounds?: CallRoundUncheckedUpdateManyWithoutDepartmentsNestedInput
+    rooms?: RoomUncheckedUpdateManyWithoutDepartmentNestedInput
+  }
+
+  export type UserUpsertWithoutApprovedPostsInput = {
+    update: XOR<UserUpdateWithoutApprovedPostsInput, UserUncheckedUpdateWithoutApprovedPostsInput>
+    create: XOR<UserCreateWithoutApprovedPostsInput, UserUncheckedCreateWithoutApprovedPostsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutApprovedPostsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutApprovedPostsInput, UserUncheckedUpdateWithoutApprovedPostsInput>
+  }
+
+  export type UserUpdateWithoutApprovedPostsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    departmentRef?: DepartmentUpdateOneWithoutUsersNestedInput
+    major?: MajorUpdateOneWithoutUsersNestedInput
+    class?: ClassUpdateOneWithoutUsersNestedInput
+    leadProjects?: ProjectUpdateManyWithoutLeaderNestedInput
+    deanReviews?: ProjectUpdateManyWithoutDeanReviewerNestedInput
+    councilEvaluations?: CouncilEvaluationUpdateManyWithoutCouncilMemberNestedInput
+    registrations?: ProjectRegistrationUpdateManyWithoutUserNestedInput
+    instructedRegistrations?: ProjectRegistrationUpdateManyWithoutInstructorNestedInput
+    instructedProjects?: ProjectUpdateManyWithoutInstructorNestedInput
+    facultyReviews?: ProjectRegistrationUpdateManyWithoutFacultyReviewerNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    callRoundInstructors?: CallRoundInstructorUpdateManyWithoutInstructorNestedInput
+    callRoundCouncilMembers?: CallRoundCouncilMemberUpdateManyWithoutCouncilMemberNestedInput
+    councilAssignments?: CouncilMemberAssignmentUpdateManyWithoutCouncilMemberNestedInput
+    officeMeetingsAsInstructor?: OfficeMeetingUpdateManyWithoutInstructorNestedInput
+    officeMeetingViews?: OfficeMeetingViewUpdateManyWithoutUserNestedInput
+    posts?: PostUpdateManyWithoutAuthorNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutApprovedPostsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    departmentId?: NullableStringFieldUpdateOperationsInput | string | null
+    majorId?: NullableStringFieldUpdateOperationsInput | string | null
+    classId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    leadProjects?: ProjectUncheckedUpdateManyWithoutLeaderNestedInput
+    deanReviews?: ProjectUncheckedUpdateManyWithoutDeanReviewerNestedInput
+    councilEvaluations?: CouncilEvaluationUncheckedUpdateManyWithoutCouncilMemberNestedInput
+    registrations?: ProjectRegistrationUncheckedUpdateManyWithoutUserNestedInput
+    instructedRegistrations?: ProjectRegistrationUncheckedUpdateManyWithoutInstructorNestedInput
+    instructedProjects?: ProjectUncheckedUpdateManyWithoutInstructorNestedInput
+    facultyReviews?: ProjectRegistrationUncheckedUpdateManyWithoutFacultyReviewerNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    callRoundInstructors?: CallRoundInstructorUncheckedUpdateManyWithoutInstructorNestedInput
+    callRoundCouncilMembers?: CallRoundCouncilMemberUncheckedUpdateManyWithoutCouncilMemberNestedInput
+    councilAssignments?: CouncilMemberAssignmentUncheckedUpdateManyWithoutCouncilMemberNestedInput
+    officeMeetingsAsInstructor?: OfficeMeetingUncheckedUpdateManyWithoutInstructorNestedInput
+    officeMeetingViews?: OfficeMeetingViewUncheckedUpdateManyWithoutUserNestedInput
+    posts?: PostUncheckedUpdateManyWithoutAuthorNestedInput
+  }
+
+  export type DepartmentCreateWithoutRoomsInput = {
+    id?: string
+    code: string
+    name: string
+    description?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    majors?: MajorCreateNestedManyWithoutDepartmentInput
+    users?: UserCreateNestedManyWithoutDepartmentRefInput
+    callRounds?: CallRoundCreateNestedManyWithoutDepartmentsInput
+    posts?: PostCreateNestedManyWithoutDepartmentInput
+  }
+
+  export type DepartmentUncheckedCreateWithoutRoomsInput = {
+    id?: string
+    code: string
+    name: string
+    description?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    majors?: MajorUncheckedCreateNestedManyWithoutDepartmentInput
+    users?: UserUncheckedCreateNestedManyWithoutDepartmentRefInput
+    callRounds?: CallRoundUncheckedCreateNestedManyWithoutDepartmentsInput
+    posts?: PostUncheckedCreateNestedManyWithoutDepartmentInput
+  }
+
+  export type DepartmentCreateOrConnectWithoutRoomsInput = {
+    where: DepartmentWhereUniqueInput
+    create: XOR<DepartmentCreateWithoutRoomsInput, DepartmentUncheckedCreateWithoutRoomsInput>
+  }
+
+  export type OfficeMeetingCreateWithoutRoomInput = {
+    id?: string
+    target: string
+    memberUserIds?: OfficeMeetingCreatememberUserIdsInput | string[]
+    meetingAt: Date | string
+    location: string
+    note?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    project: ProjectCreateNestedOneWithoutOfficeMeetingsInput
+    instructor: UserCreateNestedOneWithoutOfficeMeetingsAsInstructorInput
+    views?: OfficeMeetingViewCreateNestedManyWithoutMeetingInput
+  }
+
+  export type OfficeMeetingUncheckedCreateWithoutRoomInput = {
+    id?: string
+    projectId: string
+    instructorId: string
+    target: string
+    memberUserIds?: OfficeMeetingCreatememberUserIdsInput | string[]
+    meetingAt: Date | string
+    location: string
+    note?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    views?: OfficeMeetingViewUncheckedCreateNestedManyWithoutMeetingInput
+  }
+
+  export type OfficeMeetingCreateOrConnectWithoutRoomInput = {
+    where: OfficeMeetingWhereUniqueInput
+    create: XOR<OfficeMeetingCreateWithoutRoomInput, OfficeMeetingUncheckedCreateWithoutRoomInput>
+  }
+
+  export type OfficeMeetingCreateManyRoomInputEnvelope = {
+    data: OfficeMeetingCreateManyRoomInput | OfficeMeetingCreateManyRoomInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type DepartmentUpsertWithoutRoomsInput = {
+    update: XOR<DepartmentUpdateWithoutRoomsInput, DepartmentUncheckedUpdateWithoutRoomsInput>
+    create: XOR<DepartmentCreateWithoutRoomsInput, DepartmentUncheckedCreateWithoutRoomsInput>
+    where?: DepartmentWhereInput
+  }
+
+  export type DepartmentUpdateToOneWithWhereWithoutRoomsInput = {
+    where?: DepartmentWhereInput
+    data: XOR<DepartmentUpdateWithoutRoomsInput, DepartmentUncheckedUpdateWithoutRoomsInput>
+  }
+
+  export type DepartmentUpdateWithoutRoomsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    majors?: MajorUpdateManyWithoutDepartmentNestedInput
+    users?: UserUpdateManyWithoutDepartmentRefNestedInput
+    callRounds?: CallRoundUpdateManyWithoutDepartmentsNestedInput
+    posts?: PostUpdateManyWithoutDepartmentNestedInput
+  }
+
+  export type DepartmentUncheckedUpdateWithoutRoomsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    majors?: MajorUncheckedUpdateManyWithoutDepartmentNestedInput
+    users?: UserUncheckedUpdateManyWithoutDepartmentRefNestedInput
+    callRounds?: CallRoundUncheckedUpdateManyWithoutDepartmentsNestedInput
+    posts?: PostUncheckedUpdateManyWithoutDepartmentNestedInput
+  }
+
+  export type OfficeMeetingUpsertWithWhereUniqueWithoutRoomInput = {
+    where: OfficeMeetingWhereUniqueInput
+    update: XOR<OfficeMeetingUpdateWithoutRoomInput, OfficeMeetingUncheckedUpdateWithoutRoomInput>
+    create: XOR<OfficeMeetingCreateWithoutRoomInput, OfficeMeetingUncheckedCreateWithoutRoomInput>
+  }
+
+  export type OfficeMeetingUpdateWithWhereUniqueWithoutRoomInput = {
+    where: OfficeMeetingWhereUniqueInput
+    data: XOR<OfficeMeetingUpdateWithoutRoomInput, OfficeMeetingUncheckedUpdateWithoutRoomInput>
+  }
+
+  export type OfficeMeetingUpdateManyWithWhereWithoutRoomInput = {
+    where: OfficeMeetingScalarWhereInput
+    data: XOR<OfficeMeetingUpdateManyMutationInput, OfficeMeetingUncheckedUpdateManyWithoutRoomInput>
   }
 
   export type ProjectCreateWithoutOfficeMeetingsInput = {
@@ -44103,6 +48776,8 @@ export namespace Prisma {
     callRoundCouncilMembers?: CallRoundCouncilMemberCreateNestedManyWithoutCouncilMemberInput
     councilAssignments?: CouncilMemberAssignmentCreateNestedManyWithoutCouncilMemberInput
     officeMeetingViews?: OfficeMeetingViewCreateNestedManyWithoutUserInput
+    posts?: PostCreateNestedManyWithoutAuthorInput
+    approvedPosts?: PostCreateNestedManyWithoutApprovedByInput
   }
 
   export type UserUncheckedCreateWithoutOfficeMeetingsAsInstructorInput = {
@@ -44134,11 +48809,42 @@ export namespace Prisma {
     callRoundCouncilMembers?: CallRoundCouncilMemberUncheckedCreateNestedManyWithoutCouncilMemberInput
     councilAssignments?: CouncilMemberAssignmentUncheckedCreateNestedManyWithoutCouncilMemberInput
     officeMeetingViews?: OfficeMeetingViewUncheckedCreateNestedManyWithoutUserInput
+    posts?: PostUncheckedCreateNestedManyWithoutAuthorInput
+    approvedPosts?: PostUncheckedCreateNestedManyWithoutApprovedByInput
   }
 
   export type UserCreateOrConnectWithoutOfficeMeetingsAsInstructorInput = {
     where: UserWhereUniqueInput
     create: XOR<UserCreateWithoutOfficeMeetingsAsInstructorInput, UserUncheckedCreateWithoutOfficeMeetingsAsInstructorInput>
+  }
+
+  export type RoomCreateWithoutOfficeMeetingsInput = {
+    id?: string
+    name: string
+    code: string
+    capacity?: number | null
+    description?: string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    department: DepartmentCreateNestedOneWithoutRoomsInput
+  }
+
+  export type RoomUncheckedCreateWithoutOfficeMeetingsInput = {
+    id?: string
+    name: string
+    code: string
+    capacity?: number | null
+    description?: string | null
+    departmentId: string
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type RoomCreateOrConnectWithoutOfficeMeetingsInput = {
+    where: RoomWhereUniqueInput
+    create: XOR<RoomCreateWithoutOfficeMeetingsInput, RoomUncheckedCreateWithoutOfficeMeetingsInput>
   }
 
   export type OfficeMeetingViewCreateWithoutMeetingInput = {
@@ -44266,6 +48972,8 @@ export namespace Prisma {
     callRoundCouncilMembers?: CallRoundCouncilMemberUpdateManyWithoutCouncilMemberNestedInput
     councilAssignments?: CouncilMemberAssignmentUpdateManyWithoutCouncilMemberNestedInput
     officeMeetingViews?: OfficeMeetingViewUpdateManyWithoutUserNestedInput
+    posts?: PostUpdateManyWithoutAuthorNestedInput
+    approvedPosts?: PostUpdateManyWithoutApprovedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutOfficeMeetingsAsInstructorInput = {
@@ -44297,6 +49005,43 @@ export namespace Prisma {
     callRoundCouncilMembers?: CallRoundCouncilMemberUncheckedUpdateManyWithoutCouncilMemberNestedInput
     councilAssignments?: CouncilMemberAssignmentUncheckedUpdateManyWithoutCouncilMemberNestedInput
     officeMeetingViews?: OfficeMeetingViewUncheckedUpdateManyWithoutUserNestedInput
+    posts?: PostUncheckedUpdateManyWithoutAuthorNestedInput
+    approvedPosts?: PostUncheckedUpdateManyWithoutApprovedByNestedInput
+  }
+
+  export type RoomUpsertWithoutOfficeMeetingsInput = {
+    update: XOR<RoomUpdateWithoutOfficeMeetingsInput, RoomUncheckedUpdateWithoutOfficeMeetingsInput>
+    create: XOR<RoomCreateWithoutOfficeMeetingsInput, RoomUncheckedCreateWithoutOfficeMeetingsInput>
+    where?: RoomWhereInput
+  }
+
+  export type RoomUpdateToOneWithWhereWithoutOfficeMeetingsInput = {
+    where?: RoomWhereInput
+    data: XOR<RoomUpdateWithoutOfficeMeetingsInput, RoomUncheckedUpdateWithoutOfficeMeetingsInput>
+  }
+
+  export type RoomUpdateWithoutOfficeMeetingsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    capacity?: NullableIntFieldUpdateOperationsInput | number | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    department?: DepartmentUpdateOneRequiredWithoutRoomsNestedInput
+  }
+
+  export type RoomUncheckedUpdateWithoutOfficeMeetingsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    capacity?: NullableIntFieldUpdateOperationsInput | number | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    departmentId?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type OfficeMeetingViewUpsertWithWhereUniqueWithoutMeetingInput = {
@@ -44326,6 +49071,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     project: ProjectCreateNestedOneWithoutOfficeMeetingsInput
     instructor: UserCreateNestedOneWithoutOfficeMeetingsAsInstructorInput
+    room?: RoomCreateNestedOneWithoutOfficeMeetingsInput
   }
 
   export type OfficeMeetingUncheckedCreateWithoutViewsInput = {
@@ -44336,6 +49082,7 @@ export namespace Prisma {
     memberUserIds?: OfficeMeetingCreatememberUserIdsInput | string[]
     meetingAt: Date | string
     location: string
+    roomId?: string | null
     note?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -44375,6 +49122,8 @@ export namespace Prisma {
     callRoundCouncilMembers?: CallRoundCouncilMemberCreateNestedManyWithoutCouncilMemberInput
     councilAssignments?: CouncilMemberAssignmentCreateNestedManyWithoutCouncilMemberInput
     officeMeetingsAsInstructor?: OfficeMeetingCreateNestedManyWithoutInstructorInput
+    posts?: PostCreateNestedManyWithoutAuthorInput
+    approvedPosts?: PostCreateNestedManyWithoutApprovedByInput
   }
 
   export type UserUncheckedCreateWithoutOfficeMeetingViewsInput = {
@@ -44406,6 +49155,8 @@ export namespace Prisma {
     callRoundCouncilMembers?: CallRoundCouncilMemberUncheckedCreateNestedManyWithoutCouncilMemberInput
     councilAssignments?: CouncilMemberAssignmentUncheckedCreateNestedManyWithoutCouncilMemberInput
     officeMeetingsAsInstructor?: OfficeMeetingUncheckedCreateNestedManyWithoutInstructorInput
+    posts?: PostUncheckedCreateNestedManyWithoutAuthorInput
+    approvedPosts?: PostUncheckedCreateNestedManyWithoutApprovedByInput
   }
 
   export type UserCreateOrConnectWithoutOfficeMeetingViewsInput = {
@@ -44435,6 +49186,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     project?: ProjectUpdateOneRequiredWithoutOfficeMeetingsNestedInput
     instructor?: UserUpdateOneRequiredWithoutOfficeMeetingsAsInstructorNestedInput
+    room?: RoomUpdateOneWithoutOfficeMeetingsNestedInput
   }
 
   export type OfficeMeetingUncheckedUpdateWithoutViewsInput = {
@@ -44445,6 +49197,7 @@ export namespace Prisma {
     memberUserIds?: OfficeMeetingUpdatememberUserIdsInput | string[]
     meetingAt?: DateTimeFieldUpdateOperationsInput | Date | string
     location?: StringFieldUpdateOperationsInput | string
+    roomId?: NullableStringFieldUpdateOperationsInput | string | null
     note?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -44490,6 +49243,8 @@ export namespace Prisma {
     callRoundCouncilMembers?: CallRoundCouncilMemberUpdateManyWithoutCouncilMemberNestedInput
     councilAssignments?: CouncilMemberAssignmentUpdateManyWithoutCouncilMemberNestedInput
     officeMeetingsAsInstructor?: OfficeMeetingUpdateManyWithoutInstructorNestedInput
+    posts?: PostUpdateManyWithoutAuthorNestedInput
+    approvedPosts?: PostUpdateManyWithoutApprovedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutOfficeMeetingViewsInput = {
@@ -44521,6 +49276,8 @@ export namespace Prisma {
     callRoundCouncilMembers?: CallRoundCouncilMemberUncheckedUpdateManyWithoutCouncilMemberNestedInput
     councilAssignments?: CouncilMemberAssignmentUncheckedUpdateManyWithoutCouncilMemberNestedInput
     officeMeetingsAsInstructor?: OfficeMeetingUncheckedUpdateManyWithoutInstructorNestedInput
+    posts?: PostUncheckedUpdateManyWithoutAuthorNestedInput
+    approvedPosts?: PostUncheckedUpdateManyWithoutApprovedByNestedInput
   }
 
   export type CallRoundCreateWithoutAvailableInstructorsInput = {
@@ -44633,6 +49390,8 @@ export namespace Prisma {
     councilAssignments?: CouncilMemberAssignmentCreateNestedManyWithoutCouncilMemberInput
     officeMeetingsAsInstructor?: OfficeMeetingCreateNestedManyWithoutInstructorInput
     officeMeetingViews?: OfficeMeetingViewCreateNestedManyWithoutUserInput
+    posts?: PostCreateNestedManyWithoutAuthorInput
+    approvedPosts?: PostCreateNestedManyWithoutApprovedByInput
   }
 
   export type UserUncheckedCreateWithoutCallRoundInstructorsInput = {
@@ -44664,6 +49423,8 @@ export namespace Prisma {
     councilAssignments?: CouncilMemberAssignmentUncheckedCreateNestedManyWithoutCouncilMemberInput
     officeMeetingsAsInstructor?: OfficeMeetingUncheckedCreateNestedManyWithoutInstructorInput
     officeMeetingViews?: OfficeMeetingViewUncheckedCreateNestedManyWithoutUserInput
+    posts?: PostUncheckedCreateNestedManyWithoutAuthorInput
+    approvedPosts?: PostUncheckedCreateNestedManyWithoutApprovedByInput
   }
 
   export type UserCreateOrConnectWithoutCallRoundInstructorsInput = {
@@ -44798,6 +49559,8 @@ export namespace Prisma {
     councilAssignments?: CouncilMemberAssignmentUpdateManyWithoutCouncilMemberNestedInput
     officeMeetingsAsInstructor?: OfficeMeetingUpdateManyWithoutInstructorNestedInput
     officeMeetingViews?: OfficeMeetingViewUpdateManyWithoutUserNestedInput
+    posts?: PostUpdateManyWithoutAuthorNestedInput
+    approvedPosts?: PostUpdateManyWithoutApprovedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCallRoundInstructorsInput = {
@@ -44829,6 +49592,8 @@ export namespace Prisma {
     councilAssignments?: CouncilMemberAssignmentUncheckedUpdateManyWithoutCouncilMemberNestedInput
     officeMeetingsAsInstructor?: OfficeMeetingUncheckedUpdateManyWithoutInstructorNestedInput
     officeMeetingViews?: OfficeMeetingViewUncheckedUpdateManyWithoutUserNestedInput
+    posts?: PostUncheckedUpdateManyWithoutAuthorNestedInput
+    approvedPosts?: PostUncheckedUpdateManyWithoutApprovedByNestedInput
   }
 
   export type CallRoundCreateWithoutAvailableCouncilMembersInput = {
@@ -44941,6 +49706,8 @@ export namespace Prisma {
     councilAssignments?: CouncilMemberAssignmentCreateNestedManyWithoutCouncilMemberInput
     officeMeetingsAsInstructor?: OfficeMeetingCreateNestedManyWithoutInstructorInput
     officeMeetingViews?: OfficeMeetingViewCreateNestedManyWithoutUserInput
+    posts?: PostCreateNestedManyWithoutAuthorInput
+    approvedPosts?: PostCreateNestedManyWithoutApprovedByInput
   }
 
   export type UserUncheckedCreateWithoutCallRoundCouncilMembersInput = {
@@ -44972,6 +49739,8 @@ export namespace Prisma {
     councilAssignments?: CouncilMemberAssignmentUncheckedCreateNestedManyWithoutCouncilMemberInput
     officeMeetingsAsInstructor?: OfficeMeetingUncheckedCreateNestedManyWithoutInstructorInput
     officeMeetingViews?: OfficeMeetingViewUncheckedCreateNestedManyWithoutUserInput
+    posts?: PostUncheckedCreateNestedManyWithoutAuthorInput
+    approvedPosts?: PostUncheckedCreateNestedManyWithoutApprovedByInput
   }
 
   export type UserCreateOrConnectWithoutCallRoundCouncilMembersInput = {
@@ -45106,6 +49875,8 @@ export namespace Prisma {
     councilAssignments?: CouncilMemberAssignmentUpdateManyWithoutCouncilMemberNestedInput
     officeMeetingsAsInstructor?: OfficeMeetingUpdateManyWithoutInstructorNestedInput
     officeMeetingViews?: OfficeMeetingViewUpdateManyWithoutUserNestedInput
+    posts?: PostUpdateManyWithoutAuthorNestedInput
+    approvedPosts?: PostUpdateManyWithoutApprovedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCallRoundCouncilMembersInput = {
@@ -45137,6 +49908,8 @@ export namespace Prisma {
     councilAssignments?: CouncilMemberAssignmentUncheckedUpdateManyWithoutCouncilMemberNestedInput
     officeMeetingsAsInstructor?: OfficeMeetingUncheckedUpdateManyWithoutInstructorNestedInput
     officeMeetingViews?: OfficeMeetingViewUncheckedUpdateManyWithoutUserNestedInput
+    posts?: PostUncheckedUpdateManyWithoutAuthorNestedInput
+    approvedPosts?: PostUncheckedUpdateManyWithoutApprovedByNestedInput
   }
 
   export type CallRoundCreateWithoutCouncilsInput = {
@@ -45449,6 +50222,8 @@ export namespace Prisma {
     callRoundCouncilMembers?: CallRoundCouncilMemberCreateNestedManyWithoutCouncilMemberInput
     officeMeetingsAsInstructor?: OfficeMeetingCreateNestedManyWithoutInstructorInput
     officeMeetingViews?: OfficeMeetingViewCreateNestedManyWithoutUserInput
+    posts?: PostCreateNestedManyWithoutAuthorInput
+    approvedPosts?: PostCreateNestedManyWithoutApprovedByInput
   }
 
   export type UserUncheckedCreateWithoutCouncilAssignmentsInput = {
@@ -45480,6 +50255,8 @@ export namespace Prisma {
     callRoundCouncilMembers?: CallRoundCouncilMemberUncheckedCreateNestedManyWithoutCouncilMemberInput
     officeMeetingsAsInstructor?: OfficeMeetingUncheckedCreateNestedManyWithoutInstructorInput
     officeMeetingViews?: OfficeMeetingViewUncheckedCreateNestedManyWithoutUserInput
+    posts?: PostUncheckedCreateNestedManyWithoutAuthorInput
+    approvedPosts?: PostUncheckedCreateNestedManyWithoutApprovedByInput
   }
 
   export type UserCreateOrConnectWithoutCouncilAssignmentsInput = {
@@ -45558,6 +50335,8 @@ export namespace Prisma {
     callRoundCouncilMembers?: CallRoundCouncilMemberUpdateManyWithoutCouncilMemberNestedInput
     officeMeetingsAsInstructor?: OfficeMeetingUpdateManyWithoutInstructorNestedInput
     officeMeetingViews?: OfficeMeetingViewUpdateManyWithoutUserNestedInput
+    posts?: PostUpdateManyWithoutAuthorNestedInput
+    approvedPosts?: PostUpdateManyWithoutApprovedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCouncilAssignmentsInput = {
@@ -45589,6 +50368,8 @@ export namespace Prisma {
     callRoundCouncilMembers?: CallRoundCouncilMemberUncheckedUpdateManyWithoutCouncilMemberNestedInput
     officeMeetingsAsInstructor?: OfficeMeetingUncheckedUpdateManyWithoutInstructorNestedInput
     officeMeetingViews?: OfficeMeetingViewUncheckedUpdateManyWithoutUserNestedInput
+    posts?: PostUncheckedUpdateManyWithoutAuthorNestedInput
+    approvedPosts?: PostUncheckedUpdateManyWithoutApprovedByNestedInput
   }
 
   export type CouncilCreateWithoutProjectsInput = {
@@ -45762,6 +50543,33 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
+  export type RoomCreateManyDepartmentInput = {
+    id?: string
+    name: string
+    code: string
+    capacity?: number | null
+    description?: string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PostCreateManyDepartmentInput = {
+    id?: string
+    title: string
+    content: string
+    audience?: $Enums.PostAudience
+    status?: $Enums.PostStatus
+    authorId: string
+    authorRole: $Enums.Role
+    approvedById?: string | null
+    approvedAt?: Date | string | null
+    rejectionReason?: string | null
+    publishedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
   export type MajorUpdateWithoutDepartmentInput = {
     id?: StringFieldUpdateOperationsInput | string
     code?: StringFieldUpdateOperationsInput | string
@@ -45824,6 +50632,8 @@ export namespace Prisma {
     councilAssignments?: CouncilMemberAssignmentUpdateManyWithoutCouncilMemberNestedInput
     officeMeetingsAsInstructor?: OfficeMeetingUpdateManyWithoutInstructorNestedInput
     officeMeetingViews?: OfficeMeetingViewUpdateManyWithoutUserNestedInput
+    posts?: PostUpdateManyWithoutAuthorNestedInput
+    approvedPosts?: PostUpdateManyWithoutApprovedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutDepartmentRefInput = {
@@ -45855,6 +50665,8 @@ export namespace Prisma {
     councilAssignments?: CouncilMemberAssignmentUncheckedUpdateManyWithoutCouncilMemberNestedInput
     officeMeetingsAsInstructor?: OfficeMeetingUncheckedUpdateManyWithoutInstructorNestedInput
     officeMeetingViews?: OfficeMeetingViewUncheckedUpdateManyWithoutUserNestedInput
+    posts?: PostUncheckedUpdateManyWithoutAuthorNestedInput
+    approvedPosts?: PostUncheckedUpdateManyWithoutApprovedByNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutDepartmentRefInput = {
@@ -45982,6 +50794,89 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type RoomUpdateWithoutDepartmentInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    capacity?: NullableIntFieldUpdateOperationsInput | number | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    officeMeetings?: OfficeMeetingUpdateManyWithoutRoomNestedInput
+  }
+
+  export type RoomUncheckedUpdateWithoutDepartmentInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    capacity?: NullableIntFieldUpdateOperationsInput | number | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    officeMeetings?: OfficeMeetingUncheckedUpdateManyWithoutRoomNestedInput
+  }
+
+  export type RoomUncheckedUpdateManyWithoutDepartmentInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    capacity?: NullableIntFieldUpdateOperationsInput | number | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PostUpdateWithoutDepartmentInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    audience?: EnumPostAudienceFieldUpdateOperationsInput | $Enums.PostAudience
+    status?: EnumPostStatusFieldUpdateOperationsInput | $Enums.PostStatus
+    authorRole?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    author?: UserUpdateOneRequiredWithoutPostsNestedInput
+    approvedBy?: UserUpdateOneWithoutApprovedPostsNestedInput
+  }
+
+  export type PostUncheckedUpdateWithoutDepartmentInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    audience?: EnumPostAudienceFieldUpdateOperationsInput | $Enums.PostAudience
+    status?: EnumPostStatusFieldUpdateOperationsInput | $Enums.PostStatus
+    authorId?: StringFieldUpdateOperationsInput | string
+    authorRole?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    approvedById?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PostUncheckedUpdateManyWithoutDepartmentInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    audience?: EnumPostAudienceFieldUpdateOperationsInput | $Enums.PostAudience
+    status?: EnumPostStatusFieldUpdateOperationsInput | $Enums.PostStatus
+    authorId?: StringFieldUpdateOperationsInput | string
+    authorRole?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    approvedById?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type ClassCreateManyMajorInput = {
     id?: string
     code: string
@@ -46065,6 +50960,8 @@ export namespace Prisma {
     councilAssignments?: CouncilMemberAssignmentUpdateManyWithoutCouncilMemberNestedInput
     officeMeetingsAsInstructor?: OfficeMeetingUpdateManyWithoutInstructorNestedInput
     officeMeetingViews?: OfficeMeetingViewUpdateManyWithoutUserNestedInput
+    posts?: PostUpdateManyWithoutAuthorNestedInput
+    approvedPosts?: PostUpdateManyWithoutApprovedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutMajorInput = {
@@ -46096,6 +50993,8 @@ export namespace Prisma {
     councilAssignments?: CouncilMemberAssignmentUncheckedUpdateManyWithoutCouncilMemberNestedInput
     officeMeetingsAsInstructor?: OfficeMeetingUncheckedUpdateManyWithoutInstructorNestedInput
     officeMeetingViews?: OfficeMeetingViewUncheckedUpdateManyWithoutUserNestedInput
+    posts?: PostUncheckedUpdateManyWithoutAuthorNestedInput
+    approvedPosts?: PostUncheckedUpdateManyWithoutApprovedByNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutMajorInput = {
@@ -46270,6 +51169,8 @@ export namespace Prisma {
     councilAssignments?: CouncilMemberAssignmentUpdateManyWithoutCouncilMemberNestedInput
     officeMeetingsAsInstructor?: OfficeMeetingUpdateManyWithoutInstructorNestedInput
     officeMeetingViews?: OfficeMeetingViewUpdateManyWithoutUserNestedInput
+    posts?: PostUpdateManyWithoutAuthorNestedInput
+    approvedPosts?: PostUpdateManyWithoutApprovedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutClassInput = {
@@ -46301,6 +51202,8 @@ export namespace Prisma {
     councilAssignments?: CouncilMemberAssignmentUncheckedUpdateManyWithoutCouncilMemberNestedInput
     officeMeetingsAsInstructor?: OfficeMeetingUncheckedUpdateManyWithoutInstructorNestedInput
     officeMeetingViews?: OfficeMeetingViewUncheckedUpdateManyWithoutUserNestedInput
+    posts?: PostUncheckedUpdateManyWithoutAuthorNestedInput
+    approvedPosts?: PostUncheckedUpdateManyWithoutApprovedByNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutClassInput = {
@@ -46587,6 +51490,7 @@ export namespace Prisma {
     memberUserIds?: OfficeMeetingCreatememberUserIdsInput | string[]
     meetingAt: Date | string
     location: string
+    roomId?: string | null
     note?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -46597,6 +51501,38 @@ export namespace Prisma {
     meetingId: string
     isRead?: boolean
     readAt?: Date | string | null
+  }
+
+  export type PostCreateManyAuthorInput = {
+    id?: string
+    title: string
+    content: string
+    audience?: $Enums.PostAudience
+    status?: $Enums.PostStatus
+    authorRole: $Enums.Role
+    departmentId?: string | null
+    approvedById?: string | null
+    approvedAt?: Date | string | null
+    rejectionReason?: string | null
+    publishedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PostCreateManyApprovedByInput = {
+    id?: string
+    title: string
+    content: string
+    audience?: $Enums.PostAudience
+    status?: $Enums.PostStatus
+    authorId: string
+    authorRole: $Enums.Role
+    departmentId?: string | null
+    approvedAt?: Date | string | null
+    rejectionReason?: string | null
+    publishedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type ProjectUpdateWithoutLeaderInput = {
@@ -47101,6 +52037,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     project?: ProjectUpdateOneRequiredWithoutOfficeMeetingsNestedInput
+    room?: RoomUpdateOneWithoutOfficeMeetingsNestedInput
     views?: OfficeMeetingViewUpdateManyWithoutMeetingNestedInput
   }
 
@@ -47111,6 +52048,7 @@ export namespace Prisma {
     memberUserIds?: OfficeMeetingUpdatememberUserIdsInput | string[]
     meetingAt?: DateTimeFieldUpdateOperationsInput | Date | string
     location?: StringFieldUpdateOperationsInput | string
+    roomId?: NullableStringFieldUpdateOperationsInput | string | null
     note?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -47124,6 +52062,7 @@ export namespace Prisma {
     memberUserIds?: OfficeMeetingUpdatememberUserIdsInput | string[]
     meetingAt?: DateTimeFieldUpdateOperationsInput | Date | string
     location?: StringFieldUpdateOperationsInput | string
+    roomId?: NullableStringFieldUpdateOperationsInput | string | null
     note?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -47148,6 +52087,102 @@ export namespace Prisma {
     meetingId?: StringFieldUpdateOperationsInput | string
     isRead?: BoolFieldUpdateOperationsInput | boolean
     readAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type PostUpdateWithoutAuthorInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    audience?: EnumPostAudienceFieldUpdateOperationsInput | $Enums.PostAudience
+    status?: EnumPostStatusFieldUpdateOperationsInput | $Enums.PostStatus
+    authorRole?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    department?: DepartmentUpdateOneWithoutPostsNestedInput
+    approvedBy?: UserUpdateOneWithoutApprovedPostsNestedInput
+  }
+
+  export type PostUncheckedUpdateWithoutAuthorInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    audience?: EnumPostAudienceFieldUpdateOperationsInput | $Enums.PostAudience
+    status?: EnumPostStatusFieldUpdateOperationsInput | $Enums.PostStatus
+    authorRole?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    departmentId?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedById?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PostUncheckedUpdateManyWithoutAuthorInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    audience?: EnumPostAudienceFieldUpdateOperationsInput | $Enums.PostAudience
+    status?: EnumPostStatusFieldUpdateOperationsInput | $Enums.PostStatus
+    authorRole?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    departmentId?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedById?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PostUpdateWithoutApprovedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    audience?: EnumPostAudienceFieldUpdateOperationsInput | $Enums.PostAudience
+    status?: EnumPostStatusFieldUpdateOperationsInput | $Enums.PostStatus
+    authorRole?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    author?: UserUpdateOneRequiredWithoutPostsNestedInput
+    department?: DepartmentUpdateOneWithoutPostsNestedInput
+  }
+
+  export type PostUncheckedUpdateWithoutApprovedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    audience?: EnumPostAudienceFieldUpdateOperationsInput | $Enums.PostAudience
+    status?: EnumPostStatusFieldUpdateOperationsInput | $Enums.PostStatus
+    authorId?: StringFieldUpdateOperationsInput | string
+    authorRole?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    departmentId?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PostUncheckedUpdateManyWithoutApprovedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    audience?: EnumPostAudienceFieldUpdateOperationsInput | $Enums.PostAudience
+    status?: EnumPostStatusFieldUpdateOperationsInput | $Enums.PostStatus
+    authorId?: StringFieldUpdateOperationsInput | string
+    authorRole?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    departmentId?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ProjectCreateManyCallRoundInput = {
@@ -47339,6 +52374,8 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     majors?: MajorUpdateManyWithoutDepartmentNestedInput
     users?: UserUpdateManyWithoutDepartmentRefNestedInput
+    rooms?: RoomUpdateManyWithoutDepartmentNestedInput
+    posts?: PostUpdateManyWithoutDepartmentNestedInput
   }
 
   export type DepartmentUncheckedUpdateWithoutCallRoundsInput = {
@@ -47350,6 +52387,8 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     majors?: MajorUncheckedUpdateManyWithoutDepartmentNestedInput
     users?: UserUncheckedUpdateManyWithoutDepartmentRefNestedInput
+    rooms?: RoomUncheckedUpdateManyWithoutDepartmentNestedInput
+    posts?: PostUncheckedUpdateManyWithoutDepartmentNestedInput
   }
 
   export type DepartmentUncheckedUpdateManyWithoutCallRoundsInput = {
@@ -47634,6 +52673,7 @@ export namespace Prisma {
     memberUserIds?: OfficeMeetingCreatememberUserIdsInput | string[]
     meetingAt: Date | string
     location: string
+    roomId?: string | null
     note?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -47796,6 +52836,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     instructor?: UserUpdateOneRequiredWithoutOfficeMeetingsAsInstructorNestedInput
+    room?: RoomUpdateOneWithoutOfficeMeetingsNestedInput
     views?: OfficeMeetingViewUpdateManyWithoutMeetingNestedInput
   }
 
@@ -47806,6 +52847,7 @@ export namespace Prisma {
     memberUserIds?: OfficeMeetingUpdatememberUserIdsInput | string[]
     meetingAt?: DateTimeFieldUpdateOperationsInput | Date | string
     location?: StringFieldUpdateOperationsInput | string
+    roomId?: NullableStringFieldUpdateOperationsInput | string | null
     note?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -47819,6 +52861,7 @@ export namespace Prisma {
     memberUserIds?: OfficeMeetingUpdatememberUserIdsInput | string[]
     meetingAt?: DateTimeFieldUpdateOperationsInput | Date | string
     location?: StringFieldUpdateOperationsInput | string
+    roomId?: NullableStringFieldUpdateOperationsInput | string | null
     note?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -48004,6 +53047,60 @@ export namespace Prisma {
     approvedById?: NullableStringFieldUpdateOperationsInput | string | null
     approvalNote?: NullableStringFieldUpdateOperationsInput | string | null
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type OfficeMeetingCreateManyRoomInput = {
+    id?: string
+    projectId: string
+    instructorId: string
+    target: string
+    memberUserIds?: OfficeMeetingCreatememberUserIdsInput | string[]
+    meetingAt: Date | string
+    location: string
+    note?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type OfficeMeetingUpdateWithoutRoomInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    target?: StringFieldUpdateOperationsInput | string
+    memberUserIds?: OfficeMeetingUpdatememberUserIdsInput | string[]
+    meetingAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    location?: StringFieldUpdateOperationsInput | string
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    project?: ProjectUpdateOneRequiredWithoutOfficeMeetingsNestedInput
+    instructor?: UserUpdateOneRequiredWithoutOfficeMeetingsAsInstructorNestedInput
+    views?: OfficeMeetingViewUpdateManyWithoutMeetingNestedInput
+  }
+
+  export type OfficeMeetingUncheckedUpdateWithoutRoomInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    projectId?: StringFieldUpdateOperationsInput | string
+    instructorId?: StringFieldUpdateOperationsInput | string
+    target?: StringFieldUpdateOperationsInput | string
+    memberUserIds?: OfficeMeetingUpdatememberUserIdsInput | string[]
+    meetingAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    location?: StringFieldUpdateOperationsInput | string
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    views?: OfficeMeetingViewUncheckedUpdateManyWithoutMeetingNestedInput
+  }
+
+  export type OfficeMeetingUncheckedUpdateManyWithoutRoomInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    projectId?: StringFieldUpdateOperationsInput | string
+    instructorId?: StringFieldUpdateOperationsInput | string
+    target?: StringFieldUpdateOperationsInput | string
+    memberUserIds?: OfficeMeetingUpdatememberUserIdsInput | string[]
+    meetingAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    location?: StringFieldUpdateOperationsInput | string
+    note?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

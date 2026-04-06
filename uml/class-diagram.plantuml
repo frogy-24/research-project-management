@@ -1,0 +1,294 @@
+@startuml Research Project Management - Class Diagram
+
+' Styling for better readability
+skinparam classAttributeIconSize 0
+skinparam defaultFontSize 11
+skinparam class {
+    BackgroundColor White
+    BorderColor Black
+    ArrowColor Black
+}
+
+' ============================================
+' ORGANIZATION ENTITIES
+' ============================================
+
+package "Tổ chức" {
+    class Department {
+        + id: String
+        + code: String
+        + name: String
+    }
+
+    class Major {
+        + id: String
+        + code: String
+        + name: String
+        + departmentId: String
+    }
+
+    class Class {
+        + id: String
+        + code: String
+        + name: String
+        + majorId: String
+    }
+
+    class Room {
+        + id: String
+        + code: String
+        + name: String
+        + capacity: Int
+        + departmentId: String
+    }
+}
+
+' ============================================
+' USER
+' ============================================
+
+package "Người dùng" {
+    class User {
+        + id: String
+        + code: String
+        + name: String
+        + email: String
+        + role: String
+        + departmentId: String
+        + majorId: String
+        + classId: String
+    }
+}
+
+' ============================================
+' CALL ROUND
+' ============================================
+
+package "Đợt đăng ký" {
+    class CallRound {
+        + id: String
+        + name: String
+        + registrationStartDate: DateTime
+        + registrationEndDate: DateTime
+        + projectStartDate: DateTime
+        + projectEndDate: DateTime
+        + applicableFor: String
+        + approvalStatus: String
+    }
+
+    class CallRoundInstructor {
+        + callRoundId: String
+        + instructorId: String
+    }
+
+    class CallRoundCouncilMember {
+        + callRoundId: String
+        + councilMemberId: String
+    }
+}
+
+' ============================================
+' PROJECT
+' ============================================
+
+package "Đề tài" {
+    class ProjectType {
+        + id: String
+        + name: String
+        + budgetCap: Decimal
+    }
+
+    class Project {
+        + id: String
+        + code: String
+        + title: String
+        + objective: String
+        + budgetRequested: Decimal
+        + budgetApproved: Decimal
+        + status: String
+        + leaderId: String
+        + instructorId: String
+        + callRoundId: String
+    }
+
+    class ProjectRegistration {
+        + id: String
+        + userId: String
+        + callRoundId: String
+        + title: String
+        + objective: String
+        + status: String
+        + instructorId: String
+        + instructorStatus: String
+        + facultyStatus: String
+    }
+}
+
+' ============================================
+' PROGRESS REPORT
+' ============================================
+
+package "Báo cáo tiến độ" {
+    class ProgressReportTemplate {
+        + id: String
+        + name: String
+        + isActive: Boolean
+    }
+
+    class ProgressReportTemplateItem {
+        + id: String
+        + templateId: String
+        + weekNumber: Int
+        + weekLabel: String
+        + taskDescription: String
+    }
+
+    class ProgressReport {
+        + id: String
+        + projectId: String
+        + periodLabel: String
+        + summary: String
+        + mentorReview: String
+        + mentorScore: Float
+        + submittedAt: DateTime
+    }
+}
+
+' ============================================
+' COUNCIL
+' ============================================
+
+package "Hội đồng" {
+    class Council {
+        + id: String
+        + callRoundId: String
+        + name: String
+    }
+
+    class CouncilMemberAssignment {
+        + councilId: String
+        + councilMemberId: String
+        + role: String
+    }
+
+    class ProjectCouncilAssignment {
+        + councilId: String
+        + projectRegistrationId: String
+    }
+
+    class CouncilEvaluation {
+        + id: String
+        + projectId: String
+        + councilMemberId: String
+        + score: Int
+        + decision: String
+        + comment: String
+    }
+}
+
+' ============================================
+' FINANCIAL & EXTENSION
+' ============================================
+
+package "Tài chính & Gia hạn" {
+    class FundingDisbursement {
+        + id: String
+        + projectId: String
+        + amount: Decimal
+        + disbursedAt: DateTime
+        + voucherNo: String
+    }
+
+    class ExtensionRequest {
+        + id: String
+        + projectId: String
+        + requestedMonths: Int
+        + reason: String
+        + status: String
+    }
+}
+
+' ============================================
+' NOTIFICATION & MEETING
+' ============================================
+
+package "Thông báo & Lịch họp" {
+    class Notification {
+        + id: String
+        + userId: String
+        + type: String
+        + title: String
+        + message: String
+        + isRead: Boolean
+    }
+
+    class OfficeMeeting {
+        + id: String
+        + projectId: String
+        + instructorId: String
+        + meetingAt: DateTime
+        + location: String
+        + roomId: String
+    }
+
+    class OfficeMeetingView {
+        + meetingId: String
+        + userId: String
+        + isRead: Boolean
+    }
+}
+
+' ============================================
+' RELATIONSHIPS
+' ============================================
+
+' Organization
+Department "1" -- "0..*" Major
+Department "1" -- "0..*" User
+Department "1" -- "0..*" Room
+Major "1" -- "0..*" Class
+Major "1" -- "0..*" User
+Class "1" -- "0..*" User
+
+' Call Round
+CallRound "1" -- "0..*" Project
+CallRound "1" -- "0..*" ProjectRegistration
+CallRound "1" -- "0..*" CallRoundInstructor
+CallRound "1" -- "0..*" CallRoundCouncilMember
+CallRound "1" -- "0..*" Council
+CallRound "0..1" -- "0..1" ProgressReportTemplate
+
+CallRoundInstructor "*" -- "1" User
+CallRoundCouncilMember "*" -- "1" User
+
+' User & Project
+User "1" -- "0..*" Project : leads
+User "1" -- "0..*" Project : instructs
+User "1" -- "0..*" ProjectRegistration
+User "1" -- "0..*" CouncilEvaluation
+User "1" -- "0..*" Notification
+User "1" -- "0..*" OfficeMeeting
+
+' Project
+ProjectType "1" -- "0..*" Project
+Project "1" -- "0..*" ProgressReport
+Project "1" -- "0..*" CouncilEvaluation
+Project "1" -- "0..*" FundingDisbursement
+Project "1" -- "0..*" ExtensionRequest
+Project "1" -- "0..*" OfficeMeeting
+
+' Progress Report
+ProgressReportTemplate "1" -- "0..*" ProgressReportTemplateItem
+
+' Council
+Council "1" -- "0..*" CouncilMemberAssignment
+Council "1" -- "0..*" ProjectCouncilAssignment
+CouncilMemberAssignment "*" -- "1" User
+ProjectCouncilAssignment "*" -- "1" ProjectRegistration
+
+' Meeting
+Room "1" -- "0..*" OfficeMeeting
+OfficeMeeting "1" -- "0..*" OfficeMeetingView
+OfficeMeetingView "*" -- "1" User
+
+@enduml

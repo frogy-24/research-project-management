@@ -1,0 +1,146 @@
+@startuml
+!theme plain
+skinparam backgroundColor #F8FAFC
+skinparam handwritten false
+skinparam shadowing false
+
+' Define custom colors
+skinparam actor {
+    BackgroundColor #0F172A
+    BorderColor #0F172A
+    FontColor #FFFFFF
+}
+
+skinparam usecase {
+    BackgroundColor #FFFFFF
+    BorderColor #2563EB
+    FontColor #0F172A
+    BorderThickness 2
+}
+
+skinparam package {
+    BackgroundColor #E2E8F0
+    BorderColor #94A3B8
+    FontColor #0F172A
+}
+
+' Title
+title
+    <size:20><b>Biểu đồ Use Case - Xem và Nhận xét Tiến độ Đề tài</b></size>
+    <size:14>Hệ thống Quản lý Nghiên cứu Khoa học</size>
+end title
+
+' Actors
+actor "Giảng viên\nHướng dẫn" as LECTURER
+
+' Main Package
+package "Chức năng Xem và Nhận xét Tiến độ" {
+    
+    ' Main Use Cases
+    usecase "Xem danh sách\nđề tài hướng dẫn" as UC_VIEW_PROJECTS
+    usecase "Xem chi tiết\nbáo cáo tiến độ" as UC_VIEW_REPORT
+    usecase "Nhận xét và\nchấm điểm báo cáo" as UC_REVIEW_REPORT
+    usecase "Đặt lịch họp\nvới sinh viên" as UC_SCHEDULE_MEETING
+    
+    ' Sub Use Cases for View Projects
+    usecase "Lọc theo đợt" as UC_FILTER_ROUND
+    usecase "Tìm kiếm đề tài" as UC_SEARCH_PROJECT
+    usecase "Xem thông tin\nsinh viên" as UC_VIEW_STUDENT
+    
+    ' Sub Use Cases for View Report
+    usecase "Xem danh sách\nbáo cáo tuần" as UC_LIST_REPORTS
+    usecase "Xem nội dung\nbáo cáo" as UC_VIEW_CONTENT
+    usecase "Xem file đính kèm" as UC_VIEW_FILE
+    usecase "Xem mẫu tiến độ" as UC_VIEW_TEMPLATE
+    
+    ' Sub Use Cases for Review
+    usecase "Nhập nhận xét" as UC_INPUT_REVIEW
+    usecase "Nhập điểm số" as UC_INPUT_SCORE
+    usecase "Lưu đánh giá" as UC_SAVE_REVIEW
+    usecase "Gửi thông báo\ncho sinh viên" as UC_NOTIFY_STUDENT
+    
+    ' Sub Use Cases for Meeting
+    usecase "Chọn đề tài" as UC_SELECT_PROJECT
+    usecase "Chọn thành viên\nnhận lịch" as UC_SELECT_MEMBERS
+    usecase "Nhập thông tin\nbuổi họp" as UC_INPUT_MEETING
+}
+
+' Relationships - Main flows
+LECTURER --> UC_VIEW_PROJECTS
+LECTURER --> UC_VIEW_REPORT
+LECTURER --> UC_REVIEW_REPORT
+LECTURER --> UC_SCHEDULE_MEETING
+
+' Include relationships for View Projects
+UC_VIEW_PROJECTS ..> UC_FILTER_ROUND : <<include>>
+UC_VIEW_PROJECTS ..> UC_SEARCH_PROJECT : <<include>>
+UC_VIEW_PROJECTS ..> UC_VIEW_STUDENT : <<include>>
+
+' Include relationships for View Report
+UC_VIEW_REPORT ..> UC_LIST_REPORTS : <<include>>
+UC_VIEW_REPORT ..> UC_VIEW_CONTENT : <<include>>
+UC_VIEW_REPORT ..> UC_VIEW_FILE : <<include>>
+UC_VIEW_REPORT ..> UC_VIEW_TEMPLATE : <<include>>
+
+' Include relationships for Review
+UC_REVIEW_REPORT ..> UC_VIEW_CONTENT : <<include>>
+UC_REVIEW_REPORT ..> UC_INPUT_REVIEW : <<include>>
+UC_REVIEW_REPORT ..> UC_INPUT_SCORE : <<include>>
+UC_REVIEW_REPORT ..> UC_SAVE_REVIEW : <<include>>
+UC_SAVE_REVIEW ..> UC_NOTIFY_STUDENT : <<include>>
+
+' Include relationships for Meeting
+UC_SCHEDULE_MEETING ..> UC_SELECT_PROJECT : <<include>>
+UC_SCHEDULE_MEETING ..> UC_SELECT_MEMBERS : <<include>>
+UC_SCHEDULE_MEETING ..> UC_INPUT_MEETING : <<include>>
+
+' Notes
+note right of UC_VIEW_PROJECTS
+  <b>Danh sách đề tài</b>
+  • Hiển thị đề tài có instructorId = mình
+  • Thông tin: Tên đề tài, Sinh viên, MSSV
+  • Email, SĐT, Trạng thái đề tài
+  • Lọc theo đợt, Tìm kiếm
+  • Nút: "Xem báo cáo", "Đặt lịch"
+end note
+
+note right of UC_VIEW_REPORT
+  <b>Xem báo cáo tiến độ</b>
+  • Danh sách báo cáo tuần của đề tài
+  • Mỗi báo cáo: Tuần, Thời gian, Điểm
+  • Trạng thái: Đã/Chưa đánh giá
+  • Nội dung: Công việc, Thực hiện, Kết quả
+  • File đính kèm (PDF/Word)
+  • Xem trong iframe hoặc tab mới
+end note
+
+note right of UC_REVIEW_REPORT
+  <b>Nhận xét và chấm điểm</b>
+  • Nhập nhận xét (bắt buộc)
+  • Nhập điểm số 0-10 (bắt buộc)
+  • Lưu vào mentorReview, mentorScore
+  • Gửi thông báo cho sinh viên
+  • Không thể sửa sau khi lưu
+  • Hiển thị đánh giá đã lưu
+end note
+
+note bottom of UC_SCHEDULE_MEETING
+  <b>Đặt lịch họp</b>
+  • Chọn đợt và đề tài
+  • Chọn thành viên nhận lịch (hoặc toàn bộ)
+  • Nhập: Thời gian, Địa điểm/Link
+  • Ghi chú (tùy chọn)
+  • Tạo OfficeMeeting
+  • Gửi thông báo cho thành viên
+end note
+
+note bottom of UC_VIEW_TEMPLATE
+  <b>Mẫu tiến độ</b>
+  • Hiển thị template từ CallRound
+  • Danh sách tuần với công việc
+  • Hướng dẫn nội dung
+  • Kết quả mong đợi
+  • Sinh viên chọn tuần để nộp
+end note
+
+@enduml
