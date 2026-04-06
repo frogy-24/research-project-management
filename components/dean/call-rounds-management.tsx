@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { Clock, CheckCircle, XCircle, PlusCircle } from 'lucide-react';
+import { Clock, CheckCircle, XCircle, PlusCircle, Eye, Pencil, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
@@ -85,6 +85,7 @@ export function DeanCallRoundsManagement() {
     const [isDialogOpen, setIsDialogOpen] = React.useState(false);
     const [isDeleteDialogOpen, setIsDeleteDialogOpen] = React.useState(false);
     const [editingCallRound, setEditingCallRound] = React.useState<CallRound | null>(null);
+    const [viewingCallRound, setViewingCallRound] = React.useState<CallRound | null>(null);
     const [deletingCallRound, setDeletingCallRound] = React.useState<CallRound | null>(null);
     const [formData, setFormData] = React.useState<CallRoundFormData>(initialFormData);
 
@@ -92,6 +93,24 @@ export function DeanCallRoundsManagement() {
     const deanCallRounds = callRounds || [];
 
     const canEditCallRound = (callRound: CallRound) => callRound.approvalStatus === 'PENDING_APPROVAL';
+
+    const isCallRoundEnded = (callRound: CallRound) => new Date(callRound.registrationEndDate) < new Date();
+
+    const getRoundPhaseBadge = (callRound: CallRound) => {
+        if (isCallRoundEnded(callRound)) {
+            return (
+                <Badge variant="secondary" className="gap-1 bg-slate-200 text-slate-700">
+                    Kết thúc
+                </Badge>
+            );
+        }
+
+        return (
+            <Badge variant="default" className="gap-1 bg-blue-600">
+                Đang mở
+            </Badge>
+        );
+    };
 
     const handleOpenDialog = (callRound?: CallRound) => {
         if (callRound) {
@@ -242,12 +261,14 @@ export function DeanCallRoundsManagement() {
                                 <TableHead>Thời gian thực hiện</TableHead>
                                 <TableHead>Biểu mẫu</TableHead>
                                 <TableHead>Trạng thái</TableHead>
+                                <TableHead>Tiến độ</TableHead>
+                                <TableHead className="text-right">Thao tác</TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
                             {deanCallRounds.length === 0 ? (
                                 <TableRow>
-                                    <TableCell colSpan={5} className="text-center text-muted-foreground">
+                                    <TableCell colSpan={7} className="text-center text-muted-foreground">
                                         Chưa có đợt đăng ký nào
                                     </TableCell>
                                 </TableRow>
@@ -297,6 +318,47 @@ export function DeanCallRoundsManagement() {
                                             )}
                                         </TableCell>
                                         <TableCell>{getStatusBadge(callRound)}</TableCell>
+                                        <TableCell>{getRoundPhaseBadge(callRound)}</TableCell>
+                                        <TableCell>
+                                            <div className="flex items-center justify-end gap-2">
+                                                <Button
+                                                    type="button"
+                                                    size="sm"
+                                                    variant="outline"
+                                                    onClick={() => setViewingCallRound(callRound)}
+                                                >
+                                                    <Eye className="h-4 w-4 mr-1" />
+                                                    Xem
+                                                </Button>
+
+                                                {!isCallRoundEnded(callRound) && canEditCallRound(callRound) && (
+                                                    <Button
+                                                        type="button"
+                                                        size="sm"
+                                                        variant="outline"
+                                                        onClick={() => handleOpenDialog(callRound)}
+                                                    >
+                                                        <Pencil className="h-4 w-4 mr-1" />
+                                                        Sửa
+                                                    </Button>
+                                                )}
+
+                                                {!isCallRoundEnded(callRound) && (
+                                                    <Button
+                                                        type="button"
+                                                        size="sm"
+                                                        variant="destructive"
+                                                        onClick={() => {
+                                                            setDeletingCallRound(callRound);
+                                                            setIsDeleteDialogOpen(true);
+                                                        }}
+                                                    >
+                                                        <Trash2 className="h-4 w-4 mr-1" />
+                                                        Xóa
+                                                    </Button>
+                                                )}
+                                            </div>
+                                        </TableCell>
                                     </TableRow>
                                 ))
                             )}
@@ -661,6 +723,61 @@ export function DeanCallRoundsManagement() {
                         </Button>
                         <Button variant="destructive" onClick={handleDelete} disabled={deleteCallRound.isPending}>
                             {deleteCallRound.isPending ? 'Đang xóa...' : 'Xóa'}
+                        </Button>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
+
+            <Dialog
+                open={Boolean(viewingCallRound)}
+                onOpenChange={(open) => {
+                    if (!open) {
+                        setViewingCallRound(null);
+                    }
+                }}
+            >
+                <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+                    <DialogHeader>
+                        <DialogTitle>Chi tiết đợt đăng ký</DialogTitle>
+                        <DialogDescription>Thông tin tổng quan và trạng thái vận hành của đợt đăng ký.</DialogDescription>
+                    </DialogHeader>
+
+                    {viewingCallRound && (
+                        <div className="space-y-3 text-sm">
+                            <div>
+                                <p className="text-muted-foreground">Tên đợt</p>
+                                <p className="font-medium">{viewingCallRound.name}</p>
+                            </div>
+                            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                                <div>
+                                    <p className="text-muted-foreground">Bắt đầu đăng ký</p>
+                                    <p>{new Date(viewingCallRound.registrationStartDate).toLocaleDateString('vi-VN')}</p>
+                                </div>
+                                <div>
+                                    <p className="text-muted-foreground">Kết thúc đăng ký</p>
+                                    <p>{new Date(viewingCallRound.registrationEndDate).toLocaleDateString('vi-VN')}</p>
+                                </div>
+                            </div>
+                            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                                <div>
+                                    <p className="text-muted-foreground">Trạng thái phê duyệt</p>
+                                    <div className="mt-1">{getStatusBadge(viewingCallRound)}</div>
+                                </div>
+                                <div>
+                                    <p className="text-muted-foreground">Trạng thái vận hành</p>
+                                    <div className="mt-1">{getRoundPhaseBadge(viewingCallRound)}</div>
+                                </div>
+                            </div>
+                            <div>
+                                <p className="text-muted-foreground">Mô tả</p>
+                                <p>{viewingCallRound.description || 'Không có mô tả'}</p>
+                            </div>
+                        </div>
+                    )}
+
+                    <DialogFooter>
+                        <Button type="button" variant="outline" onClick={() => setViewingCallRound(null)}>
+                            Đóng
                         </Button>
                     </DialogFooter>
                 </DialogContent>

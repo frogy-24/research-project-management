@@ -4,6 +4,7 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
 import { useRooms, useCreateRoom, useUpdateRoom, useDeleteRoom } from '@/hooks/useRooms';
 import { createRoomSchema, type CreateRoomInput, type RoomItem } from '@/types/room.schema';
 import { Button } from '@/components/ui/button';
@@ -46,6 +47,8 @@ import {
 import { PlusCircle, Pencil, Trash2, DoorOpen, Users, Building2 } from 'lucide-react';
 import { Switch } from '@/components/ui/switch';
 
+type RoomFormValues = z.input<typeof createRoomSchema>;
+
 function RoomFormDialog({
   open,
   onOpenChange,
@@ -59,7 +62,7 @@ function RoomFormDialog({
   const updateRoom = useUpdateRoom();
   const isEdit = !!room;
 
-  const form = useForm<CreateRoomInput>({
+  const form = useForm<RoomFormValues>({
     resolver: zodResolver(createRoomSchema),
     defaultValues: {
       name: room?.name ?? '',
@@ -84,14 +87,16 @@ function RoomFormDialog({
     onOpenChange(v);
   };
 
-  const onSubmit = (data: CreateRoomInput) => {
+  const onSubmit = (data: RoomFormValues) => {
+    const validatedData: CreateRoomInput = createRoomSchema.parse(data);
+
     if (isEdit && room) {
       updateRoom.mutate(
-        { id: room.id, data },
+        { id: room.id, data: validatedData },
         { onSuccess: () => onOpenChange(false) },
       );
     } else {
-      createRoom.mutate(data, { onSuccess: () => onOpenChange(false) });
+      createRoom.mutate(validatedData, { onSuccess: () => onOpenChange(false) });
     }
   };
 

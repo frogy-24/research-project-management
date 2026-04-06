@@ -114,6 +114,15 @@ const getDisplayStatus = (item: ProjectRegistration): DisplayRegistrationStatus 
     return 'PENDING_FACULTY';
 };
 
+const isCallRoundEnded = (item: ProjectRegistration): boolean => {
+    const endDate = item.callRound?.registrationEndDate;
+    if (!endDate) {
+        return false;
+    }
+
+    return new Date(endDate) < new Date();
+};
+
 export function ProjectRegistrationPage({ title }: ProjectRegistrationPageProps) {
     const [projectTitle, setProjectTitle] = useState('');
     const [objective, setObjective] = useState('');
@@ -889,7 +898,8 @@ export function ProjectRegistrationPage({ title }: ProjectRegistrationPageProps)
                                                 </TableRow>
                                             ) : (
                                                 filteredHistoryRegistrations.map((item) => {
-                                                const displayStatus = getDisplayStatus(item);
+                                                    const displayStatus = getDisplayStatus(item);
+                                                    const roundEnded = isCallRoundEnded(item);
 
                                                 return (
                                                     <TableRow key={item.id} className="group">
@@ -900,7 +910,7 @@ export function ProjectRegistrationPage({ title }: ProjectRegistrationPageProps)
                                                                         <DialogTrigger asChild>
                                                                             <span>{item.title}</span>
                                                                         </DialogTrigger>
-                                                                        <DialogContent className="sm:max-w-2xl">
+                                                                        <DialogContent className="sm:max-w-2xl max-h-[90vh] overflow-y-auto">
                                                                             <DialogHeader>
                                                                                 <DialogTitle>
                                                                                     Chi tiết đề xuất nghiên cứu
@@ -1184,7 +1194,7 @@ export function ProjectRegistrationPage({ title }: ProjectRegistrationPageProps)
                                                                 )}
                                                         </TableCell>
                                                         <TableCell className="pr-6 align-top">
-                                                            {canEditRegistration(item) ? (
+                                                            {canEditRegistration(item) && !roundEnded ? (
                                                                 <Button
                                                                     variant="secondary"
                                                                     className="h-8 mb-2"
@@ -1198,7 +1208,8 @@ export function ProjectRegistrationPage({ title }: ProjectRegistrationPageProps)
 
                                                             {item.status === 'PENDING' &&
                                                             item.instructorStatus !== 'ACCEPTED' &&
-                                                            item.instructorStatus !== 'REJECTED' ? (
+                                                            item.instructorStatus !== 'REJECTED' &&
+                                                            !roundEnded ? (
                                                                 <div className="flex flex-col gap-2 w-max">
                                                                     <Input
                                                                         size={1}
@@ -1223,6 +1234,11 @@ export function ProjectRegistrationPage({ title }: ProjectRegistrationPageProps)
                                                                     </Button>
                                                                 </div>
                                                             ) : null}
+                                                            {roundEnded ? (
+                                                                <p className="text-xs text-muted-foreground italic">
+                                                                    Đợt đăng ký đã kết thúc, chỉ có thể xem chi tiết.
+                                                                </p>
+                                                            ) : null}
                                                         </TableCell>
                                                     </TableRow>
                                                 );
@@ -1237,7 +1253,7 @@ export function ProjectRegistrationPage({ title }: ProjectRegistrationPageProps)
             </div>
 
             <Dialog open={memberPickerOpen} onOpenChange={setMemberPickerOpen}>
-                <DialogContent className="sm:max-w-2xl">
+                <DialogContent className="sm:max-w-2xl max-h-[90vh] overflow-y-auto">
                     <DialogHeader>
                         <DialogTitle>Chọn thành viên cùng khoa</DialogTitle>
                     </DialogHeader>
@@ -1343,11 +1359,30 @@ export function ProjectRegistrationPage({ title }: ProjectRegistrationPageProps)
             </Dialog>
 
             <Dialog open={Boolean(editingRegistration)} onOpenChange={(open) => !open && closeEditDialog()}>
-                <DialogContent className="sm:max-w-xl">
+                <DialogContent className="sm:max-w-xl max-h-[90vh] overflow-y-auto">
                     <DialogHeader>
                         <DialogTitle>Chỉnh sửa thông tin đề tài</DialogTitle>
                     </DialogHeader>
                     <div className="space-y-4 py-2">
+                        <div className="rounded-md border bg-muted/20 p-3">
+                            <p className="text-xs text-muted-foreground">Đợt đăng ký</p>
+                            <p className="font-medium">
+                                {editingRegistration?.callRound?.name || 'Chưa gắn đợt đăng ký'}
+                            </p>
+                            {editingRegistration?.callRound?.registrationStartDate &&
+                            editingRegistration?.callRound?.registrationEndDate ? (
+                                <p className="text-xs text-muted-foreground mt-1">
+                                    {new Date(editingRegistration.callRound.registrationStartDate).toLocaleDateString(
+                                        'vi-VN',
+                                    )}{' '}
+                                    -{' '}
+                                    {new Date(editingRegistration.callRound.registrationEndDate).toLocaleDateString(
+                                        'vi-VN',
+                                    )}
+                                </p>
+                            ) : null}
+                        </div>
+
                         <div className="space-y-2">
                             <Label>
                                 Tên đề tài <span className="text-destructive">*</span>

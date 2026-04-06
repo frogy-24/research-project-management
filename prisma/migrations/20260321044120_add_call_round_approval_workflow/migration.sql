@@ -1,3 +1,4 @@
+
 -- CreateEnum
 CREATE TYPE "CallRoundApprovalStatus" AS ENUM ('PENDING_APPROVAL', 'APPROVED', 'REJECTED');
 

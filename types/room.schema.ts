@@ -9,7 +9,7 @@ export const createRoomSchema = z.object({
     .max(20)
     .regex(/^[A-Za-z0-9\-_]+$/, 'Mã phòng chỉ được chứa chữ cái, số, gạch ngang hoặc gạch dưới'),
   capacity: z
-    .number({ invalid_type_error: 'Sức chứa phải là số' })
+    .number()
     .int()
     .positive('Sức chứa phải lớn hơn 0')
     .nullable()

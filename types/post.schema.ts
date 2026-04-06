@@ -39,11 +39,33 @@ export const postSchema = z.object({
 
 export const postListSchema = z.array(postSchema);
 
+const htmlTagRegex = /<[^>]+>/g;
+const mediaContentRegex = /<img\b[^>]*>|<a\b[^>]*href=["'][^"']+["'][^>]*>/i;
+
+function extractPlainTextFromHtml(content: string): string {
+  return content.replace(htmlTagRegex, ' ').replace(/\s+/g, ' ').trim();
+}
+
 export const createPostSchema = z.object({
   title: z.string().min(3, 'Tiêu đề phải có ít nhất 3 ký tự').max(200),
-  content: z.string().min(10, 'Nội dung phải có ít nhất 10 ký tự').max(20000),
+  content: z
+    .string()
+    .max(120000, 'Nội dung bài viết quá dài')
+    .superRefine((content, ctx) => {
+      const plainText = extractPlainTextFromHtml(content);
+      const hasMedia = mediaContentRegex.test(content);
+
+      if (plainText.length < 10 && !hasMedia) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: 'Nội dung phải có ít nhất 10 ký tự hoặc có ảnh/tài liệu đính kèm',
+        });
+      }
+    }),
   audience: PostAudienceEnum,
 });
+
+export const updatePostSchema = createPostSchema;
 
 export const moderatePostSchema = z
   .object({
@@ -64,4 +86,5 @@ export type PostAudience = z.infer<typeof PostAudienceEnum>;
 export type PostStatus = z.infer<typeof PostStatusEnum>;
 export type PostItem = z.infer<typeof postSchema>;
 export type CreatePostInput = z.infer<typeof createPostSchema>;
+export type UpdatePostInput = z.infer<typeof updatePostSchema>;
 export type ModeratePostInput = z.infer<typeof moderatePostSchema>;

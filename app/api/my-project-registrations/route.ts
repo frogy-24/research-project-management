@@ -4,6 +4,7 @@ import { getActorRole, getActorUserId } from "@/lib/project-permissions";
 import { createProjectRegistrationSchema } from "@/types/project-registration.schema";
 import { createNotifications } from "@/lib/notification-service";
 import { ZodError } from "zod";
+import type { ApplicableFor } from "@/prisma/generated/prisma";
 
 const mapZodError = (zodError: ZodError) => {
   const fields: Record<string, string[]> = {};
@@ -116,7 +117,7 @@ export async function POST(request: Request) {
         : null;
 
     // Find all call rounds currently open, approved, and applicable for current actor role
-    const applicableFor =
+    const applicableFor: ApplicableFor[] =
       actorRole === "STUDENT"
         ? ["STUDENT", "BOTH"]
         : ["LECTURER", "BOTH"];
