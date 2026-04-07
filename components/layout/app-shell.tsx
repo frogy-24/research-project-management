@@ -350,11 +350,9 @@ function AppSidebar({ session }: { session: AuthSession }) {
                     <SidebarGroupContent>
                         <SidebarMenu>
                             {navItems.map((item) => {
-                                // Exact match for dashboard/home routes, startsWith for sub-routes
-                                const isDashboard = item.url === getDashboardRoute(session.role);
-                                const isActive = isDashboard 
-                                    ? pathname === item.url 
-                                    : pathname.startsWith(item.url);
+                                // Exact match for the route to avoid false positives
+                                // e.g., /dean/call-rounds should not match /dean/call-rounds-approval
+                                const isActive = pathname === item.url;
                                 return (
                                     <SidebarMenuItem key={item.title}>
                                         <SidebarMenuButton asChild isActive={isActive} tooltip={item.title}>

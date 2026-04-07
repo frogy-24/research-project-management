@@ -133,6 +133,11 @@ export type CouncilMemberAssignment = $Result.DefaultSelection<Prisma.$CouncilMe
  * 
  */
 export type ProjectCouncilAssignment = $Result.DefaultSelection<Prisma.$ProjectCouncilAssignmentPayload>
+/**
+ * Model CallRoundAttachment
+ * 
+ */
+export type CallRoundAttachment = $Result.DefaultSelection<Prisma.$CallRoundAttachmentPayload>
 
 /**
  * Enums
@@ -690,6 +695,16 @@ export class PrismaClient<
     * ```
     */
   get projectCouncilAssignment(): Prisma.ProjectCouncilAssignmentDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.callRoundAttachment`: Exposes CRUD operations for the **CallRoundAttachment** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more CallRoundAttachments
+    * const callRoundAttachments = await prisma.callRoundAttachment.findMany()
+    * ```
+    */
+  get callRoundAttachment(): Prisma.CallRoundAttachmentDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -1147,7 +1162,8 @@ export namespace Prisma {
     CallRoundCouncilMember: 'CallRoundCouncilMember',
     Council: 'Council',
     CouncilMemberAssignment: 'CouncilMemberAssignment',
-    ProjectCouncilAssignment: 'ProjectCouncilAssignment'
+    ProjectCouncilAssignment: 'ProjectCouncilAssignment',
+    CallRoundAttachment: 'CallRoundAttachment'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -1163,7 +1179,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "department" | "major" | "class" | "user" | "callRound" | "projectType" | "project" | "progressReportTemplate" | "progressReportTemplateItem" | "progressReport" | "councilEvaluation" | "fundingDisbursement" | "extensionRequest" | "projectRegistration" | "notification" | "post" | "room" | "officeMeeting" | "officeMeetingView" | "callRoundInstructor" | "callRoundCouncilMember" | "council" | "councilMemberAssignment" | "projectCouncilAssignment"
+      modelProps: "department" | "major" | "class" | "user" | "callRound" | "projectType" | "project" | "progressReportTemplate" | "progressReportTemplateItem" | "progressReport" | "councilEvaluation" | "fundingDisbursement" | "extensionRequest" | "projectRegistration" | "notification" | "post" | "room" | "officeMeeting" | "officeMeetingView" | "callRoundInstructor" | "callRoundCouncilMember" | "council" | "councilMemberAssignment" | "projectCouncilAssignment" | "callRoundAttachment"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -2943,6 +2959,80 @@ export namespace Prisma {
           }
         }
       }
+      CallRoundAttachment: {
+        payload: Prisma.$CallRoundAttachmentPayload<ExtArgs>
+        fields: Prisma.CallRoundAttachmentFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.CallRoundAttachmentFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CallRoundAttachmentPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.CallRoundAttachmentFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CallRoundAttachmentPayload>
+          }
+          findFirst: {
+            args: Prisma.CallRoundAttachmentFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CallRoundAttachmentPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.CallRoundAttachmentFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CallRoundAttachmentPayload>
+          }
+          findMany: {
+            args: Prisma.CallRoundAttachmentFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CallRoundAttachmentPayload>[]
+          }
+          create: {
+            args: Prisma.CallRoundAttachmentCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CallRoundAttachmentPayload>
+          }
+          createMany: {
+            args: Prisma.CallRoundAttachmentCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.CallRoundAttachmentCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CallRoundAttachmentPayload>[]
+          }
+          delete: {
+            args: Prisma.CallRoundAttachmentDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CallRoundAttachmentPayload>
+          }
+          update: {
+            args: Prisma.CallRoundAttachmentUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CallRoundAttachmentPayload>
+          }
+          deleteMany: {
+            args: Prisma.CallRoundAttachmentDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.CallRoundAttachmentUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.CallRoundAttachmentUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CallRoundAttachmentPayload>[]
+          }
+          upsert: {
+            args: Prisma.CallRoundAttachmentUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CallRoundAttachmentPayload>
+          }
+          aggregate: {
+            args: Prisma.CallRoundAttachmentAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateCallRoundAttachment>
+          }
+          groupBy: {
+            args: Prisma.CallRoundAttachmentGroupByArgs<ExtArgs>
+            result: $Utils.Optional<CallRoundAttachmentGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.CallRoundAttachmentCountArgs<ExtArgs>
+            result: $Utils.Optional<CallRoundAttachmentCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -3075,6 +3165,7 @@ export namespace Prisma {
     council?: CouncilOmit
     councilMemberAssignment?: CouncilMemberAssignmentOmit
     projectCouncilAssignment?: ProjectCouncilAssignmentOmit
+    callRoundAttachment?: CallRoundAttachmentOmit
   }
 
   /* Types for Logging */
@@ -3476,6 +3567,7 @@ export namespace Prisma {
     availableInstructors: number
     availableCouncilMembers: number
     councils: number
+    attachments: number
   }
 
   export type CallRoundCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -3487,6 +3579,7 @@ export namespace Prisma {
     availableInstructors?: boolean | CallRoundCountOutputTypeCountAvailableInstructorsArgs
     availableCouncilMembers?: boolean | CallRoundCountOutputTypeCountAvailableCouncilMembersArgs
     councils?: boolean | CallRoundCountOutputTypeCountCouncilsArgs
+    attachments?: boolean | CallRoundCountOutputTypeCountAttachmentsArgs
   }
 
   // Custom InputTypes
@@ -3554,6 +3647,13 @@ export namespace Prisma {
    */
   export type CallRoundCountOutputTypeCountCouncilsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: CouncilWhereInput
+  }
+
+  /**
+   * CallRoundCountOutputType without action
+   */
+  export type CallRoundCountOutputTypeCountAttachmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CallRoundAttachmentWhereInput
   }
 
 
@@ -9043,6 +9143,8 @@ export namespace Prisma {
     projectEndDate: Date | null
     reviewDeadline: Date | null
     reportingStartDate: Date | null
+    defenseDate: Date | null
+    projectLockDate: Date | null
     startDate: Date | null
     endDate: Date | null
     maxProjects: number | null
@@ -9074,6 +9176,8 @@ export namespace Prisma {
     projectEndDate: Date | null
     reviewDeadline: Date | null
     reportingStartDate: Date | null
+    defenseDate: Date | null
+    projectLockDate: Date | null
     startDate: Date | null
     endDate: Date | null
     maxProjects: number | null
@@ -9105,6 +9209,8 @@ export namespace Prisma {
     projectEndDate: number
     reviewDeadline: number
     reportingStartDate: number
+    defenseDate: number
+    projectLockDate: number
     startDate: number
     endDate: number
     maxProjects: number
@@ -9148,6 +9254,8 @@ export namespace Prisma {
     projectEndDate?: true
     reviewDeadline?: true
     reportingStartDate?: true
+    defenseDate?: true
+    projectLockDate?: true
     startDate?: true
     endDate?: true
     maxProjects?: true
@@ -9179,6 +9287,8 @@ export namespace Prisma {
     projectEndDate?: true
     reviewDeadline?: true
     reportingStartDate?: true
+    defenseDate?: true
+    projectLockDate?: true
     startDate?: true
     endDate?: true
     maxProjects?: true
@@ -9210,6 +9320,8 @@ export namespace Prisma {
     projectEndDate?: true
     reviewDeadline?: true
     reportingStartDate?: true
+    defenseDate?: true
+    projectLockDate?: true
     startDate?: true
     endDate?: true
     maxProjects?: true
@@ -9328,6 +9440,8 @@ export namespace Prisma {
     projectEndDate: Date | null
     reviewDeadline: Date | null
     reportingStartDate: Date | null
+    defenseDate: Date | null
+    projectLockDate: Date | null
     startDate: Date
     endDate: Date
     maxProjects: number | null
@@ -9378,6 +9492,8 @@ export namespace Prisma {
     projectEndDate?: boolean
     reviewDeadline?: boolean
     reportingStartDate?: boolean
+    defenseDate?: boolean
+    projectLockDate?: boolean
     startDate?: boolean
     endDate?: boolean
     maxProjects?: boolean
@@ -9406,6 +9522,7 @@ export namespace Prisma {
     availableInstructors?: boolean | CallRound$availableInstructorsArgs<ExtArgs>
     availableCouncilMembers?: boolean | CallRound$availableCouncilMembersArgs<ExtArgs>
     councils?: boolean | CallRound$councilsArgs<ExtArgs>
+    attachments?: boolean | CallRound$attachmentsArgs<ExtArgs>
     _count?: boolean | CallRoundCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["callRound"]>
 
@@ -9419,6 +9536,8 @@ export namespace Prisma {
     projectEndDate?: boolean
     reviewDeadline?: boolean
     reportingStartDate?: boolean
+    defenseDate?: boolean
+    projectLockDate?: boolean
     startDate?: boolean
     endDate?: boolean
     maxProjects?: boolean
@@ -9451,6 +9570,8 @@ export namespace Prisma {
     projectEndDate?: boolean
     reviewDeadline?: boolean
     reportingStartDate?: boolean
+    defenseDate?: boolean
+    projectLockDate?: boolean
     startDate?: boolean
     endDate?: boolean
     maxProjects?: boolean
@@ -9483,6 +9604,8 @@ export namespace Prisma {
     projectEndDate?: boolean
     reviewDeadline?: boolean
     reportingStartDate?: boolean
+    defenseDate?: boolean
+    projectLockDate?: boolean
     startDate?: boolean
     endDate?: boolean
     maxProjects?: boolean
@@ -9504,7 +9627,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type CallRoundOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "description" | "registrationStartDate" | "registrationEndDate" | "projectStartDate" | "projectEndDate" | "reviewDeadline" | "reportingStartDate" | "startDate" | "endDate" | "maxProjects" | "budgetLimit" | "requirements" | "guidelines" | "contactInfo" | "isActive" | "isLocked" | "applicableFor" | "approvalStatus" | "createdById" | "createdByRole" | "approvedById" | "approvalNote" | "approvedAt" | "templateId" | "createdAt" | "updatedAt", ExtArgs["result"]["callRound"]>
+  export type CallRoundOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "description" | "registrationStartDate" | "registrationEndDate" | "projectStartDate" | "projectEndDate" | "reviewDeadline" | "reportingStartDate" | "defenseDate" | "projectLockDate" | "startDate" | "endDate" | "maxProjects" | "budgetLimit" | "requirements" | "guidelines" | "contactInfo" | "isActive" | "isLocked" | "applicableFor" | "approvalStatus" | "createdById" | "createdByRole" | "approvedById" | "approvalNote" | "approvedAt" | "templateId" | "createdAt" | "updatedAt", ExtArgs["result"]["callRound"]>
   export type CallRoundInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     projects?: boolean | CallRound$projectsArgs<ExtArgs>
     registrations?: boolean | CallRound$registrationsArgs<ExtArgs>
@@ -9515,6 +9638,7 @@ export namespace Prisma {
     availableInstructors?: boolean | CallRound$availableInstructorsArgs<ExtArgs>
     availableCouncilMembers?: boolean | CallRound$availableCouncilMembersArgs<ExtArgs>
     councils?: boolean | CallRound$councilsArgs<ExtArgs>
+    attachments?: boolean | CallRound$attachmentsArgs<ExtArgs>
     _count?: boolean | CallRoundCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type CallRoundIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -9536,6 +9660,7 @@ export namespace Prisma {
       availableInstructors: Prisma.$CallRoundInstructorPayload<ExtArgs>[]
       availableCouncilMembers: Prisma.$CallRoundCouncilMemberPayload<ExtArgs>[]
       councils: Prisma.$CouncilPayload<ExtArgs>[]
+      attachments: Prisma.$CallRoundAttachmentPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -9547,6 +9672,8 @@ export namespace Prisma {
       projectEndDate: Date | null
       reviewDeadline: Date | null
       reportingStartDate: Date | null
+      defenseDate: Date | null
+      projectLockDate: Date | null
       startDate: Date
       endDate: Date
       maxProjects: number | null
@@ -9969,6 +10096,7 @@ export namespace Prisma {
     availableInstructors<T extends CallRound$availableInstructorsArgs<ExtArgs> = {}>(args?: Subset<T, CallRound$availableInstructorsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CallRoundInstructorPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     availableCouncilMembers<T extends CallRound$availableCouncilMembersArgs<ExtArgs> = {}>(args?: Subset<T, CallRound$availableCouncilMembersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CallRoundCouncilMemberPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     councils<T extends CallRound$councilsArgs<ExtArgs> = {}>(args?: Subset<T, CallRound$councilsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CouncilPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    attachments<T extends CallRound$attachmentsArgs<ExtArgs> = {}>(args?: Subset<T, CallRound$attachmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CallRoundAttachmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -10007,6 +10135,8 @@ export namespace Prisma {
     readonly projectEndDate: FieldRef<"CallRound", 'DateTime'>
     readonly reviewDeadline: FieldRef<"CallRound", 'DateTime'>
     readonly reportingStartDate: FieldRef<"CallRound", 'DateTime'>
+    readonly defenseDate: FieldRef<"CallRound", 'DateTime'>
+    readonly projectLockDate: FieldRef<"CallRound", 'DateTime'>
     readonly startDate: FieldRef<"CallRound", 'DateTime'>
     readonly endDate: FieldRef<"CallRound", 'DateTime'>
     readonly maxProjects: FieldRef<"CallRound", 'Int'>
@@ -10635,6 +10765,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: CouncilScalarFieldEnum | CouncilScalarFieldEnum[]
+  }
+
+  /**
+   * CallRound.attachments
+   */
+  export type CallRound$attachmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CallRoundAttachment
+     */
+    select?: CallRoundAttachmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CallRoundAttachment
+     */
+    omit?: CallRoundAttachmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CallRoundAttachmentInclude<ExtArgs> | null
+    where?: CallRoundAttachmentWhereInput
+    orderBy?: CallRoundAttachmentOrderByWithRelationInput | CallRoundAttachmentOrderByWithRelationInput[]
+    cursor?: CallRoundAttachmentWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: CallRoundAttachmentScalarFieldEnum | CallRoundAttachmentScalarFieldEnum[]
   }
 
   /**
@@ -32753,6 +32907,1142 @@ export namespace Prisma {
 
 
   /**
+   * Model CallRoundAttachment
+   */
+
+  export type AggregateCallRoundAttachment = {
+    _count: CallRoundAttachmentCountAggregateOutputType | null
+    _avg: CallRoundAttachmentAvgAggregateOutputType | null
+    _sum: CallRoundAttachmentSumAggregateOutputType | null
+    _min: CallRoundAttachmentMinAggregateOutputType | null
+    _max: CallRoundAttachmentMaxAggregateOutputType | null
+  }
+
+  export type CallRoundAttachmentAvgAggregateOutputType = {
+    fileSize: number | null
+  }
+
+  export type CallRoundAttachmentSumAggregateOutputType = {
+    fileSize: number | null
+  }
+
+  export type CallRoundAttachmentMinAggregateOutputType = {
+    id: string | null
+    callRoundId: string | null
+    fileName: string | null
+    fileUrl: string | null
+    fileSize: number | null
+    fileType: string | null
+    description: string | null
+    createdAt: Date | null
+  }
+
+  export type CallRoundAttachmentMaxAggregateOutputType = {
+    id: string | null
+    callRoundId: string | null
+    fileName: string | null
+    fileUrl: string | null
+    fileSize: number | null
+    fileType: string | null
+    description: string | null
+    createdAt: Date | null
+  }
+
+  export type CallRoundAttachmentCountAggregateOutputType = {
+    id: number
+    callRoundId: number
+    fileName: number
+    fileUrl: number
+    fileSize: number
+    fileType: number
+    description: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type CallRoundAttachmentAvgAggregateInputType = {
+    fileSize?: true
+  }
+
+  export type CallRoundAttachmentSumAggregateInputType = {
+    fileSize?: true
+  }
+
+  export type CallRoundAttachmentMinAggregateInputType = {
+    id?: true
+    callRoundId?: true
+    fileName?: true
+    fileUrl?: true
+    fileSize?: true
+    fileType?: true
+    description?: true
+    createdAt?: true
+  }
+
+  export type CallRoundAttachmentMaxAggregateInputType = {
+    id?: true
+    callRoundId?: true
+    fileName?: true
+    fileUrl?: true
+    fileSize?: true
+    fileType?: true
+    description?: true
+    createdAt?: true
+  }
+
+  export type CallRoundAttachmentCountAggregateInputType = {
+    id?: true
+    callRoundId?: true
+    fileName?: true
+    fileUrl?: true
+    fileSize?: true
+    fileType?: true
+    description?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type CallRoundAttachmentAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which CallRoundAttachment to aggregate.
+     */
+    where?: CallRoundAttachmentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CallRoundAttachments to fetch.
+     */
+    orderBy?: CallRoundAttachmentOrderByWithRelationInput | CallRoundAttachmentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: CallRoundAttachmentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CallRoundAttachments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CallRoundAttachments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned CallRoundAttachments
+    **/
+    _count?: true | CallRoundAttachmentCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: CallRoundAttachmentAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: CallRoundAttachmentSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: CallRoundAttachmentMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: CallRoundAttachmentMaxAggregateInputType
+  }
+
+  export type GetCallRoundAttachmentAggregateType<T extends CallRoundAttachmentAggregateArgs> = {
+        [P in keyof T & keyof AggregateCallRoundAttachment]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateCallRoundAttachment[P]>
+      : GetScalarType<T[P], AggregateCallRoundAttachment[P]>
+  }
+
+
+
+
+  export type CallRoundAttachmentGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CallRoundAttachmentWhereInput
+    orderBy?: CallRoundAttachmentOrderByWithAggregationInput | CallRoundAttachmentOrderByWithAggregationInput[]
+    by: CallRoundAttachmentScalarFieldEnum[] | CallRoundAttachmentScalarFieldEnum
+    having?: CallRoundAttachmentScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: CallRoundAttachmentCountAggregateInputType | true
+    _avg?: CallRoundAttachmentAvgAggregateInputType
+    _sum?: CallRoundAttachmentSumAggregateInputType
+    _min?: CallRoundAttachmentMinAggregateInputType
+    _max?: CallRoundAttachmentMaxAggregateInputType
+  }
+
+  export type CallRoundAttachmentGroupByOutputType = {
+    id: string
+    callRoundId: string
+    fileName: string
+    fileUrl: string
+    fileSize: number | null
+    fileType: string | null
+    description: string | null
+    createdAt: Date
+    _count: CallRoundAttachmentCountAggregateOutputType | null
+    _avg: CallRoundAttachmentAvgAggregateOutputType | null
+    _sum: CallRoundAttachmentSumAggregateOutputType | null
+    _min: CallRoundAttachmentMinAggregateOutputType | null
+    _max: CallRoundAttachmentMaxAggregateOutputType | null
+  }
+
+  type GetCallRoundAttachmentGroupByPayload<T extends CallRoundAttachmentGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<CallRoundAttachmentGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof CallRoundAttachmentGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], CallRoundAttachmentGroupByOutputType[P]>
+            : GetScalarType<T[P], CallRoundAttachmentGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type CallRoundAttachmentSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    callRoundId?: boolean
+    fileName?: boolean
+    fileUrl?: boolean
+    fileSize?: boolean
+    fileType?: boolean
+    description?: boolean
+    createdAt?: boolean
+    callRound?: boolean | CallRoundDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["callRoundAttachment"]>
+
+  export type CallRoundAttachmentSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    callRoundId?: boolean
+    fileName?: boolean
+    fileUrl?: boolean
+    fileSize?: boolean
+    fileType?: boolean
+    description?: boolean
+    createdAt?: boolean
+    callRound?: boolean | CallRoundDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["callRoundAttachment"]>
+
+  export type CallRoundAttachmentSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    callRoundId?: boolean
+    fileName?: boolean
+    fileUrl?: boolean
+    fileSize?: boolean
+    fileType?: boolean
+    description?: boolean
+    createdAt?: boolean
+    callRound?: boolean | CallRoundDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["callRoundAttachment"]>
+
+  export type CallRoundAttachmentSelectScalar = {
+    id?: boolean
+    callRoundId?: boolean
+    fileName?: boolean
+    fileUrl?: boolean
+    fileSize?: boolean
+    fileType?: boolean
+    description?: boolean
+    createdAt?: boolean
+  }
+
+  export type CallRoundAttachmentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "callRoundId" | "fileName" | "fileUrl" | "fileSize" | "fileType" | "description" | "createdAt", ExtArgs["result"]["callRoundAttachment"]>
+  export type CallRoundAttachmentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    callRound?: boolean | CallRoundDefaultArgs<ExtArgs>
+  }
+  export type CallRoundAttachmentIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    callRound?: boolean | CallRoundDefaultArgs<ExtArgs>
+  }
+  export type CallRoundAttachmentIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    callRound?: boolean | CallRoundDefaultArgs<ExtArgs>
+  }
+
+  export type $CallRoundAttachmentPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "CallRoundAttachment"
+    objects: {
+      callRound: Prisma.$CallRoundPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      callRoundId: string
+      fileName: string
+      fileUrl: string
+      fileSize: number | null
+      fileType: string | null
+      description: string | null
+      createdAt: Date
+    }, ExtArgs["result"]["callRoundAttachment"]>
+    composites: {}
+  }
+
+  type CallRoundAttachmentGetPayload<S extends boolean | null | undefined | CallRoundAttachmentDefaultArgs> = $Result.GetResult<Prisma.$CallRoundAttachmentPayload, S>
+
+  type CallRoundAttachmentCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<CallRoundAttachmentFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: CallRoundAttachmentCountAggregateInputType | true
+    }
+
+  export interface CallRoundAttachmentDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['CallRoundAttachment'], meta: { name: 'CallRoundAttachment' } }
+    /**
+     * Find zero or one CallRoundAttachment that matches the filter.
+     * @param {CallRoundAttachmentFindUniqueArgs} args - Arguments to find a CallRoundAttachment
+     * @example
+     * // Get one CallRoundAttachment
+     * const callRoundAttachment = await prisma.callRoundAttachment.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends CallRoundAttachmentFindUniqueArgs>(args: SelectSubset<T, CallRoundAttachmentFindUniqueArgs<ExtArgs>>): Prisma__CallRoundAttachmentClient<$Result.GetResult<Prisma.$CallRoundAttachmentPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one CallRoundAttachment that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {CallRoundAttachmentFindUniqueOrThrowArgs} args - Arguments to find a CallRoundAttachment
+     * @example
+     * // Get one CallRoundAttachment
+     * const callRoundAttachment = await prisma.callRoundAttachment.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends CallRoundAttachmentFindUniqueOrThrowArgs>(args: SelectSubset<T, CallRoundAttachmentFindUniqueOrThrowArgs<ExtArgs>>): Prisma__CallRoundAttachmentClient<$Result.GetResult<Prisma.$CallRoundAttachmentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first CallRoundAttachment that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CallRoundAttachmentFindFirstArgs} args - Arguments to find a CallRoundAttachment
+     * @example
+     * // Get one CallRoundAttachment
+     * const callRoundAttachment = await prisma.callRoundAttachment.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends CallRoundAttachmentFindFirstArgs>(args?: SelectSubset<T, CallRoundAttachmentFindFirstArgs<ExtArgs>>): Prisma__CallRoundAttachmentClient<$Result.GetResult<Prisma.$CallRoundAttachmentPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first CallRoundAttachment that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CallRoundAttachmentFindFirstOrThrowArgs} args - Arguments to find a CallRoundAttachment
+     * @example
+     * // Get one CallRoundAttachment
+     * const callRoundAttachment = await prisma.callRoundAttachment.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends CallRoundAttachmentFindFirstOrThrowArgs>(args?: SelectSubset<T, CallRoundAttachmentFindFirstOrThrowArgs<ExtArgs>>): Prisma__CallRoundAttachmentClient<$Result.GetResult<Prisma.$CallRoundAttachmentPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more CallRoundAttachments that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CallRoundAttachmentFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all CallRoundAttachments
+     * const callRoundAttachments = await prisma.callRoundAttachment.findMany()
+     * 
+     * // Get first 10 CallRoundAttachments
+     * const callRoundAttachments = await prisma.callRoundAttachment.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const callRoundAttachmentWithIdOnly = await prisma.callRoundAttachment.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends CallRoundAttachmentFindManyArgs>(args?: SelectSubset<T, CallRoundAttachmentFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CallRoundAttachmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a CallRoundAttachment.
+     * @param {CallRoundAttachmentCreateArgs} args - Arguments to create a CallRoundAttachment.
+     * @example
+     * // Create one CallRoundAttachment
+     * const CallRoundAttachment = await prisma.callRoundAttachment.create({
+     *   data: {
+     *     // ... data to create a CallRoundAttachment
+     *   }
+     * })
+     * 
+     */
+    create<T extends CallRoundAttachmentCreateArgs>(args: SelectSubset<T, CallRoundAttachmentCreateArgs<ExtArgs>>): Prisma__CallRoundAttachmentClient<$Result.GetResult<Prisma.$CallRoundAttachmentPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many CallRoundAttachments.
+     * @param {CallRoundAttachmentCreateManyArgs} args - Arguments to create many CallRoundAttachments.
+     * @example
+     * // Create many CallRoundAttachments
+     * const callRoundAttachment = await prisma.callRoundAttachment.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends CallRoundAttachmentCreateManyArgs>(args?: SelectSubset<T, CallRoundAttachmentCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many CallRoundAttachments and returns the data saved in the database.
+     * @param {CallRoundAttachmentCreateManyAndReturnArgs} args - Arguments to create many CallRoundAttachments.
+     * @example
+     * // Create many CallRoundAttachments
+     * const callRoundAttachment = await prisma.callRoundAttachment.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many CallRoundAttachments and only return the `id`
+     * const callRoundAttachmentWithIdOnly = await prisma.callRoundAttachment.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends CallRoundAttachmentCreateManyAndReturnArgs>(args?: SelectSubset<T, CallRoundAttachmentCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CallRoundAttachmentPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a CallRoundAttachment.
+     * @param {CallRoundAttachmentDeleteArgs} args - Arguments to delete one CallRoundAttachment.
+     * @example
+     * // Delete one CallRoundAttachment
+     * const CallRoundAttachment = await prisma.callRoundAttachment.delete({
+     *   where: {
+     *     // ... filter to delete one CallRoundAttachment
+     *   }
+     * })
+     * 
+     */
+    delete<T extends CallRoundAttachmentDeleteArgs>(args: SelectSubset<T, CallRoundAttachmentDeleteArgs<ExtArgs>>): Prisma__CallRoundAttachmentClient<$Result.GetResult<Prisma.$CallRoundAttachmentPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one CallRoundAttachment.
+     * @param {CallRoundAttachmentUpdateArgs} args - Arguments to update one CallRoundAttachment.
+     * @example
+     * // Update one CallRoundAttachment
+     * const callRoundAttachment = await prisma.callRoundAttachment.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends CallRoundAttachmentUpdateArgs>(args: SelectSubset<T, CallRoundAttachmentUpdateArgs<ExtArgs>>): Prisma__CallRoundAttachmentClient<$Result.GetResult<Prisma.$CallRoundAttachmentPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more CallRoundAttachments.
+     * @param {CallRoundAttachmentDeleteManyArgs} args - Arguments to filter CallRoundAttachments to delete.
+     * @example
+     * // Delete a few CallRoundAttachments
+     * const { count } = await prisma.callRoundAttachment.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends CallRoundAttachmentDeleteManyArgs>(args?: SelectSubset<T, CallRoundAttachmentDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more CallRoundAttachments.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CallRoundAttachmentUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many CallRoundAttachments
+     * const callRoundAttachment = await prisma.callRoundAttachment.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends CallRoundAttachmentUpdateManyArgs>(args: SelectSubset<T, CallRoundAttachmentUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more CallRoundAttachments and returns the data updated in the database.
+     * @param {CallRoundAttachmentUpdateManyAndReturnArgs} args - Arguments to update many CallRoundAttachments.
+     * @example
+     * // Update many CallRoundAttachments
+     * const callRoundAttachment = await prisma.callRoundAttachment.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more CallRoundAttachments and only return the `id`
+     * const callRoundAttachmentWithIdOnly = await prisma.callRoundAttachment.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends CallRoundAttachmentUpdateManyAndReturnArgs>(args: SelectSubset<T, CallRoundAttachmentUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CallRoundAttachmentPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one CallRoundAttachment.
+     * @param {CallRoundAttachmentUpsertArgs} args - Arguments to update or create a CallRoundAttachment.
+     * @example
+     * // Update or create a CallRoundAttachment
+     * const callRoundAttachment = await prisma.callRoundAttachment.upsert({
+     *   create: {
+     *     // ... data to create a CallRoundAttachment
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the CallRoundAttachment we want to update
+     *   }
+     * })
+     */
+    upsert<T extends CallRoundAttachmentUpsertArgs>(args: SelectSubset<T, CallRoundAttachmentUpsertArgs<ExtArgs>>): Prisma__CallRoundAttachmentClient<$Result.GetResult<Prisma.$CallRoundAttachmentPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of CallRoundAttachments.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CallRoundAttachmentCountArgs} args - Arguments to filter CallRoundAttachments to count.
+     * @example
+     * // Count the number of CallRoundAttachments
+     * const count = await prisma.callRoundAttachment.count({
+     *   where: {
+     *     // ... the filter for the CallRoundAttachments we want to count
+     *   }
+     * })
+    **/
+    count<T extends CallRoundAttachmentCountArgs>(
+      args?: Subset<T, CallRoundAttachmentCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], CallRoundAttachmentCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a CallRoundAttachment.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CallRoundAttachmentAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends CallRoundAttachmentAggregateArgs>(args: Subset<T, CallRoundAttachmentAggregateArgs>): Prisma.PrismaPromise<GetCallRoundAttachmentAggregateType<T>>
+
+    /**
+     * Group by CallRoundAttachment.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CallRoundAttachmentGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends CallRoundAttachmentGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: CallRoundAttachmentGroupByArgs['orderBy'] }
+        : { orderBy?: CallRoundAttachmentGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, CallRoundAttachmentGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetCallRoundAttachmentGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the CallRoundAttachment model
+   */
+  readonly fields: CallRoundAttachmentFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for CallRoundAttachment.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__CallRoundAttachmentClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    callRound<T extends CallRoundDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CallRoundDefaultArgs<ExtArgs>>): Prisma__CallRoundClient<$Result.GetResult<Prisma.$CallRoundPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the CallRoundAttachment model
+   */
+  interface CallRoundAttachmentFieldRefs {
+    readonly id: FieldRef<"CallRoundAttachment", 'String'>
+    readonly callRoundId: FieldRef<"CallRoundAttachment", 'String'>
+    readonly fileName: FieldRef<"CallRoundAttachment", 'String'>
+    readonly fileUrl: FieldRef<"CallRoundAttachment", 'String'>
+    readonly fileSize: FieldRef<"CallRoundAttachment", 'Int'>
+    readonly fileType: FieldRef<"CallRoundAttachment", 'String'>
+    readonly description: FieldRef<"CallRoundAttachment", 'String'>
+    readonly createdAt: FieldRef<"CallRoundAttachment", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * CallRoundAttachment findUnique
+   */
+  export type CallRoundAttachmentFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CallRoundAttachment
+     */
+    select?: CallRoundAttachmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CallRoundAttachment
+     */
+    omit?: CallRoundAttachmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CallRoundAttachmentInclude<ExtArgs> | null
+    /**
+     * Filter, which CallRoundAttachment to fetch.
+     */
+    where: CallRoundAttachmentWhereUniqueInput
+  }
+
+  /**
+   * CallRoundAttachment findUniqueOrThrow
+   */
+  export type CallRoundAttachmentFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CallRoundAttachment
+     */
+    select?: CallRoundAttachmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CallRoundAttachment
+     */
+    omit?: CallRoundAttachmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CallRoundAttachmentInclude<ExtArgs> | null
+    /**
+     * Filter, which CallRoundAttachment to fetch.
+     */
+    where: CallRoundAttachmentWhereUniqueInput
+  }
+
+  /**
+   * CallRoundAttachment findFirst
+   */
+  export type CallRoundAttachmentFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CallRoundAttachment
+     */
+    select?: CallRoundAttachmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CallRoundAttachment
+     */
+    omit?: CallRoundAttachmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CallRoundAttachmentInclude<ExtArgs> | null
+    /**
+     * Filter, which CallRoundAttachment to fetch.
+     */
+    where?: CallRoundAttachmentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CallRoundAttachments to fetch.
+     */
+    orderBy?: CallRoundAttachmentOrderByWithRelationInput | CallRoundAttachmentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for CallRoundAttachments.
+     */
+    cursor?: CallRoundAttachmentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CallRoundAttachments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CallRoundAttachments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CallRoundAttachments.
+     */
+    distinct?: CallRoundAttachmentScalarFieldEnum | CallRoundAttachmentScalarFieldEnum[]
+  }
+
+  /**
+   * CallRoundAttachment findFirstOrThrow
+   */
+  export type CallRoundAttachmentFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CallRoundAttachment
+     */
+    select?: CallRoundAttachmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CallRoundAttachment
+     */
+    omit?: CallRoundAttachmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CallRoundAttachmentInclude<ExtArgs> | null
+    /**
+     * Filter, which CallRoundAttachment to fetch.
+     */
+    where?: CallRoundAttachmentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CallRoundAttachments to fetch.
+     */
+    orderBy?: CallRoundAttachmentOrderByWithRelationInput | CallRoundAttachmentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for CallRoundAttachments.
+     */
+    cursor?: CallRoundAttachmentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CallRoundAttachments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CallRoundAttachments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CallRoundAttachments.
+     */
+    distinct?: CallRoundAttachmentScalarFieldEnum | CallRoundAttachmentScalarFieldEnum[]
+  }
+
+  /**
+   * CallRoundAttachment findMany
+   */
+  export type CallRoundAttachmentFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CallRoundAttachment
+     */
+    select?: CallRoundAttachmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CallRoundAttachment
+     */
+    omit?: CallRoundAttachmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CallRoundAttachmentInclude<ExtArgs> | null
+    /**
+     * Filter, which CallRoundAttachments to fetch.
+     */
+    where?: CallRoundAttachmentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CallRoundAttachments to fetch.
+     */
+    orderBy?: CallRoundAttachmentOrderByWithRelationInput | CallRoundAttachmentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing CallRoundAttachments.
+     */
+    cursor?: CallRoundAttachmentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CallRoundAttachments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CallRoundAttachments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CallRoundAttachments.
+     */
+    distinct?: CallRoundAttachmentScalarFieldEnum | CallRoundAttachmentScalarFieldEnum[]
+  }
+
+  /**
+   * CallRoundAttachment create
+   */
+  export type CallRoundAttachmentCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CallRoundAttachment
+     */
+    select?: CallRoundAttachmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CallRoundAttachment
+     */
+    omit?: CallRoundAttachmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CallRoundAttachmentInclude<ExtArgs> | null
+    /**
+     * The data needed to create a CallRoundAttachment.
+     */
+    data: XOR<CallRoundAttachmentCreateInput, CallRoundAttachmentUncheckedCreateInput>
+  }
+
+  /**
+   * CallRoundAttachment createMany
+   */
+  export type CallRoundAttachmentCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many CallRoundAttachments.
+     */
+    data: CallRoundAttachmentCreateManyInput | CallRoundAttachmentCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * CallRoundAttachment createManyAndReturn
+   */
+  export type CallRoundAttachmentCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CallRoundAttachment
+     */
+    select?: CallRoundAttachmentSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the CallRoundAttachment
+     */
+    omit?: CallRoundAttachmentOmit<ExtArgs> | null
+    /**
+     * The data used to create many CallRoundAttachments.
+     */
+    data: CallRoundAttachmentCreateManyInput | CallRoundAttachmentCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CallRoundAttachmentIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * CallRoundAttachment update
+   */
+  export type CallRoundAttachmentUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CallRoundAttachment
+     */
+    select?: CallRoundAttachmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CallRoundAttachment
+     */
+    omit?: CallRoundAttachmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CallRoundAttachmentInclude<ExtArgs> | null
+    /**
+     * The data needed to update a CallRoundAttachment.
+     */
+    data: XOR<CallRoundAttachmentUpdateInput, CallRoundAttachmentUncheckedUpdateInput>
+    /**
+     * Choose, which CallRoundAttachment to update.
+     */
+    where: CallRoundAttachmentWhereUniqueInput
+  }
+
+  /**
+   * CallRoundAttachment updateMany
+   */
+  export type CallRoundAttachmentUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update CallRoundAttachments.
+     */
+    data: XOR<CallRoundAttachmentUpdateManyMutationInput, CallRoundAttachmentUncheckedUpdateManyInput>
+    /**
+     * Filter which CallRoundAttachments to update
+     */
+    where?: CallRoundAttachmentWhereInput
+    /**
+     * Limit how many CallRoundAttachments to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * CallRoundAttachment updateManyAndReturn
+   */
+  export type CallRoundAttachmentUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CallRoundAttachment
+     */
+    select?: CallRoundAttachmentSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the CallRoundAttachment
+     */
+    omit?: CallRoundAttachmentOmit<ExtArgs> | null
+    /**
+     * The data used to update CallRoundAttachments.
+     */
+    data: XOR<CallRoundAttachmentUpdateManyMutationInput, CallRoundAttachmentUncheckedUpdateManyInput>
+    /**
+     * Filter which CallRoundAttachments to update
+     */
+    where?: CallRoundAttachmentWhereInput
+    /**
+     * Limit how many CallRoundAttachments to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CallRoundAttachmentIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * CallRoundAttachment upsert
+   */
+  export type CallRoundAttachmentUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CallRoundAttachment
+     */
+    select?: CallRoundAttachmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CallRoundAttachment
+     */
+    omit?: CallRoundAttachmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CallRoundAttachmentInclude<ExtArgs> | null
+    /**
+     * The filter to search for the CallRoundAttachment to update in case it exists.
+     */
+    where: CallRoundAttachmentWhereUniqueInput
+    /**
+     * In case the CallRoundAttachment found by the `where` argument doesn't exist, create a new CallRoundAttachment with this data.
+     */
+    create: XOR<CallRoundAttachmentCreateInput, CallRoundAttachmentUncheckedCreateInput>
+    /**
+     * In case the CallRoundAttachment was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<CallRoundAttachmentUpdateInput, CallRoundAttachmentUncheckedUpdateInput>
+  }
+
+  /**
+   * CallRoundAttachment delete
+   */
+  export type CallRoundAttachmentDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CallRoundAttachment
+     */
+    select?: CallRoundAttachmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CallRoundAttachment
+     */
+    omit?: CallRoundAttachmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CallRoundAttachmentInclude<ExtArgs> | null
+    /**
+     * Filter which CallRoundAttachment to delete.
+     */
+    where: CallRoundAttachmentWhereUniqueInput
+  }
+
+  /**
+   * CallRoundAttachment deleteMany
+   */
+  export type CallRoundAttachmentDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which CallRoundAttachments to delete
+     */
+    where?: CallRoundAttachmentWhereInput
+    /**
+     * Limit how many CallRoundAttachments to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * CallRoundAttachment without action
+   */
+  export type CallRoundAttachmentDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CallRoundAttachment
+     */
+    select?: CallRoundAttachmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CallRoundAttachment
+     */
+    omit?: CallRoundAttachmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CallRoundAttachmentInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -32835,6 +34125,8 @@ export namespace Prisma {
     projectEndDate: 'projectEndDate',
     reviewDeadline: 'reviewDeadline',
     reportingStartDate: 'reportingStartDate',
+    defenseDate: 'defenseDate',
+    projectLockDate: 'projectLockDate',
     startDate: 'startDate',
     endDate: 'endDate',
     maxProjects: 'maxProjects',
@@ -33140,6 +34432,20 @@ export namespace Prisma {
   };
 
   export type ProjectCouncilAssignmentScalarFieldEnum = (typeof ProjectCouncilAssignmentScalarFieldEnum)[keyof typeof ProjectCouncilAssignmentScalarFieldEnum]
+
+
+  export const CallRoundAttachmentScalarFieldEnum: {
+    id: 'id',
+    callRoundId: 'callRoundId',
+    fileName: 'fileName',
+    fileUrl: 'fileUrl',
+    fileSize: 'fileSize',
+    fileType: 'fileType',
+    description: 'description',
+    createdAt: 'createdAt'
+  };
+
+  export type CallRoundAttachmentScalarFieldEnum = (typeof CallRoundAttachmentScalarFieldEnum)[keyof typeof CallRoundAttachmentScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -33850,6 +35156,8 @@ export namespace Prisma {
     projectEndDate?: DateTimeNullableFilter<"CallRound"> | Date | string | null
     reviewDeadline?: DateTimeNullableFilter<"CallRound"> | Date | string | null
     reportingStartDate?: DateTimeNullableFilter<"CallRound"> | Date | string | null
+    defenseDate?: DateTimeNullableFilter<"CallRound"> | Date | string | null
+    projectLockDate?: DateTimeNullableFilter<"CallRound"> | Date | string | null
     startDate?: DateTimeFilter<"CallRound"> | Date | string
     endDate?: DateTimeFilter<"CallRound"> | Date | string
     maxProjects?: IntNullableFilter<"CallRound"> | number | null
@@ -33878,6 +35186,7 @@ export namespace Prisma {
     availableInstructors?: CallRoundInstructorListRelationFilter
     availableCouncilMembers?: CallRoundCouncilMemberListRelationFilter
     councils?: CouncilListRelationFilter
+    attachments?: CallRoundAttachmentListRelationFilter
   }
 
   export type CallRoundOrderByWithRelationInput = {
@@ -33890,6 +35199,8 @@ export namespace Prisma {
     projectEndDate?: SortOrderInput | SortOrder
     reviewDeadline?: SortOrderInput | SortOrder
     reportingStartDate?: SortOrderInput | SortOrder
+    defenseDate?: SortOrderInput | SortOrder
+    projectLockDate?: SortOrderInput | SortOrder
     startDate?: SortOrder
     endDate?: SortOrder
     maxProjects?: SortOrderInput | SortOrder
@@ -33918,6 +35229,7 @@ export namespace Prisma {
     availableInstructors?: CallRoundInstructorOrderByRelationAggregateInput
     availableCouncilMembers?: CallRoundCouncilMemberOrderByRelationAggregateInput
     councils?: CouncilOrderByRelationAggregateInput
+    attachments?: CallRoundAttachmentOrderByRelationAggregateInput
   }
 
   export type CallRoundWhereUniqueInput = Prisma.AtLeast<{
@@ -33933,6 +35245,8 @@ export namespace Prisma {
     projectEndDate?: DateTimeNullableFilter<"CallRound"> | Date | string | null
     reviewDeadline?: DateTimeNullableFilter<"CallRound"> | Date | string | null
     reportingStartDate?: DateTimeNullableFilter<"CallRound"> | Date | string | null
+    defenseDate?: DateTimeNullableFilter<"CallRound"> | Date | string | null
+    projectLockDate?: DateTimeNullableFilter<"CallRound"> | Date | string | null
     startDate?: DateTimeFilter<"CallRound"> | Date | string
     endDate?: DateTimeFilter<"CallRound"> | Date | string
     maxProjects?: IntNullableFilter<"CallRound"> | number | null
@@ -33961,6 +35275,7 @@ export namespace Prisma {
     availableInstructors?: CallRoundInstructorListRelationFilter
     availableCouncilMembers?: CallRoundCouncilMemberListRelationFilter
     councils?: CouncilListRelationFilter
+    attachments?: CallRoundAttachmentListRelationFilter
   }, "id">
 
   export type CallRoundOrderByWithAggregationInput = {
@@ -33973,6 +35288,8 @@ export namespace Prisma {
     projectEndDate?: SortOrderInput | SortOrder
     reviewDeadline?: SortOrderInput | SortOrder
     reportingStartDate?: SortOrderInput | SortOrder
+    defenseDate?: SortOrderInput | SortOrder
+    projectLockDate?: SortOrderInput | SortOrder
     startDate?: SortOrder
     endDate?: SortOrder
     maxProjects?: SortOrderInput | SortOrder
@@ -34012,6 +35329,8 @@ export namespace Prisma {
     projectEndDate?: DateTimeNullableWithAggregatesFilter<"CallRound"> | Date | string | null
     reviewDeadline?: DateTimeNullableWithAggregatesFilter<"CallRound"> | Date | string | null
     reportingStartDate?: DateTimeNullableWithAggregatesFilter<"CallRound"> | Date | string | null
+    defenseDate?: DateTimeNullableWithAggregatesFilter<"CallRound"> | Date | string | null
+    projectLockDate?: DateTimeNullableWithAggregatesFilter<"CallRound"> | Date | string | null
     startDate?: DateTimeWithAggregatesFilter<"CallRound"> | Date | string
     endDate?: DateTimeWithAggregatesFilter<"CallRound"> | Date | string
     maxProjects?: IntNullableWithAggregatesFilter<"CallRound"> | number | null
@@ -35554,6 +36873,78 @@ export namespace Prisma {
     createdAt?: DateTimeWithAggregatesFilter<"ProjectCouncilAssignment"> | Date | string
   }
 
+  export type CallRoundAttachmentWhereInput = {
+    AND?: CallRoundAttachmentWhereInput | CallRoundAttachmentWhereInput[]
+    OR?: CallRoundAttachmentWhereInput[]
+    NOT?: CallRoundAttachmentWhereInput | CallRoundAttachmentWhereInput[]
+    id?: StringFilter<"CallRoundAttachment"> | string
+    callRoundId?: StringFilter<"CallRoundAttachment"> | string
+    fileName?: StringFilter<"CallRoundAttachment"> | string
+    fileUrl?: StringFilter<"CallRoundAttachment"> | string
+    fileSize?: IntNullableFilter<"CallRoundAttachment"> | number | null
+    fileType?: StringNullableFilter<"CallRoundAttachment"> | string | null
+    description?: StringNullableFilter<"CallRoundAttachment"> | string | null
+    createdAt?: DateTimeFilter<"CallRoundAttachment"> | Date | string
+    callRound?: XOR<CallRoundScalarRelationFilter, CallRoundWhereInput>
+  }
+
+  export type CallRoundAttachmentOrderByWithRelationInput = {
+    id?: SortOrder
+    callRoundId?: SortOrder
+    fileName?: SortOrder
+    fileUrl?: SortOrder
+    fileSize?: SortOrderInput | SortOrder
+    fileType?: SortOrderInput | SortOrder
+    description?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    callRound?: CallRoundOrderByWithRelationInput
+  }
+
+  export type CallRoundAttachmentWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: CallRoundAttachmentWhereInput | CallRoundAttachmentWhereInput[]
+    OR?: CallRoundAttachmentWhereInput[]
+    NOT?: CallRoundAttachmentWhereInput | CallRoundAttachmentWhereInput[]
+    callRoundId?: StringFilter<"CallRoundAttachment"> | string
+    fileName?: StringFilter<"CallRoundAttachment"> | string
+    fileUrl?: StringFilter<"CallRoundAttachment"> | string
+    fileSize?: IntNullableFilter<"CallRoundAttachment"> | number | null
+    fileType?: StringNullableFilter<"CallRoundAttachment"> | string | null
+    description?: StringNullableFilter<"CallRoundAttachment"> | string | null
+    createdAt?: DateTimeFilter<"CallRoundAttachment"> | Date | string
+    callRound?: XOR<CallRoundScalarRelationFilter, CallRoundWhereInput>
+  }, "id">
+
+  export type CallRoundAttachmentOrderByWithAggregationInput = {
+    id?: SortOrder
+    callRoundId?: SortOrder
+    fileName?: SortOrder
+    fileUrl?: SortOrder
+    fileSize?: SortOrderInput | SortOrder
+    fileType?: SortOrderInput | SortOrder
+    description?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    _count?: CallRoundAttachmentCountOrderByAggregateInput
+    _avg?: CallRoundAttachmentAvgOrderByAggregateInput
+    _max?: CallRoundAttachmentMaxOrderByAggregateInput
+    _min?: CallRoundAttachmentMinOrderByAggregateInput
+    _sum?: CallRoundAttachmentSumOrderByAggregateInput
+  }
+
+  export type CallRoundAttachmentScalarWhereWithAggregatesInput = {
+    AND?: CallRoundAttachmentScalarWhereWithAggregatesInput | CallRoundAttachmentScalarWhereWithAggregatesInput[]
+    OR?: CallRoundAttachmentScalarWhereWithAggregatesInput[]
+    NOT?: CallRoundAttachmentScalarWhereWithAggregatesInput | CallRoundAttachmentScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"CallRoundAttachment"> | string
+    callRoundId?: StringWithAggregatesFilter<"CallRoundAttachment"> | string
+    fileName?: StringWithAggregatesFilter<"CallRoundAttachment"> | string
+    fileUrl?: StringWithAggregatesFilter<"CallRoundAttachment"> | string
+    fileSize?: IntNullableWithAggregatesFilter<"CallRoundAttachment"> | number | null
+    fileType?: StringNullableWithAggregatesFilter<"CallRoundAttachment"> | string | null
+    description?: StringNullableWithAggregatesFilter<"CallRoundAttachment"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"CallRoundAttachment"> | Date | string
+  }
+
   export type DepartmentCreateInput = {
     id?: string
     code: string
@@ -35988,6 +37379,8 @@ export namespace Prisma {
     projectEndDate?: Date | string | null
     reviewDeadline?: Date | string | null
     reportingStartDate?: Date | string | null
+    defenseDate?: Date | string | null
+    projectLockDate?: Date | string | null
     startDate: Date | string
     endDate: Date | string
     maxProjects?: number | null
@@ -36015,6 +37408,7 @@ export namespace Prisma {
     availableInstructors?: CallRoundInstructorCreateNestedManyWithoutCallRoundInput
     availableCouncilMembers?: CallRoundCouncilMemberCreateNestedManyWithoutCallRoundInput
     councils?: CouncilCreateNestedManyWithoutCallRoundInput
+    attachments?: CallRoundAttachmentCreateNestedManyWithoutCallRoundInput
   }
 
   export type CallRoundUncheckedCreateInput = {
@@ -36027,6 +37421,8 @@ export namespace Prisma {
     projectEndDate?: Date | string | null
     reviewDeadline?: Date | string | null
     reportingStartDate?: Date | string | null
+    defenseDate?: Date | string | null
+    projectLockDate?: Date | string | null
     startDate: Date | string
     endDate: Date | string
     maxProjects?: number | null
@@ -36054,6 +37450,7 @@ export namespace Prisma {
     availableInstructors?: CallRoundInstructorUncheckedCreateNestedManyWithoutCallRoundInput
     availableCouncilMembers?: CallRoundCouncilMemberUncheckedCreateNestedManyWithoutCallRoundInput
     councils?: CouncilUncheckedCreateNestedManyWithoutCallRoundInput
+    attachments?: CallRoundAttachmentUncheckedCreateNestedManyWithoutCallRoundInput
   }
 
   export type CallRoundUpdateInput = {
@@ -36066,6 +37463,8 @@ export namespace Prisma {
     projectEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reviewDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reportingStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    defenseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    projectLockDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     maxProjects?: NullableIntFieldUpdateOperationsInput | number | null
@@ -36093,6 +37492,7 @@ export namespace Prisma {
     availableInstructors?: CallRoundInstructorUpdateManyWithoutCallRoundNestedInput
     availableCouncilMembers?: CallRoundCouncilMemberUpdateManyWithoutCallRoundNestedInput
     councils?: CouncilUpdateManyWithoutCallRoundNestedInput
+    attachments?: CallRoundAttachmentUpdateManyWithoutCallRoundNestedInput
   }
 
   export type CallRoundUncheckedUpdateInput = {
@@ -36105,6 +37505,8 @@ export namespace Prisma {
     projectEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reviewDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reportingStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    defenseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    projectLockDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     maxProjects?: NullableIntFieldUpdateOperationsInput | number | null
@@ -36132,6 +37534,7 @@ export namespace Prisma {
     availableInstructors?: CallRoundInstructorUncheckedUpdateManyWithoutCallRoundNestedInput
     availableCouncilMembers?: CallRoundCouncilMemberUncheckedUpdateManyWithoutCallRoundNestedInput
     councils?: CouncilUncheckedUpdateManyWithoutCallRoundNestedInput
+    attachments?: CallRoundAttachmentUncheckedUpdateManyWithoutCallRoundNestedInput
   }
 
   export type CallRoundCreateManyInput = {
@@ -36144,6 +37547,8 @@ export namespace Prisma {
     projectEndDate?: Date | string | null
     reviewDeadline?: Date | string | null
     reportingStartDate?: Date | string | null
+    defenseDate?: Date | string | null
+    projectLockDate?: Date | string | null
     startDate: Date | string
     endDate: Date | string
     maxProjects?: number | null
@@ -36175,6 +37580,8 @@ export namespace Prisma {
     projectEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reviewDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reportingStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    defenseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    projectLockDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     maxProjects?: NullableIntFieldUpdateOperationsInput | number | null
@@ -36205,6 +37612,8 @@ export namespace Prisma {
     projectEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reviewDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reportingStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    defenseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    projectLockDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     maxProjects?: NullableIntFieldUpdateOperationsInput | number | null
@@ -37826,6 +39235,82 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type CallRoundAttachmentCreateInput = {
+    id?: string
+    fileName: string
+    fileUrl: string
+    fileSize?: number | null
+    fileType?: string | null
+    description?: string | null
+    createdAt?: Date | string
+    callRound: CallRoundCreateNestedOneWithoutAttachmentsInput
+  }
+
+  export type CallRoundAttachmentUncheckedCreateInput = {
+    id?: string
+    callRoundId: string
+    fileName: string
+    fileUrl: string
+    fileSize?: number | null
+    fileType?: string | null
+    description?: string | null
+    createdAt?: Date | string
+  }
+
+  export type CallRoundAttachmentUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    fileName?: StringFieldUpdateOperationsInput | string
+    fileUrl?: StringFieldUpdateOperationsInput | string
+    fileSize?: NullableIntFieldUpdateOperationsInput | number | null
+    fileType?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    callRound?: CallRoundUpdateOneRequiredWithoutAttachmentsNestedInput
+  }
+
+  export type CallRoundAttachmentUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    callRoundId?: StringFieldUpdateOperationsInput | string
+    fileName?: StringFieldUpdateOperationsInput | string
+    fileUrl?: StringFieldUpdateOperationsInput | string
+    fileSize?: NullableIntFieldUpdateOperationsInput | number | null
+    fileType?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CallRoundAttachmentCreateManyInput = {
+    id?: string
+    callRoundId: string
+    fileName: string
+    fileUrl: string
+    fileSize?: number | null
+    fileType?: string | null
+    description?: string | null
+    createdAt?: Date | string
+  }
+
+  export type CallRoundAttachmentUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    fileName?: StringFieldUpdateOperationsInput | string
+    fileUrl?: StringFieldUpdateOperationsInput | string
+    fileSize?: NullableIntFieldUpdateOperationsInput | number | null
+    fileType?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CallRoundAttachmentUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    callRoundId?: StringFieldUpdateOperationsInput | string
+    fileName?: StringFieldUpdateOperationsInput | string
+    fileUrl?: StringFieldUpdateOperationsInput | string
+    fileSize?: NullableIntFieldUpdateOperationsInput | number | null
+    fileType?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type StringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -38362,11 +39847,21 @@ export namespace Prisma {
     none?: CouncilWhereInput
   }
 
+  export type CallRoundAttachmentListRelationFilter = {
+    every?: CallRoundAttachmentWhereInput
+    some?: CallRoundAttachmentWhereInput
+    none?: CallRoundAttachmentWhereInput
+  }
+
   export type DepartmentOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
   export type CouncilOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type CallRoundAttachmentOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -38380,6 +39875,8 @@ export namespace Prisma {
     projectEndDate?: SortOrder
     reviewDeadline?: SortOrder
     reportingStartDate?: SortOrder
+    defenseDate?: SortOrder
+    projectLockDate?: SortOrder
     startDate?: SortOrder
     endDate?: SortOrder
     maxProjects?: SortOrder
@@ -38416,6 +39913,8 @@ export namespace Prisma {
     projectEndDate?: SortOrder
     reviewDeadline?: SortOrder
     reportingStartDate?: SortOrder
+    defenseDate?: SortOrder
+    projectLockDate?: SortOrder
     startDate?: SortOrder
     endDate?: SortOrder
     maxProjects?: SortOrder
@@ -38447,6 +39946,8 @@ export namespace Prisma {
     projectEndDate?: SortOrder
     reviewDeadline?: SortOrder
     reportingStartDate?: SortOrder
+    defenseDate?: SortOrder
+    projectLockDate?: SortOrder
     startDate?: SortOrder
     endDate?: SortOrder
     maxProjects?: SortOrder
@@ -39718,6 +41219,47 @@ export namespace Prisma {
     createdAt?: SortOrder
   }
 
+  export type CallRoundAttachmentCountOrderByAggregateInput = {
+    id?: SortOrder
+    callRoundId?: SortOrder
+    fileName?: SortOrder
+    fileUrl?: SortOrder
+    fileSize?: SortOrder
+    fileType?: SortOrder
+    description?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type CallRoundAttachmentAvgOrderByAggregateInput = {
+    fileSize?: SortOrder
+  }
+
+  export type CallRoundAttachmentMaxOrderByAggregateInput = {
+    id?: SortOrder
+    callRoundId?: SortOrder
+    fileName?: SortOrder
+    fileUrl?: SortOrder
+    fileSize?: SortOrder
+    fileType?: SortOrder
+    description?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type CallRoundAttachmentMinOrderByAggregateInput = {
+    id?: SortOrder
+    callRoundId?: SortOrder
+    fileName?: SortOrder
+    fileUrl?: SortOrder
+    fileSize?: SortOrder
+    fileType?: SortOrder
+    description?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type CallRoundAttachmentSumOrderByAggregateInput = {
+    fileSize?: SortOrder
+  }
+
   export type MajorCreateNestedManyWithoutDepartmentInput = {
     create?: XOR<MajorCreateWithoutDepartmentInput, MajorUncheckedCreateWithoutDepartmentInput> | MajorCreateWithoutDepartmentInput[] | MajorUncheckedCreateWithoutDepartmentInput[]
     connectOrCreate?: MajorCreateOrConnectWithoutDepartmentInput | MajorCreateOrConnectWithoutDepartmentInput[]
@@ -40915,6 +42457,13 @@ export namespace Prisma {
     connect?: CouncilWhereUniqueInput | CouncilWhereUniqueInput[]
   }
 
+  export type CallRoundAttachmentCreateNestedManyWithoutCallRoundInput = {
+    create?: XOR<CallRoundAttachmentCreateWithoutCallRoundInput, CallRoundAttachmentUncheckedCreateWithoutCallRoundInput> | CallRoundAttachmentCreateWithoutCallRoundInput[] | CallRoundAttachmentUncheckedCreateWithoutCallRoundInput[]
+    connectOrCreate?: CallRoundAttachmentCreateOrConnectWithoutCallRoundInput | CallRoundAttachmentCreateOrConnectWithoutCallRoundInput[]
+    createMany?: CallRoundAttachmentCreateManyCallRoundInputEnvelope
+    connect?: CallRoundAttachmentWhereUniqueInput | CallRoundAttachmentWhereUniqueInput[]
+  }
+
   export type ProjectUncheckedCreateNestedManyWithoutCallRoundInput = {
     create?: XOR<ProjectCreateWithoutCallRoundInput, ProjectUncheckedCreateWithoutCallRoundInput> | ProjectCreateWithoutCallRoundInput[] | ProjectUncheckedCreateWithoutCallRoundInput[]
     connectOrCreate?: ProjectCreateOrConnectWithoutCallRoundInput | ProjectCreateOrConnectWithoutCallRoundInput[]
@@ -40966,6 +42515,13 @@ export namespace Prisma {
     connectOrCreate?: CouncilCreateOrConnectWithoutCallRoundInput | CouncilCreateOrConnectWithoutCallRoundInput[]
     createMany?: CouncilCreateManyCallRoundInputEnvelope
     connect?: CouncilWhereUniqueInput | CouncilWhereUniqueInput[]
+  }
+
+  export type CallRoundAttachmentUncheckedCreateNestedManyWithoutCallRoundInput = {
+    create?: XOR<CallRoundAttachmentCreateWithoutCallRoundInput, CallRoundAttachmentUncheckedCreateWithoutCallRoundInput> | CallRoundAttachmentCreateWithoutCallRoundInput[] | CallRoundAttachmentUncheckedCreateWithoutCallRoundInput[]
+    connectOrCreate?: CallRoundAttachmentCreateOrConnectWithoutCallRoundInput | CallRoundAttachmentCreateOrConnectWithoutCallRoundInput[]
+    createMany?: CallRoundAttachmentCreateManyCallRoundInputEnvelope
+    connect?: CallRoundAttachmentWhereUniqueInput | CallRoundAttachmentWhereUniqueInput[]
   }
 
   export type NullableIntFieldUpdateOperationsInput = {
@@ -41119,6 +42675,20 @@ export namespace Prisma {
     deleteMany?: CouncilScalarWhereInput | CouncilScalarWhereInput[]
   }
 
+  export type CallRoundAttachmentUpdateManyWithoutCallRoundNestedInput = {
+    create?: XOR<CallRoundAttachmentCreateWithoutCallRoundInput, CallRoundAttachmentUncheckedCreateWithoutCallRoundInput> | CallRoundAttachmentCreateWithoutCallRoundInput[] | CallRoundAttachmentUncheckedCreateWithoutCallRoundInput[]
+    connectOrCreate?: CallRoundAttachmentCreateOrConnectWithoutCallRoundInput | CallRoundAttachmentCreateOrConnectWithoutCallRoundInput[]
+    upsert?: CallRoundAttachmentUpsertWithWhereUniqueWithoutCallRoundInput | CallRoundAttachmentUpsertWithWhereUniqueWithoutCallRoundInput[]
+    createMany?: CallRoundAttachmentCreateManyCallRoundInputEnvelope
+    set?: CallRoundAttachmentWhereUniqueInput | CallRoundAttachmentWhereUniqueInput[]
+    disconnect?: CallRoundAttachmentWhereUniqueInput | CallRoundAttachmentWhereUniqueInput[]
+    delete?: CallRoundAttachmentWhereUniqueInput | CallRoundAttachmentWhereUniqueInput[]
+    connect?: CallRoundAttachmentWhereUniqueInput | CallRoundAttachmentWhereUniqueInput[]
+    update?: CallRoundAttachmentUpdateWithWhereUniqueWithoutCallRoundInput | CallRoundAttachmentUpdateWithWhereUniqueWithoutCallRoundInput[]
+    updateMany?: CallRoundAttachmentUpdateManyWithWhereWithoutCallRoundInput | CallRoundAttachmentUpdateManyWithWhereWithoutCallRoundInput[]
+    deleteMany?: CallRoundAttachmentScalarWhereInput | CallRoundAttachmentScalarWhereInput[]
+  }
+
   export type ProjectUncheckedUpdateManyWithoutCallRoundNestedInput = {
     create?: XOR<ProjectCreateWithoutCallRoundInput, ProjectUncheckedCreateWithoutCallRoundInput> | ProjectCreateWithoutCallRoundInput[] | ProjectUncheckedCreateWithoutCallRoundInput[]
     connectOrCreate?: ProjectCreateOrConnectWithoutCallRoundInput | ProjectCreateOrConnectWithoutCallRoundInput[]
@@ -41226,6 +42796,20 @@ export namespace Prisma {
     update?: CouncilUpdateWithWhereUniqueWithoutCallRoundInput | CouncilUpdateWithWhereUniqueWithoutCallRoundInput[]
     updateMany?: CouncilUpdateManyWithWhereWithoutCallRoundInput | CouncilUpdateManyWithWhereWithoutCallRoundInput[]
     deleteMany?: CouncilScalarWhereInput | CouncilScalarWhereInput[]
+  }
+
+  export type CallRoundAttachmentUncheckedUpdateManyWithoutCallRoundNestedInput = {
+    create?: XOR<CallRoundAttachmentCreateWithoutCallRoundInput, CallRoundAttachmentUncheckedCreateWithoutCallRoundInput> | CallRoundAttachmentCreateWithoutCallRoundInput[] | CallRoundAttachmentUncheckedCreateWithoutCallRoundInput[]
+    connectOrCreate?: CallRoundAttachmentCreateOrConnectWithoutCallRoundInput | CallRoundAttachmentCreateOrConnectWithoutCallRoundInput[]
+    upsert?: CallRoundAttachmentUpsertWithWhereUniqueWithoutCallRoundInput | CallRoundAttachmentUpsertWithWhereUniqueWithoutCallRoundInput[]
+    createMany?: CallRoundAttachmentCreateManyCallRoundInputEnvelope
+    set?: CallRoundAttachmentWhereUniqueInput | CallRoundAttachmentWhereUniqueInput[]
+    disconnect?: CallRoundAttachmentWhereUniqueInput | CallRoundAttachmentWhereUniqueInput[]
+    delete?: CallRoundAttachmentWhereUniqueInput | CallRoundAttachmentWhereUniqueInput[]
+    connect?: CallRoundAttachmentWhereUniqueInput | CallRoundAttachmentWhereUniqueInput[]
+    update?: CallRoundAttachmentUpdateWithWhereUniqueWithoutCallRoundInput | CallRoundAttachmentUpdateWithWhereUniqueWithoutCallRoundInput[]
+    updateMany?: CallRoundAttachmentUpdateManyWithWhereWithoutCallRoundInput | CallRoundAttachmentUpdateManyWithWhereWithoutCallRoundInput[]
+    deleteMany?: CallRoundAttachmentScalarWhereInput | CallRoundAttachmentScalarWhereInput[]
   }
 
   export type ProjectCreateNestedManyWithoutProjectTypeInput = {
@@ -42329,6 +43913,20 @@ export namespace Prisma {
     update?: XOR<XOR<ProjectRegistrationUpdateToOneWithWhereWithoutCouncilAssignmentInput, ProjectRegistrationUpdateWithoutCouncilAssignmentInput>, ProjectRegistrationUncheckedUpdateWithoutCouncilAssignmentInput>
   }
 
+  export type CallRoundCreateNestedOneWithoutAttachmentsInput = {
+    create?: XOR<CallRoundCreateWithoutAttachmentsInput, CallRoundUncheckedCreateWithoutAttachmentsInput>
+    connectOrCreate?: CallRoundCreateOrConnectWithoutAttachmentsInput
+    connect?: CallRoundWhereUniqueInput
+  }
+
+  export type CallRoundUpdateOneRequiredWithoutAttachmentsNestedInput = {
+    create?: XOR<CallRoundCreateWithoutAttachmentsInput, CallRoundUncheckedCreateWithoutAttachmentsInput>
+    connectOrCreate?: CallRoundCreateOrConnectWithoutAttachmentsInput
+    upsert?: CallRoundUpsertWithoutAttachmentsInput
+    connect?: CallRoundWhereUniqueInput
+    update?: XOR<XOR<CallRoundUpdateToOneWithWhereWithoutAttachmentsInput, CallRoundUpdateWithoutAttachmentsInput>, CallRoundUncheckedUpdateWithoutAttachmentsInput>
+  }
+
   export type NestedStringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -42981,6 +44579,8 @@ export namespace Prisma {
     projectEndDate?: Date | string | null
     reviewDeadline?: Date | string | null
     reportingStartDate?: Date | string | null
+    defenseDate?: Date | string | null
+    projectLockDate?: Date | string | null
     startDate: Date | string
     endDate: Date | string
     maxProjects?: number | null
@@ -43007,6 +44607,7 @@ export namespace Prisma {
     availableInstructors?: CallRoundInstructorCreateNestedManyWithoutCallRoundInput
     availableCouncilMembers?: CallRoundCouncilMemberCreateNestedManyWithoutCallRoundInput
     councils?: CouncilCreateNestedManyWithoutCallRoundInput
+    attachments?: CallRoundAttachmentCreateNestedManyWithoutCallRoundInput
   }
 
   export type CallRoundUncheckedCreateWithoutDepartmentsInput = {
@@ -43019,6 +44620,8 @@ export namespace Prisma {
     projectEndDate?: Date | string | null
     reviewDeadline?: Date | string | null
     reportingStartDate?: Date | string | null
+    defenseDate?: Date | string | null
+    projectLockDate?: Date | string | null
     startDate: Date | string
     endDate: Date | string
     maxProjects?: number | null
@@ -43045,6 +44648,7 @@ export namespace Prisma {
     availableInstructors?: CallRoundInstructorUncheckedCreateNestedManyWithoutCallRoundInput
     availableCouncilMembers?: CallRoundCouncilMemberUncheckedCreateNestedManyWithoutCallRoundInput
     councils?: CouncilUncheckedCreateNestedManyWithoutCallRoundInput
+    attachments?: CallRoundAttachmentUncheckedCreateNestedManyWithoutCallRoundInput
   }
 
   export type CallRoundCreateOrConnectWithoutDepartmentsInput = {
@@ -43224,6 +44828,8 @@ export namespace Prisma {
     projectEndDate?: DateTimeNullableFilter<"CallRound"> | Date | string | null
     reviewDeadline?: DateTimeNullableFilter<"CallRound"> | Date | string | null
     reportingStartDate?: DateTimeNullableFilter<"CallRound"> | Date | string | null
+    defenseDate?: DateTimeNullableFilter<"CallRound"> | Date | string | null
+    projectLockDate?: DateTimeNullableFilter<"CallRound"> | Date | string | null
     startDate?: DateTimeFilter<"CallRound"> | Date | string
     endDate?: DateTimeFilter<"CallRound"> | Date | string
     maxProjects?: IntNullableFilter<"CallRound"> | number | null
@@ -43459,6 +45065,8 @@ export namespace Prisma {
     projectEndDate?: Date | string | null
     reviewDeadline?: Date | string | null
     reportingStartDate?: Date | string | null
+    defenseDate?: Date | string | null
+    projectLockDate?: Date | string | null
     startDate: Date | string
     endDate: Date | string
     maxProjects?: number | null
@@ -43485,6 +45093,7 @@ export namespace Prisma {
     availableInstructors?: CallRoundInstructorCreateNestedManyWithoutCallRoundInput
     availableCouncilMembers?: CallRoundCouncilMemberCreateNestedManyWithoutCallRoundInput
     councils?: CouncilCreateNestedManyWithoutCallRoundInput
+    attachments?: CallRoundAttachmentCreateNestedManyWithoutCallRoundInput
   }
 
   export type CallRoundUncheckedCreateWithoutMajorsInput = {
@@ -43497,6 +45106,8 @@ export namespace Prisma {
     projectEndDate?: Date | string | null
     reviewDeadline?: Date | string | null
     reportingStartDate?: Date | string | null
+    defenseDate?: Date | string | null
+    projectLockDate?: Date | string | null
     startDate: Date | string
     endDate: Date | string
     maxProjects?: number | null
@@ -43523,6 +45134,7 @@ export namespace Prisma {
     availableInstructors?: CallRoundInstructorUncheckedCreateNestedManyWithoutCallRoundInput
     availableCouncilMembers?: CallRoundCouncilMemberUncheckedCreateNestedManyWithoutCallRoundInput
     councils?: CouncilUncheckedCreateNestedManyWithoutCallRoundInput
+    attachments?: CallRoundAttachmentUncheckedCreateNestedManyWithoutCallRoundInput
   }
 
   export type CallRoundCreateOrConnectWithoutMajorsInput = {
@@ -43742,6 +45354,8 @@ export namespace Prisma {
     projectEndDate?: Date | string | null
     reviewDeadline?: Date | string | null
     reportingStartDate?: Date | string | null
+    defenseDate?: Date | string | null
+    projectLockDate?: Date | string | null
     startDate: Date | string
     endDate: Date | string
     maxProjects?: number | null
@@ -43768,6 +45382,7 @@ export namespace Prisma {
     availableInstructors?: CallRoundInstructorCreateNestedManyWithoutCallRoundInput
     availableCouncilMembers?: CallRoundCouncilMemberCreateNestedManyWithoutCallRoundInput
     councils?: CouncilCreateNestedManyWithoutCallRoundInput
+    attachments?: CallRoundAttachmentCreateNestedManyWithoutCallRoundInput
   }
 
   export type CallRoundUncheckedCreateWithoutClassesInput = {
@@ -43780,6 +45395,8 @@ export namespace Prisma {
     projectEndDate?: Date | string | null
     reviewDeadline?: Date | string | null
     reportingStartDate?: Date | string | null
+    defenseDate?: Date | string | null
+    projectLockDate?: Date | string | null
     startDate: Date | string
     endDate: Date | string
     maxProjects?: number | null
@@ -43806,6 +45423,7 @@ export namespace Prisma {
     availableInstructors?: CallRoundInstructorUncheckedCreateNestedManyWithoutCallRoundInput
     availableCouncilMembers?: CallRoundCouncilMemberUncheckedCreateNestedManyWithoutCallRoundInput
     councils?: CouncilUncheckedCreateNestedManyWithoutCallRoundInput
+    attachments?: CallRoundAttachmentUncheckedCreateNestedManyWithoutCallRoundInput
   }
 
   export type CallRoundCreateOrConnectWithoutClassesInput = {
@@ -45332,6 +46950,36 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type CallRoundAttachmentCreateWithoutCallRoundInput = {
+    id?: string
+    fileName: string
+    fileUrl: string
+    fileSize?: number | null
+    fileType?: string | null
+    description?: string | null
+    createdAt?: Date | string
+  }
+
+  export type CallRoundAttachmentUncheckedCreateWithoutCallRoundInput = {
+    id?: string
+    fileName: string
+    fileUrl: string
+    fileSize?: number | null
+    fileType?: string | null
+    description?: string | null
+    createdAt?: Date | string
+  }
+
+  export type CallRoundAttachmentCreateOrConnectWithoutCallRoundInput = {
+    where: CallRoundAttachmentWhereUniqueInput
+    create: XOR<CallRoundAttachmentCreateWithoutCallRoundInput, CallRoundAttachmentUncheckedCreateWithoutCallRoundInput>
+  }
+
+  export type CallRoundAttachmentCreateManyCallRoundInputEnvelope = {
+    data: CallRoundAttachmentCreateManyCallRoundInput | CallRoundAttachmentCreateManyCallRoundInput[]
+    skipDuplicates?: boolean
+  }
+
   export type ProjectUpsertWithWhereUniqueWithoutCallRoundInput = {
     where: ProjectWhereUniqueInput
     update: XOR<ProjectUpdateWithoutCallRoundInput, ProjectUncheckedUpdateWithoutCallRoundInput>
@@ -45517,6 +47165,36 @@ export namespace Prisma {
     description?: StringNullableFilter<"Council"> | string | null
     createdAt?: DateTimeFilter<"Council"> | Date | string
     updatedAt?: DateTimeFilter<"Council"> | Date | string
+  }
+
+  export type CallRoundAttachmentUpsertWithWhereUniqueWithoutCallRoundInput = {
+    where: CallRoundAttachmentWhereUniqueInput
+    update: XOR<CallRoundAttachmentUpdateWithoutCallRoundInput, CallRoundAttachmentUncheckedUpdateWithoutCallRoundInput>
+    create: XOR<CallRoundAttachmentCreateWithoutCallRoundInput, CallRoundAttachmentUncheckedCreateWithoutCallRoundInput>
+  }
+
+  export type CallRoundAttachmentUpdateWithWhereUniqueWithoutCallRoundInput = {
+    where: CallRoundAttachmentWhereUniqueInput
+    data: XOR<CallRoundAttachmentUpdateWithoutCallRoundInput, CallRoundAttachmentUncheckedUpdateWithoutCallRoundInput>
+  }
+
+  export type CallRoundAttachmentUpdateManyWithWhereWithoutCallRoundInput = {
+    where: CallRoundAttachmentScalarWhereInput
+    data: XOR<CallRoundAttachmentUpdateManyMutationInput, CallRoundAttachmentUncheckedUpdateManyWithoutCallRoundInput>
+  }
+
+  export type CallRoundAttachmentScalarWhereInput = {
+    AND?: CallRoundAttachmentScalarWhereInput | CallRoundAttachmentScalarWhereInput[]
+    OR?: CallRoundAttachmentScalarWhereInput[]
+    NOT?: CallRoundAttachmentScalarWhereInput | CallRoundAttachmentScalarWhereInput[]
+    id?: StringFilter<"CallRoundAttachment"> | string
+    callRoundId?: StringFilter<"CallRoundAttachment"> | string
+    fileName?: StringFilter<"CallRoundAttachment"> | string
+    fileUrl?: StringFilter<"CallRoundAttachment"> | string
+    fileSize?: IntNullableFilter<"CallRoundAttachment"> | number | null
+    fileType?: StringNullableFilter<"CallRoundAttachment"> | string | null
+    description?: StringNullableFilter<"CallRoundAttachment"> | string | null
+    createdAt?: DateTimeFilter<"CallRoundAttachment"> | Date | string
   }
 
   export type ProjectCreateWithoutProjectTypeInput = {
@@ -45747,6 +47425,8 @@ export namespace Prisma {
     projectEndDate?: Date | string | null
     reviewDeadline?: Date | string | null
     reportingStartDate?: Date | string | null
+    defenseDate?: Date | string | null
+    projectLockDate?: Date | string | null
     startDate: Date | string
     endDate: Date | string
     maxProjects?: number | null
@@ -45773,6 +47453,7 @@ export namespace Prisma {
     availableInstructors?: CallRoundInstructorCreateNestedManyWithoutCallRoundInput
     availableCouncilMembers?: CallRoundCouncilMemberCreateNestedManyWithoutCallRoundInput
     councils?: CouncilCreateNestedManyWithoutCallRoundInput
+    attachments?: CallRoundAttachmentCreateNestedManyWithoutCallRoundInput
   }
 
   export type CallRoundUncheckedCreateWithoutProjectsInput = {
@@ -45785,6 +47466,8 @@ export namespace Prisma {
     projectEndDate?: Date | string | null
     reviewDeadline?: Date | string | null
     reportingStartDate?: Date | string | null
+    defenseDate?: Date | string | null
+    projectLockDate?: Date | string | null
     startDate: Date | string
     endDate: Date | string
     maxProjects?: number | null
@@ -45811,6 +47494,7 @@ export namespace Prisma {
     availableInstructors?: CallRoundInstructorUncheckedCreateNestedManyWithoutCallRoundInput
     availableCouncilMembers?: CallRoundCouncilMemberUncheckedCreateNestedManyWithoutCallRoundInput
     councils?: CouncilUncheckedCreateNestedManyWithoutCallRoundInput
+    attachments?: CallRoundAttachmentUncheckedCreateNestedManyWithoutCallRoundInput
   }
 
   export type CallRoundCreateOrConnectWithoutProjectsInput = {
@@ -46261,6 +47945,8 @@ export namespace Prisma {
     projectEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reviewDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reportingStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    defenseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    projectLockDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     maxProjects?: NullableIntFieldUpdateOperationsInput | number | null
@@ -46287,6 +47973,7 @@ export namespace Prisma {
     availableInstructors?: CallRoundInstructorUpdateManyWithoutCallRoundNestedInput
     availableCouncilMembers?: CallRoundCouncilMemberUpdateManyWithoutCallRoundNestedInput
     councils?: CouncilUpdateManyWithoutCallRoundNestedInput
+    attachments?: CallRoundAttachmentUpdateManyWithoutCallRoundNestedInput
   }
 
   export type CallRoundUncheckedUpdateWithoutProjectsInput = {
@@ -46299,6 +47986,8 @@ export namespace Prisma {
     projectEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reviewDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reportingStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    defenseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    projectLockDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     maxProjects?: NullableIntFieldUpdateOperationsInput | number | null
@@ -46325,6 +48014,7 @@ export namespace Prisma {
     availableInstructors?: CallRoundInstructorUncheckedUpdateManyWithoutCallRoundNestedInput
     availableCouncilMembers?: CallRoundCouncilMemberUncheckedUpdateManyWithoutCallRoundNestedInput
     councils?: CouncilUncheckedUpdateManyWithoutCallRoundNestedInput
+    attachments?: CallRoundAttachmentUncheckedUpdateManyWithoutCallRoundNestedInput
   }
 
   export type ProjectTypeUpsertWithoutProjectsInput = {
@@ -46606,6 +48296,8 @@ export namespace Prisma {
     projectEndDate?: Date | string | null
     reviewDeadline?: Date | string | null
     reportingStartDate?: Date | string | null
+    defenseDate?: Date | string | null
+    projectLockDate?: Date | string | null
     startDate: Date | string
     endDate: Date | string
     maxProjects?: number | null
@@ -46632,6 +48324,7 @@ export namespace Prisma {
     availableInstructors?: CallRoundInstructorCreateNestedManyWithoutCallRoundInput
     availableCouncilMembers?: CallRoundCouncilMemberCreateNestedManyWithoutCallRoundInput
     councils?: CouncilCreateNestedManyWithoutCallRoundInput
+    attachments?: CallRoundAttachmentCreateNestedManyWithoutCallRoundInput
   }
 
   export type CallRoundUncheckedCreateWithoutTemplateInput = {
@@ -46644,6 +48337,8 @@ export namespace Prisma {
     projectEndDate?: Date | string | null
     reviewDeadline?: Date | string | null
     reportingStartDate?: Date | string | null
+    defenseDate?: Date | string | null
+    projectLockDate?: Date | string | null
     startDate: Date | string
     endDate: Date | string
     maxProjects?: number | null
@@ -46670,6 +48365,7 @@ export namespace Prisma {
     availableInstructors?: CallRoundInstructorUncheckedCreateNestedManyWithoutCallRoundInput
     availableCouncilMembers?: CallRoundCouncilMemberUncheckedCreateNestedManyWithoutCallRoundInput
     councils?: CouncilUncheckedCreateNestedManyWithoutCallRoundInput
+    attachments?: CallRoundAttachmentUncheckedCreateNestedManyWithoutCallRoundInput
   }
 
   export type CallRoundCreateOrConnectWithoutTemplateInput = {
@@ -47558,6 +49254,8 @@ export namespace Prisma {
     projectEndDate?: Date | string | null
     reviewDeadline?: Date | string | null
     reportingStartDate?: Date | string | null
+    defenseDate?: Date | string | null
+    projectLockDate?: Date | string | null
     startDate: Date | string
     endDate: Date | string
     maxProjects?: number | null
@@ -47584,6 +49282,7 @@ export namespace Prisma {
     availableInstructors?: CallRoundInstructorCreateNestedManyWithoutCallRoundInput
     availableCouncilMembers?: CallRoundCouncilMemberCreateNestedManyWithoutCallRoundInput
     councils?: CouncilCreateNestedManyWithoutCallRoundInput
+    attachments?: CallRoundAttachmentCreateNestedManyWithoutCallRoundInput
   }
 
   export type CallRoundUncheckedCreateWithoutRegistrationsInput = {
@@ -47596,6 +49295,8 @@ export namespace Prisma {
     projectEndDate?: Date | string | null
     reviewDeadline?: Date | string | null
     reportingStartDate?: Date | string | null
+    defenseDate?: Date | string | null
+    projectLockDate?: Date | string | null
     startDate: Date | string
     endDate: Date | string
     maxProjects?: number | null
@@ -47622,6 +49323,7 @@ export namespace Prisma {
     availableInstructors?: CallRoundInstructorUncheckedCreateNestedManyWithoutCallRoundInput
     availableCouncilMembers?: CallRoundCouncilMemberUncheckedCreateNestedManyWithoutCallRoundInput
     councils?: CouncilUncheckedCreateNestedManyWithoutCallRoundInput
+    attachments?: CallRoundAttachmentUncheckedCreateNestedManyWithoutCallRoundInput
   }
 
   export type CallRoundCreateOrConnectWithoutRegistrationsInput = {
@@ -47892,6 +49594,8 @@ export namespace Prisma {
     projectEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reviewDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reportingStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    defenseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    projectLockDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     maxProjects?: NullableIntFieldUpdateOperationsInput | number | null
@@ -47918,6 +49622,7 @@ export namespace Prisma {
     availableInstructors?: CallRoundInstructorUpdateManyWithoutCallRoundNestedInput
     availableCouncilMembers?: CallRoundCouncilMemberUpdateManyWithoutCallRoundNestedInput
     councils?: CouncilUpdateManyWithoutCallRoundNestedInput
+    attachments?: CallRoundAttachmentUpdateManyWithoutCallRoundNestedInput
   }
 
   export type CallRoundUncheckedUpdateWithoutRegistrationsInput = {
@@ -47930,6 +49635,8 @@ export namespace Prisma {
     projectEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reviewDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reportingStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    defenseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    projectLockDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     maxProjects?: NullableIntFieldUpdateOperationsInput | number | null
@@ -47956,6 +49663,7 @@ export namespace Prisma {
     availableInstructors?: CallRoundInstructorUncheckedUpdateManyWithoutCallRoundNestedInput
     availableCouncilMembers?: CallRoundCouncilMemberUncheckedUpdateManyWithoutCallRoundNestedInput
     councils?: CouncilUncheckedUpdateManyWithoutCallRoundNestedInput
+    attachments?: CallRoundAttachmentUncheckedUpdateManyWithoutCallRoundNestedInput
   }
 
   export type UserUpsertWithoutFacultyReviewsInput = {
@@ -49290,6 +50998,8 @@ export namespace Prisma {
     projectEndDate?: Date | string | null
     reviewDeadline?: Date | string | null
     reportingStartDate?: Date | string | null
+    defenseDate?: Date | string | null
+    projectLockDate?: Date | string | null
     startDate: Date | string
     endDate: Date | string
     maxProjects?: number | null
@@ -49316,6 +51026,7 @@ export namespace Prisma {
     classes?: ClassCreateNestedManyWithoutCallRoundsInput
     availableCouncilMembers?: CallRoundCouncilMemberCreateNestedManyWithoutCallRoundInput
     councils?: CouncilCreateNestedManyWithoutCallRoundInput
+    attachments?: CallRoundAttachmentCreateNestedManyWithoutCallRoundInput
   }
 
   export type CallRoundUncheckedCreateWithoutAvailableInstructorsInput = {
@@ -49328,6 +51039,8 @@ export namespace Prisma {
     projectEndDate?: Date | string | null
     reviewDeadline?: Date | string | null
     reportingStartDate?: Date | string | null
+    defenseDate?: Date | string | null
+    projectLockDate?: Date | string | null
     startDate: Date | string
     endDate: Date | string
     maxProjects?: number | null
@@ -49354,6 +51067,7 @@ export namespace Prisma {
     classes?: ClassUncheckedCreateNestedManyWithoutCallRoundsInput
     availableCouncilMembers?: CallRoundCouncilMemberUncheckedCreateNestedManyWithoutCallRoundInput
     councils?: CouncilUncheckedCreateNestedManyWithoutCallRoundInput
+    attachments?: CallRoundAttachmentUncheckedCreateNestedManyWithoutCallRoundInput
   }
 
   export type CallRoundCreateOrConnectWithoutAvailableInstructorsInput = {
@@ -49453,6 +51167,8 @@ export namespace Prisma {
     projectEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reviewDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reportingStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    defenseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    projectLockDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     maxProjects?: NullableIntFieldUpdateOperationsInput | number | null
@@ -49479,6 +51195,7 @@ export namespace Prisma {
     classes?: ClassUpdateManyWithoutCallRoundsNestedInput
     availableCouncilMembers?: CallRoundCouncilMemberUpdateManyWithoutCallRoundNestedInput
     councils?: CouncilUpdateManyWithoutCallRoundNestedInput
+    attachments?: CallRoundAttachmentUpdateManyWithoutCallRoundNestedInput
   }
 
   export type CallRoundUncheckedUpdateWithoutAvailableInstructorsInput = {
@@ -49491,6 +51208,8 @@ export namespace Prisma {
     projectEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reviewDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reportingStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    defenseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    projectLockDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     maxProjects?: NullableIntFieldUpdateOperationsInput | number | null
@@ -49517,6 +51236,7 @@ export namespace Prisma {
     classes?: ClassUncheckedUpdateManyWithoutCallRoundsNestedInput
     availableCouncilMembers?: CallRoundCouncilMemberUncheckedUpdateManyWithoutCallRoundNestedInput
     councils?: CouncilUncheckedUpdateManyWithoutCallRoundNestedInput
+    attachments?: CallRoundAttachmentUncheckedUpdateManyWithoutCallRoundNestedInput
   }
 
   export type UserUpsertWithoutCallRoundInstructorsInput = {
@@ -49606,6 +51326,8 @@ export namespace Prisma {
     projectEndDate?: Date | string | null
     reviewDeadline?: Date | string | null
     reportingStartDate?: Date | string | null
+    defenseDate?: Date | string | null
+    projectLockDate?: Date | string | null
     startDate: Date | string
     endDate: Date | string
     maxProjects?: number | null
@@ -49632,6 +51354,7 @@ export namespace Prisma {
     classes?: ClassCreateNestedManyWithoutCallRoundsInput
     availableInstructors?: CallRoundInstructorCreateNestedManyWithoutCallRoundInput
     councils?: CouncilCreateNestedManyWithoutCallRoundInput
+    attachments?: CallRoundAttachmentCreateNestedManyWithoutCallRoundInput
   }
 
   export type CallRoundUncheckedCreateWithoutAvailableCouncilMembersInput = {
@@ -49644,6 +51367,8 @@ export namespace Prisma {
     projectEndDate?: Date | string | null
     reviewDeadline?: Date | string | null
     reportingStartDate?: Date | string | null
+    defenseDate?: Date | string | null
+    projectLockDate?: Date | string | null
     startDate: Date | string
     endDate: Date | string
     maxProjects?: number | null
@@ -49670,6 +51395,7 @@ export namespace Prisma {
     classes?: ClassUncheckedCreateNestedManyWithoutCallRoundsInput
     availableInstructors?: CallRoundInstructorUncheckedCreateNestedManyWithoutCallRoundInput
     councils?: CouncilUncheckedCreateNestedManyWithoutCallRoundInput
+    attachments?: CallRoundAttachmentUncheckedCreateNestedManyWithoutCallRoundInput
   }
 
   export type CallRoundCreateOrConnectWithoutAvailableCouncilMembersInput = {
@@ -49769,6 +51495,8 @@ export namespace Prisma {
     projectEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reviewDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reportingStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    defenseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    projectLockDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     maxProjects?: NullableIntFieldUpdateOperationsInput | number | null
@@ -49795,6 +51523,7 @@ export namespace Prisma {
     classes?: ClassUpdateManyWithoutCallRoundsNestedInput
     availableInstructors?: CallRoundInstructorUpdateManyWithoutCallRoundNestedInput
     councils?: CouncilUpdateManyWithoutCallRoundNestedInput
+    attachments?: CallRoundAttachmentUpdateManyWithoutCallRoundNestedInput
   }
 
   export type CallRoundUncheckedUpdateWithoutAvailableCouncilMembersInput = {
@@ -49807,6 +51536,8 @@ export namespace Prisma {
     projectEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reviewDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reportingStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    defenseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    projectLockDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     maxProjects?: NullableIntFieldUpdateOperationsInput | number | null
@@ -49833,6 +51564,7 @@ export namespace Prisma {
     classes?: ClassUncheckedUpdateManyWithoutCallRoundsNestedInput
     availableInstructors?: CallRoundInstructorUncheckedUpdateManyWithoutCallRoundNestedInput
     councils?: CouncilUncheckedUpdateManyWithoutCallRoundNestedInput
+    attachments?: CallRoundAttachmentUncheckedUpdateManyWithoutCallRoundNestedInput
   }
 
   export type UserUpsertWithoutCallRoundCouncilMembersInput = {
@@ -49922,6 +51654,8 @@ export namespace Prisma {
     projectEndDate?: Date | string | null
     reviewDeadline?: Date | string | null
     reportingStartDate?: Date | string | null
+    defenseDate?: Date | string | null
+    projectLockDate?: Date | string | null
     startDate: Date | string
     endDate: Date | string
     maxProjects?: number | null
@@ -49948,6 +51682,7 @@ export namespace Prisma {
     classes?: ClassCreateNestedManyWithoutCallRoundsInput
     availableInstructors?: CallRoundInstructorCreateNestedManyWithoutCallRoundInput
     availableCouncilMembers?: CallRoundCouncilMemberCreateNestedManyWithoutCallRoundInput
+    attachments?: CallRoundAttachmentCreateNestedManyWithoutCallRoundInput
   }
 
   export type CallRoundUncheckedCreateWithoutCouncilsInput = {
@@ -49960,6 +51695,8 @@ export namespace Prisma {
     projectEndDate?: Date | string | null
     reviewDeadline?: Date | string | null
     reportingStartDate?: Date | string | null
+    defenseDate?: Date | string | null
+    projectLockDate?: Date | string | null
     startDate: Date | string
     endDate: Date | string
     maxProjects?: number | null
@@ -49986,6 +51723,7 @@ export namespace Prisma {
     classes?: ClassUncheckedCreateNestedManyWithoutCallRoundsInput
     availableInstructors?: CallRoundInstructorUncheckedCreateNestedManyWithoutCallRoundInput
     availableCouncilMembers?: CallRoundCouncilMemberUncheckedCreateNestedManyWithoutCallRoundInput
+    attachments?: CallRoundAttachmentUncheckedCreateNestedManyWithoutCallRoundInput
   }
 
   export type CallRoundCreateOrConnectWithoutCouncilsInput = {
@@ -50060,6 +51798,8 @@ export namespace Prisma {
     projectEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reviewDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reportingStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    defenseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    projectLockDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     maxProjects?: NullableIntFieldUpdateOperationsInput | number | null
@@ -50086,6 +51826,7 @@ export namespace Prisma {
     classes?: ClassUpdateManyWithoutCallRoundsNestedInput
     availableInstructors?: CallRoundInstructorUpdateManyWithoutCallRoundNestedInput
     availableCouncilMembers?: CallRoundCouncilMemberUpdateManyWithoutCallRoundNestedInput
+    attachments?: CallRoundAttachmentUpdateManyWithoutCallRoundNestedInput
   }
 
   export type CallRoundUncheckedUpdateWithoutCouncilsInput = {
@@ -50098,6 +51839,8 @@ export namespace Prisma {
     projectEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reviewDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reportingStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    defenseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    projectLockDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     maxProjects?: NullableIntFieldUpdateOperationsInput | number | null
@@ -50124,6 +51867,7 @@ export namespace Prisma {
     classes?: ClassUncheckedUpdateManyWithoutCallRoundsNestedInput
     availableInstructors?: CallRoundInstructorUncheckedUpdateManyWithoutCallRoundNestedInput
     availableCouncilMembers?: CallRoundCouncilMemberUncheckedUpdateManyWithoutCallRoundNestedInput
+    attachments?: CallRoundAttachmentUncheckedUpdateManyWithoutCallRoundNestedInput
   }
 
   export type CouncilMemberAssignmentUpsertWithWhereUniqueWithoutCouncilInput = {
@@ -50516,6 +52260,186 @@ export namespace Prisma {
     facultyReviewerId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
+  export type CallRoundCreateWithoutAttachmentsInput = {
+    id?: string
+    name: string
+    description?: string | null
+    registrationStartDate: Date | string
+    registrationEndDate: Date | string
+    projectStartDate?: Date | string | null
+    projectEndDate?: Date | string | null
+    reviewDeadline?: Date | string | null
+    reportingStartDate?: Date | string | null
+    defenseDate?: Date | string | null
+    projectLockDate?: Date | string | null
+    startDate: Date | string
+    endDate: Date | string
+    maxProjects?: number | null
+    budgetLimit?: Decimal | DecimalJsLike | number | string | null
+    requirements?: string | null
+    guidelines?: string | null
+    contactInfo?: string | null
+    isActive?: boolean
+    isLocked?: boolean
+    applicableFor?: $Enums.ApplicableFor
+    approvalStatus?: $Enums.CallRoundApprovalStatus
+    createdById?: string | null
+    createdByRole?: $Enums.Role | null
+    approvedById?: string | null
+    approvalNote?: string | null
+    approvedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    projects?: ProjectCreateNestedManyWithoutCallRoundInput
+    registrations?: ProjectRegistrationCreateNestedManyWithoutCallRoundInput
+    template?: ProgressReportTemplateCreateNestedOneWithoutCallRoundsInput
+    departments?: DepartmentCreateNestedManyWithoutCallRoundsInput
+    majors?: MajorCreateNestedManyWithoutCallRoundsInput
+    classes?: ClassCreateNestedManyWithoutCallRoundsInput
+    availableInstructors?: CallRoundInstructorCreateNestedManyWithoutCallRoundInput
+    availableCouncilMembers?: CallRoundCouncilMemberCreateNestedManyWithoutCallRoundInput
+    councils?: CouncilCreateNestedManyWithoutCallRoundInput
+  }
+
+  export type CallRoundUncheckedCreateWithoutAttachmentsInput = {
+    id?: string
+    name: string
+    description?: string | null
+    registrationStartDate: Date | string
+    registrationEndDate: Date | string
+    projectStartDate?: Date | string | null
+    projectEndDate?: Date | string | null
+    reviewDeadline?: Date | string | null
+    reportingStartDate?: Date | string | null
+    defenseDate?: Date | string | null
+    projectLockDate?: Date | string | null
+    startDate: Date | string
+    endDate: Date | string
+    maxProjects?: number | null
+    budgetLimit?: Decimal | DecimalJsLike | number | string | null
+    requirements?: string | null
+    guidelines?: string | null
+    contactInfo?: string | null
+    isActive?: boolean
+    isLocked?: boolean
+    applicableFor?: $Enums.ApplicableFor
+    approvalStatus?: $Enums.CallRoundApprovalStatus
+    createdById?: string | null
+    createdByRole?: $Enums.Role | null
+    approvedById?: string | null
+    approvalNote?: string | null
+    approvedAt?: Date | string | null
+    templateId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    projects?: ProjectUncheckedCreateNestedManyWithoutCallRoundInput
+    registrations?: ProjectRegistrationUncheckedCreateNestedManyWithoutCallRoundInput
+    departments?: DepartmentUncheckedCreateNestedManyWithoutCallRoundsInput
+    majors?: MajorUncheckedCreateNestedManyWithoutCallRoundsInput
+    classes?: ClassUncheckedCreateNestedManyWithoutCallRoundsInput
+    availableInstructors?: CallRoundInstructorUncheckedCreateNestedManyWithoutCallRoundInput
+    availableCouncilMembers?: CallRoundCouncilMemberUncheckedCreateNestedManyWithoutCallRoundInput
+    councils?: CouncilUncheckedCreateNestedManyWithoutCallRoundInput
+  }
+
+  export type CallRoundCreateOrConnectWithoutAttachmentsInput = {
+    where: CallRoundWhereUniqueInput
+    create: XOR<CallRoundCreateWithoutAttachmentsInput, CallRoundUncheckedCreateWithoutAttachmentsInput>
+  }
+
+  export type CallRoundUpsertWithoutAttachmentsInput = {
+    update: XOR<CallRoundUpdateWithoutAttachmentsInput, CallRoundUncheckedUpdateWithoutAttachmentsInput>
+    create: XOR<CallRoundCreateWithoutAttachmentsInput, CallRoundUncheckedCreateWithoutAttachmentsInput>
+    where?: CallRoundWhereInput
+  }
+
+  export type CallRoundUpdateToOneWithWhereWithoutAttachmentsInput = {
+    where?: CallRoundWhereInput
+    data: XOR<CallRoundUpdateWithoutAttachmentsInput, CallRoundUncheckedUpdateWithoutAttachmentsInput>
+  }
+
+  export type CallRoundUpdateWithoutAttachmentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    registrationStartDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    registrationEndDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    projectStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    projectEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reviewDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reportingStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    defenseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    projectLockDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    maxProjects?: NullableIntFieldUpdateOperationsInput | number | null
+    budgetLimit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    requirements?: NullableStringFieldUpdateOperationsInput | string | null
+    guidelines?: NullableStringFieldUpdateOperationsInput | string | null
+    contactInfo?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    isLocked?: BoolFieldUpdateOperationsInput | boolean
+    applicableFor?: EnumApplicableForFieldUpdateOperationsInput | $Enums.ApplicableFor
+    approvalStatus?: EnumCallRoundApprovalStatusFieldUpdateOperationsInput | $Enums.CallRoundApprovalStatus
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdByRole?: NullableEnumRoleFieldUpdateOperationsInput | $Enums.Role | null
+    approvedById?: NullableStringFieldUpdateOperationsInput | string | null
+    approvalNote?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    projects?: ProjectUpdateManyWithoutCallRoundNestedInput
+    registrations?: ProjectRegistrationUpdateManyWithoutCallRoundNestedInput
+    template?: ProgressReportTemplateUpdateOneWithoutCallRoundsNestedInput
+    departments?: DepartmentUpdateManyWithoutCallRoundsNestedInput
+    majors?: MajorUpdateManyWithoutCallRoundsNestedInput
+    classes?: ClassUpdateManyWithoutCallRoundsNestedInput
+    availableInstructors?: CallRoundInstructorUpdateManyWithoutCallRoundNestedInput
+    availableCouncilMembers?: CallRoundCouncilMemberUpdateManyWithoutCallRoundNestedInput
+    councils?: CouncilUpdateManyWithoutCallRoundNestedInput
+  }
+
+  export type CallRoundUncheckedUpdateWithoutAttachmentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    registrationStartDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    registrationEndDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    projectStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    projectEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reviewDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reportingStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    defenseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    projectLockDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    maxProjects?: NullableIntFieldUpdateOperationsInput | number | null
+    budgetLimit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    requirements?: NullableStringFieldUpdateOperationsInput | string | null
+    guidelines?: NullableStringFieldUpdateOperationsInput | string | null
+    contactInfo?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    isLocked?: BoolFieldUpdateOperationsInput | boolean
+    applicableFor?: EnumApplicableForFieldUpdateOperationsInput | $Enums.ApplicableFor
+    approvalStatus?: EnumCallRoundApprovalStatusFieldUpdateOperationsInput | $Enums.CallRoundApprovalStatus
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdByRole?: NullableEnumRoleFieldUpdateOperationsInput | $Enums.Role | null
+    approvedById?: NullableStringFieldUpdateOperationsInput | string | null
+    approvalNote?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    templateId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    projects?: ProjectUncheckedUpdateManyWithoutCallRoundNestedInput
+    registrations?: ProjectRegistrationUncheckedUpdateManyWithoutCallRoundNestedInput
+    departments?: DepartmentUncheckedUpdateManyWithoutCallRoundsNestedInput
+    majors?: MajorUncheckedUpdateManyWithoutCallRoundsNestedInput
+    classes?: ClassUncheckedUpdateManyWithoutCallRoundsNestedInput
+    availableInstructors?: CallRoundInstructorUncheckedUpdateManyWithoutCallRoundNestedInput
+    availableCouncilMembers?: CallRoundCouncilMemberUncheckedUpdateManyWithoutCallRoundNestedInput
+    councils?: CouncilUncheckedUpdateManyWithoutCallRoundNestedInput
+  }
+
   export type MajorCreateManyDepartmentInput = {
     id?: string
     code: string
@@ -50697,6 +52621,8 @@ export namespace Prisma {
     projectEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reviewDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reportingStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    defenseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    projectLockDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     maxProjects?: NullableIntFieldUpdateOperationsInput | number | null
@@ -50723,6 +52649,7 @@ export namespace Prisma {
     availableInstructors?: CallRoundInstructorUpdateManyWithoutCallRoundNestedInput
     availableCouncilMembers?: CallRoundCouncilMemberUpdateManyWithoutCallRoundNestedInput
     councils?: CouncilUpdateManyWithoutCallRoundNestedInput
+    attachments?: CallRoundAttachmentUpdateManyWithoutCallRoundNestedInput
   }
 
   export type CallRoundUncheckedUpdateWithoutDepartmentsInput = {
@@ -50735,6 +52662,8 @@ export namespace Prisma {
     projectEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reviewDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reportingStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    defenseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    projectLockDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     maxProjects?: NullableIntFieldUpdateOperationsInput | number | null
@@ -50761,6 +52690,7 @@ export namespace Prisma {
     availableInstructors?: CallRoundInstructorUncheckedUpdateManyWithoutCallRoundNestedInput
     availableCouncilMembers?: CallRoundCouncilMemberUncheckedUpdateManyWithoutCallRoundNestedInput
     councils?: CouncilUncheckedUpdateManyWithoutCallRoundNestedInput
+    attachments?: CallRoundAttachmentUncheckedUpdateManyWithoutCallRoundNestedInput
   }
 
   export type CallRoundUncheckedUpdateManyWithoutDepartmentsInput = {
@@ -50773,6 +52703,8 @@ export namespace Prisma {
     projectEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reviewDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reportingStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    defenseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    projectLockDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     maxProjects?: NullableIntFieldUpdateOperationsInput | number | null
@@ -51025,6 +52957,8 @@ export namespace Prisma {
     projectEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reviewDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reportingStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    defenseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    projectLockDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     maxProjects?: NullableIntFieldUpdateOperationsInput | number | null
@@ -51051,6 +52985,7 @@ export namespace Prisma {
     availableInstructors?: CallRoundInstructorUpdateManyWithoutCallRoundNestedInput
     availableCouncilMembers?: CallRoundCouncilMemberUpdateManyWithoutCallRoundNestedInput
     councils?: CouncilUpdateManyWithoutCallRoundNestedInput
+    attachments?: CallRoundAttachmentUpdateManyWithoutCallRoundNestedInput
   }
 
   export type CallRoundUncheckedUpdateWithoutMajorsInput = {
@@ -51063,6 +52998,8 @@ export namespace Prisma {
     projectEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reviewDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reportingStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    defenseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    projectLockDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     maxProjects?: NullableIntFieldUpdateOperationsInput | number | null
@@ -51089,6 +53026,7 @@ export namespace Prisma {
     availableInstructors?: CallRoundInstructorUncheckedUpdateManyWithoutCallRoundNestedInput
     availableCouncilMembers?: CallRoundCouncilMemberUncheckedUpdateManyWithoutCallRoundNestedInput
     councils?: CouncilUncheckedUpdateManyWithoutCallRoundNestedInput
+    attachments?: CallRoundAttachmentUncheckedUpdateManyWithoutCallRoundNestedInput
   }
 
   export type CallRoundUncheckedUpdateManyWithoutMajorsInput = {
@@ -51101,6 +53039,8 @@ export namespace Prisma {
     projectEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reviewDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reportingStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    defenseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    projectLockDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     maxProjects?: NullableIntFieldUpdateOperationsInput | number | null
@@ -51234,6 +53174,8 @@ export namespace Prisma {
     projectEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reviewDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reportingStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    defenseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    projectLockDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     maxProjects?: NullableIntFieldUpdateOperationsInput | number | null
@@ -51260,6 +53202,7 @@ export namespace Prisma {
     availableInstructors?: CallRoundInstructorUpdateManyWithoutCallRoundNestedInput
     availableCouncilMembers?: CallRoundCouncilMemberUpdateManyWithoutCallRoundNestedInput
     councils?: CouncilUpdateManyWithoutCallRoundNestedInput
+    attachments?: CallRoundAttachmentUpdateManyWithoutCallRoundNestedInput
   }
 
   export type CallRoundUncheckedUpdateWithoutClassesInput = {
@@ -51272,6 +53215,8 @@ export namespace Prisma {
     projectEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reviewDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reportingStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    defenseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    projectLockDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     maxProjects?: NullableIntFieldUpdateOperationsInput | number | null
@@ -51298,6 +53243,7 @@ export namespace Prisma {
     availableInstructors?: CallRoundInstructorUncheckedUpdateManyWithoutCallRoundNestedInput
     availableCouncilMembers?: CallRoundCouncilMemberUncheckedUpdateManyWithoutCallRoundNestedInput
     councils?: CouncilUncheckedUpdateManyWithoutCallRoundNestedInput
+    attachments?: CallRoundAttachmentUncheckedUpdateManyWithoutCallRoundNestedInput
   }
 
   export type CallRoundUncheckedUpdateManyWithoutClassesInput = {
@@ -51310,6 +53256,8 @@ export namespace Prisma {
     projectEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reviewDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reportingStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    defenseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    projectLockDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     maxProjects?: NullableIntFieldUpdateOperationsInput | number | null
@@ -52242,6 +54190,16 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
+  export type CallRoundAttachmentCreateManyCallRoundInput = {
+    id?: string
+    fileName: string
+    fileUrl: string
+    fileSize?: number | null
+    fileType?: string | null
+    description?: string | null
+    createdAt?: Date | string
+  }
+
   export type ProjectUpdateWithoutCallRoundInput = {
     id?: StringFieldUpdateOperationsInput | string
     code?: NullableStringFieldUpdateOperationsInput | string | null
@@ -52525,6 +54483,36 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CallRoundAttachmentUpdateWithoutCallRoundInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    fileName?: StringFieldUpdateOperationsInput | string
+    fileUrl?: StringFieldUpdateOperationsInput | string
+    fileSize?: NullableIntFieldUpdateOperationsInput | number | null
+    fileType?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CallRoundAttachmentUncheckedUpdateWithoutCallRoundInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    fileName?: StringFieldUpdateOperationsInput | string
+    fileUrl?: StringFieldUpdateOperationsInput | string
+    fileSize?: NullableIntFieldUpdateOperationsInput | number | null
+    fileType?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CallRoundAttachmentUncheckedUpdateManyWithoutCallRoundInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    fileName?: StringFieldUpdateOperationsInput | string
+    fileUrl?: StringFieldUpdateOperationsInput | string
+    fileSize?: NullableIntFieldUpdateOperationsInput | number | null
+    fileType?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ProjectCreateManyProjectTypeInput = {
@@ -52889,6 +54877,8 @@ export namespace Prisma {
     projectEndDate?: Date | string | null
     reviewDeadline?: Date | string | null
     reportingStartDate?: Date | string | null
+    defenseDate?: Date | string | null
+    projectLockDate?: Date | string | null
     startDate: Date | string
     endDate: Date | string
     maxProjects?: number | null
@@ -52955,6 +54945,8 @@ export namespace Prisma {
     projectEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reviewDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reportingStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    defenseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    projectLockDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     maxProjects?: NullableIntFieldUpdateOperationsInput | number | null
@@ -52981,6 +54973,7 @@ export namespace Prisma {
     availableInstructors?: CallRoundInstructorUpdateManyWithoutCallRoundNestedInput
     availableCouncilMembers?: CallRoundCouncilMemberUpdateManyWithoutCallRoundNestedInput
     councils?: CouncilUpdateManyWithoutCallRoundNestedInput
+    attachments?: CallRoundAttachmentUpdateManyWithoutCallRoundNestedInput
   }
 
   export type CallRoundUncheckedUpdateWithoutTemplateInput = {
@@ -52993,6 +54986,8 @@ export namespace Prisma {
     projectEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reviewDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reportingStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    defenseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    projectLockDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     maxProjects?: NullableIntFieldUpdateOperationsInput | number | null
@@ -53019,6 +55014,7 @@ export namespace Prisma {
     availableInstructors?: CallRoundInstructorUncheckedUpdateManyWithoutCallRoundNestedInput
     availableCouncilMembers?: CallRoundCouncilMemberUncheckedUpdateManyWithoutCallRoundNestedInput
     councils?: CouncilUncheckedUpdateManyWithoutCallRoundNestedInput
+    attachments?: CallRoundAttachmentUncheckedUpdateManyWithoutCallRoundNestedInput
   }
 
   export type CallRoundUncheckedUpdateManyWithoutTemplateInput = {
@@ -53031,6 +55027,8 @@ export namespace Prisma {
     projectEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reviewDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reportingStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    defenseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    projectLockDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     maxProjects?: NullableIntFieldUpdateOperationsInput | number | null

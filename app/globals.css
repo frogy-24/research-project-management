@@ -1,6 +1,5 @@
 @import "tailwindcss";
 @import "tw-animate-css";
-@import "shadcn/tailwind.css";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -74,11 +73,11 @@
   --chart-5: oklch(0.424 0.199 265.638);
   --radius: 0.625rem;
   --sidebar: oklch(0.223 0.03 257.18);
-  --sidebar-foreground: oklch(0.97 0.005 247.86);
+  --sidebar-foreground: oklch(0.85 0.01 257.18);
   --sidebar-primary: oklch(0.534 0.19 258.34);
   --sidebar-primary-foreground: oklch(0.985 0.004 247.86);
   --sidebar-accent: oklch(0.31 0.035 257.18);
-  --sidebar-accent-foreground: oklch(0.97 0.005 247.86);
+  --sidebar-accent-foreground: oklch(0.534 0.19 258.34);
   --sidebar-border: oklch(0.35 0.03 257.18);
   --sidebar-ring: oklch(0.64 0.19 258.34);
 }
@@ -121,14 +120,23 @@
   * {
     @apply border-border outline-ring/50;
   }
-  body {
-    @apply bg-background text-foreground;
-  }
   html {
-    @apply font-sans;
+    font-family: var(--font-roboto), system-ui, sans-serif;
+  }
+  body {
+    @apply bg-background text-foreground font-sans;
   }
 
-  /* Keep form typography consistent across pages and portal-based selects/dialog controls. */
+  /* Ensure Roboto is applied globally to all elements */
+  body,
+  h1, h2, h3, h4, h5, h6,
+  p,
+  span,
+  div,
+  a,
+  li,
+  td,
+  th,
   form,
   form *,
   input,
@@ -141,6 +149,6 @@
   [role='option'],
   [data-radix-select-content],
   [data-radix-select-trigger] {
-    font-family: var(--font-roboto), sans-serif;
+    font-family: var(--font-roboto), system-ui, sans-serif;
   }
 }

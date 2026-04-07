@@ -177,6 +177,8 @@ exports.Prisma.CallRoundScalarFieldEnum = {
   projectEndDate: 'projectEndDate',
   reviewDeadline: 'reviewDeadline',
   reportingStartDate: 'reportingStartDate',
+  defenseDate: 'defenseDate',
+  projectLockDate: 'projectLockDate',
   startDate: 'startDate',
   endDate: 'endDate',
   maxProjects: 'maxProjects',
@@ -424,6 +426,17 @@ exports.Prisma.ProjectCouncilAssignmentScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
+exports.Prisma.CallRoundAttachmentScalarFieldEnum = {
+  id: 'id',
+  callRoundId: 'callRoundId',
+  fileName: 'fileName',
+  fileUrl: 'fileUrl',
+  fileSize: 'fileSize',
+  fileType: 'fileType',
+  description: 'description',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -573,7 +586,8 @@ exports.Prisma.ModelName = {
   CallRoundCouncilMember: 'CallRoundCouncilMember',
   Council: 'Council',
   CouncilMemberAssignment: 'CouncilMemberAssignment',
-  ProjectCouncilAssignment: 'ProjectCouncilAssignment'
+  ProjectCouncilAssignment: 'ProjectCouncilAssignment',
+  CallRoundAttachment: 'CallRoundAttachment'
 };
 
 /**

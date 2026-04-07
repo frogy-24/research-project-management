@@ -1,6 +1,7 @@
 'use client';
 
 import { useMemo, useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { useCallRounds, useCreateCallRound, useUpdateCallRound, useDeleteCallRound, useApproveCallRound, useRejectCallRound } from '@/hooks/useCallRounds';
 import { useProgressTemplates } from '@/hooks/useProgressTemplates';
@@ -13,13 +14,14 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
-import { Plus, Edit, Trash2, Calendar, Building2, Info, Clock, DollarSign, FileText, Lock, Unlock, Eye, AlertTriangle, CheckCircle, XCircle } from 'lucide-react';
+import { Plus, Edit, Trash2, Calendar, Building2, Info, Clock, DollarSign, FileText, Lock, Unlock, Eye, AlertTriangle, CheckCircle, XCircle, Paperclip, ExternalLink } from 'lucide-react';
 import { MoneyInput } from '@/components/ui/money-input';
-import type { CallRound } from '@/types/call-round.schema';
+import type { CallRound, CallRoundAttachment } from '@/types/call-round.schema';
+import { callRoundsApi } from '@/api/call-rounds';
 
 const APPROVAL_STATUS_FILTERS = [
     { value: 'ALL', label: 'Tất cả trạng thái' },
@@ -44,6 +46,7 @@ export default function CallRoundsPage() {
 
     const [dialogOpen, setDialogOpen] = useState(false);
     const [editingRound, setEditingRound] = useState<CallRound | null>(null);
+    const [viewRound, setViewRound] = useState<CallRound | null>(null);
     
     // Confirmation dialogs state
     const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
@@ -549,10 +552,21 @@ export default function CallRoundsPage() {
                                                         <Button 
                                                             size="sm" 
                                                             variant="ghost" 
+                                                            onClick={() => {
+                                                                setViewRound(round);
+                                                            }}
+                                                            title="Xem chi tiết"
+                                                        >
+                                                            <Eye className="h-4 w-4" />
+                                                        </Button>
+                                                        <Button 
+                                                            size="sm" 
+                                                            variant="ghost" 
                                                             onClick={() => handleEdit(round)}
                                                             title={round.isLocked ? "Xem chi tiết" : "Chỉnh sửa"}
+                                                            disabled={round.isLocked}
                                                         >
-                                                            {round.isLocked ? <Eye className="h-4 w-4" /> : <Edit className="h-4 w-4" />}
+                                                            <Edit className="h-4 w-4" />
                                                         </Button>
                                                         <Button
                                                             size="sm"
@@ -1161,6 +1175,107 @@ export default function CallRoundsPage() {
                     </div>
                 </DialogContent>
             </Dialog>
+
+            {/* View Dialog with Attachments */}
+            <Dialog open={!!viewRound} onOpenChange={(open) => {
+                if (!open) setViewRound(null);
+            }}>
+                <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
+                    <DialogHeader>
+                        <div className="flex items-center gap-3">
+                            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-600 text-white">
+                                <Calendar className="h-5 w-5" />
+                            </div>
+                            <div>
+                                <DialogTitle className="text-xl">{viewRound?.name}</DialogTitle>
+                                <DialogDescription>
+                                    Mã đợt: <code className="rounded bg-muted px-1.5 py-0.5 text-xs">{viewRound?.id.slice(0, 8)}</code>
+                                </DialogDescription>
+                            </div>
+                        </div>
+                    </DialogHeader>
+                    {viewRound && <AttachmentsSection callRoundId={viewRound.id} />}
+                    <DialogFooter>
+                        <Button type="button" variant="outline" onClick={() => setViewRound(null)}>
+                            Đóng
+                        </Button>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
+        </div>
+    );
+}
+
+// Attachments Section Component
+function AttachmentsSection({ callRoundId }: { callRoundId: string }) {
+    const { data: attachments, isLoading } = useQuery({
+        queryKey: ['call-round-attachments', callRoundId],
+        queryFn: () => callRoundsApi.getAttachments(callRoundId),
+        enabled: !!callRoundId,
+    });
+
+    if (isLoading) {
+        return (
+            <div className="rounded-lg border bg-card p-4">
+                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                    <Paperclip className="h-4 w-4" />
+                    Đang tải tệp đính kèm...
+                </div>
+            </div>
+        );
+    }
+
+    if (!attachments || attachments.length === 0) {
+        return (
+            <div className="rounded-lg border bg-card p-4">
+                <div className="flex items-center gap-2 text-sm font-medium">
+                    <Paperclip className="h-4 w-4" />
+                    Tệp đính kèm
+                </div>
+                <Separator className="my-3" />
+                <div className="text-center py-4">
+                    <Paperclip className="w-8 h-8 mx-auto text-gray-400 mb-2" />
+                    <p className="text-sm text-muted-foreground">Không có tệp đính kèm</p>
+                </div>
+            </div>
+        );
+    }
+
+    return (
+        <div className="rounded-lg border bg-card p-4">
+            <div className="flex items-center gap-2 text-sm font-medium">
+                <Paperclip className="h-4 w-4" />
+                Tệp đính kèm ({attachments.length})
+            </div>
+            <Separator className="my-3" />
+            <div className="space-y-2">
+                {attachments.map((attachment: CallRoundAttachment) => (
+                    <div
+                        key={attachment.id}
+                        className="flex items-center justify-between p-3 rounded-md border bg-muted/50 hover:bg-muted/80 transition-colors"
+                    >
+                        <div className="flex items-center gap-3 min-w-0 flex-1">
+                            <FileText className="w-5 h-5 text-blue-500 flex-shrink-0" />
+                            <div className="min-w-0 flex-1">
+                                <p className="text-sm font-medium truncate">{attachment.fileName}</p>
+                                <p className="text-xs text-muted-foreground">
+                                    {attachment.fileSize ? `${(attachment.fileSize / 1024).toFixed(1)} KB` : 'N/A'} • {attachment.createdAt ? new Date(attachment.createdAt).toLocaleDateString('vi-VN') : 'N/A'}
+                                </p>
+                            </div>
+                        </div>
+                        <Button
+                            variant="ghost"
+                            size="sm"
+                            className="h-8 w-8 p-0"
+                            asChild
+                        >
+                            <a href={attachment.fileUrl} target="_blank" rel="noopener noreferrer">
+                                <ExternalLink className="w-4 h-4" />
+                            </a>
+                        </Button>
+                    </div>
+                ))}
+            </div>
         </div>
     );
 }

@@ -1,5 +1,18 @@
 import { z } from 'zod';
 
+// Schema cho file đính kèm của đợt đăng ký
+export const callRoundAttachmentSchema = z.object({
+    id: z.string(),
+    callRoundId: z.string(),
+    fileName: z.string(),
+    fileUrl: z.string(),
+    fileSize: z.number().nullable().optional(),
+    fileType: z.string().nullable().optional(),
+    description: z.string().nullable().optional(),
+    uploadedAt: z.coerce.date().nullable().optional(),
+    createdAt: z.coerce.date(),
+});
+
 export const callRoundSchema = z.object({
     id: z.string(),
     name: z.string(),
@@ -16,6 +29,8 @@ export const callRoundSchema = z.object({
     // Các mốc thời gian khác
     reviewDeadline: z.coerce.date().nullable().optional(),
     reportingStartDate: z.coerce.date().nullable().optional(),
+    defenseDate: z.coerce.date().nullable().optional(),
+    projectLockDate: z.coerce.date().nullable().optional(),
 
     // Legacy fields
     startDate: z.coerce.date(),
@@ -107,6 +122,9 @@ export const callRoundSchema = z.object({
             }),
         )
         .optional(),
+    attachments: z
+        .array(callRoundAttachmentSchema)
+        .optional(),
     _count: z
         .object({
             projects: z.number(),
@@ -132,6 +150,8 @@ const callRoundBaseSchema = z.object({
     // Các mốc thời gian khác (tùy chọn)
     reviewDeadline: z.coerce.date().nullable().optional(),
     reportingStartDate: z.coerce.date().nullable().optional(),
+    defenseDate: z.coerce.date().nullable().optional(),
+    projectLockDate: z.coerce.date().nullable().optional(),
 
     // Legacy fields (auto-populate from registration dates)
     startDate: z.coerce.date(),
@@ -168,6 +188,7 @@ export const createCallRoundSchema = callRoundBaseSchema
 export const updateCallRoundSchema = callRoundBaseSchema.partial();
 
 export type CallRound = z.infer<typeof callRoundSchema>;
+export type CallRoundAttachment = z.infer<typeof callRoundAttachmentSchema>;
 export type CreateCallRoundInput = z.infer<typeof createCallRoundSchema>;
 export type UpdateCallRoundInput = z.infer<typeof updateCallRoundSchema>;
 

@@ -1,9 +1,11 @@
 import { api } from '@/lib/axios';
 import {
     callRoundSchema,
+    callRoundAttachmentSchema,
     createCallRoundSchema,
     updateCallRoundSchema,
     type CallRound,
+    type CallRoundAttachment,
     type CreateCallRoundInput,
     type UpdateCallRoundInput,
 } from '@/types/call-round.schema';
@@ -14,6 +16,7 @@ type ApiSuccess<T> = {
 };
 
 const callRoundListSchema = callRoundSchema.array();
+const callRoundAttachmentListSchema = callRoundAttachmentSchema.array();
 
 export const callRoundsApi = {
     getAll: async (): Promise<CallRound[]> => {
@@ -35,6 +38,32 @@ export const callRoundsApi = {
 
     delete: async (id: string): Promise<{ id: string }> => {
         const response = await api.delete<ApiSuccess<{ id: string }>>(`/call-rounds/${id}`);
+        return response.data.data;
+    },
+
+    // File attachments
+    getAttachments: async (callRoundId: string): Promise<CallRoundAttachment[]> => {
+        const response = await api.get<ApiSuccess<CallRoundAttachment[]>>(`/call-rounds/${callRoundId}/attachments`);
+        return callRoundAttachmentListSchema.parse(response.data.data);
+    },
+
+    uploadAttachment: async (callRoundId: string, formData: FormData): Promise<CallRoundAttachment> => {
+        const response = await api.post<ApiSuccess<CallRoundAttachment>>(
+            `/call-rounds/${callRoundId}/attachments`,
+            formData,
+            {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            },
+        );
+        return callRoundAttachmentSchema.parse(response.data.data);
+    },
+
+    deleteAttachment: async (callRoundId: string, attachmentId: string): Promise<{ id: string }> => {
+        const response = await api.delete<ApiSuccess<{ id: string }>>(
+            `/call-rounds/${callRoundId}/attachments/${attachmentId}`,
+        );
         return response.data.data;
     },
 };

@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { Clock, CheckCircle, XCircle, PlusCircle, Eye, Pencil, Trash2 } from 'lucide-react';
+import { Clock, CheckCircle, XCircle, PlusCircle, Eye, Pencil, Trash2, Calendar, Users, FileText, Settings, BookOpen, GraduationCap, DollarSign, Hash, AlertCircle, Info, Paperclip, ExternalLink } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
@@ -17,16 +17,19 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Separator } from '@/components/ui/separator';
 import { toast } from 'sonner';
+import { useQuery } from '@tanstack/react-query';
 import { useCallRounds, useCreateCallRound, useUpdateCallRound, useDeleteCallRound } from '@/hooks/useCallRounds';
 import { useAuthSession } from '@/hooks/useAuth';
 import { useMe } from '@/hooks/useMe';
 import { useProgressTemplates } from '@/hooks/useProgressTemplates';
 import { useUsers } from '@/hooks/useUsers';
 import type { CallRound } from '@/types/call-round.schema';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Checkbox } from '@/components/ui/checkbox';
-import { ScrollArea } from '@/components/ui/scroll-area';
+import { CallRoundFormDialog } from '@/components/dean/call-round-form-dialog';
+import { callRoundsApi } from '@/api/call-rounds';
+import type { CallRoundAttachment } from '@/types/call-round.schema';
 
 type CallRoundFormData = {
     name: string;
@@ -35,6 +38,8 @@ type CallRoundFormData = {
     registrationEndDate: string;
     projectStartDate: string;
     projectEndDate: string;
+    defenseDate: string;
+    projectLockDate: string;
     maxProjects: string;
     requirements: string;
     templateId: string;
@@ -50,6 +55,8 @@ const initialFormData: CallRoundFormData = {
     registrationEndDate: '',
     projectStartDate: '',
     projectEndDate: '',
+    defenseDate: '',
+    projectLockDate: '',
     maxProjects: '',
     requirements: '',
     templateId: '',
@@ -62,23 +69,6 @@ export function DeanCallRoundsManagement() {
     const { data: session } = useAuthSession();
     const { data: me } = useMe();
     const { data: callRounds, isLoading, refetch } = useCallRounds();
-    const { data: templates, isLoading: isLoadingTemplates } = useProgressTemplates(true);
-    
-    // Fetch lecturers from dean's department
-    const { data: usersData, isLoading: isLoadingLecturers } = useUsers({
-        role: 'LECTURER',
-        departmentId: me?.departmentId || undefined,
-        limit: 100,
-    });
-    const lecturers = usersData?.data || [];
-    
-    // Fetch council members (LECTURER with COUNCIL capability)
-    // const { data: councilData, isLoading: isLoadingCouncil } = useUsers({
-    //     role: 'LECTURER',
-    //     departmentId: session?.user?.departmentId || undefined,
-    //     limit: 100,
-    // });
-    // const councilMembers = councilData?.data || [];
     const createCallRound = useCreateCallRound();
     const updateCallRound = useUpdateCallRound();
     const deleteCallRound = useDeleteCallRound();
@@ -87,7 +77,6 @@ export function DeanCallRoundsManagement() {
     const [editingCallRound, setEditingCallRound] = React.useState<CallRound | null>(null);
     const [viewingCallRound, setViewingCallRound] = React.useState<CallRound | null>(null);
     const [deletingCallRound, setDeletingCallRound] = React.useState<CallRound | null>(null);
-    const [formData, setFormData] = React.useState<CallRoundFormData>(initialFormData);
 
     // API đã filter sẵn: DEAN chỉ thấy đợt mình tạo, ADMIN thấy tất cả
     const deanCallRounds = callRounds || [];
@@ -113,78 +102,12 @@ export function DeanCallRoundsManagement() {
     };
 
     const handleOpenDialog = (callRound?: CallRound) => {
-        if (callRound) {
-            if (!canEditCallRound(callRound)) {
-                toast.error('Chỉ có thể chỉnh sửa đợt đăng ký khi đang ở trạng thái chờ duyệt.');
-                return;
-            }
-            setEditingCallRound(callRound);
-            setFormData({
-                name: callRound.name,
-                description: callRound.description || '',
-                registrationStartDate: new Date(callRound.registrationStartDate).toISOString().split('T')[0],
-                registrationEndDate: new Date(callRound.registrationEndDate).toISOString().split('T')[0],
-                projectStartDate: callRound.projectStartDate
-                    ? new Date(callRound.projectStartDate).toISOString().split('T')[0]
-                    : '',
-                projectEndDate: callRound.projectEndDate
-                    ? new Date(callRound.projectEndDate).toISOString().split('T')[0]
-                    : '',
-                maxProjects: callRound.maxProjects?.toString() || '',
-                requirements: callRound.requirements || '',
-                templateId: callRound.templateId || '',
-                instructorIds: callRound.availableInstructors?.map((i) => i.instructorId) || [],
-                councilMemberIds: callRound.availableCouncilMembers?.map((c) => c.councilMemberId) || [],
-                applicableFor: callRound.applicableFor || 'STUDENT',
-            });
-        } else {
-            setEditingCallRound(null);
-            setFormData(initialFormData);
+        if (callRound && !canEditCallRound(callRound)) {
+            toast.error('Chỉ có thể chỉnh sửa đợt đăng ký khi đang ở trạng thái chờ duyệt.');
+            return;
         }
+        setEditingCallRound(callRound || null);
         setIsDialogOpen(true);
-    };
-
-    const handleCloseDialog = () => {
-        setIsDialogOpen(false);
-        setEditingCallRound(null);
-        setFormData(initialFormData);
-    };
-
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-
-        try {
-            const payload: any = {
-                name: formData.name,
-                description: formData.description || undefined,
-                registrationStartDate: new Date(formData.registrationStartDate),
-                registrationEndDate: new Date(formData.registrationEndDate),
-                startDate: new Date(formData.registrationStartDate),
-                endDate: new Date(formData.registrationEndDate),
-                projectStartDate: formData.projectStartDate ? new Date(formData.projectStartDate) : undefined,
-                projectEndDate: formData.projectEndDate ? new Date(formData.projectEndDate) : undefined,
-                maxProjects: formData.maxProjects ? parseInt(formData.maxProjects) : undefined,
-                requirements: formData.requirements || undefined,
-                templateId: formData.templateId && formData.templateId !== 'none' ? formData.templateId : null,
-                instructorIds: formData.instructorIds,
-                councilMemberIds: formData.councilMemberIds,
-                applicableFor: formData.applicableFor,
-                isActive: true,
-                isLocked: false,
-            };
-
-            if (editingCallRound) {
-                await updateCallRound.mutateAsync({ id: editingCallRound.id, ...payload });
-                toast.success('Cập nhật đợt đăng ký thành công!');
-            } else {
-                await createCallRound.mutateAsync(payload);
-                toast.success('Tạo đợt đăng ký thành công! Đang chờ Admin phê duyệt.');
-            }
-
-            handleCloseDialog();
-        } catch (error: any) {
-            toast.error(error.response?.data?.error || 'Có lỗi xảy ra!');
-        }
     };
 
     const handleDelete = async () => {
@@ -259,6 +182,8 @@ export function DeanCallRoundsManagement() {
                                 <TableHead>Tên đợt</TableHead>
                                 <TableHead>Thời gian đăng ký</TableHead>
                                 <TableHead>Thời gian thực hiện</TableHead>
+                                <TableHead>Ngày chốt đề tài</TableHead>
+                                <TableHead>Ngày bảo vệ</TableHead>
                                 <TableHead>Biểu mẫu</TableHead>
                                 <TableHead>Trạng thái</TableHead>
                                 <TableHead>Tiến độ</TableHead>
@@ -268,7 +193,7 @@ export function DeanCallRoundsManagement() {
                         <TableBody>
                             {deanCallRounds.length === 0 ? (
                                 <TableRow>
-                                    <TableCell colSpan={7} className="text-center text-muted-foreground">
+                                    <TableCell colSpan={9} className="text-center text-muted-foreground">
                                         Chưa có đợt đăng ký nào
                                     </TableCell>
                                 </TableRow>
@@ -306,6 +231,24 @@ export function DeanCallRoundsManagement() {
                                                 </div>
                                             ) : (
                                                 <span className="text-muted-foreground text-sm">Chưa xác định</span>
+                                            )}
+                                        </TableCell>
+                                        <TableCell>
+                                            {callRound.projectLockDate ? (
+                                                <div className="text-sm">
+                                                    {new Date(callRound.projectLockDate).toLocaleDateString('vi-VN')}
+                                                </div>
+                                            ) : (
+                                                <span className="text-muted-foreground text-sm">-</span>
+                                            )}
+                                        </TableCell>
+                                        <TableCell>
+                                            {callRound.defenseDate ? (
+                                                <div className="text-sm">
+                                                    {new Date(callRound.defenseDate).toLocaleDateString('vi-VN')}
+                                                </div>
+                                            ) : (
+                                                <span className="text-muted-foreground text-sm">-</span>
                                             )}
                                         </TableCell>
                                         <TableCell>
@@ -368,339 +311,13 @@ export function DeanCallRoundsManagement() {
             </Card>
 
             {/* Create/Edit Dialog */}
-            <Dialog open={isDialogOpen} onOpenChange={handleCloseDialog}>
-                <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto sm:max-w-1/2">
-                    <DialogHeader>
-                        <DialogTitle>{editingCallRound ? 'Chỉnh sửa đợt đăng ký' : 'Tạo đợt đăng ký mới'}</DialogTitle>
-                        <DialogDescription>
-                            {editingCallRound
-                                ? 'Cập nhật thông tin đợt đăng ký'
-                                : 'Đợt đăng ký sẽ được gửi đến Admin để phê duyệt'}
-                        </DialogDescription>
-                    </DialogHeader>
-                    <form onSubmit={handleSubmit} className="space-y-4">
-                        <div className="space-y-2">
-                            <Label htmlFor="name">Tên đợt đăng ký *</Label>
-                            <Input
-                                id="name"
-                                value={formData.name}
-                                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                                placeholder="VD: Đợt đăng ký đề tài Khoa CNTT - Học kỳ 1/2026"
-                                required
-                            />
-                        </div>
-
-                        <div className="space-y-2">
-                            <Label htmlFor="description">Mô tả</Label>
-                            <Textarea
-                                id="description"
-                                value={formData.description}
-                                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                                placeholder="Mô tả chi tiết về đợt đăng ký..."
-                                rows={3}
-                            />
-                        </div>
-
-                        <div className="grid grid-cols-2 gap-4">
-                            <div className="space-y-2">
-                                <Label htmlFor="registrationStartDate">Ngày bắt đầu đăng ký *</Label>
-                                <Input
-                                    id="registrationStartDate"
-                                    type="date"
-                                    value={formData.registrationStartDate}
-                                    onChange={(e) =>
-                                        setFormData({ ...formData, registrationStartDate: e.target.value })
-                                    }
-                                    required
-                                />
-                            </div>
-                            <div className="space-y-2">
-                                <Label htmlFor="registrationEndDate">Ngày kết thúc đăng ký *</Label>
-                                <Input
-                                    id="registrationEndDate"
-                                    type="date"
-                                    value={formData.registrationEndDate}
-                                    onChange={(e) => setFormData({ ...formData, registrationEndDate: e.target.value })}
-                                    required
-                                />
-                            </div>
-                        </div>
-
-                        <div className="grid grid-cols-2 gap-4">
-                            <div className="space-y-2">
-                                <Label htmlFor="projectStartDate">Ngày bắt đầu thực hiện</Label>
-                                <Input
-                                    id="projectStartDate"
-                                    type="date"
-                                    value={formData.projectStartDate}
-                                    onChange={(e) => setFormData({ ...formData, projectStartDate: e.target.value })}
-                                />
-                            </div>
-                            <div className="space-y-2">
-                                <Label htmlFor="projectEndDate">Ngày kết thúc thực hiện</Label>
-                                <Input
-                                    id="projectEndDate"
-                                    type="date"
-                                    value={formData.projectEndDate}
-                                    onChange={(e) => setFormData({ ...formData, projectEndDate: e.target.value })}
-                                />
-                            </div>
-                        </div>
-
-                        <div className="space-y-2">
-                            <Label htmlFor="maxProjects">Số lượng đề tài tối đa</Label>
-                            <Input
-                                id="maxProjects"
-                                type="number"
-                                min="1"
-                                value={formData.maxProjects}
-                                onChange={(e) => setFormData({ ...formData, maxProjects: e.target.value })}
-                                placeholder="Để trống nếu không giới hạn"
-                            />
-                        </div>
-
-                        <div className="space-y-2">
-                            <Label htmlFor="applicableFor">Đối tượng áp dụng *</Label>
-                            <Select
-                                value={formData.applicableFor}
-                                onValueChange={(value: 'STUDENT' | 'LECTURER' | 'BOTH') => setFormData({ ...formData, applicableFor: value })}
-                            >
-                                <SelectTrigger id="applicableFor">
-                                    <SelectValue placeholder="Chọn đối tượng áp dụng" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectItem value="STUDENT">Sinh viên</SelectItem>
-                                    <SelectItem value="LECTURER">Giảng viên</SelectItem>
-                                    <SelectItem value="BOTH">Cả hai</SelectItem>
-                                </SelectContent>
-                            </Select>
-                            <p className="text-xs text-muted-foreground">
-                                Xác định đợt đăng ký này dành cho đối tượng nào
-                            </p>
-                        </div>
-
-                        <div className="space-y-2">
-                            <Label htmlFor="requirements">Yêu cầu & Điều kiện</Label>
-                            <Textarea
-                                id="requirements"
-                                value={formData.requirements}
-                                onChange={(e) => setFormData({ ...formData, requirements: e.target.value })}
-                                placeholder="Các yêu cầu, điều kiện đăng ký..."
-                                rows={3}
-                            />
-                        </div>
-
-                        <div className="space-y-2">
-                            <Label htmlFor="templateId">Biểu mẫu báo cáo tiến độ</Label>
-                            <Select
-                                value={formData.templateId}
-                                onValueChange={(value) => setFormData({ ...formData, templateId: value })}
-                            >
-                                <SelectTrigger id="templateId">
-                                    <SelectValue placeholder="Chọn biểu mẫu (tùy chọn)" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    {isLoadingTemplates ? (
-                                        <SelectItem value="loading" disabled>
-                                            Đang tải...
-                                        </SelectItem>
-                                    ) : templates && templates.length > 0 ? (
-                                        <>
-                                            <SelectItem value="none">Không sử dụng biểu mẫu</SelectItem>
-                                            {templates.map((template) => (
-                                                <SelectItem key={template.id} value={template.id}>
-                                                    {template.name}
-                                                </SelectItem>
-                                            ))}
-                                        </>
-                                    ) : (
-                                        <SelectItem value="no-templates" disabled>
-                                            Chưa có biểu mẫu nào
-                                        </SelectItem>
-                                    )}
-                                </SelectContent>
-                            </Select>
-                            <p className="text-xs text-muted-foreground">
-                                Biểu mẫu này sẽ được sử dụng để hướng dẫn sinh viên báo cáo tiến độ
-                            </p>
-                        </div>
-
-                        <div className="space-y-2">
-                            <div className="flex items-center justify-between">
-                                <Label>Giảng viên hướng dẫn (Chọn nhiều)</Label>
-                                {lecturers.length > 0 && (
-                                    <Button
-                                        type="button"
-                                        variant="ghost"
-                                        size="sm"
-                                        className="h-8 text-xs"
-                                        onClick={() => {
-                                            if (formData.instructorIds.length === lecturers.length) {
-                                                setFormData({ ...formData, instructorIds: [] });
-                                            } else {
-                                                setFormData({
-                                                    ...formData,
-                                                    instructorIds: lecturers.map((l) => l.id),
-                                                });
-                                            }
-                                        }}
-                                    >
-                                        {formData.instructorIds.length === lecturers.length
-                                            ? 'Bỏ chọn tất cả'
-                                            : 'Chọn tất cả'}
-                                    </Button>
-                                )}
-                            </div>
-                            <div className="rounded-md border p-4">
-                                {isLoadingLecturers ? (
-                                    <p className="text-sm text-muted-foreground">Đang tải danh sách giảng viên...</p>
-                                ) : lecturers.length === 0 ? (
-                                    <p className="text-sm text-muted-foreground">Chưa có giảng viên nào trong khoa</p>
-                                ) : (
-                                    <ScrollArea className="h-50">
-                                        <div className="space-y-2">
-                                            {lecturers.map((lecturer) => (
-                                                <div key={lecturer.id} className="flex items-center space-x-2">
-                                                    <Checkbox
-                                                        id={`lecturer-${lecturer.id}`}
-                                                        checked={formData.instructorIds.includes(lecturer.id)}
-                                                        onCheckedChange={(checked) => {
-                                                            if (checked) {
-                                                                setFormData({
-                                                                    ...formData,
-                                                                    instructorIds: [
-                                                                        ...formData.instructorIds,
-                                                                        lecturer.id,
-                                                                    ],
-                                                                });
-                                                            } else {
-                                                                setFormData({
-                                                                    ...formData,
-                                                                    instructorIds: formData.instructorIds.filter(
-                                                                        (id) => id !== lecturer.id,
-                                                                    ),
-                                                                });
-                                                            }
-                                                        }}
-                                                    />
-                                                    <label
-                                                        htmlFor={`lecturer-${lecturer.id}`}
-                                                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
-                                                    >
-                                                        {lecturer.name} ({lecturer.email})
-                                                    </label>
-                                                </div>
-                                            ))}
-                                        </div>
-                                    </ScrollArea>
-                                )}
-                            </div>
-                            <p className="text-xs text-muted-foreground">
-                                Chọn giảng viên có thể hướng dẫn đề tài trong đợt này. Sinh viên chỉ được chọn giảng
-                                viên từ danh sách này.
-                            </p>
-                            {formData.instructorIds.length > 0 && (
-                                <p className="text-xs font-medium text-blue-600">
-                                    Đã chọn: {formData.instructorIds.length} giảng viên
-                                </p>
-                            )}
-                        </div>
-
-                        <div className="space-y-2">
-                            <div className="flex items-center justify-between">
-                                <Label>Thành viên hội đồng (Chọn nhiều)</Label>
-                                {lecturers.length > 0 && (
-                                    <Button
-                                        type="button"
-                                        variant="ghost"
-                                        size="sm"
-                                        className="h-8 text-xs"
-                                        onClick={() => {
-                                            if (formData.councilMemberIds.length === lecturers.length) {
-                                                setFormData({ ...formData, councilMemberIds: [] });
-                                            } else {
-                                                setFormData({
-                                                    ...formData,
-                                                    councilMemberIds: lecturers.map((l) => l.id),
-                                                });
-                                            }
-                                        }}
-                                    >
-                                        {formData.councilMemberIds.length === lecturers.length
-                                            ? 'Bỏ chọn tất cả'
-                                            : 'Chọn tất cả'}
-                                    </Button>
-                                )}
-                            </div>
-                            <div className="rounded-md border p-4">
-                                {isLoadingLecturers ? (
-                                    <p className="text-sm text-muted-foreground">Đang tải danh sách giảng viên...</p>
-                                ) : lecturers.length === 0 ? (
-                                    <p className="text-sm text-muted-foreground">Chưa có giảng viên nào trong khoa</p>
-                                ) : (
-                                    <ScrollArea className="h-50">
-                                        <div className="space-y-2">
-                                            {lecturers.map((member) => (
-                                                <div key={member.id} className="flex items-center space-x-2">
-                                                    <Checkbox
-                                                        id={`council-${member.id}`}
-                                                        checked={formData.councilMemberIds.includes(member.id)}
-                                                        onCheckedChange={(checked) => {
-                                                            if (checked) {
-                                                                setFormData({
-                                                                    ...formData,
-                                                                    councilMemberIds: [
-                                                                        ...formData.councilMemberIds,
-                                                                        member.id,
-                                                                    ],
-                                                                });
-                                                            } else {
-                                                                setFormData({
-                                                                    ...formData,
-                                                                    councilMemberIds: formData.councilMemberIds.filter(
-                                                                        (id) => id !== member.id,
-                                                                    ),
-                                                                });
-                                                            }
-                                                        }}
-                                                    />
-                                                    <label
-                                                        htmlFor={`council-${member.id}`}
-                                                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
-                                                    >
-                                                        {member.name} ({member.email})
-                                                    </label>
-                                                </div>
-                                            ))}
-                                        </div>
-                                    </ScrollArea>
-                                )}
-                            </div>
-                            <p className="text-xs text-muted-foreground">
-                                Chọn thành viên hội đồng có thể chấm điểm và nghiệm thu đề tài trong đợt này.
-                            </p>
-                            {formData.councilMemberIds.length > 0 && (
-                                <p className="text-xs font-medium text-emerald-600">
-                                    Đã chọn: {formData.councilMemberIds.length} thành viên
-                                </p>
-                            )}
-                        </div>
-
-                        <DialogFooter>
-                            <Button type="button" variant="outline" onClick={handleCloseDialog}>
-                                Hủy
-                            </Button>
-                            <Button type="submit" disabled={createCallRound.isPending || updateCallRound.isPending}>
-                                {createCallRound.isPending || updateCallRound.isPending
-                                    ? 'Đang xử lý...'
-                                    : editingCallRound
-                                      ? 'Cập nhật'
-                                      : 'Tạo mới'}
-                            </Button>
-                        </DialogFooter>
-                    </form>
-                </DialogContent>
-            </Dialog>
+            <CallRoundFormDialog
+                open={isDialogOpen}
+                onOpenChange={setIsDialogOpen}
+                editingCallRound={editingCallRound}
+                departmentId={me?.departmentId}
+                onSuccess={() => refetch()}
+            />
 
             <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
                 <DialogContent>
@@ -728,6 +345,7 @@ export function DeanCallRoundsManagement() {
                 </DialogContent>
             </Dialog>
 
+            {/* View Detail Dialog */}
             <Dialog
                 open={Boolean(viewingCallRound)}
                 onOpenChange={(open) => {
@@ -736,43 +354,434 @@ export function DeanCallRoundsManagement() {
                     }
                 }}
             >
-                <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+                <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto sm:max-w-1/2">
                     <DialogHeader>
-                        <DialogTitle>Chi tiết đợt đăng ký</DialogTitle>
-                        <DialogDescription>Thông tin tổng quan và trạng thái vận hành của đợt đăng ký.</DialogDescription>
+                        <div className="flex items-center gap-3">
+                            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-600 text-white">
+                                <Calendar className="h-5 w-5" />
+                            </div>
+                            <div>
+                                <DialogTitle className="text-xl">{viewingCallRound?.name}</DialogTitle>
+                                <DialogDescription>
+                                    Mã đợt: <code className="rounded bg-muted px-1.5 py-0.5 text-xs">{viewingCallRound?.id.slice(0, 8)}</code>
+                                </DialogDescription>
+                            </div>
+                        </div>
                     </DialogHeader>
 
                     {viewingCallRound && (
-                        <div className="space-y-3 text-sm">
-                            <div>
-                                <p className="text-muted-foreground">Tên đợt</p>
-                                <p className="font-medium">{viewingCallRound.name}</p>
-                            </div>
-                            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-                                <div>
-                                    <p className="text-muted-foreground">Bắt đầu đăng ký</p>
-                                    <p>{new Date(viewingCallRound.registrationStartDate).toLocaleDateString('vi-VN')}</p>
+                        <Tabs defaultValue="overview" className="mt-2 flex flex-col">
+                            <TabsList className="grid w-full grid-cols-4">
+                                <TabsTrigger value="overview">
+                                    <Info className="mr-1.5 h-3.5 w-3.5" />
+                                    Tổng quan
+                                </TabsTrigger>
+                                <TabsTrigger value="timeline">
+                                    <Calendar className="mr-1.5 h-3.5 w-3.5" />
+                                    Thời gian
+                                </TabsTrigger>
+                                <TabsTrigger value="config">
+                                    <Settings className="mr-1.5 h-3.5 w-3.5" />
+                                    Cấu hình
+                                </TabsTrigger>
+                                <TabsTrigger value="personnel">
+                                    <Users className="mr-1.5 h-3.5 w-3.5" />
+                                    Nhân sự
+                                </TabsTrigger>
+                            </TabsList>
+
+                            {/* Tab: Tổng quan */}
+                            <TabsContent value="overview" className="space-y-4">
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div className="rounded-lg border bg-card p-4">
+                                        <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                                            <CheckCircle className="h-4 w-4" />
+                                            Trạng thái phê duyệt
+                                        </div>
+                                        <div className="mt-2">{getStatusBadge(viewingCallRound)}</div>
+                                    </div>
+                                    <div className="rounded-lg border bg-card p-4">
+                                        <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                                            <Clock className="h-4 w-4" />
+                                            Trạng thái vận hành
+                                        </div>
+                                        <div className="mt-2">{getRoundPhaseBadge(viewingCallRound)}</div>
+                                    </div>
                                 </div>
-                                <div>
-                                    <p className="text-muted-foreground">Kết thúc đăng ký</p>
-                                    <p>{new Date(viewingCallRound.registrationEndDate).toLocaleDateString('vi-VN')}</p>
+
+                                <div className="rounded-lg border bg-card p-4">
+                                    <div className="flex items-center gap-2 text-sm font-medium">
+                                        <FileText className="h-4 w-4" />
+                                        Mô tả
+                                    </div>
+                                    <Separator className="my-3" />
+                                    <p className="text-sm leading-relaxed">
+                                        {viewingCallRound.description || (
+                                            <span className="text-muted-foreground italic">Không có mô tả</span>
+                                        )}
+                                    </p>
                                 </div>
-                            </div>
-                            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-                                <div>
-                                    <p className="text-muted-foreground">Trạng thái phê duyệt</p>
-                                    <div className="mt-1">{getStatusBadge(viewingCallRound)}</div>
+
+                                <div className="rounded-lg border bg-card p-4">
+                                    <div className="flex items-center gap-2 text-sm font-medium">
+                                        <AlertCircle className="h-4 w-4" />
+                                        Yêu cầu & Điều kiện
+                                    </div>
+                                    <Separator className="my-3" />
+                                    <p className="text-sm leading-relaxed">
+                                        {viewingCallRound.requirements || (
+                                            <span className="text-muted-foreground italic">Không có yêu cầu đặc biệt</span>
+                                        )}
+                                    </p>
                                 </div>
-                                <div>
-                                    <p className="text-muted-foreground">Trạng thái vận hành</p>
-                                    <div className="mt-1">{getRoundPhaseBadge(viewingCallRound)}</div>
+
+                                {viewingCallRound.approvalStatus === 'REJECTED' && viewingCallRound.approvalNote && (
+                                    <div className="rounded-lg border border-rose-200 bg-rose-50 p-4">
+                                        <div className="flex items-center gap-2 text-sm font-medium text-rose-700">
+                                            <XCircle className="h-4 w-4" />
+                                            Lý do từ chối
+                                        </div>
+                                        <p className="mt-2 text-sm text-rose-600">{viewingCallRound.approvalNote}</p>
+                                    </div>
+                                )}
+
+                                {/* Attachments Section */}
+                                <AttachmentsSection callRoundId={viewingCallRound.id} />
+                            </TabsContent>
+
+                            {/* Tab: Thời gian */}
+                            <TabsContent value="timeline" className="space-y-4">
+                                <div className="rounded-lg border bg-card p-4">
+                                    <div className="flex items-center gap-2 text-sm font-medium text-blue-600">
+                                        <Calendar className="h-4 w-4" />
+                                        Thời gian đăng ký
+                                    </div>
+                                    <Separator className="my-3" />
+                                    <div className="grid grid-cols-2 gap-4">
+                                        <div>
+                                            <p className="text-xs text-muted-foreground">Bắt đầu</p>
+                                            <p className="mt-1 font-medium">
+                                                {new Date(viewingCallRound.registrationStartDate).toLocaleDateString('vi-VN', {
+                                                    weekday: 'long',
+                                                    year: 'numeric',
+                                                    month: 'long',
+                                                    day: 'numeric',
+                                                })}
+                                            </p>
+                                        </div>
+                                        <div>
+                                            <p className="text-xs text-muted-foreground">Kết thúc</p>
+                                            <p className="mt-1 font-medium">
+                                                {new Date(viewingCallRound.registrationEndDate).toLocaleDateString('vi-VN', {
+                                                    weekday: 'long',
+                                                    year: 'numeric',
+                                                    month: 'long',
+                                                    day: 'numeric',
+                                                })}
+                                            </p>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                            <div>
-                                <p className="text-muted-foreground">Mô tả</p>
-                                <p>{viewingCallRound.description || 'Không có mô tả'}</p>
-                            </div>
-                        </div>
+
+                                <div className="rounded-lg border bg-card p-4">
+                                    <div className="flex items-center gap-2 text-sm font-medium text-emerald-600">
+                                        <BookOpen className="h-4 w-4" />
+                                        Thời gian thực hiện đề tài
+                                    </div>
+                                    <Separator className="my-3" />
+                                    {viewingCallRound.projectStartDate && viewingCallRound.projectEndDate ? (
+                                        <div className="grid grid-cols-2 gap-4">
+                                            <div>
+                                                <p className="text-xs text-muted-foreground">Bắt đầu</p>
+                                                <p className="mt-1 font-medium">
+                                                    {new Date(viewingCallRound.projectStartDate).toLocaleDateString('vi-VN', {
+                                                        year: 'numeric',
+                                                        month: 'long',
+                                                        day: 'numeric',
+                                                    })}
+                                                </p>
+                                            </div>
+                                            <div>
+                                                <p className="text-xs text-muted-foreground">Kết thúc</p>
+                                                <p className="mt-1 font-medium">
+                                                    {new Date(viewingCallRound.projectEndDate).toLocaleDateString('vi-VN', {
+                                                        year: 'numeric',
+                                                        month: 'long',
+                                                        day: 'numeric',
+                                                    })}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    ) : (
+                                        <p className="text-sm text-muted-foreground italic">Chưa xác định</p>
+                                    )}
+                                </div>
+
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div className="rounded-lg border bg-card p-4">
+                                        <div className="flex items-center gap-2 text-sm font-medium text-amber-600">
+                                            <Calendar className="h-4 w-4" />
+                                            Ngày chốt đề tài
+                                        </div>
+                                        <Separator className="my-3" />
+                                        {viewingCallRound.projectLockDate ? (
+                                            <p className="font-medium">
+                                                {new Date(viewingCallRound.projectLockDate).toLocaleDateString('vi-VN', {
+                                                    year: 'numeric',
+                                                    month: 'long',
+                                                    day: 'numeric',
+                                                })}
+                                            </p>
+                                        ) : (
+                                            <p className="text-sm text-muted-foreground italic">Chưa thiết lập</p>
+                                        )}
+                                        <p className="mt-1 text-xs text-muted-foreground">Hạn chót đăng ký/thay đổi đề tài</p>
+                                    </div>
+                                    <div className="rounded-lg border bg-card p-4">
+                                        <div className="flex items-center gap-2 text-sm font-medium text-purple-600">
+                                            <GraduationCap className="h-4 w-4" />
+                                            Ngày bảo vệ đề tài
+                                        </div>
+                                        <Separator className="my-3" />
+                                        {viewingCallRound.defenseDate ? (
+                                            <p className="font-medium">
+                                                {new Date(viewingCallRound.defenseDate).toLocaleDateString('vi-VN', {
+                                                    year: 'numeric',
+                                                    month: 'long',
+                                                    day: 'numeric',
+                                                })}
+                                            </p>
+                                        ) : (
+                                            <p className="text-sm text-muted-foreground italic">Chưa thiết lập</p>
+                                        )}
+                                    </div>
+                                </div>
+
+                                {viewingCallRound.reviewDeadline && (
+                                    <div className="rounded-lg border bg-card p-4">
+                                        <div className="flex items-center gap-2 text-sm font-medium">
+                                            <Calendar className="h-4 w-4" />
+                                            Hạn nộp hồ sơ thẩm định
+                                        </div>
+                                        <p className="mt-2 font-medium">
+                                            {new Date(viewingCallRound.reviewDeadline).toLocaleDateString('vi-VN', {
+                                                year: 'numeric',
+                                                month: 'long',
+                                                day: 'numeric',
+                                            })}
+                                        </p>
+                                    </div>
+                                )}
+                            </TabsContent>
+
+                            {/* Tab: Cấu hình */}
+                            <TabsContent value="config" className="space-y-4">
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div className="rounded-lg border bg-card p-4">
+                                        <div className="flex items-center gap-2 text-sm font-medium">
+                                            <Hash className="h-4 w-4" />
+                                            Số lượng đề tài tối đa
+                                        </div>
+                                        <Separator className="my-3" />
+                                        {viewingCallRound.maxProjects ? (
+                                            <p className="text-2xl font-bold">{viewingCallRound.maxProjects}</p>
+                                        ) : (
+                                            <p className="text-sm text-muted-foreground italic">Không giới hạn</p>
+                                        )}
+                                    </div>
+                                    <div className="rounded-lg border bg-card p-4">
+                                        <div className="flex items-center gap-2 text-sm font-medium">
+                                            <DollarSign className="h-4 w-4" />
+                                            Giới hạn kinh phí
+                                        </div>
+                                        <Separator className="my-3" />
+                                        {viewingCallRound.budgetLimit ? (
+                                            <p className="text-2xl font-bold text-emerald-600">
+                                                {new Intl.NumberFormat('vi-VN', {
+                                                    style: 'currency',
+                                                    currency: 'VND',
+                                                }).format(viewingCallRound.budgetLimit)}
+                                            </p>
+                                        ) : (
+                                            <p className="text-sm text-muted-foreground italic">Theo quy định</p>
+                                        )}
+                                    </div>
+                                </div>
+
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div className="rounded-lg border bg-card p-4">
+                                        <div className="flex items-center gap-2 text-sm font-medium">
+                                            <Users className="h-4 w-4" />
+                                            Đối tượng áp dụng
+                                        </div>
+                                        <Separator className="my-3" />
+                                        <Badge
+                                            variant={
+                                                viewingCallRound.applicableFor === 'BOTH'
+                                                    ? 'default'
+                                                    : 'secondary'
+                                            }
+                                        >
+                                            {viewingCallRound.applicableFor === 'STUDENT' && 'Sinh viên'}
+                                            {viewingCallRound.applicableFor === 'LECTURER' && 'Giảng viên'}
+                                            {viewingCallRound.applicableFor === 'BOTH' && 'Cả hai'}
+                                        </Badge>
+                                    </div>
+                                    <div className="rounded-lg border bg-card p-4">
+                                        <div className="flex items-center gap-2 text-sm font-medium">
+                                            <FileText className="h-4 w-4" />
+                                            Biểu mẫu báo cáo
+                                        </div>
+                                        <Separator className="my-3" />
+                                        {viewingCallRound.template ? (
+                                            <Badge variant="secondary">{viewingCallRound.template.name}</Badge>
+                                        ) : (
+                                            <p className="text-sm text-muted-foreground italic">Chưa thiết lập</p>
+                                        )}
+                                    </div>
+                                </div>
+
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div className="rounded-lg border bg-card p-4">
+                                        <div className="flex items-center gap-2 text-sm font-medium">
+                                            <CheckCircle className="h-4 w-4" />
+                                            Trạng thái kích hoạt
+                                        </div>
+                                        <Separator className="my-3" />
+                                        <Badge
+                                            variant={viewingCallRound.isActive ? 'default' : 'secondary'}
+                                            className={viewingCallRound.isActive ? 'bg-emerald-500' : ''}
+                                        >
+                                            {viewingCallRound.isActive ? 'Đang kích hoạt' : 'Không kích hoạt'}
+                                        </Badge>
+                                    </div>
+                                    <div className="rounded-lg border bg-card p-4">
+                                        <div className="flex items-center gap-2 text-sm font-medium">
+                                            <AlertCircle className="h-4 w-4" />
+                                            Trạng thái khóa
+                                        </div>
+                                        <Separator className="my-3" />
+                                        <Badge
+                                            variant={viewingCallRound.isLocked ? 'destructive' : 'outline'}
+                                        >
+                                            {viewingCallRound.isLocked ? 'Đã khóa' : 'Chưa khóa'}
+                                        </Badge>
+                                    </div>
+                                </div>
+
+                                {viewingCallRound.guidelines && (
+                                    <div className="rounded-lg border bg-card p-4">
+                                        <div className="flex items-center gap-2 text-sm font-medium">
+                                            <FileText className="h-4 w-4" />
+                                            Hướng dẫn bổ sung
+                                        </div>
+                                        <Separator className="my-3" />
+                                        <p className="text-sm leading-relaxed">{viewingCallRound.guidelines}</p>
+                                    </div>
+                                )}
+
+                                {viewingCallRound.contactInfo && (
+                                    <div className="rounded-lg border bg-card p-4">
+                                        <div className="flex items-center gap-2 text-sm font-medium">
+                                            <Users className="h-4 w-4" />
+                                            Thông tin liên hệ
+                                        </div>
+                                        <Separator className="my-3" />
+                                        <p className="text-sm">{viewingCallRound.contactInfo}</p>
+                                    </div>
+                                )}
+                            </TabsContent>
+
+                            {/* Tab: Nhân sự */}
+                            <TabsContent value="personnel" className="space-y-4">
+                                <Tabs defaultValue="instructors" className="w-full flex flex-col gap-4">
+                                    <TabsList className="grid w-full grid-cols-2">
+                                        <TabsTrigger value="instructors">
+                                            <BookOpen className="mr-1.5 h-3.5 w-3.5" />
+                                            Giảng viên hướng dẫn
+                                        </TabsTrigger>
+                                        <TabsTrigger value="council-members">
+                                            <GraduationCap className="mr-1.5 h-3.5 w-3.5" />
+                                            Thành viên hội đồng
+                                        </TabsTrigger>
+                                    </TabsList>
+
+                                    {/* Sub-tab: Giảng viên hướng dẫn */}
+                                    <TabsContent value="instructors" className="mt-4">
+                                        <div className="rounded-lg border bg-card p-4">
+                                            <div className="flex items-center gap-2 text-sm font-medium text-blue-600">
+                                                <BookOpen className="h-4 w-4" />
+                                                Danh sách giảng viên hướng dẫn
+                                            </div>
+                                            <Separator className="my-3" />
+                                            {viewingCallRound.availableInstructors && viewingCallRound.availableInstructors.length > 0 ? (
+                                                <div className="space-y-2">
+                                                    {viewingCallRound.availableInstructors.map((item) => (
+                                                        <div
+                                                            key={item.instructorId}
+                                                            className="flex items-center gap-3 rounded-md border bg-muted/50 p-3"
+                                                        >
+                                                            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-100 text-blue-600">
+                                                                <span className="text-xs font-medium">
+                                                                    {item.instructor.name.charAt(0)}
+                                                                </span>
+                                                            </div>
+                                                            <div>
+                                                                <p className="text-sm font-medium">{item.instructor.name}</p>
+                                                                <p className="text-xs text-muted-foreground">
+                                                                    {item.instructor.email}
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            ) : (
+                                                <p className="text-sm text-muted-foreground italic">
+                                                    Chưa có giảng viên hướng dẫn được chỉ định
+                                                </p>
+                                            )}
+                                        </div>
+                                    </TabsContent>
+
+                                    {/* Sub-tab: Thành viên hội đồng */}
+                                    <TabsContent value="council-members" className="mt-4">
+                                        <div className="rounded-lg border bg-card p-4">
+                                            <div className="flex items-center gap-2 text-sm font-medium text-emerald-600">
+                                                <GraduationCap className="h-4 w-4" />
+                                                Danh sách thành viên hội đồng
+                                            </div>
+                                            <Separator className="my-3" />
+                                            {viewingCallRound.availableCouncilMembers && viewingCallRound.availableCouncilMembers.length > 0 ? (
+                                                <div className="space-y-2">
+                                                    {viewingCallRound.availableCouncilMembers.map((item) => (
+                                                        <div
+                                                            key={item.councilMemberId}
+                                                            className="flex items-center gap-3 rounded-md border bg-muted/50 p-3"
+                                                        >
+                                                            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-emerald-100 text-emerald-600">
+                                                                <span className="text-xs font-medium">
+                                                                    {item.councilMember.name.charAt(0)}
+                                                                </span>
+                                                            </div>
+                                                            <div>
+                                                                <p className="text-sm font-medium">{item.councilMember.name}</p>
+                                                                <p className="text-xs text-muted-foreground">
+                                                                    {item.councilMember.email}
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            ) : (
+                                                <p className="text-sm text-muted-foreground italic">
+                                                    Chưa có thành viên hội đồng được chỉ định
+                                                </p>
+                                            )}
+                                        </div>
+                                    </TabsContent>
+                                </Tabs>
+                            </TabsContent>
+                        </Tabs>
                     )}
 
                     <DialogFooter>
@@ -782,6 +791,80 @@ export function DeanCallRoundsManagement() {
                     </DialogFooter>
                 </DialogContent>
             </Dialog>
+        </div>
+    );
+}
+
+// Attachments Section Component
+function AttachmentsSection({ callRoundId }: { callRoundId: string }) {
+    const { data: attachments, isLoading } = useQuery({
+        queryKey: ['call-round-attachments', callRoundId],
+        queryFn: () => callRoundsApi.getAttachments(callRoundId),
+        enabled: !!callRoundId,
+    });
+
+    if (isLoading) {
+        return (
+            <div className="rounded-lg border bg-card p-4">
+                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                    <Paperclip className="h-4 w-4" />
+                    Đang tải tệp đính kèm...
+                </div>
+            </div>
+        );
+    }
+
+    if (!attachments || attachments.length === 0) {
+        return (
+            <div className="rounded-lg border bg-card p-4">
+                <div className="flex items-center gap-2 text-sm font-medium">
+                    <Paperclip className="h-4 w-4" />
+                    Tệp đính kèm
+                </div>
+                <Separator className="my-3" />
+                <div className="text-center py-4">
+                    <Paperclip className="w-8 h-8 mx-auto text-gray-400 mb-2" />
+                    <p className="text-sm text-muted-foreground">Không có tệp đính kèm</p>
+                </div>
+            </div>
+        );
+    }
+
+    return (
+        <div className="rounded-lg border bg-card p-4">
+            <div className="flex items-center gap-2 text-sm font-medium">
+                <Paperclip className="h-4 w-4" />
+                Tệp đính kèm ({attachments.length})
+            </div>
+            <Separator className="my-3" />
+            <div className="space-y-2">
+                {attachments.map((attachment) => (
+                    <div
+                        key={attachment.id}
+                        className="flex items-center justify-between p-3 rounded-md border bg-muted/50 hover:bg-muted/80 transition-colors"
+                    >
+                        <div className="flex items-center gap-3 min-w-0 flex-1">
+                            <FileText className="w-5 h-5 text-blue-500 flex-shrink-0" />
+                            <div className="min-w-0 flex-1">
+                                <p className="text-sm font-medium truncate">{attachment.fileName}</p>
+                                <p className="text-xs text-muted-foreground">
+                                    {attachment.fileSize ? `${(attachment.fileSize / 1024).toFixed(1)} KB` : 'N/A'} • {attachment.createdAt ? new Date(attachment.createdAt).toLocaleDateString('vi-VN') : 'N/A'}
+                                </p>
+                            </div>
+                        </div>
+                        <Button
+                            variant="ghost"
+                            size="sm"
+                            className="h-8 w-8 p-0"
+                            asChild
+                        >
+                            <a href={attachment.fileUrl} target="_blank" rel="noopener noreferrer">
+                                <ExternalLink className="w-4 h-4" />
+                            </a>
+                        </Button>
+                    </div>
+                ))}
+            </div>
         </div>
     );
 }

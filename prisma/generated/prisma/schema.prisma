@@ -160,6 +160,8 @@ model CallRound {
   // Các mốc thời gian khác
   reviewDeadline     DateTime? // Hạn chót duyệt đề tài
   reportingStartDate DateTime? // Thời gian bắt đầu báo cáo tiến độ
+  defenseDate        DateTime? // Ngày bảo vệ đề tài
+  projectLockDate    DateTime? // Ngày chốt đề tài (hạn chót đăng ký)
 
   // Legacy fields (keep for backward compatibility)
   startDate DateTime // Maps to registrationStartDate
@@ -199,6 +201,7 @@ model CallRound {
   availableInstructors    CallRoundInstructor[] // Danh sách giảng viên hướng dẫn được chỉ định cho đợt này
   availableCouncilMembers CallRoundCouncilMember[] // Danh sách thành viên hội đồng được chỉ định cho đợt này
   councils                Council[] // Các hội đồng được tạo trong đợt này
+  attachments             CallRoundAttachment[] // File đính kèm của đợt đăng ký
 }
 
 model ProjectType {
@@ -565,4 +568,20 @@ model ProjectCouncilAssignment {
 
   @@unique([projectRegistrationId]) // Mỗi đề tài chỉ thuộc 1 hội đồng
   @@index([councilId])
+}
+
+// File đính kèm của đợt đăng ký
+model CallRoundAttachment {
+  id          String   @id @default(cuid())
+  callRoundId String
+  fileName    String // Tên file gốc
+  fileUrl     String // URL lưu trữ file
+  fileSize    Int? // Kích thước file (bytes)
+  fileType    String? // MIME type hoặc extension
+  description String? // Mô tả ngắn về file
+  createdAt   DateTime @default(now())
+
+  callRound CallRound @relation(fields: [callRoundId], references: [id], onDelete: Cascade)
+
+  @@index([callRoundId])
 }

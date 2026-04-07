@@ -916,44 +916,119 @@ export function ProjectRegistrationPage({ title }: ProjectRegistrationPageProps)
                                                                                     Chi tiết đề xuất nghiên cứu
                                                                                 </DialogTitle>
                                                                             </DialogHeader>
-                                                                            <div className="space-y-4 py-4">
-                                                                                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 rounded-md border bg-muted/20 p-3">
-                                                                                    <div>
-                                                                                        <h4 className="font-medium text-sm text-muted-foreground mb-1">
-                                                                                            Mã đăng ký
-                                                                                        </h4>
-                                                                                        <p className="text-sm font-medium">{item.id}</p>
-                                                                                    </div>
-                                                                                    <div>
-                                                                                        <h4 className="font-medium text-sm text-muted-foreground mb-1">
-                                                                                            Đợt đăng ký
-                                                                                        </h4>
-                                                                                        <p className="text-sm font-medium">
-                                                                                            {item.callRound?.name ||
-                                                                                                'Chưa gắn đợt đề tài'}
-                                                                                        </p>
-                                                                                    </div>
-                                                                                    <div>
-                                                                                        <h4 className="font-medium text-sm text-muted-foreground mb-1">
-                                                                                            Ngày tạo
-                                                                                        </h4>
-                                                                                        <p className="text-sm">
-                                                                                            {new Date(item.createdAt).toLocaleString(
-                                                                                                'vi-VN',
-                                                                                            )}
-                                                                                        </p>
-                                                                                    </div>
-                                                                                    <div>
-                                                                                        <h4 className="font-medium text-sm text-muted-foreground mb-1">
-                                                                                            Cập nhật gần nhất
-                                                                                        </h4>
-                                                                                        <p className="text-sm">
-                                                                                            {new Date(item.updatedAt).toLocaleString(
-                                                                                                'vi-VN',
-                                                                                            )}
-                                                                                        </p>
-                                                                                    </div>
-                                                                                </div>
+                                                                             <div className="space-y-5 py-4">
+                                                                                 {/* Thông tin cơ bản */}
+                                                                                 <div className="rounded-xl border bg-gradient-to-br from-blue-50 to-slate-50 dark:from-blue-950/20 dark:to-slate-950/20 p-4">
+                                                                                     <div className="flex items-center gap-2 mb-3">
+                                                                                         <FileText className="h-4 w-4 text-blue-600" />
+                                                                                         <h3 className="font-semibold text-sm">Thông tin đăng ký</h3>
+                                                                                     </div>
+                                                                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                                                                         <div>
+                                                                                             <h4 className="font-medium text-xs text-muted-foreground mb-1 uppercase tracking-wide">
+                                                                                                 Mã đăng ký
+                                                                                             </h4>
+                                                                                             <p className="text-sm font-mono font-medium">{item.id}</p>
+                                                                                         </div>
+                                                                                         <div>
+                                                                                             <h4 className="font-medium text-xs text-muted-foreground mb-1 uppercase tracking-wide">
+                                                                                                 Đợt đăng ký
+                                                                                             </h4>
+                                                                                             <p className="text-sm font-medium">
+                                                                                                 {item.callRound?.name ||
+                                                                                                     'Chưa gắn đợt đề tài'}
+                                                                                             </p>
+                                                                                         </div>
+                                                                                         <div>
+                                                                                             <h4 className="font-medium text-xs text-muted-foreground mb-1 uppercase tracking-wide">
+                                                                                                 Ngày tạo
+                                                                                             </h4>
+                                                                                             <div className="flex items-center gap-2">
+                                                                                                 <CalendarClock className="h-3.5 w-3.5 text-muted-foreground" />
+                                                                                                 <p className="text-sm">
+                                                                                                     {new Date(item.createdAt).toLocaleString('vi-VN')}
+                                                                                                 </p>
+                                                                                             </div>
+                                                                                         </div>
+                                                                                         <div>
+                                                                                             <h4 className="font-medium text-xs text-muted-foreground mb-1 uppercase tracking-wide">
+                                                                                                 Cập nhật gần nhất
+                                                                                             </h4>
+                                                                                             <div className="flex items-center gap-2">
+                                                                                                 <CalendarClock className="h-3.5 w-3.5 text-muted-foreground" />
+                                                                                                 <p className="text-sm">
+                                                                                                     {new Date(item.updatedAt).toLocaleString('vi-VN')}
+                                                                                                 </p>
+                                                                                             </div>
+                                                                                         </div>
+                                                                                     </div>
+                                                                                 </div>
+
+                                                                                 {/* Mốc thời gian quan trọng */}
+                                                                                 <div className="rounded-xl border bg-gradient-to-br from-amber-50 to-orange-50 dark:from-amber-950/20 dark:to-orange-950/20 p-4">
+                                                                                     <div className="flex items-center gap-2 mb-3">
+                                                                                         <CalendarClock className="h-4 w-4 text-amber-600" />
+                                                                                         <h3 className="font-semibold text-sm">Mốc thời gian đề tài</h3>
+                                                                                     </div>
+                                                                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                                                                         <div className="rounded-lg bg-white/70 dark:bg-slate-900/30 p-3">
+                                                                                             <h4 className="font-medium text-xs text-muted-foreground mb-1 uppercase tracking-wide">
+                                                                                                 Bắt đầu đăng ký
+                                                                                             </h4>
+                                                                                             <p className="text-sm font-medium">
+                                                                                                 {item.callRound?.registrationStartDate
+                                                                                                     ? new Date(item.callRound.registrationStartDate).toLocaleDateString('vi-VN', {
+                                                                                                         day: '2-digit',
+                                                                                                         month: '2-digit',
+                                                                                                         year: 'numeric',
+                                                                                                     })
+                                                                                                     : '—'}
+                                                                                             </p>
+                                                                                         </div>
+                                                                                         <div className="rounded-lg bg-white/70 dark:bg-slate-900/30 p-3">
+                                                                                             <h4 className="font-medium text-xs text-muted-foreground mb-1 uppercase tracking-wide">
+                                                                                                 Kết thúc đăng ký
+                                                                                             </h4>
+                                                                                             <p className="text-sm font-medium">
+                                                                                                 {item.callRound?.registrationEndDate
+                                                                                                     ? new Date(item.callRound.registrationEndDate).toLocaleDateString('vi-VN', {
+                                                                                                         day: '2-digit',
+                                                                                                         month: '2-digit',
+                                                                                                         year: 'numeric',
+                                                                                                     })
+                                                                                                     : '—'}
+                                                                                             </p>
+                                                                                         </div>
+                                                                                         <div className="rounded-lg bg-white/70 dark:bg-slate-900/30 p-3">
+                                                                                             <h4 className="font-medium text-xs text-muted-foreground mb-1 uppercase tracking-wide">
+                                                                                                 Ngày bắt đầu đề tài
+                                                                                             </h4>
+                                                                                             <p className="text-sm font-medium">
+                                                                                                 {item.callRound?.projectStartDate
+                                                                                                     ? new Date(item.callRound.projectStartDate).toLocaleDateString('vi-VN', {
+                                                                                                         day: '2-digit',
+                                                                                                         month: '2-digit',
+                                                                                                         year: 'numeric',
+                                                                                                     })
+                                                                                                     : '—'}
+                                                                                             </p>
+                                                                                         </div>
+                                                                                         <div className="rounded-lg bg-white/70 dark:bg-slate-900/30 p-3">
+                                                                                             <h4 className="font-medium text-xs text-muted-foreground mb-1 uppercase tracking-wide">
+                                                                                                 Ngày kết thúc đề tài
+                                                                                             </h4>
+                                                                                             <p className="text-sm font-medium">
+                                                                                                 {item.callRound?.projectEndDate
+                                                                                                     ? new Date(item.callRound.projectEndDate).toLocaleDateString('vi-VN', {
+                                                                                                         day: '2-digit',
+                                                                                                         month: '2-digit',
+                                                                                                         year: 'numeric',
+                                                                                                     })
+                                                                                                     : '—'}
+                                                                                             </p>
+                                                                                         </div>
+                                                                                     </div>
+                                                                                 </div>
                                                                                 <div>
                                                                                     <h4 className="font-medium text-sm text-muted-foreground mb-1">
                                                                                         Tên đề tài
