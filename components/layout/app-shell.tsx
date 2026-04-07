@@ -217,6 +217,11 @@ function AppSidebar({ session }: { session: AuthSession }) {
     if (session.role === 'LECTURER') {
         navItems.push(
             {
+                title: 'Lời mời tham gia',
+                url: '/lecturer/call-round-invitations',
+                icon: Mail,
+            },
+            {
                 title: 'Duyệt hướng dẫn',
                 url: '/lecturer/guidance',
                 icon: GraduationCap,

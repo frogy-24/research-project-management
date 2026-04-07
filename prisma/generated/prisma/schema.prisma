@@ -54,6 +54,12 @@ enum CallRoundApprovalStatus {
   REJECTED // Admin từ chối
 }
 
+enum InvitationStatus {
+  PENDING // Chờ phản hồi
+  ACCEPTED // Đã đồng ý
+  REJECTED // Đã từ chối
+}
+
 enum ApplicableFor {
   STUDENT // Áp dụng cho sinh viên
   LECTURER // Áp dụng cho giảng viên
@@ -200,8 +206,11 @@ model CallRound {
   classes                 Class[]                  @relation("CallRoundClasses")
   availableInstructors    CallRoundInstructor[] // Danh sách giảng viên hướng dẫn được chỉ định cho đợt này
   availableCouncilMembers CallRoundCouncilMember[] // Danh sách thành viên hội đồng được chỉ định cho đợt này
-  councils                Council[] // Các hội đồng được tạo trong đợt này
-  attachments             CallRoundAttachment[] // File đính kèm của đợt đăng ký
+  // Thời hạn phản hồi lời mời tham gia
+  invitationDeadline      DateTime? // Hạn chót để giảng viên/thành viên hội đồng phản hồi lời mời
+
+  councils    Council[] // Các hội đồng được tạo trong đợt này
+  attachments CallRoundAttachment[] // File đính kèm của đợt đăng ký
 }
 
 model ProjectType {
@@ -496,10 +505,13 @@ model OfficeMeetingView {
 
 // Junction table: Danh sách giảng viên hướng dẫn được chỉ định cho mỗi đợt đăng ký
 model CallRoundInstructor {
-  id           String   @id @default(cuid())
-  callRoundId  String
-  instructorId String
-  createdAt    DateTime @default(now())
+  id               String           @id @default(cuid())
+  callRoundId      String
+  instructorId     String
+  invitationStatus InvitationStatus @default(PENDING) // Trạng thái phản hồi lời mời
+  respondedAt      DateTime? // Thời điểm phản hồi
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
 
   callRound  CallRound @relation(fields: [callRoundId], references: [id], onDelete: Cascade)
   instructor User      @relation(fields: [instructorId], references: [id], onDelete: Cascade)
@@ -507,14 +519,18 @@ model CallRoundInstructor {
   @@unique([callRoundId, instructorId])
   @@index([callRoundId])
   @@index([instructorId])
+  @@index([invitationStatus])
 }
 
 // Junction table: Danh sách thành viên hội đồng được chỉ định cho mỗi đợt đăng ký
 model CallRoundCouncilMember {
-  id              String   @id @default(cuid())
-  callRoundId     String
-  councilMemberId String
-  createdAt       DateTime @default(now())
+  id               String           @id @default(cuid())
+  callRoundId      String
+  councilMemberId  String
+  invitationStatus InvitationStatus @default(PENDING) // Trạng thái phản hồi lời mời
+  respondedAt      DateTime? // Thời điểm phản hồi
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
 
   callRound     CallRound @relation(fields: [callRoundId], references: [id], onDelete: Cascade)
   councilMember User      @relation(fields: [councilMemberId], references: [id], onDelete: Cascade)
@@ -522,6 +538,7 @@ model CallRoundCouncilMember {
   @@unique([callRoundId, councilMemberId])
   @@index([callRoundId])
   @@index([councilMemberId])
+  @@index([invitationStatus])
 }
 
 // Model: Hội đồng đánh giá (được chia tự động hoặc thủ công)

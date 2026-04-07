@@ -57,7 +57,12 @@ export async function GET(req: Request) {
         },
         availableInstructors: {
           select: {
+            id: true,
             instructorId: true,
+            invitationStatus: true,
+            respondedAt: true,
+            createdAt: true,
+            updatedAt: true,
             instructor: {
               select: {
                 id: true,
@@ -70,7 +75,12 @@ export async function GET(req: Request) {
         },
         availableCouncilMembers: {
           select: {
+            id: true,
             councilMemberId: true,
+            invitationStatus: true,
+            respondedAt: true,
+            createdAt: true,
+            updatedAt: true,
             councilMember: {
               select: {
                 id: true,

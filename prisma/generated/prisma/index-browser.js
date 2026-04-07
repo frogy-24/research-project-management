@@ -197,7 +197,8 @@ exports.Prisma.CallRoundScalarFieldEnum = {
   approvedAt: 'approvedAt',
   templateId: 'templateId',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  invitationDeadline: 'invitationDeadline'
 };
 
 exports.Prisma.ProjectTypeScalarFieldEnum = {
@@ -392,14 +393,20 @@ exports.Prisma.CallRoundInstructorScalarFieldEnum = {
   id: 'id',
   callRoundId: 'callRoundId',
   instructorId: 'instructorId',
-  createdAt: 'createdAt'
+  invitationStatus: 'invitationStatus',
+  respondedAt: 'respondedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.CallRoundCouncilMemberScalarFieldEnum = {
   id: 'id',
   callRoundId: 'callRoundId',
   councilMemberId: 'councilMemberId',
-  createdAt: 'createdAt'
+  invitationStatus: 'invitationStatus',
+  respondedAt: 'respondedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.CouncilScalarFieldEnum = {
@@ -559,6 +566,12 @@ exports.PostAudience = exports.$Enums.PostAudience = {
 exports.PostStatus = exports.$Enums.PostStatus = {
   PENDING: 'PENDING',
   APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED'
+};
+
+exports.InvitationStatus = exports.$Enums.InvitationStatus = {
+  PENDING: 'PENDING',
+  ACCEPTED: 'ACCEPTED',
   REJECTED: 'REJECTED'
 };
 

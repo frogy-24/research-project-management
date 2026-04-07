@@ -208,6 +208,15 @@ export const CallRoundApprovalStatus: {
 export type CallRoundApprovalStatus = (typeof CallRoundApprovalStatus)[keyof typeof CallRoundApprovalStatus]
 
 
+export const InvitationStatus: {
+  PENDING: 'PENDING',
+  ACCEPTED: 'ACCEPTED',
+  REJECTED: 'REJECTED'
+};
+
+export type InvitationStatus = (typeof InvitationStatus)[keyof typeof InvitationStatus]
+
+
 export const ApplicableFor: {
   STUDENT: 'STUDENT',
   LECTURER: 'LECTURER',
@@ -306,6 +315,10 @@ export const RequestStatus: typeof $Enums.RequestStatus
 export type CallRoundApprovalStatus = $Enums.CallRoundApprovalStatus
 
 export const CallRoundApprovalStatus: typeof $Enums.CallRoundApprovalStatus
+
+export type InvitationStatus = $Enums.InvitationStatus
+
+export const InvitationStatus: typeof $Enums.InvitationStatus
 
 export type ApplicableFor = $Enums.ApplicableFor
 
@@ -9164,6 +9177,7 @@ export namespace Prisma {
     templateId: string | null
     createdAt: Date | null
     updatedAt: Date | null
+    invitationDeadline: Date | null
   }
 
   export type CallRoundMaxAggregateOutputType = {
@@ -9197,6 +9211,7 @@ export namespace Prisma {
     templateId: string | null
     createdAt: Date | null
     updatedAt: Date | null
+    invitationDeadline: Date | null
   }
 
   export type CallRoundCountAggregateOutputType = {
@@ -9230,6 +9245,7 @@ export namespace Prisma {
     templateId: number
     createdAt: number
     updatedAt: number
+    invitationDeadline: number
     _all: number
   }
 
@@ -9275,6 +9291,7 @@ export namespace Prisma {
     templateId?: true
     createdAt?: true
     updatedAt?: true
+    invitationDeadline?: true
   }
 
   export type CallRoundMaxAggregateInputType = {
@@ -9308,6 +9325,7 @@ export namespace Prisma {
     templateId?: true
     createdAt?: true
     updatedAt?: true
+    invitationDeadline?: true
   }
 
   export type CallRoundCountAggregateInputType = {
@@ -9341,6 +9359,7 @@ export namespace Prisma {
     templateId?: true
     createdAt?: true
     updatedAt?: true
+    invitationDeadline?: true
     _all?: true
   }
 
@@ -9461,6 +9480,7 @@ export namespace Prisma {
     templateId: string | null
     createdAt: Date
     updatedAt: Date
+    invitationDeadline: Date | null
     _count: CallRoundCountAggregateOutputType | null
     _avg: CallRoundAvgAggregateOutputType | null
     _sum: CallRoundSumAggregateOutputType | null
@@ -9513,6 +9533,7 @@ export namespace Prisma {
     templateId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    invitationDeadline?: boolean
     projects?: boolean | CallRound$projectsArgs<ExtArgs>
     registrations?: boolean | CallRound$registrationsArgs<ExtArgs>
     template?: boolean | CallRound$templateArgs<ExtArgs>
@@ -9557,6 +9578,7 @@ export namespace Prisma {
     templateId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    invitationDeadline?: boolean
     template?: boolean | CallRound$templateArgs<ExtArgs>
   }, ExtArgs["result"]["callRound"]>
 
@@ -9591,6 +9613,7 @@ export namespace Prisma {
     templateId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    invitationDeadline?: boolean
     template?: boolean | CallRound$templateArgs<ExtArgs>
   }, ExtArgs["result"]["callRound"]>
 
@@ -9625,9 +9648,10 @@ export namespace Prisma {
     templateId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    invitationDeadline?: boolean
   }
 
-  export type CallRoundOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "description" | "registrationStartDate" | "registrationEndDate" | "projectStartDate" | "projectEndDate" | "reviewDeadline" | "reportingStartDate" | "defenseDate" | "projectLockDate" | "startDate" | "endDate" | "maxProjects" | "budgetLimit" | "requirements" | "guidelines" | "contactInfo" | "isActive" | "isLocked" | "applicableFor" | "approvalStatus" | "createdById" | "createdByRole" | "approvedById" | "approvalNote" | "approvedAt" | "templateId" | "createdAt" | "updatedAt", ExtArgs["result"]["callRound"]>
+  export type CallRoundOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "description" | "registrationStartDate" | "registrationEndDate" | "projectStartDate" | "projectEndDate" | "reviewDeadline" | "reportingStartDate" | "defenseDate" | "projectLockDate" | "startDate" | "endDate" | "maxProjects" | "budgetLimit" | "requirements" | "guidelines" | "contactInfo" | "isActive" | "isLocked" | "applicableFor" | "approvalStatus" | "createdById" | "createdByRole" | "approvedById" | "approvalNote" | "approvedAt" | "templateId" | "createdAt" | "updatedAt" | "invitationDeadline", ExtArgs["result"]["callRound"]>
   export type CallRoundInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     projects?: boolean | CallRound$projectsArgs<ExtArgs>
     registrations?: boolean | CallRound$registrationsArgs<ExtArgs>
@@ -9693,6 +9717,7 @@ export namespace Prisma {
       templateId: string | null
       createdAt: Date
       updatedAt: Date
+      invitationDeadline: Date | null
     }, ExtArgs["result"]["callRound"]>
     composites: {}
   }
@@ -10156,6 +10181,7 @@ export namespace Prisma {
     readonly templateId: FieldRef<"CallRound", 'String'>
     readonly createdAt: FieldRef<"CallRound", 'DateTime'>
     readonly updatedAt: FieldRef<"CallRound", 'DateTime'>
+    readonly invitationDeadline: FieldRef<"CallRound", 'DateTime'>
   }
     
 
@@ -27541,21 +27567,30 @@ export namespace Prisma {
     id: string | null
     callRoundId: string | null
     instructorId: string | null
+    invitationStatus: $Enums.InvitationStatus | null
+    respondedAt: Date | null
     createdAt: Date | null
+    updatedAt: Date | null
   }
 
   export type CallRoundInstructorMaxAggregateOutputType = {
     id: string | null
     callRoundId: string | null
     instructorId: string | null
+    invitationStatus: $Enums.InvitationStatus | null
+    respondedAt: Date | null
     createdAt: Date | null
+    updatedAt: Date | null
   }
 
   export type CallRoundInstructorCountAggregateOutputType = {
     id: number
     callRoundId: number
     instructorId: number
+    invitationStatus: number
+    respondedAt: number
     createdAt: number
+    updatedAt: number
     _all: number
   }
 
@@ -27564,21 +27599,30 @@ export namespace Prisma {
     id?: true
     callRoundId?: true
     instructorId?: true
+    invitationStatus?: true
+    respondedAt?: true
     createdAt?: true
+    updatedAt?: true
   }
 
   export type CallRoundInstructorMaxAggregateInputType = {
     id?: true
     callRoundId?: true
     instructorId?: true
+    invitationStatus?: true
+    respondedAt?: true
     createdAt?: true
+    updatedAt?: true
   }
 
   export type CallRoundInstructorCountAggregateInputType = {
     id?: true
     callRoundId?: true
     instructorId?: true
+    invitationStatus?: true
+    respondedAt?: true
     createdAt?: true
+    updatedAt?: true
     _all?: true
   }
 
@@ -27658,7 +27702,10 @@ export namespace Prisma {
     id: string
     callRoundId: string
     instructorId: string
+    invitationStatus: $Enums.InvitationStatus
+    respondedAt: Date | null
     createdAt: Date
+    updatedAt: Date
     _count: CallRoundInstructorCountAggregateOutputType | null
     _min: CallRoundInstructorMinAggregateOutputType | null
     _max: CallRoundInstructorMaxAggregateOutputType | null
@@ -27682,7 +27729,10 @@ export namespace Prisma {
     id?: boolean
     callRoundId?: boolean
     instructorId?: boolean
+    invitationStatus?: boolean
+    respondedAt?: boolean
     createdAt?: boolean
+    updatedAt?: boolean
     callRound?: boolean | CallRoundDefaultArgs<ExtArgs>
     instructor?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["callRoundInstructor"]>
@@ -27691,7 +27741,10 @@ export namespace Prisma {
     id?: boolean
     callRoundId?: boolean
     instructorId?: boolean
+    invitationStatus?: boolean
+    respondedAt?: boolean
     createdAt?: boolean
+    updatedAt?: boolean
     callRound?: boolean | CallRoundDefaultArgs<ExtArgs>
     instructor?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["callRoundInstructor"]>
@@ -27700,7 +27753,10 @@ export namespace Prisma {
     id?: boolean
     callRoundId?: boolean
     instructorId?: boolean
+    invitationStatus?: boolean
+    respondedAt?: boolean
     createdAt?: boolean
+    updatedAt?: boolean
     callRound?: boolean | CallRoundDefaultArgs<ExtArgs>
     instructor?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["callRoundInstructor"]>
@@ -27709,10 +27765,13 @@ export namespace Prisma {
     id?: boolean
     callRoundId?: boolean
     instructorId?: boolean
+    invitationStatus?: boolean
+    respondedAt?: boolean
     createdAt?: boolean
+    updatedAt?: boolean
   }
 
-  export type CallRoundInstructorOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "callRoundId" | "instructorId" | "createdAt", ExtArgs["result"]["callRoundInstructor"]>
+  export type CallRoundInstructorOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "callRoundId" | "instructorId" | "invitationStatus" | "respondedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["callRoundInstructor"]>
   export type CallRoundInstructorInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     callRound?: boolean | CallRoundDefaultArgs<ExtArgs>
     instructor?: boolean | UserDefaultArgs<ExtArgs>
@@ -27736,7 +27795,10 @@ export namespace Prisma {
       id: string
       callRoundId: string
       instructorId: string
+      invitationStatus: $Enums.InvitationStatus
+      respondedAt: Date | null
       createdAt: Date
+      updatedAt: Date
     }, ExtArgs["result"]["callRoundInstructor"]>
     composites: {}
   }
@@ -28165,7 +28227,10 @@ export namespace Prisma {
     readonly id: FieldRef<"CallRoundInstructor", 'String'>
     readonly callRoundId: FieldRef<"CallRoundInstructor", 'String'>
     readonly instructorId: FieldRef<"CallRoundInstructor", 'String'>
+    readonly invitationStatus: FieldRef<"CallRoundInstructor", 'InvitationStatus'>
+    readonly respondedAt: FieldRef<"CallRoundInstructor", 'DateTime'>
     readonly createdAt: FieldRef<"CallRoundInstructor", 'DateTime'>
+    readonly updatedAt: FieldRef<"CallRoundInstructor", 'DateTime'>
   }
     
 
@@ -28599,21 +28664,30 @@ export namespace Prisma {
     id: string | null
     callRoundId: string | null
     councilMemberId: string | null
+    invitationStatus: $Enums.InvitationStatus | null
+    respondedAt: Date | null
     createdAt: Date | null
+    updatedAt: Date | null
   }
 
   export type CallRoundCouncilMemberMaxAggregateOutputType = {
     id: string | null
     callRoundId: string | null
     councilMemberId: string | null
+    invitationStatus: $Enums.InvitationStatus | null
+    respondedAt: Date | null
     createdAt: Date | null
+    updatedAt: Date | null
   }
 
   export type CallRoundCouncilMemberCountAggregateOutputType = {
     id: number
     callRoundId: number
     councilMemberId: number
+    invitationStatus: number
+    respondedAt: number
     createdAt: number
+    updatedAt: number
     _all: number
   }
 
@@ -28622,21 +28696,30 @@ export namespace Prisma {
     id?: true
     callRoundId?: true
     councilMemberId?: true
+    invitationStatus?: true
+    respondedAt?: true
     createdAt?: true
+    updatedAt?: true
   }
 
   export type CallRoundCouncilMemberMaxAggregateInputType = {
     id?: true
     callRoundId?: true
     councilMemberId?: true
+    invitationStatus?: true
+    respondedAt?: true
     createdAt?: true
+    updatedAt?: true
   }
 
   export type CallRoundCouncilMemberCountAggregateInputType = {
     id?: true
     callRoundId?: true
     councilMemberId?: true
+    invitationStatus?: true
+    respondedAt?: true
     createdAt?: true
+    updatedAt?: true
     _all?: true
   }
 
@@ -28716,7 +28799,10 @@ export namespace Prisma {
     id: string
     callRoundId: string
     councilMemberId: string
+    invitationStatus: $Enums.InvitationStatus
+    respondedAt: Date | null
     createdAt: Date
+    updatedAt: Date
     _count: CallRoundCouncilMemberCountAggregateOutputType | null
     _min: CallRoundCouncilMemberMinAggregateOutputType | null
     _max: CallRoundCouncilMemberMaxAggregateOutputType | null
@@ -28740,7 +28826,10 @@ export namespace Prisma {
     id?: boolean
     callRoundId?: boolean
     councilMemberId?: boolean
+    invitationStatus?: boolean
+    respondedAt?: boolean
     createdAt?: boolean
+    updatedAt?: boolean
     callRound?: boolean | CallRoundDefaultArgs<ExtArgs>
     councilMember?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["callRoundCouncilMember"]>
@@ -28749,7 +28838,10 @@ export namespace Prisma {
     id?: boolean
     callRoundId?: boolean
     councilMemberId?: boolean
+    invitationStatus?: boolean
+    respondedAt?: boolean
     createdAt?: boolean
+    updatedAt?: boolean
     callRound?: boolean | CallRoundDefaultArgs<ExtArgs>
     councilMember?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["callRoundCouncilMember"]>
@@ -28758,7 +28850,10 @@ export namespace Prisma {
     id?: boolean
     callRoundId?: boolean
     councilMemberId?: boolean
+    invitationStatus?: boolean
+    respondedAt?: boolean
     createdAt?: boolean
+    updatedAt?: boolean
     callRound?: boolean | CallRoundDefaultArgs<ExtArgs>
     councilMember?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["callRoundCouncilMember"]>
@@ -28767,10 +28862,13 @@ export namespace Prisma {
     id?: boolean
     callRoundId?: boolean
     councilMemberId?: boolean
+    invitationStatus?: boolean
+    respondedAt?: boolean
     createdAt?: boolean
+    updatedAt?: boolean
   }
 
-  export type CallRoundCouncilMemberOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "callRoundId" | "councilMemberId" | "createdAt", ExtArgs["result"]["callRoundCouncilMember"]>
+  export type CallRoundCouncilMemberOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "callRoundId" | "councilMemberId" | "invitationStatus" | "respondedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["callRoundCouncilMember"]>
   export type CallRoundCouncilMemberInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     callRound?: boolean | CallRoundDefaultArgs<ExtArgs>
     councilMember?: boolean | UserDefaultArgs<ExtArgs>
@@ -28794,7 +28892,10 @@ export namespace Prisma {
       id: string
       callRoundId: string
       councilMemberId: string
+      invitationStatus: $Enums.InvitationStatus
+      respondedAt: Date | null
       createdAt: Date
+      updatedAt: Date
     }, ExtArgs["result"]["callRoundCouncilMember"]>
     composites: {}
   }
@@ -29223,7 +29324,10 @@ export namespace Prisma {
     readonly id: FieldRef<"CallRoundCouncilMember", 'String'>
     readonly callRoundId: FieldRef<"CallRoundCouncilMember", 'String'>
     readonly councilMemberId: FieldRef<"CallRoundCouncilMember", 'String'>
+    readonly invitationStatus: FieldRef<"CallRoundCouncilMember", 'InvitationStatus'>
+    readonly respondedAt: FieldRef<"CallRoundCouncilMember", 'DateTime'>
     readonly createdAt: FieldRef<"CallRoundCouncilMember", 'DateTime'>
+    readonly updatedAt: FieldRef<"CallRoundCouncilMember", 'DateTime'>
   }
     
 
@@ -34145,7 +34249,8 @@ export namespace Prisma {
     approvedAt: 'approvedAt',
     templateId: 'templateId',
     createdAt: 'createdAt',
-    updatedAt: 'updatedAt'
+    updatedAt: 'updatedAt',
+    invitationDeadline: 'invitationDeadline'
   };
 
   export type CallRoundScalarFieldEnum = (typeof CallRoundScalarFieldEnum)[keyof typeof CallRoundScalarFieldEnum]
@@ -34385,7 +34490,10 @@ export namespace Prisma {
     id: 'id',
     callRoundId: 'callRoundId',
     instructorId: 'instructorId',
-    createdAt: 'createdAt'
+    invitationStatus: 'invitationStatus',
+    respondedAt: 'respondedAt',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
   };
 
   export type CallRoundInstructorScalarFieldEnum = (typeof CallRoundInstructorScalarFieldEnum)[keyof typeof CallRoundInstructorScalarFieldEnum]
@@ -34395,7 +34503,10 @@ export namespace Prisma {
     id: 'id',
     callRoundId: 'callRoundId',
     councilMemberId: 'councilMemberId',
-    createdAt: 'createdAt'
+    invitationStatus: 'invitationStatus',
+    respondedAt: 'respondedAt',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
   };
 
   export type CallRoundCouncilMemberScalarFieldEnum = (typeof CallRoundCouncilMemberScalarFieldEnum)[keyof typeof CallRoundCouncilMemberScalarFieldEnum]
@@ -34764,6 +34875,20 @@ export namespace Prisma {
    * Reference to a field of type 'PostStatus[]'
    */
   export type ListEnumPostStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PostStatus[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'InvitationStatus'
+   */
+  export type EnumInvitationStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'InvitationStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'InvitationStatus[]'
+   */
+  export type ListEnumInvitationStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'InvitationStatus[]'>
     
   /**
    * Deep Input Types
@@ -35177,6 +35302,7 @@ export namespace Prisma {
     templateId?: StringNullableFilter<"CallRound"> | string | null
     createdAt?: DateTimeFilter<"CallRound"> | Date | string
     updatedAt?: DateTimeFilter<"CallRound"> | Date | string
+    invitationDeadline?: DateTimeNullableFilter<"CallRound"> | Date | string | null
     projects?: ProjectListRelationFilter
     registrations?: ProjectRegistrationListRelationFilter
     template?: XOR<ProgressReportTemplateNullableScalarRelationFilter, ProgressReportTemplateWhereInput> | null
@@ -35220,6 +35346,7 @@ export namespace Prisma {
     templateId?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    invitationDeadline?: SortOrderInput | SortOrder
     projects?: ProjectOrderByRelationAggregateInput
     registrations?: ProjectRegistrationOrderByRelationAggregateInput
     template?: ProgressReportTemplateOrderByWithRelationInput
@@ -35266,6 +35393,7 @@ export namespace Prisma {
     templateId?: StringNullableFilter<"CallRound"> | string | null
     createdAt?: DateTimeFilter<"CallRound"> | Date | string
     updatedAt?: DateTimeFilter<"CallRound"> | Date | string
+    invitationDeadline?: DateTimeNullableFilter<"CallRound"> | Date | string | null
     projects?: ProjectListRelationFilter
     registrations?: ProjectRegistrationListRelationFilter
     template?: XOR<ProgressReportTemplateNullableScalarRelationFilter, ProgressReportTemplateWhereInput> | null
@@ -35309,6 +35437,7 @@ export namespace Prisma {
     templateId?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    invitationDeadline?: SortOrderInput | SortOrder
     _count?: CallRoundCountOrderByAggregateInput
     _avg?: CallRoundAvgOrderByAggregateInput
     _max?: CallRoundMaxOrderByAggregateInput
@@ -35350,6 +35479,7 @@ export namespace Prisma {
     templateId?: StringNullableWithAggregatesFilter<"CallRound"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"CallRound"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"CallRound"> | Date | string
+    invitationDeadline?: DateTimeNullableWithAggregatesFilter<"CallRound"> | Date | string | null
   }
 
   export type ProjectTypeWhereInput = {
@@ -36594,7 +36724,10 @@ export namespace Prisma {
     id?: StringFilter<"CallRoundInstructor"> | string
     callRoundId?: StringFilter<"CallRoundInstructor"> | string
     instructorId?: StringFilter<"CallRoundInstructor"> | string
+    invitationStatus?: EnumInvitationStatusFilter<"CallRoundInstructor"> | $Enums.InvitationStatus
+    respondedAt?: DateTimeNullableFilter<"CallRoundInstructor"> | Date | string | null
     createdAt?: DateTimeFilter<"CallRoundInstructor"> | Date | string
+    updatedAt?: DateTimeFilter<"CallRoundInstructor"> | Date | string
     callRound?: XOR<CallRoundScalarRelationFilter, CallRoundWhereInput>
     instructor?: XOR<UserScalarRelationFilter, UserWhereInput>
   }
@@ -36603,7 +36736,10 @@ export namespace Prisma {
     id?: SortOrder
     callRoundId?: SortOrder
     instructorId?: SortOrder
+    invitationStatus?: SortOrder
+    respondedAt?: SortOrderInput | SortOrder
     createdAt?: SortOrder
+    updatedAt?: SortOrder
     callRound?: CallRoundOrderByWithRelationInput
     instructor?: UserOrderByWithRelationInput
   }
@@ -36616,7 +36752,10 @@ export namespace Prisma {
     NOT?: CallRoundInstructorWhereInput | CallRoundInstructorWhereInput[]
     callRoundId?: StringFilter<"CallRoundInstructor"> | string
     instructorId?: StringFilter<"CallRoundInstructor"> | string
+    invitationStatus?: EnumInvitationStatusFilter<"CallRoundInstructor"> | $Enums.InvitationStatus
+    respondedAt?: DateTimeNullableFilter<"CallRoundInstructor"> | Date | string | null
     createdAt?: DateTimeFilter<"CallRoundInstructor"> | Date | string
+    updatedAt?: DateTimeFilter<"CallRoundInstructor"> | Date | string
     callRound?: XOR<CallRoundScalarRelationFilter, CallRoundWhereInput>
     instructor?: XOR<UserScalarRelationFilter, UserWhereInput>
   }, "id" | "callRoundId_instructorId">
@@ -36625,7 +36764,10 @@ export namespace Prisma {
     id?: SortOrder
     callRoundId?: SortOrder
     instructorId?: SortOrder
+    invitationStatus?: SortOrder
+    respondedAt?: SortOrderInput | SortOrder
     createdAt?: SortOrder
+    updatedAt?: SortOrder
     _count?: CallRoundInstructorCountOrderByAggregateInput
     _max?: CallRoundInstructorMaxOrderByAggregateInput
     _min?: CallRoundInstructorMinOrderByAggregateInput
@@ -36638,7 +36780,10 @@ export namespace Prisma {
     id?: StringWithAggregatesFilter<"CallRoundInstructor"> | string
     callRoundId?: StringWithAggregatesFilter<"CallRoundInstructor"> | string
     instructorId?: StringWithAggregatesFilter<"CallRoundInstructor"> | string
+    invitationStatus?: EnumInvitationStatusWithAggregatesFilter<"CallRoundInstructor"> | $Enums.InvitationStatus
+    respondedAt?: DateTimeNullableWithAggregatesFilter<"CallRoundInstructor"> | Date | string | null
     createdAt?: DateTimeWithAggregatesFilter<"CallRoundInstructor"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"CallRoundInstructor"> | Date | string
   }
 
   export type CallRoundCouncilMemberWhereInput = {
@@ -36648,7 +36793,10 @@ export namespace Prisma {
     id?: StringFilter<"CallRoundCouncilMember"> | string
     callRoundId?: StringFilter<"CallRoundCouncilMember"> | string
     councilMemberId?: StringFilter<"CallRoundCouncilMember"> | string
+    invitationStatus?: EnumInvitationStatusFilter<"CallRoundCouncilMember"> | $Enums.InvitationStatus
+    respondedAt?: DateTimeNullableFilter<"CallRoundCouncilMember"> | Date | string | null
     createdAt?: DateTimeFilter<"CallRoundCouncilMember"> | Date | string
+    updatedAt?: DateTimeFilter<"CallRoundCouncilMember"> | Date | string
     callRound?: XOR<CallRoundScalarRelationFilter, CallRoundWhereInput>
     councilMember?: XOR<UserScalarRelationFilter, UserWhereInput>
   }
@@ -36657,7 +36805,10 @@ export namespace Prisma {
     id?: SortOrder
     callRoundId?: SortOrder
     councilMemberId?: SortOrder
+    invitationStatus?: SortOrder
+    respondedAt?: SortOrderInput | SortOrder
     createdAt?: SortOrder
+    updatedAt?: SortOrder
     callRound?: CallRoundOrderByWithRelationInput
     councilMember?: UserOrderByWithRelationInput
   }
@@ -36670,7 +36821,10 @@ export namespace Prisma {
     NOT?: CallRoundCouncilMemberWhereInput | CallRoundCouncilMemberWhereInput[]
     callRoundId?: StringFilter<"CallRoundCouncilMember"> | string
     councilMemberId?: StringFilter<"CallRoundCouncilMember"> | string
+    invitationStatus?: EnumInvitationStatusFilter<"CallRoundCouncilMember"> | $Enums.InvitationStatus
+    respondedAt?: DateTimeNullableFilter<"CallRoundCouncilMember"> | Date | string | null
     createdAt?: DateTimeFilter<"CallRoundCouncilMember"> | Date | string
+    updatedAt?: DateTimeFilter<"CallRoundCouncilMember"> | Date | string
     callRound?: XOR<CallRoundScalarRelationFilter, CallRoundWhereInput>
     councilMember?: XOR<UserScalarRelationFilter, UserWhereInput>
   }, "id" | "callRoundId_councilMemberId">
@@ -36679,7 +36833,10 @@ export namespace Prisma {
     id?: SortOrder
     callRoundId?: SortOrder
     councilMemberId?: SortOrder
+    invitationStatus?: SortOrder
+    respondedAt?: SortOrderInput | SortOrder
     createdAt?: SortOrder
+    updatedAt?: SortOrder
     _count?: CallRoundCouncilMemberCountOrderByAggregateInput
     _max?: CallRoundCouncilMemberMaxOrderByAggregateInput
     _min?: CallRoundCouncilMemberMinOrderByAggregateInput
@@ -36692,7 +36849,10 @@ export namespace Prisma {
     id?: StringWithAggregatesFilter<"CallRoundCouncilMember"> | string
     callRoundId?: StringWithAggregatesFilter<"CallRoundCouncilMember"> | string
     councilMemberId?: StringWithAggregatesFilter<"CallRoundCouncilMember"> | string
+    invitationStatus?: EnumInvitationStatusWithAggregatesFilter<"CallRoundCouncilMember"> | $Enums.InvitationStatus
+    respondedAt?: DateTimeNullableWithAggregatesFilter<"CallRoundCouncilMember"> | Date | string | null
     createdAt?: DateTimeWithAggregatesFilter<"CallRoundCouncilMember"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"CallRoundCouncilMember"> | Date | string
   }
 
   export type CouncilWhereInput = {
@@ -37399,6 +37559,7 @@ export namespace Prisma {
     approvedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    invitationDeadline?: Date | string | null
     projects?: ProjectCreateNestedManyWithoutCallRoundInput
     registrations?: ProjectRegistrationCreateNestedManyWithoutCallRoundInput
     template?: ProgressReportTemplateCreateNestedOneWithoutCallRoundsInput
@@ -37442,6 +37603,7 @@ export namespace Prisma {
     templateId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    invitationDeadline?: Date | string | null
     projects?: ProjectUncheckedCreateNestedManyWithoutCallRoundInput
     registrations?: ProjectRegistrationUncheckedCreateNestedManyWithoutCallRoundInput
     departments?: DepartmentUncheckedCreateNestedManyWithoutCallRoundsInput
@@ -37483,6 +37645,7 @@ export namespace Prisma {
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    invitationDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     projects?: ProjectUpdateManyWithoutCallRoundNestedInput
     registrations?: ProjectRegistrationUpdateManyWithoutCallRoundNestedInput
     template?: ProgressReportTemplateUpdateOneWithoutCallRoundsNestedInput
@@ -37526,6 +37689,7 @@ export namespace Prisma {
     templateId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    invitationDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     projects?: ProjectUncheckedUpdateManyWithoutCallRoundNestedInput
     registrations?: ProjectRegistrationUncheckedUpdateManyWithoutCallRoundNestedInput
     departments?: DepartmentUncheckedUpdateManyWithoutCallRoundsNestedInput
@@ -37568,6 +37732,7 @@ export namespace Prisma {
     templateId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    invitationDeadline?: Date | string | null
   }
 
   export type CallRoundUpdateManyMutationInput = {
@@ -37600,6 +37765,7 @@ export namespace Prisma {
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    invitationDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type CallRoundUncheckedUpdateManyInput = {
@@ -37633,6 +37799,7 @@ export namespace Prisma {
     templateId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    invitationDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type ProjectTypeCreateInput = {
@@ -38972,7 +39139,10 @@ export namespace Prisma {
 
   export type CallRoundInstructorCreateInput = {
     id?: string
+    invitationStatus?: $Enums.InvitationStatus
+    respondedAt?: Date | string | null
     createdAt?: Date | string
+    updatedAt?: Date | string
     callRound: CallRoundCreateNestedOneWithoutAvailableInstructorsInput
     instructor: UserCreateNestedOneWithoutCallRoundInstructorsInput
   }
@@ -38981,12 +39151,18 @@ export namespace Prisma {
     id?: string
     callRoundId: string
     instructorId: string
+    invitationStatus?: $Enums.InvitationStatus
+    respondedAt?: Date | string | null
     createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type CallRoundInstructorUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
+    invitationStatus?: EnumInvitationStatusFieldUpdateOperationsInput | $Enums.InvitationStatus
+    respondedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     callRound?: CallRoundUpdateOneRequiredWithoutAvailableInstructorsNestedInput
     instructor?: UserUpdateOneRequiredWithoutCallRoundInstructorsNestedInput
   }
@@ -38995,31 +39171,46 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     callRoundId?: StringFieldUpdateOperationsInput | string
     instructorId?: StringFieldUpdateOperationsInput | string
+    invitationStatus?: EnumInvitationStatusFieldUpdateOperationsInput | $Enums.InvitationStatus
+    respondedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type CallRoundInstructorCreateManyInput = {
     id?: string
     callRoundId: string
     instructorId: string
+    invitationStatus?: $Enums.InvitationStatus
+    respondedAt?: Date | string | null
     createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type CallRoundInstructorUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
+    invitationStatus?: EnumInvitationStatusFieldUpdateOperationsInput | $Enums.InvitationStatus
+    respondedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type CallRoundInstructorUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     callRoundId?: StringFieldUpdateOperationsInput | string
     instructorId?: StringFieldUpdateOperationsInput | string
+    invitationStatus?: EnumInvitationStatusFieldUpdateOperationsInput | $Enums.InvitationStatus
+    respondedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type CallRoundCouncilMemberCreateInput = {
     id?: string
+    invitationStatus?: $Enums.InvitationStatus
+    respondedAt?: Date | string | null
     createdAt?: Date | string
+    updatedAt?: Date | string
     callRound: CallRoundCreateNestedOneWithoutAvailableCouncilMembersInput
     councilMember: UserCreateNestedOneWithoutCallRoundCouncilMembersInput
   }
@@ -39028,12 +39219,18 @@ export namespace Prisma {
     id?: string
     callRoundId: string
     councilMemberId: string
+    invitationStatus?: $Enums.InvitationStatus
+    respondedAt?: Date | string | null
     createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type CallRoundCouncilMemberUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
+    invitationStatus?: EnumInvitationStatusFieldUpdateOperationsInput | $Enums.InvitationStatus
+    respondedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     callRound?: CallRoundUpdateOneRequiredWithoutAvailableCouncilMembersNestedInput
     councilMember?: UserUpdateOneRequiredWithoutCallRoundCouncilMembersNestedInput
   }
@@ -39042,26 +39239,38 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     callRoundId?: StringFieldUpdateOperationsInput | string
     councilMemberId?: StringFieldUpdateOperationsInput | string
+    invitationStatus?: EnumInvitationStatusFieldUpdateOperationsInput | $Enums.InvitationStatus
+    respondedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type CallRoundCouncilMemberCreateManyInput = {
     id?: string
     callRoundId: string
     councilMemberId: string
+    invitationStatus?: $Enums.InvitationStatus
+    respondedAt?: Date | string | null
     createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type CallRoundCouncilMemberUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
+    invitationStatus?: EnumInvitationStatusFieldUpdateOperationsInput | $Enums.InvitationStatus
+    respondedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type CallRoundCouncilMemberUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     callRoundId?: StringFieldUpdateOperationsInput | string
     councilMemberId?: StringFieldUpdateOperationsInput | string
+    invitationStatus?: EnumInvitationStatusFieldUpdateOperationsInput | $Enums.InvitationStatus
+    respondedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type CouncilCreateInput = {
@@ -39896,6 +40105,7 @@ export namespace Prisma {
     templateId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    invitationDeadline?: SortOrder
   }
 
   export type CallRoundAvgOrderByAggregateInput = {
@@ -39934,6 +40144,7 @@ export namespace Prisma {
     templateId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    invitationDeadline?: SortOrder
   }
 
   export type CallRoundMinOrderByAggregateInput = {
@@ -39967,6 +40178,7 @@ export namespace Prisma {
     templateId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    invitationDeadline?: SortOrder
   }
 
   export type CallRoundSumOrderByAggregateInput = {
@@ -41065,6 +41277,13 @@ export namespace Prisma {
     readAt?: SortOrder
   }
 
+  export type EnumInvitationStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.InvitationStatus | EnumInvitationStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.InvitationStatus[] | ListEnumInvitationStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.InvitationStatus[] | ListEnumInvitationStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumInvitationStatusFilter<$PrismaModel> | $Enums.InvitationStatus
+  }
+
   export type CallRoundScalarRelationFilter = {
     is?: CallRoundWhereInput
     isNot?: CallRoundWhereInput
@@ -41079,21 +41298,40 @@ export namespace Prisma {
     id?: SortOrder
     callRoundId?: SortOrder
     instructorId?: SortOrder
+    invitationStatus?: SortOrder
+    respondedAt?: SortOrder
     createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type CallRoundInstructorMaxOrderByAggregateInput = {
     id?: SortOrder
     callRoundId?: SortOrder
     instructorId?: SortOrder
+    invitationStatus?: SortOrder
+    respondedAt?: SortOrder
     createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type CallRoundInstructorMinOrderByAggregateInput = {
     id?: SortOrder
     callRoundId?: SortOrder
     instructorId?: SortOrder
+    invitationStatus?: SortOrder
+    respondedAt?: SortOrder
     createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type EnumInvitationStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.InvitationStatus | EnumInvitationStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.InvitationStatus[] | ListEnumInvitationStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.InvitationStatus[] | ListEnumInvitationStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumInvitationStatusWithAggregatesFilter<$PrismaModel> | $Enums.InvitationStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumInvitationStatusFilter<$PrismaModel>
+    _max?: NestedEnumInvitationStatusFilter<$PrismaModel>
   }
 
   export type CallRoundCouncilMemberCallRoundIdCouncilMemberIdCompoundUniqueInput = {
@@ -41105,21 +41343,30 @@ export namespace Prisma {
     id?: SortOrder
     callRoundId?: SortOrder
     councilMemberId?: SortOrder
+    invitationStatus?: SortOrder
+    respondedAt?: SortOrder
     createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type CallRoundCouncilMemberMaxOrderByAggregateInput = {
     id?: SortOrder
     callRoundId?: SortOrder
     councilMemberId?: SortOrder
+    invitationStatus?: SortOrder
+    respondedAt?: SortOrder
     createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type CallRoundCouncilMemberMinOrderByAggregateInput = {
     id?: SortOrder
     callRoundId?: SortOrder
     councilMemberId?: SortOrder
+    invitationStatus?: SortOrder
+    respondedAt?: SortOrder
     createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type ProjectCouncilAssignmentListRelationFilter = {
@@ -43715,6 +43962,10 @@ export namespace Prisma {
     connect?: UserWhereUniqueInput
   }
 
+  export type EnumInvitationStatusFieldUpdateOperationsInput = {
+    set?: $Enums.InvitationStatus
+  }
+
   export type CallRoundUpdateOneRequiredWithoutAvailableInstructorsNestedInput = {
     create?: XOR<CallRoundCreateWithoutAvailableInstructorsInput, CallRoundUncheckedCreateWithoutAvailableInstructorsInput>
     connectOrCreate?: CallRoundCreateOrConnectWithoutAvailableInstructorsInput
@@ -44459,6 +44710,23 @@ export namespace Prisma {
     _max?: NestedEnumPostStatusFilter<$PrismaModel>
   }
 
+  export type NestedEnumInvitationStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.InvitationStatus | EnumInvitationStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.InvitationStatus[] | ListEnumInvitationStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.InvitationStatus[] | ListEnumInvitationStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumInvitationStatusFilter<$PrismaModel> | $Enums.InvitationStatus
+  }
+
+  export type NestedEnumInvitationStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.InvitationStatus | EnumInvitationStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.InvitationStatus[] | ListEnumInvitationStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.InvitationStatus[] | ListEnumInvitationStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumInvitationStatusWithAggregatesFilter<$PrismaModel> | $Enums.InvitationStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumInvitationStatusFilter<$PrismaModel>
+    _max?: NestedEnumInvitationStatusFilter<$PrismaModel>
+  }
+
   export type MajorCreateWithoutDepartmentInput = {
     id?: string
     code: string
@@ -44599,6 +44867,7 @@ export namespace Prisma {
     approvedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    invitationDeadline?: Date | string | null
     projects?: ProjectCreateNestedManyWithoutCallRoundInput
     registrations?: ProjectRegistrationCreateNestedManyWithoutCallRoundInput
     template?: ProgressReportTemplateCreateNestedOneWithoutCallRoundsInput
@@ -44641,6 +44910,7 @@ export namespace Prisma {
     templateId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    invitationDeadline?: Date | string | null
     projects?: ProjectUncheckedCreateNestedManyWithoutCallRoundInput
     registrations?: ProjectRegistrationUncheckedCreateNestedManyWithoutCallRoundInput
     majors?: MajorUncheckedCreateNestedManyWithoutCallRoundsInput
@@ -44849,6 +45119,7 @@ export namespace Prisma {
     templateId?: StringNullableFilter<"CallRound"> | string | null
     createdAt?: DateTimeFilter<"CallRound"> | Date | string
     updatedAt?: DateTimeFilter<"CallRound"> | Date | string
+    invitationDeadline?: DateTimeNullableFilter<"CallRound"> | Date | string | null
   }
 
   export type RoomUpsertWithWhereUniqueWithoutDepartmentInput = {
@@ -45085,6 +45356,7 @@ export namespace Prisma {
     approvedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    invitationDeadline?: Date | string | null
     projects?: ProjectCreateNestedManyWithoutCallRoundInput
     registrations?: ProjectRegistrationCreateNestedManyWithoutCallRoundInput
     template?: ProgressReportTemplateCreateNestedOneWithoutCallRoundsInput
@@ -45127,6 +45399,7 @@ export namespace Prisma {
     templateId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    invitationDeadline?: Date | string | null
     projects?: ProjectUncheckedCreateNestedManyWithoutCallRoundInput
     registrations?: ProjectRegistrationUncheckedCreateNestedManyWithoutCallRoundInput
     departments?: DepartmentUncheckedCreateNestedManyWithoutCallRoundsInput
@@ -45374,6 +45647,7 @@ export namespace Prisma {
     approvedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    invitationDeadline?: Date | string | null
     projects?: ProjectCreateNestedManyWithoutCallRoundInput
     registrations?: ProjectRegistrationCreateNestedManyWithoutCallRoundInput
     template?: ProgressReportTemplateCreateNestedOneWithoutCallRoundsInput
@@ -45416,6 +45690,7 @@ export namespace Prisma {
     templateId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    invitationDeadline?: Date | string | null
     projects?: ProjectUncheckedCreateNestedManyWithoutCallRoundInput
     registrations?: ProjectRegistrationUncheckedCreateNestedManyWithoutCallRoundInput
     departments?: DepartmentUncheckedCreateNestedManyWithoutCallRoundsInput
@@ -45967,14 +46242,20 @@ export namespace Prisma {
 
   export type CallRoundInstructorCreateWithoutInstructorInput = {
     id?: string
+    invitationStatus?: $Enums.InvitationStatus
+    respondedAt?: Date | string | null
     createdAt?: Date | string
+    updatedAt?: Date | string
     callRound: CallRoundCreateNestedOneWithoutAvailableInstructorsInput
   }
 
   export type CallRoundInstructorUncheckedCreateWithoutInstructorInput = {
     id?: string
     callRoundId: string
+    invitationStatus?: $Enums.InvitationStatus
+    respondedAt?: Date | string | null
     createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type CallRoundInstructorCreateOrConnectWithoutInstructorInput = {
@@ -45989,14 +46270,20 @@ export namespace Prisma {
 
   export type CallRoundCouncilMemberCreateWithoutCouncilMemberInput = {
     id?: string
+    invitationStatus?: $Enums.InvitationStatus
+    respondedAt?: Date | string | null
     createdAt?: Date | string
+    updatedAt?: Date | string
     callRound: CallRoundCreateNestedOneWithoutAvailableCouncilMembersInput
   }
 
   export type CallRoundCouncilMemberUncheckedCreateWithoutCouncilMemberInput = {
     id?: string
     callRoundId: string
+    invitationStatus?: $Enums.InvitationStatus
+    respondedAt?: Date | string | null
     createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type CallRoundCouncilMemberCreateOrConnectWithoutCouncilMemberInput = {
@@ -46508,7 +46795,10 @@ export namespace Prisma {
     id?: StringFilter<"CallRoundInstructor"> | string
     callRoundId?: StringFilter<"CallRoundInstructor"> | string
     instructorId?: StringFilter<"CallRoundInstructor"> | string
+    invitationStatus?: EnumInvitationStatusFilter<"CallRoundInstructor"> | $Enums.InvitationStatus
+    respondedAt?: DateTimeNullableFilter<"CallRoundInstructor"> | Date | string | null
     createdAt?: DateTimeFilter<"CallRoundInstructor"> | Date | string
+    updatedAt?: DateTimeFilter<"CallRoundInstructor"> | Date | string
   }
 
   export type CallRoundCouncilMemberUpsertWithWhereUniqueWithoutCouncilMemberInput = {
@@ -46534,7 +46824,10 @@ export namespace Prisma {
     id?: StringFilter<"CallRoundCouncilMember"> | string
     callRoundId?: StringFilter<"CallRoundCouncilMember"> | string
     councilMemberId?: StringFilter<"CallRoundCouncilMember"> | string
+    invitationStatus?: EnumInvitationStatusFilter<"CallRoundCouncilMember"> | $Enums.InvitationStatus
+    respondedAt?: DateTimeNullableFilter<"CallRoundCouncilMember"> | Date | string | null
     createdAt?: DateTimeFilter<"CallRoundCouncilMember"> | Date | string
+    updatedAt?: DateTimeFilter<"CallRoundCouncilMember"> | Date | string
   }
 
   export type CouncilMemberAssignmentUpsertWithWhereUniqueWithoutCouncilMemberInput = {
@@ -46878,14 +47171,20 @@ export namespace Prisma {
 
   export type CallRoundInstructorCreateWithoutCallRoundInput = {
     id?: string
+    invitationStatus?: $Enums.InvitationStatus
+    respondedAt?: Date | string | null
     createdAt?: Date | string
+    updatedAt?: Date | string
     instructor: UserCreateNestedOneWithoutCallRoundInstructorsInput
   }
 
   export type CallRoundInstructorUncheckedCreateWithoutCallRoundInput = {
     id?: string
     instructorId: string
+    invitationStatus?: $Enums.InvitationStatus
+    respondedAt?: Date | string | null
     createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type CallRoundInstructorCreateOrConnectWithoutCallRoundInput = {
@@ -46900,14 +47199,20 @@ export namespace Prisma {
 
   export type CallRoundCouncilMemberCreateWithoutCallRoundInput = {
     id?: string
+    invitationStatus?: $Enums.InvitationStatus
+    respondedAt?: Date | string | null
     createdAt?: Date | string
+    updatedAt?: Date | string
     councilMember: UserCreateNestedOneWithoutCallRoundCouncilMembersInput
   }
 
   export type CallRoundCouncilMemberUncheckedCreateWithoutCallRoundInput = {
     id?: string
     councilMemberId: string
+    invitationStatus?: $Enums.InvitationStatus
+    respondedAt?: Date | string | null
     createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type CallRoundCouncilMemberCreateOrConnectWithoutCallRoundInput = {
@@ -47445,6 +47750,7 @@ export namespace Prisma {
     approvedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    invitationDeadline?: Date | string | null
     registrations?: ProjectRegistrationCreateNestedManyWithoutCallRoundInput
     template?: ProgressReportTemplateCreateNestedOneWithoutCallRoundsInput
     departments?: DepartmentCreateNestedManyWithoutCallRoundsInput
@@ -47487,6 +47793,7 @@ export namespace Prisma {
     templateId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    invitationDeadline?: Date | string | null
     registrations?: ProjectRegistrationUncheckedCreateNestedManyWithoutCallRoundInput
     departments?: DepartmentUncheckedCreateNestedManyWithoutCallRoundsInput
     majors?: MajorUncheckedCreateNestedManyWithoutCallRoundsInput
@@ -47965,6 +48272,7 @@ export namespace Prisma {
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    invitationDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     registrations?: ProjectRegistrationUpdateManyWithoutCallRoundNestedInput
     template?: ProgressReportTemplateUpdateOneWithoutCallRoundsNestedInput
     departments?: DepartmentUpdateManyWithoutCallRoundsNestedInput
@@ -48007,6 +48315,7 @@ export namespace Prisma {
     templateId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    invitationDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     registrations?: ProjectRegistrationUncheckedUpdateManyWithoutCallRoundNestedInput
     departments?: DepartmentUncheckedUpdateManyWithoutCallRoundsNestedInput
     majors?: MajorUncheckedUpdateManyWithoutCallRoundsNestedInput
@@ -48316,6 +48625,7 @@ export namespace Prisma {
     approvedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    invitationDeadline?: Date | string | null
     projects?: ProjectCreateNestedManyWithoutCallRoundInput
     registrations?: ProjectRegistrationCreateNestedManyWithoutCallRoundInput
     departments?: DepartmentCreateNestedManyWithoutCallRoundsInput
@@ -48357,6 +48667,7 @@ export namespace Prisma {
     approvedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    invitationDeadline?: Date | string | null
     projects?: ProjectUncheckedCreateNestedManyWithoutCallRoundInput
     registrations?: ProjectRegistrationUncheckedCreateNestedManyWithoutCallRoundInput
     departments?: DepartmentUncheckedCreateNestedManyWithoutCallRoundsInput
@@ -49274,6 +49585,7 @@ export namespace Prisma {
     approvedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    invitationDeadline?: Date | string | null
     projects?: ProjectCreateNestedManyWithoutCallRoundInput
     template?: ProgressReportTemplateCreateNestedOneWithoutCallRoundsInput
     departments?: DepartmentCreateNestedManyWithoutCallRoundsInput
@@ -49316,6 +49628,7 @@ export namespace Prisma {
     templateId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    invitationDeadline?: Date | string | null
     projects?: ProjectUncheckedCreateNestedManyWithoutCallRoundInput
     departments?: DepartmentUncheckedCreateNestedManyWithoutCallRoundsInput
     majors?: MajorUncheckedCreateNestedManyWithoutCallRoundsInput
@@ -49614,6 +49927,7 @@ export namespace Prisma {
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    invitationDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     projects?: ProjectUpdateManyWithoutCallRoundNestedInput
     template?: ProgressReportTemplateUpdateOneWithoutCallRoundsNestedInput
     departments?: DepartmentUpdateManyWithoutCallRoundsNestedInput
@@ -49656,6 +49970,7 @@ export namespace Prisma {
     templateId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    invitationDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     projects?: ProjectUncheckedUpdateManyWithoutCallRoundNestedInput
     departments?: DepartmentUncheckedUpdateManyWithoutCallRoundsNestedInput
     majors?: MajorUncheckedUpdateManyWithoutCallRoundsNestedInput
@@ -51018,6 +51333,7 @@ export namespace Prisma {
     approvedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    invitationDeadline?: Date | string | null
     projects?: ProjectCreateNestedManyWithoutCallRoundInput
     registrations?: ProjectRegistrationCreateNestedManyWithoutCallRoundInput
     template?: ProgressReportTemplateCreateNestedOneWithoutCallRoundsInput
@@ -51060,6 +51376,7 @@ export namespace Prisma {
     templateId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    invitationDeadline?: Date | string | null
     projects?: ProjectUncheckedCreateNestedManyWithoutCallRoundInput
     registrations?: ProjectRegistrationUncheckedCreateNestedManyWithoutCallRoundInput
     departments?: DepartmentUncheckedCreateNestedManyWithoutCallRoundsInput
@@ -51187,6 +51504,7 @@ export namespace Prisma {
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    invitationDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     projects?: ProjectUpdateManyWithoutCallRoundNestedInput
     registrations?: ProjectRegistrationUpdateManyWithoutCallRoundNestedInput
     template?: ProgressReportTemplateUpdateOneWithoutCallRoundsNestedInput
@@ -51229,6 +51547,7 @@ export namespace Prisma {
     templateId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    invitationDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     projects?: ProjectUncheckedUpdateManyWithoutCallRoundNestedInput
     registrations?: ProjectRegistrationUncheckedUpdateManyWithoutCallRoundNestedInput
     departments?: DepartmentUncheckedUpdateManyWithoutCallRoundsNestedInput
@@ -51346,6 +51665,7 @@ export namespace Prisma {
     approvedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    invitationDeadline?: Date | string | null
     projects?: ProjectCreateNestedManyWithoutCallRoundInput
     registrations?: ProjectRegistrationCreateNestedManyWithoutCallRoundInput
     template?: ProgressReportTemplateCreateNestedOneWithoutCallRoundsInput
@@ -51388,6 +51708,7 @@ export namespace Prisma {
     templateId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    invitationDeadline?: Date | string | null
     projects?: ProjectUncheckedCreateNestedManyWithoutCallRoundInput
     registrations?: ProjectRegistrationUncheckedCreateNestedManyWithoutCallRoundInput
     departments?: DepartmentUncheckedCreateNestedManyWithoutCallRoundsInput
@@ -51515,6 +51836,7 @@ export namespace Prisma {
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    invitationDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     projects?: ProjectUpdateManyWithoutCallRoundNestedInput
     registrations?: ProjectRegistrationUpdateManyWithoutCallRoundNestedInput
     template?: ProgressReportTemplateUpdateOneWithoutCallRoundsNestedInput
@@ -51557,6 +51879,7 @@ export namespace Prisma {
     templateId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    invitationDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     projects?: ProjectUncheckedUpdateManyWithoutCallRoundNestedInput
     registrations?: ProjectRegistrationUncheckedUpdateManyWithoutCallRoundNestedInput
     departments?: DepartmentUncheckedUpdateManyWithoutCallRoundsNestedInput
@@ -51674,6 +51997,7 @@ export namespace Prisma {
     approvedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    invitationDeadline?: Date | string | null
     projects?: ProjectCreateNestedManyWithoutCallRoundInput
     registrations?: ProjectRegistrationCreateNestedManyWithoutCallRoundInput
     template?: ProgressReportTemplateCreateNestedOneWithoutCallRoundsInput
@@ -51716,6 +52040,7 @@ export namespace Prisma {
     templateId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    invitationDeadline?: Date | string | null
     projects?: ProjectUncheckedCreateNestedManyWithoutCallRoundInput
     registrations?: ProjectRegistrationUncheckedCreateNestedManyWithoutCallRoundInput
     departments?: DepartmentUncheckedCreateNestedManyWithoutCallRoundsInput
@@ -51818,6 +52143,7 @@ export namespace Prisma {
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    invitationDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     projects?: ProjectUpdateManyWithoutCallRoundNestedInput
     registrations?: ProjectRegistrationUpdateManyWithoutCallRoundNestedInput
     template?: ProgressReportTemplateUpdateOneWithoutCallRoundsNestedInput
@@ -51860,6 +52186,7 @@ export namespace Prisma {
     templateId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    invitationDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     projects?: ProjectUncheckedUpdateManyWithoutCallRoundNestedInput
     registrations?: ProjectRegistrationUncheckedUpdateManyWithoutCallRoundNestedInput
     departments?: DepartmentUncheckedUpdateManyWithoutCallRoundsNestedInput
@@ -52290,6 +52617,7 @@ export namespace Prisma {
     approvedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    invitationDeadline?: Date | string | null
     projects?: ProjectCreateNestedManyWithoutCallRoundInput
     registrations?: ProjectRegistrationCreateNestedManyWithoutCallRoundInput
     template?: ProgressReportTemplateCreateNestedOneWithoutCallRoundsInput
@@ -52332,6 +52660,7 @@ export namespace Prisma {
     templateId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    invitationDeadline?: Date | string | null
     projects?: ProjectUncheckedCreateNestedManyWithoutCallRoundInput
     registrations?: ProjectRegistrationUncheckedCreateNestedManyWithoutCallRoundInput
     departments?: DepartmentUncheckedCreateNestedManyWithoutCallRoundsInput
@@ -52388,6 +52717,7 @@ export namespace Prisma {
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    invitationDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     projects?: ProjectUpdateManyWithoutCallRoundNestedInput
     registrations?: ProjectRegistrationUpdateManyWithoutCallRoundNestedInput
     template?: ProgressReportTemplateUpdateOneWithoutCallRoundsNestedInput
@@ -52430,6 +52760,7 @@ export namespace Prisma {
     templateId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    invitationDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     projects?: ProjectUncheckedUpdateManyWithoutCallRoundNestedInput
     registrations?: ProjectRegistrationUncheckedUpdateManyWithoutCallRoundNestedInput
     departments?: DepartmentUncheckedUpdateManyWithoutCallRoundsNestedInput
@@ -52641,6 +52972,7 @@ export namespace Prisma {
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    invitationDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     projects?: ProjectUpdateManyWithoutCallRoundNestedInput
     registrations?: ProjectRegistrationUpdateManyWithoutCallRoundNestedInput
     template?: ProgressReportTemplateUpdateOneWithoutCallRoundsNestedInput
@@ -52683,6 +53015,7 @@ export namespace Prisma {
     templateId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    invitationDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     projects?: ProjectUncheckedUpdateManyWithoutCallRoundNestedInput
     registrations?: ProjectRegistrationUncheckedUpdateManyWithoutCallRoundNestedInput
     majors?: MajorUncheckedUpdateManyWithoutCallRoundsNestedInput
@@ -52724,6 +53057,7 @@ export namespace Prisma {
     templateId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    invitationDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type RoomUpdateWithoutDepartmentInput = {
@@ -52977,6 +53311,7 @@ export namespace Prisma {
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    invitationDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     projects?: ProjectUpdateManyWithoutCallRoundNestedInput
     registrations?: ProjectRegistrationUpdateManyWithoutCallRoundNestedInput
     template?: ProgressReportTemplateUpdateOneWithoutCallRoundsNestedInput
@@ -53019,6 +53354,7 @@ export namespace Prisma {
     templateId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    invitationDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     projects?: ProjectUncheckedUpdateManyWithoutCallRoundNestedInput
     registrations?: ProjectRegistrationUncheckedUpdateManyWithoutCallRoundNestedInput
     departments?: DepartmentUncheckedUpdateManyWithoutCallRoundsNestedInput
@@ -53060,6 +53396,7 @@ export namespace Prisma {
     templateId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    invitationDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type UserCreateManyClassInput = {
@@ -53194,6 +53531,7 @@ export namespace Prisma {
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    invitationDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     projects?: ProjectUpdateManyWithoutCallRoundNestedInput
     registrations?: ProjectRegistrationUpdateManyWithoutCallRoundNestedInput
     template?: ProgressReportTemplateUpdateOneWithoutCallRoundsNestedInput
@@ -53236,6 +53574,7 @@ export namespace Prisma {
     templateId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    invitationDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     projects?: ProjectUncheckedUpdateManyWithoutCallRoundNestedInput
     registrations?: ProjectRegistrationUncheckedUpdateManyWithoutCallRoundNestedInput
     departments?: DepartmentUncheckedUpdateManyWithoutCallRoundsNestedInput
@@ -53277,6 +53616,7 @@ export namespace Prisma {
     templateId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    invitationDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type ProjectCreateManyLeaderInput = {
@@ -53415,13 +53755,19 @@ export namespace Prisma {
   export type CallRoundInstructorCreateManyInstructorInput = {
     id?: string
     callRoundId: string
+    invitationStatus?: $Enums.InvitationStatus
+    respondedAt?: Date | string | null
     createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type CallRoundCouncilMemberCreateManyCouncilMemberInput = {
     id?: string
     callRoundId: string
+    invitationStatus?: $Enums.InvitationStatus
+    respondedAt?: Date | string | null
     createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type CouncilMemberAssignmentCreateManyCouncilMemberInput = {
@@ -53920,38 +54266,56 @@ export namespace Prisma {
 
   export type CallRoundInstructorUpdateWithoutInstructorInput = {
     id?: StringFieldUpdateOperationsInput | string
+    invitationStatus?: EnumInvitationStatusFieldUpdateOperationsInput | $Enums.InvitationStatus
+    respondedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     callRound?: CallRoundUpdateOneRequiredWithoutAvailableInstructorsNestedInput
   }
 
   export type CallRoundInstructorUncheckedUpdateWithoutInstructorInput = {
     id?: StringFieldUpdateOperationsInput | string
     callRoundId?: StringFieldUpdateOperationsInput | string
+    invitationStatus?: EnumInvitationStatusFieldUpdateOperationsInput | $Enums.InvitationStatus
+    respondedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type CallRoundInstructorUncheckedUpdateManyWithoutInstructorInput = {
     id?: StringFieldUpdateOperationsInput | string
     callRoundId?: StringFieldUpdateOperationsInput | string
+    invitationStatus?: EnumInvitationStatusFieldUpdateOperationsInput | $Enums.InvitationStatus
+    respondedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type CallRoundCouncilMemberUpdateWithoutCouncilMemberInput = {
     id?: StringFieldUpdateOperationsInput | string
+    invitationStatus?: EnumInvitationStatusFieldUpdateOperationsInput | $Enums.InvitationStatus
+    respondedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     callRound?: CallRoundUpdateOneRequiredWithoutAvailableCouncilMembersNestedInput
   }
 
   export type CallRoundCouncilMemberUncheckedUpdateWithoutCouncilMemberInput = {
     id?: StringFieldUpdateOperationsInput | string
     callRoundId?: StringFieldUpdateOperationsInput | string
+    invitationStatus?: EnumInvitationStatusFieldUpdateOperationsInput | $Enums.InvitationStatus
+    respondedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type CallRoundCouncilMemberUncheckedUpdateManyWithoutCouncilMemberInput = {
     id?: StringFieldUpdateOperationsInput | string
     callRoundId?: StringFieldUpdateOperationsInput | string
+    invitationStatus?: EnumInvitationStatusFieldUpdateOperationsInput | $Enums.InvitationStatus
+    respondedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type CouncilMemberAssignmentUpdateWithoutCouncilMemberInput = {
@@ -54173,13 +54537,19 @@ export namespace Prisma {
   export type CallRoundInstructorCreateManyCallRoundInput = {
     id?: string
     instructorId: string
+    invitationStatus?: $Enums.InvitationStatus
+    respondedAt?: Date | string | null
     createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type CallRoundCouncilMemberCreateManyCallRoundInput = {
     id?: string
     councilMemberId: string
+    invitationStatus?: $Enums.InvitationStatus
+    respondedAt?: Date | string | null
     createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type CouncilCreateManyCallRoundInput = {
@@ -54423,38 +54793,56 @@ export namespace Prisma {
 
   export type CallRoundInstructorUpdateWithoutCallRoundInput = {
     id?: StringFieldUpdateOperationsInput | string
+    invitationStatus?: EnumInvitationStatusFieldUpdateOperationsInput | $Enums.InvitationStatus
+    respondedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     instructor?: UserUpdateOneRequiredWithoutCallRoundInstructorsNestedInput
   }
 
   export type CallRoundInstructorUncheckedUpdateWithoutCallRoundInput = {
     id?: StringFieldUpdateOperationsInput | string
     instructorId?: StringFieldUpdateOperationsInput | string
+    invitationStatus?: EnumInvitationStatusFieldUpdateOperationsInput | $Enums.InvitationStatus
+    respondedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type CallRoundInstructorUncheckedUpdateManyWithoutCallRoundInput = {
     id?: StringFieldUpdateOperationsInput | string
     instructorId?: StringFieldUpdateOperationsInput | string
+    invitationStatus?: EnumInvitationStatusFieldUpdateOperationsInput | $Enums.InvitationStatus
+    respondedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type CallRoundCouncilMemberUpdateWithoutCallRoundInput = {
     id?: StringFieldUpdateOperationsInput | string
+    invitationStatus?: EnumInvitationStatusFieldUpdateOperationsInput | $Enums.InvitationStatus
+    respondedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     councilMember?: UserUpdateOneRequiredWithoutCallRoundCouncilMembersNestedInput
   }
 
   export type CallRoundCouncilMemberUncheckedUpdateWithoutCallRoundInput = {
     id?: StringFieldUpdateOperationsInput | string
     councilMemberId?: StringFieldUpdateOperationsInput | string
+    invitationStatus?: EnumInvitationStatusFieldUpdateOperationsInput | $Enums.InvitationStatus
+    respondedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type CallRoundCouncilMemberUncheckedUpdateManyWithoutCallRoundInput = {
     id?: StringFieldUpdateOperationsInput | string
     councilMemberId?: StringFieldUpdateOperationsInput | string
+    invitationStatus?: EnumInvitationStatusFieldUpdateOperationsInput | $Enums.InvitationStatus
+    respondedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type CouncilUpdateWithoutCallRoundInput = {
@@ -54897,6 +55285,7 @@ export namespace Prisma {
     approvedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    invitationDeadline?: Date | string | null
   }
 
   export type ProgressReportTemplateItemUpdateWithoutTemplateInput = {
@@ -54965,6 +55354,7 @@ export namespace Prisma {
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    invitationDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     projects?: ProjectUpdateManyWithoutCallRoundNestedInput
     registrations?: ProjectRegistrationUpdateManyWithoutCallRoundNestedInput
     departments?: DepartmentUpdateManyWithoutCallRoundsNestedInput
@@ -55006,6 +55396,7 @@ export namespace Prisma {
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    invitationDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     projects?: ProjectUncheckedUpdateManyWithoutCallRoundNestedInput
     registrations?: ProjectRegistrationUncheckedUpdateManyWithoutCallRoundNestedInput
     departments?: DepartmentUncheckedUpdateManyWithoutCallRoundsNestedInput
@@ -55047,6 +55438,7 @@ export namespace Prisma {
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    invitationDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type OfficeMeetingCreateManyRoomInput = {

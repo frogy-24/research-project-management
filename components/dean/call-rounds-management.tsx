@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { Clock, CheckCircle, XCircle, PlusCircle, Eye, Pencil, Trash2, Calendar, Users, FileText, Settings, BookOpen, GraduationCap, DollarSign, Hash, AlertCircle, Info, Paperclip, ExternalLink } from 'lucide-react';
+import { Clock, CheckCircle, XCircle, PlusCircle, Eye, Pencil, Trash2, Calendar, Users, FileText, Settings, BookOpen, GraduationCap, DollarSign, Hash, AlertCircle, Info, Paperclip, ExternalLink, Search } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
@@ -31,39 +31,31 @@ import { CallRoundFormDialog } from '@/components/dean/call-round-form-dialog';
 import { callRoundsApi } from '@/api/call-rounds';
 import type { CallRoundAttachment } from '@/types/call-round.schema';
 
-type CallRoundFormData = {
-    name: string;
-    description: string;
-    registrationStartDate: string;
-    registrationEndDate: string;
-    projectStartDate: string;
-    projectEndDate: string;
-    defenseDate: string;
-    projectLockDate: string;
-    maxProjects: string;
-    requirements: string;
-    templateId: string;
-    instructorIds: string[];
-    councilMemberIds: string[];
-    applicableFor: 'STUDENT' | 'LECTURER' | 'BOTH';
-};
-
-const initialFormData: CallRoundFormData = {
-    name: '',
-    description: '',
-    registrationStartDate: '',
-    registrationEndDate: '',
-    projectStartDate: '',
-    projectEndDate: '',
-    defenseDate: '',
-    projectLockDate: '',
-    maxProjects: '',
-    requirements: '',
-    templateId: '',
-    instructorIds: [],
-    councilMemberIds: [],
-    applicableFor: 'STUDENT',
-};
+// Helper: render invitation status badge
+function InvitationStatusBadge({ status }: { status?: string }) {
+    if (status === 'ACCEPTED') {
+        return (
+            <Badge variant="default" className="gap-1 bg-emerald-500 text-white">
+                <CheckCircle className="h-3 w-3" />
+                Đã đồng ý
+            </Badge>
+        );
+    }
+    if (status === 'REJECTED') {
+        return (
+            <Badge variant="destructive" className="gap-1">
+                <XCircle className="h-3 w-3" />
+                Từ chối
+            </Badge>
+        );
+    }
+    return (
+        <Badge variant="outline" className="gap-1 text-amber-600 border-amber-300">
+            <Clock className="h-3 w-3" />
+            Chờ phản hồi
+        </Badge>
+    );
+}
 
 export function DeanCallRoundsManagement() {
     const { data: session } = useAuthSession();
@@ -81,7 +73,10 @@ export function DeanCallRoundsManagement() {
     // API đã filter sẵn: DEAN chỉ thấy đợt mình tạo, ADMIN thấy tất cả
     const deanCallRounds = callRounds || [];
 
-    const canEditCallRound = (callRound: CallRound) => callRound.approvalStatus === 'PENDING_APPROVAL';
+    const canEditCallRound = (callRound: CallRound) => {
+        // Chỉ cho phép sửa khi đang chờ duyệt
+        return callRound.approvalStatus === 'PENDING_APPROVAL';
+    };
 
     const isCallRoundEnded = (callRound: CallRound) => new Date(callRound.registrationEndDate) < new Date();
 
@@ -274,7 +269,7 @@ export function DeanCallRoundsManagement() {
                                                     Xem
                                                 </Button>
 
-                                                {!isCallRoundEnded(callRound) && canEditCallRound(callRound) && (
+                                                {canEditCallRound(callRound) && (
                                                     <Button
                                                         type="button"
                                                         size="sm"
@@ -286,7 +281,7 @@ export function DeanCallRoundsManagement() {
                                                     </Button>
                                                 )}
 
-                                                {!isCallRoundEnded(callRound) && (
+                                                {canEditCallRound(callRound) && (
                                                     <Button
                                                         type="button"
                                                         size="sm"
@@ -708,76 +703,12 @@ export function DeanCallRoundsManagement() {
 
                                     {/* Sub-tab: Giảng viên hướng dẫn */}
                                     <TabsContent value="instructors" className="mt-4">
-                                        <div className="rounded-lg border bg-card p-4">
-                                            <div className="flex items-center gap-2 text-sm font-medium text-blue-600">
-                                                <BookOpen className="h-4 w-4" />
-                                                Danh sách giảng viên hướng dẫn
-                                            </div>
-                                            <Separator className="my-3" />
-                                            {viewingCallRound.availableInstructors && viewingCallRound.availableInstructors.length > 0 ? (
-                                                <div className="space-y-2">
-                                                    {viewingCallRound.availableInstructors.map((item) => (
-                                                        <div
-                                                            key={item.instructorId}
-                                                            className="flex items-center gap-3 rounded-md border bg-muted/50 p-3"
-                                                        >
-                                                            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-100 text-blue-600">
-                                                                <span className="text-xs font-medium">
-                                                                    {item.instructor.name.charAt(0)}
-                                                                </span>
-                                                            </div>
-                                                            <div>
-                                                                <p className="text-sm font-medium">{item.instructor.name}</p>
-                                                                <p className="text-xs text-muted-foreground">
-                                                                    {item.instructor.email}
-                                                                </p>
-                                                            </div>
-                                                        </div>
-                                                    ))}
-                                                </div>
-                                            ) : (
-                                                <p className="text-sm text-muted-foreground italic">
-                                                    Chưa có giảng viên hướng dẫn được chỉ định
-                                                </p>
-                                            )}
-                                        </div>
+                                        <InstructorsTab instructors={viewingCallRound.availableInstructors || []} />
                                     </TabsContent>
 
                                     {/* Sub-tab: Thành viên hội đồng */}
                                     <TabsContent value="council-members" className="mt-4">
-                                        <div className="rounded-lg border bg-card p-4">
-                                            <div className="flex items-center gap-2 text-sm font-medium text-emerald-600">
-                                                <GraduationCap className="h-4 w-4" />
-                                                Danh sách thành viên hội đồng
-                                            </div>
-                                            <Separator className="my-3" />
-                                            {viewingCallRound.availableCouncilMembers && viewingCallRound.availableCouncilMembers.length > 0 ? (
-                                                <div className="space-y-2">
-                                                    {viewingCallRound.availableCouncilMembers.map((item) => (
-                                                        <div
-                                                            key={item.councilMemberId}
-                                                            className="flex items-center gap-3 rounded-md border bg-muted/50 p-3"
-                                                        >
-                                                            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-emerald-100 text-emerald-600">
-                                                                <span className="text-xs font-medium">
-                                                                    {item.councilMember.name.charAt(0)}
-                                                                </span>
-                                                            </div>
-                                                            <div>
-                                                                <p className="text-sm font-medium">{item.councilMember.name}</p>
-                                                                <p className="text-xs text-muted-foreground">
-                                                                    {item.councilMember.email}
-                                                                </p>
-                                                            </div>
-                                                        </div>
-                                                    ))}
-                                                </div>
-                                            ) : (
-                                                <p className="text-sm text-muted-foreground italic">
-                                                    Chưa có thành viên hội đồng được chỉ định
-                                                </p>
-                                            )}
-                                        </div>
+                                        <CouncilMembersTab councilMembers={viewingCallRound.availableCouncilMembers || []} />
                                     </TabsContent>
                                 </Tabs>
                             </TabsContent>
@@ -791,6 +722,148 @@ export function DeanCallRoundsManagement() {
                     </DialogFooter>
                 </DialogContent>
             </Dialog>
+        </div>
+    );
+}
+
+// Instructors Tab Component with Search
+function InstructorsTab({ instructors }: { instructors: any[] }) {
+    const [searchQuery, setSearchQuery] = React.useState('');
+
+    const filteredInstructors = React.useMemo(() => {
+        if (!searchQuery.trim()) return instructors;
+        const query = searchQuery.toLowerCase();
+        return instructors.filter((item) =>
+            item.instructor.name.toLowerCase().includes(query) ||
+            item.instructor.email.toLowerCase().includes(query)
+        );
+    }, [instructors, searchQuery]);
+
+    return (
+        <div className="rounded-lg border bg-card p-4">
+            <div className="flex items-center justify-between gap-3 mb-3">
+                <div className="flex items-center gap-2 text-sm font-medium text-blue-600">
+                    <BookOpen className="h-4 w-4" />
+                    Danh sách giảng viên hướng dẫn
+                </div>
+                <div className="relative w-64">
+                    <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+                    <Input
+                        type="text"
+                        placeholder="Tìm theo tên..."
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        className="pl-8 h-9"
+                    />
+                </div>
+            </div>
+            <Separator className="my-3" />
+            {instructors.length === 0 ? (
+                <p className="text-sm text-muted-foreground italic">
+                    Chưa có giảng viên hướng dẫn được chỉ định
+                </p>
+            ) : filteredInstructors.length === 0 ? (
+                <p className="text-sm text-muted-foreground italic text-center py-4">
+                    Không tìm thấy giảng viên phù hợp
+                </p>
+            ) : (
+                <div className="space-y-2">
+                    {filteredInstructors.map((item) => (
+                        <div
+                            key={item.instructorId}
+                            className="flex items-center justify-between gap-3 rounded-md border bg-muted/50 p-3"
+                        >
+                            <div className="flex items-center gap-3 min-w-0 flex-1">
+                                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-100 text-blue-600 flex-shrink-0">
+                                    <span className="text-xs font-medium">
+                                        {item.instructor.name.charAt(0)}
+                                    </span>
+                                </div>
+                                <div className="min-w-0 flex-1">
+                                    <p className="text-sm font-medium truncate">{item.instructor.name}</p>
+                                    <p className="text-xs text-muted-foreground">
+                                        {item.instructor.email}
+                                    </p>
+                                </div>
+                            </div>
+                            <div className="flex-shrink-0">
+                                <InvitationStatusBadge status={item.invitationStatus} />
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            )}
+        </div>
+    );
+}
+
+// Council Members Tab Component with Search
+function CouncilMembersTab({ councilMembers }: { councilMembers: any[] }) {
+    const [searchQuery, setSearchQuery] = React.useState('');
+
+    const filteredCouncilMembers = React.useMemo(() => {
+        if (!searchQuery.trim()) return councilMembers;
+        const query = searchQuery.toLowerCase();
+        return councilMembers.filter((item) =>
+            item.councilMember.name.toLowerCase().includes(query) ||
+            item.councilMember.email.toLowerCase().includes(query)
+        );
+    }, [councilMembers, searchQuery]);
+
+    return (
+        <div className="rounded-lg border bg-card p-4">
+            <div className="flex items-center justify-between gap-3 mb-3">
+                <div className="flex items-center gap-2 text-sm font-medium text-emerald-600">
+                    <GraduationCap className="h-4 w-4" />
+                    Danh sách thành viên hội đồng
+                </div>
+                <div className="relative w-64">
+                    <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+                    <Input
+                        type="text"
+                        placeholder="Tìm theo tên..."
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        className="pl-8 h-9"
+                    />
+                </div>
+            </div>
+            <Separator className="my-3" />
+            {councilMembers.length === 0 ? (
+                <p className="text-sm text-muted-foreground italic">
+                    Chưa có thành viên hội đồng được chỉ định
+                </p>
+            ) : filteredCouncilMembers.length === 0 ? (
+                <p className="text-sm text-muted-foreground italic text-center py-4">
+                    Không tìm thấy thành viên phù hợp
+                </p>
+            ) : (
+                <div className="space-y-2">
+                    {filteredCouncilMembers.map((item) => (
+                        <div
+                            key={item.councilMemberId}
+                            className="flex items-center justify-between gap-3 rounded-md border bg-muted/50 p-3"
+                        >
+                            <div className="flex items-center gap-3 min-w-0 flex-1">
+                                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-emerald-100 text-emerald-600 flex-shrink-0">
+                                    <span className="text-xs font-medium">
+                                        {item.councilMember.name.charAt(0)}
+                                    </span>
+                                </div>
+                                <div className="min-w-0 flex-1">
+                                    <p className="text-sm font-medium truncate">{item.councilMember.name}</p>
+                                    <p className="text-xs text-muted-foreground">
+                                        {item.councilMember.email}
+                                    </p>
+                                </div>
+                            </div>
+                            <div className="flex-shrink-0">
+                                <InvitationStatusBadge status={item.invitationStatus} />
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            )}
         </div>
     );
 }

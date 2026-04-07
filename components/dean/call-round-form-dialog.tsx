@@ -1,7 +1,19 @@
 'use client';
 
 import * as React from 'react';
-import { PlusCircle, Paperclip, Upload, Trash2, FileText, ExternalLink, X } from 'lucide-react';
+import {
+    PlusCircle,
+    Paperclip,
+    Upload,
+    Trash2,
+    FileText,
+    ExternalLink,
+    X,
+    Calendar,
+    CheckCircle,
+    XCircle,
+    Clock,
+} from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
     Dialog,
@@ -37,6 +49,7 @@ export type CallRoundFormData = {
     budgetLimit?: number;
     defenseDate: string;
     projectLockDate: string;
+    invitationDeadline: string;
     maxProjects: string;
     requirements: string;
     templateId: string;
@@ -54,6 +67,7 @@ const initialFormData: CallRoundFormData = {
     projectEndDate: '',
     defenseDate: '',
     projectLockDate: '',
+    invitationDeadline: '',
     maxProjects: '',
     requirements: '',
     templateId: '',
@@ -124,6 +138,9 @@ export function CallRoundFormDialog({
                 projectLockDate: editingCallRound.projectLockDate
                     ? new Date(editingCallRound.projectLockDate).toISOString().split('T')[0]
                     : '',
+                invitationDeadline: editingCallRound.invitationDeadline
+                    ? new Date(editingCallRound.invitationDeadline).toISOString().slice(0, 16)
+                    : '',
                 maxProjects: editingCallRound.maxProjects?.toString() || '',
                 requirements: editingCallRound.requirements || '',
                 templateId: editingCallRound.templateId || '',
@@ -190,6 +207,7 @@ export function CallRoundFormDialog({
                 projectEndDate: formData.projectEndDate ? new Date(formData.projectEndDate) : undefined,
                 defenseDate: formData.defenseDate ? new Date(formData.defenseDate) : undefined,
                 projectLockDate: formData.projectLockDate ? new Date(formData.projectLockDate) : undefined,
+                invitationDeadline: formData.invitationDeadline ? new Date(formData.invitationDeadline) : undefined,
                 maxProjects: formData.maxProjects ? parseInt(formData.maxProjects) : undefined,
                 requirements: formData.requirements || undefined,
                 templateId: formData.templateId && formData.templateId !== 'none' ? formData.templateId : null,
@@ -294,7 +312,7 @@ export function CallRoundFormDialog({
                                 required
                             />
                         </div>
-                         <div className="space-y-2">
+                        <div className="space-y-2">
                             <Label htmlFor="projectLockDate">Ngày chốt đề tài</Label>
                             <Input
                                 id="projectLockDate"
@@ -337,7 +355,6 @@ export function CallRoundFormDialog({
                                 onChange={(e) => setFormData({ ...formData, defenseDate: e.target.value })}
                             />
                         </div>
-                       
                     </div>
 
                     <div className="space-y-2">
@@ -427,9 +444,24 @@ export function CallRoundFormDialog({
                         </p>
                     </div>
 
+                    <div className="space-y-2">
+                        <Label htmlFor="invitationDeadline" className="flex items-center gap-2">
+                            <Calendar className="h-4 w-4" />
+                            Hạn phản hồi lời mời (giảng viên/hội đồng)
+                        </Label>
+                        <Input
+                            id="invitationDeadline"
+                            type="date"
+                            value={formData.invitationDeadline}
+                            onChange={(e) => setFormData({ ...formData, invitationDeadline: e.target.value })}
+                        />
+                        <p className="text-xs text-muted-foreground">
+                            Hạn chót để giảng viên/hội đồng phản hồi lời mời
+                        </p>
+                    </div>
                     {/* Instructor Selection */}
                     <LecturerSelection
-                        label="Giảng viên hướng dẫn"
+                        label="Lựa chọn giảng viên hướng dẫn - Tự động gửi lời mời"
                         field="instructorIds"
                         formData={formData}
                         lecturers={lecturers}
@@ -442,7 +474,7 @@ export function CallRoundFormDialog({
 
                     {/* Council Member Selection */}
                     <LecturerSelection
-                        label="Thành viên hội đồng"
+                        label="Lựa chọn thành viên hội đồng - Tự động gửi lời mời"
                         field="councilMemberIds"
                         formData={formData}
                         lecturers={lecturers}
@@ -453,7 +485,6 @@ export function CallRoundFormDialog({
                         selectedColor="text-emerald-600"
                     />
 
-                    {/* File Attachments Section */}
                     <div className="space-y-2">
                         <div className="flex items-center justify-between">
                             <Label>Tệp đính kèm</Label>

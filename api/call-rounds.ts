@@ -66,4 +66,12 @@ export const callRoundsApi = {
         );
         return response.data.data;
     },
+
+    // Reset approval status back to PENDING_APPROVAL
+    resetApproval: async (id: string): Promise<CallRound> => {
+        const response = await api.patch<ApiSuccess<CallRound>>(`/call-rounds/${id}`, {
+            approvalStatus: 'PENDING_APPROVAL',
+        });
+        return callRoundSchema.parse(response.data.data);
+    },
 };

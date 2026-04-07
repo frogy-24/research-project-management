@@ -1,7 +1,7 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { useCallRounds, useCreateCallRound, useUpdateCallRound, useDeleteCallRound, useApproveCallRound, useRejectCallRound } from '@/hooks/useCallRounds';
 import { useProgressTemplates } from '@/hooks/useProgressTemplates';
@@ -31,6 +31,7 @@ const APPROVAL_STATUS_FILTERS = [
 ];
 
 export default function CallRoundsPage() {
+    const queryClient = useQueryClient();
     const { data: callRounds = [], isLoading } = useCallRounds();
     const { data: templates = [] } = useProgressTemplates();
     const { data: departments = [] } = useDepartments();
@@ -52,6 +53,7 @@ export default function CallRoundsPage() {
     const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
     const [lockConfirmOpen, setLockConfirmOpen] = useState(false);
     const [approvalDialogOpen, setApprovalDialogOpen] = useState(false);
+    const [resetApprovalConfirmOpen, setResetApprovalConfirmOpen] = useState(false);
     const [selectedRoundForAction, setSelectedRoundForAction] = useState<any>(null);
     const [approvalNote, setApprovalNote] = useState('');
     const [errors, setErrors] = useState<Record<string, boolean>>({});
@@ -491,34 +493,6 @@ export default function CallRoundsPage() {
                                                                 {round.approvalNote}
                                                             </span>
                                                         )}
-                                                        {round.approvalStatus === 'PENDING_APPROVAL' && (
-                                                            <div className="flex gap-1 mt-1">
-                                                                <Button
-                                                                    size="sm"
-                                                                    variant="default"
-                                                                    className="h-7 px-2 text-xs bg-emerald-600 hover:bg-emerald-700"
-                                                                    onClick={() => {
-                                                                        setSelectedRoundForAction(round);
-                                                                        setApprovalDialogOpen(true);
-                                                                    }}
-                                                                >
-                                                                    <CheckCircle className="h-3 w-3 mr-1" />
-                                                                    Duyệt
-                                                                </Button>
-                                                                <Button
-                                                                    size="sm"
-                                                                    variant="destructive"
-                                                                    className="h-7 px-2 text-xs"
-                                                                    onClick={() => {
-                                                                        setSelectedRoundForAction(round);
-                                                                        setApprovalDialogOpen(true);
-                                                                    }}
-                                                                >
-                                                                    <XCircle className="h-3 w-3 mr-1" />
-                                                                    Từ chối
-                                                                </Button>
-                                                            </div>
-                                                        )}
                                                     </div>
                                                 </TableCell>
                                                 <TableCell>
@@ -552,19 +526,8 @@ export default function CallRoundsPage() {
                                                         <Button 
                                                             size="sm" 
                                                             variant="ghost" 
-                                                            onClick={() => {
-                                                                setViewRound(round);
-                                                            }}
-                                                            title="Xem chi tiết"
-                                                        >
-                                                            <Eye className="h-4 w-4" />
-                                                        </Button>
-                                                        <Button 
-                                                            size="sm" 
-                                                            variant="ghost" 
                                                             onClick={() => handleEdit(round)}
-                                                            title={round.isLocked ? "Xem chi tiết" : "Chỉnh sửa"}
-                                                            disabled={round.isLocked}
+                                                            title="Chỉnh sửa / Phê duyệt"
                                                         >
                                                             <Edit className="h-4 w-4" />
                                                         </Button>
@@ -1011,6 +974,86 @@ export default function CallRoundsPage() {
                             </div>
                         </div>
 
+                        {editingRound && editingRound.approvalStatus === 'PENDING_APPROVAL' && (
+                            <div className="flex gap-3">
+                                <Button
+                                    onClick={() => {
+                                        setSelectedRoundForAction(editingRound);
+                                        setApprovalDialogOpen(true);
+                                        setDialogOpen(false);
+                                    }}
+                                    variant="destructive"
+                                    className="flex-1"
+                                >
+                                    <XCircle className="h-4 w-4 mr-2" />
+                                    Từ chối đợt đăng ký
+                                </Button>
+                                <Button
+                                    onClick={() => {
+                                        if (editingRound) {
+                                            approveMutation.mutate(
+                                                { id: editingRound.id },
+                                                {
+                                                    onSuccess: () => {
+                                                        toast.success('Đã phê duyệt đợt đăng ký');
+                                                        setDialogOpen(false);
+                                                        resetForm();
+                                                    },
+                                                    onError: (error: any) => {
+                                                        toast.error(error.response?.data?.error || 'Lỗi khi phê duyệt');
+                                                    },
+                                                }
+                                            );
+                                        }
+                                    }}
+                                    className="flex-1 bg-emerald-600 hover:bg-emerald-700"
+                                    disabled={approveMutation.isPending}
+                                >
+                                    {approveMutation.isPending ? (
+                                        <div className="flex items-center gap-2">
+                                            <div className="h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                                            Đang duyệt...
+                                        </div>
+                                    ) : (
+                                        <>
+                                            <CheckCircle className="h-4 w-4 mr-2" />
+                                            Phê duyệt đợt đăng ký
+                                        </>
+                                    )}
+                                </Button>
+                            </div>
+                        )}
+
+                        {editingRound && editingRound.approvalStatus === 'APPROVED' && (
+                            <Button
+                                onClick={() => {
+                                    setSelectedRoundForAction(editingRound);
+                                    setResetApprovalConfirmOpen(true);
+                                    setDialogOpen(false);
+                                }}
+                                variant="outline"
+                                className="w-full border-amber-500 text-amber-700 hover:bg-amber-50"
+                            >
+                                <XCircle className="h-4 w-4 mr-2" />
+                                Hủy phê duyệt (chuyển về chờ duyệt)
+                            </Button>
+                        )}
+
+                        {editingRound && editingRound.approvalStatus === 'REJECTED' && (
+                            <Button
+                                onClick={() => {
+                                    setSelectedRoundForAction(editingRound);
+                                    setResetApprovalConfirmOpen(true);
+                                    setDialogOpen(false);
+                                }}
+                                variant="outline"
+                                className="w-full border-blue-500 text-blue-700 hover:bg-blue-50"
+                            >
+                                <CheckCircle className="h-4 w-4 mr-2" />
+                                Hủy từ chối (chuyển về chờ duyệt)
+                            </Button>
+                        )}
+
                         {!isReadOnly && (
                             <Button
                                 onClick={handleSubmit}
@@ -1171,6 +1214,64 @@ export default function CallRoundsPage() {
                             disabled={approveMutation.isPending || rejectMutation.isPending}
                         >
                             {approveMutation.isPending ? 'Đang xử lý...' : 'Phê duyệt'}
+                        </Button>
+                    </div>
+                </DialogContent>
+            </Dialog>
+
+            {/* Reset Approval Confirmation Dialog */}
+            <Dialog open={resetApprovalConfirmOpen} onOpenChange={setResetApprovalConfirmOpen}>
+                <DialogContent className="sm:max-w-md">
+                    <DialogHeader>
+                        <DialogTitle className="flex items-center gap-2 text-amber-600">
+                            <AlertTriangle className="h-5 w-5" />
+                            Xác nhận thay đổi trạng thái
+                        </DialogTitle>
+                        <DialogDescription>
+                            {selectedRoundForAction?.approvalStatus === 'APPROVED' ? (
+                                <>
+                                    Bạn đang chuẩn bị <strong>hủy phê duyệt</strong> đợt đăng ký{' '}
+                                    <span className="font-semibold text-foreground">{selectedRoundForAction?.name}</span>.
+                                    <br /><br />
+                                    Đợt đăng ký sẽ chuyển về trạng thái <strong>Chờ duyệt</strong>. Bạn có chắc chắn muốn tiếp tục?
+                                </>
+                            ) : (
+                                <>
+                                    Bạn đang chuẩn bị <strong>hủy từ chối</strong> đợt đăng ký{' '}
+                                    <span className="font-semibold text-foreground">{selectedRoundForAction?.name}</span>.
+                                    <br /><br />
+                                    Đợt đăng ký sẽ chuyển về trạng thái <strong>Chờ duyệt</strong>. Bạn có chắc chắn muốn tiếp tục?
+                                </>
+                            )}
+                        </DialogDescription>
+                    </DialogHeader>
+                    <div className="flex justify-end gap-3 mt-4">
+                        <Button variant="outline" onClick={() => {
+                            setResetApprovalConfirmOpen(false);
+                            setSelectedRoundForAction(null);
+                        }}>
+                            Hủy
+                        </Button>
+                        <Button 
+                            className="bg-amber-600 hover:bg-amber-700 text-white"
+                            onClick={async () => {
+                                if (selectedRoundForAction) {
+                                    try {
+                                        await callRoundsApi.resetApproval(selectedRoundForAction.id);
+                                        const message = selectedRoundForAction.approvalStatus === 'APPROVED' 
+                                            ? 'Đã hủy phê duyệt, chuyển về trạng thái chờ duyệt'
+                                            : 'Đã hủy từ chối, chuyển về trạng thái chờ duyệt';
+                                        toast.success(message);
+                                        queryClient.invalidateQueries({ queryKey: ['call-rounds'] });
+                                        setResetApprovalConfirmOpen(false);
+                                        setSelectedRoundForAction(null);
+                                    } catch (error: any) {
+                                        toast.error(error.response?.data?.error || 'Lỗi khi thay đổi trạng thái');
+                                    }
+                                }
+                            }}
+                        >
+                            Xác nhận
                         </Button>
                     </div>
                 </DialogContent>

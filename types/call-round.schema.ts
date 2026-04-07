@@ -13,7 +13,42 @@ export const callRoundAttachmentSchema = z.object({
     createdAt: z.coerce.date(),
 });
 
+// Schema for instructor invitation with status
+export const callRoundInstructorSchema = z.object({
+    id: z.string(),
+    callRoundId: z.string(),
+    instructorId: z.string(),
+    invitationStatus: z.enum(["PENDING", "ACCEPTED", "REJECTED"]).default("PENDING"),
+    respondedAt: z.coerce.date().nullable().optional(),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
+    instructor: z.object({
+        id: z.string(),
+        name: z.string(),
+        email: z.string(),
+        departmentId: z.string().nullable().optional(),
+    }),
+});
+
+// Schema for council member invitation with status
+export const callRoundCouncilMemberSchema = z.object({
+    id: z.string(),
+    callRoundId: z.string(),
+    councilMemberId: z.string(),
+    invitationStatus: z.enum(["PENDING", "ACCEPTED", "REJECTED"]).default("PENDING"),
+    respondedAt: z.coerce.date().nullable().optional(),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
+    councilMember: z.object({
+        id: z.string(),
+        name: z.string(),
+        email: z.string(),
+        departmentId: z.string().nullable().optional(),
+    }),
+});
+
 export const callRoundSchema = z.object({
+    invitationDeadline: z.coerce.date().nullable().optional(),
     id: z.string(),
     name: z.string(),
     description: z.string().nullable().optional(),
@@ -99,7 +134,10 @@ export const callRoundSchema = z.object({
     availableInstructors: z
         .array(
             z.object({
+                id: z.string().optional(),
                 instructorId: z.string(),
+                invitationStatus: z.enum(["PENDING", "ACCEPTED", "REJECTED"]).optional(),
+                respondedAt: z.coerce.date().nullable().optional(),
                 instructor: z.object({
                     id: z.string(),
                     name: z.string(),
@@ -112,7 +150,10 @@ export const callRoundSchema = z.object({
     availableCouncilMembers: z
         .array(
             z.object({
+                id: z.string().optional(),
                 councilMemberId: z.string(),
+                invitationStatus: z.enum(["PENDING", "ACCEPTED", "REJECTED"]).optional(),
+                respondedAt: z.coerce.date().nullable().optional(),
                 councilMember: z.object({
                     id: z.string(),
                     name: z.string(),
@@ -167,7 +208,9 @@ const callRoundBaseSchema = z.object({
     isActive: z.boolean().default(true),
     isLocked: z.boolean().default(false),
     applicableFor: z.enum(["STUDENT", "LECTURER", "BOTH"]).default("STUDENT"),
+    approvalStatus: z.enum(["PENDING_APPROVAL", "APPROVED", "REJECTED"]).optional(),
     templateId: z.string().nullable().optional(),
+    invitationDeadline: z.coerce.date().nullable().optional(),
     departmentIds: z.array(z.string()).optional(),
     majorIds: z.array(z.string()).optional(),
     classIds: z.array(z.string()).optional(),
