@@ -1,5 +1,5 @@
-import prisma from './lib/prisma';
-import { RegistrationStatus, InstructorStatus } from './prisma/generated/prisma';
+import prisma from '../lib/prisma';
+import { RegistrationStatus, InstructorStatus } from './generated/prisma';
 
 async function main() {
   const users = await prisma.user.findMany();

@@ -44,5 +44,12 @@ next-env.d.ts
 
 /.roo
 /.github
+/.github/*
 
 /.BC_ANTN.docs
+
+/.kilo
+/.kilo/*
+
+/.kilo.json
+BC_DATN.docx

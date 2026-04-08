@@ -25,6 +25,9 @@ import {
     CalendarClock,
     DoorOpen,
     Newspaper,
+    BarChart3,
+    DollarSign,
+    ChevronRight,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAuthSession, useLogout } from '@/hooks/useAuth';
@@ -44,6 +47,9 @@ import {
     SidebarGroup,
     SidebarGroupLabel,
     SidebarGroupContent,
+    SidebarMenuSub,
+    SidebarMenuSubItem,
+    SidebarMenuSubButton,
 } from '@/components/ui/sidebar';
 import { Separator } from '@/components/ui/separator';
 import { Badge } from '@/components/ui/badge';
@@ -182,6 +188,15 @@ function UserMenu({ session }: { session: AuthSession }) {
     );
 }
 
+// Type definitions for navigation
+type NavItem = {
+    title: string;
+    url?: string;
+    icon: any;
+    badgeCount?: number;
+    items?: Array<{ title: string; url: string }>;
+};
+
 function AppSidebar({ session }: { session: AuthSession }) {
     const pathname = usePathname();
     const isPortal = session.role === 'STUDENT' || session.role === 'LECTURER';
@@ -192,7 +207,7 @@ function AppSidebar({ session }: { session: AuthSession }) {
             ? teamInvitations.filter((invitation) => invitation.invitationStatus === 'PENDING').length
             : 0;
 
-    let navItems: Array<{ title: string; url: string; icon: any; badgeCount?: number }> = isPortal
+    let navItems: NavItem[] = isPortal
         ? [
               { title: 'Hồ sơ cá nhân', url: `${portalPrefix}/profile`, icon: User },
               {
@@ -247,9 +262,12 @@ function AppSidebar({ session }: { session: AuthSession }) {
     } else if (session.role === 'DEAN') {
         navItems.push(
             {
-                title: 'Duyệt đề tài Khoa',
-                url: '/dean/approvals',
+                title: 'Quản lý Đề tài',
                 icon: FolderKanban,
+                items: [
+                    { title: 'Duyệt đề tài Khoa', url: '/dean/approvals' },
+                    { title: 'Gán đề tài hội đồng', url: '/dean/council-projects' },
+                ],
             },
             {
                 title: 'Đợt Đăng Ký',
@@ -257,34 +275,28 @@ function AppSidebar({ session }: { session: AuthSession }) {
                 icon: Activity,
             },
             {
+                title: 'Giải ngân',
+                url: '/dean/disbursements',
+                icon: DollarSign,
+            },
+            {
                 title: 'Quản lý Biểu mẫu',
                 url: '/dean/templates',
                 icon: FileText,
             },
             {
-                title: 'Quản lý Lớp',
-                url: '/dean/classes',
-                icon: School,
-            },
-            {
-                title: 'Quản lý Giảng viên',
-                url: '/dean/lecturers',
-                icon: UserCog,
-            },
-            {
-                title: 'Quản lý Sinh viên',
-                url: '/dean/students',
-                icon: UserRound,
+                title: 'Quản lý Người dùng',
+                icon: Users,
+                items: [
+                    { title: 'Quản lý Lớp', url: '/dean/classes' },
+                    { title: 'Quản lý Giảng viên', url: '/dean/lecturers' },
+                    { title: 'Quản lý Sinh viên', url: '/dean/students' },
+                ],
             },
             {
                 title: 'Quản lý Hội đồng',
                 url: '/dean/councils',
                 icon: UsersRound,
-            },
-            {
-                title: 'Gán đề tài hội đồng',
-                url: '/dean/council-projects',
-                icon: Link2,
             },
             {
                 title: 'Quản lý Phòng họp',
@@ -295,19 +307,13 @@ function AppSidebar({ session }: { session: AuthSession }) {
     } else if (session.role === 'ADMIN') {
         navItems.push(
             {
-                title: 'Quản lý Khoa',
-                url: '/admin/departments',
+                title: 'Tổ chức',
                 icon: Building2,
-            },
-            {
-                title: 'Quản lý Ngành',
-                url: '/admin/majors',
-                icon: BookOpen,
-            },
-            {
-                title: 'Quản lý Lớp',
-                url: '/admin/classes',
-                icon: School,
+                items: [
+                    { title: 'Quản lý Khoa', url: '/admin/departments' },
+                    { title: 'Quản lý Ngành', url: '/admin/majors' },
+                    { title: 'Quản lý Lớp', url: '/admin/classes' },
+                ],
             },
             {
                 title: 'Quản lý Người dùng',
@@ -323,6 +329,19 @@ function AppSidebar({ session }: { session: AuthSession }) {
                 title: 'Đợt Đăng Ký',
                 url: '/admin/call-rounds',
                 icon: Activity,
+            },
+            {
+                title: 'Giải ngân',
+                icon: DollarSign,
+                items: [
+                    { title: 'Quản lý giải ngân', url: '/admin/disbursements' },
+                    { title: 'Phê duyệt giải ngân', url: '/admin/disbursements/approvals' },
+                ],
+            },
+            {
+                title: 'Thống kê',
+                url: '/admin/statistics',
+                icon: BarChart3,
             },
         );
     }
@@ -355,13 +374,60 @@ function AppSidebar({ session }: { session: AuthSession }) {
                     <SidebarGroupContent>
                         <SidebarMenu>
                             {navItems.map((item) => {
-                                // Exact match for the route to avoid false positives
-                                // e.g., /dean/call-rounds should not match /dean/call-rounds-approval
+                                // Check if item has submenu
+                                if (item.items && item.items.length > 0) {
+                                    // eslint-disable-next-line react-hooks/rules-of-hooks
+                                    const isAnySubItemActive = item.items.some(subItem => pathname === subItem.url);
+                                    // eslint-disable-next-line react-hooks/rules-of-hooks
+                                    const [isOpen, setIsOpen] = React.useState(false);
+                                    
+                                    // Auto-open if any subitem is active
+                                    // eslint-disable-next-line react-hooks/rules-of-hooks
+                                    React.useEffect(() => {
+                                        if (isAnySubItemActive) {
+                                            setIsOpen(true);
+                                        }
+                                    }, [isAnySubItemActive]);
+                                    
+                                    return (
+                                        <SidebarMenuItem key={item.title}>
+                                            <SidebarMenuButton
+                                                onClick={() => setIsOpen(!isOpen)}
+                                                tooltip={item.title}
+                                                className="cursor-pointer"
+                                            >
+                                                <item.icon className="h-4 w-4" />
+                                                <span>{item.title}</span>
+                                                <ChevronRight 
+                                                    className={`ml-auto h-4 w-4 transition-transform ${isOpen ? 'rotate-90' : ''}`} 
+                                                />
+                                            </SidebarMenuButton>
+                                            {isOpen && (
+                                                <SidebarMenuSub>
+                                                    {item.items.map((subItem) => {
+                                                        const isSubActive = pathname === subItem.url;
+                                                        return (
+                                                            <SidebarMenuSubItem key={subItem.url}>
+                                                                <SidebarMenuSubButton asChild isActive={isSubActive}>
+                                                                    <Link href={subItem.url}>
+                                                                        <span>{subItem.title}</span>
+                                                                    </Link>
+                                                                </SidebarMenuSubButton>
+                                                            </SidebarMenuSubItem>
+                                                        );
+                                                    })}
+                                                </SidebarMenuSub>
+                                            )}
+                                        </SidebarMenuItem>
+                                    );
+                                }
+                                
+                                // Regular menu item without submenu
                                 const isActive = pathname === item.url;
                                 return (
                                     <SidebarMenuItem key={item.title}>
                                         <SidebarMenuButton asChild isActive={isActive} tooltip={item.title}>
-                                            <Link href={item.url}>
+                                            <Link href={item.url!}>
                                                 <item.icon className="h-4 w-4" />
                                                 <span>{item.title}</span>
                                                 {item.badgeCount && item.badgeCount > 0 && (

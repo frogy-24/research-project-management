@@ -1,0 +1,148 @@
+@startuml
+!theme plain
+skinparam backgroundColor #F8FAFC
+skinparam defaultFontName "Inter"
+skinparam shadowing false
+
+' Define custom colors
+skinparam actor {
+    BackgroundColor #0F172A
+    BorderColor #0F172A
+    FontColor #FFFFFF
+}
+
+skinparam usecase {
+    BackgroundColor #FFFFFF
+    BorderColor #2563EB
+    FontColor #0F172A
+    BorderThickness 2
+}
+
+skinparam package {
+    BackgroundColor #E2E8F0
+    BorderColor #94A3B8
+    FontColor #0F172A
+}
+
+' Title
+title
+    <size:20><b>Biểu đồ Use Case - Giải Ngân Kinh Phí Đề Tài</b></size>
+    <size:14>Hệ thống Quản lý Nghiên cứu Khoa học</size>
+end title
+
+' Actors
+actor "Admin\n(Phòng QLKH)" as ADMIN
+actor "Chủ nhiệm\nĐề tài" as LEADER
+
+' Main Package
+package "Chức năng Giải ngân Kinh phí" {
+    
+    ' Main Use Cases
+    usecase "Tạo đợt giải ngân" as UC_CREATE
+    usecase "Xem danh sách đề tài\nđủ điều kiện giải ngân" as UC_VIEW_LIST
+    usecase "Xem chi tiết đề tài" as UC_VIEW_DETAIL
+    usecase "Xem lịch sử giải ngân" as UC_VIEW_HISTORY
+    
+    ' Sub Use Cases (included)
+    usecase "Nhập thông tin giải ngân" as UC_INPUT
+    usecase "Upload chứng từ" as UC_UPLOAD
+    usecase "Xác nhận giải ngân" as UC_CONFIRM
+    
+    ' Extended Use Cases
+    usecase "Sửa thông tin giải ngân" as UC_UPDATE
+    usecase "Xóa đợt giải ngân" as UC_DELETE
+    
+    ' Filter Use Cases
+    usecase "Lọc theo trạng thái giải ngân" as UC_FILTER_STATUS
+    usecase "Lọc theo khoa/loại đề tài" as UC_FILTER_TYPE
+    
+    ' Report Use Case
+    usecase "Xuất báo cáo giải ngân" as UC_EXPORT
+}
+
+' Notification Package
+package "Thông báo" {
+    usecase "Gửi thông báo\ngiải ngân" as UC_NOTIFY
+}
+
+' Relationships - Main flow
+ADMIN --> UC_VIEW_LIST
+ADMIN --> UC_VIEW_DETAIL
+ADMIN --> UC_CREATE
+ADMIN --> UC_UPDATE
+ADMIN --> UC_DELETE
+ADMIN --> UC_EXPORT
+
+' Include relationships
+UC_CREATE ..> UC_VIEW_LIST : <<include>>
+UC_CREATE ..> UC_INPUT : <<include>>
+UC_CREATE ..> UC_CONFIRM : <<include>>
+
+UC_INPUT ..> UC_UPLOAD : <<extend>>
+
+UC_VIEW_DETAIL ..> UC_VIEW_HISTORY : <<include>>
+
+UC_VIEW_LIST ..> UC_FILTER_STATUS : <<include>>
+UC_VIEW_LIST ..> UC_FILTER_TYPE : <<include>>
+
+UC_DELETE ..> UC_NOTIFY : <<include>>
+UC_CREATE ..> UC_NOTIFY : <<include>>
+
+' Actor relationships
+LEADER --> UC_NOTIFY : <<notify>>
+
+' Notes
+note right of UC_CREATE
+  <b>Tạo giải ngân</b>
+  • Kiểm tra điều kiện nghiệp vụ
+  • Số tiền <= kinh phí còn lại
+  • Đề tài: IN_PROGRESS
+  • Tạo bản ghi FundingDisbursement
+end note
+
+note right of UC_VIEW_DETAIL
+  <b>Chi tiết đề tài</b>
+  • Kinh phí phê duyệt
+  • Tổng đã giải ngân
+  • Kinh phí còn lại
+  • Trạng thái đề tài
+end note
+
+note right of UC_VIEW_HISTORY
+  <b>Lịch sử giải ngân</b>
+  • Số tiền từng đợt
+  • Ngày giải ngân
+  • Số chứng từ
+  • File chứng từ
+end note
+
+note bottom of UC_INPUT
+  <b>Thông tin nhập</b>
+  • amount: Số tiền (bắt buộc)
+  • disbursedAt: Ngày giải ngân
+  • voucherNo: Số chứng từ
+  • voucherFileUrl: File chứng từ
+end note
+
+note left of UC_FILTER_STATUS
+  <b>Trạng thái giải ngân</b>
+  • Chưa giải ngân
+  • Đang giải ngân
+  • Đã giải ngân hết
+end note
+
+note left of UC_UPLOAD
+  <b>Upload chứng từ</b>
+  • Định dạng: PDF/Word
+  • Kích thước tối đa: 10MB
+  • Lưu URL vào voucherFileUrl
+end note
+
+note bottom of UC_NOTIFY
+  <b>Thông báo tự động</b>
+  • Gửi cho chủ nhiệm đề tài
+  • Loại: FUNDING_DISBURSED
+  • Nội dung: Số tiền, ngày giải ngân
+end note
+
+@enduml
