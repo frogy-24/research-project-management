@@ -394,6 +394,7 @@ function AppSidebar({ session }: { session: AuthSession }) {
                                             <SidebarMenuButton
                                                 onClick={() => setIsOpen(!isOpen)}
                                                 tooltip={item.title}
+                                                isActive={isAnySubItemActive}
                                                 className="cursor-pointer"
                                             >
                                                 <item.icon className="h-4 w-4" />

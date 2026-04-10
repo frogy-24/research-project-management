@@ -236,6 +236,15 @@ export const RegistrationStatus: {
 export type RegistrationStatus = (typeof RegistrationStatus)[keyof typeof RegistrationStatus]
 
 
+export const DisbursementStatus: {
+  PENDING: 'PENDING',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED'
+};
+
+export type DisbursementStatus = (typeof DisbursementStatus)[keyof typeof DisbursementStatus]
+
+
 export const InstructorStatus: {
   PENDING: 'PENDING',
   ACCEPTED: 'ACCEPTED',
@@ -327,6 +336,10 @@ export const ApplicableFor: typeof $Enums.ApplicableFor
 export type RegistrationStatus = $Enums.RegistrationStatus
 
 export const RegistrationStatus: typeof $Enums.RegistrationStatus
+
+export type DisbursementStatus = $Enums.DisbursementStatus
+
+export const DisbursementStatus: typeof $Enums.DisbursementStatus
 
 export type InstructorStatus = $Enums.InstructorStatus
 
@@ -3430,6 +3443,8 @@ export namespace Prisma {
     officeMeetingViews: number
     posts: number
     approvedPosts: number
+    createdDisbursements: number
+    approvedDisbursements: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -3448,6 +3463,8 @@ export namespace Prisma {
     officeMeetingViews?: boolean | UserCountOutputTypeCountOfficeMeetingViewsArgs
     posts?: boolean | UserCountOutputTypeCountPostsArgs
     approvedPosts?: boolean | UserCountOutputTypeCountApprovedPostsArgs
+    createdDisbursements?: boolean | UserCountOutputTypeCountCreatedDisbursementsArgs
+    approvedDisbursements?: boolean | UserCountOutputTypeCountApprovedDisbursementsArgs
   }
 
   // Custom InputTypes
@@ -3564,6 +3581,20 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountApprovedPostsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: PostWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountCreatedDisbursementsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: FundingDisbursementWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountApprovedDisbursementsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: FundingDisbursementWhereInput
   }
 
 
@@ -7693,6 +7724,8 @@ export namespace Prisma {
     officeMeetingViews?: boolean | User$officeMeetingViewsArgs<ExtArgs>
     posts?: boolean | User$postsArgs<ExtArgs>
     approvedPosts?: boolean | User$approvedPostsArgs<ExtArgs>
+    createdDisbursements?: boolean | User$createdDisbursementsArgs<ExtArgs>
+    approvedDisbursements?: boolean | User$approvedDisbursementsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -7779,6 +7812,8 @@ export namespace Prisma {
     officeMeetingViews?: boolean | User$officeMeetingViewsArgs<ExtArgs>
     posts?: boolean | User$postsArgs<ExtArgs>
     approvedPosts?: boolean | User$approvedPostsArgs<ExtArgs>
+    createdDisbursements?: boolean | User$createdDisbursementsArgs<ExtArgs>
+    approvedDisbursements?: boolean | User$approvedDisbursementsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -7813,6 +7848,8 @@ export namespace Prisma {
       officeMeetingViews: Prisma.$OfficeMeetingViewPayload<ExtArgs>[]
       posts: Prisma.$PostPayload<ExtArgs>[]
       approvedPosts: Prisma.$PostPayload<ExtArgs>[]
+      createdDisbursements: Prisma.$FundingDisbursementPayload<ExtArgs>[]
+      approvedDisbursements: Prisma.$FundingDisbursementPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -8243,6 +8280,8 @@ export namespace Prisma {
     officeMeetingViews<T extends User$officeMeetingViewsArgs<ExtArgs> = {}>(args?: Subset<T, User$officeMeetingViewsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OfficeMeetingViewPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     posts<T extends User$postsArgs<ExtArgs> = {}>(args?: Subset<T, User$postsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PostPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     approvedPosts<T extends User$approvedPostsArgs<ExtArgs> = {}>(args?: Subset<T, User$approvedPostsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PostPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    createdDisbursements<T extends User$createdDisbursementsArgs<ExtArgs> = {}>(args?: Subset<T, User$createdDisbursementsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FundingDisbursementPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    approvedDisbursements<T extends User$approvedDisbursementsArgs<ExtArgs> = {}>(args?: Subset<T, User$approvedDisbursementsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FundingDisbursementPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -9103,6 +9142,54 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: PostScalarFieldEnum | PostScalarFieldEnum[]
+  }
+
+  /**
+   * User.createdDisbursements
+   */
+  export type User$createdDisbursementsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FundingDisbursement
+     */
+    select?: FundingDisbursementSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FundingDisbursement
+     */
+    omit?: FundingDisbursementOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FundingDisbursementInclude<ExtArgs> | null
+    where?: FundingDisbursementWhereInput
+    orderBy?: FundingDisbursementOrderByWithRelationInput | FundingDisbursementOrderByWithRelationInput[]
+    cursor?: FundingDisbursementWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: FundingDisbursementScalarFieldEnum | FundingDisbursementScalarFieldEnum[]
+  }
+
+  /**
+   * User.approvedDisbursements
+   */
+  export type User$approvedDisbursementsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FundingDisbursement
+     */
+    select?: FundingDisbursementSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FundingDisbursement
+     */
+    omit?: FundingDisbursementOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FundingDisbursementInclude<ExtArgs> | null
+    where?: FundingDisbursementWhereInput
+    orderBy?: FundingDisbursementOrderByWithRelationInput | FundingDisbursementOrderByWithRelationInput[]
+    cursor?: FundingDisbursementWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: FundingDisbursementScalarFieldEnum | FundingDisbursementScalarFieldEnum[]
   }
 
   /**
@@ -18205,7 +18292,14 @@ export namespace Prisma {
     disbursedAt: Date | null
     voucherNo: string | null
     voucherFileUrl: string | null
+    reason: string | null
+    status: $Enums.DisbursementStatus | null
+    createdById: string | null
+    approvedById: string | null
+    approvedAt: Date | null
+    rejectionNote: string | null
     createdAt: Date | null
+    updatedAt: Date | null
   }
 
   export type FundingDisbursementMaxAggregateOutputType = {
@@ -18215,7 +18309,14 @@ export namespace Prisma {
     disbursedAt: Date | null
     voucherNo: string | null
     voucherFileUrl: string | null
+    reason: string | null
+    status: $Enums.DisbursementStatus | null
+    createdById: string | null
+    approvedById: string | null
+    approvedAt: Date | null
+    rejectionNote: string | null
     createdAt: Date | null
+    updatedAt: Date | null
   }
 
   export type FundingDisbursementCountAggregateOutputType = {
@@ -18225,7 +18326,14 @@ export namespace Prisma {
     disbursedAt: number
     voucherNo: number
     voucherFileUrl: number
+    reason: number
+    status: number
+    createdById: number
+    approvedById: number
+    approvedAt: number
+    rejectionNote: number
     createdAt: number
+    updatedAt: number
     _all: number
   }
 
@@ -18245,7 +18353,14 @@ export namespace Prisma {
     disbursedAt?: true
     voucherNo?: true
     voucherFileUrl?: true
+    reason?: true
+    status?: true
+    createdById?: true
+    approvedById?: true
+    approvedAt?: true
+    rejectionNote?: true
     createdAt?: true
+    updatedAt?: true
   }
 
   export type FundingDisbursementMaxAggregateInputType = {
@@ -18255,7 +18370,14 @@ export namespace Prisma {
     disbursedAt?: true
     voucherNo?: true
     voucherFileUrl?: true
+    reason?: true
+    status?: true
+    createdById?: true
+    approvedById?: true
+    approvedAt?: true
+    rejectionNote?: true
     createdAt?: true
+    updatedAt?: true
   }
 
   export type FundingDisbursementCountAggregateInputType = {
@@ -18265,7 +18387,14 @@ export namespace Prisma {
     disbursedAt?: true
     voucherNo?: true
     voucherFileUrl?: true
+    reason?: true
+    status?: true
+    createdById?: true
+    approvedById?: true
+    approvedAt?: true
+    rejectionNote?: true
     createdAt?: true
+    updatedAt?: true
     _all?: true
   }
 
@@ -18362,7 +18491,14 @@ export namespace Prisma {
     disbursedAt: Date
     voucherNo: string | null
     voucherFileUrl: string | null
+    reason: string | null
+    status: $Enums.DisbursementStatus
+    createdById: string
+    approvedById: string | null
+    approvedAt: Date | null
+    rejectionNote: string | null
     createdAt: Date
+    updatedAt: Date
     _count: FundingDisbursementCountAggregateOutputType | null
     _avg: FundingDisbursementAvgAggregateOutputType | null
     _sum: FundingDisbursementSumAggregateOutputType | null
@@ -18391,8 +18527,17 @@ export namespace Prisma {
     disbursedAt?: boolean
     voucherNo?: boolean
     voucherFileUrl?: boolean
+    reason?: boolean
+    status?: boolean
+    createdById?: boolean
+    approvedById?: boolean
+    approvedAt?: boolean
+    rejectionNote?: boolean
     createdAt?: boolean
+    updatedAt?: boolean
     project?: boolean | ProjectDefaultArgs<ExtArgs>
+    createdBy?: boolean | UserDefaultArgs<ExtArgs>
+    approvedBy?: boolean | FundingDisbursement$approvedByArgs<ExtArgs>
   }, ExtArgs["result"]["fundingDisbursement"]>
 
   export type FundingDisbursementSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -18402,8 +18547,17 @@ export namespace Prisma {
     disbursedAt?: boolean
     voucherNo?: boolean
     voucherFileUrl?: boolean
+    reason?: boolean
+    status?: boolean
+    createdById?: boolean
+    approvedById?: boolean
+    approvedAt?: boolean
+    rejectionNote?: boolean
     createdAt?: boolean
+    updatedAt?: boolean
     project?: boolean | ProjectDefaultArgs<ExtArgs>
+    createdBy?: boolean | UserDefaultArgs<ExtArgs>
+    approvedBy?: boolean | FundingDisbursement$approvedByArgs<ExtArgs>
   }, ExtArgs["result"]["fundingDisbursement"]>
 
   export type FundingDisbursementSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -18413,8 +18567,17 @@ export namespace Prisma {
     disbursedAt?: boolean
     voucherNo?: boolean
     voucherFileUrl?: boolean
+    reason?: boolean
+    status?: boolean
+    createdById?: boolean
+    approvedById?: boolean
+    approvedAt?: boolean
+    rejectionNote?: boolean
     createdAt?: boolean
+    updatedAt?: boolean
     project?: boolean | ProjectDefaultArgs<ExtArgs>
+    createdBy?: boolean | UserDefaultArgs<ExtArgs>
+    approvedBy?: boolean | FundingDisbursement$approvedByArgs<ExtArgs>
   }, ExtArgs["result"]["fundingDisbursement"]>
 
   export type FundingDisbursementSelectScalar = {
@@ -18424,24 +18587,39 @@ export namespace Prisma {
     disbursedAt?: boolean
     voucherNo?: boolean
     voucherFileUrl?: boolean
+    reason?: boolean
+    status?: boolean
+    createdById?: boolean
+    approvedById?: boolean
+    approvedAt?: boolean
+    rejectionNote?: boolean
     createdAt?: boolean
+    updatedAt?: boolean
   }
 
-  export type FundingDisbursementOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "projectId" | "amount" | "disbursedAt" | "voucherNo" | "voucherFileUrl" | "createdAt", ExtArgs["result"]["fundingDisbursement"]>
+  export type FundingDisbursementOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "projectId" | "amount" | "disbursedAt" | "voucherNo" | "voucherFileUrl" | "reason" | "status" | "createdById" | "approvedById" | "approvedAt" | "rejectionNote" | "createdAt" | "updatedAt", ExtArgs["result"]["fundingDisbursement"]>
   export type FundingDisbursementInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     project?: boolean | ProjectDefaultArgs<ExtArgs>
+    createdBy?: boolean | UserDefaultArgs<ExtArgs>
+    approvedBy?: boolean | FundingDisbursement$approvedByArgs<ExtArgs>
   }
   export type FundingDisbursementIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     project?: boolean | ProjectDefaultArgs<ExtArgs>
+    createdBy?: boolean | UserDefaultArgs<ExtArgs>
+    approvedBy?: boolean | FundingDisbursement$approvedByArgs<ExtArgs>
   }
   export type FundingDisbursementIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     project?: boolean | ProjectDefaultArgs<ExtArgs>
+    createdBy?: boolean | UserDefaultArgs<ExtArgs>
+    approvedBy?: boolean | FundingDisbursement$approvedByArgs<ExtArgs>
   }
 
   export type $FundingDisbursementPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "FundingDisbursement"
     objects: {
       project: Prisma.$ProjectPayload<ExtArgs>
+      createdBy: Prisma.$UserPayload<ExtArgs>
+      approvedBy: Prisma.$UserPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -18450,7 +18628,14 @@ export namespace Prisma {
       disbursedAt: Date
       voucherNo: string | null
       voucherFileUrl: string | null
+      reason: string | null
+      status: $Enums.DisbursementStatus
+      createdById: string
+      approvedById: string | null
+      approvedAt: Date | null
+      rejectionNote: string | null
       createdAt: Date
+      updatedAt: Date
     }, ExtArgs["result"]["fundingDisbursement"]>
     composites: {}
   }
@@ -18846,6 +19031,8 @@ export namespace Prisma {
   export interface Prisma__FundingDisbursementClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     project<T extends ProjectDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ProjectDefaultArgs<ExtArgs>>): Prisma__ProjectClient<$Result.GetResult<Prisma.$ProjectPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    createdBy<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    approvedBy<T extends FundingDisbursement$approvedByArgs<ExtArgs> = {}>(args?: Subset<T, FundingDisbursement$approvedByArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -18881,7 +19068,14 @@ export namespace Prisma {
     readonly disbursedAt: FieldRef<"FundingDisbursement", 'DateTime'>
     readonly voucherNo: FieldRef<"FundingDisbursement", 'String'>
     readonly voucherFileUrl: FieldRef<"FundingDisbursement", 'String'>
+    readonly reason: FieldRef<"FundingDisbursement", 'String'>
+    readonly status: FieldRef<"FundingDisbursement", 'DisbursementStatus'>
+    readonly createdById: FieldRef<"FundingDisbursement", 'String'>
+    readonly approvedById: FieldRef<"FundingDisbursement", 'String'>
+    readonly approvedAt: FieldRef<"FundingDisbursement", 'DateTime'>
+    readonly rejectionNote: FieldRef<"FundingDisbursement", 'String'>
     readonly createdAt: FieldRef<"FundingDisbursement", 'DateTime'>
+    readonly updatedAt: FieldRef<"FundingDisbursement", 'DateTime'>
   }
     
 
@@ -19280,6 +19474,25 @@ export namespace Prisma {
      * Limit how many FundingDisbursements to delete.
      */
     limit?: number
+  }
+
+  /**
+   * FundingDisbursement.approvedBy
+   */
+  export type FundingDisbursement$approvedByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
   }
 
   /**
@@ -34365,7 +34578,14 @@ export namespace Prisma {
     disbursedAt: 'disbursedAt',
     voucherNo: 'voucherNo',
     voucherFileUrl: 'voucherFileUrl',
-    createdAt: 'createdAt'
+    reason: 'reason',
+    status: 'status',
+    createdById: 'createdById',
+    approvedById: 'approvedById',
+    approvedAt: 'approvedAt',
+    rejectionNote: 'rejectionNote',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
   };
 
   export type FundingDisbursementScalarFieldEnum = (typeof FundingDisbursementScalarFieldEnum)[keyof typeof FundingDisbursementScalarFieldEnum]
@@ -34767,6 +34987,20 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'DisbursementStatus'
+   */
+  export type EnumDisbursementStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DisbursementStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'DisbursementStatus[]'
+   */
+  export type ListEnumDisbursementStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DisbursementStatus[]'>
+    
+
+
+  /**
    * Reference to a field of type 'RequestStatus'
    */
   export type EnumRequestStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'RequestStatus'>
@@ -35145,6 +35379,8 @@ export namespace Prisma {
     officeMeetingViews?: OfficeMeetingViewListRelationFilter
     posts?: PostListRelationFilter
     approvedPosts?: PostListRelationFilter
+    createdDisbursements?: FundingDisbursementListRelationFilter
+    approvedDisbursements?: FundingDisbursementListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -35182,6 +35418,8 @@ export namespace Prisma {
     officeMeetingViews?: OfficeMeetingViewOrderByRelationAggregateInput
     posts?: PostOrderByRelationAggregateInput
     approvedPosts?: PostOrderByRelationAggregateInput
+    createdDisbursements?: FundingDisbursementOrderByRelationAggregateInput
+    approvedDisbursements?: FundingDisbursementOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -35222,6 +35460,8 @@ export namespace Prisma {
     officeMeetingViews?: OfficeMeetingViewListRelationFilter
     posts?: PostListRelationFilter
     approvedPosts?: PostListRelationFilter
+    createdDisbursements?: FundingDisbursementListRelationFilter
+    approvedDisbursements?: FundingDisbursementListRelationFilter
   }, "id" | "code" | "email">
 
   export type UserOrderByWithAggregationInput = {
@@ -36046,8 +36286,17 @@ export namespace Prisma {
     disbursedAt?: DateTimeFilter<"FundingDisbursement"> | Date | string
     voucherNo?: StringNullableFilter<"FundingDisbursement"> | string | null
     voucherFileUrl?: StringNullableFilter<"FundingDisbursement"> | string | null
+    reason?: StringNullableFilter<"FundingDisbursement"> | string | null
+    status?: EnumDisbursementStatusFilter<"FundingDisbursement"> | $Enums.DisbursementStatus
+    createdById?: StringFilter<"FundingDisbursement"> | string
+    approvedById?: StringNullableFilter<"FundingDisbursement"> | string | null
+    approvedAt?: DateTimeNullableFilter<"FundingDisbursement"> | Date | string | null
+    rejectionNote?: StringNullableFilter<"FundingDisbursement"> | string | null
     createdAt?: DateTimeFilter<"FundingDisbursement"> | Date | string
+    updatedAt?: DateTimeFilter<"FundingDisbursement"> | Date | string
     project?: XOR<ProjectScalarRelationFilter, ProjectWhereInput>
+    createdBy?: XOR<UserScalarRelationFilter, UserWhereInput>
+    approvedBy?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
   }
 
   export type FundingDisbursementOrderByWithRelationInput = {
@@ -36057,8 +36306,17 @@ export namespace Prisma {
     disbursedAt?: SortOrder
     voucherNo?: SortOrderInput | SortOrder
     voucherFileUrl?: SortOrderInput | SortOrder
+    reason?: SortOrderInput | SortOrder
+    status?: SortOrder
+    createdById?: SortOrder
+    approvedById?: SortOrderInput | SortOrder
+    approvedAt?: SortOrderInput | SortOrder
+    rejectionNote?: SortOrderInput | SortOrder
     createdAt?: SortOrder
+    updatedAt?: SortOrder
     project?: ProjectOrderByWithRelationInput
+    createdBy?: UserOrderByWithRelationInput
+    approvedBy?: UserOrderByWithRelationInput
   }
 
   export type FundingDisbursementWhereUniqueInput = Prisma.AtLeast<{
@@ -36071,8 +36329,17 @@ export namespace Prisma {
     disbursedAt?: DateTimeFilter<"FundingDisbursement"> | Date | string
     voucherNo?: StringNullableFilter<"FundingDisbursement"> | string | null
     voucherFileUrl?: StringNullableFilter<"FundingDisbursement"> | string | null
+    reason?: StringNullableFilter<"FundingDisbursement"> | string | null
+    status?: EnumDisbursementStatusFilter<"FundingDisbursement"> | $Enums.DisbursementStatus
+    createdById?: StringFilter<"FundingDisbursement"> | string
+    approvedById?: StringNullableFilter<"FundingDisbursement"> | string | null
+    approvedAt?: DateTimeNullableFilter<"FundingDisbursement"> | Date | string | null
+    rejectionNote?: StringNullableFilter<"FundingDisbursement"> | string | null
     createdAt?: DateTimeFilter<"FundingDisbursement"> | Date | string
+    updatedAt?: DateTimeFilter<"FundingDisbursement"> | Date | string
     project?: XOR<ProjectScalarRelationFilter, ProjectWhereInput>
+    createdBy?: XOR<UserScalarRelationFilter, UserWhereInput>
+    approvedBy?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
   }, "id">
 
   export type FundingDisbursementOrderByWithAggregationInput = {
@@ -36082,7 +36349,14 @@ export namespace Prisma {
     disbursedAt?: SortOrder
     voucherNo?: SortOrderInput | SortOrder
     voucherFileUrl?: SortOrderInput | SortOrder
+    reason?: SortOrderInput | SortOrder
+    status?: SortOrder
+    createdById?: SortOrder
+    approvedById?: SortOrderInput | SortOrder
+    approvedAt?: SortOrderInput | SortOrder
+    rejectionNote?: SortOrderInput | SortOrder
     createdAt?: SortOrder
+    updatedAt?: SortOrder
     _count?: FundingDisbursementCountOrderByAggregateInput
     _avg?: FundingDisbursementAvgOrderByAggregateInput
     _max?: FundingDisbursementMaxOrderByAggregateInput
@@ -36100,7 +36374,14 @@ export namespace Prisma {
     disbursedAt?: DateTimeWithAggregatesFilter<"FundingDisbursement"> | Date | string
     voucherNo?: StringNullableWithAggregatesFilter<"FundingDisbursement"> | string | null
     voucherFileUrl?: StringNullableWithAggregatesFilter<"FundingDisbursement"> | string | null
+    reason?: StringNullableWithAggregatesFilter<"FundingDisbursement"> | string | null
+    status?: EnumDisbursementStatusWithAggregatesFilter<"FundingDisbursement"> | $Enums.DisbursementStatus
+    createdById?: StringWithAggregatesFilter<"FundingDisbursement"> | string
+    approvedById?: StringNullableWithAggregatesFilter<"FundingDisbursement"> | string | null
+    approvedAt?: DateTimeNullableWithAggregatesFilter<"FundingDisbursement"> | Date | string | null
+    rejectionNote?: StringNullableWithAggregatesFilter<"FundingDisbursement"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"FundingDisbursement"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"FundingDisbursement"> | Date | string
   }
 
   export type ExtensionRequestWhereInput = {
@@ -37371,6 +37652,8 @@ export namespace Prisma {
     officeMeetingViews?: OfficeMeetingViewCreateNestedManyWithoutUserInput
     posts?: PostCreateNestedManyWithoutAuthorInput
     approvedPosts?: PostCreateNestedManyWithoutApprovedByInput
+    createdDisbursements?: FundingDisbursementCreateNestedManyWithoutCreatedByInput
+    approvedDisbursements?: FundingDisbursementCreateNestedManyWithoutApprovedByInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -37405,6 +37688,8 @@ export namespace Prisma {
     officeMeetingViews?: OfficeMeetingViewUncheckedCreateNestedManyWithoutUserInput
     posts?: PostUncheckedCreateNestedManyWithoutAuthorInput
     approvedPosts?: PostUncheckedCreateNestedManyWithoutApprovedByInput
+    createdDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutCreatedByInput
+    approvedDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutApprovedByInput
   }
 
   export type UserUpdateInput = {
@@ -37439,6 +37724,8 @@ export namespace Prisma {
     officeMeetingViews?: OfficeMeetingViewUpdateManyWithoutUserNestedInput
     posts?: PostUpdateManyWithoutAuthorNestedInput
     approvedPosts?: PostUpdateManyWithoutApprovedByNestedInput
+    createdDisbursements?: FundingDisbursementUpdateManyWithoutCreatedByNestedInput
+    approvedDisbursements?: FundingDisbursementUpdateManyWithoutApprovedByNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -37473,6 +37760,8 @@ export namespace Prisma {
     officeMeetingViews?: OfficeMeetingViewUncheckedUpdateManyWithoutUserNestedInput
     posts?: PostUncheckedUpdateManyWithoutAuthorNestedInput
     approvedPosts?: PostUncheckedUpdateManyWithoutApprovedByNestedInput
+    createdDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutCreatedByNestedInput
+    approvedDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutApprovedByNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -38419,8 +38708,15 @@ export namespace Prisma {
     disbursedAt: Date | string
     voucherNo?: string | null
     voucherFileUrl?: string | null
+    reason?: string | null
+    status?: $Enums.DisbursementStatus
+    approvedAt?: Date | string | null
+    rejectionNote?: string | null
     createdAt?: Date | string
+    updatedAt?: Date | string
     project: ProjectCreateNestedOneWithoutDisbursementsInput
+    createdBy: UserCreateNestedOneWithoutCreatedDisbursementsInput
+    approvedBy?: UserCreateNestedOneWithoutApprovedDisbursementsInput
   }
 
   export type FundingDisbursementUncheckedCreateInput = {
@@ -38430,7 +38726,14 @@ export namespace Prisma {
     disbursedAt: Date | string
     voucherNo?: string | null
     voucherFileUrl?: string | null
+    reason?: string | null
+    status?: $Enums.DisbursementStatus
+    createdById: string
+    approvedById?: string | null
+    approvedAt?: Date | string | null
+    rejectionNote?: string | null
     createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type FundingDisbursementUpdateInput = {
@@ -38439,8 +38742,15 @@ export namespace Prisma {
     disbursedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     voucherNo?: NullableStringFieldUpdateOperationsInput | string | null
     voucherFileUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumDisbursementStatusFieldUpdateOperationsInput | $Enums.DisbursementStatus
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rejectionNote?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     project?: ProjectUpdateOneRequiredWithoutDisbursementsNestedInput
+    createdBy?: UserUpdateOneRequiredWithoutCreatedDisbursementsNestedInput
+    approvedBy?: UserUpdateOneWithoutApprovedDisbursementsNestedInput
   }
 
   export type FundingDisbursementUncheckedUpdateInput = {
@@ -38450,7 +38760,14 @@ export namespace Prisma {
     disbursedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     voucherNo?: NullableStringFieldUpdateOperationsInput | string | null
     voucherFileUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumDisbursementStatusFieldUpdateOperationsInput | $Enums.DisbursementStatus
+    createdById?: StringFieldUpdateOperationsInput | string
+    approvedById?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rejectionNote?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type FundingDisbursementCreateManyInput = {
@@ -38460,7 +38777,14 @@ export namespace Prisma {
     disbursedAt: Date | string
     voucherNo?: string | null
     voucherFileUrl?: string | null
+    reason?: string | null
+    status?: $Enums.DisbursementStatus
+    createdById: string
+    approvedById?: string | null
+    approvedAt?: Date | string | null
+    rejectionNote?: string | null
     createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type FundingDisbursementUpdateManyMutationInput = {
@@ -38469,7 +38793,12 @@ export namespace Prisma {
     disbursedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     voucherNo?: NullableStringFieldUpdateOperationsInput | string | null
     voucherFileUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumDisbursementStatusFieldUpdateOperationsInput | $Enums.DisbursementStatus
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rejectionNote?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type FundingDisbursementUncheckedUpdateManyInput = {
@@ -38479,7 +38808,14 @@ export namespace Prisma {
     disbursedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     voucherNo?: NullableStringFieldUpdateOperationsInput | string | null
     voucherFileUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumDisbursementStatusFieldUpdateOperationsInput | $Enums.DisbursementStatus
+    createdById?: StringFieldUpdateOperationsInput | string
+    approvedById?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rejectionNote?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ExtensionRequestCreateInput = {
@@ -39864,6 +40200,12 @@ export namespace Prisma {
     none?: OfficeMeetingViewWhereInput
   }
 
+  export type FundingDisbursementListRelationFilter = {
+    every?: FundingDisbursementWhereInput
+    some?: FundingDisbursementWhereInput
+    none?: FundingDisbursementWhereInput
+  }
+
   export type ProjectOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -39897,6 +40239,10 @@ export namespace Prisma {
   }
 
   export type OfficeMeetingViewOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type FundingDisbursementOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -40332,12 +40678,6 @@ export namespace Prisma {
     none?: ProgressReportWhereInput
   }
 
-  export type FundingDisbursementListRelationFilter = {
-    every?: FundingDisbursementWhereInput
-    some?: FundingDisbursementWhereInput
-    none?: FundingDisbursementWhereInput
-  }
-
   export type ExtensionRequestListRelationFilter = {
     every?: ExtensionRequestWhereInput
     some?: ExtensionRequestWhereInput
@@ -40345,10 +40685,6 @@ export namespace Prisma {
   }
 
   export type ProgressReportOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
-  export type FundingDisbursementOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -40730,6 +41066,13 @@ export namespace Prisma {
     not?: NestedDecimalFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string
   }
 
+  export type EnumDisbursementStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.DisbursementStatus | EnumDisbursementStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.DisbursementStatus[] | ListEnumDisbursementStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.DisbursementStatus[] | ListEnumDisbursementStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumDisbursementStatusFilter<$PrismaModel> | $Enums.DisbursementStatus
+  }
+
   export type FundingDisbursementCountOrderByAggregateInput = {
     id?: SortOrder
     projectId?: SortOrder
@@ -40737,7 +41080,14 @@ export namespace Prisma {
     disbursedAt?: SortOrder
     voucherNo?: SortOrder
     voucherFileUrl?: SortOrder
+    reason?: SortOrder
+    status?: SortOrder
+    createdById?: SortOrder
+    approvedById?: SortOrder
+    approvedAt?: SortOrder
+    rejectionNote?: SortOrder
     createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type FundingDisbursementAvgOrderByAggregateInput = {
@@ -40751,7 +41101,14 @@ export namespace Prisma {
     disbursedAt?: SortOrder
     voucherNo?: SortOrder
     voucherFileUrl?: SortOrder
+    reason?: SortOrder
+    status?: SortOrder
+    createdById?: SortOrder
+    approvedById?: SortOrder
+    approvedAt?: SortOrder
+    rejectionNote?: SortOrder
     createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type FundingDisbursementMinOrderByAggregateInput = {
@@ -40761,7 +41118,14 @@ export namespace Prisma {
     disbursedAt?: SortOrder
     voucherNo?: SortOrder
     voucherFileUrl?: SortOrder
+    reason?: SortOrder
+    status?: SortOrder
+    createdById?: SortOrder
+    approvedById?: SortOrder
+    approvedAt?: SortOrder
+    rejectionNote?: SortOrder
     createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type FundingDisbursementSumOrderByAggregateInput = {
@@ -40782,6 +41146,16 @@ export namespace Prisma {
     _sum?: NestedDecimalFilter<$PrismaModel>
     _min?: NestedDecimalFilter<$PrismaModel>
     _max?: NestedDecimalFilter<$PrismaModel>
+  }
+
+  export type EnumDisbursementStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.DisbursementStatus | EnumDisbursementStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.DisbursementStatus[] | ListEnumDisbursementStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.DisbursementStatus[] | ListEnumDisbursementStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumDisbursementStatusWithAggregatesFilter<$PrismaModel> | $Enums.DisbursementStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumDisbursementStatusFilter<$PrismaModel>
+    _max?: NestedEnumDisbursementStatusFilter<$PrismaModel>
   }
 
   export type EnumRequestStatusFilter<$PrismaModel = never> = {
@@ -42078,6 +42452,20 @@ export namespace Prisma {
     connect?: PostWhereUniqueInput | PostWhereUniqueInput[]
   }
 
+  export type FundingDisbursementCreateNestedManyWithoutCreatedByInput = {
+    create?: XOR<FundingDisbursementCreateWithoutCreatedByInput, FundingDisbursementUncheckedCreateWithoutCreatedByInput> | FundingDisbursementCreateWithoutCreatedByInput[] | FundingDisbursementUncheckedCreateWithoutCreatedByInput[]
+    connectOrCreate?: FundingDisbursementCreateOrConnectWithoutCreatedByInput | FundingDisbursementCreateOrConnectWithoutCreatedByInput[]
+    createMany?: FundingDisbursementCreateManyCreatedByInputEnvelope
+    connect?: FundingDisbursementWhereUniqueInput | FundingDisbursementWhereUniqueInput[]
+  }
+
+  export type FundingDisbursementCreateNestedManyWithoutApprovedByInput = {
+    create?: XOR<FundingDisbursementCreateWithoutApprovedByInput, FundingDisbursementUncheckedCreateWithoutApprovedByInput> | FundingDisbursementCreateWithoutApprovedByInput[] | FundingDisbursementUncheckedCreateWithoutApprovedByInput[]
+    connectOrCreate?: FundingDisbursementCreateOrConnectWithoutApprovedByInput | FundingDisbursementCreateOrConnectWithoutApprovedByInput[]
+    createMany?: FundingDisbursementCreateManyApprovedByInputEnvelope
+    connect?: FundingDisbursementWhereUniqueInput | FundingDisbursementWhereUniqueInput[]
+  }
+
   export type ProjectUncheckedCreateNestedManyWithoutLeaderInput = {
     create?: XOR<ProjectCreateWithoutLeaderInput, ProjectUncheckedCreateWithoutLeaderInput> | ProjectCreateWithoutLeaderInput[] | ProjectUncheckedCreateWithoutLeaderInput[]
     connectOrCreate?: ProjectCreateOrConnectWithoutLeaderInput | ProjectCreateOrConnectWithoutLeaderInput[]
@@ -42181,6 +42569,20 @@ export namespace Prisma {
     connectOrCreate?: PostCreateOrConnectWithoutApprovedByInput | PostCreateOrConnectWithoutApprovedByInput[]
     createMany?: PostCreateManyApprovedByInputEnvelope
     connect?: PostWhereUniqueInput | PostWhereUniqueInput[]
+  }
+
+  export type FundingDisbursementUncheckedCreateNestedManyWithoutCreatedByInput = {
+    create?: XOR<FundingDisbursementCreateWithoutCreatedByInput, FundingDisbursementUncheckedCreateWithoutCreatedByInput> | FundingDisbursementCreateWithoutCreatedByInput[] | FundingDisbursementUncheckedCreateWithoutCreatedByInput[]
+    connectOrCreate?: FundingDisbursementCreateOrConnectWithoutCreatedByInput | FundingDisbursementCreateOrConnectWithoutCreatedByInput[]
+    createMany?: FundingDisbursementCreateManyCreatedByInputEnvelope
+    connect?: FundingDisbursementWhereUniqueInput | FundingDisbursementWhereUniqueInput[]
+  }
+
+  export type FundingDisbursementUncheckedCreateNestedManyWithoutApprovedByInput = {
+    create?: XOR<FundingDisbursementCreateWithoutApprovedByInput, FundingDisbursementUncheckedCreateWithoutApprovedByInput> | FundingDisbursementCreateWithoutApprovedByInput[] | FundingDisbursementUncheckedCreateWithoutApprovedByInput[]
+    connectOrCreate?: FundingDisbursementCreateOrConnectWithoutApprovedByInput | FundingDisbursementCreateOrConnectWithoutApprovedByInput[]
+    createMany?: FundingDisbursementCreateManyApprovedByInputEnvelope
+    connect?: FundingDisbursementWhereUniqueInput | FundingDisbursementWhereUniqueInput[]
   }
 
   export type NullableDateTimeFieldUpdateOperationsInput = {
@@ -42435,6 +42837,34 @@ export namespace Prisma {
     deleteMany?: PostScalarWhereInput | PostScalarWhereInput[]
   }
 
+  export type FundingDisbursementUpdateManyWithoutCreatedByNestedInput = {
+    create?: XOR<FundingDisbursementCreateWithoutCreatedByInput, FundingDisbursementUncheckedCreateWithoutCreatedByInput> | FundingDisbursementCreateWithoutCreatedByInput[] | FundingDisbursementUncheckedCreateWithoutCreatedByInput[]
+    connectOrCreate?: FundingDisbursementCreateOrConnectWithoutCreatedByInput | FundingDisbursementCreateOrConnectWithoutCreatedByInput[]
+    upsert?: FundingDisbursementUpsertWithWhereUniqueWithoutCreatedByInput | FundingDisbursementUpsertWithWhereUniqueWithoutCreatedByInput[]
+    createMany?: FundingDisbursementCreateManyCreatedByInputEnvelope
+    set?: FundingDisbursementWhereUniqueInput | FundingDisbursementWhereUniqueInput[]
+    disconnect?: FundingDisbursementWhereUniqueInput | FundingDisbursementWhereUniqueInput[]
+    delete?: FundingDisbursementWhereUniqueInput | FundingDisbursementWhereUniqueInput[]
+    connect?: FundingDisbursementWhereUniqueInput | FundingDisbursementWhereUniqueInput[]
+    update?: FundingDisbursementUpdateWithWhereUniqueWithoutCreatedByInput | FundingDisbursementUpdateWithWhereUniqueWithoutCreatedByInput[]
+    updateMany?: FundingDisbursementUpdateManyWithWhereWithoutCreatedByInput | FundingDisbursementUpdateManyWithWhereWithoutCreatedByInput[]
+    deleteMany?: FundingDisbursementScalarWhereInput | FundingDisbursementScalarWhereInput[]
+  }
+
+  export type FundingDisbursementUpdateManyWithoutApprovedByNestedInput = {
+    create?: XOR<FundingDisbursementCreateWithoutApprovedByInput, FundingDisbursementUncheckedCreateWithoutApprovedByInput> | FundingDisbursementCreateWithoutApprovedByInput[] | FundingDisbursementUncheckedCreateWithoutApprovedByInput[]
+    connectOrCreate?: FundingDisbursementCreateOrConnectWithoutApprovedByInput | FundingDisbursementCreateOrConnectWithoutApprovedByInput[]
+    upsert?: FundingDisbursementUpsertWithWhereUniqueWithoutApprovedByInput | FundingDisbursementUpsertWithWhereUniqueWithoutApprovedByInput[]
+    createMany?: FundingDisbursementCreateManyApprovedByInputEnvelope
+    set?: FundingDisbursementWhereUniqueInput | FundingDisbursementWhereUniqueInput[]
+    disconnect?: FundingDisbursementWhereUniqueInput | FundingDisbursementWhereUniqueInput[]
+    delete?: FundingDisbursementWhereUniqueInput | FundingDisbursementWhereUniqueInput[]
+    connect?: FundingDisbursementWhereUniqueInput | FundingDisbursementWhereUniqueInput[]
+    update?: FundingDisbursementUpdateWithWhereUniqueWithoutApprovedByInput | FundingDisbursementUpdateWithWhereUniqueWithoutApprovedByInput[]
+    updateMany?: FundingDisbursementUpdateManyWithWhereWithoutApprovedByInput | FundingDisbursementUpdateManyWithWhereWithoutApprovedByInput[]
+    deleteMany?: FundingDisbursementScalarWhereInput | FundingDisbursementScalarWhereInput[]
+  }
+
   export type ProjectUncheckedUpdateManyWithoutLeaderNestedInput = {
     create?: XOR<ProjectCreateWithoutLeaderInput, ProjectUncheckedCreateWithoutLeaderInput> | ProjectCreateWithoutLeaderInput[] | ProjectUncheckedCreateWithoutLeaderInput[]
     connectOrCreate?: ProjectCreateOrConnectWithoutLeaderInput | ProjectCreateOrConnectWithoutLeaderInput[]
@@ -42643,6 +43073,34 @@ export namespace Prisma {
     update?: PostUpdateWithWhereUniqueWithoutApprovedByInput | PostUpdateWithWhereUniqueWithoutApprovedByInput[]
     updateMany?: PostUpdateManyWithWhereWithoutApprovedByInput | PostUpdateManyWithWhereWithoutApprovedByInput[]
     deleteMany?: PostScalarWhereInput | PostScalarWhereInput[]
+  }
+
+  export type FundingDisbursementUncheckedUpdateManyWithoutCreatedByNestedInput = {
+    create?: XOR<FundingDisbursementCreateWithoutCreatedByInput, FundingDisbursementUncheckedCreateWithoutCreatedByInput> | FundingDisbursementCreateWithoutCreatedByInput[] | FundingDisbursementUncheckedCreateWithoutCreatedByInput[]
+    connectOrCreate?: FundingDisbursementCreateOrConnectWithoutCreatedByInput | FundingDisbursementCreateOrConnectWithoutCreatedByInput[]
+    upsert?: FundingDisbursementUpsertWithWhereUniqueWithoutCreatedByInput | FundingDisbursementUpsertWithWhereUniqueWithoutCreatedByInput[]
+    createMany?: FundingDisbursementCreateManyCreatedByInputEnvelope
+    set?: FundingDisbursementWhereUniqueInput | FundingDisbursementWhereUniqueInput[]
+    disconnect?: FundingDisbursementWhereUniqueInput | FundingDisbursementWhereUniqueInput[]
+    delete?: FundingDisbursementWhereUniqueInput | FundingDisbursementWhereUniqueInput[]
+    connect?: FundingDisbursementWhereUniqueInput | FundingDisbursementWhereUniqueInput[]
+    update?: FundingDisbursementUpdateWithWhereUniqueWithoutCreatedByInput | FundingDisbursementUpdateWithWhereUniqueWithoutCreatedByInput[]
+    updateMany?: FundingDisbursementUpdateManyWithWhereWithoutCreatedByInput | FundingDisbursementUpdateManyWithWhereWithoutCreatedByInput[]
+    deleteMany?: FundingDisbursementScalarWhereInput | FundingDisbursementScalarWhereInput[]
+  }
+
+  export type FundingDisbursementUncheckedUpdateManyWithoutApprovedByNestedInput = {
+    create?: XOR<FundingDisbursementCreateWithoutApprovedByInput, FundingDisbursementUncheckedCreateWithoutApprovedByInput> | FundingDisbursementCreateWithoutApprovedByInput[] | FundingDisbursementUncheckedCreateWithoutApprovedByInput[]
+    connectOrCreate?: FundingDisbursementCreateOrConnectWithoutApprovedByInput | FundingDisbursementCreateOrConnectWithoutApprovedByInput[]
+    upsert?: FundingDisbursementUpsertWithWhereUniqueWithoutApprovedByInput | FundingDisbursementUpsertWithWhereUniqueWithoutApprovedByInput[]
+    createMany?: FundingDisbursementCreateManyApprovedByInputEnvelope
+    set?: FundingDisbursementWhereUniqueInput | FundingDisbursementWhereUniqueInput[]
+    disconnect?: FundingDisbursementWhereUniqueInput | FundingDisbursementWhereUniqueInput[]
+    delete?: FundingDisbursementWhereUniqueInput | FundingDisbursementWhereUniqueInput[]
+    connect?: FundingDisbursementWhereUniqueInput | FundingDisbursementWhereUniqueInput[]
+    update?: FundingDisbursementUpdateWithWhereUniqueWithoutApprovedByInput | FundingDisbursementUpdateWithWhereUniqueWithoutApprovedByInput[]
+    updateMany?: FundingDisbursementUpdateManyWithWhereWithoutApprovedByInput | FundingDisbursementUpdateManyWithWhereWithoutApprovedByInput[]
+    deleteMany?: FundingDisbursementScalarWhereInput | FundingDisbursementScalarWhereInput[]
   }
 
   export type ProjectCreateNestedManyWithoutCallRoundInput = {
@@ -43559,6 +44017,18 @@ export namespace Prisma {
     connect?: ProjectWhereUniqueInput
   }
 
+  export type UserCreateNestedOneWithoutCreatedDisbursementsInput = {
+    create?: XOR<UserCreateWithoutCreatedDisbursementsInput, UserUncheckedCreateWithoutCreatedDisbursementsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutCreatedDisbursementsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutApprovedDisbursementsInput = {
+    create?: XOR<UserCreateWithoutApprovedDisbursementsInput, UserUncheckedCreateWithoutApprovedDisbursementsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutApprovedDisbursementsInput
+    connect?: UserWhereUniqueInput
+  }
+
   export type DecimalFieldUpdateOperationsInput = {
     set?: Decimal | DecimalJsLike | number | string
     increment?: Decimal | DecimalJsLike | number | string
@@ -43567,12 +44037,34 @@ export namespace Prisma {
     divide?: Decimal | DecimalJsLike | number | string
   }
 
+  export type EnumDisbursementStatusFieldUpdateOperationsInput = {
+    set?: $Enums.DisbursementStatus
+  }
+
   export type ProjectUpdateOneRequiredWithoutDisbursementsNestedInput = {
     create?: XOR<ProjectCreateWithoutDisbursementsInput, ProjectUncheckedCreateWithoutDisbursementsInput>
     connectOrCreate?: ProjectCreateOrConnectWithoutDisbursementsInput
     upsert?: ProjectUpsertWithoutDisbursementsInput
     connect?: ProjectWhereUniqueInput
     update?: XOR<XOR<ProjectUpdateToOneWithWhereWithoutDisbursementsInput, ProjectUpdateWithoutDisbursementsInput>, ProjectUncheckedUpdateWithoutDisbursementsInput>
+  }
+
+  export type UserUpdateOneRequiredWithoutCreatedDisbursementsNestedInput = {
+    create?: XOR<UserCreateWithoutCreatedDisbursementsInput, UserUncheckedCreateWithoutCreatedDisbursementsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutCreatedDisbursementsInput
+    upsert?: UserUpsertWithoutCreatedDisbursementsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutCreatedDisbursementsInput, UserUpdateWithoutCreatedDisbursementsInput>, UserUncheckedUpdateWithoutCreatedDisbursementsInput>
+  }
+
+  export type UserUpdateOneWithoutApprovedDisbursementsNestedInput = {
+    create?: XOR<UserCreateWithoutApprovedDisbursementsInput, UserUncheckedCreateWithoutApprovedDisbursementsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutApprovedDisbursementsInput
+    upsert?: UserUpsertWithoutApprovedDisbursementsInput
+    disconnect?: UserWhereInput | boolean
+    delete?: UserWhereInput | boolean
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutApprovedDisbursementsInput, UserUpdateWithoutApprovedDisbursementsInput>, UserUncheckedUpdateWithoutApprovedDisbursementsInput>
   }
 
   export type ProjectCreateNestedOneWithoutExtensionRequestsInput = {
@@ -44552,6 +45044,13 @@ export namespace Prisma {
     not?: NestedDecimalFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string
   }
 
+  export type NestedEnumDisbursementStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.DisbursementStatus | EnumDisbursementStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.DisbursementStatus[] | ListEnumDisbursementStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.DisbursementStatus[] | ListEnumDisbursementStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumDisbursementStatusFilter<$PrismaModel> | $Enums.DisbursementStatus
+  }
+
   export type NestedDecimalWithAggregatesFilter<$PrismaModel = never> = {
     equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
     in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
@@ -44566,6 +45065,16 @@ export namespace Prisma {
     _sum?: NestedDecimalFilter<$PrismaModel>
     _min?: NestedDecimalFilter<$PrismaModel>
     _max?: NestedDecimalFilter<$PrismaModel>
+  }
+
+  export type NestedEnumDisbursementStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.DisbursementStatus | EnumDisbursementStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.DisbursementStatus[] | ListEnumDisbursementStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.DisbursementStatus[] | ListEnumDisbursementStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumDisbursementStatusWithAggregatesFilter<$PrismaModel> | $Enums.DisbursementStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumDisbursementStatusFilter<$PrismaModel>
+    _max?: NestedEnumDisbursementStatusFilter<$PrismaModel>
   }
 
   export type NestedEnumRequestStatusFilter<$PrismaModel = never> = {
@@ -44792,6 +45301,8 @@ export namespace Prisma {
     officeMeetingViews?: OfficeMeetingViewCreateNestedManyWithoutUserInput
     posts?: PostCreateNestedManyWithoutAuthorInput
     approvedPosts?: PostCreateNestedManyWithoutApprovedByInput
+    createdDisbursements?: FundingDisbursementCreateNestedManyWithoutCreatedByInput
+    approvedDisbursements?: FundingDisbursementCreateNestedManyWithoutApprovedByInput
   }
 
   export type UserUncheckedCreateWithoutDepartmentRefInput = {
@@ -44825,6 +45336,8 @@ export namespace Prisma {
     officeMeetingViews?: OfficeMeetingViewUncheckedCreateNestedManyWithoutUserInput
     posts?: PostUncheckedCreateNestedManyWithoutAuthorInput
     approvedPosts?: PostUncheckedCreateNestedManyWithoutApprovedByInput
+    createdDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutCreatedByInput
+    approvedDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutApprovedByInput
   }
 
   export type UserCreateOrConnectWithoutDepartmentRefInput = {
@@ -45281,6 +45794,8 @@ export namespace Prisma {
     officeMeetingViews?: OfficeMeetingViewCreateNestedManyWithoutUserInput
     posts?: PostCreateNestedManyWithoutAuthorInput
     approvedPosts?: PostCreateNestedManyWithoutApprovedByInput
+    createdDisbursements?: FundingDisbursementCreateNestedManyWithoutCreatedByInput
+    approvedDisbursements?: FundingDisbursementCreateNestedManyWithoutApprovedByInput
   }
 
   export type UserUncheckedCreateWithoutMajorInput = {
@@ -45314,6 +45829,8 @@ export namespace Prisma {
     officeMeetingViews?: OfficeMeetingViewUncheckedCreateNestedManyWithoutUserInput
     posts?: PostUncheckedCreateNestedManyWithoutAuthorInput
     approvedPosts?: PostUncheckedCreateNestedManyWithoutApprovedByInput
+    createdDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutCreatedByInput
+    approvedDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutApprovedByInput
   }
 
   export type UserCreateOrConnectWithoutMajorInput = {
@@ -45572,6 +46089,8 @@ export namespace Prisma {
     officeMeetingViews?: OfficeMeetingViewCreateNestedManyWithoutUserInput
     posts?: PostCreateNestedManyWithoutAuthorInput
     approvedPosts?: PostCreateNestedManyWithoutApprovedByInput
+    createdDisbursements?: FundingDisbursementCreateNestedManyWithoutCreatedByInput
+    approvedDisbursements?: FundingDisbursementCreateNestedManyWithoutApprovedByInput
   }
 
   export type UserUncheckedCreateWithoutClassInput = {
@@ -45605,6 +46124,8 @@ export namespace Prisma {
     officeMeetingViews?: OfficeMeetingViewUncheckedCreateNestedManyWithoutUserInput
     posts?: PostUncheckedCreateNestedManyWithoutAuthorInput
     approvedPosts?: PostUncheckedCreateNestedManyWithoutApprovedByInput
+    createdDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutCreatedByInput
+    approvedDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutApprovedByInput
   }
 
   export type UserCreateOrConnectWithoutClassInput = {
@@ -46466,6 +46987,90 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type FundingDisbursementCreateWithoutCreatedByInput = {
+    id?: string
+    amount: Decimal | DecimalJsLike | number | string
+    disbursedAt: Date | string
+    voucherNo?: string | null
+    voucherFileUrl?: string | null
+    reason?: string | null
+    status?: $Enums.DisbursementStatus
+    approvedAt?: Date | string | null
+    rejectionNote?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    project: ProjectCreateNestedOneWithoutDisbursementsInput
+    approvedBy?: UserCreateNestedOneWithoutApprovedDisbursementsInput
+  }
+
+  export type FundingDisbursementUncheckedCreateWithoutCreatedByInput = {
+    id?: string
+    projectId: string
+    amount: Decimal | DecimalJsLike | number | string
+    disbursedAt: Date | string
+    voucherNo?: string | null
+    voucherFileUrl?: string | null
+    reason?: string | null
+    status?: $Enums.DisbursementStatus
+    approvedById?: string | null
+    approvedAt?: Date | string | null
+    rejectionNote?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type FundingDisbursementCreateOrConnectWithoutCreatedByInput = {
+    where: FundingDisbursementWhereUniqueInput
+    create: XOR<FundingDisbursementCreateWithoutCreatedByInput, FundingDisbursementUncheckedCreateWithoutCreatedByInput>
+  }
+
+  export type FundingDisbursementCreateManyCreatedByInputEnvelope = {
+    data: FundingDisbursementCreateManyCreatedByInput | FundingDisbursementCreateManyCreatedByInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type FundingDisbursementCreateWithoutApprovedByInput = {
+    id?: string
+    amount: Decimal | DecimalJsLike | number | string
+    disbursedAt: Date | string
+    voucherNo?: string | null
+    voucherFileUrl?: string | null
+    reason?: string | null
+    status?: $Enums.DisbursementStatus
+    approvedAt?: Date | string | null
+    rejectionNote?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    project: ProjectCreateNestedOneWithoutDisbursementsInput
+    createdBy: UserCreateNestedOneWithoutCreatedDisbursementsInput
+  }
+
+  export type FundingDisbursementUncheckedCreateWithoutApprovedByInput = {
+    id?: string
+    projectId: string
+    amount: Decimal | DecimalJsLike | number | string
+    disbursedAt: Date | string
+    voucherNo?: string | null
+    voucherFileUrl?: string | null
+    reason?: string | null
+    status?: $Enums.DisbursementStatus
+    createdById: string
+    approvedAt?: Date | string | null
+    rejectionNote?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type FundingDisbursementCreateOrConnectWithoutApprovedByInput = {
+    where: FundingDisbursementWhereUniqueInput
+    create: XOR<FundingDisbursementCreateWithoutApprovedByInput, FundingDisbursementUncheckedCreateWithoutApprovedByInput>
+  }
+
+  export type FundingDisbursementCreateManyApprovedByInputEnvelope = {
+    data: FundingDisbursementCreateManyApprovedByInput | FundingDisbursementCreateManyApprovedByInput[]
+    skipDuplicates?: boolean
+  }
+
   export type DepartmentUpsertWithoutUsersInput = {
     update: XOR<DepartmentUpdateWithoutUsersInput, DepartmentUncheckedUpdateWithoutUsersInput>
     create: XOR<DepartmentCreateWithoutUsersInput, DepartmentUncheckedCreateWithoutUsersInput>
@@ -46947,6 +47552,58 @@ export namespace Prisma {
   export type PostUpdateManyWithWhereWithoutApprovedByInput = {
     where: PostScalarWhereInput
     data: XOR<PostUpdateManyMutationInput, PostUncheckedUpdateManyWithoutApprovedByInput>
+  }
+
+  export type FundingDisbursementUpsertWithWhereUniqueWithoutCreatedByInput = {
+    where: FundingDisbursementWhereUniqueInput
+    update: XOR<FundingDisbursementUpdateWithoutCreatedByInput, FundingDisbursementUncheckedUpdateWithoutCreatedByInput>
+    create: XOR<FundingDisbursementCreateWithoutCreatedByInput, FundingDisbursementUncheckedCreateWithoutCreatedByInput>
+  }
+
+  export type FundingDisbursementUpdateWithWhereUniqueWithoutCreatedByInput = {
+    where: FundingDisbursementWhereUniqueInput
+    data: XOR<FundingDisbursementUpdateWithoutCreatedByInput, FundingDisbursementUncheckedUpdateWithoutCreatedByInput>
+  }
+
+  export type FundingDisbursementUpdateManyWithWhereWithoutCreatedByInput = {
+    where: FundingDisbursementScalarWhereInput
+    data: XOR<FundingDisbursementUpdateManyMutationInput, FundingDisbursementUncheckedUpdateManyWithoutCreatedByInput>
+  }
+
+  export type FundingDisbursementScalarWhereInput = {
+    AND?: FundingDisbursementScalarWhereInput | FundingDisbursementScalarWhereInput[]
+    OR?: FundingDisbursementScalarWhereInput[]
+    NOT?: FundingDisbursementScalarWhereInput | FundingDisbursementScalarWhereInput[]
+    id?: StringFilter<"FundingDisbursement"> | string
+    projectId?: StringFilter<"FundingDisbursement"> | string
+    amount?: DecimalFilter<"FundingDisbursement"> | Decimal | DecimalJsLike | number | string
+    disbursedAt?: DateTimeFilter<"FundingDisbursement"> | Date | string
+    voucherNo?: StringNullableFilter<"FundingDisbursement"> | string | null
+    voucherFileUrl?: StringNullableFilter<"FundingDisbursement"> | string | null
+    reason?: StringNullableFilter<"FundingDisbursement"> | string | null
+    status?: EnumDisbursementStatusFilter<"FundingDisbursement"> | $Enums.DisbursementStatus
+    createdById?: StringFilter<"FundingDisbursement"> | string
+    approvedById?: StringNullableFilter<"FundingDisbursement"> | string | null
+    approvedAt?: DateTimeNullableFilter<"FundingDisbursement"> | Date | string | null
+    rejectionNote?: StringNullableFilter<"FundingDisbursement"> | string | null
+    createdAt?: DateTimeFilter<"FundingDisbursement"> | Date | string
+    updatedAt?: DateTimeFilter<"FundingDisbursement"> | Date | string
+  }
+
+  export type FundingDisbursementUpsertWithWhereUniqueWithoutApprovedByInput = {
+    where: FundingDisbursementWhereUniqueInput
+    update: XOR<FundingDisbursementUpdateWithoutApprovedByInput, FundingDisbursementUncheckedUpdateWithoutApprovedByInput>
+    create: XOR<FundingDisbursementCreateWithoutApprovedByInput, FundingDisbursementUncheckedCreateWithoutApprovedByInput>
+  }
+
+  export type FundingDisbursementUpdateWithWhereUniqueWithoutApprovedByInput = {
+    where: FundingDisbursementWhereUniqueInput
+    data: XOR<FundingDisbursementUpdateWithoutApprovedByInput, FundingDisbursementUncheckedUpdateWithoutApprovedByInput>
+  }
+
+  export type FundingDisbursementUpdateManyWithWhereWithoutApprovedByInput = {
+    where: FundingDisbursementScalarWhereInput
+    data: XOR<FundingDisbursementUpdateManyMutationInput, FundingDisbursementUncheckedUpdateManyWithoutApprovedByInput>
   }
 
   export type ProjectCreateWithoutCallRoundInput = {
@@ -47609,6 +48266,8 @@ export namespace Prisma {
     officeMeetingViews?: OfficeMeetingViewCreateNestedManyWithoutUserInput
     posts?: PostCreateNestedManyWithoutAuthorInput
     approvedPosts?: PostCreateNestedManyWithoutApprovedByInput
+    createdDisbursements?: FundingDisbursementCreateNestedManyWithoutCreatedByInput
+    approvedDisbursements?: FundingDisbursementCreateNestedManyWithoutApprovedByInput
   }
 
   export type UserUncheckedCreateWithoutLeadProjectsInput = {
@@ -47642,6 +48301,8 @@ export namespace Prisma {
     officeMeetingViews?: OfficeMeetingViewUncheckedCreateNestedManyWithoutUserInput
     posts?: PostUncheckedCreateNestedManyWithoutAuthorInput
     approvedPosts?: PostUncheckedCreateNestedManyWithoutApprovedByInput
+    createdDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutCreatedByInput
+    approvedDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutApprovedByInput
   }
 
   export type UserCreateOrConnectWithoutLeadProjectsInput = {
@@ -47680,6 +48341,8 @@ export namespace Prisma {
     officeMeetingViews?: OfficeMeetingViewCreateNestedManyWithoutUserInput
     posts?: PostCreateNestedManyWithoutAuthorInput
     approvedPosts?: PostCreateNestedManyWithoutApprovedByInput
+    createdDisbursements?: FundingDisbursementCreateNestedManyWithoutCreatedByInput
+    approvedDisbursements?: FundingDisbursementCreateNestedManyWithoutApprovedByInput
   }
 
   export type UserUncheckedCreateWithoutDeanReviewsInput = {
@@ -47713,6 +48376,8 @@ export namespace Prisma {
     officeMeetingViews?: OfficeMeetingViewUncheckedCreateNestedManyWithoutUserInput
     posts?: PostUncheckedCreateNestedManyWithoutAuthorInput
     approvedPosts?: PostUncheckedCreateNestedManyWithoutApprovedByInput
+    createdDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutCreatedByInput
+    approvedDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutApprovedByInput
   }
 
   export type UserCreateOrConnectWithoutDeanReviewsInput = {
@@ -47914,7 +48579,14 @@ export namespace Prisma {
     disbursedAt: Date | string
     voucherNo?: string | null
     voucherFileUrl?: string | null
+    reason?: string | null
+    status?: $Enums.DisbursementStatus
+    approvedAt?: Date | string | null
+    rejectionNote?: string | null
     createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy: UserCreateNestedOneWithoutCreatedDisbursementsInput
+    approvedBy?: UserCreateNestedOneWithoutApprovedDisbursementsInput
   }
 
   export type FundingDisbursementUncheckedCreateWithoutProjectInput = {
@@ -47923,7 +48595,14 @@ export namespace Prisma {
     disbursedAt: Date | string
     voucherNo?: string | null
     voucherFileUrl?: string | null
+    reason?: string | null
+    status?: $Enums.DisbursementStatus
+    createdById: string
+    approvedById?: string | null
+    approvedAt?: Date | string | null
+    rejectionNote?: string | null
     createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type FundingDisbursementCreateOrConnectWithoutProjectInput = {
@@ -47999,6 +48678,8 @@ export namespace Prisma {
     officeMeetingViews?: OfficeMeetingViewCreateNestedManyWithoutUserInput
     posts?: PostCreateNestedManyWithoutAuthorInput
     approvedPosts?: PostCreateNestedManyWithoutApprovedByInput
+    createdDisbursements?: FundingDisbursementCreateNestedManyWithoutCreatedByInput
+    approvedDisbursements?: FundingDisbursementCreateNestedManyWithoutApprovedByInput
   }
 
   export type UserUncheckedCreateWithoutInstructedProjectsInput = {
@@ -48032,6 +48713,8 @@ export namespace Prisma {
     officeMeetingViews?: OfficeMeetingViewUncheckedCreateNestedManyWithoutUserInput
     posts?: PostUncheckedCreateNestedManyWithoutAuthorInput
     approvedPosts?: PostUncheckedCreateNestedManyWithoutApprovedByInput
+    createdDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutCreatedByInput
+    approvedDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutApprovedByInput
   }
 
   export type UserCreateOrConnectWithoutInstructedProjectsInput = {
@@ -48119,6 +48802,8 @@ export namespace Prisma {
     officeMeetingViews?: OfficeMeetingViewUpdateManyWithoutUserNestedInput
     posts?: PostUpdateManyWithoutAuthorNestedInput
     approvedPosts?: PostUpdateManyWithoutApprovedByNestedInput
+    createdDisbursements?: FundingDisbursementUpdateManyWithoutCreatedByNestedInput
+    approvedDisbursements?: FundingDisbursementUpdateManyWithoutApprovedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutLeadProjectsInput = {
@@ -48152,6 +48837,8 @@ export namespace Prisma {
     officeMeetingViews?: OfficeMeetingViewUncheckedUpdateManyWithoutUserNestedInput
     posts?: PostUncheckedUpdateManyWithoutAuthorNestedInput
     approvedPosts?: PostUncheckedUpdateManyWithoutApprovedByNestedInput
+    createdDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutCreatedByNestedInput
+    approvedDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutApprovedByNestedInput
   }
 
   export type UserUpsertWithoutDeanReviewsInput = {
@@ -48196,6 +48883,8 @@ export namespace Prisma {
     officeMeetingViews?: OfficeMeetingViewUpdateManyWithoutUserNestedInput
     posts?: PostUpdateManyWithoutAuthorNestedInput
     approvedPosts?: PostUpdateManyWithoutApprovedByNestedInput
+    createdDisbursements?: FundingDisbursementUpdateManyWithoutCreatedByNestedInput
+    approvedDisbursements?: FundingDisbursementUpdateManyWithoutApprovedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutDeanReviewsInput = {
@@ -48229,6 +48918,8 @@ export namespace Prisma {
     officeMeetingViews?: OfficeMeetingViewUncheckedUpdateManyWithoutUserNestedInput
     posts?: PostUncheckedUpdateManyWithoutAuthorNestedInput
     approvedPosts?: PostUncheckedUpdateManyWithoutApprovedByNestedInput
+    createdDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutCreatedByNestedInput
+    approvedDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutApprovedByNestedInput
   }
 
   export type CallRoundUpsertWithoutProjectsInput = {
@@ -48424,19 +49115,6 @@ export namespace Prisma {
     data: XOR<FundingDisbursementUpdateManyMutationInput, FundingDisbursementUncheckedUpdateManyWithoutProjectInput>
   }
 
-  export type FundingDisbursementScalarWhereInput = {
-    AND?: FundingDisbursementScalarWhereInput | FundingDisbursementScalarWhereInput[]
-    OR?: FundingDisbursementScalarWhereInput[]
-    NOT?: FundingDisbursementScalarWhereInput | FundingDisbursementScalarWhereInput[]
-    id?: StringFilter<"FundingDisbursement"> | string
-    projectId?: StringFilter<"FundingDisbursement"> | string
-    amount?: DecimalFilter<"FundingDisbursement"> | Decimal | DecimalJsLike | number | string
-    disbursedAt?: DateTimeFilter<"FundingDisbursement"> | Date | string
-    voucherNo?: StringNullableFilter<"FundingDisbursement"> | string | null
-    voucherFileUrl?: StringNullableFilter<"FundingDisbursement"> | string | null
-    createdAt?: DateTimeFilter<"FundingDisbursement"> | Date | string
-  }
-
   export type ExtensionRequestUpsertWithWhereUniqueWithoutProjectInput = {
     where: ExtensionRequestWhereUniqueInput
     update: XOR<ExtensionRequestUpdateWithoutProjectInput, ExtensionRequestUncheckedUpdateWithoutProjectInput>
@@ -48510,6 +49188,8 @@ export namespace Prisma {
     officeMeetingViews?: OfficeMeetingViewUpdateManyWithoutUserNestedInput
     posts?: PostUpdateManyWithoutAuthorNestedInput
     approvedPosts?: PostUpdateManyWithoutApprovedByNestedInput
+    createdDisbursements?: FundingDisbursementUpdateManyWithoutCreatedByNestedInput
+    approvedDisbursements?: FundingDisbursementUpdateManyWithoutApprovedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutInstructedProjectsInput = {
@@ -48543,6 +49223,8 @@ export namespace Prisma {
     officeMeetingViews?: OfficeMeetingViewUncheckedUpdateManyWithoutUserNestedInput
     posts?: PostUncheckedUpdateManyWithoutAuthorNestedInput
     approvedPosts?: PostUncheckedUpdateManyWithoutApprovedByNestedInput
+    createdDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutCreatedByNestedInput
+    approvedDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutApprovedByNestedInput
   }
 
   export type OfficeMeetingUpsertWithWhereUniqueWithoutProjectInput = {
@@ -49003,6 +49685,8 @@ export namespace Prisma {
     officeMeetingViews?: OfficeMeetingViewCreateNestedManyWithoutUserInput
     posts?: PostCreateNestedManyWithoutAuthorInput
     approvedPosts?: PostCreateNestedManyWithoutApprovedByInput
+    createdDisbursements?: FundingDisbursementCreateNestedManyWithoutCreatedByInput
+    approvedDisbursements?: FundingDisbursementCreateNestedManyWithoutApprovedByInput
   }
 
   export type UserUncheckedCreateWithoutCouncilEvaluationsInput = {
@@ -49036,6 +49720,8 @@ export namespace Prisma {
     officeMeetingViews?: OfficeMeetingViewUncheckedCreateNestedManyWithoutUserInput
     posts?: PostUncheckedCreateNestedManyWithoutAuthorInput
     approvedPosts?: PostUncheckedCreateNestedManyWithoutApprovedByInput
+    createdDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutCreatedByInput
+    approvedDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutApprovedByInput
   }
 
   export type UserCreateOrConnectWithoutCouncilEvaluationsInput = {
@@ -49146,6 +49832,8 @@ export namespace Prisma {
     officeMeetingViews?: OfficeMeetingViewUpdateManyWithoutUserNestedInput
     posts?: PostUpdateManyWithoutAuthorNestedInput
     approvedPosts?: PostUpdateManyWithoutApprovedByNestedInput
+    createdDisbursements?: FundingDisbursementUpdateManyWithoutCreatedByNestedInput
+    approvedDisbursements?: FundingDisbursementUpdateManyWithoutApprovedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCouncilEvaluationsInput = {
@@ -49179,6 +49867,8 @@ export namespace Prisma {
     officeMeetingViews?: OfficeMeetingViewUncheckedUpdateManyWithoutUserNestedInput
     posts?: PostUncheckedUpdateManyWithoutAuthorNestedInput
     approvedPosts?: PostUncheckedUpdateManyWithoutApprovedByNestedInput
+    createdDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutCreatedByNestedInput
+    approvedDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutApprovedByNestedInput
   }
 
   export type ProjectCreateWithoutDisbursementsInput = {
@@ -49234,6 +49924,156 @@ export namespace Prisma {
   export type ProjectCreateOrConnectWithoutDisbursementsInput = {
     where: ProjectWhereUniqueInput
     create: XOR<ProjectCreateWithoutDisbursementsInput, ProjectUncheckedCreateWithoutDisbursementsInput>
+  }
+
+  export type UserCreateWithoutCreatedDisbursementsInput = {
+    id?: string
+    code?: string | null
+    name: string
+    email: string
+    password?: string | null
+    dateOfBirth?: Date | string | null
+    gender?: $Enums.Gender | null
+    phone?: string | null
+    address?: string | null
+    role?: $Enums.Role
+    department?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    departmentRef?: DepartmentCreateNestedOneWithoutUsersInput
+    major?: MajorCreateNestedOneWithoutUsersInput
+    class?: ClassCreateNestedOneWithoutUsersInput
+    leadProjects?: ProjectCreateNestedManyWithoutLeaderInput
+    deanReviews?: ProjectCreateNestedManyWithoutDeanReviewerInput
+    councilEvaluations?: CouncilEvaluationCreateNestedManyWithoutCouncilMemberInput
+    registrations?: ProjectRegistrationCreateNestedManyWithoutUserInput
+    instructedRegistrations?: ProjectRegistrationCreateNestedManyWithoutInstructorInput
+    instructedProjects?: ProjectCreateNestedManyWithoutInstructorInput
+    facultyReviews?: ProjectRegistrationCreateNestedManyWithoutFacultyReviewerInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    callRoundInstructors?: CallRoundInstructorCreateNestedManyWithoutInstructorInput
+    callRoundCouncilMembers?: CallRoundCouncilMemberCreateNestedManyWithoutCouncilMemberInput
+    councilAssignments?: CouncilMemberAssignmentCreateNestedManyWithoutCouncilMemberInput
+    officeMeetingsAsInstructor?: OfficeMeetingCreateNestedManyWithoutInstructorInput
+    officeMeetingViews?: OfficeMeetingViewCreateNestedManyWithoutUserInput
+    posts?: PostCreateNestedManyWithoutAuthorInput
+    approvedPosts?: PostCreateNestedManyWithoutApprovedByInput
+    approvedDisbursements?: FundingDisbursementCreateNestedManyWithoutApprovedByInput
+  }
+
+  export type UserUncheckedCreateWithoutCreatedDisbursementsInput = {
+    id?: string
+    code?: string | null
+    name: string
+    email: string
+    password?: string | null
+    dateOfBirth?: Date | string | null
+    gender?: $Enums.Gender | null
+    phone?: string | null
+    address?: string | null
+    role?: $Enums.Role
+    department?: string | null
+    departmentId?: string | null
+    majorId?: string | null
+    classId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    leadProjects?: ProjectUncheckedCreateNestedManyWithoutLeaderInput
+    deanReviews?: ProjectUncheckedCreateNestedManyWithoutDeanReviewerInput
+    councilEvaluations?: CouncilEvaluationUncheckedCreateNestedManyWithoutCouncilMemberInput
+    registrations?: ProjectRegistrationUncheckedCreateNestedManyWithoutUserInput
+    instructedRegistrations?: ProjectRegistrationUncheckedCreateNestedManyWithoutInstructorInput
+    instructedProjects?: ProjectUncheckedCreateNestedManyWithoutInstructorInput
+    facultyReviews?: ProjectRegistrationUncheckedCreateNestedManyWithoutFacultyReviewerInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    callRoundInstructors?: CallRoundInstructorUncheckedCreateNestedManyWithoutInstructorInput
+    callRoundCouncilMembers?: CallRoundCouncilMemberUncheckedCreateNestedManyWithoutCouncilMemberInput
+    councilAssignments?: CouncilMemberAssignmentUncheckedCreateNestedManyWithoutCouncilMemberInput
+    officeMeetingsAsInstructor?: OfficeMeetingUncheckedCreateNestedManyWithoutInstructorInput
+    officeMeetingViews?: OfficeMeetingViewUncheckedCreateNestedManyWithoutUserInput
+    posts?: PostUncheckedCreateNestedManyWithoutAuthorInput
+    approvedPosts?: PostUncheckedCreateNestedManyWithoutApprovedByInput
+    approvedDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutApprovedByInput
+  }
+
+  export type UserCreateOrConnectWithoutCreatedDisbursementsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutCreatedDisbursementsInput, UserUncheckedCreateWithoutCreatedDisbursementsInput>
+  }
+
+  export type UserCreateWithoutApprovedDisbursementsInput = {
+    id?: string
+    code?: string | null
+    name: string
+    email: string
+    password?: string | null
+    dateOfBirth?: Date | string | null
+    gender?: $Enums.Gender | null
+    phone?: string | null
+    address?: string | null
+    role?: $Enums.Role
+    department?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    departmentRef?: DepartmentCreateNestedOneWithoutUsersInput
+    major?: MajorCreateNestedOneWithoutUsersInput
+    class?: ClassCreateNestedOneWithoutUsersInput
+    leadProjects?: ProjectCreateNestedManyWithoutLeaderInput
+    deanReviews?: ProjectCreateNestedManyWithoutDeanReviewerInput
+    councilEvaluations?: CouncilEvaluationCreateNestedManyWithoutCouncilMemberInput
+    registrations?: ProjectRegistrationCreateNestedManyWithoutUserInput
+    instructedRegistrations?: ProjectRegistrationCreateNestedManyWithoutInstructorInput
+    instructedProjects?: ProjectCreateNestedManyWithoutInstructorInput
+    facultyReviews?: ProjectRegistrationCreateNestedManyWithoutFacultyReviewerInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    callRoundInstructors?: CallRoundInstructorCreateNestedManyWithoutInstructorInput
+    callRoundCouncilMembers?: CallRoundCouncilMemberCreateNestedManyWithoutCouncilMemberInput
+    councilAssignments?: CouncilMemberAssignmentCreateNestedManyWithoutCouncilMemberInput
+    officeMeetingsAsInstructor?: OfficeMeetingCreateNestedManyWithoutInstructorInput
+    officeMeetingViews?: OfficeMeetingViewCreateNestedManyWithoutUserInput
+    posts?: PostCreateNestedManyWithoutAuthorInput
+    approvedPosts?: PostCreateNestedManyWithoutApprovedByInput
+    createdDisbursements?: FundingDisbursementCreateNestedManyWithoutCreatedByInput
+  }
+
+  export type UserUncheckedCreateWithoutApprovedDisbursementsInput = {
+    id?: string
+    code?: string | null
+    name: string
+    email: string
+    password?: string | null
+    dateOfBirth?: Date | string | null
+    gender?: $Enums.Gender | null
+    phone?: string | null
+    address?: string | null
+    role?: $Enums.Role
+    department?: string | null
+    departmentId?: string | null
+    majorId?: string | null
+    classId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    leadProjects?: ProjectUncheckedCreateNestedManyWithoutLeaderInput
+    deanReviews?: ProjectUncheckedCreateNestedManyWithoutDeanReviewerInput
+    councilEvaluations?: CouncilEvaluationUncheckedCreateNestedManyWithoutCouncilMemberInput
+    registrations?: ProjectRegistrationUncheckedCreateNestedManyWithoutUserInput
+    instructedRegistrations?: ProjectRegistrationUncheckedCreateNestedManyWithoutInstructorInput
+    instructedProjects?: ProjectUncheckedCreateNestedManyWithoutInstructorInput
+    facultyReviews?: ProjectRegistrationUncheckedCreateNestedManyWithoutFacultyReviewerInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    callRoundInstructors?: CallRoundInstructorUncheckedCreateNestedManyWithoutInstructorInput
+    callRoundCouncilMembers?: CallRoundCouncilMemberUncheckedCreateNestedManyWithoutCouncilMemberInput
+    councilAssignments?: CouncilMemberAssignmentUncheckedCreateNestedManyWithoutCouncilMemberInput
+    officeMeetingsAsInstructor?: OfficeMeetingUncheckedCreateNestedManyWithoutInstructorInput
+    officeMeetingViews?: OfficeMeetingViewUncheckedCreateNestedManyWithoutUserInput
+    posts?: PostUncheckedCreateNestedManyWithoutAuthorInput
+    approvedPosts?: PostUncheckedCreateNestedManyWithoutApprovedByInput
+    createdDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutCreatedByInput
+  }
+
+  export type UserCreateOrConnectWithoutApprovedDisbursementsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutApprovedDisbursementsInput, UserUncheckedCreateWithoutApprovedDisbursementsInput>
   }
 
   export type ProjectUpsertWithoutDisbursementsInput = {
@@ -49295,6 +50135,168 @@ export namespace Prisma {
     councilEvaluations?: CouncilEvaluationUncheckedUpdateManyWithoutProjectNestedInput
     extensionRequests?: ExtensionRequestUncheckedUpdateManyWithoutProjectNestedInput
     officeMeetings?: OfficeMeetingUncheckedUpdateManyWithoutProjectNestedInput
+  }
+
+  export type UserUpsertWithoutCreatedDisbursementsInput = {
+    update: XOR<UserUpdateWithoutCreatedDisbursementsInput, UserUncheckedUpdateWithoutCreatedDisbursementsInput>
+    create: XOR<UserCreateWithoutCreatedDisbursementsInput, UserUncheckedCreateWithoutCreatedDisbursementsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutCreatedDisbursementsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutCreatedDisbursementsInput, UserUncheckedUpdateWithoutCreatedDisbursementsInput>
+  }
+
+  export type UserUpdateWithoutCreatedDisbursementsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    departmentRef?: DepartmentUpdateOneWithoutUsersNestedInput
+    major?: MajorUpdateOneWithoutUsersNestedInput
+    class?: ClassUpdateOneWithoutUsersNestedInput
+    leadProjects?: ProjectUpdateManyWithoutLeaderNestedInput
+    deanReviews?: ProjectUpdateManyWithoutDeanReviewerNestedInput
+    councilEvaluations?: CouncilEvaluationUpdateManyWithoutCouncilMemberNestedInput
+    registrations?: ProjectRegistrationUpdateManyWithoutUserNestedInput
+    instructedRegistrations?: ProjectRegistrationUpdateManyWithoutInstructorNestedInput
+    instructedProjects?: ProjectUpdateManyWithoutInstructorNestedInput
+    facultyReviews?: ProjectRegistrationUpdateManyWithoutFacultyReviewerNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    callRoundInstructors?: CallRoundInstructorUpdateManyWithoutInstructorNestedInput
+    callRoundCouncilMembers?: CallRoundCouncilMemberUpdateManyWithoutCouncilMemberNestedInput
+    councilAssignments?: CouncilMemberAssignmentUpdateManyWithoutCouncilMemberNestedInput
+    officeMeetingsAsInstructor?: OfficeMeetingUpdateManyWithoutInstructorNestedInput
+    officeMeetingViews?: OfficeMeetingViewUpdateManyWithoutUserNestedInput
+    posts?: PostUpdateManyWithoutAuthorNestedInput
+    approvedPosts?: PostUpdateManyWithoutApprovedByNestedInput
+    approvedDisbursements?: FundingDisbursementUpdateManyWithoutApprovedByNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutCreatedDisbursementsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    departmentId?: NullableStringFieldUpdateOperationsInput | string | null
+    majorId?: NullableStringFieldUpdateOperationsInput | string | null
+    classId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    leadProjects?: ProjectUncheckedUpdateManyWithoutLeaderNestedInput
+    deanReviews?: ProjectUncheckedUpdateManyWithoutDeanReviewerNestedInput
+    councilEvaluations?: CouncilEvaluationUncheckedUpdateManyWithoutCouncilMemberNestedInput
+    registrations?: ProjectRegistrationUncheckedUpdateManyWithoutUserNestedInput
+    instructedRegistrations?: ProjectRegistrationUncheckedUpdateManyWithoutInstructorNestedInput
+    instructedProjects?: ProjectUncheckedUpdateManyWithoutInstructorNestedInput
+    facultyReviews?: ProjectRegistrationUncheckedUpdateManyWithoutFacultyReviewerNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    callRoundInstructors?: CallRoundInstructorUncheckedUpdateManyWithoutInstructorNestedInput
+    callRoundCouncilMembers?: CallRoundCouncilMemberUncheckedUpdateManyWithoutCouncilMemberNestedInput
+    councilAssignments?: CouncilMemberAssignmentUncheckedUpdateManyWithoutCouncilMemberNestedInput
+    officeMeetingsAsInstructor?: OfficeMeetingUncheckedUpdateManyWithoutInstructorNestedInput
+    officeMeetingViews?: OfficeMeetingViewUncheckedUpdateManyWithoutUserNestedInput
+    posts?: PostUncheckedUpdateManyWithoutAuthorNestedInput
+    approvedPosts?: PostUncheckedUpdateManyWithoutApprovedByNestedInput
+    approvedDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutApprovedByNestedInput
+  }
+
+  export type UserUpsertWithoutApprovedDisbursementsInput = {
+    update: XOR<UserUpdateWithoutApprovedDisbursementsInput, UserUncheckedUpdateWithoutApprovedDisbursementsInput>
+    create: XOR<UserCreateWithoutApprovedDisbursementsInput, UserUncheckedCreateWithoutApprovedDisbursementsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutApprovedDisbursementsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutApprovedDisbursementsInput, UserUncheckedUpdateWithoutApprovedDisbursementsInput>
+  }
+
+  export type UserUpdateWithoutApprovedDisbursementsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    departmentRef?: DepartmentUpdateOneWithoutUsersNestedInput
+    major?: MajorUpdateOneWithoutUsersNestedInput
+    class?: ClassUpdateOneWithoutUsersNestedInput
+    leadProjects?: ProjectUpdateManyWithoutLeaderNestedInput
+    deanReviews?: ProjectUpdateManyWithoutDeanReviewerNestedInput
+    councilEvaluations?: CouncilEvaluationUpdateManyWithoutCouncilMemberNestedInput
+    registrations?: ProjectRegistrationUpdateManyWithoutUserNestedInput
+    instructedRegistrations?: ProjectRegistrationUpdateManyWithoutInstructorNestedInput
+    instructedProjects?: ProjectUpdateManyWithoutInstructorNestedInput
+    facultyReviews?: ProjectRegistrationUpdateManyWithoutFacultyReviewerNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    callRoundInstructors?: CallRoundInstructorUpdateManyWithoutInstructorNestedInput
+    callRoundCouncilMembers?: CallRoundCouncilMemberUpdateManyWithoutCouncilMemberNestedInput
+    councilAssignments?: CouncilMemberAssignmentUpdateManyWithoutCouncilMemberNestedInput
+    officeMeetingsAsInstructor?: OfficeMeetingUpdateManyWithoutInstructorNestedInput
+    officeMeetingViews?: OfficeMeetingViewUpdateManyWithoutUserNestedInput
+    posts?: PostUpdateManyWithoutAuthorNestedInput
+    approvedPosts?: PostUpdateManyWithoutApprovedByNestedInput
+    createdDisbursements?: FundingDisbursementUpdateManyWithoutCreatedByNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutApprovedDisbursementsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    departmentId?: NullableStringFieldUpdateOperationsInput | string | null
+    majorId?: NullableStringFieldUpdateOperationsInput | string | null
+    classId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    leadProjects?: ProjectUncheckedUpdateManyWithoutLeaderNestedInput
+    deanReviews?: ProjectUncheckedUpdateManyWithoutDeanReviewerNestedInput
+    councilEvaluations?: CouncilEvaluationUncheckedUpdateManyWithoutCouncilMemberNestedInput
+    registrations?: ProjectRegistrationUncheckedUpdateManyWithoutUserNestedInput
+    instructedRegistrations?: ProjectRegistrationUncheckedUpdateManyWithoutInstructorNestedInput
+    instructedProjects?: ProjectUncheckedUpdateManyWithoutInstructorNestedInput
+    facultyReviews?: ProjectRegistrationUncheckedUpdateManyWithoutFacultyReviewerNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    callRoundInstructors?: CallRoundInstructorUncheckedUpdateManyWithoutInstructorNestedInput
+    callRoundCouncilMembers?: CallRoundCouncilMemberUncheckedUpdateManyWithoutCouncilMemberNestedInput
+    councilAssignments?: CouncilMemberAssignmentUncheckedUpdateManyWithoutCouncilMemberNestedInput
+    officeMeetingsAsInstructor?: OfficeMeetingUncheckedUpdateManyWithoutInstructorNestedInput
+    officeMeetingViews?: OfficeMeetingViewUncheckedUpdateManyWithoutUserNestedInput
+    posts?: PostUncheckedUpdateManyWithoutAuthorNestedInput
+    approvedPosts?: PostUncheckedUpdateManyWithoutApprovedByNestedInput
+    createdDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type ProjectCreateWithoutExtensionRequestsInput = {
@@ -49444,6 +50446,8 @@ export namespace Prisma {
     officeMeetingViews?: OfficeMeetingViewCreateNestedManyWithoutUserInput
     posts?: PostCreateNestedManyWithoutAuthorInput
     approvedPosts?: PostCreateNestedManyWithoutApprovedByInput
+    createdDisbursements?: FundingDisbursementCreateNestedManyWithoutCreatedByInput
+    approvedDisbursements?: FundingDisbursementCreateNestedManyWithoutApprovedByInput
   }
 
   export type UserUncheckedCreateWithoutRegistrationsInput = {
@@ -49477,6 +50481,8 @@ export namespace Prisma {
     officeMeetingViews?: OfficeMeetingViewUncheckedCreateNestedManyWithoutUserInput
     posts?: PostUncheckedCreateNestedManyWithoutAuthorInput
     approvedPosts?: PostUncheckedCreateNestedManyWithoutApprovedByInput
+    createdDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutCreatedByInput
+    approvedDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutApprovedByInput
   }
 
   export type UserCreateOrConnectWithoutRegistrationsInput = {
@@ -49515,6 +50521,8 @@ export namespace Prisma {
     officeMeetingViews?: OfficeMeetingViewCreateNestedManyWithoutUserInput
     posts?: PostCreateNestedManyWithoutAuthorInput
     approvedPosts?: PostCreateNestedManyWithoutApprovedByInput
+    createdDisbursements?: FundingDisbursementCreateNestedManyWithoutCreatedByInput
+    approvedDisbursements?: FundingDisbursementCreateNestedManyWithoutApprovedByInput
   }
 
   export type UserUncheckedCreateWithoutInstructedRegistrationsInput = {
@@ -49548,6 +50556,8 @@ export namespace Prisma {
     officeMeetingViews?: OfficeMeetingViewUncheckedCreateNestedManyWithoutUserInput
     posts?: PostUncheckedCreateNestedManyWithoutAuthorInput
     approvedPosts?: PostUncheckedCreateNestedManyWithoutApprovedByInput
+    createdDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutCreatedByInput
+    approvedDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutApprovedByInput
   }
 
   export type UserCreateOrConnectWithoutInstructedRegistrationsInput = {
@@ -49675,6 +50685,8 @@ export namespace Prisma {
     officeMeetingViews?: OfficeMeetingViewCreateNestedManyWithoutUserInput
     posts?: PostCreateNestedManyWithoutAuthorInput
     approvedPosts?: PostCreateNestedManyWithoutApprovedByInput
+    createdDisbursements?: FundingDisbursementCreateNestedManyWithoutCreatedByInput
+    approvedDisbursements?: FundingDisbursementCreateNestedManyWithoutApprovedByInput
   }
 
   export type UserUncheckedCreateWithoutFacultyReviewsInput = {
@@ -49708,6 +50720,8 @@ export namespace Prisma {
     officeMeetingViews?: OfficeMeetingViewUncheckedCreateNestedManyWithoutUserInput
     posts?: PostUncheckedCreateNestedManyWithoutAuthorInput
     approvedPosts?: PostUncheckedCreateNestedManyWithoutApprovedByInput
+    createdDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutCreatedByInput
+    approvedDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutApprovedByInput
   }
 
   export type UserCreateOrConnectWithoutFacultyReviewsInput = {
@@ -49774,6 +50788,8 @@ export namespace Prisma {
     officeMeetingViews?: OfficeMeetingViewUpdateManyWithoutUserNestedInput
     posts?: PostUpdateManyWithoutAuthorNestedInput
     approvedPosts?: PostUpdateManyWithoutApprovedByNestedInput
+    createdDisbursements?: FundingDisbursementUpdateManyWithoutCreatedByNestedInput
+    approvedDisbursements?: FundingDisbursementUpdateManyWithoutApprovedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutRegistrationsInput = {
@@ -49807,6 +50823,8 @@ export namespace Prisma {
     officeMeetingViews?: OfficeMeetingViewUncheckedUpdateManyWithoutUserNestedInput
     posts?: PostUncheckedUpdateManyWithoutAuthorNestedInput
     approvedPosts?: PostUncheckedUpdateManyWithoutApprovedByNestedInput
+    createdDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutCreatedByNestedInput
+    approvedDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutApprovedByNestedInput
   }
 
   export type UserUpsertWithoutInstructedRegistrationsInput = {
@@ -49851,6 +50869,8 @@ export namespace Prisma {
     officeMeetingViews?: OfficeMeetingViewUpdateManyWithoutUserNestedInput
     posts?: PostUpdateManyWithoutAuthorNestedInput
     approvedPosts?: PostUpdateManyWithoutApprovedByNestedInput
+    createdDisbursements?: FundingDisbursementUpdateManyWithoutCreatedByNestedInput
+    approvedDisbursements?: FundingDisbursementUpdateManyWithoutApprovedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutInstructedRegistrationsInput = {
@@ -49884,6 +50904,8 @@ export namespace Prisma {
     officeMeetingViews?: OfficeMeetingViewUncheckedUpdateManyWithoutUserNestedInput
     posts?: PostUncheckedUpdateManyWithoutAuthorNestedInput
     approvedPosts?: PostUncheckedUpdateManyWithoutApprovedByNestedInput
+    createdDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutCreatedByNestedInput
+    approvedDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutApprovedByNestedInput
   }
 
   export type CallRoundUpsertWithoutRegistrationsInput = {
@@ -50023,6 +51045,8 @@ export namespace Prisma {
     officeMeetingViews?: OfficeMeetingViewUpdateManyWithoutUserNestedInput
     posts?: PostUpdateManyWithoutAuthorNestedInput
     approvedPosts?: PostUpdateManyWithoutApprovedByNestedInput
+    createdDisbursements?: FundingDisbursementUpdateManyWithoutCreatedByNestedInput
+    approvedDisbursements?: FundingDisbursementUpdateManyWithoutApprovedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutFacultyReviewsInput = {
@@ -50056,6 +51080,8 @@ export namespace Prisma {
     officeMeetingViews?: OfficeMeetingViewUncheckedUpdateManyWithoutUserNestedInput
     posts?: PostUncheckedUpdateManyWithoutAuthorNestedInput
     approvedPosts?: PostUncheckedUpdateManyWithoutApprovedByNestedInput
+    createdDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutCreatedByNestedInput
+    approvedDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutApprovedByNestedInput
   }
 
   export type ProjectCouncilAssignmentUpsertWithoutProjectRegistrationInput = {
@@ -50112,6 +51138,8 @@ export namespace Prisma {
     officeMeetingViews?: OfficeMeetingViewCreateNestedManyWithoutUserInput
     posts?: PostCreateNestedManyWithoutAuthorInput
     approvedPosts?: PostCreateNestedManyWithoutApprovedByInput
+    createdDisbursements?: FundingDisbursementCreateNestedManyWithoutCreatedByInput
+    approvedDisbursements?: FundingDisbursementCreateNestedManyWithoutApprovedByInput
   }
 
   export type UserUncheckedCreateWithoutNotificationsInput = {
@@ -50145,6 +51173,8 @@ export namespace Prisma {
     officeMeetingViews?: OfficeMeetingViewUncheckedCreateNestedManyWithoutUserInput
     posts?: PostUncheckedCreateNestedManyWithoutAuthorInput
     approvedPosts?: PostUncheckedCreateNestedManyWithoutApprovedByInput
+    createdDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutCreatedByInput
+    approvedDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutApprovedByInput
   }
 
   export type UserCreateOrConnectWithoutNotificationsInput = {
@@ -50194,6 +51224,8 @@ export namespace Prisma {
     officeMeetingViews?: OfficeMeetingViewUpdateManyWithoutUserNestedInput
     posts?: PostUpdateManyWithoutAuthorNestedInput
     approvedPosts?: PostUpdateManyWithoutApprovedByNestedInput
+    createdDisbursements?: FundingDisbursementUpdateManyWithoutCreatedByNestedInput
+    approvedDisbursements?: FundingDisbursementUpdateManyWithoutApprovedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutNotificationsInput = {
@@ -50227,6 +51259,8 @@ export namespace Prisma {
     officeMeetingViews?: OfficeMeetingViewUncheckedUpdateManyWithoutUserNestedInput
     posts?: PostUncheckedUpdateManyWithoutAuthorNestedInput
     approvedPosts?: PostUncheckedUpdateManyWithoutApprovedByNestedInput
+    createdDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutCreatedByNestedInput
+    approvedDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutApprovedByNestedInput
   }
 
   export type UserCreateWithoutPostsInput = {
@@ -50260,6 +51294,8 @@ export namespace Prisma {
     officeMeetingsAsInstructor?: OfficeMeetingCreateNestedManyWithoutInstructorInput
     officeMeetingViews?: OfficeMeetingViewCreateNestedManyWithoutUserInput
     approvedPosts?: PostCreateNestedManyWithoutApprovedByInput
+    createdDisbursements?: FundingDisbursementCreateNestedManyWithoutCreatedByInput
+    approvedDisbursements?: FundingDisbursementCreateNestedManyWithoutApprovedByInput
   }
 
   export type UserUncheckedCreateWithoutPostsInput = {
@@ -50293,6 +51329,8 @@ export namespace Prisma {
     officeMeetingsAsInstructor?: OfficeMeetingUncheckedCreateNestedManyWithoutInstructorInput
     officeMeetingViews?: OfficeMeetingViewUncheckedCreateNestedManyWithoutUserInput
     approvedPosts?: PostUncheckedCreateNestedManyWithoutApprovedByInput
+    createdDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutCreatedByInput
+    approvedDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutApprovedByInput
   }
 
   export type UserCreateOrConnectWithoutPostsInput = {
@@ -50362,6 +51400,8 @@ export namespace Prisma {
     officeMeetingsAsInstructor?: OfficeMeetingCreateNestedManyWithoutInstructorInput
     officeMeetingViews?: OfficeMeetingViewCreateNestedManyWithoutUserInput
     posts?: PostCreateNestedManyWithoutAuthorInput
+    createdDisbursements?: FundingDisbursementCreateNestedManyWithoutCreatedByInput
+    approvedDisbursements?: FundingDisbursementCreateNestedManyWithoutApprovedByInput
   }
 
   export type UserUncheckedCreateWithoutApprovedPostsInput = {
@@ -50395,6 +51435,8 @@ export namespace Prisma {
     officeMeetingsAsInstructor?: OfficeMeetingUncheckedCreateNestedManyWithoutInstructorInput
     officeMeetingViews?: OfficeMeetingViewUncheckedCreateNestedManyWithoutUserInput
     posts?: PostUncheckedCreateNestedManyWithoutAuthorInput
+    createdDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutCreatedByInput
+    approvedDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutApprovedByInput
   }
 
   export type UserCreateOrConnectWithoutApprovedPostsInput = {
@@ -50444,6 +51486,8 @@ export namespace Prisma {
     officeMeetingsAsInstructor?: OfficeMeetingUpdateManyWithoutInstructorNestedInput
     officeMeetingViews?: OfficeMeetingViewUpdateManyWithoutUserNestedInput
     approvedPosts?: PostUpdateManyWithoutApprovedByNestedInput
+    createdDisbursements?: FundingDisbursementUpdateManyWithoutCreatedByNestedInput
+    approvedDisbursements?: FundingDisbursementUpdateManyWithoutApprovedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPostsInput = {
@@ -50477,6 +51521,8 @@ export namespace Prisma {
     officeMeetingsAsInstructor?: OfficeMeetingUncheckedUpdateManyWithoutInstructorNestedInput
     officeMeetingViews?: OfficeMeetingViewUncheckedUpdateManyWithoutUserNestedInput
     approvedPosts?: PostUncheckedUpdateManyWithoutApprovedByNestedInput
+    createdDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutCreatedByNestedInput
+    approvedDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutApprovedByNestedInput
   }
 
   export type DepartmentUpsertWithoutPostsInput = {
@@ -50558,6 +51604,8 @@ export namespace Prisma {
     officeMeetingsAsInstructor?: OfficeMeetingUpdateManyWithoutInstructorNestedInput
     officeMeetingViews?: OfficeMeetingViewUpdateManyWithoutUserNestedInput
     posts?: PostUpdateManyWithoutAuthorNestedInput
+    createdDisbursements?: FundingDisbursementUpdateManyWithoutCreatedByNestedInput
+    approvedDisbursements?: FundingDisbursementUpdateManyWithoutApprovedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutApprovedPostsInput = {
@@ -50591,6 +51639,8 @@ export namespace Prisma {
     officeMeetingsAsInstructor?: OfficeMeetingUncheckedUpdateManyWithoutInstructorNestedInput
     officeMeetingViews?: OfficeMeetingViewUncheckedUpdateManyWithoutUserNestedInput
     posts?: PostUncheckedUpdateManyWithoutAuthorNestedInput
+    createdDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutCreatedByNestedInput
+    approvedDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutApprovedByNestedInput
   }
 
   export type DepartmentCreateWithoutRoomsInput = {
@@ -50801,6 +51851,8 @@ export namespace Prisma {
     officeMeetingViews?: OfficeMeetingViewCreateNestedManyWithoutUserInput
     posts?: PostCreateNestedManyWithoutAuthorInput
     approvedPosts?: PostCreateNestedManyWithoutApprovedByInput
+    createdDisbursements?: FundingDisbursementCreateNestedManyWithoutCreatedByInput
+    approvedDisbursements?: FundingDisbursementCreateNestedManyWithoutApprovedByInput
   }
 
   export type UserUncheckedCreateWithoutOfficeMeetingsAsInstructorInput = {
@@ -50834,6 +51886,8 @@ export namespace Prisma {
     officeMeetingViews?: OfficeMeetingViewUncheckedCreateNestedManyWithoutUserInput
     posts?: PostUncheckedCreateNestedManyWithoutAuthorInput
     approvedPosts?: PostUncheckedCreateNestedManyWithoutApprovedByInput
+    createdDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutCreatedByInput
+    approvedDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutApprovedByInput
   }
 
   export type UserCreateOrConnectWithoutOfficeMeetingsAsInstructorInput = {
@@ -50997,6 +52051,8 @@ export namespace Prisma {
     officeMeetingViews?: OfficeMeetingViewUpdateManyWithoutUserNestedInput
     posts?: PostUpdateManyWithoutAuthorNestedInput
     approvedPosts?: PostUpdateManyWithoutApprovedByNestedInput
+    createdDisbursements?: FundingDisbursementUpdateManyWithoutCreatedByNestedInput
+    approvedDisbursements?: FundingDisbursementUpdateManyWithoutApprovedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutOfficeMeetingsAsInstructorInput = {
@@ -51030,6 +52086,8 @@ export namespace Prisma {
     officeMeetingViews?: OfficeMeetingViewUncheckedUpdateManyWithoutUserNestedInput
     posts?: PostUncheckedUpdateManyWithoutAuthorNestedInput
     approvedPosts?: PostUncheckedUpdateManyWithoutApprovedByNestedInput
+    createdDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutCreatedByNestedInput
+    approvedDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutApprovedByNestedInput
   }
 
   export type RoomUpsertWithoutOfficeMeetingsInput = {
@@ -51147,6 +52205,8 @@ export namespace Prisma {
     officeMeetingsAsInstructor?: OfficeMeetingCreateNestedManyWithoutInstructorInput
     posts?: PostCreateNestedManyWithoutAuthorInput
     approvedPosts?: PostCreateNestedManyWithoutApprovedByInput
+    createdDisbursements?: FundingDisbursementCreateNestedManyWithoutCreatedByInput
+    approvedDisbursements?: FundingDisbursementCreateNestedManyWithoutApprovedByInput
   }
 
   export type UserUncheckedCreateWithoutOfficeMeetingViewsInput = {
@@ -51180,6 +52240,8 @@ export namespace Prisma {
     officeMeetingsAsInstructor?: OfficeMeetingUncheckedCreateNestedManyWithoutInstructorInput
     posts?: PostUncheckedCreateNestedManyWithoutAuthorInput
     approvedPosts?: PostUncheckedCreateNestedManyWithoutApprovedByInput
+    createdDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutCreatedByInput
+    approvedDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutApprovedByInput
   }
 
   export type UserCreateOrConnectWithoutOfficeMeetingViewsInput = {
@@ -51268,6 +52330,8 @@ export namespace Prisma {
     officeMeetingsAsInstructor?: OfficeMeetingUpdateManyWithoutInstructorNestedInput
     posts?: PostUpdateManyWithoutAuthorNestedInput
     approvedPosts?: PostUpdateManyWithoutApprovedByNestedInput
+    createdDisbursements?: FundingDisbursementUpdateManyWithoutCreatedByNestedInput
+    approvedDisbursements?: FundingDisbursementUpdateManyWithoutApprovedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutOfficeMeetingViewsInput = {
@@ -51301,6 +52365,8 @@ export namespace Prisma {
     officeMeetingsAsInstructor?: OfficeMeetingUncheckedUpdateManyWithoutInstructorNestedInput
     posts?: PostUncheckedUpdateManyWithoutAuthorNestedInput
     approvedPosts?: PostUncheckedUpdateManyWithoutApprovedByNestedInput
+    createdDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutCreatedByNestedInput
+    approvedDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutApprovedByNestedInput
   }
 
   export type CallRoundCreateWithoutAvailableInstructorsInput = {
@@ -51423,6 +52489,8 @@ export namespace Prisma {
     officeMeetingViews?: OfficeMeetingViewCreateNestedManyWithoutUserInput
     posts?: PostCreateNestedManyWithoutAuthorInput
     approvedPosts?: PostCreateNestedManyWithoutApprovedByInput
+    createdDisbursements?: FundingDisbursementCreateNestedManyWithoutCreatedByInput
+    approvedDisbursements?: FundingDisbursementCreateNestedManyWithoutApprovedByInput
   }
 
   export type UserUncheckedCreateWithoutCallRoundInstructorsInput = {
@@ -51456,6 +52524,8 @@ export namespace Prisma {
     officeMeetingViews?: OfficeMeetingViewUncheckedCreateNestedManyWithoutUserInput
     posts?: PostUncheckedCreateNestedManyWithoutAuthorInput
     approvedPosts?: PostUncheckedCreateNestedManyWithoutApprovedByInput
+    createdDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutCreatedByInput
+    approvedDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutApprovedByInput
   }
 
   export type UserCreateOrConnectWithoutCallRoundInstructorsInput = {
@@ -51600,6 +52670,8 @@ export namespace Prisma {
     officeMeetingViews?: OfficeMeetingViewUpdateManyWithoutUserNestedInput
     posts?: PostUpdateManyWithoutAuthorNestedInput
     approvedPosts?: PostUpdateManyWithoutApprovedByNestedInput
+    createdDisbursements?: FundingDisbursementUpdateManyWithoutCreatedByNestedInput
+    approvedDisbursements?: FundingDisbursementUpdateManyWithoutApprovedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCallRoundInstructorsInput = {
@@ -51633,6 +52705,8 @@ export namespace Prisma {
     officeMeetingViews?: OfficeMeetingViewUncheckedUpdateManyWithoutUserNestedInput
     posts?: PostUncheckedUpdateManyWithoutAuthorNestedInput
     approvedPosts?: PostUncheckedUpdateManyWithoutApprovedByNestedInput
+    createdDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutCreatedByNestedInput
+    approvedDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutApprovedByNestedInput
   }
 
   export type CallRoundCreateWithoutAvailableCouncilMembersInput = {
@@ -51755,6 +52829,8 @@ export namespace Prisma {
     officeMeetingViews?: OfficeMeetingViewCreateNestedManyWithoutUserInput
     posts?: PostCreateNestedManyWithoutAuthorInput
     approvedPosts?: PostCreateNestedManyWithoutApprovedByInput
+    createdDisbursements?: FundingDisbursementCreateNestedManyWithoutCreatedByInput
+    approvedDisbursements?: FundingDisbursementCreateNestedManyWithoutApprovedByInput
   }
 
   export type UserUncheckedCreateWithoutCallRoundCouncilMembersInput = {
@@ -51788,6 +52864,8 @@ export namespace Prisma {
     officeMeetingViews?: OfficeMeetingViewUncheckedCreateNestedManyWithoutUserInput
     posts?: PostUncheckedCreateNestedManyWithoutAuthorInput
     approvedPosts?: PostUncheckedCreateNestedManyWithoutApprovedByInput
+    createdDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutCreatedByInput
+    approvedDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutApprovedByInput
   }
 
   export type UserCreateOrConnectWithoutCallRoundCouncilMembersInput = {
@@ -51932,6 +53010,8 @@ export namespace Prisma {
     officeMeetingViews?: OfficeMeetingViewUpdateManyWithoutUserNestedInput
     posts?: PostUpdateManyWithoutAuthorNestedInput
     approvedPosts?: PostUpdateManyWithoutApprovedByNestedInput
+    createdDisbursements?: FundingDisbursementUpdateManyWithoutCreatedByNestedInput
+    approvedDisbursements?: FundingDisbursementUpdateManyWithoutApprovedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCallRoundCouncilMembersInput = {
@@ -51965,6 +53045,8 @@ export namespace Prisma {
     officeMeetingViews?: OfficeMeetingViewUncheckedUpdateManyWithoutUserNestedInput
     posts?: PostUncheckedUpdateManyWithoutAuthorNestedInput
     approvedPosts?: PostUncheckedUpdateManyWithoutApprovedByNestedInput
+    createdDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutCreatedByNestedInput
+    approvedDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutApprovedByNestedInput
   }
 
   export type CallRoundCreateWithoutCouncilsInput = {
@@ -52295,6 +53377,8 @@ export namespace Prisma {
     officeMeetingViews?: OfficeMeetingViewCreateNestedManyWithoutUserInput
     posts?: PostCreateNestedManyWithoutAuthorInput
     approvedPosts?: PostCreateNestedManyWithoutApprovedByInput
+    createdDisbursements?: FundingDisbursementCreateNestedManyWithoutCreatedByInput
+    approvedDisbursements?: FundingDisbursementCreateNestedManyWithoutApprovedByInput
   }
 
   export type UserUncheckedCreateWithoutCouncilAssignmentsInput = {
@@ -52328,6 +53412,8 @@ export namespace Prisma {
     officeMeetingViews?: OfficeMeetingViewUncheckedCreateNestedManyWithoutUserInput
     posts?: PostUncheckedCreateNestedManyWithoutAuthorInput
     approvedPosts?: PostUncheckedCreateNestedManyWithoutApprovedByInput
+    createdDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutCreatedByInput
+    approvedDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutApprovedByInput
   }
 
   export type UserCreateOrConnectWithoutCouncilAssignmentsInput = {
@@ -52408,6 +53494,8 @@ export namespace Prisma {
     officeMeetingViews?: OfficeMeetingViewUpdateManyWithoutUserNestedInput
     posts?: PostUpdateManyWithoutAuthorNestedInput
     approvedPosts?: PostUpdateManyWithoutApprovedByNestedInput
+    createdDisbursements?: FundingDisbursementUpdateManyWithoutCreatedByNestedInput
+    approvedDisbursements?: FundingDisbursementUpdateManyWithoutApprovedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCouncilAssignmentsInput = {
@@ -52441,6 +53529,8 @@ export namespace Prisma {
     officeMeetingViews?: OfficeMeetingViewUncheckedUpdateManyWithoutUserNestedInput
     posts?: PostUncheckedUpdateManyWithoutAuthorNestedInput
     approvedPosts?: PostUncheckedUpdateManyWithoutApprovedByNestedInput
+    createdDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutCreatedByNestedInput
+    approvedDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutApprovedByNestedInput
   }
 
   export type CouncilCreateWithoutProjectsInput = {
@@ -52889,6 +53979,8 @@ export namespace Prisma {
     officeMeetingViews?: OfficeMeetingViewUpdateManyWithoutUserNestedInput
     posts?: PostUpdateManyWithoutAuthorNestedInput
     approvedPosts?: PostUpdateManyWithoutApprovedByNestedInput
+    createdDisbursements?: FundingDisbursementUpdateManyWithoutCreatedByNestedInput
+    approvedDisbursements?: FundingDisbursementUpdateManyWithoutApprovedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutDepartmentRefInput = {
@@ -52922,6 +54014,8 @@ export namespace Prisma {
     officeMeetingViews?: OfficeMeetingViewUncheckedUpdateManyWithoutUserNestedInput
     posts?: PostUncheckedUpdateManyWithoutAuthorNestedInput
     approvedPosts?: PostUncheckedUpdateManyWithoutApprovedByNestedInput
+    createdDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutCreatedByNestedInput
+    approvedDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutApprovedByNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutDepartmentRefInput = {
@@ -53228,6 +54322,8 @@ export namespace Prisma {
     officeMeetingViews?: OfficeMeetingViewUpdateManyWithoutUserNestedInput
     posts?: PostUpdateManyWithoutAuthorNestedInput
     approvedPosts?: PostUpdateManyWithoutApprovedByNestedInput
+    createdDisbursements?: FundingDisbursementUpdateManyWithoutCreatedByNestedInput
+    approvedDisbursements?: FundingDisbursementUpdateManyWithoutApprovedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutMajorInput = {
@@ -53261,6 +54357,8 @@ export namespace Prisma {
     officeMeetingViews?: OfficeMeetingViewUncheckedUpdateManyWithoutUserNestedInput
     posts?: PostUncheckedUpdateManyWithoutAuthorNestedInput
     approvedPosts?: PostUncheckedUpdateManyWithoutApprovedByNestedInput
+    createdDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutCreatedByNestedInput
+    approvedDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutApprovedByNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutMajorInput = {
@@ -53448,6 +54546,8 @@ export namespace Prisma {
     officeMeetingViews?: OfficeMeetingViewUpdateManyWithoutUserNestedInput
     posts?: PostUpdateManyWithoutAuthorNestedInput
     approvedPosts?: PostUpdateManyWithoutApprovedByNestedInput
+    createdDisbursements?: FundingDisbursementUpdateManyWithoutCreatedByNestedInput
+    approvedDisbursements?: FundingDisbursementUpdateManyWithoutApprovedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutClassInput = {
@@ -53481,6 +54581,8 @@ export namespace Prisma {
     officeMeetingViews?: OfficeMeetingViewUncheckedUpdateManyWithoutUserNestedInput
     posts?: PostUncheckedUpdateManyWithoutAuthorNestedInput
     approvedPosts?: PostUncheckedUpdateManyWithoutApprovedByNestedInput
+    createdDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutCreatedByNestedInput
+    approvedDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutApprovedByNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutClassInput = {
@@ -53825,6 +54927,38 @@ export namespace Prisma {
     approvedAt?: Date | string | null
     rejectionReason?: string | null
     publishedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type FundingDisbursementCreateManyCreatedByInput = {
+    id?: string
+    projectId: string
+    amount: Decimal | DecimalJsLike | number | string
+    disbursedAt: Date | string
+    voucherNo?: string | null
+    voucherFileUrl?: string | null
+    reason?: string | null
+    status?: $Enums.DisbursementStatus
+    approvedById?: string | null
+    approvedAt?: Date | string | null
+    rejectionNote?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type FundingDisbursementCreateManyApprovedByInput = {
+    id?: string
+    projectId: string
+    amount: Decimal | DecimalJsLike | number | string
+    disbursedAt: Date | string
+    voucherNo?: string | null
+    voucherFileUrl?: string | null
+    reason?: string | null
+    status?: $Enums.DisbursementStatus
+    createdById: string
+    approvedAt?: Date | string | null
+    rejectionNote?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -54497,6 +55631,102 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type FundingDisbursementUpdateWithoutCreatedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    disbursedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    voucherNo?: NullableStringFieldUpdateOperationsInput | string | null
+    voucherFileUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumDisbursementStatusFieldUpdateOperationsInput | $Enums.DisbursementStatus
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rejectionNote?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    project?: ProjectUpdateOneRequiredWithoutDisbursementsNestedInput
+    approvedBy?: UserUpdateOneWithoutApprovedDisbursementsNestedInput
+  }
+
+  export type FundingDisbursementUncheckedUpdateWithoutCreatedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    projectId?: StringFieldUpdateOperationsInput | string
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    disbursedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    voucherNo?: NullableStringFieldUpdateOperationsInput | string | null
+    voucherFileUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumDisbursementStatusFieldUpdateOperationsInput | $Enums.DisbursementStatus
+    approvedById?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rejectionNote?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FundingDisbursementUncheckedUpdateManyWithoutCreatedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    projectId?: StringFieldUpdateOperationsInput | string
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    disbursedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    voucherNo?: NullableStringFieldUpdateOperationsInput | string | null
+    voucherFileUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumDisbursementStatusFieldUpdateOperationsInput | $Enums.DisbursementStatus
+    approvedById?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rejectionNote?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FundingDisbursementUpdateWithoutApprovedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    disbursedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    voucherNo?: NullableStringFieldUpdateOperationsInput | string | null
+    voucherFileUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumDisbursementStatusFieldUpdateOperationsInput | $Enums.DisbursementStatus
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rejectionNote?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    project?: ProjectUpdateOneRequiredWithoutDisbursementsNestedInput
+    createdBy?: UserUpdateOneRequiredWithoutCreatedDisbursementsNestedInput
+  }
+
+  export type FundingDisbursementUncheckedUpdateWithoutApprovedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    projectId?: StringFieldUpdateOperationsInput | string
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    disbursedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    voucherNo?: NullableStringFieldUpdateOperationsInput | string | null
+    voucherFileUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumDisbursementStatusFieldUpdateOperationsInput | $Enums.DisbursementStatus
+    createdById?: StringFieldUpdateOperationsInput | string
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rejectionNote?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FundingDisbursementUncheckedUpdateManyWithoutApprovedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    projectId?: StringFieldUpdateOperationsInput | string
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    disbursedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    voucherNo?: NullableStringFieldUpdateOperationsInput | string | null
+    voucherFileUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumDisbursementStatusFieldUpdateOperationsInput | $Enums.DisbursementStatus
+    createdById?: StringFieldUpdateOperationsInput | string
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rejectionNote?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type ProjectCreateManyCallRoundInput = {
     id?: string
     code?: string | null
@@ -55028,7 +56258,14 @@ export namespace Prisma {
     disbursedAt: Date | string
     voucherNo?: string | null
     voucherFileUrl?: string | null
+    reason?: string | null
+    status?: $Enums.DisbursementStatus
+    createdById: string
+    approvedById?: string | null
+    approvedAt?: Date | string | null
+    rejectionNote?: string | null
     createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type ExtensionRequestCreateManyProjectInput = {
@@ -55148,7 +56385,14 @@ export namespace Prisma {
     disbursedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     voucherNo?: NullableStringFieldUpdateOperationsInput | string | null
     voucherFileUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumDisbursementStatusFieldUpdateOperationsInput | $Enums.DisbursementStatus
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rejectionNote?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: UserUpdateOneRequiredWithoutCreatedDisbursementsNestedInput
+    approvedBy?: UserUpdateOneWithoutApprovedDisbursementsNestedInput
   }
 
   export type FundingDisbursementUncheckedUpdateWithoutProjectInput = {
@@ -55157,7 +56401,14 @@ export namespace Prisma {
     disbursedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     voucherNo?: NullableStringFieldUpdateOperationsInput | string | null
     voucherFileUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumDisbursementStatusFieldUpdateOperationsInput | $Enums.DisbursementStatus
+    createdById?: StringFieldUpdateOperationsInput | string
+    approvedById?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rejectionNote?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type FundingDisbursementUncheckedUpdateManyWithoutProjectInput = {
@@ -55166,7 +56417,14 @@ export namespace Prisma {
     disbursedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     voucherNo?: NullableStringFieldUpdateOperationsInput | string | null
     voucherFileUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumDisbursementStatusFieldUpdateOperationsInput | $Enums.DisbursementStatus
+    createdById?: StringFieldUpdateOperationsInput | string
+    approvedById?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rejectionNote?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ExtensionRequestUpdateWithoutProjectInput = {

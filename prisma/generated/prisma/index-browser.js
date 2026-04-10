@@ -292,7 +292,14 @@ exports.Prisma.FundingDisbursementScalarFieldEnum = {
   disbursedAt: 'disbursedAt',
   voucherNo: 'voucherNo',
   voucherFileUrl: 'voucherFileUrl',
-  createdAt: 'createdAt'
+  reason: 'reason',
+  status: 'status',
+  createdById: 'createdById',
+  approvedById: 'approvedById',
+  approvedAt: 'approvedAt',
+  rejectionNote: 'rejectionNote',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.ExtensionRequestScalarFieldEnum = {
@@ -514,6 +521,12 @@ exports.ReviewDecision = exports.$Enums.ReviewDecision = {
   PASS: 'PASS',
   NEED_REVISION: 'NEED_REVISION',
   FAIL: 'FAIL'
+};
+
+exports.DisbursementStatus = exports.$Enums.DisbursementStatus = {
+  PENDING: 'PENDING',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED'
 };
 
 exports.RequestStatus = exports.$Enums.RequestStatus = {
