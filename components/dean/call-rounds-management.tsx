@@ -57,6 +57,12 @@ function InvitationStatusBadge({ status }: { status?: string }) {
     );
 }
 
+const toEndOfDay = (value: Date | string): Date => {
+    const date = new Date(value);
+    date.setHours(23, 59, 59, 999);
+    return date;
+};
+
 export function DeanCallRoundsManagement() {
     const { data: session } = useAuthSession();
     const { data: me } = useMe();
@@ -78,7 +84,7 @@ export function DeanCallRoundsManagement() {
         return callRound.approvalStatus === 'PENDING_APPROVAL';
     };
 
-    const isCallRoundEnded = (callRound: CallRound) => new Date(callRound.registrationEndDate) < new Date();
+    const isCallRoundEnded = (callRound: CallRound) => new Date() > toEndOfDay(callRound.registrationEndDate);
 
     const getRoundPhaseBadge = (callRound: CallRound) => {
         if (isCallRoundEnded(callRound)) {

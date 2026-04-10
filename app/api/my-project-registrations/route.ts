@@ -19,6 +19,18 @@ const mapZodError = (zodError: ZodError) => {
 
 const canManageOwnRegistrations = (role: string) => role === "STUDENT" || role === "LECTURER";
 
+const toStartOfDay = (value: Date): Date => {
+  const date = new Date(value);
+  date.setHours(0, 0, 0, 0);
+  return date;
+};
+
+const toEndOfDay = (value: Date): Date => {
+  const date = new Date(value);
+  date.setHours(23, 59, 59, 999);
+  return date;
+};
+
 type TeamMemberPayload = {
   name: string;
   role: string;
@@ -123,18 +135,26 @@ export async function POST(request: Request) {
         : ["LECTURER", "BOTH"];
 
     const now = new Date();
+    const todayStart = toStartOfDay(now);
+    const todayEnd = toEndOfDay(now);
     const openCallRounds = await prisma.callRound.findMany({
       where: {
         isActive: true,
         approvalStatus: "APPROVED",
         applicableFor: { in: applicableFor },
-        registrationStartDate: { lte: now },
-        registrationEndDate: { gte: now },
+        registrationStartDate: { lte: todayEnd },
+        registrationEndDate: { gte: todayStart },
       },
       include: {
         departments: true,
         majors: true,
         classes: true,
+        availableInstructors: {
+          select: {
+            instructorId: true,
+            invitationStatus: true,
+          },
+        },
       },
     });
 
@@ -278,6 +298,23 @@ export async function POST(request: Request) {
           success: false,
           error: "Invalid payload",
           fields: mapZodError(parsed.error),
+        },
+        { status: 400 }
+      );
+    }
+
+    const selectedInstructor = activeCallRound.availableInstructors.find(
+      (instructor) =>
+        instructor.instructorId === parsed.data.instructorId &&
+        instructor.invitationStatus === "ACCEPTED"
+    );
+
+    if (!selectedInstructor) {
+      return NextResponse.json(
+        {
+          success: false,
+          error:
+            "Giảng viên được chọn chưa chấp nhận lời mời tham gia đợt này hoặc không thuộc danh sách được mời.",
         },
         { status: 400 }
       );
