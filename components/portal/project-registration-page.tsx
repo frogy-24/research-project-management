@@ -94,6 +94,23 @@ const invitationStatusVariant: Record<'PENDING' | 'ACCEPTED' | 'REJECTED', 'seco
     REJECTED: 'destructive',
 };
 
+const toStartOfDay = (value: Date | string): Date => {
+    const date = new Date(value);
+    date.setHours(0, 0, 0, 0);
+    return date;
+};
+
+const toEndOfDay = (value: Date | string): Date => {
+    const date = new Date(value);
+    date.setHours(23, 59, 59, 999);
+    return date;
+};
+
+const isDateWithinRangeByDay = (startDate: Date | string, endDate: Date | string, now: Date = new Date()): boolean => {
+    const current = new Date(now);
+    return current >= toStartOfDay(startDate) && current <= toEndOfDay(endDate);
+};
+
 const getDisplayStatus = (item: ProjectRegistration): DisplayRegistrationStatus => {
     if (item.status === 'CANCELED') {
         return 'CANCELED';
@@ -120,7 +137,7 @@ const isCallRoundEnded = (item: ProjectRegistration): boolean => {
         return false;
     }
 
-    return new Date(endDate) < new Date();
+    return new Date() > toEndOfDay(endDate);
 };
 
 export function ProjectRegistrationPage({ title }: ProjectRegistrationPageProps) {
@@ -143,8 +160,6 @@ export function ProjectRegistrationPage({ title }: ProjectRegistrationPageProps)
     const [historySearchKeyword, setHistorySearchKeyword] = useState('');
     const [historyCallRoundFilter, setHistoryCallRoundFilter] = useState('all');
     const [historyStatusFilter, setHistoryStatusFilter] = useState<'all' | DisplayRegistrationStatus>('all');
-    const { data: usersData } = useUsers();
-    const users = usersData?.data ?? [];
     const { data: me } = useMe();
     const { data: session } = useAuthSession();
     const myDepartmentId = me?.departmentId ?? undefined;
@@ -204,9 +219,7 @@ export function ProjectRegistrationPage({ title }: ProjectRegistrationPageProps)
             if (round.approvalStatus !== 'APPROVED') return false;
             if (role === 'STUDENT' && !['STUDENT', 'BOTH'].includes(round.applicableFor)) return false;
             if (role === 'LECTURER' && !['LECTURER', 'BOTH'].includes(round.applicableFor)) return false;
-            const start = new Date(round.registrationStartDate);
-            const end = new Date(round.registrationEndDate);
-            return now >= start && now <= end;
+            return isDateWithinRangeByDay(round.registrationStartDate, round.registrationEndDate, now);
         });
     }, [callRounds, session?.role]);
 
@@ -216,11 +229,33 @@ export function ProjectRegistrationPage({ title }: ProjectRegistrationPageProps)
         return availableCallRounds.find((r) => r.id === selectedCallRoundId) ?? undefined;
     }, [availableCallRounds, selectedCallRoundId]);
 
+    const acceptedInstructorsInActiveCallRound = React.useMemo(() => {
+        if (!activeCallRound?.availableInstructors) {
+            return [];
+        }
+
+        return activeCallRound.availableInstructors.filter((item) => item.invitationStatus === 'ACCEPTED');
+    }, [activeCallRound]);
+
     React.useEffect(() => {
         if (availableCallRounds.length === 1 && selectedCallRoundId !== availableCallRounds[0].id) {
             setSelectedCallRoundId(availableCallRounds[0].id);
         }
     }, [availableCallRounds, selectedCallRoundId]);
+
+    React.useEffect(() => {
+        if (!instructorId) {
+            return;
+        }
+
+        const isInstructorStillEligible = acceptedInstructorsInActiveCallRound.some(
+            (item) => item.instructor.id === instructorId,
+        );
+
+        if (!isInstructorStillEligible) {
+            setInstructorId('');
+        }
+    }, [acceptedInstructorsInActiveCallRound, instructorId]);
 
     const sortedRegistrations = React.useMemo(() => {
         return [...registrations].sort((a, b) => {
@@ -300,8 +335,7 @@ export function ProjectRegistrationPage({ title }: ProjectRegistrationPageProps)
         if (!activeCallRound) return false;
 
         return myTeamInvitations.some(
-            (invitation) =>
-                invitation.callRoundId === activeCallRound.id && invitation.invitationStatus === 'ACCEPTED',
+            (invitation) => invitation.callRoundId === activeCallRound.id && invitation.invitationStatus === 'ACCEPTED',
         );
     }, [activeCallRound, myTeamInvitations]);
 
@@ -430,6 +464,20 @@ export function ProjectRegistrationPage({ title }: ProjectRegistrationPageProps)
         }
         if (!instructorId) {
             toast.error('Vui lòng chọn giảng viên hướng dẫn');
+            return;
+        }
+
+        if (acceptedInstructorsInActiveCallRound.length === 0) {
+            toast.error('Đợt này chưa có giảng viên nào chấp nhận lời mời hướng dẫn.');
+            return;
+        }
+
+        const isSelectedInstructorAccepted = acceptedInstructorsInActiveCallRound.some(
+            (item) => item.instructor.id === instructorId,
+        );
+
+        if (!isSelectedInstructorAccepted) {
+            toast.error('Giảng viên được chọn chưa chấp nhận lời mời tham gia đợt này.');
             return;
         }
 
@@ -622,7 +670,8 @@ export function ProjectRegistrationPage({ title }: ProjectRegistrationPageProps)
                                     <AlertCircle className="h-4 w-4 text-amber-600" />
                                     <AlertTitle className="text-amber-800">Đã tham gia nhóm đề tài</AlertTitle>
                                     <AlertDescription className="text-amber-700">
-                                        Bạn đã xác nhận tham gia một đề tài trong đợt đăng ký này, nên không thể đăng ký thêm đề tài mới.
+                                        Bạn đã xác nhận tham gia một đề tài trong đợt đăng ký này, nên không thể đăng ký
+                                        thêm đề tài mới.
                                     </AlertDescription>
                                 </Alert>
                             )}
@@ -769,34 +818,39 @@ export function ProjectRegistrationPage({ title }: ProjectRegistrationPageProps)
                                 <Label className="text-muted-foreground">
                                     Người hướng dẫn <span className="text-destructive">*</span>
                                 </Label>
-                                <Select value={instructorId} onValueChange={setInstructorId} disabled={isFormDisabled}>
+                                <Select
+                                    value={instructorId}
+                                    onValueChange={setInstructorId}
+                                    disabled={isFormDisabled || acceptedInstructorsInActiveCallRound.length === 0}
+                                >
                                     <SelectTrigger>
                                         <SelectValue placeholder="Chọn người hướng dẫn" />
                                     </SelectTrigger>
                                     <SelectContent>
-                                        {activeCallRound?.availableInstructors &&
-                                        activeCallRound.availableInstructors.length > 0
-                                            ? activeCallRound.availableInstructors.map((item) => (
+                                        {acceptedInstructorsInActiveCallRound.length > 0
+                                            ? acceptedInstructorsInActiveCallRound.map((item) => (
                                                   <SelectItem key={item.instructor.id} value={item.instructor.id}>
                                                       {item.instructor.name} - {item.instructor.email}
                                                   </SelectItem>
                                               ))
-                                            : users
-                                                  .filter((u) => u.role !== 'STUDENT' && u.id !== session?.userId)
-                                                  .map((u) => (
-                                                      <SelectItem key={u.id} value={u.id}>
-                                                          {u.name} - {u.role === 'LECTURER' ? 'Giảng viên' : 'Cán bộ'}
-                                                      </SelectItem>
-                                                  ))}
+                                            : (
+                                                  <SelectItem value="__no-accepted-instructor__" disabled>
+                                                      Chưa có giảng viên chấp nhận lời mời
+                                                  </SelectItem>
+                                              )}
                                     </SelectContent>
                                 </Select>
-                                {activeCallRound?.availableInstructors &&
-                                    activeCallRound.availableInstructors.length > 0 && (
+                                {activeCallRound && acceptedInstructorsInActiveCallRound.length > 0 && (
                                         <p className="text-xs text-muted-foreground">
-                                            Chỉ hiển thị {activeCallRound.availableInstructors.length} giảng viên được
-                                            chỉ định cho đợt này
+                                            Chỉ hiển thị {acceptedInstructorsInActiveCallRound.length} giảng viên đã
+                                            chấp nhận lời mời trong đợt này
                                         </p>
                                     )}
+                                {activeCallRound && acceptedInstructorsInActiveCallRound.length === 0 && (
+                                    <p className="text-xs text-amber-600">
+                                        Chưa có giảng viên nào chấp nhận lời mời hướng dẫn cho đợt này.
+                                    </p>
+                                )}
                             </div>
 
                             <Button
@@ -806,13 +860,13 @@ export function ProjectRegistrationPage({ title }: ProjectRegistrationPageProps)
                             >
                                 {hasRegistrationInSelectedCallRound
                                     ? 'Đã đăng ký đề tài'
-                                                                        : hasAcceptedInvitationInSelectedCallRound
-                                                                            ? 'Đã tham gia đề tài trong đợt này'
-                                    : !activeCallRound
-                                      ? 'Chưa mở đợt đăng ký'
-                                      : createMutation.isPending
-                                        ? 'Đang xử lý...'
-                                        : 'Gửi đăng ký'}
+                                    : hasAcceptedInvitationInSelectedCallRound
+                                      ? 'Đã tham gia đề tài trong đợt này'
+                                      : !activeCallRound
+                                        ? 'Chưa mở đợt đăng ký'
+                                        : createMutation.isPending
+                                          ? 'Đang xử lý...'
+                                          : 'Gửi đăng ký'}
                             </Button>
                         </CardContent>
                     </Card>
@@ -892,7 +946,10 @@ export function ProjectRegistrationPage({ title }: ProjectRegistrationPageProps)
                                         <TableBody>
                                             {filteredHistoryRegistrations.length === 0 ? (
                                                 <TableRow>
-                                                    <TableCell colSpan={4} className="text-center text-muted-foreground py-8">
+                                                    <TableCell
+                                                        colSpan={4}
+                                                        className="text-center text-muted-foreground py-8"
+                                                    >
                                                         Không tìm thấy đề xuất phù hợp bộ lọc.
                                                     </TableCell>
                                                 </TableRow>
@@ -901,423 +958,482 @@ export function ProjectRegistrationPage({ title }: ProjectRegistrationPageProps)
                                                     const displayStatus = getDisplayStatus(item);
                                                     const roundEnded = isCallRoundEnded(item);
 
-                                                return (
-                                                    <TableRow key={item.id} className="group">
-                                                        <TableCell className="pl-6 py-4">
-                                                            <div className="flex flex-col gap-1">
-                                                                <p className="font-semibold text-primary leading-tight hover:underline cursor-pointer">
-                                                                    <Dialog>
-                                                                        <DialogTrigger asChild>
-                                                                            <span>{item.title}</span>
-                                                                        </DialogTrigger>
-                                                                        <DialogContent className="sm:max-w-2xl max-h-[90vh] overflow-y-auto">
-                                                                            <DialogHeader>
-                                                                                <DialogTitle>
-                                                                                    Chi tiết đề xuất nghiên cứu
-                                                                                </DialogTitle>
-                                                                            </DialogHeader>
-                                                                             <div className="space-y-5 py-4">
-                                                                                 {/* Thông tin cơ bản */}
-                                                                                 <div className="rounded-xl border bg-gradient-to-br from-blue-50 to-slate-50 dark:from-blue-950/20 dark:to-slate-950/20 p-4">
-                                                                                     <div className="flex items-center gap-2 mb-3">
-                                                                                         <FileText className="h-4 w-4 text-blue-600" />
-                                                                                         <h3 className="font-semibold text-sm">Thông tin đăng ký</h3>
-                                                                                     </div>
-                                                                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                                                                         <div>
-                                                                                             <h4 className="font-medium text-xs text-muted-foreground mb-1 uppercase tracking-wide">
-                                                                                                 Mã đăng ký
-                                                                                             </h4>
-                                                                                             <p className="text-sm font-mono font-medium">{item.id}</p>
-                                                                                         </div>
-                                                                                         <div>
-                                                                                             <h4 className="font-medium text-xs text-muted-foreground mb-1 uppercase tracking-wide">
-                                                                                                 Đợt đăng ký
-                                                                                             </h4>
-                                                                                             <p className="text-sm font-medium">
-                                                                                                 {item.callRound?.name ||
-                                                                                                     'Chưa gắn đợt đề tài'}
-                                                                                             </p>
-                                                                                         </div>
-                                                                                         <div>
-                                                                                             <h4 className="font-medium text-xs text-muted-foreground mb-1 uppercase tracking-wide">
-                                                                                                 Ngày tạo
-                                                                                             </h4>
-                                                                                             <div className="flex items-center gap-2">
-                                                                                                 <CalendarClock className="h-3.5 w-3.5 text-muted-foreground" />
-                                                                                                 <p className="text-sm">
-                                                                                                     {new Date(item.createdAt).toLocaleString('vi-VN')}
-                                                                                                 </p>
-                                                                                             </div>
-                                                                                         </div>
-                                                                                         <div>
-                                                                                             <h4 className="font-medium text-xs text-muted-foreground mb-1 uppercase tracking-wide">
-                                                                                                 Cập nhật gần nhất
-                                                                                             </h4>
-                                                                                             <div className="flex items-center gap-2">
-                                                                                                 <CalendarClock className="h-3.5 w-3.5 text-muted-foreground" />
-                                                                                                 <p className="text-sm">
-                                                                                                     {new Date(item.updatedAt).toLocaleString('vi-VN')}
-                                                                                                 </p>
-                                                                                             </div>
-                                                                                         </div>
-                                                                                     </div>
-                                                                                 </div>
-
-                                                                                 {/* Mốc thời gian quan trọng */}
-                                                                                 <div className="rounded-xl border bg-gradient-to-br from-amber-50 to-orange-50 dark:from-amber-950/20 dark:to-orange-950/20 p-4">
-                                                                                     <div className="flex items-center gap-2 mb-3">
-                                                                                         <CalendarClock className="h-4 w-4 text-amber-600" />
-                                                                                         <h3 className="font-semibold text-sm">Mốc thời gian đề tài</h3>
-                                                                                     </div>
-                                                                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                                                                         <div className="rounded-lg bg-white/70 dark:bg-slate-900/30 p-3">
-                                                                                             <h4 className="font-medium text-xs text-muted-foreground mb-1 uppercase tracking-wide">
-                                                                                                 Bắt đầu đăng ký
-                                                                                             </h4>
-                                                                                             <p className="text-sm font-medium">
-                                                                                                 {item.callRound?.registrationStartDate
-                                                                                                     ? new Date(item.callRound.registrationStartDate).toLocaleDateString('vi-VN', {
-                                                                                                         day: '2-digit',
-                                                                                                         month: '2-digit',
-                                                                                                         year: 'numeric',
-                                                                                                     })
-                                                                                                     : '—'}
-                                                                                             </p>
-                                                                                         </div>
-                                                                                         <div className="rounded-lg bg-white/70 dark:bg-slate-900/30 p-3">
-                                                                                             <h4 className="font-medium text-xs text-muted-foreground mb-1 uppercase tracking-wide">
-                                                                                                 Kết thúc đăng ký
-                                                                                             </h4>
-                                                                                             <p className="text-sm font-medium">
-                                                                                                 {item.callRound?.registrationEndDate
-                                                                                                     ? new Date(item.callRound.registrationEndDate).toLocaleDateString('vi-VN', {
-                                                                                                         day: '2-digit',
-                                                                                                         month: '2-digit',
-                                                                                                         year: 'numeric',
-                                                                                                     })
-                                                                                                     : '—'}
-                                                                                             </p>
-                                                                                         </div>
-                                                                                         <div className="rounded-lg bg-white/70 dark:bg-slate-900/30 p-3">
-                                                                                             <h4 className="font-medium text-xs text-muted-foreground mb-1 uppercase tracking-wide">
-                                                                                                 Ngày bắt đầu đề tài
-                                                                                             </h4>
-                                                                                             <p className="text-sm font-medium">
-                                                                                                 {item.callRound?.projectStartDate
-                                                                                                     ? new Date(item.callRound.projectStartDate).toLocaleDateString('vi-VN', {
-                                                                                                         day: '2-digit',
-                                                                                                         month: '2-digit',
-                                                                                                         year: 'numeric',
-                                                                                                     })
-                                                                                                     : '—'}
-                                                                                             </p>
-                                                                                         </div>
-                                                                                         <div className="rounded-lg bg-white/70 dark:bg-slate-900/30 p-3">
-                                                                                             <h4 className="font-medium text-xs text-muted-foreground mb-1 uppercase tracking-wide">
-                                                                                                 Ngày kết thúc đề tài
-                                                                                             </h4>
-                                                                                             <p className="text-sm font-medium">
-                                                                                                 {item.callRound?.projectEndDate
-                                                                                                     ? new Date(item.callRound.projectEndDate).toLocaleDateString('vi-VN', {
-                                                                                                         day: '2-digit',
-                                                                                                         month: '2-digit',
-                                                                                                         year: 'numeric',
-                                                                                                     })
-                                                                                                     : '—'}
-                                                                                             </p>
-                                                                                         </div>
-                                                                                     </div>
-                                                                                 </div>
-                                                                                <div>
-                                                                                    <h4 className="font-medium text-sm text-muted-foreground mb-1">
-                                                                                        Tên đề tài
-                                                                                    </h4>
-                                                                                    <p className="text-sm font-medium">
-                                                                                        {item.title}
-                                                                                    </p>
-                                                                                </div>
-                                                                                <div>
-                                                                                    <h4 className="font-medium text-sm text-muted-foreground mb-1">
-                                                                                        Mục tiêu
-                                                                                    </h4>
-                                                                                    <p
-                                                                                        className="text-sm whitespace-pre-wrap"
-                                                                                        style={{
-                                                                                            whiteSpace:
-                                                                                                'pre-wrap !important',
-                                                                                        }}
-                                                                                    >
-                                                                                        {item.objective ||
-                                                                                            'Chưa có thông tin'}
-                                                                                    </p>
-                                                                                </div>
-                                                                                <div>
-                                                                                    <h4 className="font-medium text-sm text-muted-foreground mb-1">
-                                                                                        Sản phẩm dự kiến
-                                                                                    </h4>
-                                                                                    <p className="text-sm whitespace-pre-wrap">
-                                                                                        {item.expectedOutput ||
-                                                                                            'Chưa có thông tin'}
-                                                                                    </p>
-                                                                                </div>
-                                                                                <div>
-                                                                                    <h4 className="font-medium text-sm text-muted-foreground mb-1">
-                                                                                        Người hướng dẫn
-                                                                                    </h4>
-                                                                                    <div className="flex flex-wrap items-center gap-2 text-sm">
-                                                                                        <span>
-                                                                                            {item.instructor
-                                                                                                ? item.instructor.name
-                                                                                                : 'Chưa phân công'}
-                                                                                        </span>
-                                                                                        <Badge variant="outline">
-                                                                                            {item.instructorStatus ===
-                                                                                            'ACCEPTED'
-                                                                                                ? 'Đã đồng ý'
-                                                                                                : item.instructorStatus ===
-                                                                                                    'REJECTED'
-                                                                                                  ? 'Từ chối'
-                                                                                                  : 'Chờ xác nhận'}
-                                                                                        </Badge>
-                                                                                    </div>
-                                                                                </div>
-                                                                                <div>
-                                                                                    <h4 className="font-medium text-sm text-muted-foreground mb-1">
-                                                                                        Thành viên nhóm
-                                                                                    </h4>
-                                                                                    {(
-                                                                                        item.teamMembers as
-                                                                                            | TeamMemberInput[]
-                                                                                            | null
-                                                                                            | undefined
-                                                                                    )?.length ? (
-                                                                                        <div className="space-y-2">
-                                                                                            {(
-                                                                                                item.teamMembers as TeamMemberInput[]
-                                                                                            ).map((member, index) => (
-                                                                                                <div
-                                                                                                    key={`${member.name}-${index}`}
-                                                                                                    className="text-sm flex flex-wrap items-center gap-2"
-                                                                                                >
-                                                                                                    <Users className="h-4 w-4 text-muted-foreground" />
-                                                                                                    <span className="font-medium">
-                                                                                                        {member.name}
-                                                                                                    </span>
-                                                                                                    <Badge variant="outline">
-                                                                                                        {member.role}
-                                                                                                    </Badge>
-                                                                                                    {member.invitationStatus && (
-                                                                                                        <Badge
-                                                                                                            variant={
-                                                                                                                invitationStatusVariant[
-                                                                                                                    member.invitationStatus
-                                                                                                                ]
-                                                                                                            }
-                                                                                                        >
-                                                                                                            {
-                                                                                                                invitationStatusLabel[
-                                                                                                                    member.invitationStatus
-                                                                                                                ]
-                                                                                                            }
-                                                                                                        </Badge>
-                                                                                                    )}
-                                                                                                    {member.invitedAt && (
-                                                                                                        <span className="text-xs text-muted-foreground">
-                                                                                                            Mời:{' '}
-                                                                                                            {new Date(
-                                                                                                                member.invitedAt,
-                                                                                                            ).toLocaleString(
-                                                                                                                'vi-VN',
-                                                                                                            )}
-                                                                                                        </span>
-                                                                                                    )}
-                                                                                                </div>
-                                                                                            ))}
+                                                    return (
+                                                        <TableRow key={item.id} className="group">
+                                                            <TableCell className="pl-6 py-4">
+                                                                <div className="flex flex-col gap-1">
+                                                                    <p className="font-semibold text-primary leading-tight hover:underline cursor-pointer">
+                                                                        <Dialog>
+                                                                            <DialogTrigger asChild>
+                                                                                <span>{item.title}</span>
+                                                                            </DialogTrigger>
+                                                                            <DialogContent className="sm:max-w-2xl max-h-[90vh] overflow-y-auto">
+                                                                                <DialogHeader>
+                                                                                    <DialogTitle>
+                                                                                        Chi tiết đề xuất nghiên cứu
+                                                                                    </DialogTitle>
+                                                                                </DialogHeader>
+                                                                                <div className="space-y-5 py-4">
+                                                                                    {/* Thông tin cơ bản */}
+                                                                                    <div className="rounded-xl border bg-gradient-to-br from-blue-50 to-slate-50 dark:from-blue-950/20 dark:to-slate-950/20 p-4">
+                                                                                        <div className="flex items-center gap-2 mb-3">
+                                                                                            <FileText className="h-4 w-4 text-blue-600" />
+                                                                                            <h3 className="font-semibold text-sm">
+                                                                                                Thông tin đăng ký
+                                                                                            </h3>
                                                                                         </div>
-                                                                                    ) : (
-                                                                                        <p className="text-sm text-muted-foreground">
-                                                                                            Chưa có thành viên nhóm
-                                                                                        </p>
-                                                                                    )}
-                                                                                </div>
-                                                                                <div>
-                                                                                    <h4 className="font-medium text-sm text-muted-foreground mb-1">
-                                                                                        Trạng thái xử lý tổng quan
-                                                                                    </h4>
-                                                                                    <Badge
-                                                                                        variant={
-                                                                                            displayStatusVariant[
-                                                                                                displayStatus
-                                                                                            ]
-                                                                                        }
-                                                                                    >
-                                                                                        {
-                                                                                            displayStatusLabel[
-                                                                                                displayStatus
-                                                                                            ]
-                                                                                        }
-                                                                                    </Badge>
-                                                                                </div>
-                                                                                <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                                                                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                                                                            <div>
+                                                                                                <h4 className="font-medium text-xs text-muted-foreground mb-1 uppercase tracking-wide">
+                                                                                                    Mã đăng ký
+                                                                                                </h4>
+                                                                                                <p className="text-sm font-mono font-medium">
+                                                                                                    {item.id}
+                                                                                                </p>
+                                                                                            </div>
+                                                                                            <div>
+                                                                                                <h4 className="font-medium text-xs text-muted-foreground mb-1 uppercase tracking-wide">
+                                                                                                    Đợt đăng ký
+                                                                                                </h4>
+                                                                                                <p className="text-sm font-medium">
+                                                                                                    {item.callRound
+                                                                                                        ?.name ||
+                                                                                                        'Chưa gắn đợt đề tài'}
+                                                                                                </p>
+                                                                                            </div>
+                                                                                            <div>
+                                                                                                <h4 className="font-medium text-xs text-muted-foreground mb-1 uppercase tracking-wide">
+                                                                                                    Ngày tạo
+                                                                                                </h4>
+                                                                                                <div className="flex items-center gap-2">
+                                                                                                    <CalendarClock className="h-3.5 w-3.5 text-muted-foreground" />
+                                                                                                    <p className="text-sm">
+                                                                                                        {new Date(
+                                                                                                            item.createdAt,
+                                                                                                        ).toLocaleString(
+                                                                                                            'vi-VN',
+                                                                                                        )}
+                                                                                                    </p>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            <div>
+                                                                                                <h4 className="font-medium text-xs text-muted-foreground mb-1 uppercase tracking-wide">
+                                                                                                    Cập nhật gần nhất
+                                                                                                </h4>
+                                                                                                <div className="flex items-center gap-2">
+                                                                                                    <CalendarClock className="h-3.5 w-3.5 text-muted-foreground" />
+                                                                                                    <p className="text-sm">
+                                                                                                        {new Date(
+                                                                                                            item.updatedAt,
+                                                                                                        ).toLocaleString(
+                                                                                                            'vi-VN',
+                                                                                                        )}
+                                                                                                    </p>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+
+                                                                                    {/* Mốc thời gian quan trọng */}
+                                                                                    <div className="rounded-xl border bg-gradient-to-br from-amber-50 to-orange-50 dark:from-amber-950/20 dark:to-orange-950/20 p-4">
+                                                                                        <div className="flex items-center gap-2 mb-3">
+                                                                                            <CalendarClock className="h-4 w-4 text-amber-600" />
+                                                                                            <h3 className="font-semibold text-sm">
+                                                                                                Mốc thời gian đề tài
+                                                                                            </h3>
+                                                                                        </div>
+                                                                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                                                                            <div className="rounded-lg bg-white/70 dark:bg-slate-900/30 p-3">
+                                                                                                <h4 className="font-medium text-xs text-muted-foreground mb-1 uppercase tracking-wide">
+                                                                                                    Bắt đầu đăng ký
+                                                                                                </h4>
+                                                                                                <p className="text-sm font-medium">
+                                                                                                    {item.callRound
+                                                                                                        ?.registrationStartDate
+                                                                                                        ? new Date(
+                                                                                                              item
+                                                                                                                  .callRound
+                                                                                                                  .registrationStartDate,
+                                                                                                          ).toLocaleDateString(
+                                                                                                              'vi-VN',
+                                                                                                              {
+                                                                                                                  day: '2-digit',
+                                                                                                                  month: '2-digit',
+                                                                                                                  year: 'numeric',
+                                                                                                              },
+                                                                                                          )
+                                                                                                        : '—'}
+                                                                                                </p>
+                                                                                            </div>
+                                                                                            <div className="rounded-lg bg-white/70 dark:bg-slate-900/30 p-3">
+                                                                                                <h4 className="font-medium text-xs text-muted-foreground mb-1 uppercase tracking-wide">
+                                                                                                    Kết thúc đăng ký
+                                                                                                </h4>
+                                                                                                <p className="text-sm font-medium">
+                                                                                                    {item.callRound
+                                                                                                        ?.registrationEndDate
+                                                                                                        ? new Date(
+                                                                                                              item
+                                                                                                                  .callRound
+                                                                                                                  .registrationEndDate,
+                                                                                                          ).toLocaleDateString(
+                                                                                                              'vi-VN',
+                                                                                                              {
+                                                                                                                  day: '2-digit',
+                                                                                                                  month: '2-digit',
+                                                                                                                  year: 'numeric',
+                                                                                                              },
+                                                                                                          )
+                                                                                                        : '—'}
+                                                                                                </p>
+                                                                                            </div>
+                                                                                            <div className="rounded-lg bg-white/70 dark:bg-slate-900/30 p-3">
+                                                                                                <h4 className="font-medium text-xs text-muted-foreground mb-1 uppercase tracking-wide">
+                                                                                                    Ngày bắt đầu đề tài
+                                                                                                </h4>
+                                                                                                <p className="text-sm font-medium">
+                                                                                                    {item.callRound
+                                                                                                        ?.projectStartDate
+                                                                                                        ? new Date(
+                                                                                                              item
+                                                                                                                  .callRound
+                                                                                                                  .projectStartDate,
+                                                                                                          ).toLocaleDateString(
+                                                                                                              'vi-VN',
+                                                                                                              {
+                                                                                                                  day: '2-digit',
+                                                                                                                  month: '2-digit',
+                                                                                                                  year: 'numeric',
+                                                                                                              },
+                                                                                                          )
+                                                                                                        : '—'}
+                                                                                                </p>
+                                                                                            </div>
+                                                                                            <div className="rounded-lg bg-white/70 dark:bg-slate-900/30 p-3">
+                                                                                                <h4 className="font-medium text-xs text-muted-foreground mb-1 uppercase tracking-wide">
+                                                                                                    Ngày kết thúc đề tài
+                                                                                                </h4>
+                                                                                                <p className="text-sm font-medium">
+                                                                                                    {item.callRound
+                                                                                                        ?.projectEndDate
+                                                                                                        ? new Date(
+                                                                                                              item
+                                                                                                                  .callRound
+                                                                                                                  .projectEndDate,
+                                                                                                          ).toLocaleDateString(
+                                                                                                              'vi-VN',
+                                                                                                              {
+                                                                                                                  day: '2-digit',
+                                                                                                                  month: '2-digit',
+                                                                                                                  year: 'numeric',
+                                                                                                              },
+                                                                                                          )
+                                                                                                        : '—'}
+                                                                                                </p>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
                                                                                     <div>
                                                                                         <h4 className="font-medium text-sm text-muted-foreground mb-1">
-                                                                                            Trạng thái đăng ký
+                                                                                            Tên đề tài
+                                                                                        </h4>
+                                                                                        <p className="text-sm font-medium">
+                                                                                            {item.title}
+                                                                                        </p>
+                                                                                    </div>
+                                                                                    <div>
+                                                                                        <h4 className="font-medium text-sm text-muted-foreground mb-1">
+                                                                                            Mục tiêu
+                                                                                        </h4>
+                                                                                        <p
+                                                                                            className="text-sm whitespace-pre-wrap"
+                                                                                            style={{
+                                                                                                whiteSpace:
+                                                                                                    'pre-wrap !important',
+                                                                                            }}
+                                                                                        >
+                                                                                            {item.objective ||
+                                                                                                'Chưa có thông tin'}
+                                                                                        </p>
+                                                                                    </div>
+                                                                                    <div>
+                                                                                        <h4 className="font-medium text-sm text-muted-foreground mb-1">
+                                                                                            Sản phẩm dự kiến
+                                                                                        </h4>
+                                                                                        <p className="text-sm whitespace-pre-wrap">
+                                                                                            {item.expectedOutput ||
+                                                                                                'Chưa có thông tin'}
+                                                                                        </p>
+                                                                                    </div>
+                                                                                    <div>
+                                                                                        <h4 className="font-medium text-sm text-muted-foreground mb-1">
+                                                                                            Người hướng dẫn
+                                                                                        </h4>
+                                                                                        <div className="flex flex-wrap items-center gap-2 text-sm">
+                                                                                            <span>
+                                                                                                {item.instructor
+                                                                                                    ? item.instructor
+                                                                                                          .name
+                                                                                                    : 'Chưa phân công'}
+                                                                                            </span>
+                                                                                            <Badge variant="outline">
+                                                                                                {item.instructorStatus ===
+                                                                                                'ACCEPTED'
+                                                                                                    ? 'Đã đồng ý'
+                                                                                                    : item.instructorStatus ===
+                                                                                                        'REJECTED'
+                                                                                                      ? 'Từ chối'
+                                                                                                      : 'Chờ xác nhận'}
+                                                                                            </Badge>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div>
+                                                                                        <h4 className="font-medium text-sm text-muted-foreground mb-1">
+                                                                                            Thành viên nhóm
+                                                                                        </h4>
+                                                                                        {(
+                                                                                            item.teamMembers as
+                                                                                                | TeamMemberInput[]
+                                                                                                | null
+                                                                                                | undefined
+                                                                                        )?.length ? (
+                                                                                            <div className="space-y-2">
+                                                                                                {(
+                                                                                                    item.teamMembers as TeamMemberInput[]
+                                                                                                ).map(
+                                                                                                    (member, index) => (
+                                                                                                        <div
+                                                                                                            key={`${member.name}-${index}`}
+                                                                                                            className="text-sm flex flex-wrap items-center gap-2"
+                                                                                                        >
+                                                                                                            <Users className="h-4 w-4 text-muted-foreground" />
+                                                                                                            <span className="font-medium">
+                                                                                                                {
+                                                                                                                    member.name
+                                                                                                                }
+                                                                                                            </span>
+                                                                                                            <Badge variant="outline">
+                                                                                                                {
+                                                                                                                    member.role
+                                                                                                                }
+                                                                                                            </Badge>
+                                                                                                            {member.invitationStatus && (
+                                                                                                                <Badge
+                                                                                                                    variant={
+                                                                                                                        invitationStatusVariant[
+                                                                                                                            member
+                                                                                                                                .invitationStatus
+                                                                                                                        ]
+                                                                                                                    }
+                                                                                                                >
+                                                                                                                    {
+                                                                                                                        invitationStatusLabel[
+                                                                                                                            member
+                                                                                                                                .invitationStatus
+                                                                                                                        ]
+                                                                                                                    }
+                                                                                                                </Badge>
+                                                                                                            )}
+                                                                                                            {member.invitedAt && (
+                                                                                                                <span className="text-xs text-muted-foreground">
+                                                                                                                    Mời:{' '}
+                                                                                                                    {new Date(
+                                                                                                                        member.invitedAt,
+                                                                                                                    ).toLocaleString(
+                                                                                                                        'vi-VN',
+                                                                                                                    )}
+                                                                                                                </span>
+                                                                                                            )}
+                                                                                                        </div>
+                                                                                                    ),
+                                                                                                )}
+                                                                                            </div>
+                                                                                        ) : (
+                                                                                            <p className="text-sm text-muted-foreground">
+                                                                                                Chưa có thành viên nhóm
+                                                                                            </p>
+                                                                                        )}
+                                                                                    </div>
+                                                                                    <div>
+                                                                                        <h4 className="font-medium text-sm text-muted-foreground mb-1">
+                                                                                            Trạng thái xử lý tổng quan
                                                                                         </h4>
                                                                                         <Badge
                                                                                             variant={
-                                                                                                statusVariant[
-                                                                                                    item.status
-                                                                                                ] || 'default'
+                                                                                                displayStatusVariant[
+                                                                                                    displayStatus
+                                                                                                ]
                                                                                             }
                                                                                         >
-                                                                                            {statusLabel[
-                                                                                                item.status
-                                                                                            ] || item.status}
+                                                                                            {
+                                                                                                displayStatusLabel[
+                                                                                                    displayStatus
+                                                                                                ]
+                                                                                            }
                                                                                         </Badge>
                                                                                     </div>
-                                                                                    <div>
-                                                                                        <h4 className="font-medium text-sm text-muted-foreground mb-1">
-                                                                                            Trạng thái giảng viên
-                                                                                        </h4>
-                                                                                        <Badge variant="outline">
-                                                                                            {item.instructorStatus ===
-                                                                                            'ACCEPTED'
-                                                                                                ? 'Đã đồng ý'
-                                                                                                : item.instructorStatus ===
-                                                                                                    'REJECTED'
-                                                                                                  ? 'Từ chối'
-                                                                                                  : 'Chờ xác nhận'}
-                                                                                        </Badge>
+                                                                                    <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                                                                                        <div>
+                                                                                            <h4 className="font-medium text-sm text-muted-foreground mb-1">
+                                                                                                Trạng thái đăng ký
+                                                                                            </h4>
+                                                                                            <Badge
+                                                                                                variant={
+                                                                                                    statusVariant[
+                                                                                                        item.status
+                                                                                                    ] || 'default'
+                                                                                                }
+                                                                                            >
+                                                                                                {statusLabel[
+                                                                                                    item.status
+                                                                                                ] || item.status}
+                                                                                            </Badge>
+                                                                                        </div>
+                                                                                        <div>
+                                                                                            <h4 className="font-medium text-sm text-muted-foreground mb-1">
+                                                                                                Trạng thái giảng viên
+                                                                                            </h4>
+                                                                                            <Badge variant="outline">
+                                                                                                {item.instructorStatus ===
+                                                                                                'ACCEPTED'
+                                                                                                    ? 'Đã đồng ý'
+                                                                                                    : item.instructorStatus ===
+                                                                                                        'REJECTED'
+                                                                                                      ? 'Từ chối'
+                                                                                                      : 'Chờ xác nhận'}
+                                                                                            </Badge>
+                                                                                        </div>
+                                                                                        <div>
+                                                                                            <h4 className="font-medium text-sm text-muted-foreground mb-1">
+                                                                                                Trạng thái cấp khoa
+                                                                                            </h4>
+                                                                                            <Badge variant="outline">
+                                                                                                {item.facultyStatus ===
+                                                                                                'APPROVED'
+                                                                                                    ? 'Đã duyệt'
+                                                                                                    : item.facultyStatus ===
+                                                                                                        'REJECTED'
+                                                                                                      ? 'Từ chối'
+                                                                                                      : 'Đang chờ'}
+                                                                                            </Badge>
+                                                                                        </div>
                                                                                     </div>
-                                                                                    <div>
-                                                                                        <h4 className="font-medium text-sm text-muted-foreground mb-1">
-                                                                                            Trạng thái cấp khoa
-                                                                                        </h4>
-                                                                                        <Badge variant="outline">
-                                                                                            {item.facultyStatus ===
-                                                                                            'APPROVED'
-                                                                                                ? 'Đã duyệt'
-                                                                                                : item.facultyStatus ===
-                                                                                                    'REJECTED'
-                                                                                                  ? 'Từ chối'
-                                                                                                  : 'Đang chờ'}
-                                                                                        </Badge>
-                                                                                    </div>
+                                                                                    {item.cancelReason && (
+                                                                                        <div>
+                                                                                            <h4 className="font-medium text-sm text-muted-foreground mb-1">
+                                                                                                Lý do hủy/từ chối
+                                                                                            </h4>
+                                                                                            <p className="text-sm text-destructive">
+                                                                                                {item.cancelReason}
+                                                                                            </p>
+                                                                                        </div>
+                                                                                    )}
                                                                                 </div>
-                                                                                {item.cancelReason && (
-                                                                                    <div>
-                                                                                        <h4 className="font-medium text-sm text-muted-foreground mb-1">
-                                                                                            Lý do hủy/từ chối
-                                                                                        </h4>
-                                                                                        <p className="text-sm text-destructive">
-                                                                                            {item.cancelReason}
-                                                                                        </p>
-                                                                                    </div>
-                                                                                )}
-                                                                            </div>
-                                                                        </DialogContent>
-                                                                    </Dialog>
-                                                                </p>
-                                                                <p
-                                                                    className="text-sm text-muted-foreground truncate max-w-60"
-                                                                    title={item.objective}
-                                                                >
-                                                                    {item.objective}
-                                                                </p>
-                                                            </div>
-                                                        </TableCell>
-                                                        <TableCell>
-                                                            {item.instructor ? (
-                                                                <div className="flex flex-col gap-1">
-                                                                    <span className="font-medium text-sm">
-                                                                        {item.instructor.name}
-                                                                    </span>
-                                                                    <Badge
-                                                                        variant={
-                                                                            item.instructorStatus === 'ACCEPTED'
-                                                                                ? 'default'
-                                                                                : item.instructorStatus === 'REJECTED'
-                                                                                  ? 'destructive'
-                                                                                  : 'secondary'
-                                                                        }
-                                                                        className="w-fit text-xs"
-                                                                    >
-                                                                        {item.instructorStatus === 'ACCEPTED'
-                                                                            ? 'Đã đồng ý'
-                                                                            : item.instructorStatus === 'REJECTED'
-                                                                              ? 'Từ chối'
-                                                                              : 'Chờ xác nhận'}
-                                                                    </Badge>
-                                                                </div>
-                                                            ) : (
-                                                                <span className="text-muted-foreground text-sm">
-                                                                    Chưa chọn
-                                                                </span>
-                                                            )}
-                                                        </TableCell>
-                                                        <TableCell>
-                                                            <Badge variant={displayStatusVariant[displayStatus]}>
-                                                                {displayStatusLabel[displayStatus]}
-                                                            </Badge>
-                                                            {displayStatus !== 'PENDING_INSTRUCTOR' &&
-                                                                displayStatus !== 'PENDING_FACULTY' &&
-                                                                item.cancelReason && (
-                                                                    <p className="text-xs text-muted-foreground mt-2 line-clamp-1 italic">
-                                                                        Lý do: {item.cancelReason}
+                                                                            </DialogContent>
+                                                                        </Dialog>
                                                                     </p>
-                                                                )}
-                                                        </TableCell>
-                                                        <TableCell className="pr-6 align-top">
-                                                            {canEditRegistration(item) && !roundEnded ? (
-                                                                <Button
-                                                                    variant="secondary"
-                                                                    className="h-8 mb-2"
-                                                                    size="sm"
-                                                                    onClick={() => openEditDialog(item)}
-                                                                >
-                                                                    <Pencil className="h-3.5 w-3.5 mr-1" />
-                                                                    Sửa
-                                                                </Button>
-                                                            ) : null}
-
-                                                            {item.status === 'PENDING' &&
-                                                            item.instructorStatus !== 'ACCEPTED' &&
-                                                            item.instructorStatus !== 'REJECTED' &&
-                                                            !roundEnded ? (
-                                                                <div className="flex flex-col gap-2 w-max">
-                                                                    <Input
-                                                                        size={1}
-                                                                        className="h-8 text-xs bg-background"
-                                                                        value={cancelReasonById[item.id] ?? ''}
-                                                                        onChange={(e) =>
-                                                                            setCancelReasonById((prev) => ({
-                                                                                ...prev,
-                                                                                [item.id]: e.target.value,
-                                                                            }))
-                                                                        }
-                                                                        placeholder="Lý do hủy..."
-                                                                    />
-                                                                    <Button
-                                                                        variant="outline"
-                                                                        className="text-destructive border-destructive/30 hover:bg-destructive/10 h-8 self-end"
-                                                                        size="sm"
-                                                                        onClick={() => handleCancel(item.id)}
-                                                                        disabled={cancelMutation.isPending}
+                                                                    <p
+                                                                        className="text-sm text-muted-foreground truncate max-w-60"
+                                                                        title={item.objective}
                                                                     >
-                                                                        Hủy đăng ký
-                                                                    </Button>
+                                                                        {item.objective}
+                                                                    </p>
                                                                 </div>
-                                                            ) : null}
-                                                            {roundEnded ? (
-                                                                <p className="text-xs text-muted-foreground italic">
-                                                                    Đợt đăng ký đã kết thúc, chỉ có thể xem chi tiết.
-                                                                </p>
-                                                            ) : null}
-                                                        </TableCell>
-                                                    </TableRow>
-                                                );
-                                            }))}
+                                                            </TableCell>
+                                                            <TableCell>
+                                                                {item.instructor ? (
+                                                                    <div className="flex flex-col gap-1">
+                                                                        <span className="font-medium text-sm">
+                                                                            {item.instructor.name}
+                                                                        </span>
+                                                                        <Badge
+                                                                            variant={
+                                                                                item.instructorStatus === 'ACCEPTED'
+                                                                                    ? 'default'
+                                                                                    : item.instructorStatus ===
+                                                                                        'REJECTED'
+                                                                                      ? 'destructive'
+                                                                                      : 'secondary'
+                                                                            }
+                                                                            className="w-fit text-xs"
+                                                                        >
+                                                                            {item.instructorStatus === 'ACCEPTED'
+                                                                                ? 'Đã đồng ý'
+                                                                                : item.instructorStatus === 'REJECTED'
+                                                                                  ? 'Từ chối'
+                                                                                  : 'Chờ xác nhận'}
+                                                                        </Badge>
+                                                                    </div>
+                                                                ) : (
+                                                                    <span className="text-muted-foreground text-sm">
+                                                                        Chưa chọn
+                                                                    </span>
+                                                                )}
+                                                            </TableCell>
+                                                            <TableCell>
+                                                                <Badge variant={displayStatusVariant[displayStatus]}>
+                                                                    {displayStatusLabel[displayStatus]}
+                                                                </Badge>
+                                                                {displayStatus !== 'PENDING_INSTRUCTOR' &&
+                                                                    displayStatus !== 'PENDING_FACULTY' &&
+                                                                    item.cancelReason && (
+                                                                        <p className="text-xs text-muted-foreground mt-2 line-clamp-1 italic">
+                                                                            Lý do: {item.cancelReason}
+                                                                        </p>
+                                                                    )}
+                                                            </TableCell>
+                                                            <TableCell className="pr-6 align-top">
+                                                                {canEditRegistration(item) && !roundEnded ? (
+                                                                    <Button
+                                                                        variant="secondary"
+                                                                        className="h-8 mb-2"
+                                                                        size="sm"
+                                                                        onClick={() => openEditDialog(item)}
+                                                                    >
+                                                                        <Pencil className="h-3.5 w-3.5 mr-1" />
+                                                                        Sửa
+                                                                    </Button>
+                                                                ) : null}
+
+                                                                {item.status === 'PENDING' &&
+                                                                item.instructorStatus !== 'ACCEPTED' &&
+                                                                item.instructorStatus !== 'REJECTED' &&
+                                                                !roundEnded ? (
+                                                                    <div className="flex flex-col gap-2 w-max">
+                                                                        <Input
+                                                                            size={1}
+                                                                            className="h-8 text-xs bg-background"
+                                                                            value={cancelReasonById[item.id] ?? ''}
+                                                                            onChange={(e) =>
+                                                                                setCancelReasonById((prev) => ({
+                                                                                    ...prev,
+                                                                                    [item.id]: e.target.value,
+                                                                                }))
+                                                                            }
+                                                                            placeholder="Lý do hủy..."
+                                                                        />
+                                                                        <Button
+                                                                            variant="outline"
+                                                                            className="text-destructive border-destructive/30 hover:bg-destructive/10 h-8 self-end"
+                                                                            size="sm"
+                                                                            onClick={() => handleCancel(item.id)}
+                                                                            disabled={cancelMutation.isPending}
+                                                                        >
+                                                                            Hủy đăng ký
+                                                                        </Button>
+                                                                    </div>
+                                                                ) : null}
+                                                                {roundEnded ? (
+                                                                    <p className="text-xs text-muted-foreground italic">
+                                                                        Đợt đăng ký đã kết thúc, chỉ có thể xem chi
+                                                                        tiết.
+                                                                    </p>
+                                                                ) : null}
+                                                            </TableCell>
+                                                        </TableRow>
+                                                    );
+                                                })
+                                            )}
                                         </TableBody>
                                     </Table>
                                 </div>
