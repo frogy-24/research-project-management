@@ -65,7 +65,7 @@ export function DocumentViewer({ fileUrl, fileName, open, onOpenChange }: Docume
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
-            <DialogContent className="max-w-6xl h-[90vh] flex flex-col p-0" showCloseButton={true}>
+            <DialogContent className="max-w-6xl h-[90vh] flex flex-col p-0 sm:max-w-2/3" showCloseButton={true}>
                 <DialogHeader className="p-4 pb-3 border-b">
                     <DialogTitle className="flex items-center gap-2">
                         <FileText className="h-5 w-5 text-primary" />

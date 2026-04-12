@@ -5,7 +5,7 @@ import { registrationTeamMemberSchema } from '@/types/project-registration.schem
 
 type TeamMemberWithMeta = {
     studentId: string;
-    invitationStatus?: 'PENDING' | 'ACCEPTED' | 'REJECTED';
+    invitationStatus?: 'PENDING' | 'ACCEPTED' | 'REJECTED' | 'CANCELED';
 };
 
 const teamMemberArraySchema = registrationTeamMemberSchema.array();

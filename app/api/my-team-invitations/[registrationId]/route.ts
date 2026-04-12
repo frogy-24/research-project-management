@@ -12,12 +12,26 @@ type TeamMemberJson = {
     name: string;
     role: string;
     studentId?: string;
-    invitationStatus?: 'PENDING' | 'ACCEPTED' | 'REJECTED';
+    invitationStatus?: 'PENDING' | 'ACCEPTED' | 'REJECTED' | 'CANCELED';
     invitedAt?: string | Date;
     respondedAt?: string | Date | null;
 };
 
 const canRespondInvitation = (role: string) => role === 'STUDENT';
+const INVITATION_EXPIRE_MS = 24 * 60 * 60 * 1000;
+
+const isExpiredPendingInvitation = (member: TeamMemberJson, fallbackDate: Date, now: Date): boolean => {
+    if ((member.invitationStatus ?? 'PENDING') !== 'PENDING') {
+        return false;
+    }
+
+    const invitedAt = new Date(member.invitedAt ?? fallbackDate);
+    if (Number.isNaN(invitedAt.getTime())) {
+        return false;
+    }
+
+    return now.getTime() - invitedAt.getTime() >= INVITATION_EXPIRE_MS;
+};
 
 const hasAcceptedMembership = (rawMembers: unknown, userId: string) => {
     if (!Array.isArray(rawMembers)) {
@@ -85,8 +99,57 @@ export async function PATCH(request: Request, { params }: Params) {
             return NextResponse.json({ success: false, error: 'Bạn không nằm trong danh sách thành viên.' }, { status: 404 });
         }
 
-        if ((currentMembers[targetIndex].invitationStatus ?? 'PENDING') !== 'PENDING') {
-            return NextResponse.json({ success: false, error: 'Lời mời này đã được xác nhận trước đó.' }, { status: 409 });
+        const now = new Date();
+        const nowIso = now.toISOString();
+
+        if (isExpiredPendingInvitation(currentMembers[targetIndex], registration.createdAt, now)) {
+            const expiredMembers = currentMembers.map((member, index) =>
+                index === targetIndex
+                    ? {
+                          ...member,
+                          invitationStatus: 'CANCELED' as const,
+                          respondedAt: member.respondedAt ?? nowIso,
+                      }
+                    : member,
+            );
+
+            await prisma.projectRegistration.update({
+                where: { id: registrationId },
+                data: {
+                    teamMembers: expiredMembers,
+                },
+            });
+
+            return NextResponse.json(
+                {
+                    success: false,
+                    error: 'Lời mời đã hết hạn sau 1 ngày và đã được tự động hủy.',
+                },
+                { status: 409 },
+            );
+        }
+
+        const currentStatus = currentMembers[targetIndex].invitationStatus ?? 'PENDING';
+
+        if (currentStatus === 'CANCELED') {
+            return NextResponse.json(
+                { success: false, error: 'Lời mời này đã bị hủy tự động do quá thời hạn phản hồi.' },
+                { status: 409 },
+            );
+        }
+
+        if (parsed.data.decision === 'PENDING') {
+            if (currentStatus === 'PENDING') {
+                return NextResponse.json({ success: false, error: 'Lời mời hiện đã ở trạng thái chờ xác nhận.' }, { status: 409 });
+            }
+        } else if (currentStatus !== 'PENDING') {
+            return NextResponse.json(
+                {
+                    success: false,
+                    error: 'Vui lòng hủy xác nhận hiện tại trước khi chọn trạng thái mới.',
+                },
+                { status: 409 },
+            );
         }
 
         if (parsed.data.decision === 'ACCEPTED') {
@@ -142,13 +205,12 @@ export async function PATCH(request: Request, { params }: Params) {
             select: { name: true },
         });
 
-        const nowIso = new Date().toISOString();
         const updatedMembers = currentMembers.map((member, index) =>
             index === targetIndex
                 ? {
                       ...member,
                       invitationStatus: parsed.data.decision,
-                      respondedAt: nowIso,
+                      respondedAt: parsed.data.decision === 'PENDING' ? null : nowIso,
                   }
                 : member,
         );
@@ -191,13 +253,18 @@ export async function PATCH(request: Request, { params }: Params) {
             return NextResponse.json({ success: false, error: 'Không tìm thấy đăng ký đề tài.' }, { status: 404 });
         }
 
+        const notificationActionText =
+            parsed.data.decision === 'ACCEPTED'
+                ? 'đồng ý'
+                : parsed.data.decision === 'REJECTED'
+                  ? 'từ chối'
+                  : 'hủy xác nhận';
+
         await createNotification({
             userId: registration.userId,
             type: 'REGISTRATION_STATUS_CHANGE',
-            title: `Thành viên đã ${parsed.data.decision === 'ACCEPTED' ? 'đồng ý' : 'từ chối'} lời mời`,
-            message: `${actorUser?.name ?? 'Thành viên'} trong đề tài "${registration.title}" đã ${
-                parsed.data.decision === 'ACCEPTED' ? 'đồng ý' : 'từ chối'
-            } tham gia nhóm.`,
+            title: `Thành viên đã ${notificationActionText} lời mời`,
+            message: `${actorUser?.name ?? 'Thành viên'} trong đề tài "${registration.title}" đã ${notificationActionText} tham gia nhóm.`,
             link: '/student/projects',
             metadata: {
                 registrationId,

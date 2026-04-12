@@ -41,7 +41,7 @@ export interface GuidanceRequest {
         name: string;
         role: string;
         studentId?: string;
-        invitationStatus?: 'PENDING' | 'ACCEPTED' | 'REJECTED';
+        invitationStatus?: 'PENDING' | 'ACCEPTED' | 'REJECTED' | 'CANCELED';
         invitedAt?: string | Date;
         respondedAt?: string | Date | null;
     }> | null;

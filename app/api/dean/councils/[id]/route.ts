@@ -20,9 +20,26 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
             return NextResponse.json({ error: 'Tên hội đồng là bắt buộc' }, { status: 400 });
         }
 
-        const existing = await prisma.council.findUnique({ where: { id } });
+        const existing = await prisma.council.findUnique({
+            where: { id },
+            select: {
+                id: true,
+                callRound: {
+                    select: {
+                        isLocked: true,
+                    },
+                },
+            },
+        });
         if (!existing) {
             return NextResponse.json({ error: 'Không tìm thấy hội đồng' }, { status: 404 });
+        }
+
+        if (existing.callRound?.isLocked) {
+            return NextResponse.json(
+                { error: 'Đợt đề tài đã hoàn tất công bố hội đồng, không thể chỉnh sửa' },
+                { status: 409 },
+            );
         }
 
         if (members && members.length === 0) {
@@ -110,11 +127,25 @@ export async function DELETE(_request: Request, { params }: { params: Promise<{ 
 
         const existing = await prisma.council.findUnique({
             where: { id },
-            select: { id: true },
+            select: {
+                id: true,
+                callRound: {
+                    select: {
+                        isLocked: true,
+                    },
+                },
+            },
         });
 
         if (!existing) {
             return NextResponse.json({ error: 'Không tìm thấy hội đồng' }, { status: 404 });
+        }
+
+        if (existing.callRound?.isLocked) {
+            return NextResponse.json(
+                { error: 'Đợt đề tài đã hoàn tất công bố hội đồng, không thể xóa' },
+                { status: 409 },
+            );
         }
 
         await prisma.council.delete({ where: { id } });

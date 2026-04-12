@@ -31,16 +31,18 @@ const SEARCH_FIELD_OPTIONS = [
     { value: 'studentCode', label: 'MSSV' },
 ] as const;
 
-const teamInvitationStatusLabel: Record<'PENDING' | 'ACCEPTED' | 'REJECTED', string> = {
+const teamInvitationStatusLabel: Record<'PENDING' | 'ACCEPTED' | 'REJECTED' | 'CANCELED', string> = {
     PENDING: 'Chờ xác nhận',
     ACCEPTED: 'Đã đồng ý',
     REJECTED: 'Đã từ chối',
+    CANCELED: 'Đã hủy',
 };
 
-const teamInvitationStatusVariant: Record<'PENDING' | 'ACCEPTED' | 'REJECTED', 'secondary' | 'default' | 'destructive'> = {
+const teamInvitationStatusVariant: Record<'PENDING' | 'ACCEPTED' | 'REJECTED' | 'CANCELED', 'secondary' | 'default' | 'destructive' | 'outline'> = {
     PENDING: 'secondary',
     ACCEPTED: 'default',
     REJECTED: 'destructive',
+    CANCELED: 'outline',
 };
 
 export function GuidancePageClient() {

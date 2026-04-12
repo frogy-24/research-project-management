@@ -28,6 +28,13 @@ export async function POST(request: Request) {
       );
     }
 
+    if (members.length > 3) {
+      return NextResponse.json(
+        { error: 'Một hội đồng chỉ được tối đa 3 thành viên' },
+        { status: 400 }
+      );
+    }
+
     // Kiểm tra call round tồn tại
     const callRound = await prisma.callRound.findUnique({
       where: { id: callRoundId },

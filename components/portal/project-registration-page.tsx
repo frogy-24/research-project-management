@@ -41,7 +41,7 @@ type TeamMemberInput = {
     name: string;
     role: string;
     studentId?: string;
-    invitationStatus?: 'PENDING' | 'ACCEPTED' | 'REJECTED';
+    invitationStatus?: 'PENDING' | 'ACCEPTED' | 'REJECTED' | 'CANCELED';
     invitedAt?: Date;
     respondedAt?: Date | null;
 };
@@ -82,16 +82,18 @@ const displayStatusVariant: Record<DisplayRegistrationStatus, 'default' | 'secon
     REJECTED: 'destructive',
 };
 
-const invitationStatusLabel: Record<'PENDING' | 'ACCEPTED' | 'REJECTED', string> = {
+const invitationStatusLabel: Record<'PENDING' | 'ACCEPTED' | 'REJECTED' | 'CANCELED', string> = {
     PENDING: 'Chờ xác nhận',
     ACCEPTED: 'Đã đồng ý',
     REJECTED: 'Đã từ chối',
+    CANCELED: 'Đã hủy',
 };
 
-const invitationStatusVariant: Record<'PENDING' | 'ACCEPTED' | 'REJECTED', 'secondary' | 'default' | 'destructive'> = {
+const invitationStatusVariant: Record<'PENDING' | 'ACCEPTED' | 'REJECTED' | 'CANCELED', 'secondary' | 'default' | 'destructive' | 'outline'> = {
     PENDING: 'secondary',
     ACCEPTED: 'default',
     REJECTED: 'destructive',
+    CANCELED: 'outline',
 };
 
 const toStartOfDay = (value: Date | string): Date => {

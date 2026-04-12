@@ -7,12 +7,32 @@ type TeamMemberJson = {
     name: string;
     role: string;
     studentId?: string;
-    invitationStatus?: 'PENDING' | 'ACCEPTED' | 'REJECTED';
+    invitationStatus?: 'PENDING' | 'ACCEPTED' | 'REJECTED' | 'CANCELED';
     invitedAt?: string | Date;
     respondedAt?: string | Date | null;
 };
 
 const canViewInvitations = (role: string) => role === 'STUDENT';
+const INVITATION_EXPIRE_MS = 24 * 60 * 60 * 1000;
+
+const getInvitationDate = (member: TeamMemberJson, fallbackDate: Date): Date | null => {
+    const rawValue = member.invitedAt ?? fallbackDate;
+    const invitedAt = new Date(rawValue);
+    return Number.isNaN(invitedAt.getTime()) ? null : invitedAt;
+};
+
+const shouldAutoCancelInvitation = (member: TeamMemberJson, fallbackDate: Date, now: Date): boolean => {
+    if ((member.invitationStatus ?? 'PENDING') !== 'PENDING') {
+        return false;
+    }
+
+    const invitedAt = getInvitationDate(member, fallbackDate);
+    if (!invitedAt) {
+        return false;
+    }
+
+    return now.getTime() - invitedAt.getTime() >= INVITATION_EXPIRE_MS;
+};
 
 export async function GET(request: Request) {
     try {
@@ -65,13 +85,40 @@ export async function GET(request: Request) {
             },
         });
 
-        const invitations = registrations
-            .map((registration) => {
+        const now = new Date();
+        const nowIso = now.toISOString();
+
+        const invitations = (
+            await Promise.all(
+                registrations.map(async (registration) => {
                 const members = Array.isArray(registration.teamMembers)
                     ? (registration.teamMembers as unknown as TeamMemberJson[])
                     : [];
 
-                const matchedMember = members.find((member) => member.studentId === actorUserId);
+                const normalizedMembers = members.map((member) => {
+                    if (!shouldAutoCancelInvitation(member, registration.createdAt, now)) {
+                        return member;
+                    }
+
+                    return {
+                        ...member,
+                        invitationStatus: 'CANCELED' as const,
+                        respondedAt: member.respondedAt ?? nowIso,
+                    };
+                });
+
+                const hasUpdatedMembers = normalizedMembers.some((member, index) => member !== members[index]);
+
+                if (hasUpdatedMembers) {
+                    await prisma.projectRegistration.update({
+                        where: { id: registration.id },
+                        data: {
+                            teamMembers: normalizedMembers,
+                        },
+                    });
+                }
+
+                const matchedMember = normalizedMembers.find((member) => member.studentId === actorUserId);
                 if (!matchedMember) {
                     return null;
                 }
@@ -97,7 +144,7 @@ export async function GET(request: Request) {
                     respondedAt: matchedMember.respondedAt ?? null,
                     callRoundId: registration.callRoundId,
                     callRoundName: registration.callRound?.name ?? null,
-                    teamMembers: members.map((member) => ({
+                    teamMembers: normalizedMembers.map((member) => ({
                         name: member.name,
                         role: member.role,
                         studentId: member.studentId,
@@ -108,7 +155,9 @@ export async function GET(request: Request) {
                     createdAt: registration.createdAt,
                     updatedAt: registration.updatedAt,
                 };
-            })
+                }),
+            )
+        )
             .filter((item): item is NonNullable<typeof item> => item !== null)
             .sort((a, b) => new Date(b.invitedAt).getTime() - new Date(a.invitedAt).getTime());
 

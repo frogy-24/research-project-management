@@ -54,10 +54,30 @@ interface Registration {
     } | null;
     callRound?: {
         name: string;
+        projectLockDate?: string | null;
     } | null;
     instructorStatus: string;
     facultyStatus: string;
 }
+
+const stripTime = (value: Date) => {
+    const normalized = new Date(value);
+    normalized.setHours(0, 0, 0, 0);
+    return normalized;
+};
+
+const isPastLockDate = (projectLockDate?: string | null) => {
+    if (!projectLockDate) {
+        return false;
+    }
+
+    const parsedDate = new Date(projectLockDate);
+    if (Number.isNaN(parsedDate.getTime())) {
+        return false;
+    }
+
+    return stripTime(new Date()) > stripTime(parsedDate);
+};
 
 const PAGE_SIZE = 10;
 
@@ -259,6 +279,9 @@ export function DeanApprovalClient() {
                             </TableHeader>
                             <TableBody>
                                 {registrations.map((req, index) => (
+                                    // Hide dean approval actions after project lock date passes.
+                                    // Details are still available in read-only mode.
+                                    
                                     <TableRow key={req.id}>
                                         <TableCell className="text-muted-foreground">
                                             {(currentPage - 1) * PAGE_SIZE + index + 1}
@@ -416,7 +439,7 @@ export function DeanApprovalClient() {
                                                 </DialogContent>
                                             </Dialog>
 
-                                            {req.facultyStatus === 'PENDING' && (
+                                            {req.facultyStatus === 'PENDING' && !isPastLockDate(req.callRound?.projectLockDate) && (
                                                 <>
                                                     <Button
                                                         variant="outline"
@@ -425,7 +448,7 @@ export function DeanApprovalClient() {
                                                             mutation.mutate(
                                                                 { id: req.id, status: 'APPROVED' },
                                                                 {
-                                                                    onSuccess: () => toast.success('Cập nhật trạng thái thành công'),
+                                                                    onSuccess: () => toast.success('Phê duyệt hồ sơ thành công'),
                                                                     onError: () => toast.error('Đã xảy ra lỗi khi cập nhật'),
                                                                 }
                                                             )
@@ -444,7 +467,7 @@ export function DeanApprovalClient() {
                                                             mutation.mutate(
                                                                 { id: req.id, status: 'REJECTED' },
                                                                 {
-                                                                    onSuccess: () => toast.success('Cập nhật trạng thái thành công'),
+                                                                    onSuccess: () => toast.success('Đã từ chối hồ sơ'),
                                                                     onError: () => toast.error('Đã xảy ra lỗi khi cập nhật'),
                                                                 }
                                                             )
@@ -454,6 +477,31 @@ export function DeanApprovalClient() {
                                                         Từ chối
                                                     </Button>
                                                 </>
+                                            )}
+
+                                            {req.facultyStatus === 'APPROVED' && !isPastLockDate(req.callRound?.projectLockDate) && (
+                                                <Button
+                                                    variant="secondary"
+                                                    size="sm"
+                                                    onClick={() =>
+                                                        mutation.mutate(
+                                                            { id: req.id, status: 'PENDING' },
+                                                            {
+                                                                onSuccess: () => toast.success('Đã hủy phê duyệt và chuyển về chờ duyệt'),
+                                                                onError: () => toast.error('Đã xảy ra lỗi khi cập nhật'),
+                                                            }
+                                                        )
+                                                    }
+                                                    disabled={mutation.isPending}
+                                                >
+                                                    Hủy phê duyệt
+                                                </Button>
+                                            )}
+
+                                            {isPastLockDate(req.callRound?.projectLockDate) && (
+                                                <Badge variant="outline" className="text-muted-foreground">
+                                                    Đã quá hạn chốt
+                                                </Badge>
                                             )}
                                         </TableCell>
                                     </TableRow>

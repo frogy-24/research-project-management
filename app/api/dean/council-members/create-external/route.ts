@@ -55,6 +55,8 @@ export async function POST(request: NextRequest) {
                 data: {
                     callRoundId,
                     councilMemberId: councilMember.id,
+                    invitationStatus: 'ACCEPTED',
+                    respondedAt: new Date(),
                 },
                 include: {
                     councilMember: {
@@ -97,6 +99,8 @@ export async function POST(request: NextRequest) {
             data: {
                 callRoundId,
                 councilMemberId: councilMember.id,
+                invitationStatus: 'ACCEPTED',
+                respondedAt: new Date(),
             },
             include: {
                 councilMember: {

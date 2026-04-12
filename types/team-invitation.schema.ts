@@ -43,9 +43,7 @@ export const teamInvitationSchema = z.object({
 export const teamInvitationListSchema = teamInvitationSchema.array();
 
 export const respondTeamInvitationSchema = z.object({
-    decision: TeamMemberInvitationStatusEnum.refine((value) => value !== 'PENDING', {
-        message: 'Quyết định phải là ACCEPTED hoặc REJECTED',
-    }),
+    decision: z.enum(['PENDING', 'ACCEPTED', 'REJECTED']),
 });
 
 export type TeamInvitation = z.infer<typeof teamInvitationSchema>;

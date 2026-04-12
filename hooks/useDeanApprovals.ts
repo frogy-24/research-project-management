@@ -2,7 +2,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { api } from '@/lib/axios';
 
-type DeanApprovalStatus = 'APPROVED' | 'REJECTED';
+type DeanApprovalStatus = 'PENDING' | 'APPROVED' | 'REJECTED';
 
 interface DeanApproval {
     id: string;
@@ -36,6 +36,7 @@ interface DeanApproval {
     } | null;
     callRound?: {
         name: string;
+        projectLockDate?: string | null;
     } | null;
     instructorStatus: string;
     facultyStatus: string;

@@ -9,6 +9,7 @@ import {
     useCouncilProjectAssignments,
     useFinalizeCouncilProjectAssignments,
     useUnassignProjectsFromCouncil,
+    useUpdateCouncilDefenseLocation,
 } from '@/hooks/useCouncilProjectAssignments';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -18,6 +19,17 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
 
 export function CouncilProjectAssignmentManagement() {
     const [selectedCallRoundId, setSelectedCallRoundId] = useState('');
@@ -25,6 +37,8 @@ export function CouncilProjectAssignmentManagement() {
     const [search, setSearch] = useState('');
     const [selectedProjectIds, setSelectedProjectIds] = useState<string[]>([]);
     const [selectedAssignedProjectIds, setSelectedAssignedProjectIds] = useState<string[]>([]);
+    const [isFinalizeDialogOpen, setIsFinalizeDialogOpen] = useState(false);
+    const [defenseLocationInput, setDefenseLocationInput] = useState('');
 
     const { data: callRounds = [], isLoading: loadingCallRounds } = useCallRounds();
     const approvedCallRounds = useMemo(
@@ -35,6 +49,7 @@ export function CouncilProjectAssignmentManagement() {
     const assignMutation = useAssignProjectsToCouncil();
     const unassignMutation = useUnassignProjectsFromCouncil();
     const finalizeMutation = useFinalizeCouncilProjectAssignments();
+    const updateDefenseLocationMutation = useUpdateCouncilDefenseLocation();
 
     const councils = data?.councils ?? [];
     const approvedProjects = data?.approvedProjects ?? [];
@@ -74,6 +89,10 @@ export function CouncilProjectAssignmentManagement() {
             setSelectedAssignedProjectIds([]);
         }
     }, [approvedCallRounds, selectedCallRoundId]);
+
+    useEffect(() => {
+        setDefenseLocationInput(selectedCouncil?.defenseLocation ?? '');
+    }, [selectedCouncil?.id, selectedCouncil?.defenseLocation]);
 
     const handleToggleProject = (projectId: string) => {
         setSelectedProjectIds((prev) =>
@@ -181,24 +200,44 @@ export function CouncilProjectAssignmentManagement() {
             return;
         }
 
-        const confirmed = window.confirm(
-            'Xác nhận hoàn tất phân công cho toàn bộ đợt này? Sau khi xác nhận, hội đồng/giảng viên/thành viên mới nhìn thấy và bạn sẽ không thể chỉnh sửa.',
-        );
-        if (!confirmed) {
-            return;
-        }
-
         finalizeMutation.mutate(
             { callRoundId: selectedCallRoundId },
             {
                 onSuccess: () => {
                     toast.success('Đã hoàn tất phân công toàn bộ đợt đăng ký');
+                    setIsFinalizeDialogOpen(false);
                 },
                 onError: (error: unknown) => {
                     const message =
                         typeof error === 'object' && error && 'message' in error
                             ? String((error as { message?: string }).message)
                             : 'Không thể hoàn tất phân công';
+                    toast.error(message);
+                },
+            },
+        );
+    };
+
+    const handleSaveDefenseLocation = () => {
+        if (!selectedCallRoundId) {
+            toast.error('Vui lòng chọn đợt đăng ký');
+            return;
+        }
+
+        updateDefenseLocationMutation.mutate(
+            {
+                callRoundId: selectedCallRoundId,
+                defenseLocation: defenseLocationInput,
+            },
+            {
+                onSuccess: () => {
+                    toast.success('Đã lưu nơi bảo vệ');
+                },
+                onError: (error: unknown) => {
+                    const message =
+                        typeof error === 'object' && error && 'message' in error
+                            ? String((error as { message?: string }).message)
+                            : 'Không thể lưu nơi bảo vệ';
                     toast.error(message);
                 },
             },
@@ -275,14 +314,59 @@ export function CouncilProjectAssignmentManagement() {
                             <Badge variant={isFinalized ? 'default' : 'secondary'}>
                                 {isFinalized ? 'Đã hoàn tất phân công' : 'Đang xếp ảo (chưa công bố)'}
                             </Badge>
-                            <Button
-                                type="button"
-                                onClick={handleFinalizeAll}
-                                disabled={finalizeMutation.isPending || isLoading || isFinalized}
-                            >
-                                <CheckCircle2 className="h-4 w-4 mr-2" />
-                                {finalizeMutation.isPending ? 'Đang xác nhận...' : 'Hoàn tất xác nhận tất cả'}
-                            </Button>
+                            <AlertDialog open={isFinalizeDialogOpen} onOpenChange={setIsFinalizeDialogOpen}>
+                                <AlertDialogTrigger asChild>
+                                    <Button
+                                        type="button"
+                                        disabled={finalizeMutation.isPending || isLoading || isFinalized}
+                                    >
+                                        <CheckCircle2 className="h-4 w-4 mr-2" />
+                                        {finalizeMutation.isPending ? 'Đang xác nhận...' : 'Hoàn tất xác nhận tất cả'}
+                                    </Button>
+                                </AlertDialogTrigger>
+                                <AlertDialogContent>
+                                    <AlertDialogHeader>
+                                        <AlertDialogTitle>Hoàn tất xác nhận tất cả?</AlertDialogTitle>
+                                        <AlertDialogDescription>
+                                            Sau khi xác nhận, hội đồng, giảng viên và thành viên mới nhìn thấy dữ liệu.
+                                            Bạn sẽ không thể chỉnh sửa phân công của đợt này.
+                                        </AlertDialogDescription>
+                                    </AlertDialogHeader>
+                                    <AlertDialogFooter>
+                                        <AlertDialogCancel disabled={finalizeMutation.isPending}>Hủy</AlertDialogCancel>
+                                        <AlertDialogAction
+                                            onClick={handleFinalizeAll}
+                                            disabled={finalizeMutation.isPending}
+                                        >
+                                            {finalizeMutation.isPending ? 'Đang xác nhận...' : 'Xác nhận'}
+                                        </AlertDialogAction>
+                                    </AlertDialogFooter>
+                                </AlertDialogContent>
+                            </AlertDialog>
+                        </div>
+                    )}
+
+                    {selectedCouncilId && selectedCouncil && (
+                        <div className="rounded-md border bg-muted/20 p-3 space-y-2">
+                            <p className="text-xs text-muted-foreground">Nơi bảo vệ</p>
+                            <div className="flex flex-col md:flex-row gap-2">
+                                <Input
+                                    value={defenseLocationInput}
+                                    onChange={(event) => setDefenseLocationInput(event.target.value)}
+                                    placeholder="Nhập nơi bảo vệ..."
+                                    disabled={updateDefenseLocationMutation.isPending}
+                                />
+                                <Button
+                                    type="button"
+                                    onClick={handleSaveDefenseLocation}
+                                    disabled={updateDefenseLocationMutation.isPending}
+                                >
+                                    {updateDefenseLocationMutation.isPending ? 'Đang lưu...' : 'Lưu nơi bảo vệ'}
+                                </Button>
+                            </div>
+                            <p className="text-xs text-muted-foreground">
+                                Thông tin này áp dụng cho các hội đồng trong đợt đăng ký đã chọn.
+                            </p>
                         </div>
                     )}
                 </CardContent>

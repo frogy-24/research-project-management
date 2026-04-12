@@ -3,7 +3,7 @@ import { z } from "zod";
 export const RegistrationStatusEnum = z.enum(["PENDING", "APPROVED", "CANCELED", "REJECTED"]);
 export const InstructorStatusEnum = z.enum(["PENDING", "ACCEPTED", "REJECTED"]);
 export const FacultyStatusEnum = z.enum(["PENDING", "APPROVED", "REJECTED"]);
-export const TeamMemberInvitationStatusEnum = z.enum(["PENDING", "ACCEPTED", "REJECTED"]);
+export const TeamMemberInvitationStatusEnum = z.enum(["PENDING", "ACCEPTED", "REJECTED", "CANCELED"]);
 
 export const registrationTeamMemberSchema = z.object({
   name: z.string().min(1, "Tên thành viên không được để trống"),

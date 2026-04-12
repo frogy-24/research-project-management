@@ -254,6 +254,12 @@ function AppSidebar({ session }: { session: AuthSession }) {
         );
     } else if (session.role === 'STUDENT') {
         navItems.push({
+            title: 'Xem hội đồng',
+            url: '/student/councils',
+            icon: UsersRound,
+        });
+
+        navItems.push({
             title: 'Lời mời nhóm',
             url: '/student/team-invitations',
             icon: Mail,

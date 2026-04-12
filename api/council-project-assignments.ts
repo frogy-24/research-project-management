@@ -4,6 +4,7 @@ import type {
     CouncilProjectAssignmentsResponse,
     FinalizeCouncilAssignmentsInput,
     UnassignProjectsFromCouncilInput,
+    UpdateCouncilDefenseLocationInput,
 } from '@/types/council-project-assignment.schema';
 
 export const councilProjectAssignmentsApi = {
@@ -23,6 +24,11 @@ export const councilProjectAssignmentsApi = {
     },
 
     finalize: async (payload: FinalizeCouncilAssignmentsInput): Promise<{ success: boolean }> => {
+        const response = await api.patch('/dean/council-project-assignments', payload);
+        return response.data;
+    },
+
+    updateDefenseLocation: async (payload: UpdateCouncilDefenseLocationInput): Promise<{ success: boolean }> => {
         const response = await api.patch('/dean/council-project-assignments', payload);
         return response.data;
     },

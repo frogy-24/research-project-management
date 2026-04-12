@@ -1,5 +1,23 @@
 import { z } from "zod";
 
+const uploadedFileUrlSchema = z
+  .string()
+  .refine(
+    (value) => {
+      if (value.startsWith("/uploads/")) {
+        return true;
+      }
+
+      try {
+        new URL(value);
+        return true;
+      } catch {
+        return false;
+      }
+    },
+    { message: "URL file không hợp lệ" }
+  );
+
 export const progressReportSchema = z.object({
   id: z.string().cuid(),
   projectId: z.string().cuid(),
@@ -12,7 +30,7 @@ export const progressReportSchema = z.object({
   reportContent: z.string().nullable().optional(),
   periodLabel: z.string().min(1),
   summary: z.string().min(1),
-  fileUrl: z.string().url().nullable().optional(),
+  fileUrl: uploadedFileUrlSchema.nullable().optional(),
   mentorReview: z.string().nullable().optional(),
   mentorScore: z.number().min(0).max(100).nullable().optional(),
   submittedAt: z.coerce.date(),
