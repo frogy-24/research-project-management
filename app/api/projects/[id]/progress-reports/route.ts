@@ -23,6 +23,20 @@ const mapZodError = (zodError: ZodError) => {
   return fields;
 };
 
+const stripTime = (value: Date) => {
+  const normalized = new Date(value);
+  normalized.setHours(0, 0, 0, 0);
+  return normalized;
+};
+
+const isDatePassed = (today: Date, targetDate?: Date | null) => {
+  if (!targetDate) {
+    return false;
+  }
+
+  return today > stripTime(targetDate);
+};
+
 export async function GET(_: Request, { params }: Params) {
   try {
     const { id } = await params;
@@ -72,7 +86,16 @@ export async function POST(request: Request, { params }: Params) {
     const { id } = await params;
     const project = await prisma.project.findUnique({
       where: { id },
-      select: { id: true, leaderId: true },
+      select: {
+        id: true,
+        leaderId: true,
+        callRound: {
+          select: {
+            projectEndDate: true,
+            projectLockDate: true,
+          },
+        },
+      },
     });
 
     if (!project) {
@@ -106,6 +129,49 @@ export async function POST(request: Request, { params }: Params) {
           fields: mapZodError(parsed.error),
         },
         { status: 400 }
+      );
+    }
+
+    const today = stripTime(new Date());
+    const submissionLockDate = project.callRound?.projectLockDate ?? project.callRound?.projectEndDate ?? null;
+
+    if (isDatePassed(today, submissionLockDate)) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: "Đã quá hạn nộp báo cáo cho đề tài này.",
+        },
+        { status: 400 }
+      );
+    }
+
+    if (isDatePassed(today, parsed.data.toDate ?? null)) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: "Báo cáo đã quá hạn nộp.",
+        },
+        { status: 400 }
+      );
+    }
+
+    const duplicateReport = await prisma.progressReport.findFirst({
+      where: {
+        projectId: id,
+        ...(parsed.data.week !== null && parsed.data.week !== undefined
+          ? { week: parsed.data.week }
+          : { periodLabel: parsed.data.periodLabel }),
+      },
+      select: { id: true },
+    });
+
+    if (duplicateReport) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: "Báo cáo đã được nộp, chỉ có thể xem và không được chỉnh sửa.",
+        },
+        { status: 409 }
       );
     }
 

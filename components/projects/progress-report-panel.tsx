@@ -1,7 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { toast } from 'sonner';
+import axios from 'axios';
 import { useAuthSession } from '@/hooks/useAuth';
 import { useProjects } from '@/hooks/useProjects';
 import { useProgressReports, useCreateProgressReport, useReviewProgressReport } from '@/hooks/useProjectOperations';
@@ -53,6 +54,74 @@ type TemplateItem = {
     orderIndex: number;
 };
 
+type TemplateWeekRange = {
+    itemId: string;
+    fromDate: Date;
+    toDate: Date;
+    isFutureWeek: boolean;
+    exceedsProjectEnd: boolean;
+};
+
+const stripTime = (date: Date): Date => {
+    const value = new Date(date);
+    value.setHours(0, 0, 0, 0);
+    return value;
+};
+
+const addDays = (date: Date, days: number): Date => {
+    const value = new Date(date);
+    value.setDate(value.getDate() + days);
+    return value;
+};
+
+const formatDateInput = (date: Date): string => {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+};
+
+const formatDisplayDate = (date?: Date | string | null): string => {
+    if (!date) {
+        return 'Chưa cập nhật';
+    }
+
+    const parsedDate = date instanceof Date ? date : new Date(date);
+    if (Number.isNaN(parsedDate.getTime())) {
+        return 'Chưa cập nhật';
+    }
+
+    return parsedDate.toLocaleDateString('vi-VN');
+};
+
+const isDatePassed = (currentDate: Date, targetDate?: Date | string | null): boolean => {
+    if (!targetDate) {
+        return false;
+    }
+
+    const parsedDate = targetDate instanceof Date ? targetDate : new Date(targetDate);
+    if (Number.isNaN(parsedDate.getTime())) {
+        return false;
+    }
+
+    return currentDate > stripTime(parsedDate);
+};
+
+const inferWeeksFromLabel = (label: string): number => {
+    const weekNumbers = (label.match(/\d+/g) ?? []).map((value) => Number(value));
+    if (weekNumbers.length < 2) {
+        return 1;
+    }
+
+    const first = weekNumbers[0];
+    const last = weekNumbers[weekNumbers.length - 1];
+    if (!Number.isFinite(first) || !Number.isFinite(last) || last < first) {
+        return 1;
+    }
+
+    return last - first + 1;
+};
+
 export function ProgressReportPanel({ projectId }: ProgressReportPanelProps) {
     const { data: session } = useAuthSession();
     const { data: projects = [] } = useProjects();
@@ -63,17 +132,60 @@ export function ProgressReportPanel({ projectId }: ProgressReportPanelProps) {
     const reviewMutation = useReviewProgressReport(projectId);
 
     // Get template items from project's callRound
-    const templateItems: TemplateItem[] =
-        project?.callRound?.template?.items?.map((item) => ({
-            id: item.id,
-            weekNumber: item.weekNumber,
-            weekLabel: item.weekLabel,
-            taskDescription: item.taskDescription,
-            contentGuideline: item.contentGuideline ?? null,
-            expectedResult: item.expectedResult ?? null,
-            orderIndex: item.orderIndex,
-        })) ?? [];
+    const templateItems: TemplateItem[] = useMemo(
+        () =>
+            (project?.callRound?.template?.items ?? [])
+                .map((item) => ({
+                    id: item.id,
+                    weekNumber: item.weekNumber,
+                    weekLabel: item.weekLabel,
+                    taskDescription: item.taskDescription,
+                    contentGuideline: item.contentGuideline ?? null,
+                    expectedResult: item.expectedResult ?? null,
+                    orderIndex: item.orderIndex,
+                }))
+                .sort((a, b) => a.orderIndex - b.orderIndex),
+        [project?.callRound?.template?.items],
+    );
     const hasTemplate = templateItems.length > 0;
+    const projectStartDate = stripTime(
+        project?.callRound?.projectStartDate ??
+            project?.callRound?.registrationStartDate ??
+            project?.createdAt ??
+            new Date(),
+    );
+    const projectEndDate = project?.callRound?.projectEndDate
+        ? stripTime(new Date(project.callRound.projectEndDate))
+        : null;
+
+    const templateWeekRanges = useMemo<TemplateWeekRange[]>(() => {
+        const today = stripTime(new Date());
+        let currentFromDate = projectStartDate;
+
+        return templateItems.map((item, index) => {
+            const nextItem = templateItems[index + 1];
+            const currentWeekSpan = nextItem
+                ? Math.max(1, nextItem.weekNumber - item.weekNumber)
+                : Math.max(1, inferWeeksFromLabel(item.weekLabel));
+            const toDate = addDays(currentFromDate, currentWeekSpan * 7 - 1);
+
+            const range: TemplateWeekRange = {
+                itemId: item.id,
+                fromDate: currentFromDate,
+                toDate,
+                isFutureWeek: today < currentFromDate,
+                exceedsProjectEnd: projectEndDate ? toDate > projectEndDate : false,
+            };
+
+            currentFromDate = addDays(toDate, 1);
+            return range;
+        });
+    }, [projectEndDate, projectStartDate, templateItems]);
+
+    const templateWeekRangeMap = useMemo(
+        () => new Map(templateWeekRanges.map((range) => [range.itemId, range])),
+        [templateWeekRanges],
+    );
 
     // States for form - Dynamic based on template
     const [selectedTemplateItem, setSelectedTemplateItem] = useState<TemplateItem | null>(null);
@@ -106,9 +218,46 @@ export function ProgressReportPanel({ projectId }: ProgressReportPanelProps) {
 
     const typedProject = project as Project;
     const instructorDisplay =
-        typedProject.instructor?.name || typedProject.instructorId || typedProject.deanReviewer?.name || 'Chưa phân công';
+        typedProject.instructor?.name ||
+        typedProject.instructorId ||
+        typedProject.deanReviewer?.name ||
+        'Chưa phân công';
     const callRoundDisplay = typedProject.callRound?.name || 'Chưa gắn đợt đề tài';
     const templateDisplay = typedProject.callRound?.template?.name || 'Có sẵn';
+    const callRoundMilestones = [
+        {
+            label: 'Ngày bắt đầu đăng ký',
+            value: typedProject.callRound?.registrationStartDate,
+        },
+        {
+            label: 'Ngày kết thúc đăng ký',
+            value: typedProject.callRound?.registrationEndDate,
+        },
+        {
+            label: 'Ngày bắt đầu đề tài',
+            value: typedProject.callRound?.projectStartDate,
+        },
+        {
+            label: 'Ngày kết thúc đề tài',
+            value: typedProject.callRound?.projectEndDate,
+        },
+        {
+            label: 'Ngày bắt đầu báo cáo',
+            value: typedProject.callRound?.reportingStartDate,
+        },
+        {
+            label: 'Hạn phản biện',
+            value: typedProject.callRound?.reviewDeadline,
+        },
+        {
+            label: 'Ngày bảo vệ',
+            value: typedProject.callRound?.defenseDate,
+        },
+        {
+            label: 'Ngày khóa đề tài',
+            value: typedProject.callRound?.projectLockDate,
+        },
+    ];
 
     const isLeader = session?.userId === project.leaderId;
     const isMentor =
@@ -116,6 +265,16 @@ export function ProgressReportPanel({ projectId }: ProgressReportPanelProps) {
         session?.role === 'ADMIN' ||
         session?.role === 'LEADER' ||
         session?.role === 'LECTURER';
+    const today = stripTime(new Date());
+    const reportLockDate = typedProject.callRound?.projectLockDate ?? typedProject.callRound?.projectEndDate ?? null;
+    const isGlobalSubmissionLocked = isDatePassed(today, reportLockDate);
+    const hasSubmittedInNonTemplateMode = !hasTemplate && reports.length > 0;
+    const selectedTemplateRange = selectedTemplateItem
+        ? (templateWeekRangeMap.get(selectedTemplateItem.id) ?? null)
+        : null;
+    const isSelectedTemplatePastDeadline =
+        selectedTemplateRange !== null ? isDatePassed(today, selectedTemplateRange.toDate) : false;
+    const isFormReadOnly = isGlobalSubmissionLocked || hasSubmittedInNonTemplateMode || isSelectedTemplatePastDeadline;
 
     const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
@@ -145,17 +304,41 @@ export function ProgressReportPanel({ projectId }: ProgressReportPanelProps) {
     };
 
     const handleSelectTemplateItem = (item: TemplateItem) => {
+        if (isGlobalSubmissionLocked) {
+            toast.error('Đã quá hạn nộp báo cáo của đề tài.');
+            return;
+        }
+
+        if (reports.some((report) => report.week === item.weekNumber)) {
+            return;
+        }
+
+        const selectedRange = templateWeekRangeMap.get(item.id);
+        if (!selectedRange) {
+            return;
+        }
+
+        if (isDatePassed(today, selectedRange.toDate)) {
+            toast.error('Tuần này đã quá hạn nộp báo cáo.');
+            return;
+        }
+
         setSelectedTemplateItem(item);
         setTasks(item.taskDescription); // Pre-fill from template
         setPerformedContent('');
         setResults('');
         setReportContent('');
         setFileUrl('');
-        setFromDate('');
-        setToDate('');
+        setFromDate(formatDateInput(selectedRange.fromDate));
+        setToDate(formatDateInput(selectedRange.toDate));
     };
 
     const handleCreate = () => {
+        if (isFormReadOnly) {
+            toast.error('Báo cáo đang ở chế độ chỉ xem, không thể chỉnh sửa hoặc nộp mới.');
+            return;
+        }
+
         if (!fromDate || !toDate) {
             toast.error('Vui lòng chọn ngày tháng');
             return;
@@ -192,7 +375,33 @@ export function ProgressReportPanel({ projectId }: ProgressReportPanelProps) {
                     setFromDate('');
                     setToDate('');
                 },
-                onError: () => toast.error('Có lỗi xảy ra khi nộp'),
+                onError: (error: unknown) => {
+                    if (axios.isAxiosError(error)) {
+                        const serverMessage =
+                            (
+                                error.response?.data as
+                                    | { error?: string; message?: string; fields?: Record<string, string[]> }
+                                    | undefined
+                            )?.error ||
+                            (
+                                error.response?.data as
+                                    | { error?: string; message?: string; fields?: Record<string, string[]> }
+                                    | undefined
+                            )?.message;
+
+                        if (serverMessage) {
+                            toast.error(serverMessage);
+                            return;
+                        }
+                    }
+
+                    if (error instanceof Error) {
+                        toast.error(error.message);
+                        return;
+                    }
+
+                    toast.error('Có lỗi xảy ra khi nộp');
+                },
             },
         );
     };
@@ -260,6 +469,17 @@ export function ProgressReportPanel({ projectId }: ProgressReportPanelProps) {
                             </p>
                         </div>
                     )}
+                    <div className="md:col-span-2 border-t pt-4 mt-1">
+                        <Label className="text-muted-foreground">Mốc thời gian:</Label>
+                        <div className="mt-2 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                            {callRoundMilestones.map((milestone) => (
+                                <div key={milestone.label}>
+                                    <Label className="text-muted-foreground">{milestone.label}:</Label>
+                                    <p className="font-medium">{formatDisplayDate(milestone.value)}</p>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
                 </CardContent>
             </Card>
 
@@ -275,6 +495,17 @@ export function ProgressReportPanel({ projectId }: ProgressReportPanelProps) {
                         </CardDescription>
                     </CardHeader>
                     <CardContent className="pt-6 space-y-4">
+                        {isGlobalSubmissionLocked && (
+                            <div className="rounded-md border border-destructive/40 bg-destructive/5 p-3 text-sm text-destructive">
+                                Đã quá hạn nộp báo cáo của đề tài, hệ thống chỉ cho phép xem.
+                            </div>
+                        )}
+                        {hasSubmittedInNonTemplateMode && (
+                            <div className="rounded-md border border-amber-300 bg-amber-50 p-3 text-sm text-amber-800">
+                                Bạn đã nộp báo cáo. Ở trạng thái này chỉ được xem, không được chỉnh sửa.
+                            </div>
+                        )}
+
                         {/* Template-based Selection */}
                         {hasTemplate ? (
                             <>
@@ -286,27 +517,65 @@ export function ProgressReportPanel({ projectId }: ProgressReportPanelProps) {
                                         {templateItems.map((item) => {
                                             const isSelected = selectedTemplateItem?.id === item.id;
                                             const alreadyReported = reports.some((r) => r.week === item.weekNumber);
+                                            const weekRange = templateWeekRangeMap.get(item.id);
+                                            const isFutureWeek = weekRange?.isFutureWeek ?? false;
+                                            const exceedsProjectEnd = weekRange?.exceedsProjectEnd ?? false;
+                                            const isPastWeekDeadline = weekRange
+                                                ? isDatePassed(today, weekRange.toDate)
+                                                : false;
+                                            const isDisabledByDate =
+                                                isGlobalSubmissionLocked ||
+                                                isFutureWeek ||
+                                                exceedsProjectEnd ||
+                                                isPastWeekDeadline;
+                                            const isDisabled = alreadyReported || isDisabledByDate;
 
                                             return (
                                                 <button
                                                     key={item.id}
                                                     type="button"
                                                     onClick={() => handleSelectTemplateItem(item)}
-                                                    disabled={alreadyReported}
+                                                    disabled={isDisabled}
                                                     className={`
                                                         relative p-4 border-2 rounded-lg text-left transition-all
-                                                        ${isSelected ? 'border-primary bg-primary/5' : 'border-border hover:border-primary/50'}
-                                                        ${alreadyReported ? 'opacity-50 cursor-not-allowed bg-muted' : 'cursor-pointer'}
+                                                        ${isSelected ? 'border-primary bg-primary/5' : 'border-border'}
+                                                        ${isDisabled ? 'opacity-50 cursor-not-allowed bg-muted' : 'cursor-pointer hover:border-primary/50'}
                                                     `}
                                                 >
                                                     <div className="flex items-start justify-between mb-2">
                                                         <div className="font-semibold text-sm">{item.weekLabel}</div>
-                                                        {alreadyReported && (
-                                                            <Badge variant="secondary" className="text-xs">
-                                                                Đã nộp
-                                                            </Badge>
-                                                        )}
+                                                        <div className="flex flex-wrap items-center justify-end gap-1">
+                                                            {alreadyReported && (
+                                                                <Badge variant="secondary" className="text-xs">
+                                                                    Đã nộp
+                                                                </Badge>
+                                                            )}
+                                                            {!alreadyReported && isFutureWeek && (
+                                                                <Badge variant="outline" className="text-xs">
+                                                                    Chưa đến tuần
+                                                                </Badge>
+                                                            )}
+                                                            {!alreadyReported && !isFutureWeek && exceedsProjectEnd && (
+                                                                <Badge variant="destructive" className="text-xs">
+                                                                    Quá hạn đề tài
+                                                                </Badge>
+                                                            )}
+                                                            {!alreadyReported &&
+                                                                !isFutureWeek &&
+                                                                !exceedsProjectEnd &&
+                                                                isPastWeekDeadline && (
+                                                                    <Badge variant="destructive" className="text-xs">
+                                                                        Quá hạn nộp
+                                                                    </Badge>
+                                                                )}
+                                                        </div>
                                                     </div>
+                                                    {weekRange && (
+                                                        <p className="text-[11px] text-muted-foreground mb-2">
+                                                            {weekRange.fromDate.toLocaleDateString('vi-VN')} -{' '}
+                                                            {weekRange.toDate.toLocaleDateString('vi-VN')}
+                                                        </p>
+                                                    )}
                                                     <p className="text-xs text-muted-foreground line-clamp-2">
                                                         {item.taskDescription}
                                                     </p>
@@ -388,13 +657,19 @@ export function ProgressReportPanel({ projectId }: ProgressReportPanelProps) {
                                             type="date"
                                             value={fromDate}
                                             onChange={(e) => setFromDate(e.target.value)}
+                                            disabled={isFormReadOnly}
                                         />
                                     </div>
                                     <div className="space-y-2">
                                         <Label>
                                             Đến ngày <span className="text-destructive">*</span>
                                         </Label>
-                                        <Input type="date" value={toDate} onChange={(e) => setToDate(e.target.value)} />
+                                        <Input
+                                            type="date"
+                                            value={toDate}
+                                            onChange={(e) => setToDate(e.target.value)}
+                                            disabled={isFormReadOnly}
+                                        />
                                     </div>
                                 </div>
 
@@ -405,34 +680,48 @@ export function ProgressReportPanel({ projectId }: ProgressReportPanelProps) {
                                         onChange={(e) => setTasks(e.target.value)}
                                         placeholder="Nhập các công việc đã được giao..."
                                         rows={3}
+                                        disabled={isFormReadOnly}
                                     />
                                 </div>
 
                                 <div className="space-y-2">
                                     <Label>Nội dung thực hiện</Label>
                                     <div className="border bg-background rounded-md overflow-hidden p-1">
-                                        <RichTextEditor value={performedContent} onChange={setPerformedContent} />
+                                        <RichTextEditor
+                                            value={performedContent}
+                                            onChange={isFormReadOnly ? () => {} : setPerformedContent}
+                                        />
                                     </div>
                                 </div>
 
                                 <div className="space-y-2">
                                     <Label>Kết quả đạt được</Label>
                                     <div className="border bg-background rounded-md overflow-hidden p-1">
-                                        <RichTextEditor value={results} onChange={setResults} />
+                                        <RichTextEditor
+                                            value={results}
+                                            onChange={isFormReadOnly ? () => {} : setResults}
+                                        />
                                     </div>
                                 </div>
 
                                 <div className="space-y-2">
                                     <Label>Nội dung báo cáo chi tiết</Label>
                                     <div className="border bg-background rounded-md overflow-hidden p-1">
-                                        <RichTextEditor value={reportContent} onChange={setReportContent} />
+                                        <RichTextEditor
+                                            value={reportContent}
+                                            onChange={isFormReadOnly ? () => {} : setReportContent}
+                                        />
                                     </div>
                                 </div>
 
                                 <div className="space-y-2">
                                     <Label>File đính kèm báo cáo</Label>
                                     <div className="flex items-center gap-4">
-                                        <Input type="file" onChange={handleFileUpload} disabled={isUploading} />
+                                        <Input
+                                            type="file"
+                                            onChange={handleFileUpload}
+                                            disabled={isUploading || isFormReadOnly}
+                                        />
                                         {fileUrl && (
                                             <a
                                                 href={fileUrl}
@@ -447,10 +736,20 @@ export function ProgressReportPanel({ projectId }: ProgressReportPanelProps) {
 
                                 <Button
                                     onClick={handleCreate}
-                                    disabled={createMutation.isPending || isUploading || !fromDate || !toDate}
+                                    disabled={
+                                        createMutation.isPending ||
+                                        isUploading ||
+                                        !fromDate ||
+                                        !toDate ||
+                                        isFormReadOnly
+                                    }
                                     className="w-full"
                                 >
-                                    {createMutation.isPending ? 'Đang gửi...' : 'Nộp báo cáo tuần'}
+                                    {createMutation.isPending
+                                        ? 'Đang gửi...'
+                                        : isFormReadOnly
+                                          ? 'Chỉ xem - Không thể chỉnh sửa'
+                                          : 'Nộp báo cáo tuần'}
                                 </Button>
                             </>
                         )}

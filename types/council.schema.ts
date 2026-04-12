@@ -122,7 +122,7 @@ export const createCouncilRequestSchema = z.object({
       councilMemberId: z.string(),
       role: z.string().optional(),
     })
-  ).min(1, 'Phải có ít nhất 1 thành viên'),
+  ).min(1, 'Phải có ít nhất 1 thành viên').max(3, 'Tối đa 3 thành viên'),
 });
 
 export type CreateCouncilRequest = z.infer<typeof createCouncilRequestSchema>;
@@ -135,7 +135,7 @@ export const updateCouncilRequestSchema = z.object({
       councilMemberId: z.string(),
       role: z.string().optional(),
     })
-  ).min(1, 'Phải có ít nhất 1 thành viên').optional(),
+  ).min(1, 'Phải có ít nhất 1 thành viên').max(3, 'Tối đa 3 thành viên').optional(),
 });
 
 export type UpdateCouncilRequest = z.infer<typeof updateCouncilRequestSchema>;
@@ -194,6 +194,38 @@ export const lecturerCouncilItemSchema = z.object({
 export const lecturerCouncilListSchema = z.array(lecturerCouncilItemSchema);
 
 export type LecturerCouncilItem = z.infer<typeof lecturerCouncilItemSchema>;
+
+export const studentCouncilItemSchema = z.object({
+  projectAssignmentId: z.string(),
+  projectRegistrationId: z.string(),
+  projectTitle: z.string(),
+  participationRole: z.enum(['OWNER', 'TEAM_MEMBER']),
+  assignedAt: z.coerce.date(),
+  council: z.object({
+    id: z.string(),
+    name: z.string(),
+    description: z.string().nullable(),
+    callRoundId: z.string(),
+    callRoundName: z.string(),
+    defenseDate: z.coerce.date().nullable().optional(),
+    defenseLocation: z.string().nullable().optional(),
+    memberCount: z.number(),
+    projectCount: z.number(),
+    members: z.array(
+      z.object({
+        id: z.string(),
+        name: z.string(),
+        email: z.string().email().nullable().optional(),
+        code: z.string().nullable().optional(),
+        role: z.string().nullable().optional(),
+      })
+    ),
+  }),
+});
+
+export const studentCouncilListSchema = z.array(studentCouncilItemSchema);
+
+export type StudentCouncilItem = z.infer<typeof studentCouncilItemSchema>;
 
 export const quickAddCouncilsInputSchema = z.object({
   callRoundId: z.string().min(1),

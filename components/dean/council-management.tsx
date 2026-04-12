@@ -131,8 +131,8 @@ function CreateCouncilDialog({
             toast.error('Vui lòng nhập tên hội đồng');
             return;
         }
-        if (selectedMembers.length < 3) {
-            toast.error('Vui lòng chọn đủ 3 thành viên');
+        if (selectedMembers.length === 0) {
+            toast.error('Vui lòng chọn ít nhất 1 thành viên');
             return;
         }
 
@@ -174,7 +174,7 @@ function CreateCouncilDialog({
             <DialogContent className="max-w-2xl sm:max-w-1/2">
                 <DialogHeader>
                     <DialogTitle>Tạo hội đồng mới</DialogTitle>
-                    <DialogDescription>Nhập thông tin và chọn 3 thành viên cho hội đồng</DialogDescription>
+                    <DialogDescription>Nhập thông tin và chọn tối đa 3 thành viên cho hội đồng</DialogDescription>
                 </DialogHeader>
                 <div className="space-y-4">
                     {/* Council Info */}
@@ -307,7 +307,7 @@ function CreateCouncilDialog({
                     </DialogClose>
                     <Button
                         onClick={handleCreate}
-                        disabled={createCouncilMutation.isPending || selectedMembers.length < 3 || !councilName.trim()}
+                        disabled={createCouncilMutation.isPending || selectedMembers.length === 0 || !councilName.trim()}
                     >
                         {createCouncilMutation.isPending ? (
                             <>
@@ -711,6 +711,11 @@ export function CouncilManagement() {
     };
 
     const handleOpenEditCouncil = (council: CouncilWithRelations) => {
+        if (isCouncilListLocked) {
+            toast.warning('Đợt đề tài đã hoàn tất công bố hội đồng, chỉ có thể xem thông tin');
+            return;
+        }
+
         setEditingCouncilId(council.id);
         setEditCouncilName(council.name);
         setEditCouncilDescription(council.description || '');
@@ -764,6 +769,11 @@ export function CouncilManagement() {
     };
 
     const handleDeleteCouncil = (council: CouncilWithRelations) => {
+        if (isCouncilListLocked) {
+            toast.warning('Đợt đề tài đã hoàn tất công bố hội đồng, không thể xóa hội đồng');
+            return;
+        }
+
         const confirmed = window.confirm(
             `Bạn có chắc chắn muốn xóa ${council.name}?\nTất cả phân công thành viên và đề tài trong hội đồng này sẽ bị xóa.`,
         );
@@ -843,6 +853,7 @@ export function CouncilManagement() {
 
     const selectedCallRound = approvedCallRounds.find((cr: { id: string }) => cr.id === selectedCallRoundId);
     const detailCouncil = councils?.find((council) => council.id === detailCouncilId) ?? null;
+    const isCouncilListLocked = Boolean(selectedCallRound?.isLocked);
 
  
     const handleCallRoundChange = (value: string) => {
@@ -1058,7 +1069,7 @@ export function CouncilManagement() {
                                 Thành viên Hội đồng
                             </CardTitle>
                             <CardDescription>
-                                {selectedCallRound?.name} - {pagination?.total || 0} thành viên
+                                {selectedCallRound?.name} - {pagination?.total || 0} thành viên đã đồng ý tham gia
                             </CardDescription>
                         </div>
                         <div className="flex gap-2">
@@ -1244,8 +1255,8 @@ export function CouncilManagement() {
                         ) : councilMembers.length === 0 ? (
                             <div className="text-center py-12 border border-dashed rounded-lg">
                                 <Users className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-                                <p className="text-muted-foreground">Chưa có thành viên nào trong hội đồng</p>
-                                <p className="text-sm text-muted-foreground mt-1">Nhấn "Thêm thành viên" để bắt đầu</p>
+                                <p className="text-muted-foreground">Chưa có thành viên nào đã đồng ý tham gia</p>
+                                <p className="text-sm text-muted-foreground mt-1">Nhấn "Thêm thành viên" để cập nhật danh sách</p>
                             </div>
                         ) : (
                             <div className="space-y-4">
@@ -1358,6 +1369,11 @@ export function CouncilManagement() {
                                 Danh sách Hội đồng ({councils?.length || 0} hội đồng)
                             </CardTitle>
                             <CardDescription>Các hội đồng đã được phân công thành viên và đề tài</CardDescription>
+                            {isCouncilListLocked && (
+                                <Badge variant="secondary" className="mt-2">
+                                    Đã hoàn tất công bố hội đồng - chỉ xem thông tin
+                                </Badge>
+                            )}
                         </div>
                         <div className="flex items-center gap-2">
                             <QuickAddCouncilsDialog callRoundId={selectedCallRoundId} />
@@ -1449,23 +1465,27 @@ export function CouncilManagement() {
                                                         <Eye className="h-4 w-4 mr-1" />
                                                         Chi tiết
                                                     </Button>
-                                                    <Button
-                                                        variant="outline"
-                                                        size="sm"
-                                                        onClick={() => handleOpenEditCouncil(council)}
-                                                    >
-                                                        <Pencil className="h-4 w-4 mr-1" />
-                                                        Sửa
-                                                    </Button>
-                                                    <Button
-                                                        variant="destructive"
-                                                        size="sm"
-                                                        onClick={() => handleDeleteCouncil(council)}
-                                                        disabled={deleteCouncilMutation.isPending}
-                                                    >
-                                                        <Trash2 className="h-4 w-4 mr-1" />
-                                                        Xóa
-                                                    </Button>
+                                                    {!isCouncilListLocked && (
+                                                        <>
+                                                            <Button
+                                                                variant="outline"
+                                                                size="sm"
+                                                                onClick={() => handleOpenEditCouncil(council)}
+                                                            >
+                                                                <Pencil className="h-4 w-4 mr-1" />
+                                                                Sửa
+                                                            </Button>
+                                                            <Button
+                                                                variant="destructive"
+                                                                size="sm"
+                                                                onClick={() => handleDeleteCouncil(council)}
+                                                                disabled={deleteCouncilMutation.isPending}
+                                                            >
+                                                                <Trash2 className="h-4 w-4 mr-1" />
+                                                                Xóa
+                                                            </Button>
+                                                        </>
+                                                    )}
                                                 </div>
                                             </TableCell>
                                         </TableRow>

@@ -118,6 +118,7 @@ export async function GET(req: Request) {
         callRound: {
           select: {
             name: true,
+            projectLockDate: true,
           },
         },
       },

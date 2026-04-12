@@ -35,7 +35,7 @@ type TeamMemberPayload = {
   name: string;
   role: string;
   studentId?: string;
-  invitationStatus?: "PENDING" | "ACCEPTED" | "REJECTED";
+  invitationStatus?: "PENDING" | "ACCEPTED" | "REJECTED" | "CANCELED";
   invitedAt?: Date | string;
   respondedAt?: Date | string | null;
 };
@@ -363,7 +363,7 @@ export async function POST(request: Request) {
           userId: inviteeId,
           type: "REGISTRATION_STATUS_CHANGE" as const,
           title: "Bạn được mời tham gia nhóm đề tài",
-          message: `Bạn vừa được thêm vào nhóm của đề tài \"${created.title}\". Vui lòng xác nhận tham gia.`,
+          message: `Bạn vừa được thêm vào nhóm của đề tài \"${created.title}\". Vui lòng xác nhận tham gia trong vòng 1 ngày, quá hạn lời mời sẽ tự động hủy.`,
           link: "/student/team-invitations",
           metadata: {
             registrationId: created.id,

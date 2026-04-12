@@ -4,6 +4,7 @@ import type {
     AssignProjectsToCouncilInput,
     FinalizeCouncilAssignmentsInput,
     UnassignProjectsFromCouncilInput,
+    UpdateCouncilDefenseLocationInput,
 } from '@/types/council-project-assignment.schema';
 
 export const councilProjectAssignmentKeys = {
@@ -59,6 +60,23 @@ export function useFinalizeCouncilProjectAssignments() {
             });
             queryClient.invalidateQueries({ queryKey: ['councils'] });
             queryClient.invalidateQueries({ queryKey: ['lecturer-councils'] });
+        },
+    });
+}
+
+export function useUpdateCouncilDefenseLocation() {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: (payload: UpdateCouncilDefenseLocationInput) =>
+            councilProjectAssignmentsApi.updateDefenseLocation(payload),
+        onSuccess: (_, variables) => {
+            queryClient.invalidateQueries({
+                queryKey: councilProjectAssignmentKeys.byCallRound(variables.callRoundId),
+            });
+            queryClient.invalidateQueries({ queryKey: ['councils'] });
+            queryClient.invalidateQueries({ queryKey: ['lecturer-councils'] });
+            queryClient.invalidateQueries({ queryKey: ['my-councils'] });
         },
     });
 }

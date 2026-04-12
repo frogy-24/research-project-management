@@ -5,6 +5,7 @@ import {
     assignProjectsToCouncilSchema,
     finalizeCouncilAssignmentsSchema,
     unassignProjectsFromCouncilSchema,
+    updateCouncilDefenseLocationSchema,
 } from '@/types/council-project-assignment.schema';
 
 export async function GET(request: NextRequest) {
@@ -38,6 +39,11 @@ export async function GET(request: NextRequest) {
                 id: true,
                 name: true,
                 description: true,
+                callRound: {
+                    select: {
+                        contactInfo: true,
+                    },
+                },
                 _count: {
                     select: {
                         members: true,
@@ -47,6 +53,14 @@ export async function GET(request: NextRequest) {
             },
             orderBy: { name: 'asc' },
         });
+
+        const normalizedCouncils = councils.map((council) => ({
+            id: council.id,
+            name: council.name,
+            description: council.description,
+            defenseLocation: council.callRound.contactInfo,
+            _count: council._count,
+        }));
 
         const approvedProjects = await prisma.projectRegistration.findMany({
             where: {
@@ -76,7 +90,7 @@ export async function GET(request: NextRequest) {
             orderBy: { createdAt: 'asc' },
         });
 
-        return NextResponse.json({ councils, approvedProjects, isFinalized: callRound.isLocked });
+        return NextResponse.json({ councils: normalizedCouncils, approvedProjects, isFinalized: callRound.isLocked });
     } catch (error) {
         console.error('Error fetching council project assignments:', error);
         return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
@@ -247,6 +261,44 @@ export async function PATCH(request: NextRequest) {
         }
 
         const body = await request.json();
+
+        if (typeof body === 'object' && body !== null && 'defenseLocation' in body) {
+            const updateParsed = updateCouncilDefenseLocationSchema.safeParse(body);
+
+            if (!updateParsed.success) {
+                return NextResponse.json(
+                    { error: 'Invalid payload', fields: updateParsed.error.flatten().fieldErrors },
+                    { status: 400 },
+                );
+            }
+
+            const { callRoundId, defenseLocation } = updateParsed.data;
+
+            const callRound = await prisma.callRound.findUnique({
+                where: { id: callRoundId },
+                select: { id: true, approvalStatus: true },
+            });
+
+            if (!callRound) {
+                return NextResponse.json({ error: 'Call round not found' }, { status: 404 });
+            }
+
+            if (callRound.approvalStatus !== 'APPROVED') {
+                return NextResponse.json({ error: 'Call round must be APPROVED' }, { status: 400 });
+            }
+
+            const normalizedLocation = defenseLocation?.trim();
+
+            await prisma.callRound.update({
+                where: { id: callRoundId },
+                data: {
+                    contactInfo: normalizedLocation && normalizedLocation.length > 0 ? normalizedLocation : null,
+                },
+            });
+
+            return NextResponse.json({ success: true });
+        }
+
         const parsed = finalizeCouncilAssignmentsSchema.safeParse(body);
 
         if (!parsed.success) {

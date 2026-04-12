@@ -43,6 +43,14 @@ const callRoundTemplateSchema = z.object({
 const callRoundRelationSchema = z.object({
   id: z.string().cuid(),
   name: z.string(),
+  registrationStartDate: z.coerce.date().nullable().optional(),
+  registrationEndDate: z.coerce.date().nullable().optional(),
+  projectStartDate: z.coerce.date().nullable().optional(),
+  projectEndDate: z.coerce.date().nullable().optional(),
+  reportingStartDate: z.coerce.date().nullable().optional(),
+  reviewDeadline: z.coerce.date().nullable().optional(),
+  defenseDate: z.coerce.date().nullable().optional(),
+  projectLockDate: z.coerce.date().nullable().optional(),
   template: callRoundTemplateSchema.nullable().optional(),
 });
 

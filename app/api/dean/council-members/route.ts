@@ -24,12 +24,18 @@ export async function GET(request: NextRequest) {
 
         // Get total count
         const total = await prisma.callRoundCouncilMember.count({
-            where: { callRoundId },
+            where: {
+                callRoundId,
+                invitationStatus: 'ACCEPTED',
+            },
         });
 
         // Get paginated data
         const councilMembers = await prisma.callRoundCouncilMember.findMany({
-            where: { callRoundId },
+            where: {
+                callRoundId,
+                invitationStatus: 'ACCEPTED',
+            },
             include: {
                 councilMember: {
                     select: {
@@ -92,13 +98,45 @@ export async function POST(request: NextRequest) {
         });
 
         if (existing) {
-            return NextResponse.json({ error: 'Member already in council' }, { status: 400 });
+            if (existing.invitationStatus === 'ACCEPTED') {
+                return NextResponse.json({ error: 'Member already in council' }, { status: 400 });
+            }
+
+            const updated = await prisma.callRoundCouncilMember.update({
+                where: { id: existing.id },
+                data: {
+                    invitationStatus: 'ACCEPTED',
+                    respondedAt: new Date(),
+                },
+                include: {
+                    councilMember: {
+                        select: {
+                            id: true,
+                            name: true,
+                            email: true,
+                            code: true,
+                            majorId: true,
+                            major: {
+                                select: {
+                                    id: true,
+                                    code: true,
+                                    name: true,
+                                },
+                            },
+                        },
+                    },
+                },
+            });
+
+            return NextResponse.json(updated);
         }
 
         const councilMember = await prisma.callRoundCouncilMember.create({
             data: {
                 callRoundId,
                 councilMemberId,
+                invitationStatus: 'ACCEPTED',
+                respondedAt: new Date(),
             },
             include: {
                 councilMember: {
