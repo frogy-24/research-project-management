@@ -21,8 +21,46 @@ export async function GET(req: Request) {
 
     // DEAN: CHỈ thấy các call rounds do chính mình tạo
     // ADMIN/LEADER: thấy tất cả
+    // STUDENT: CHỈ thấy call rounds của khoa/ngành/lớp mình
     if (actorRole === "DEAN" && actorUserId) {
       whereClause.createdById = actorUserId;
+    } else if (actorRole === "STUDENT" && actorUserId) {
+      // Lấy thông tin student
+      const student = await prisma.user.findUnique({
+        where: { id: actorUserId },
+        select: {
+          departmentId: true,
+          majorId: true,
+          classId: true,
+        },
+      });
+
+      if (student) {
+        // Student chỉ thấy call rounds:
+        // 1. Được APPROVED
+        // 2. Thuộc department/major/class của student
+        whereClause.approvalStatus = "APPROVED";
+        whereClause.OR = [
+          // Call rounds có department của student
+          student.departmentId ? {
+            departments: {
+              some: { id: student.departmentId }
+            }
+          } : {},
+          // Call rounds có major của student
+          student.majorId ? {
+            majors: {
+              some: { id: student.majorId }
+            }
+          } : {},
+          // Call rounds có class của student
+          student.classId ? {
+            classes: {
+              some: { id: student.classId }
+            }
+          } : {},
+        ].filter(condition => Object.keys(condition).length > 0);
+      }
     }
 
     const callRounds = await prisma.callRound.findMany({

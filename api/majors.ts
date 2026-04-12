@@ -61,31 +61,31 @@ export const majorApi = {
     page?: number;
     limit?: number;
   }): Promise<PaginatedMajors> => {
-    const response = await api.get<ApiSuccess<MajorItem[]>>("/majors", { params });
+    const response = await api.get<PaginatedMajors>("/majors", { params });
     return {
       data: majorListSchema.parse(response.data.data),
       pagination: response.data.pagination ?? {
         page: 1,
         limit: 20,
-        total: response.data.data.length,
+        total: response.data.data?.length || 0,
         totalPages: 1,
       },
     };
   },
 
   getById: async (id: string): Promise<MajorItem> => {
-    const response = await api.get<ApiSuccess<MajorItem>>(`/majors/${id}`);
-    return majorItemSchema.parse(response.data.data);
+    const response = await api.get<MajorItem>(`/majors/${id}`);
+    return majorItemSchema.parse(response.data);
   },
 
   create: async (data: CreateMajorPayload): Promise<MajorItem> => {
-    const response = await api.post<ApiSuccess<MajorItem>>("/majors", data);
-    return majorItemSchema.parse(response.data.data);
+    const response = await api.post<MajorItem>("/majors", data);
+    return majorItemSchema.parse(response.data);
   },
 
   update: async (id: string, data: UpdateMajorPayload): Promise<MajorItem> => {
-    const response = await api.put<ApiSuccess<MajorItem>>(`/majors/${id}`, data);
-    return majorItemSchema.parse(response.data.data);
+    const response = await api.put<MajorItem>(`/majors/${id}`, data);
+    return majorItemSchema.parse(response.data);
   },
 
   delete: async (id: string): Promise<void> => {

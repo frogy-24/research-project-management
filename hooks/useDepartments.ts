@@ -5,10 +5,11 @@ export function useDepartments() {
   return useQuery({
     queryKey: ['departments'],
     queryFn: async () => {
-      const response = await fetch('/api/departments');
+      const response = await fetch('/api/departments?limit=1000');
       const data = await response.json();
       if (!response.ok) throw new Error(data.error || 'Failed to fetch departments');
-      return data.data;
+      // API returns { data: [...], pagination: {...} }
+      return data.data || [];
     },
   });
 }

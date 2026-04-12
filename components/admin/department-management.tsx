@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { Plus, Pencil, Trash2, Search } from "lucide-react";
 import { useDepartments, useCreateDepartment, useUpdateDepartment, useDeleteDepartment } from "@/hooks/useDepartments";
+import { useDebounce } from "@/hooks/useDebounce";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -40,6 +41,7 @@ export function DepartmentManagement() {
     description: "",
   });
   const [searchTerm, setSearchTerm] = useState("");
+  const debouncedSearchTerm = useDebounce(searchTerm, 300);
 
   const handleOpenDialog = (dept?: any) => {
     if (dept) {
@@ -83,11 +85,13 @@ export function DepartmentManagement() {
     }
   };
 
-  const filteredDepartments = departments.filter(
-    (d: any) =>
-      d.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      d.code.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredDepartments = useMemo(() => {
+    return departments.filter(
+      (d: any) =>
+        d.name.toLowerCase().includes(debouncedSearchTerm.toLowerCase()) ||
+        d.code.toLowerCase().includes(debouncedSearchTerm.toLowerCase())
+    );
+  }, [departments, debouncedSearchTerm]);
 
   return (
     <Card>

@@ -61,9 +61,9 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
       return NextResponse.json({ error: "Registration is already in this status" }, { status: 409 });
     }
 
-    // Only allow undo for previously approved registrations.
-    if (status === "PENDING" && existing.facultyStatus !== "APPROVED") {
-      return NextResponse.json({ error: "Only approved registrations can be reverted to pending" }, { status: 409 });
+    // Allow undo for both approved and rejected registrations.
+    if (status === "PENDING" && existing.facultyStatus !== "APPROVED" && existing.facultyStatus !== "REJECTED") {
+      return NextResponse.json({ error: "Only approved or rejected registrations can be reverted to pending" }, { status: 409 });
     }
 
     if (status === "APPROVED" && existing.instructorStatus !== "ACCEPTED") {

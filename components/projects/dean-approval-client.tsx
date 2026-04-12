@@ -498,6 +498,25 @@ export function DeanApprovalClient() {
                                                 </Button>
                                             )}
 
+                                            {req.facultyStatus === 'REJECTED' && !isPastLockDate(req.callRound?.projectLockDate) && (
+                                                <Button
+                                                    variant="secondary"
+                                                    size="sm"
+                                                    onClick={() =>
+                                                        mutation.mutate(
+                                                            { id: req.id, status: 'PENDING' },
+                                                            {
+                                                                onSuccess: () => toast.success('Đã hủy từ chối và chuyển về chờ duyệt'),
+                                                                onError: () => toast.error('Đã xảy ra lỗi khi cập nhật'),
+                                                            }
+                                                        )
+                                                    }
+                                                    disabled={mutation.isPending}
+                                                >
+                                                    Hủy từ chối
+                                                </Button>
+                                            )}
+
                                             {isPastLockDate(req.callRound?.projectLockDate) && (
                                                 <Badge variant="outline" className="text-muted-foreground">
                                                     Đã quá hạn chốt
