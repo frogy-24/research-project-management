@@ -105,8 +105,11 @@ export async function GET(request: Request) {
                 description: assignment.council.description,
                 callRoundId: assignment.council.callRound.id,
                 callRoundName: assignment.council.callRound.name,
-                defenseDate: assignment.council.callRound.reviewDeadline ?? assignment.council.callRound.projectEndDate,
-                defenseLocation: assignment.council.callRound.contactInfo,
+                defenseDate:
+                    assignment.council.defenseDate ??
+                    assignment.council.callRound.reviewDeadline ??
+                    assignment.council.callRound.projectEndDate,
+                defenseLocation: assignment.council.defenseLocation ?? assignment.council.callRound.contactInfo,
                 memberCount: assignment.council._count.members,
                 projectCount: assignment.council._count.projects,
                 members: assignment.council.members.map((member) => ({

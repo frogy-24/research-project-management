@@ -31,6 +31,25 @@ import {
     AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 
+const toDateTimeLocalValue = (value: Date | string | null | undefined): string => {
+    if (!value) {
+        return '';
+    }
+
+    const parsedDate = new Date(value);
+    if (Number.isNaN(parsedDate.getTime())) {
+        return '';
+    }
+
+    const year = parsedDate.getFullYear();
+    const month = String(parsedDate.getMonth() + 1).padStart(2, '0');
+    const day = String(parsedDate.getDate()).padStart(2, '0');
+    const hour = String(parsedDate.getHours()).padStart(2, '0');
+    const minute = String(parsedDate.getMinutes()).padStart(2, '0');
+
+    return `${year}-${month}-${day}T${hour}:${minute}`;
+};
+
 export function CouncilProjectAssignmentManagement() {
     const [selectedCallRoundId, setSelectedCallRoundId] = useState('');
     const [selectedCouncilId, setSelectedCouncilId] = useState('');
@@ -39,6 +58,7 @@ export function CouncilProjectAssignmentManagement() {
     const [selectedAssignedProjectIds, setSelectedAssignedProjectIds] = useState<string[]>([]);
     const [isFinalizeDialogOpen, setIsFinalizeDialogOpen] = useState(false);
     const [defenseLocationInput, setDefenseLocationInput] = useState('');
+    const [reportDateInput, setReportDateInput] = useState('');
 
     const { data: callRounds = [], isLoading: loadingCallRounds } = useCallRounds();
     const approvedCallRounds = useMemo(
@@ -54,6 +74,8 @@ export function CouncilProjectAssignmentManagement() {
     const councils = data?.councils ?? [];
     const approvedProjects = data?.approvedProjects ?? [];
     const isFinalized = data?.isFinalized ?? false;
+    const callRoundDefenseDate = data?.callRound?.defenseDate;
+    const callRoundDefenseLocation = data?.callRound?.defenseLocation ?? '';
 
     const unassignedProjects = useMemo(() => {
         const keyword = search.trim().toLowerCase();
@@ -91,8 +113,15 @@ export function CouncilProjectAssignmentManagement() {
     }, [approvedCallRounds, selectedCallRoundId]);
 
     useEffect(() => {
-        setDefenseLocationInput(selectedCouncil?.defenseLocation ?? '');
-    }, [selectedCouncil?.id, selectedCouncil?.defenseLocation]);
+        setDefenseLocationInput(selectedCouncil?.defenseLocation ?? callRoundDefenseLocation);
+        setReportDateInput(toDateTimeLocalValue(selectedCouncil?.defenseDate ?? callRoundDefenseDate));
+    }, [
+        selectedCouncil?.id,
+        selectedCouncil?.defenseDate,
+        selectedCouncil?.defenseLocation,
+        callRoundDefenseDate,
+        callRoundDefenseLocation,
+    ]);
 
     const handleToggleProject = (projectId: string) => {
         setSelectedProjectIds((prev) =>
@@ -111,6 +140,7 @@ export function CouncilProjectAssignmentManagement() {
             toast.error('Vui lòng chọn đợt đăng ký');
             return;
         }
+
         if (!selectedCouncilId) {
             toast.error('Vui lòng chọn hội đồng');
             return;
@@ -224,14 +254,21 @@ export function CouncilProjectAssignmentManagement() {
             return;
         }
 
+        if (isFinalized) {
+            toast.error('Đợt này đã hoàn tất phân công. Không thể chỉnh sửa.');
+            return;
+        }
+
         updateDefenseLocationMutation.mutate(
             {
                 callRoundId: selectedCallRoundId,
+                councilId: selectedCouncilId,
                 defenseLocation: defenseLocationInput,
+                defenseDate: reportDateInput ? new Date(reportDateInput) : null,
             },
             {
                 onSuccess: () => {
-                    toast.success('Đã lưu nơi bảo vệ');
+                    toast.success('Đã lưu ngày báo cáo và nơi bảo vệ');
                 },
                 onError: (error: unknown) => {
                     const message =
@@ -348,24 +385,30 @@ export function CouncilProjectAssignmentManagement() {
 
                     {selectedCouncilId && selectedCouncil && (
                         <div className="rounded-md border bg-muted/20 p-3 space-y-2">
-                            <p className="text-xs text-muted-foreground">Nơi bảo vệ</p>
-                            <div className="flex flex-col md:flex-row gap-2">
+                            <p className="text-xs text-muted-foreground">Ngày báo cáo và nơi bảo vệ</p>
+                            <div className="grid gap-2 md:grid-cols-[220px_1fr_auto]">
+                                <Input
+                                    type="datetime-local"
+                                    value={reportDateInput}
+                                    onChange={(event) => setReportDateInput(event.target.value)}
+                                    disabled={updateDefenseLocationMutation.isPending || isFinalized}
+                                />
                                 <Input
                                     value={defenseLocationInput}
                                     onChange={(event) => setDefenseLocationInput(event.target.value)}
                                     placeholder="Nhập nơi bảo vệ..."
-                                    disabled={updateDefenseLocationMutation.isPending}
+                                    disabled={updateDefenseLocationMutation.isPending || isFinalized}
                                 />
                                 <Button
                                     type="button"
                                     onClick={handleSaveDefenseLocation}
-                                    disabled={updateDefenseLocationMutation.isPending}
+                                    disabled={updateDefenseLocationMutation.isPending || isFinalized || !selectedCouncilId}
                                 >
-                                    {updateDefenseLocationMutation.isPending ? 'Đang lưu...' : 'Lưu nơi bảo vệ'}
+                                    {updateDefenseLocationMutation.isPending ? 'Đang lưu...' : 'Lưu lịch báo cáo'}
                                 </Button>
                             </div>
                             <p className="text-xs text-muted-foreground">
-                                Thông tin này áp dụng cho các hội đồng trong đợt đăng ký đã chọn.
+                                Lịch này áp dụng cho hội đồng đang chọn. Nếu chưa nhập, hệ thống dùng mặc định từ đợt đăng ký.
                             </p>
                         </div>
                     )}

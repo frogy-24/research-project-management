@@ -15,8 +15,25 @@ import {
     DialogHeader,
     DialogTitle,
 } from '@/components/ui/dialog';
-import { useCallRoundInvitations, useRespondToInvitation } from '@/hooks/useCallRoundInvitations';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import {
+    useCallRoundInvitationOptions,
+    useCallRoundInvitations,
+    useRespondToInvitation,
+} from '@/hooks/useCallRoundInvitations';
 import { format } from 'date-fns';
+
+function parseValidDate(value: unknown): Date | null {
+    if (!value) return null;
+    const date = new Date(value as string | number | Date);
+    return Number.isNaN(date.getTime()) ? null : date;
+}
+
+function formatDateTime(value: unknown, pattern = 'dd/MM/yyyy HH:mm'): string {
+    const date = parseValidDate(value);
+    if (!date) return '-';
+    return format(date, pattern);
+}
 
 function InvitationStatusBadge({ status }: { status: string }) {
     if (status === 'ACCEPTED') {
@@ -59,10 +76,8 @@ function InvitationCard({
     const isPending = invitation.invitationStatus === 'PENDING';
     const isAccepted = invitation.invitationStatus === 'ACCEPTED';
     const isRejected = invitation.invitationStatus === 'REJECTED';
-    const isExpired =
-        isPending &&
-        invitation.callRound.invitationDeadline &&
-        new Date(invitation.callRound.invitationDeadline) < new Date();
+    const invitationDeadline = parseValidDate(invitation.callRound.invitationDeadline);
+    const isExpired = isPending && invitationDeadline ? invitationDeadline.getTime() <= Date.now() : false;
 
     const handleConfirmAction = () => {
         if (!confirmDialog.action) return;
@@ -77,7 +92,7 @@ function InvitationCard({
                 onSuccess: () => {
                     setConfirmDialog({ open: false, action: null });
                 },
-            }
+            },
         );
     };
 
@@ -99,7 +114,9 @@ function InvitationCard({
                 </CardHeader>
                 <CardContent>
                     {invitation.callRound.description && (
-                        <p className="text-sm text-muted-foreground mb-4">{invitation.callRound.description}</p>
+                        <p className="text-sm text-muted-foreground mb-4 whitespace-pre-wrap">
+                            {invitation.callRound.description}
+                        </p>
                     )}
 
                     <div className="grid grid-cols-2 gap-4 mb-4">
@@ -108,8 +125,8 @@ function InvitationCard({
                             <div>
                                 <p className="text-xs text-muted-foreground">Đăng ký</p>
                                 <p className="font-medium">
-                                    {format(new Date(invitation.callRound.registrationStartDate), 'dd/MM/yyyy')} -{' '}
-                                    {format(new Date(invitation.callRound.registrationEndDate), 'dd/MM/yyyy')}
+                                    {formatDateTime(invitation.callRound.registrationStartDate, 'dd/MM/yyyy')} -{' '}
+                                    {formatDateTime(invitation.callRound.registrationEndDate, 'dd/MM/yyyy')}
                                 </p>
                             </div>
                         </div>
@@ -119,7 +136,7 @@ function InvitationCard({
                                 <div>
                                     <p className="text-xs text-muted-foreground">Bảo vệ</p>
                                     <p className="font-medium">
-                                        {format(new Date(invitation.callRound.defenseDate), 'dd/MM/yyyy')}
+                                        {formatDateTime(invitation.callRound.defenseDate, 'dd/MM/yyyy HH:mm')}
                                     </p>
                                 </div>
                             </div>
@@ -129,16 +146,14 @@ function InvitationCard({
                                 <Clock className="h-4 w-4 text-muted-foreground" />
                                 <div>
                                     <p className="text-xs text-muted-foreground">Hạn phản hồi</p>
-                                    <p className="font-medium">
-                                        {format(new Date(invitation.callRound.invitationDeadline), 'dd/MM/yyyy HH:mm')}
-                                    </p>
+                                    <p className="font-medium">{formatDateTime(invitation.callRound.invitationDeadline)}</p>
                                 </div>
                             </div>
                         )}
                     </div>
 
                     {isExpired && isPending && (
-                        <p className="text-sm text-red-500 mb-4">Đã hết hạn phản hồi. Lời mời đã tự động bị từ chối.</p>
+                        <p className="text-sm text-red-500 mb-4">Đã hết hạn phản hồi. Bạn không thể thay đổi trạng thái lời mời.</p>
                     )}
 
                     {isPending && !isExpired && (
@@ -212,9 +227,11 @@ function InvitationCard({
                                 'Bạn có chắc chắn muốn đồng ý tham gia đợt đăng ký này? Bạn có thể hủy sau nếu cần.'}
                             {confirmDialog.action === 'REJECTED' &&
                                 'Bạn có chắc chắn muốn từ chối lời mời này? Bạn có thể hủy sau nếu cần.'}
-                            {confirmDialog.action === 'PENDING' && isAccepted &&
+                            {confirmDialog.action === 'PENDING' &&
+                                isAccepted &&
                                 'Bạn có chắc chắn muốn hủy lời đồng ý? Trạng thái sẽ chuyển về "Chờ phản hồi".'}
-                            {confirmDialog.action === 'PENDING' && isRejected &&
+                            {confirmDialog.action === 'PENDING' &&
+                                isRejected &&
                                 'Bạn có chắc chắn muốn hủy lời từ chối? Trạng thái sẽ chuyển về "Chờ phản hồi".'}
                         </DialogDescription>
                     </DialogHeader>
@@ -241,9 +258,11 @@ function InvitationCard({
 }
 
 export function LecturerCallRoundInvitations() {
-    const { data, isLoading } = useCallRoundInvitations();
+    const [selectedCallRoundId, setSelectedCallRoundId] = React.useState<string>('');
+    const { data: options, isLoading: isLoadingOptions } = useCallRoundInvitationOptions();
+    const { data, isLoading } = useCallRoundInvitations(selectedCallRoundId, Boolean(selectedCallRoundId));
 
-    if (isLoading) {
+    if (isLoadingOptions) {
         return <div className="flex items-center justify-center h-96">Đang tải...</div>;
     }
 
@@ -269,78 +288,114 @@ export function LecturerCallRoundInvitations() {
                 )}
             </div>
 
-            <Tabs defaultValue="all" className="mt-4 flex flex-col">
-                <TabsList className="grid w-full grid-cols-3">
-                    <TabsTrigger value="all">Tất cả</TabsTrigger>
-                    <TabsTrigger value="instructor">
-                        <Users className="mr-1.5 h-3.5 w-3.5" />
-                        Giảng viên hướng dẫn
-                    </TabsTrigger>
-                    <TabsTrigger value="council">
-                        <Users className="mr-1.5 h-3.5 w-3.5" />
-                        Thành viên hội đồng
-                    </TabsTrigger>
-                </TabsList>
+            <Card>
+                <CardContent className="pt-6">
+                    <div className="grid gap-2 max-w-md">
+                        <p className="text-sm font-medium">Lọc theo đợt đăng ký</p>
+                        <Select value={selectedCallRoundId} onValueChange={setSelectedCallRoundId}>
+                            <SelectTrigger>
+                                <SelectValue placeholder="Chọn đợt đăng ký để tải lời mời" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                {options && options.length > 0 ? (
+                                    options.map((option) => (
+                                        <SelectItem key={option.id} value={option.id}>
+                                            {option.name}
+                                        </SelectItem>
+                                    ))
+                                ) : (
+                                    <SelectItem value="no-options" disabled>
+                                        Không có đợt đăng ký
+                                    </SelectItem>
+                                )}
+                            </SelectContent>
+                        </Select>
+                    </div>
+                </CardContent>
+            </Card>
 
-                <TabsContent value="all" className="mt-4">
-                    {instructorInvitations.length === 0 && councilMemberInvitations.length === 0 ? (
-                        <Card>
-                            <CardContent className="py-12 text-center text-muted-foreground">
-                                Chưa có lời mời nào
-                            </CardContent>
-                        </Card>
-                    ) : (
-                        <>
-                            {instructorInvitations.map((invitation) => (
-                                <InvitationCard
-                                    key={invitation.id}
-                                    invitation={invitation}
-                                    invitationType="INSTRUCTOR"
-                                />
-                            ))}
-                            {councilMemberInvitations.map((invitation) => (
+            {!selectedCallRoundId ? (
+                <Card>
+                    <CardContent className="py-12 text-center text-muted-foreground">
+                        Vui lòng chọn đợt đăng ký để xem lời mời
+                    </CardContent>
+                </Card>
+            ) : isLoading ? (
+                <div className="flex items-center justify-center h-96">Đang tải lời mời...</div>
+            ) : (
+                <Tabs defaultValue="all" className="mt-4 flex flex-col">
+                    <TabsList className="grid w-full grid-cols-3">
+                        <TabsTrigger value="all">Tất cả</TabsTrigger>
+                        <TabsTrigger value="instructor">
+                            <Users className="mr-1.5 h-3.5 w-3.5" />
+                            Giảng viên hướng dẫn
+                        </TabsTrigger>
+                        <TabsTrigger value="council">
+                            <Users className="mr-1.5 h-3.5 w-3.5" />
+                            Thành viên hội đồng
+                        </TabsTrigger>
+                    </TabsList>
+
+                    <TabsContent value="all" className="mt-4">
+                        {instructorInvitations.length === 0 && councilMemberInvitations.length === 0 ? (
+                            <Card>
+                                <CardContent className="py-12 text-center text-muted-foreground">
+                                    Chưa có lời mời nào
+                                </CardContent>
+                            </Card>
+                        ) : (
+                            <>
+                                {instructorInvitations.map((invitation) => (
+                                    <InvitationCard
+                                        key={invitation.id}
+                                        invitation={invitation}
+                                        invitationType="INSTRUCTOR"
+                                    />
+                                ))}
+                                {councilMemberInvitations.map((invitation) => (
+                                    <InvitationCard
+                                        key={invitation.id}
+                                        invitation={invitation}
+                                        invitationType="COUNCIL_MEMBER"
+                                    />
+                                ))}
+                            </>
+                        )}
+                    </TabsContent>
+
+                    <TabsContent value="instructor" className="mt-4">
+                        {instructorInvitations.length === 0 ? (
+                            <Card>
+                                <CardContent className="py-12 text-center text-muted-foreground">
+                                    Chưa có lời mời giảng viên hướng dẫn nào
+                                </CardContent>
+                            </Card>
+                        ) : (
+                            instructorInvitations.map((invitation) => (
+                                <InvitationCard key={invitation.id} invitation={invitation} invitationType="INSTRUCTOR" />
+                            ))
+                        )}
+                    </TabsContent>
+
+                    <TabsContent value="council" className="mt-4">
+                        {councilMemberInvitations.length === 0 ? (
+                            <Card>
+                                <CardContent className="py-12 text-center text-muted-foreground">
+                                    Chưa có lời mời thành viên hội đồng nào
+                                </CardContent>
+                            </Card>
+                        ) : (
+                            councilMemberInvitations.map((invitation) => (
                                 <InvitationCard
                                     key={invitation.id}
                                     invitation={invitation}
                                     invitationType="COUNCIL_MEMBER"
                                 />
-                            ))}
-                        </>
-                    )}
-                </TabsContent>
-
-                <TabsContent value="instructor" className="mt-4">
-                    {instructorInvitations.length === 0 ? (
-                        <Card>
-                            <CardContent className="py-12 text-center text-muted-foreground">
-                                Chưa có lời mời giảng viên hướng dẫn nào
-                            </CardContent>
-                        </Card>
-                    ) : (
-                        instructorInvitations.map((invitation) => (
-                            <InvitationCard key={invitation.id} invitation={invitation} invitationType="INSTRUCTOR" />
-                        ))
-                    )}
-                </TabsContent>
-
-                <TabsContent value="council" className="mt-4">
-                    {councilMemberInvitations.length === 0 ? (
-                        <Card>
-                            <CardContent className="py-12 text-center text-muted-foreground">
-                                Chưa có lời mời thành viên hội đồng nào
-                            </CardContent>
-                        </Card>
-                    ) : (
-                        councilMemberInvitations.map((invitation) => (
-                            <InvitationCard
-                                key={invitation.id}
-                                invitation={invitation}
-                                invitationType="COUNCIL_MEMBER"
-                            />
-                        ))
-                    )}
-                </TabsContent>
-            </Tabs>
+                            ))
+                        )}
+                    </TabsContent>
+                </Tabs>
+            )}
         </div>
     );
 }

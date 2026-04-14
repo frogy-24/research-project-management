@@ -2,9 +2,17 @@ import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { getActorRole, getActorUserId } from "@/lib/project-permissions";
 
+const isDeadlinePassed = (deadline: Date | null) => {
+  if (!deadline) return false;
+  return deadline.getTime() <= Date.now();
+};
+
 // GET: Get call round invitations for the current lecturer
 export async function GET(req: Request) {
   try {
+    const { searchParams } = new URL(req.url);
+    const mode = searchParams.get("mode");
+    const callRoundId = searchParams.get("callRoundId");
     const actorRole = getActorRole(req);
     const actorUserId = getActorUserId(req);
 
@@ -15,11 +23,61 @@ export async function GET(req: Request) {
       );
     }
 
+    if (mode === "options") {
+      const [instructorCallRounds, councilCallRounds] = await Promise.all([
+        prisma.callRoundInstructor.findMany({
+          where: { instructorId: actorUserId },
+          select: {
+            callRound: {
+              select: {
+                id: true,
+                name: true,
+              },
+            },
+          },
+          orderBy: { createdAt: "desc" },
+        }),
+        prisma.callRoundCouncilMember.findMany({
+          where: { councilMemberId: actorUserId },
+          select: {
+            callRound: {
+              select: {
+                id: true,
+                name: true,
+              },
+            },
+          },
+          orderBy: { createdAt: "desc" },
+        }),
+      ]);
+
+      const callRoundMap = new Map<string, { id: string; name: string }>();
+      for (const item of instructorCallRounds) {
+        callRoundMap.set(item.callRound.id, item.callRound);
+      }
+      for (const item of councilCallRounds) {
+        callRoundMap.set(item.callRound.id, item.callRound);
+      }
+
+      const options = Array.from(callRoundMap.values()).sort((a, b) =>
+        a.name.localeCompare(b.name, "vi")
+      );
+
+      return NextResponse.json({ success: true, data: options });
+    }
+
+    const instructorWhere = {
+      instructorId: actorUserId,
+      ...(callRoundId ? { callRoundId } : {}),
+    };
+    const councilWhere = {
+      councilMemberId: actorUserId,
+      ...(callRoundId ? { callRoundId } : {}),
+    };
+
     // Get invitations as instructor (CallRoundInstructor)
     const instructorInvitations = await prisma.callRoundInstructor.findMany({
-      where: {
-        instructorId: actorUserId,
-      },
+      where: instructorWhere,
       include: {
         callRound: {
           select: {
@@ -42,9 +100,7 @@ export async function GET(req: Request) {
 
     // Get invitations as council member (CallRoundCouncilMember)
     const councilMemberInvitations = await prisma.callRoundCouncilMember.findMany({
-      where: {
-        councilMemberId: actorUserId,
-      },
+      where: councilWhere,
       include: {
         callRound: {
           select: {
@@ -126,12 +182,26 @@ export async function PATCH(request: Request) {
           id: invitationId,
           instructorId: actorUserId,
         },
+        include: {
+          callRound: {
+            select: {
+              invitationDeadline: true,
+            },
+          },
+        },
       });
 
       if (!invitation) {
         return NextResponse.json(
           { success: false, error: "Không tìm thấy lời mời." },
           { status: 404 }
+        );
+      }
+
+      if (status !== "PENDING" && isDeadlinePassed(invitation.callRound.invitationDeadline)) {
+        return NextResponse.json(
+          { success: false, error: "Đã quá hạn phản hồi lời mời." },
+          { status: 400 }
         );
       }
 
@@ -144,7 +214,7 @@ export async function PATCH(request: Request) {
         },
         data: {
           invitationStatus: status,
-          respondedAt: new Date(),
+          respondedAt: status === "PENDING" ? null : new Date(),
         },
         include: {
           callRound: {
@@ -163,12 +233,26 @@ export async function PATCH(request: Request) {
           id: invitationId,
           councilMemberId: actorUserId,
         },
+        include: {
+          callRound: {
+            select: {
+              invitationDeadline: true,
+            },
+          },
+        },
       });
 
       if (!invitation) {
         return NextResponse.json(
           { success: false, error: "Không tìm thấy lời mời." },
           { status: 404 }
+        );
+      }
+
+      if (status !== "PENDING" && isDeadlinePassed(invitation.callRound.invitationDeadline)) {
+        return NextResponse.json(
+          { success: false, error: "Đã quá hạn phản hồi lời mời." },
+          { status: 400 }
         );
       }
 
@@ -181,7 +265,7 @@ export async function PATCH(request: Request) {
         },
         data: {
           invitationStatus: status,
-          respondedAt: new Date(),
+          respondedAt: status === "PENDING" ? null : new Date(),
         },
         include: {
           callRound: {

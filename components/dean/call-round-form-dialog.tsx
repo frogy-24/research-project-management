@@ -39,6 +39,40 @@ import type { CallRound, CallRoundAttachment } from '@/types/call-round.schema';
 import type { User } from '@/types/user.schema';
 import { MoneyInput } from '../ui/money-input';
 
+const toDateInputValue = (value: Date | string | null | undefined): string => {
+    if (!value) {
+        return '';
+    }
+
+    const parsedDate = new Date(value);
+    if (Number.isNaN(parsedDate.getTime())) {
+        return '';
+    }
+
+    const year = parsedDate.getFullYear();
+    const month = String(parsedDate.getMonth() + 1).padStart(2, '0');
+    const day = String(parsedDate.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+};
+
+const toDateTimeLocalValue = (value: Date | string | null | undefined): string => {
+    if (!value) {
+        return '';
+    }
+
+    const parsedDate = new Date(value);
+    if (Number.isNaN(parsedDate.getTime())) {
+        return '';
+    }
+
+    const year = parsedDate.getFullYear();
+    const month = String(parsedDate.getMonth() + 1).padStart(2, '0');
+    const day = String(parsedDate.getDate()).padStart(2, '0');
+    const hour = String(parsedDate.getHours()).padStart(2, '0');
+    const minute = String(parsedDate.getMinutes()).padStart(2, '0');
+    return `${year}-${month}-${day}T${hour}:${minute}`;
+};
+
 export type CallRoundFormData = {
     name: string;
     description: string;
@@ -65,6 +99,7 @@ const initialFormData: CallRoundFormData = {
     registrationEndDate: '',
     projectStartDate: '',
     projectEndDate: '',
+    budgetLimit: undefined,
     defenseDate: '',
     projectLockDate: '',
     invitationDeadline: '',
@@ -124,22 +159,25 @@ export function CallRoundFormDialog({
             setFormData({
                 name: editingCallRound.name,
                 description: editingCallRound.description || '',
-                registrationStartDate: new Date(editingCallRound.registrationStartDate).toISOString().split('T')[0],
-                registrationEndDate: new Date(editingCallRound.registrationEndDate).toISOString().split('T')[0],
+                registrationStartDate: toDateInputValue(editingCallRound.registrationStartDate),
+                registrationEndDate: toDateInputValue(editingCallRound.registrationEndDate),
                 projectStartDate: editingCallRound.projectStartDate
-                    ? new Date(editingCallRound.projectStartDate).toISOString().split('T')[0]
+                    ? toDateInputValue(editingCallRound.projectStartDate)
                     : '',
                 projectEndDate: editingCallRound.projectEndDate
-                    ? new Date(editingCallRound.projectEndDate).toISOString().split('T')[0]
+                    ? toDateInputValue(editingCallRound.projectEndDate)
                     : '',
+                budgetLimit: editingCallRound.budgetLimit
+                    ? Number(editingCallRound.budgetLimit)
+                    : undefined,
                 defenseDate: editingCallRound.defenseDate
-                    ? new Date(editingCallRound.defenseDate).toISOString().split('T')[0]
+                    ? toDateTimeLocalValue(editingCallRound.defenseDate)
                     : '',
                 projectLockDate: editingCallRound.projectLockDate
-                    ? new Date(editingCallRound.projectLockDate).toISOString().split('T')[0]
+                    ? toDateInputValue(editingCallRound.projectLockDate)
                     : '',
                 invitationDeadline: editingCallRound.invitationDeadline
-                    ? new Date(editingCallRound.invitationDeadline).toISOString().slice(0, 16)
+                    ? toDateTimeLocalValue(editingCallRound.invitationDeadline)
                     : '',
                 maxProjects: editingCallRound.maxProjects?.toString() || '',
                 requirements: editingCallRound.requirements || '',
@@ -209,6 +247,7 @@ export function CallRoundFormDialog({
                 projectLockDate: formData.projectLockDate ? new Date(formData.projectLockDate) : undefined,
                 invitationDeadline: formData.invitationDeadline ? new Date(formData.invitationDeadline) : undefined,
                 maxProjects: formData.maxProjects ? parseInt(formData.maxProjects) : undefined,
+                budgetLimit: formData.budgetLimit ?? undefined,
                 requirements: formData.requirements || undefined,
                 templateId: formData.templateId && formData.templateId !== 'none' ? formData.templateId : null,
                 instructorIds: formData.instructorIds,
@@ -347,10 +386,10 @@ export function CallRoundFormDialog({
 
                     <div className="grid grid-cols-2 gap-4">
                         <div className="space-y-2">
-                            <Label htmlFor="defenseDate">Ngày bảo vệ đề tài</Label>
+                            <Label htmlFor="defenseDate">Ngày giờ bảo vệ đề tài</Label>
                             <Input
                                 id="defenseDate"
-                                type="date"
+                                type="datetime-local"
                                 value={formData.defenseDate}
                                 onChange={(e) => setFormData({ ...formData, defenseDate: e.target.value })}
                             />
@@ -451,7 +490,7 @@ export function CallRoundFormDialog({
                         </Label>
                         <Input
                             id="invitationDeadline"
-                            type="date"
+                            type="datetime-local"
                             value={formData.invitationDeadline}
                             onChange={(e) => setFormData({ ...formData, invitationDeadline: e.target.value })}
                         />
@@ -517,7 +556,7 @@ export function CallRoundFormDialog({
                                         className="flex items-center justify-between p-2 rounded-md border bg-gray-50"
                                     >
                                         <div className="flex items-center gap-2 min-w-0 flex-1">
-                                            <FileText className="w-4 h-4 text-gray-500 flex-shrink-0" />
+                                            <FileText className="w-4 h-4 text-gray-500 shrink-0" />
                                             <div className="min-w-0 flex-1">
                                                 <p className="text-sm font-medium truncate">{attachment.fileName}</p>
                                                 <p className="text-xs text-muted-foreground">
@@ -570,7 +609,7 @@ export function CallRoundFormDialog({
                                         className="flex items-center justify-between p-2 rounded-md border bg-amber-50"
                                     >
                                         <div className="flex items-center gap-2 min-w-0 flex-1">
-                                            <Paperclip className="w-4 h-4 text-amber-500 flex-shrink-0" />
+                                            <Paperclip className="w-4 h-4 text-amber-500 shrink-0" />
                                             <div className="min-w-0 flex-1">
                                                 <p className="text-sm font-medium truncate">{file.name}</p>
                                                 <p className="text-xs text-muted-foreground">

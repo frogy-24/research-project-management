@@ -229,7 +229,7 @@ function AppSidebar({ session }: { session: AuthSession }) {
               },
           ];
 
-    if (session.role === 'LECTURER') {
+    if (session.role === 'LECTURER' || session.role === 'COUNCIL') {
         navItems.push(
             {
                 title: 'Lời mời tham gia',
@@ -250,6 +250,11 @@ function AppSidebar({ session }: { session: AuthSession }) {
                 title: 'Hội đồng',
                 url: '/lecturer/councils',
                 icon: UsersRound,
+            },
+            {
+                title: 'Chấm điểm đề tài',
+                url: '/lecturer/council-scoring',
+                icon: ClipboardCheck,
             },
         );
     } else if (session.role === 'STUDENT') {

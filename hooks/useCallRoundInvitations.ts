@@ -29,11 +29,28 @@ type LecturerInvitationsData = {
   councilMemberInvitations: CallRoundInvitation[];
 };
 
-export function useCallRoundInvitations() {
+export type LecturerCallRoundOption = {
+  id: string;
+  name: string;
+};
+
+export function useCallRoundInvitationOptions() {
   return useQuery({
-    queryKey: ['lecturer-call-round-invitations'],
+    queryKey: ['lecturer-call-round-invitation-options'],
     queryFn: async () => {
-      const response = await api.get('/lecturer/call-round-invitations');
+      const response = await api.get('/lecturer/call-round-invitations?mode=options');
+      return response.data.data as LecturerCallRoundOption[];
+    },
+  });
+}
+
+export function useCallRoundInvitations(callRoundId?: string, enabled = true) {
+  return useQuery({
+    queryKey: ['lecturer-call-round-invitations', callRoundId ?? 'all'],
+    enabled,
+    queryFn: async () => {
+      const query = callRoundId ? `?callRoundId=${encodeURIComponent(callRoundId)}` : '';
+      const response = await api.get(`/lecturer/call-round-invitations${query}`);
       return response.data.data as LecturerInvitationsData;
     },
   });

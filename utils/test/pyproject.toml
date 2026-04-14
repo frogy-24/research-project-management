@@ -1,7 +1,13 @@
 [project]
 name = "test"
 version = "0.1.0"
-description = "Add your description here"
+description = "PDF and Document Processing Utilities"
 readme = "README.md"
 requires-python = ">=3.10"
-dependencies = []
+dependencies = [
+    "fastapi>=0.115.0",
+    "uvicorn>=0.32.0",
+    "python-multipart>=0.0.12",
+    "docx2pdf>=0.1.8",
+    "pymupdf>=1.24.0",
+]

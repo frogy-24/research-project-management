@@ -421,6 +421,8 @@ exports.Prisma.CouncilScalarFieldEnum = {
   callRoundId: 'callRoundId',
   name: 'name',
   description: 'description',
+  defenseDate: 'defenseDate',
+  defenseLocation: 'defenseLocation',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };

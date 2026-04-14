@@ -2,6 +2,23 @@ import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 import { getAuthUser } from '@/lib/auth-helpers';
 
+type ScheduleMetadata = {
+    kind: string;
+    callRoundId?: string;
+    councilId?: string;
+    defenseDate?: string | null;
+    defenseLocation?: string | null;
+};
+
+const isScheduleMetadata = (value: unknown): value is ScheduleMetadata => {
+    if (!value || typeof value !== 'object') {
+        return false;
+    }
+
+    const item = value as Record<string, unknown>;
+    return item.kind === 'COUNCIL_REPORT_SCHEDULE';
+};
+
 export async function GET(request: Request) {
     try {
         const session = await getAuthUser();
@@ -18,7 +35,8 @@ export async function GET(request: Request) {
         // Or simpler: queries through views
         // Wait, OfficeMeetingView has the receipt status for this user
         
-        const meetings = await prisma.officeMeeting.findMany({
+        const [meetings, scheduleNotifications] = await Promise.all([
+            prisma.officeMeeting.findMany({
             where: {
                 views: {
                     some: {
@@ -52,10 +70,21 @@ export async function GET(request: Request) {
                 meetingAt: 'desc'
             },
             take: limit > 0 && limit <= 1000 ? limit : 200,
-        });
+            }),
+            prisma.notification.findMany({
+                where: {
+                    userId: session.userId,
+                    link: '/student/meetings',
+                },
+                orderBy: {
+                    createdAt: 'desc',
+                },
+                take: limit > 0 && limit <= 1000 ? limit : 200,
+            }),
+        ]);
 
         // Map to format that UI expects so migration is easy
-        const formattedMeetings = meetings.map(meeting => {
+        const formattedOfficeMeetings = meetings.map(meeting => {
             const isRead = meeting.views[0]?.isRead ?? false;
             
             // Reconstruct a title and message locally for display
@@ -89,6 +118,48 @@ export async function GET(request: Request) {
                     email: meeting.instructor.email
                 }
             };
+        });
+
+        const latestScheduleByCallRound = new Map<string, (typeof scheduleNotifications)[number]>();
+
+        for (const notification of scheduleNotifications) {
+            if (!isScheduleMetadata(notification.metadata)) {
+                continue;
+            }
+
+            const metadata = notification.metadata as ScheduleMetadata;
+            const key = metadata.councilId || metadata.callRoundId || 'global';
+            const existing = latestScheduleByCallRound.get(key);
+
+            if (!existing || existing.createdAt < notification.createdAt) {
+                latestScheduleByCallRound.set(key, notification);
+            }
+        }
+
+        const formattedReportSchedules = Array.from(latestScheduleByCallRound.values()).map((item) => {
+            const metadata = item.metadata as ScheduleMetadata;
+            const fallbackDate = item.createdAt.toISOString();
+
+            return {
+                id: `report-schedule-${item.id}`,
+                title: 'Lịch báo cáo hội đồng',
+                message: item.message,
+                isRead: item.isRead,
+                createdAt: item.createdAt.toISOString(),
+                meetingAt: metadata.defenseDate || fallbackDate,
+                location: metadata.defenseLocation || 'Chưa cập nhật',
+                note: null,
+                scheduledBy: {
+                    name: 'Khoa',
+                    email: null,
+                },
+            };
+        });
+
+        const formattedMeetings = [...formattedOfficeMeetings, ...formattedReportSchedules].sort((a, b) => {
+            const timeA = new Date(a.meetingAt).getTime();
+            const timeB = new Date(b.meetingAt).getTime();
+            return timeB - timeA;
         });
 
         return NextResponse.json({

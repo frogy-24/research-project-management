@@ -17,7 +17,9 @@ export const finalizeCouncilAssignmentsSchema = z.object({
 
 export const updateCouncilDefenseLocationSchema = z.object({
     callRoundId: z.string().min(1),
+    councilId: z.string().min(1),
     defenseLocation: z.string().max(255).nullable().optional(),
+    defenseDate: z.coerce.date().nullable().optional(),
 });
 
 export const councilAssignmentProjectSchema = z.object({
@@ -44,6 +46,7 @@ export const councilAssignmentCouncilSchema = z.object({
     id: z.string(),
     name: z.string(),
     description: z.string().nullable().optional(),
+    defenseDate: z.coerce.date().nullable().optional(),
     defenseLocation: z.string().nullable().optional(),
     _count: z.object({
         members: z.number(),
@@ -53,6 +56,11 @@ export const councilAssignmentCouncilSchema = z.object({
 
 export const councilProjectAssignmentsResponseSchema = z.object({
     isFinalized: z.boolean().default(false),
+    callRound: z.object({
+        id: z.string(),
+        defenseDate: z.coerce.date().nullable().optional(),
+        defenseLocation: z.string().nullable().optional(),
+    }),
     councils: z.array(councilAssignmentCouncilSchema),
     approvedProjects: z.array(councilAssignmentProjectSchema),
 });

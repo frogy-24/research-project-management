@@ -7,6 +7,20 @@ import {
     unassignProjectsFromCouncilSchema,
     updateCouncilDefenseLocationSchema,
 } from '@/types/council-project-assignment.schema';
+import { registrationTeamMemberSchema } from '@/types/project-registration.schema';
+
+const teamMemberArraySchema = registrationTeamMemberSchema.array();
+
+const extractTeamMemberUserIds = (teamMembers: unknown): string[] => {
+    const parsed = teamMemberArraySchema.safeParse(teamMembers);
+    if (!parsed.success) {
+        return [];
+    }
+
+    return parsed.data
+        .map((member) => member.studentId)
+        .filter((studentId): studentId is string => typeof studentId === 'string' && studentId.length > 0);
+};
 
 export async function GET(request: NextRequest) {
     try {
@@ -22,7 +36,7 @@ export async function GET(request: NextRequest) {
 
         const callRound = await prisma.callRound.findUnique({
             where: { id: callRoundId },
-            select: { id: true, approvalStatus: true, isLocked: true },
+            select: { id: true, approvalStatus: true, isLocked: true, defenseDate: true, contactInfo: true },
         });
 
         if (!callRound) {
@@ -39,11 +53,8 @@ export async function GET(request: NextRequest) {
                 id: true,
                 name: true,
                 description: true,
-                callRound: {
-                    select: {
-                        contactInfo: true,
-                    },
-                },
+                defenseDate: true,
+                defenseLocation: true,
                 _count: {
                     select: {
                         members: true,
@@ -58,7 +69,8 @@ export async function GET(request: NextRequest) {
             id: council.id,
             name: council.name,
             description: council.description,
-            defenseLocation: council.callRound.contactInfo,
+            defenseDate: council.defenseDate ?? callRound.defenseDate,
+            defenseLocation: council.defenseLocation ?? callRound.contactInfo,
             _count: council._count,
         }));
 
@@ -90,7 +102,16 @@ export async function GET(request: NextRequest) {
             orderBy: { createdAt: 'asc' },
         });
 
-        return NextResponse.json({ councils: normalizedCouncils, approvedProjects, isFinalized: callRound.isLocked });
+        return NextResponse.json({
+            callRound: {
+                id: callRound.id,
+                defenseDate: callRound.defenseDate,
+                defenseLocation: callRound.contactInfo,
+            },
+            councils: normalizedCouncils,
+            approvedProjects,
+            isFinalized: callRound.isLocked,
+        });
     } catch (error) {
         console.error('Error fetching council project assignments:', error);
         return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
@@ -130,10 +151,7 @@ export async function POST(request: NextRequest) {
         }
 
         if (callRound.isLocked) {
-            return NextResponse.json(
-                { error: 'Đợt này đã hoàn tất phân công. Không thể chỉnh sửa.' },
-                { status: 400 },
-            );
+            return NextResponse.json({ error: 'Đợt này đã hoàn tất phân công. Không thể chỉnh sửa.' }, { status: 400 });
         }
 
         const council = await prisma.council.findUnique({
@@ -231,10 +249,7 @@ export async function DELETE(request: NextRequest) {
         }
 
         if (callRound.isLocked) {
-            return NextResponse.json(
-                { error: 'Đợt này đã hoàn tất phân công. Không thể chỉnh sửa.' },
-                { status: 400 },
-            );
+            return NextResponse.json({ error: 'Đợt này đã hoàn tất phân công. Không thể chỉnh sửa.' }, { status: 400 });
         }
 
         await prisma.projectCouncilAssignment.deleteMany({
@@ -262,7 +277,11 @@ export async function PATCH(request: NextRequest) {
 
         const body = await request.json();
 
-        if (typeof body === 'object' && body !== null && 'defenseLocation' in body) {
+        if (
+            typeof body === 'object' &&
+            body !== null &&
+            ('defenseLocation' in body || 'defenseDate' in body)
+        ) {
             const updateParsed = updateCouncilDefenseLocationSchema.safeParse(body);
 
             if (!updateParsed.success) {
@@ -272,11 +291,11 @@ export async function PATCH(request: NextRequest) {
                 );
             }
 
-            const { callRoundId, defenseLocation } = updateParsed.data;
+            const { callRoundId, councilId, defenseLocation, defenseDate } = updateParsed.data;
 
             const callRound = await prisma.callRound.findUnique({
                 where: { id: callRoundId },
-                select: { id: true, approvalStatus: true },
+                select: { id: true, approvalStatus: true, isLocked: true, defenseDate: true, contactInfo: true },
             });
 
             if (!callRound) {
@@ -287,14 +306,98 @@ export async function PATCH(request: NextRequest) {
                 return NextResponse.json({ error: 'Call round must be APPROVED' }, { status: 400 });
             }
 
-            const normalizedLocation = defenseLocation?.trim();
+            if (callRound.isLocked) {
+                return NextResponse.json({ error: 'Đợt này đã hoàn tất phân công. Không thể chỉnh sửa.' }, { status: 400 });
+            }
 
-            await prisma.callRound.update({
-                where: { id: callRoundId },
+            const council = await prisma.council.findUnique({
+                where: { id: councilId },
+                select: { id: true, callRoundId: true, defenseDate: true, defenseLocation: true },
+            });
+
+            if (!council) {
+                return NextResponse.json({ error: 'Council not found' }, { status: 404 });
+            }
+
+            if (council.callRoundId !== callRoundId) {
+                return NextResponse.json({ error: 'Council does not belong to selected call round' }, { status: 400 });
+            }
+
+            await prisma.council.update({
+                where: { id: councilId },
                 data: {
-                    contactInfo: normalizedLocation && normalizedLocation.length > 0 ? normalizedLocation : null,
+                    ...(defenseLocation !== undefined
+                        ? {
+                              defenseLocation:
+                                  defenseLocation && defenseLocation.trim().length > 0
+                                      ? defenseLocation.trim()
+                                      : null,
+                          }
+                        : {}),
+                    ...(defenseDate !== undefined ? { defenseDate } : {}),
                 },
             });
+
+            const assignments = await prisma.projectCouncilAssignment.findMany({
+                where: {
+                    councilId,
+                },
+                select: {
+                    projectRegistration: {
+                        select: {
+                            userId: true,
+                            teamMembers: true,
+                        },
+                    },
+                },
+            });
+
+            const recipientIds = Array.from(
+                new Set(
+                    assignments.flatMap((assignment) => {
+                        const registration = assignment.projectRegistration;
+                        return [registration.userId, ...extractTeamMemberUserIds(registration.teamMembers)];
+                    }),
+                ),
+            );
+
+            if (recipientIds.length > 0) {
+                const targetDate = defenseDate ?? council.defenseDate ?? callRound.defenseDate;
+                const normalizedLocation =
+                    defenseLocation !== undefined
+                        ? defenseLocation && defenseLocation.trim().length > 0
+                            ? defenseLocation.trim()
+                            : null
+                        : (council.defenseLocation ?? callRound.contactInfo);
+
+                const formattedDate = targetDate
+                    ? new Intl.DateTimeFormat('vi-VN', {
+                          day: '2-digit',
+                          month: '2-digit',
+                          year: 'numeric',
+                                                    hour: '2-digit',
+                                                    minute: '2-digit',
+                                                    hour12: false,
+                      }).format(targetDate)
+                    : 'chưa cập nhật';
+
+                await prisma.notification.createMany({
+                    data: recipientIds.map((userId) => ({
+                        userId,
+                        type: 'PROJECT_STATUS_CHANGE',
+                        title: 'Cập nhật lịch báo cáo hội đồng',
+                        message: `Lịch báo cáo đề tài đã được cập nhật. Ngày báo cáo: ${formattedDate}. Phòng/Nơi báo cáo: ${normalizedLocation || 'chưa cập nhật'}.`,
+                        link: '/student/meetings',
+                        metadata: {
+                            kind: 'COUNCIL_REPORT_SCHEDULE',
+                            callRoundId,
+                            councilId,
+                            defenseDate: targetDate ? targetDate.toISOString() : null,
+                            defenseLocation: normalizedLocation,
+                        },
+                    })),
+                });
+            }
 
             return NextResponse.json({ success: true });
         }

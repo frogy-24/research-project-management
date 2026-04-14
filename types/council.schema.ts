@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { councilEvaluationSchema } from './council-evaluation.schema';
 
 // Council schema
 export const councilSchema = z.object({
@@ -186,6 +187,7 @@ export const lecturerCouncilItemSchema = z.object({
             roleLabel: z.string(),
           })
         ),
+        myEvaluation: councilEvaluationSchema.nullable().optional(),
       })
     ),
   }),

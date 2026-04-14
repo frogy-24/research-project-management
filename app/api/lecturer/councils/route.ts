@@ -20,7 +20,7 @@ const parseTeamMembers = (raw: unknown): Array<{ name: string; studentId?: strin
 export async function GET() {
     try {
         const user = await getAuthUser();
-        if (!user || user.role !== 'LECTURER') {
+        if (!user || (user.role !== 'LECTURER' && user.role !== 'COUNCIL')) {
             return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
         }
 
@@ -105,6 +105,58 @@ export async function GET() {
             },
         });
 
+        // Fetch all projects linked to these registrations
+        const registrationIds = assignments.flatMap((assignment) =>
+            assignment.council.projects.map((p) => p.projectRegistrationId)
+        );
+
+        const projects = await prisma.project.findMany({
+            where: {
+                leader: {
+                    registrations: {
+                        some: {
+                            id: { in: registrationIds },
+                        },
+                    },
+                },
+            },
+            select: {
+                id: true,
+                leaderId: true,
+                leader: {
+                    select: {
+                        registrations: {
+                            where: {
+                                id: { in: registrationIds },
+                            },
+                            select: {
+                                id: true,
+                            },
+                        },
+                    },
+                },
+            },
+        });
+
+        // Create map: registrationId -> projectId
+        const registrationToProjectMap = new Map<string, string>();
+        projects.forEach((project) => {
+            project.leader.registrations.forEach((reg) => {
+                registrationToProjectMap.set(reg.id, project.id);
+            });
+        });
+
+        // Fetch evaluations
+        const projectIds = Array.from(registrationToProjectMap.values());
+        const evaluations = await prisma.councilEvaluation.findMany({
+            where: {
+                projectId: { in: projectIds },
+                councilMemberId: user.userId,
+            },
+        });
+
+        const evaluationMap = new Map(evaluations.map((e) => [e.projectId, e]));
+
         const data = assignments.map((assignment) => ({
             assignmentId: assignment.id,
             role: assignment.role,
@@ -115,8 +167,11 @@ export async function GET() {
                 description: assignment.council.description,
                 callRoundId: assignment.council.callRoundId,
                 callRoundName: assignment.council.callRound.name,
-                defenseDate: assignment.council.callRound.reviewDeadline ?? assignment.council.callRound.projectEndDate,
-                defenseLocation: assignment.council.callRound.contactInfo,
+                defenseDate:
+                    assignment.council.defenseDate ??
+                    assignment.council.callRound.reviewDeadline ??
+                    assignment.council.callRound.projectEndDate,
+                defenseLocation: assignment.council.defenseLocation ?? assignment.council.callRound.contactInfo,
                 memberCount: assignment.council._count.members,
                 projectCount: assignment.council._count.projects,
                 members: assignment.council.members.map((member) => ({
@@ -126,37 +181,54 @@ export async function GET() {
                     code: member.councilMember.code,
                     role: member.role,
                 })),
-                projects: assignment.council.projects.map((projectItem) => ({
-                    id: projectItem.projectRegistration.id,
-                    title: projectItem.projectRegistration.title,
-                    advisor: projectItem.projectRegistration.instructor
-                        ? {
-                              id: projectItem.projectRegistration.instructor.id,
-                              name: projectItem.projectRegistration.instructor.name,
-                              email: projectItem.projectRegistration.instructor.email,
-                              code: projectItem.projectRegistration.instructor.code,
-                              phone: projectItem.projectRegistration.instructor.phone,
-                          }
-                        : null,
-                    students: [
-                        {
-                            id: projectItem.projectRegistration.user.id,
-                            name: projectItem.projectRegistration.user.name,
-                            email: projectItem.projectRegistration.user.email,
-                            code: projectItem.projectRegistration.user.code,
-                            roleLabel: 'Trưởng nhóm',
-                        },
-                        ...parseTeamMembers(projectItem.projectRegistration.teamMembers)
-                            .filter((member) => member.studentId !== projectItem.projectRegistration.user.id)
-                            .map((member, index) => ({
-                                id: member.studentId ?? `${projectItem.projectRegistration.id}-member-${index}`,
-                                name: member.name,
-                                email: null,
-                                code: null,
-                                roleLabel: 'Thành viên',
-                            })),
-                    ],
-                })),
+                projects: assignment.council.projects.map((projectItem) => {
+                    const projectId = registrationToProjectMap.get(projectItem.projectRegistrationId);
+                    const myEvaluation = projectId ? evaluationMap.get(projectId) : null;
+
+                    return {
+                        id: projectItem.projectRegistration.id,
+                        title: projectItem.projectRegistration.title,
+                        advisor: projectItem.projectRegistration.instructor
+                            ? {
+                                  id: projectItem.projectRegistration.instructor.id,
+                                  name: projectItem.projectRegistration.instructor.name,
+                                  email: projectItem.projectRegistration.instructor.email,
+                                  code: projectItem.projectRegistration.instructor.code,
+                                  phone: projectItem.projectRegistration.instructor.phone,
+                              }
+                            : null,
+                        students: [
+                            {
+                                id: projectItem.projectRegistration.user.id,
+                                name: projectItem.projectRegistration.user.name,
+                                email: projectItem.projectRegistration.user.email,
+                                code: projectItem.projectRegistration.user.code,
+                                roleLabel: 'Trưởng nhóm',
+                            },
+                            ...parseTeamMembers(projectItem.projectRegistration.teamMembers)
+                                .filter((member) => member.studentId !== projectItem.projectRegistration.user.id)
+                                .map((member, index) => ({
+                                    id: member.studentId ?? `${projectItem.projectRegistration.id}-member-${index}`,
+                                    name: member.name,
+                                    email: null,
+                                    code: null,
+                                    roleLabel: 'Thành viên',
+                                })),
+                        ],
+                        myEvaluation: myEvaluation
+                            ? {
+                                  id: myEvaluation.id,
+                                  projectId: myEvaluation.projectId,
+                                  councilMemberId: myEvaluation.councilMemberId,
+                                  score: myEvaluation.score,
+                                  decision: myEvaluation.decision,
+                                  comment: myEvaluation.comment,
+                                  evaluatedAt: myEvaluation.evaluatedAt,
+                                  createdAt: myEvaluation.createdAt,
+                              }
+                            : null,
+                    };
+                }),
             },
         }));
 

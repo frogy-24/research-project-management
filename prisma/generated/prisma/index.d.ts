@@ -29975,6 +29975,8 @@ export namespace Prisma {
     callRoundId: string | null
     name: string | null
     description: string | null
+    defenseDate: Date | null
+    defenseLocation: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -29984,6 +29986,8 @@ export namespace Prisma {
     callRoundId: string | null
     name: string | null
     description: string | null
+    defenseDate: Date | null
+    defenseLocation: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -29993,6 +29997,8 @@ export namespace Prisma {
     callRoundId: number
     name: number
     description: number
+    defenseDate: number
+    defenseLocation: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -30004,6 +30010,8 @@ export namespace Prisma {
     callRoundId?: true
     name?: true
     description?: true
+    defenseDate?: true
+    defenseLocation?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -30013,6 +30021,8 @@ export namespace Prisma {
     callRoundId?: true
     name?: true
     description?: true
+    defenseDate?: true
+    defenseLocation?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -30022,6 +30032,8 @@ export namespace Prisma {
     callRoundId?: true
     name?: true
     description?: true
+    defenseDate?: true
+    defenseLocation?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -30104,6 +30116,8 @@ export namespace Prisma {
     callRoundId: string
     name: string
     description: string | null
+    defenseDate: Date | null
+    defenseLocation: string | null
     createdAt: Date
     updatedAt: Date
     _count: CouncilCountAggregateOutputType | null
@@ -30130,6 +30144,8 @@ export namespace Prisma {
     callRoundId?: boolean
     name?: boolean
     description?: boolean
+    defenseDate?: boolean
+    defenseLocation?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     callRound?: boolean | CallRoundDefaultArgs<ExtArgs>
@@ -30143,6 +30159,8 @@ export namespace Prisma {
     callRoundId?: boolean
     name?: boolean
     description?: boolean
+    defenseDate?: boolean
+    defenseLocation?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     callRound?: boolean | CallRoundDefaultArgs<ExtArgs>
@@ -30153,6 +30171,8 @@ export namespace Prisma {
     callRoundId?: boolean
     name?: boolean
     description?: boolean
+    defenseDate?: boolean
+    defenseLocation?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     callRound?: boolean | CallRoundDefaultArgs<ExtArgs>
@@ -30163,11 +30183,13 @@ export namespace Prisma {
     callRoundId?: boolean
     name?: boolean
     description?: boolean
+    defenseDate?: boolean
+    defenseLocation?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type CouncilOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "callRoundId" | "name" | "description" | "createdAt" | "updatedAt", ExtArgs["result"]["council"]>
+  export type CouncilOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "callRoundId" | "name" | "description" | "defenseDate" | "defenseLocation" | "createdAt" | "updatedAt", ExtArgs["result"]["council"]>
   export type CouncilInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     callRound?: boolean | CallRoundDefaultArgs<ExtArgs>
     members?: boolean | Council$membersArgs<ExtArgs>
@@ -30193,6 +30215,8 @@ export namespace Prisma {
       callRoundId: string
       name: string
       description: string | null
+      defenseDate: Date | null
+      defenseLocation: string | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["council"]>
@@ -30625,6 +30649,8 @@ export namespace Prisma {
     readonly callRoundId: FieldRef<"Council", 'String'>
     readonly name: FieldRef<"Council", 'String'>
     readonly description: FieldRef<"Council", 'String'>
+    readonly defenseDate: FieldRef<"Council", 'DateTime'>
+    readonly defenseLocation: FieldRef<"Council", 'String'>
     readonly createdAt: FieldRef<"Council", 'DateTime'>
     readonly updatedAt: FieldRef<"Council", 'DateTime'>
   }
@@ -34737,6 +34763,8 @@ export namespace Prisma {
     callRoundId: 'callRoundId',
     name: 'name',
     description: 'description',
+    defenseDate: 'defenseDate',
+    defenseLocation: 'defenseLocation',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -37144,6 +37172,8 @@ export namespace Prisma {
     callRoundId?: StringFilter<"Council"> | string
     name?: StringFilter<"Council"> | string
     description?: StringNullableFilter<"Council"> | string | null
+    defenseDate?: DateTimeNullableFilter<"Council"> | Date | string | null
+    defenseLocation?: StringNullableFilter<"Council"> | string | null
     createdAt?: DateTimeFilter<"Council"> | Date | string
     updatedAt?: DateTimeFilter<"Council"> | Date | string
     callRound?: XOR<CallRoundScalarRelationFilter, CallRoundWhereInput>
@@ -37156,6 +37186,8 @@ export namespace Prisma {
     callRoundId?: SortOrder
     name?: SortOrder
     description?: SortOrderInput | SortOrder
+    defenseDate?: SortOrderInput | SortOrder
+    defenseLocation?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     callRound?: CallRoundOrderByWithRelationInput
@@ -37171,6 +37203,8 @@ export namespace Prisma {
     callRoundId?: StringFilter<"Council"> | string
     name?: StringFilter<"Council"> | string
     description?: StringNullableFilter<"Council"> | string | null
+    defenseDate?: DateTimeNullableFilter<"Council"> | Date | string | null
+    defenseLocation?: StringNullableFilter<"Council"> | string | null
     createdAt?: DateTimeFilter<"Council"> | Date | string
     updatedAt?: DateTimeFilter<"Council"> | Date | string
     callRound?: XOR<CallRoundScalarRelationFilter, CallRoundWhereInput>
@@ -37183,6 +37217,8 @@ export namespace Prisma {
     callRoundId?: SortOrder
     name?: SortOrder
     description?: SortOrderInput | SortOrder
+    defenseDate?: SortOrderInput | SortOrder
+    defenseLocation?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: CouncilCountOrderByAggregateInput
@@ -37198,6 +37234,8 @@ export namespace Prisma {
     callRoundId?: StringWithAggregatesFilter<"Council"> | string
     name?: StringWithAggregatesFilter<"Council"> | string
     description?: StringNullableWithAggregatesFilter<"Council"> | string | null
+    defenseDate?: DateTimeNullableWithAggregatesFilter<"Council"> | Date | string | null
+    defenseLocation?: StringNullableWithAggregatesFilter<"Council"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Council"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Council"> | Date | string
   }
@@ -39613,6 +39651,8 @@ export namespace Prisma {
     id?: string
     name: string
     description?: string | null
+    defenseDate?: Date | string | null
+    defenseLocation?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     callRound: CallRoundCreateNestedOneWithoutCouncilsInput
@@ -39625,6 +39665,8 @@ export namespace Prisma {
     callRoundId: string
     name: string
     description?: string | null
+    defenseDate?: Date | string | null
+    defenseLocation?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     members?: CouncilMemberAssignmentUncheckedCreateNestedManyWithoutCouncilInput
@@ -39635,6 +39677,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    defenseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    defenseLocation?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     callRound?: CallRoundUpdateOneRequiredWithoutCouncilsNestedInput
@@ -39647,6 +39691,8 @@ export namespace Prisma {
     callRoundId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    defenseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    defenseLocation?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: CouncilMemberAssignmentUncheckedUpdateManyWithoutCouncilNestedInput
@@ -39658,6 +39704,8 @@ export namespace Prisma {
     callRoundId: string
     name: string
     description?: string | null
+    defenseDate?: Date | string | null
+    defenseLocation?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -39666,6 +39714,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    defenseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    defenseLocation?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -39675,6 +39725,8 @@ export namespace Prisma {
     callRoundId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    defenseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    defenseLocation?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -41758,6 +41810,8 @@ export namespace Prisma {
     callRoundId?: SortOrder
     name?: SortOrder
     description?: SortOrder
+    defenseDate?: SortOrder
+    defenseLocation?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -41767,6 +41821,8 @@ export namespace Prisma {
     callRoundId?: SortOrder
     name?: SortOrder
     description?: SortOrder
+    defenseDate?: SortOrder
+    defenseLocation?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -41776,6 +41832,8 @@ export namespace Prisma {
     callRoundId?: SortOrder
     name?: SortOrder
     description?: SortOrder
+    defenseDate?: SortOrder
+    defenseLocation?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -47886,6 +47944,8 @@ export namespace Prisma {
     id?: string
     name: string
     description?: string | null
+    defenseDate?: Date | string | null
+    defenseLocation?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     members?: CouncilMemberAssignmentCreateNestedManyWithoutCouncilInput
@@ -47896,6 +47956,8 @@ export namespace Prisma {
     id?: string
     name: string
     description?: string | null
+    defenseDate?: Date | string | null
+    defenseLocation?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     members?: CouncilMemberAssignmentUncheckedCreateNestedManyWithoutCouncilInput
@@ -48125,6 +48187,8 @@ export namespace Prisma {
     callRoundId?: StringFilter<"Council"> | string
     name?: StringFilter<"Council"> | string
     description?: StringNullableFilter<"Council"> | string | null
+    defenseDate?: DateTimeNullableFilter<"Council"> | Date | string | null
+    defenseLocation?: StringNullableFilter<"Council"> | string | null
     createdAt?: DateTimeFilter<"Council"> | Date | string
     updatedAt?: DateTimeFilter<"Council"> | Date | string
   }
@@ -53325,6 +53389,8 @@ export namespace Prisma {
     id?: string
     name: string
     description?: string | null
+    defenseDate?: Date | string | null
+    defenseLocation?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     callRound: CallRoundCreateNestedOneWithoutCouncilsInput
@@ -53336,6 +53402,8 @@ export namespace Prisma {
     callRoundId: string
     name: string
     description?: string | null
+    defenseDate?: Date | string | null
+    defenseLocation?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     projects?: ProjectCouncilAssignmentUncheckedCreateNestedManyWithoutCouncilInput
@@ -53436,6 +53504,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    defenseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    defenseLocation?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     callRound?: CallRoundUpdateOneRequiredWithoutCouncilsNestedInput
@@ -53447,6 +53517,8 @@ export namespace Prisma {
     callRoundId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    defenseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    defenseLocation?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     projects?: ProjectCouncilAssignmentUncheckedUpdateManyWithoutCouncilNestedInput
@@ -53537,6 +53609,8 @@ export namespace Prisma {
     id?: string
     name: string
     description?: string | null
+    defenseDate?: Date | string | null
+    defenseLocation?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     callRound: CallRoundCreateNestedOneWithoutCouncilsInput
@@ -53548,6 +53622,8 @@ export namespace Prisma {
     callRoundId: string
     name: string
     description?: string | null
+    defenseDate?: Date | string | null
+    defenseLocation?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     members?: CouncilMemberAssignmentUncheckedCreateNestedManyWithoutCouncilInput
@@ -53614,6 +53690,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    defenseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    defenseLocation?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     callRound?: CallRoundUpdateOneRequiredWithoutCouncilsNestedInput
@@ -53625,6 +53703,8 @@ export namespace Prisma {
     callRoundId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    defenseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    defenseLocation?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: CouncilMemberAssignmentUncheckedUpdateManyWithoutCouncilNestedInput
@@ -55786,6 +55866,8 @@ export namespace Prisma {
     id?: string
     name: string
     description?: string | null
+    defenseDate?: Date | string | null
+    defenseLocation?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -56079,6 +56161,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    defenseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    defenseLocation?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: CouncilMemberAssignmentUpdateManyWithoutCouncilNestedInput
@@ -56089,6 +56173,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    defenseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    defenseLocation?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: CouncilMemberAssignmentUncheckedUpdateManyWithoutCouncilNestedInput
@@ -56099,6 +56185,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    defenseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    defenseLocation?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

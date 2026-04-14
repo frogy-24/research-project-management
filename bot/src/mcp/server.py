@@ -76,13 +76,14 @@ async def run_raw_sql(query: str, args: list[Any] | None = None) -> list[dict[st
     return [dict(row) for row in rows]
 
 
+
+
+
 if __name__ == "__main__":
     transport = os.getenv("MCP_TRANSPORT", "http").strip().lower()
     if transport == "stdio":
         logger.info("🚀 Starting MCP Server in STDIO mode")
-        # Stream-safe mode when launched by MCP clients.
         mcp.run(transport="stdio", show_banner=False, log_level="error")
     else:
         logger.info("🚀 Starting MCP Server in HTTP mode on http://127.0.0.1:9000/mcp")
-        # Friendly mode for manual local run: `uv run server.py`.
         mcp.run(transport="http", host="127.0.0.1", port=9000, path="/mcp")

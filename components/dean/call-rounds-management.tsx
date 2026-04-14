@@ -1,7 +1,28 @@
 'use client';
 
 import * as React from 'react';
-import { Clock, CheckCircle, XCircle, PlusCircle, Eye, Pencil, Trash2, Calendar, Users, FileText, Settings, BookOpen, GraduationCap, DollarSign, Hash, AlertCircle, Info, Paperclip, ExternalLink, Search } from 'lucide-react';
+import {
+    Clock,
+    CheckCircle,
+    XCircle,
+    PlusCircle,
+    Eye,
+    Pencil,
+    Trash2,
+    Calendar,
+    Users,
+    FileText,
+    Settings,
+    BookOpen,
+    GraduationCap,
+    DollarSign,
+    Hash,
+    AlertCircle,
+    Info,
+    Paperclip,
+    ExternalLink,
+    Search,
+} from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
@@ -364,7 +385,10 @@ export function DeanCallRoundsManagement() {
                             <div>
                                 <DialogTitle className="text-xl">{viewingCallRound?.name}</DialogTitle>
                                 <DialogDescription>
-                                    Mã đợt: <code className="rounded bg-muted px-1.5 py-0.5 text-xs">{viewingCallRound?.id.slice(0, 8)}</code>
+                                    Mã đợt:{' '}
+                                    <code className="rounded bg-muted px-1.5 py-0.5 text-xs">
+                                        {viewingCallRound?.id.slice(0, 8)}
+                                    </code>
                                 </DialogDescription>
                             </div>
                         </div>
@@ -416,7 +440,7 @@ export function DeanCallRoundsManagement() {
                                         Mô tả
                                     </div>
                                     <Separator className="my-3" />
-                                    <p className="text-sm leading-relaxed">
+                                    <p className="text-sm leading-relaxed whitespace-pre-wrap">
                                         {viewingCallRound.description || (
                                             <span className="text-muted-foreground italic">Không có mô tả</span>
                                         )}
@@ -431,7 +455,9 @@ export function DeanCallRoundsManagement() {
                                     <Separator className="my-3" />
                                     <p className="text-sm leading-relaxed">
                                         {viewingCallRound.requirements || (
-                                            <span className="text-muted-foreground italic">Không có yêu cầu đặc biệt</span>
+                                            <span className="text-muted-foreground italic">
+                                                Không có yêu cầu đặc biệt
+                                            </span>
                                         )}
                                     </p>
                                 </div>
@@ -462,23 +488,29 @@ export function DeanCallRoundsManagement() {
                                         <div>
                                             <p className="text-xs text-muted-foreground">Bắt đầu</p>
                                             <p className="mt-1 font-medium">
-                                                {new Date(viewingCallRound.registrationStartDate).toLocaleDateString('vi-VN', {
-                                                    weekday: 'long',
-                                                    year: 'numeric',
-                                                    month: 'long',
-                                                    day: 'numeric',
-                                                })}
+                                                {new Date(viewingCallRound.registrationStartDate).toLocaleDateString(
+                                                    'vi-VN',
+                                                    {
+                                                        weekday: 'long',
+                                                        year: 'numeric',
+                                                        month: 'long',
+                                                        day: 'numeric',
+                                                    },
+                                                )}
                                             </p>
                                         </div>
                                         <div>
                                             <p className="text-xs text-muted-foreground">Kết thúc</p>
                                             <p className="mt-1 font-medium">
-                                                {new Date(viewingCallRound.registrationEndDate).toLocaleDateString('vi-VN', {
-                                                    weekday: 'long',
-                                                    year: 'numeric',
-                                                    month: 'long',
-                                                    day: 'numeric',
-                                                })}
+                                                {new Date(viewingCallRound.registrationEndDate).toLocaleDateString(
+                                                    'vi-VN',
+                                                    {
+                                                        weekday: 'long',
+                                                        year: 'numeric',
+                                                        month: 'long',
+                                                        day: 'numeric',
+                                                    },
+                                                )}
                                             </p>
                                         </div>
                                     </div>
@@ -495,21 +527,27 @@ export function DeanCallRoundsManagement() {
                                             <div>
                                                 <p className="text-xs text-muted-foreground">Bắt đầu</p>
                                                 <p className="mt-1 font-medium">
-                                                    {new Date(viewingCallRound.projectStartDate).toLocaleDateString('vi-VN', {
-                                                        year: 'numeric',
-                                                        month: 'long',
-                                                        day: 'numeric',
-                                                    })}
+                                                    {new Date(viewingCallRound.projectStartDate).toLocaleDateString(
+                                                        'vi-VN',
+                                                        {
+                                                            year: 'numeric',
+                                                            month: 'long',
+                                                            day: 'numeric',
+                                                        },
+                                                    )}
                                                 </p>
                                             </div>
                                             <div>
                                                 <p className="text-xs text-muted-foreground">Kết thúc</p>
                                                 <p className="mt-1 font-medium">
-                                                    {new Date(viewingCallRound.projectEndDate).toLocaleDateString('vi-VN', {
-                                                        year: 'numeric',
-                                                        month: 'long',
-                                                        day: 'numeric',
-                                                    })}
+                                                    {new Date(viewingCallRound.projectEndDate).toLocaleDateString(
+                                                        'vi-VN',
+                                                        {
+                                                            year: 'numeric',
+                                                            month: 'long',
+                                                            day: 'numeric',
+                                                        },
+                                                    )}
                                                 </p>
                                             </div>
                                         </div>
@@ -527,16 +565,21 @@ export function DeanCallRoundsManagement() {
                                         <Separator className="my-3" />
                                         {viewingCallRound.projectLockDate ? (
                                             <p className="font-medium">
-                                                {new Date(viewingCallRound.projectLockDate).toLocaleDateString('vi-VN', {
-                                                    year: 'numeric',
-                                                    month: 'long',
-                                                    day: 'numeric',
-                                                })}
+                                                {new Date(viewingCallRound.projectLockDate).toLocaleDateString(
+                                                    'vi-VN',
+                                                    {
+                                                        year: 'numeric',
+                                                        month: 'long',
+                                                        day: 'numeric',
+                                                    },
+                                                )}
                                             </p>
                                         ) : (
                                             <p className="text-sm text-muted-foreground italic">Chưa thiết lập</p>
                                         )}
-                                        <p className="mt-1 text-xs text-muted-foreground">Hạn chót đăng ký/thay đổi đề tài</p>
+                                        <p className="mt-1 text-xs text-muted-foreground">
+                                            Hạn chót đăng ký/thay đổi đề tài
+                                        </p>
                                     </div>
                                     <div className="rounded-lg border bg-card p-4">
                                         <div className="flex items-center gap-2 text-sm font-medium text-purple-600">
@@ -618,9 +661,7 @@ export function DeanCallRoundsManagement() {
                                         <Separator className="my-3" />
                                         <Badge
                                             variant={
-                                                viewingCallRound.applicableFor === 'BOTH'
-                                                    ? 'default'
-                                                    : 'secondary'
+                                                viewingCallRound.applicableFor === 'BOTH' ? 'default' : 'secondary'
                                             }
                                         >
                                             {viewingCallRound.applicableFor === 'STUDENT' && 'Sinh viên'}
@@ -662,9 +703,7 @@ export function DeanCallRoundsManagement() {
                                             Trạng thái khóa
                                         </div>
                                         <Separator className="my-3" />
-                                        <Badge
-                                            variant={viewingCallRound.isLocked ? 'destructive' : 'outline'}
-                                        >
+                                        <Badge variant={viewingCallRound.isLocked ? 'destructive' : 'outline'}>
                                             {viewingCallRound.isLocked ? 'Đã khóa' : 'Chưa khóa'}
                                         </Badge>
                                     </div>
@@ -714,7 +753,9 @@ export function DeanCallRoundsManagement() {
 
                                     {/* Sub-tab: Thành viên hội đồng */}
                                     <TabsContent value="council-members" className="mt-4">
-                                        <CouncilMembersTab councilMembers={viewingCallRound.availableCouncilMembers || []} />
+                                        <CouncilMembersTab
+                                            councilMembers={viewingCallRound.availableCouncilMembers || []}
+                                        />
                                     </TabsContent>
                                 </Tabs>
                             </TabsContent>
@@ -739,9 +780,10 @@ function InstructorsTab({ instructors }: { instructors: any[] }) {
     const filteredInstructors = React.useMemo(() => {
         if (!searchQuery.trim()) return instructors;
         const query = searchQuery.toLowerCase();
-        return instructors.filter((item) =>
-            item.instructor.name.toLowerCase().includes(query) ||
-            item.instructor.email.toLowerCase().includes(query)
+        return instructors.filter(
+            (item) =>
+                item.instructor.name.toLowerCase().includes(query) ||
+                item.instructor.email.toLowerCase().includes(query),
         );
     }, [instructors, searchQuery]);
 
@@ -765,9 +807,7 @@ function InstructorsTab({ instructors }: { instructors: any[] }) {
             </div>
             <Separator className="my-3" />
             {instructors.length === 0 ? (
-                <p className="text-sm text-muted-foreground italic">
-                    Chưa có giảng viên hướng dẫn được chỉ định
-                </p>
+                <p className="text-sm text-muted-foreground italic">Chưa có giảng viên hướng dẫn được chỉ định</p>
             ) : filteredInstructors.length === 0 ? (
                 <p className="text-sm text-muted-foreground italic text-center py-4">
                     Không tìm thấy giảng viên phù hợp
@@ -781,15 +821,11 @@ function InstructorsTab({ instructors }: { instructors: any[] }) {
                         >
                             <div className="flex items-center gap-3 min-w-0 flex-1">
                                 <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-100 text-blue-600 flex-shrink-0">
-                                    <span className="text-xs font-medium">
-                                        {item.instructor.name.charAt(0)}
-                                    </span>
+                                    <span className="text-xs font-medium">{item.instructor.name.charAt(0)}</span>
                                 </div>
                                 <div className="min-w-0 flex-1">
                                     <p className="text-sm font-medium truncate">{item.instructor.name}</p>
-                                    <p className="text-xs text-muted-foreground">
-                                        {item.instructor.email}
-                                    </p>
+                                    <p className="text-xs text-muted-foreground">{item.instructor.email}</p>
                                 </div>
                             </div>
                             <div className="flex-shrink-0">
@@ -810,9 +846,10 @@ function CouncilMembersTab({ councilMembers }: { councilMembers: any[] }) {
     const filteredCouncilMembers = React.useMemo(() => {
         if (!searchQuery.trim()) return councilMembers;
         const query = searchQuery.toLowerCase();
-        return councilMembers.filter((item) =>
-            item.councilMember.name.toLowerCase().includes(query) ||
-            item.councilMember.email.toLowerCase().includes(query)
+        return councilMembers.filter(
+            (item) =>
+                item.councilMember.name.toLowerCase().includes(query) ||
+                item.councilMember.email.toLowerCase().includes(query),
         );
     }, [councilMembers, searchQuery]);
 
@@ -836,9 +873,7 @@ function CouncilMembersTab({ councilMembers }: { councilMembers: any[] }) {
             </div>
             <Separator className="my-3" />
             {councilMembers.length === 0 ? (
-                <p className="text-sm text-muted-foreground italic">
-                    Chưa có thành viên hội đồng được chỉ định
-                </p>
+                <p className="text-sm text-muted-foreground italic">Chưa có thành viên hội đồng được chỉ định</p>
             ) : filteredCouncilMembers.length === 0 ? (
                 <p className="text-sm text-muted-foreground italic text-center py-4">
                     Không tìm thấy thành viên phù hợp
@@ -852,15 +887,11 @@ function CouncilMembersTab({ councilMembers }: { councilMembers: any[] }) {
                         >
                             <div className="flex items-center gap-3 min-w-0 flex-1">
                                 <div className="flex h-8 w-8 items-center justify-center rounded-full bg-emerald-100 text-emerald-600 flex-shrink-0">
-                                    <span className="text-xs font-medium">
-                                        {item.councilMember.name.charAt(0)}
-                                    </span>
+                                    <span className="text-xs font-medium">{item.councilMember.name.charAt(0)}</span>
                                 </div>
                                 <div className="min-w-0 flex-1">
                                     <p className="text-sm font-medium truncate">{item.councilMember.name}</p>
-                                    <p className="text-xs text-muted-foreground">
-                                        {item.councilMember.email}
-                                    </p>
+                                    <p className="text-xs text-muted-foreground">{item.councilMember.email}</p>
                                 </div>
                             </div>
                             <div className="flex-shrink-0">
@@ -927,16 +958,14 @@ function AttachmentsSection({ callRoundId }: { callRoundId: string }) {
                             <div className="min-w-0 flex-1">
                                 <p className="text-sm font-medium truncate">{attachment.fileName}</p>
                                 <p className="text-xs text-muted-foreground">
-                                    {attachment.fileSize ? `${(attachment.fileSize / 1024).toFixed(1)} KB` : 'N/A'} • {attachment.createdAt ? new Date(attachment.createdAt).toLocaleDateString('vi-VN') : 'N/A'}
+                                    {attachment.fileSize ? `${(attachment.fileSize / 1024).toFixed(1)} KB` : 'N/A'} •{' '}
+                                    {attachment.createdAt
+                                        ? new Date(attachment.createdAt).toLocaleDateString('vi-VN')
+                                        : 'N/A'}
                                 </p>
                             </div>
                         </div>
-                        <Button
-                            variant="ghost"
-                            size="sm"
-                            className="h-8 w-8 p-0"
-                            asChild
-                        >
+                        <Button variant="ghost" size="sm" className="h-8 w-8 p-0" asChild>
                             <a href={attachment.fileUrl} target="_blank" rel="noopener noreferrer">
                                 <ExternalLink className="w-4 h-4" />
                             </a>

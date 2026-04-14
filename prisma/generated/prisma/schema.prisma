@@ -565,12 +565,14 @@ model CallRoundCouncilMember {
 
 // Model: Hội đồng đánh giá (được chia tự động hoặc thủ công)
 model Council {
-  id          String   @id @default(cuid())
-  callRoundId String
-  name        String // VD: "Hội đồng 1", "Hội đồng A"
-  description String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id              String    @id @default(cuid())
+  callRoundId     String
+  name            String // VD: "Hội đồng 1", "Hội đồng A"
+  description     String?
+  defenseDate     DateTime?
+  defenseLocation String?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
 
   callRound CallRound                  @relation(fields: [callRoundId], references: [id], onDelete: Cascade)
   members   CouncilMemberAssignment[] // Thành viên của hội đồng này

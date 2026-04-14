@@ -38,7 +38,8 @@ export function useUnassignProjectsFromCouncil() {
     const queryClient = useQueryClient();
 
     return useMutation({
-        mutationFn: (payload: UnassignProjectsFromCouncilInput) => councilProjectAssignmentsApi.unassignProjects(payload),
+        mutationFn: (payload: UnassignProjectsFromCouncilInput) =>
+            councilProjectAssignmentsApi.unassignProjects(payload),
         onSuccess: (_, variables) => {
             queryClient.invalidateQueries({
                 queryKey: councilProjectAssignmentKeys.byCallRound(variables.callRoundId),
