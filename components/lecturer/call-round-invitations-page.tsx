@@ -146,14 +146,18 @@ function InvitationCard({
                                 <Clock className="h-4 w-4 text-muted-foreground" />
                                 <div>
                                     <p className="text-xs text-muted-foreground">Hạn phản hồi</p>
-                                    <p className="font-medium">{formatDateTime(invitation.callRound.invitationDeadline)}</p>
+                                    <p className="font-medium">
+                                        {formatDateTime(invitation.callRound.invitationDeadline)}
+                                    </p>
                                 </div>
                             </div>
                         )}
                     </div>
 
                     {isExpired && isPending && (
-                        <p className="text-sm text-red-500 mb-4">Đã hết hạn phản hồi. Bạn không thể thay đổi trạng thái lời mời.</p>
+                        <p className="text-sm text-red-500 mb-4">
+                            Đã hết hạn phản hồi. Bạn không thể thay đổi trạng thái lời mời.
+                        </p>
                     )}
 
                     {isPending && !isExpired && (
@@ -372,7 +376,11 @@ export function LecturerCallRoundInvitations() {
                             </Card>
                         ) : (
                             instructorInvitations.map((invitation) => (
-                                <InvitationCard key={invitation.id} invitation={invitation} invitationType="INSTRUCTOR" />
+                                <InvitationCard
+                                    key={invitation.id}
+                                    invitation={invitation}
+                                    invitationType="INSTRUCTOR"
+                                />
                             ))
                         )}
                     </TabsContent>

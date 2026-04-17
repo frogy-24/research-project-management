@@ -92,9 +92,75 @@ export async function GET(request: Request) {
             },
         });
 
+        const registrationIds = assignments.map((assignment) => assignment.projectRegistration.id);
+
+        const projects = await prisma.project.findMany({
+            where: {
+                leader: {
+                    registrations: {
+                        some: {
+                            id: { in: registrationIds },
+                        },
+                    },
+                },
+            },
+            select: {
+                id: true,
+                leader: {
+                    select: {
+                        registrations: {
+                            where: {
+                                id: { in: registrationIds },
+                            },
+                            select: {
+                                id: true,
+                            },
+                        },
+                    },
+                },
+            },
+        });
+
+        const registrationToProjectMap = new Map<string, string>();
+        projects.forEach((project) => {
+            project.leader.registrations.forEach((registration) => {
+                registrationToProjectMap.set(registration.id, project.id);
+            });
+        });
+
+        const projectIds = Array.from(registrationToProjectMap.values());
+
+        const evaluations = await prisma.councilEvaluation.findMany({
+            where: {
+                projectId: { in: projectIds },
+            },
+            include: {
+                councilMember: {
+                    select: {
+                        id: true,
+                        name: true,
+                        email: true,
+                        code: true,
+                        role: true,
+                    },
+                },
+            },
+            orderBy: {
+                evaluatedAt: 'desc',
+            },
+        });
+
+        const evaluationMap = new Map<string, typeof evaluations>();
+        evaluations.forEach((evaluation) => {
+            const existing = evaluationMap.get(evaluation.projectId) ?? [];
+            existing.push(evaluation);
+            evaluationMap.set(evaluation.projectId, existing);
+        });
+
         const data = assignments.map((assignment) => ({
             projectAssignmentId: assignment.id,
             projectRegistrationId: assignment.projectRegistration.id,
+            projectId: registrationToProjectMap.get(assignment.projectRegistration.id) ?? null,
             projectTitle: assignment.projectRegistration.title,
             participationRole:
                 assignment.projectRegistration.userId === actorUserId ? ('OWNER' as const) : ('TEAM_MEMBER' as const),
@@ -119,6 +185,34 @@ export async function GET(request: Request) {
                     code: member.councilMember.code,
                     role: member.role,
                 })),
+                evaluations: evaluationMap
+                    .get(registrationToProjectMap.get(assignment.projectRegistration.id) ?? '')
+                    ?.map((evaluation) => ({
+                        id: evaluation.id,
+                        projectId: evaluation.projectId,
+                        councilMemberId: evaluation.councilMemberId,
+                        score: evaluation.score,
+                        decision: evaluation.decision,
+                        comment: evaluation.comment,
+                        evaluatedAt: evaluation.evaluatedAt,
+                        councilMember: {
+                            id: evaluation.councilMember.id,
+                            name: evaluation.councilMember.name,
+                            email: evaluation.councilMember.email,
+                            code: evaluation.councilMember.code,
+                            role: evaluation.councilMember.role,
+                        },
+                    })) ?? [],
+                averageScore: (() => {
+                    const projectId = registrationToProjectMap.get(assignment.projectRegistration.id);
+                    const projectEvaluations = projectId ? evaluationMap.get(projectId) ?? [] : [];
+                    if (projectEvaluations.length === 0) {
+                        return null;
+                    }
+
+                    const total = projectEvaluations.reduce((sum, evaluation) => sum + evaluation.score, 0);
+                    return total / projectEvaluations.length;
+                })(),
             },
         }));
 

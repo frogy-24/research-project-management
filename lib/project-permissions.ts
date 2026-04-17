@@ -62,6 +62,6 @@ export const canCreateExtensionRequest = (role: Role) => role === "LECTURER";
 
 export const canReviewExtensionRequest = (role: Role) => role === "ADMIN";
 
-export const canCreateCouncilEvaluation = (role: Role) => role === "COUNCIL";
+export const canCreateCouncilEvaluation = (role: Role) => role === "COUNCIL" || role === "LECTURER";
 
 export const canCreateDisbursement = (role: Role) => role === "ADMIN";

@@ -1,8 +1,10 @@
 @startuml
 !theme plain
+!option handwritten true
 skinparam backgroundColor #F8FAFC
-skinparam handwritten false
+skinparam defaultFontName "Inter"
 skinparam shadowing false
+
 
 ' Define custom colors
 skinparam actor {

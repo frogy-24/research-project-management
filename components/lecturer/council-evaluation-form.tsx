@@ -8,8 +8,7 @@ import { useCreateCouncilEvaluation } from '@/hooks/useProjectOperations';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { Label } from '@/components/ui/label';
+import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
 import {
     Dialog,
@@ -48,6 +47,12 @@ interface CouncilEvaluationFormProps {
     onSuccess?: () => void;
 }
 
+const decisionOptions = [
+    { value: 'PASS', label: 'Đạt' },
+    { value: 'NEED_REVISION', label: 'Cần sửa đổi' },
+    { value: 'FAIL', label: 'Không đạt' },
+] as const;
+
 export function CouncilEvaluationForm({
     open,
     onOpenChange,
@@ -70,6 +75,7 @@ export function CouncilEvaluationForm({
     });
 
     const onSubmit = (data: CreateCouncilEvaluationInput) => {
+        void data;
         setShowConfirm(true);
     };
 
@@ -99,12 +105,6 @@ export function CouncilEvaluationForm({
         onOpenChange(false);
     };
 
-    const decisionLabels = {
-        PASS: 'Đạt',
-        NEED_REVISION: 'Cần sửa đổi',
-        FAIL: 'Không đạt',
-    };
-
     return (
         <>
             <Dialog open={open} onOpenChange={onOpenChange}>
@@ -128,19 +128,20 @@ export function CouncilEvaluationForm({
                                 render={({ field }) => (
                                     <FormItem>
                                         <FormLabel>
-                                            Điểm số (0-100) <span className="text-destructive">*</span>
+                                            Điểm số (0-10) <span className="text-destructive">*</span>
                                         </FormLabel>
                                         <FormControl>
                                             <Input
                                                 type="number"
                                                 min={0}
-                                                max={100}
-                                                placeholder="Nhập điểm từ 0 đến 100"
+                                                max={10}
+                                                step="0.1"
+                                                placeholder="Nhập điểm từ 0 đến 10"
                                                 {...field}
                                                 value={field.value ?? ''}
                                                 onChange={(e) => {
                                                     const value = e.target.value;
-                                                    field.onChange(value === '' ? undefined : parseInt(value, 10));
+                                                    field.onChange(value === '' ? undefined : parseFloat(value));
                                                 }}
                                             />
                                         </FormControl>
@@ -158,33 +159,34 @@ export function CouncilEvaluationForm({
                                             Quyết định <span className="text-destructive">*</span>
                                         </FormLabel>
                                         <FormControl>
-                                            <RadioGroup
-                                                onValueChange={field.onChange}
-                                                value={field.value}
-                                                className="flex flex-col space-y-2"
-                                            >
-                                                <div className="flex items-center space-x-2">
-                                                    <RadioGroupItem value="PASS" id="pass" />
-                                                    <Label htmlFor="pass" className="font-normal cursor-pointer">
-                                                        {decisionLabels.PASS}
-                                                    </Label>
-                                                </div>
-                                                <div className="flex items-center space-x-2">
-                                                    <RadioGroupItem value="NEED_REVISION" id="need-revision" />
-                                                    <Label
-                                                        htmlFor="need-revision"
-                                                        className="font-normal cursor-pointer"
-                                                    >
-                                                        {decisionLabels.NEED_REVISION}
-                                                    </Label>
-                                                </div>
-                                                <div className="flex items-center space-x-2">
-                                                    <RadioGroupItem value="FAIL" id="fail" />
-                                                    <Label htmlFor="fail" className="font-normal cursor-pointer">
-                                                        {decisionLabels.FAIL}
-                                                    </Label>
-                                                </div>
-                                            </RadioGroup>
+                                            <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
+                                                {decisionOptions.map((option) => {
+                                                    const isSelected = field.value === option.value;
+                                                    const selectedClass =
+                                                        option.value === 'PASS'
+                                                            ? 'border-emerald-600 bg-emerald-600 text-white hover:bg-emerald-700'
+                                                            : option.value === 'NEED_REVISION'
+                                                              ? 'border-amber-500 bg-amber-500 text-white hover:bg-amber-600'
+                                                              : 'border-rose-600 bg-rose-600 text-white hover:bg-rose-700';
+
+                                                    return (
+                                                        <Button
+                                                            key={option.value}
+                                                            type="button"
+                                                            variant="outline"
+                                                            onClick={() => field.onChange(option.value)}
+                                                            className={cn(
+                                                                'justify-center font-medium transition-colors',
+                                                                isSelected
+                                                                    ? selectedClass
+                                                                    : 'border-border bg-background text-foreground hover:bg-muted/50'
+                                                            )}
+                                                        >
+                                                            {option.label}
+                                                        </Button>
+                                                    );
+                                                })}
+                                            </div>
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>

@@ -430,26 +430,6 @@ export async function PATCH(request: NextRequest) {
             return NextResponse.json({ success: true });
         }
 
-        const totalApprovedProjects = await prisma.projectRegistration.count({
-            where: {
-                callRoundId,
-                facultyStatus: 'APPROVED',
-            },
-        });
-
-        const assignedProjects = await prisma.projectCouncilAssignment.count({
-            where: {
-                council: { callRoundId },
-            },
-        });
-
-        if (totalApprovedProjects !== assignedProjects) {
-            return NextResponse.json(
-                { error: 'Vui lòng gán đủ tất cả đề tài đã duyệt trước khi hoàn tất.' },
-                { status: 400 },
-            );
-        }
-
         await prisma.callRound.update({
             where: { id: callRoundId },
             data: { isLocked: true },

@@ -180,6 +180,29 @@ export async function POST(request: Request) {
     }
 
     const { departmentIds, majorIds, classIds, instructorIds, councilMemberIds, ...callRoundData } = parsed.data;
+    const normalizedName = callRoundData.name.trim();
+
+    const existingCallRound = await prisma.callRound.findFirst({
+      where: {
+        createdById: actorUserId ?? null,
+        name: normalizedName,
+        registrationStartDate: callRoundData.registrationStartDate,
+        registrationEndDate: callRoundData.registrationEndDate,
+      },
+      select: {
+        id: true,
+      },
+    });
+
+    if (existingCallRound) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: "Đợt đăng ký này đã tồn tại. Vui lòng kiểm tra lại danh sách trước khi tạo mới.",
+        },
+        { status: 409 }
+      );
+    }
 
     // DEAN tạo -> PENDING_APPROVAL, ADMIN/LEADER tạo -> APPROVED
     const approvalStatus = actorRole === "DEAN" ? "PENDING_APPROVAL" : "APPROVED";
@@ -199,6 +222,7 @@ export async function POST(request: Request) {
     const callRound = await prisma.callRound.create({
       data: {
         ...callRoundData,
+        name: normalizedName,
         isLocked: callRoundData.isLocked || false,
         templateId: callRoundData.templateId || null,
         approvalStatus,

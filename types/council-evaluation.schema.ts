@@ -6,7 +6,7 @@ export const councilEvaluationSchema = z.object({
   id: z.string().cuid(),
   projectId: z.string().cuid(),
   councilMemberId: z.string().cuid(),
-  score: z.number().int().min(0).max(100),
+  score: z.number().min(0).max(10),
   decision: reviewDecisionEnum,
   comment: z.string().nullable().optional(),
   evaluatedAt: z.coerce.date(),

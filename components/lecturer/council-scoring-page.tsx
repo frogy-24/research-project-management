@@ -9,6 +9,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { CouncilEvaluationForm } from './council-evaluation-form';
 import { ClipboardCheck, CheckCircle2 } from 'lucide-react';
+import { toast } from 'sonner';
 
 export function CouncilScoringPage() {
     const { data = [], isLoading, refetch } = useLecturerCouncils();
@@ -27,7 +28,7 @@ export function CouncilScoringPage() {
 
     const selectedItem = useMemo(
         () => data.find((item) => item.assignmentId === selectedAssignmentId) ?? null,
-        [data, selectedAssignmentId]
+        [data, selectedAssignmentId],
     );
 
     const getDecisionBadge = (decision: string) => {
@@ -44,10 +45,17 @@ export function CouncilScoringPage() {
         );
     };
 
-    const handleEvaluateProject = (project: any) => {
+    const handleEvaluateProject = (project: (typeof data)[number]['council']['projects'][number]) => {
+        const targetProjectId = project.projectId ?? project.id;
+
+        if (!targetProjectId) {
+            toast.error('Không tìm thấy mã đề tài để chấm điểm. Vui lòng tải lại trang.');
+            return;
+        }
+
         setEvaluationForm({
             open: true,
-            projectId: project.id,
+            projectId: targetProjectId,
             projectTitle: project.title,
             advisorName: project.advisor?.name,
             studentName: project.students[0]?.name,
@@ -199,7 +207,9 @@ export function CouncilScoringPage() {
                                 </div>
 
                                 <div className="space-y-3">
-                                    <h3 className="font-semibold">Danh sách đề tài ({selectedItem.council.projects.length})</h3>
+                                    <h3 className="font-semibold">
+                                        Danh sách đề tài ({selectedItem.council.projects.length})
+                                    </h3>
                                     {selectedItem.council.projects.length === 0 ? (
                                         <p className="text-muted-foreground">Hội đồng này chưa được gán đề tài.</p>
                                     ) : (
@@ -222,6 +232,7 @@ export function CouncilScoringPage() {
                                                         ) : (
                                                             <Button
                                                                 size="sm"
+                                                                disabled={!project.projectId && !project.id}
                                                                 onClick={() => handleEvaluateProject(project)}
                                                             >
                                                                 Chấm điểm
@@ -263,7 +274,10 @@ export function CouncilScoringPage() {
                                                                             key={student.id}
                                                                             className="flex flex-wrap items-center gap-2"
                                                                         >
-                                                                            <Badge variant="secondary" className="text-xs">
+                                                                            <Badge
+                                                                                variant="secondary"
+                                                                                className="text-xs"
+                                                                            >
                                                                                 {student.roleLabel}
                                                                             </Badge>
                                                                             <span className="font-medium">
@@ -286,9 +300,11 @@ export function CouncilScoringPage() {
                                                             </p>
                                                             <div className="flex flex-wrap items-center gap-3 text-sm">
                                                                 <div>
-                                                                    <span className="text-muted-foreground">Điểm: </span>
+                                                                    <span className="text-muted-foreground">
+                                                                        Điểm:{' '}
+                                                                    </span>
                                                                     <span className="font-semibold text-emerald-700">
-                                                                        {project.myEvaluation.score}/100
+                                                                        {project.myEvaluation.score}/10
                                                                     </span>
                                                                 </div>
                                                                 <div className="flex items-center gap-2">
@@ -303,7 +319,7 @@ export function CouncilScoringPage() {
                                                                     <p className="text-xs text-muted-foreground mb-1">
                                                                         Nhận xét:
                                                                     </p>
-                                                                    <p className="text-sm text-emerald-900">
+                                                                    <p className="text-sm text-emerald-900 whitespace-pre-wrap">
                                                                         {project.myEvaluation.comment}
                                                                     </p>
                                                                 </div>
@@ -311,7 +327,7 @@ export function CouncilScoringPage() {
                                                             <p className="text-xs text-muted-foreground pt-1">
                                                                 Đã chấm lúc:{' '}
                                                                 {new Date(
-                                                                    project.myEvaluation.evaluatedAt
+                                                                    project.myEvaluation.evaluatedAt,
                                                                 ).toLocaleString('vi-VN')}
                                                             </p>
                                                         </div>

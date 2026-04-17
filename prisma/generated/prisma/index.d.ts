@@ -17841,7 +17841,7 @@ export namespace Prisma {
     readonly id: FieldRef<"CouncilEvaluation", 'String'>
     readonly projectId: FieldRef<"CouncilEvaluation", 'String'>
     readonly councilMemberId: FieldRef<"CouncilEvaluation", 'String'>
-    readonly score: FieldRef<"CouncilEvaluation", 'Int'>
+    readonly score: FieldRef<"CouncilEvaluation", 'Float'>
     readonly decision: FieldRef<"CouncilEvaluation", 'ReviewDecision'>
     readonly comment: FieldRef<"CouncilEvaluation", 'String'>
     readonly evaluatedAt: FieldRef<"CouncilEvaluation", 'DateTime'>
@@ -36236,7 +36236,7 @@ export namespace Prisma {
     id?: StringFilter<"CouncilEvaluation"> | string
     projectId?: StringFilter<"CouncilEvaluation"> | string
     councilMemberId?: StringFilter<"CouncilEvaluation"> | string
-    score?: IntFilter<"CouncilEvaluation"> | number
+    score?: FloatFilter<"CouncilEvaluation"> | number
     decision?: EnumReviewDecisionFilter<"CouncilEvaluation"> | $Enums.ReviewDecision
     comment?: StringNullableFilter<"CouncilEvaluation"> | string | null
     evaluatedAt?: DateTimeFilter<"CouncilEvaluation"> | Date | string
@@ -36265,7 +36265,7 @@ export namespace Prisma {
     NOT?: CouncilEvaluationWhereInput | CouncilEvaluationWhereInput[]
     projectId?: StringFilter<"CouncilEvaluation"> | string
     councilMemberId?: StringFilter<"CouncilEvaluation"> | string
-    score?: IntFilter<"CouncilEvaluation"> | number
+    score?: FloatFilter<"CouncilEvaluation"> | number
     decision?: EnumReviewDecisionFilter<"CouncilEvaluation"> | $Enums.ReviewDecision
     comment?: StringNullableFilter<"CouncilEvaluation"> | string | null
     evaluatedAt?: DateTimeFilter<"CouncilEvaluation"> | Date | string
@@ -36297,7 +36297,7 @@ export namespace Prisma {
     id?: StringWithAggregatesFilter<"CouncilEvaluation"> | string
     projectId?: StringWithAggregatesFilter<"CouncilEvaluation"> | string
     councilMemberId?: StringWithAggregatesFilter<"CouncilEvaluation"> | string
-    score?: IntWithAggregatesFilter<"CouncilEvaluation"> | number
+    score?: FloatWithAggregatesFilter<"CouncilEvaluation"> | number
     decision?: EnumReviewDecisionWithAggregatesFilter<"CouncilEvaluation"> | $Enums.ReviewDecision
     comment?: StringNullableWithAggregatesFilter<"CouncilEvaluation"> | string | null
     evaluatedAt?: DateTimeWithAggregatesFilter<"CouncilEvaluation"> | Date | string
@@ -38689,7 +38689,7 @@ export namespace Prisma {
 
   export type CouncilEvaluationUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    score?: IntFieldUpdateOperationsInput | number
+    score?: FloatFieldUpdateOperationsInput | number
     decision?: EnumReviewDecisionFieldUpdateOperationsInput | $Enums.ReviewDecision
     comment?: NullableStringFieldUpdateOperationsInput | string | null
     evaluatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -38702,7 +38702,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     projectId?: StringFieldUpdateOperationsInput | string
     councilMemberId?: StringFieldUpdateOperationsInput | string
-    score?: IntFieldUpdateOperationsInput | number
+    score?: FloatFieldUpdateOperationsInput | number
     decision?: EnumReviewDecisionFieldUpdateOperationsInput | $Enums.ReviewDecision
     comment?: NullableStringFieldUpdateOperationsInput | string | null
     evaluatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -38722,7 +38722,7 @@ export namespace Prisma {
 
   export type CouncilEvaluationUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
-    score?: IntFieldUpdateOperationsInput | number
+    score?: FloatFieldUpdateOperationsInput | number
     decision?: EnumReviewDecisionFieldUpdateOperationsInput | $Enums.ReviewDecision
     comment?: NullableStringFieldUpdateOperationsInput | string | null
     evaluatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -38733,7 +38733,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     projectId?: StringFieldUpdateOperationsInput | string
     councilMemberId?: StringFieldUpdateOperationsInput | string
-    score?: IntFieldUpdateOperationsInput | number
+    score?: FloatFieldUpdateOperationsInput | number
     decision?: EnumReviewDecisionFieldUpdateOperationsInput | $Enums.ReviewDecision
     comment?: NullableStringFieldUpdateOperationsInput | string | null
     evaluatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -41049,6 +41049,17 @@ export namespace Prisma {
     _max?: NestedFloatNullableFilter<$PrismaModel>
   }
 
+  export type FloatFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatFilter<$PrismaModel> | number
+  }
+
   export type EnumReviewDecisionFilter<$PrismaModel = never> = {
     equals?: $Enums.ReviewDecision | EnumReviewDecisionFieldRefInput<$PrismaModel>
     in?: $Enums.ReviewDecision[] | ListEnumReviewDecisionFieldRefInput<$PrismaModel>
@@ -41095,6 +41106,22 @@ export namespace Prisma {
 
   export type CouncilEvaluationSumOrderByAggregateInput = {
     score?: SortOrder
+  }
+
+  export type FloatWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedFloatFilter<$PrismaModel>
+    _min?: NestedFloatFilter<$PrismaModel>
+    _max?: NestedFloatFilter<$PrismaModel>
   }
 
   export type EnumReviewDecisionWithAggregatesFilter<$PrismaModel = never> = {
@@ -44049,6 +44076,14 @@ export namespace Prisma {
     connect?: UserWhereUniqueInput
   }
 
+  export type FloatFieldUpdateOperationsInput = {
+    set?: number
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
   export type EnumReviewDecisionFieldUpdateOperationsInput = {
     set?: $Enums.ReviewDecision
   }
@@ -45079,6 +45114,22 @@ export namespace Prisma {
     in?: $Enums.ReviewDecision[] | ListEnumReviewDecisionFieldRefInput<$PrismaModel>
     notIn?: $Enums.ReviewDecision[] | ListEnumReviewDecisionFieldRefInput<$PrismaModel>
     not?: NestedEnumReviewDecisionFilter<$PrismaModel> | $Enums.ReviewDecision
+  }
+
+  export type NestedFloatWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedFloatFilter<$PrismaModel>
+    _min?: NestedFloatFilter<$PrismaModel>
+    _max?: NestedFloatFilter<$PrismaModel>
   }
 
   export type NestedEnumReviewDecisionWithAggregatesFilter<$PrismaModel = never> = {
@@ -47311,7 +47362,7 @@ export namespace Prisma {
     id?: StringFilter<"CouncilEvaluation"> | string
     projectId?: StringFilter<"CouncilEvaluation"> | string
     councilMemberId?: StringFilter<"CouncilEvaluation"> | string
-    score?: IntFilter<"CouncilEvaluation"> | number
+    score?: FloatFilter<"CouncilEvaluation"> | number
     decision?: EnumReviewDecisionFilter<"CouncilEvaluation"> | $Enums.ReviewDecision
     comment?: StringNullableFilter<"CouncilEvaluation"> | string | null
     evaluatedAt?: DateTimeFilter<"CouncilEvaluation"> | Date | string
@@ -55185,7 +55236,7 @@ export namespace Prisma {
 
   export type CouncilEvaluationUpdateWithoutCouncilMemberInput = {
     id?: StringFieldUpdateOperationsInput | string
-    score?: IntFieldUpdateOperationsInput | number
+    score?: FloatFieldUpdateOperationsInput | number
     decision?: EnumReviewDecisionFieldUpdateOperationsInput | $Enums.ReviewDecision
     comment?: NullableStringFieldUpdateOperationsInput | string | null
     evaluatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -55196,7 +55247,7 @@ export namespace Prisma {
   export type CouncilEvaluationUncheckedUpdateWithoutCouncilMemberInput = {
     id?: StringFieldUpdateOperationsInput | string
     projectId?: StringFieldUpdateOperationsInput | string
-    score?: IntFieldUpdateOperationsInput | number
+    score?: FloatFieldUpdateOperationsInput | number
     decision?: EnumReviewDecisionFieldUpdateOperationsInput | $Enums.ReviewDecision
     comment?: NullableStringFieldUpdateOperationsInput | string | null
     evaluatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -55206,7 +55257,7 @@ export namespace Prisma {
   export type CouncilEvaluationUncheckedUpdateManyWithoutCouncilMemberInput = {
     id?: StringFieldUpdateOperationsInput | string
     projectId?: StringFieldUpdateOperationsInput | string
-    score?: IntFieldUpdateOperationsInput | number
+    score?: FloatFieldUpdateOperationsInput | number
     decision?: EnumReviewDecisionFieldUpdateOperationsInput | $Enums.ReviewDecision
     comment?: NullableStringFieldUpdateOperationsInput | string | null
     evaluatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -56439,7 +56490,7 @@ export namespace Prisma {
 
   export type CouncilEvaluationUpdateWithoutProjectInput = {
     id?: StringFieldUpdateOperationsInput | string
-    score?: IntFieldUpdateOperationsInput | number
+    score?: FloatFieldUpdateOperationsInput | number
     decision?: EnumReviewDecisionFieldUpdateOperationsInput | $Enums.ReviewDecision
     comment?: NullableStringFieldUpdateOperationsInput | string | null
     evaluatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -56450,7 +56501,7 @@ export namespace Prisma {
   export type CouncilEvaluationUncheckedUpdateWithoutProjectInput = {
     id?: StringFieldUpdateOperationsInput | string
     councilMemberId?: StringFieldUpdateOperationsInput | string
-    score?: IntFieldUpdateOperationsInput | number
+    score?: FloatFieldUpdateOperationsInput | number
     decision?: EnumReviewDecisionFieldUpdateOperationsInput | $Enums.ReviewDecision
     comment?: NullableStringFieldUpdateOperationsInput | string | null
     evaluatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -56460,7 +56511,7 @@ export namespace Prisma {
   export type CouncilEvaluationUncheckedUpdateManyWithoutProjectInput = {
     id?: StringFieldUpdateOperationsInput | string
     councilMemberId?: StringFieldUpdateOperationsInput | string
-    score?: IntFieldUpdateOperationsInput | number
+    score?: FloatFieldUpdateOperationsInput | number
     decision?: EnumReviewDecisionFieldUpdateOperationsInput | $Enums.ReviewDecision
     comment?: NullableStringFieldUpdateOperationsInput | string | null
     evaluatedAt?: DateTimeFieldUpdateOperationsInput | Date | string

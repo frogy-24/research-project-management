@@ -1,6 +1,25 @@
 import { z } from 'zod';
 import { councilEvaluationSchema } from './council-evaluation.schema';
 
+export const studentCouncilEvaluationSchema = z.object({
+  id: z.string(),
+  projectId: z.string(),
+  councilMemberId: z.string(),
+  score: z.number(),
+  decision: z.enum(['PASS', 'NEED_REVISION', 'FAIL']),
+  comment: z.string().nullable().optional(),
+  evaluatedAt: z.coerce.date(),
+  councilMember: z.object({
+    id: z.string(),
+    name: z.string(),
+    email: z.string().email().nullable().optional(),
+    code: z.string().nullable().optional(),
+    role: z.string().nullable().optional(),
+  }),
+});
+
+export type StudentCouncilEvaluation = z.infer<typeof studentCouncilEvaluationSchema>;
+
 // Council schema
 export const councilSchema = z.object({
   id: z.string(),
@@ -167,6 +186,7 @@ export const lecturerCouncilItemSchema = z.object({
     projects: z.array(
       z.object({
         id: z.string(),
+        projectId: z.string().nullable().optional(),
         title: z.string(),
         advisor: z
           .object({
@@ -200,6 +220,7 @@ export type LecturerCouncilItem = z.infer<typeof lecturerCouncilItemSchema>;
 export const studentCouncilItemSchema = z.object({
   projectAssignmentId: z.string(),
   projectRegistrationId: z.string(),
+  projectId: z.string().nullable().optional(),
   projectTitle: z.string(),
   participationRole: z.enum(['OWNER', 'TEAM_MEMBER']),
   assignedAt: z.coerce.date(),
@@ -222,6 +243,8 @@ export const studentCouncilItemSchema = z.object({
         role: z.string().nullable().optional(),
       })
     ),
+    evaluations: z.array(studentCouncilEvaluationSchema).default([]),
+    averageScore: z.number().nullable().optional(),
   }),
 });
 

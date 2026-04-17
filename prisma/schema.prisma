@@ -317,7 +317,7 @@ model CouncilEvaluation {
   id              String         @id @default(cuid())
   projectId       String
   councilMemberId String
-  score           Int
+  score           Float
   decision        ReviewDecision
   comment         String?
   evaluatedAt     DateTime       @default(now())

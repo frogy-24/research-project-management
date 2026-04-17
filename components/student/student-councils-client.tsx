@@ -1,13 +1,20 @@
 'use client';
 
-import { useMemo, useState } from 'react';
-import { UsersRound } from 'lucide-react';
+import { useEffect, useMemo, useState } from 'react';
+import { UsersRound, Star, MessageSquareText } from 'lucide-react';
 import { useMyCouncils } from '@/hooks/useMyCouncils';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+
+const decisionLabels: Record<'PASS' | 'NEED_REVISION' | 'FAIL', string> = {
+    PASS: 'Đạt',
+    NEED_REVISION: 'Cần sửa đổi',
+    FAIL: 'Không đạt',
+};
 
 const participationRoleLabel: Record<'OWNER' | 'TEAM_MEMBER', string> = {
     OWNER: 'Trưởng nhóm',
@@ -17,11 +24,50 @@ const participationRoleLabel: Record<'OWNER' | 'TEAM_MEMBER', string> = {
 export function StudentCouncilsClient() {
     const { data = [], isLoading } = useMyCouncils();
     const [selectedAssignmentId, setSelectedAssignmentId] = useState<string | null>(null);
+    const [callRoundFilter, setCallRoundFilter] = useState<string>('all');
+
+    const callRoundOptions = useMemo(() => {
+        const seen = new Set<string>();
+
+        return data
+            .map((item) => ({
+                id: item.council.callRoundId,
+                name: item.council.callRoundName,
+            }))
+            .filter((round) => {
+                if (seen.has(round.id)) {
+                    return false;
+                }
+
+                seen.add(round.id);
+                return true;
+            })
+            .sort((a, b) => a.name.localeCompare(b.name, 'vi'));
+    }, [data]);
+
+    const filteredData = useMemo(() => {
+        if (callRoundFilter === 'all') {
+            return data;
+        }
+
+        return data.filter((item) => item.council.callRoundId === callRoundFilter);
+    }, [callRoundFilter, data]);
 
     const selectedItem = useMemo(
-        () => data.find((item) => item.projectAssignmentId === selectedAssignmentId) ?? null,
-        [data, selectedAssignmentId],
+        () => filteredData.find((item) => item.projectAssignmentId === selectedAssignmentId) ?? null,
+        [filteredData, selectedAssignmentId],
     );
+
+    useEffect(() => {
+        if (!selectedAssignmentId) {
+            return;
+        }
+
+        const stillVisible = filteredData.some((item) => item.projectAssignmentId === selectedAssignmentId);
+        if (!stillVisible) {
+            setSelectedAssignmentId(null);
+        }
+    }, [filteredData, selectedAssignmentId]);
 
     if (isLoading) {
         return (
@@ -62,6 +108,27 @@ export function StudentCouncilsClient() {
                     </CardTitle>
                 </CardHeader>
                 <CardContent>
+                    <div className="mb-4 flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
+                        <p className="text-sm text-muted-foreground">
+                            Hiển thị {filteredData.length}/{data.length} hội đồng
+                        </p>
+                        <div className="w-full md:w-72">
+                            <Select value={callRoundFilter} onValueChange={setCallRoundFilter}>
+                                <SelectTrigger>
+                                    <SelectValue placeholder="Lọc theo đợt đề tài" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="all">Tất cả đợt đề tài</SelectItem>
+                                    {callRoundOptions.map((round) => (
+                                        <SelectItem key={round.id} value={round.id}>
+                                            {round.name}
+                                        </SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
+                        </div>
+                    </div>
+
                     <div className="rounded-md border">
                         <Table>
                             <TableHeader>
@@ -76,31 +143,41 @@ export function StudentCouncilsClient() {
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
-                                {data.map((item, index) => (
-                                    <TableRow key={item.projectAssignmentId}>
-                                        <TableCell className="font-medium">{index + 1}</TableCell>
-                                        <TableCell className="max-w-72">
-                                            <p className="line-clamp-2 font-medium">{item.projectTitle}</p>
-                                        </TableCell>
-                                        <TableCell>{item.council.name}</TableCell>
-                                        <TableCell>{item.council.callRoundName}</TableCell>
-                                        <TableCell>
-                                            <Badge variant="secondary">
-                                                {participationRoleLabel[item.participationRole]}
-                                            </Badge>
-                                        </TableCell>
-                                        <TableCell>{new Date(item.assignedAt).toLocaleDateString('vi-VN')}</TableCell>
-                                        <TableCell className="text-right">
-                                            <Button
-                                                size="sm"
-                                                variant="outline"
-                                                onClick={() => setSelectedAssignmentId(item.projectAssignmentId)}
-                                            >
-                                                Hiển thị chi tiết
-                                            </Button>
+                                {filteredData.length === 0 ? (
+                                    <TableRow>
+                                        <TableCell colSpan={7} className="text-center text-muted-foreground py-8">
+                                            Không có hội đồng nào trong đợt đã chọn.
                                         </TableCell>
                                     </TableRow>
-                                ))}
+                                ) : (
+                                    filteredData.map((item, index) => (
+                                        <TableRow key={item.projectAssignmentId}>
+                                            <TableCell className="font-medium">{index + 1}</TableCell>
+                                            <TableCell className="max-w-72">
+                                                <p className="line-clamp-2 font-medium">{item.projectTitle}</p>
+                                            </TableCell>
+                                            <TableCell>{item.council.name}</TableCell>
+                                            <TableCell>{item.council.callRoundName}</TableCell>
+                                            <TableCell>
+                                                <Badge variant="secondary">
+                                                    {participationRoleLabel[item.participationRole]}
+                                                </Badge>
+                                            </TableCell>
+                                            <TableCell>
+                                                {new Date(item.assignedAt).toLocaleDateString('vi-VN')}
+                                            </TableCell>
+                                            <TableCell className="text-right">
+                                                <Button
+                                                    size="sm"
+                                                    variant="outline"
+                                                    onClick={() => setSelectedAssignmentId(item.projectAssignmentId)}
+                                                >
+                                                    Hiển thị chi tiết
+                                                </Button>
+                                            </TableCell>
+                                        </TableRow>
+                                    ))
+                                )}
                             </TableBody>
                         </Table>
                     </div>
@@ -165,6 +242,84 @@ export function StudentCouncilsClient() {
                                                     <span className="text-muted-foreground">{member.email || '-'}</span>
                                                 </div>
                                             ))}
+                                        </div>
+                                    )}
+                                </div>
+
+                                <div className="space-y-3">
+                                    <h3 className="font-semibold">Kết quả đánh giá của hội đồng</h3>
+                                    {selectedItem.council.evaluations.length === 0 ? (
+                                        <p className="text-muted-foreground">
+                                            Hội đồng chưa công bố điểm và nhận xét cho đề tài này.
+                                        </p>
+                                    ) : (
+                                        <div className="space-y-3">
+                                            <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
+                                                <div className="rounded-md border p-3">
+                                                    <p className="text-muted-foreground">Điểm trung bình</p>
+                                                    <div className="mt-1 flex items-center gap-2 font-semibold text-primary">
+                                                        <Star className="h-4 w-4" />
+                                                        <span>
+                                                            {selectedItem.council.averageScore?.toFixed(2) ?? '-'} / 10
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <div className="rounded-md border p-3">
+                                                    <p className="text-muted-foreground">Số phiếu đánh giá</p>
+                                                    <p className="mt-1 font-semibold">
+                                                        {selectedItem.council.evaluations.length}
+                                                    </p>
+                                                </div>
+                                                <div className="rounded-md border p-3">
+                                                    <p className="text-muted-foreground">Trạng thái</p>
+                                                    <p className="mt-1 font-semibold">Đã có kết quả từ hội đồng</p>
+                                                </div>
+                                            </div>
+
+                                            <div className="space-y-2">
+                                                {selectedItem.council.evaluations.map((evaluation) => (
+                                                    <div
+                                                        key={evaluation.id}
+                                                        className="rounded-md border p-3 space-y-2"
+                                                    >
+                                                        <div className="flex flex-wrap items-center justify-between gap-2">
+                                                            <div>
+                                                                <p className="font-medium">{evaluation.councilMember.name}</p>
+                                                                <p className="text-xs text-muted-foreground">
+                                                                    {evaluation.councilMember.code || '-'}
+                                                                </p>
+                                                            </div>
+                                                            <div className="flex flex-wrap items-center gap-2">
+                                                                <Badge variant="secondary">
+                                                                    {decisionLabels[evaluation.decision]}
+                                                                </Badge>
+                                                                <Badge variant="outline" className="bg-emerald-50">
+                                                                    {evaluation.score}/10
+                                                                </Badge>
+                                                            </div>
+                                                        </div>
+
+                                                        {evaluation.comment ? (
+                                                            <div className="rounded-md bg-muted/40 p-3 text-sm">
+                                                                <div className="mb-1 flex items-center gap-2 text-xs text-muted-foreground">
+                                                                    <MessageSquareText className="h-3.5 w-3.5" />
+                                                                    <span>Nhận xét</span>
+                                                                </div>
+                                                                <p className="whitespace-pre-wrap">{evaluation.comment}</p>
+                                                            </div>
+                                                        ) : (
+                                                            <p className="text-sm text-muted-foreground">
+                                                                Không có nhận xét từ thành viên này.
+                                                            </p>
+                                                        )}
+
+                                                        <p className="text-xs text-muted-foreground">
+                                                            Đánh giá lúc:{' '}
+                                                            {new Date(evaluation.evaluatedAt).toLocaleString('vi-VN')}
+                                                        </p>
+                                                    </div>
+                                                ))}
+                                            </div>
                                         </div>
                                     )}
                                 </div>

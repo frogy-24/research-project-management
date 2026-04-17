@@ -187,6 +187,7 @@ export async function GET() {
 
                     return {
                         id: projectItem.projectRegistration.id,
+                        projectId: projectId ?? null,
                         title: projectItem.projectRegistration.title,
                         advisor: projectItem.projectRegistration.instructor
                             ? {
