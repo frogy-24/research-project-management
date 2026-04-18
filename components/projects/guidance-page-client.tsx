@@ -21,7 +21,20 @@ import {
 } from '@/components/ui/pagination';
 import { useDebounce } from '@/hooks/useDebounce';
 import { useCallRounds } from '@/hooks/useCallRounds';
-import { CalendarDays, Filter, Search, ShieldCheck, UserCheck, UserX, Users, Mail, UserSquare2 } from 'lucide-react';
+import {
+    CalendarDays,
+    Download,
+    ExternalLink,
+    FileText,
+    Filter,
+    Mail,
+    Search,
+    ShieldCheck,
+    UserCheck,
+    UserSquare2,
+    UserX,
+    Users,
+} from 'lucide-react';
 
 const SEARCH_FIELD_OPTIONS = [
     { value: 'all', label: 'Tất cả trường' },
@@ -441,6 +454,70 @@ export function GuidancePageClient() {
                                                                     <p className="text-sm whitespace-pre-wrap leading-6">
                                                                         {req.expectedOutput || 'Chưa có thông tin'}
                                                                     </p>
+                                                                </div>
+                                                                <div>
+                                                                    <h4 className="text-sm font-medium text-muted-foreground mb-2">
+                                                                        File đính kèm
+                                                                    </h4>
+                                                                    {req.proposalFiles && req.proposalFiles.length > 0 ? (
+                                                                        <div className="space-y-2">
+                                                                            {req.proposalFiles.map((file, fileIndex) => (
+                                                                                <div
+                                                                                    key={`${file.url}-${fileIndex}`}
+                                                                                    className="rounded-md border bg-muted/20 px-3 py-2 flex items-center justify-between gap-2"
+                                                                                >
+                                                                                    <div className="min-w-0">
+                                                                                        <p className="font-medium text-sm truncate flex items-center gap-1.5">
+                                                                                            <FileText className="h-3.5 w-3.5 text-primary shrink-0" />
+                                                                                            <span className="truncate">{file.name}</span>
+                                                                                        </p>
+                                                                                        <p className="text-xs text-muted-foreground">
+                                                                                            {typeof file.size === 'number'
+                                                                                                ? `${(file.size / 1024).toFixed(1)} KB`
+                                                                                                : 'Kích thước không xác định'}
+                                                                                        </p>
+                                                                                    </div>
+                                                                                    <div className="flex items-center gap-1">
+                                                                                        <Button
+                                                                                            type="button"
+                                                                                            variant="ghost"
+                                                                                            size="sm"
+                                                                                            className="h-8 w-8 p-0"
+                                                                                            asChild
+                                                                                        >
+                                                                                            <a
+                                                                                                href={file.url}
+                                                                                                target="_blank"
+                                                                                                rel="noopener noreferrer"
+                                                                                                aria-label={`Mở tệp ${file.name}`}
+                                                                                            >
+                                                                                                <ExternalLink className="h-4 w-4" />
+                                                                                            </a>
+                                                                                        </Button>
+                                                                                        <Button
+                                                                                            type="button"
+                                                                                            variant="ghost"
+                                                                                            size="sm"
+                                                                                            className="h-8 w-8 p-0"
+                                                                                            asChild
+                                                                                        >
+                                                                                            <a
+                                                                                                href={file.url}
+                                                                                                target="_blank"
+                                                                                                rel="noopener noreferrer"
+                                                                                                download={file.name}
+                                                                                                aria-label={`Tải tệp ${file.name}`}
+                                                                                            >
+                                                                                                <Download className="h-4 w-4" />
+                                                                                            </a>
+                                                                                        </Button>
+                                                                                    </div>
+                                                                                </div>
+                                                                            ))}
+                                                                        </div>
+                                                                    ) : (
+                                                                        <p className="text-sm text-muted-foreground">Chưa có file đính kèm.</p>
+                                                                    )}
                                                                 </div>
                                                                 <div>
                                                                     <h4 className="text-sm font-medium text-muted-foreground mb-2">

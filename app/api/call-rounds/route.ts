@@ -129,6 +129,21 @@ export async function GET(req: Request) {
             },
           },
         },
+        attachments: {
+          select: {
+            id: true,
+            callRoundId: true,
+            fileName: true,
+            fileUrl: true,
+            fileSize: true,
+            fileType: true,
+            description: true,
+            createdAt: true,
+          },
+          orderBy: {
+            createdAt: "desc",
+          },
+        },
         _count: {
           select: {
             projects: true,

@@ -1,6 +1,7 @@
 // hooks/useGuidanceRequests.ts
 import { useQuery, useMutation, useQueryClient, keepPreviousData } from '@tanstack/react-query';
 import { api } from '@/lib/axios';
+import type { RegistrationProposalFile } from '@/types/project-registration.schema';
 
 type InstructorStatus = 'ACCEPTED' | 'REJECTED';
 type GuidanceStatusFilter = 'PENDING' | 'ACCEPTED' | 'REJECTED';
@@ -11,6 +12,7 @@ export interface GuidanceRequest {
     title: string;
     objective?: string;
     expectedOutput?: string;
+    proposalFiles?: RegistrationProposalFile[] | null;
     callRoundId?: string | null;
     createdAt: string;
     callRound?: {

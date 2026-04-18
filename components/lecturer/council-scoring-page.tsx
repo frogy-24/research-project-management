@@ -5,6 +5,7 @@ import { useLecturerCouncils } from '@/hooks/useLecturerCouncils';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { CouncilEvaluationForm } from './council-evaluation-form';
@@ -14,6 +15,7 @@ import { toast } from 'sonner';
 export function CouncilScoringPage() {
     const { data = [], isLoading, refetch } = useLecturerCouncils();
     const [selectedAssignmentId, setSelectedAssignmentId] = useState<string | null>(null);
+    const [selectedCallRoundId, setSelectedCallRoundId] = useState<string>('all');
     const [evaluationForm, setEvaluationForm] = useState<{
         open: boolean;
         projectId: string;
@@ -26,9 +28,24 @@ export function CouncilScoringPage() {
         projectTitle: '',
     });
 
+    const callRoundOptions = useMemo(
+        () =>
+            data
+                .map((item) => ({ id: item.council.callRoundId, name: item.council.callRoundName }))
+                .filter((option, index, array) => array.findIndex((item) => item.id === option.id) === index),
+        [data],
+    );
+
+    const filteredData = useMemo(() => {
+        if (selectedCallRoundId === 'all') {
+            return data;
+        }
+        return data.filter((item) => item.council.callRoundId === selectedCallRoundId);
+    }, [data, selectedCallRoundId]);
+
     const selectedItem = useMemo(
-        () => data.find((item) => item.assignmentId === selectedAssignmentId) ?? null,
-        [data, selectedAssignmentId],
+        () => filteredData.find((item) => item.assignmentId === selectedAssignmentId) ?? null,
+        [filteredData, selectedAssignmentId],
     );
 
     const getDecisionBadge = (decision: string) => {
@@ -105,6 +122,36 @@ export function CouncilScoringPage() {
                     </CardTitle>
                 </CardHeader>
                 <CardContent>
+                    <div className="mb-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+                        <p className="text-sm text-muted-foreground">
+                            Lọc danh sách hội đồng theo đợt đăng ký đề tài.
+                        </p>
+                        <Select
+                            value={selectedCallRoundId}
+                            onValueChange={(value) => {
+                                setSelectedCallRoundId(value);
+                                setSelectedAssignmentId(null);
+                            }}
+                        >
+                            <SelectTrigger className="w-full sm:w-72">
+                                <SelectValue placeholder="Chọn đợt đăng ký" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="all">Tất cả đợt đăng ký</SelectItem>
+                                {callRoundOptions.map((option) => (
+                                    <SelectItem key={option.id} value={option.id}>
+                                        {option.name}
+                                    </SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
+                    </div>
+
+                    {filteredData.length === 0 ? (
+                        <div className="rounded-md border border-dashed p-6 text-center text-sm text-muted-foreground">
+                            Không có hội đồng nào thuộc đợt đăng ký đã chọn.
+                        </div>
+                    ) : (
                     <div className="rounded-md border">
                         <Table>
                             <TableHeader>
@@ -119,7 +166,7 @@ export function CouncilScoringPage() {
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
-                                {data.map((item, index) => {
+                                {filteredData.map((item, index) => {
                                     const evaluatedCount = item.council.projects.filter((p) => p.myEvaluation).length;
                                     const totalCount = item.council.projects.length;
 
@@ -167,6 +214,7 @@ export function CouncilScoringPage() {
                             </TableBody>
                         </Table>
                     </div>
+                    )}
                 </CardContent>
             </Card>
 

@@ -49,6 +49,11 @@ export type ProjectType = $Result.DefaultSelection<Prisma.$ProjectTypePayload>
  */
 export type Project = $Result.DefaultSelection<Prisma.$ProjectPayload>
 /**
+ * Model ProjectClosingSubmission
+ * 
+ */
+export type ProjectClosingSubmission = $Result.DefaultSelection<Prisma.$ProjectClosingSubmissionPayload>
+/**
  * Model ProgressReportTemplate
  * 
  */
@@ -245,6 +250,15 @@ export const DisbursementStatus: {
 export type DisbursementStatus = (typeof DisbursementStatus)[keyof typeof DisbursementStatus]
 
 
+export const ProjectClosingStatus: {
+  SUBMITTED: 'SUBMITTED',
+  REVISION_REQUESTED: 'REVISION_REQUESTED',
+  APPROVED: 'APPROVED'
+};
+
+export type ProjectClosingStatus = (typeof ProjectClosingStatus)[keyof typeof ProjectClosingStatus]
+
+
 export const InstructorStatus: {
   PENDING: 'PENDING',
   ACCEPTED: 'ACCEPTED',
@@ -340,6 +354,10 @@ export const RegistrationStatus: typeof $Enums.RegistrationStatus
 export type DisbursementStatus = $Enums.DisbursementStatus
 
 export const DisbursementStatus: typeof $Enums.DisbursementStatus
+
+export type ProjectClosingStatus = $Enums.ProjectClosingStatus
+
+export const ProjectClosingStatus: typeof $Enums.ProjectClosingStatus
 
 export type InstructorStatus = $Enums.InstructorStatus
 
@@ -551,6 +569,16 @@ export class PrismaClient<
     * ```
     */
   get project(): Prisma.ProjectDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.projectClosingSubmission`: Exposes CRUD operations for the **ProjectClosingSubmission** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ProjectClosingSubmissions
+    * const projectClosingSubmissions = await prisma.projectClosingSubmission.findMany()
+    * ```
+    */
+  get projectClosingSubmission(): Prisma.ProjectClosingSubmissionDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.progressReportTemplate`: Exposes CRUD operations for the **ProgressReportTemplate** model.
@@ -1172,6 +1200,7 @@ export namespace Prisma {
     CallRound: 'CallRound',
     ProjectType: 'ProjectType',
     Project: 'Project',
+    ProjectClosingSubmission: 'ProjectClosingSubmission',
     ProgressReportTemplate: 'ProgressReportTemplate',
     ProgressReportTemplateItem: 'ProgressReportTemplateItem',
     ProgressReport: 'ProgressReport',
@@ -1205,7 +1234,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "department" | "major" | "class" | "user" | "callRound" | "projectType" | "project" | "progressReportTemplate" | "progressReportTemplateItem" | "progressReport" | "councilEvaluation" | "fundingDisbursement" | "extensionRequest" | "projectRegistration" | "notification" | "post" | "room" | "officeMeeting" | "officeMeetingView" | "callRoundInstructor" | "callRoundCouncilMember" | "council" | "councilMemberAssignment" | "projectCouncilAssignment" | "callRoundAttachment"
+      modelProps: "department" | "major" | "class" | "user" | "callRound" | "projectType" | "project" | "projectClosingSubmission" | "progressReportTemplate" | "progressReportTemplateItem" | "progressReport" | "councilEvaluation" | "fundingDisbursement" | "extensionRequest" | "projectRegistration" | "notification" | "post" | "room" | "officeMeeting" | "officeMeetingView" | "callRoundInstructor" | "callRoundCouncilMember" | "council" | "councilMemberAssignment" | "projectCouncilAssignment" | "callRoundAttachment"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1724,6 +1753,80 @@ export namespace Prisma {
           count: {
             args: Prisma.ProjectCountArgs<ExtArgs>
             result: $Utils.Optional<ProjectCountAggregateOutputType> | number
+          }
+        }
+      }
+      ProjectClosingSubmission: {
+        payload: Prisma.$ProjectClosingSubmissionPayload<ExtArgs>
+        fields: Prisma.ProjectClosingSubmissionFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ProjectClosingSubmissionFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProjectClosingSubmissionPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ProjectClosingSubmissionFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProjectClosingSubmissionPayload>
+          }
+          findFirst: {
+            args: Prisma.ProjectClosingSubmissionFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProjectClosingSubmissionPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ProjectClosingSubmissionFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProjectClosingSubmissionPayload>
+          }
+          findMany: {
+            args: Prisma.ProjectClosingSubmissionFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProjectClosingSubmissionPayload>[]
+          }
+          create: {
+            args: Prisma.ProjectClosingSubmissionCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProjectClosingSubmissionPayload>
+          }
+          createMany: {
+            args: Prisma.ProjectClosingSubmissionCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ProjectClosingSubmissionCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProjectClosingSubmissionPayload>[]
+          }
+          delete: {
+            args: Prisma.ProjectClosingSubmissionDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProjectClosingSubmissionPayload>
+          }
+          update: {
+            args: Prisma.ProjectClosingSubmissionUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProjectClosingSubmissionPayload>
+          }
+          deleteMany: {
+            args: Prisma.ProjectClosingSubmissionDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ProjectClosingSubmissionUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.ProjectClosingSubmissionUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProjectClosingSubmissionPayload>[]
+          }
+          upsert: {
+            args: Prisma.ProjectClosingSubmissionUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProjectClosingSubmissionPayload>
+          }
+          aggregate: {
+            args: Prisma.ProjectClosingSubmissionAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateProjectClosingSubmission>
+          }
+          groupBy: {
+            args: Prisma.ProjectClosingSubmissionGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ProjectClosingSubmissionGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ProjectClosingSubmissionCountArgs<ExtArgs>
+            result: $Utils.Optional<ProjectClosingSubmissionCountAggregateOutputType> | number
           }
         }
       }
@@ -3174,6 +3277,7 @@ export namespace Prisma {
     callRound?: CallRoundOmit
     projectType?: ProjectTypeOmit
     project?: ProjectOmit
+    projectClosingSubmission?: ProjectClosingSubmissionOmit
     progressReportTemplate?: ProgressReportTemplateOmit
     progressReportTemplateItem?: ProgressReportTemplateItemOmit
     progressReport?: ProgressReportOmit
@@ -12350,6 +12454,7 @@ export namespace Prisma {
     councilEvaluations?: boolean | Project$councilEvaluationsArgs<ExtArgs>
     disbursements?: boolean | Project$disbursementsArgs<ExtArgs>
     extensionRequests?: boolean | Project$extensionRequestsArgs<ExtArgs>
+    closingSubmission?: boolean | Project$closingSubmissionArgs<ExtArgs>
     instructor?: boolean | Project$instructorArgs<ExtArgs>
     officeMeetings?: boolean | Project$officeMeetingsArgs<ExtArgs>
     _count?: boolean | ProjectCountOutputTypeDefaultArgs<ExtArgs>
@@ -12438,6 +12543,7 @@ export namespace Prisma {
     councilEvaluations?: boolean | Project$councilEvaluationsArgs<ExtArgs>
     disbursements?: boolean | Project$disbursementsArgs<ExtArgs>
     extensionRequests?: boolean | Project$extensionRequestsArgs<ExtArgs>
+    closingSubmission?: boolean | Project$closingSubmissionArgs<ExtArgs>
     instructor?: boolean | Project$instructorArgs<ExtArgs>
     officeMeetings?: boolean | Project$officeMeetingsArgs<ExtArgs>
     _count?: boolean | ProjectCountOutputTypeDefaultArgs<ExtArgs>
@@ -12468,6 +12574,7 @@ export namespace Prisma {
       councilEvaluations: Prisma.$CouncilEvaluationPayload<ExtArgs>[]
       disbursements: Prisma.$FundingDisbursementPayload<ExtArgs>[]
       extensionRequests: Prisma.$ExtensionRequestPayload<ExtArgs>[]
+      closingSubmission: Prisma.$ProjectClosingSubmissionPayload<ExtArgs> | null
       instructor: Prisma.$UserPayload<ExtArgs> | null
       officeMeetings: Prisma.$OfficeMeetingPayload<ExtArgs>[]
     }
@@ -12892,6 +12999,7 @@ export namespace Prisma {
     councilEvaluations<T extends Project$councilEvaluationsArgs<ExtArgs> = {}>(args?: Subset<T, Project$councilEvaluationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CouncilEvaluationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     disbursements<T extends Project$disbursementsArgs<ExtArgs> = {}>(args?: Subset<T, Project$disbursementsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FundingDisbursementPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     extensionRequests<T extends Project$extensionRequestsArgs<ExtArgs> = {}>(args?: Subset<T, Project$extensionRequestsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ExtensionRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    closingSubmission<T extends Project$closingSubmissionArgs<ExtArgs> = {}>(args?: Subset<T, Project$closingSubmissionArgs<ExtArgs>>): Prisma__ProjectClosingSubmissionClient<$Result.GetResult<Prisma.$ProjectClosingSubmissionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     instructor<T extends Project$instructorArgs<ExtArgs> = {}>(args?: Subset<T, Project$instructorArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     officeMeetings<T extends Project$officeMeetingsArgs<ExtArgs> = {}>(args?: Subset<T, Project$officeMeetingsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OfficeMeetingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
@@ -13495,6 +13603,25 @@ export namespace Prisma {
   }
 
   /**
+   * Project.closingSubmission
+   */
+  export type Project$closingSubmissionArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProjectClosingSubmission
+     */
+    select?: ProjectClosingSubmissionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProjectClosingSubmission
+     */
+    omit?: ProjectClosingSubmissionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProjectClosingSubmissionInclude<ExtArgs> | null
+    where?: ProjectClosingSubmissionWhereInput
+  }
+
+  /**
    * Project.instructor
    */
   export type Project$instructorArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -13553,6 +13680,1180 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: ProjectInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model ProjectClosingSubmission
+   */
+
+  export type AggregateProjectClosingSubmission = {
+    _count: ProjectClosingSubmissionCountAggregateOutputType | null
+    _min: ProjectClosingSubmissionMinAggregateOutputType | null
+    _max: ProjectClosingSubmissionMaxAggregateOutputType | null
+  }
+
+  export type ProjectClosingSubmissionMinAggregateOutputType = {
+    id: string | null
+    projectId: string | null
+    submittedById: string | null
+    status: $Enums.ProjectClosingStatus | null
+    note: string | null
+    submittedAt: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type ProjectClosingSubmissionMaxAggregateOutputType = {
+    id: string | null
+    projectId: string | null
+    submittedById: string | null
+    status: $Enums.ProjectClosingStatus | null
+    note: string | null
+    submittedAt: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type ProjectClosingSubmissionCountAggregateOutputType = {
+    id: number
+    projectId: number
+    submittedById: number
+    status: number
+    note: number
+    reportFiles: number
+    researchSourceCodeFiles: number
+    researchGuideFiles: number
+    administrativeDefenseApplicationFiles: number
+    administrativeAchievementEvidenceFiles: number
+    administrativeAdvisorReviewFiles: number
+    presentationSlideFiles: number
+    presentationVideoFiles: number
+    submittedAt: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type ProjectClosingSubmissionMinAggregateInputType = {
+    id?: true
+    projectId?: true
+    submittedById?: true
+    status?: true
+    note?: true
+    submittedAt?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type ProjectClosingSubmissionMaxAggregateInputType = {
+    id?: true
+    projectId?: true
+    submittedById?: true
+    status?: true
+    note?: true
+    submittedAt?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type ProjectClosingSubmissionCountAggregateInputType = {
+    id?: true
+    projectId?: true
+    submittedById?: true
+    status?: true
+    note?: true
+    reportFiles?: true
+    researchSourceCodeFiles?: true
+    researchGuideFiles?: true
+    administrativeDefenseApplicationFiles?: true
+    administrativeAchievementEvidenceFiles?: true
+    administrativeAdvisorReviewFiles?: true
+    presentationSlideFiles?: true
+    presentationVideoFiles?: true
+    submittedAt?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type ProjectClosingSubmissionAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ProjectClosingSubmission to aggregate.
+     */
+    where?: ProjectClosingSubmissionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ProjectClosingSubmissions to fetch.
+     */
+    orderBy?: ProjectClosingSubmissionOrderByWithRelationInput | ProjectClosingSubmissionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ProjectClosingSubmissionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ProjectClosingSubmissions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ProjectClosingSubmissions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned ProjectClosingSubmissions
+    **/
+    _count?: true | ProjectClosingSubmissionCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ProjectClosingSubmissionMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ProjectClosingSubmissionMaxAggregateInputType
+  }
+
+  export type GetProjectClosingSubmissionAggregateType<T extends ProjectClosingSubmissionAggregateArgs> = {
+        [P in keyof T & keyof AggregateProjectClosingSubmission]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateProjectClosingSubmission[P]>
+      : GetScalarType<T[P], AggregateProjectClosingSubmission[P]>
+  }
+
+
+
+
+  export type ProjectClosingSubmissionGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ProjectClosingSubmissionWhereInput
+    orderBy?: ProjectClosingSubmissionOrderByWithAggregationInput | ProjectClosingSubmissionOrderByWithAggregationInput[]
+    by: ProjectClosingSubmissionScalarFieldEnum[] | ProjectClosingSubmissionScalarFieldEnum
+    having?: ProjectClosingSubmissionScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ProjectClosingSubmissionCountAggregateInputType | true
+    _min?: ProjectClosingSubmissionMinAggregateInputType
+    _max?: ProjectClosingSubmissionMaxAggregateInputType
+  }
+
+  export type ProjectClosingSubmissionGroupByOutputType = {
+    id: string
+    projectId: string
+    submittedById: string
+    status: $Enums.ProjectClosingStatus
+    note: string | null
+    reportFiles: JsonValue | null
+    researchSourceCodeFiles: JsonValue | null
+    researchGuideFiles: JsonValue | null
+    administrativeDefenseApplicationFiles: JsonValue | null
+    administrativeAchievementEvidenceFiles: JsonValue | null
+    administrativeAdvisorReviewFiles: JsonValue | null
+    presentationSlideFiles: JsonValue | null
+    presentationVideoFiles: JsonValue | null
+    submittedAt: Date
+    createdAt: Date
+    updatedAt: Date
+    _count: ProjectClosingSubmissionCountAggregateOutputType | null
+    _min: ProjectClosingSubmissionMinAggregateOutputType | null
+    _max: ProjectClosingSubmissionMaxAggregateOutputType | null
+  }
+
+  type GetProjectClosingSubmissionGroupByPayload<T extends ProjectClosingSubmissionGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ProjectClosingSubmissionGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ProjectClosingSubmissionGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ProjectClosingSubmissionGroupByOutputType[P]>
+            : GetScalarType<T[P], ProjectClosingSubmissionGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ProjectClosingSubmissionSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    projectId?: boolean
+    submittedById?: boolean
+    status?: boolean
+    note?: boolean
+    reportFiles?: boolean
+    researchSourceCodeFiles?: boolean
+    researchGuideFiles?: boolean
+    administrativeDefenseApplicationFiles?: boolean
+    administrativeAchievementEvidenceFiles?: boolean
+    administrativeAdvisorReviewFiles?: boolean
+    presentationSlideFiles?: boolean
+    presentationVideoFiles?: boolean
+    submittedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    project?: boolean | ProjectDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["projectClosingSubmission"]>
+
+  export type ProjectClosingSubmissionSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    projectId?: boolean
+    submittedById?: boolean
+    status?: boolean
+    note?: boolean
+    reportFiles?: boolean
+    researchSourceCodeFiles?: boolean
+    researchGuideFiles?: boolean
+    administrativeDefenseApplicationFiles?: boolean
+    administrativeAchievementEvidenceFiles?: boolean
+    administrativeAdvisorReviewFiles?: boolean
+    presentationSlideFiles?: boolean
+    presentationVideoFiles?: boolean
+    submittedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    project?: boolean | ProjectDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["projectClosingSubmission"]>
+
+  export type ProjectClosingSubmissionSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    projectId?: boolean
+    submittedById?: boolean
+    status?: boolean
+    note?: boolean
+    reportFiles?: boolean
+    researchSourceCodeFiles?: boolean
+    researchGuideFiles?: boolean
+    administrativeDefenseApplicationFiles?: boolean
+    administrativeAchievementEvidenceFiles?: boolean
+    administrativeAdvisorReviewFiles?: boolean
+    presentationSlideFiles?: boolean
+    presentationVideoFiles?: boolean
+    submittedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    project?: boolean | ProjectDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["projectClosingSubmission"]>
+
+  export type ProjectClosingSubmissionSelectScalar = {
+    id?: boolean
+    projectId?: boolean
+    submittedById?: boolean
+    status?: boolean
+    note?: boolean
+    reportFiles?: boolean
+    researchSourceCodeFiles?: boolean
+    researchGuideFiles?: boolean
+    administrativeDefenseApplicationFiles?: boolean
+    administrativeAchievementEvidenceFiles?: boolean
+    administrativeAdvisorReviewFiles?: boolean
+    presentationSlideFiles?: boolean
+    presentationVideoFiles?: boolean
+    submittedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type ProjectClosingSubmissionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "projectId" | "submittedById" | "status" | "note" | "reportFiles" | "researchSourceCodeFiles" | "researchGuideFiles" | "administrativeDefenseApplicationFiles" | "administrativeAchievementEvidenceFiles" | "administrativeAdvisorReviewFiles" | "presentationSlideFiles" | "presentationVideoFiles" | "submittedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["projectClosingSubmission"]>
+  export type ProjectClosingSubmissionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    project?: boolean | ProjectDefaultArgs<ExtArgs>
+  }
+  export type ProjectClosingSubmissionIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    project?: boolean | ProjectDefaultArgs<ExtArgs>
+  }
+  export type ProjectClosingSubmissionIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    project?: boolean | ProjectDefaultArgs<ExtArgs>
+  }
+
+  export type $ProjectClosingSubmissionPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "ProjectClosingSubmission"
+    objects: {
+      project: Prisma.$ProjectPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      projectId: string
+      submittedById: string
+      status: $Enums.ProjectClosingStatus
+      note: string | null
+      reportFiles: Prisma.JsonValue | null
+      researchSourceCodeFiles: Prisma.JsonValue | null
+      researchGuideFiles: Prisma.JsonValue | null
+      administrativeDefenseApplicationFiles: Prisma.JsonValue | null
+      administrativeAchievementEvidenceFiles: Prisma.JsonValue | null
+      administrativeAdvisorReviewFiles: Prisma.JsonValue | null
+      presentationSlideFiles: Prisma.JsonValue | null
+      presentationVideoFiles: Prisma.JsonValue | null
+      submittedAt: Date
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["projectClosingSubmission"]>
+    composites: {}
+  }
+
+  type ProjectClosingSubmissionGetPayload<S extends boolean | null | undefined | ProjectClosingSubmissionDefaultArgs> = $Result.GetResult<Prisma.$ProjectClosingSubmissionPayload, S>
+
+  type ProjectClosingSubmissionCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<ProjectClosingSubmissionFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: ProjectClosingSubmissionCountAggregateInputType | true
+    }
+
+  export interface ProjectClosingSubmissionDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ProjectClosingSubmission'], meta: { name: 'ProjectClosingSubmission' } }
+    /**
+     * Find zero or one ProjectClosingSubmission that matches the filter.
+     * @param {ProjectClosingSubmissionFindUniqueArgs} args - Arguments to find a ProjectClosingSubmission
+     * @example
+     * // Get one ProjectClosingSubmission
+     * const projectClosingSubmission = await prisma.projectClosingSubmission.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ProjectClosingSubmissionFindUniqueArgs>(args: SelectSubset<T, ProjectClosingSubmissionFindUniqueArgs<ExtArgs>>): Prisma__ProjectClosingSubmissionClient<$Result.GetResult<Prisma.$ProjectClosingSubmissionPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one ProjectClosingSubmission that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {ProjectClosingSubmissionFindUniqueOrThrowArgs} args - Arguments to find a ProjectClosingSubmission
+     * @example
+     * // Get one ProjectClosingSubmission
+     * const projectClosingSubmission = await prisma.projectClosingSubmission.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ProjectClosingSubmissionFindUniqueOrThrowArgs>(args: SelectSubset<T, ProjectClosingSubmissionFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ProjectClosingSubmissionClient<$Result.GetResult<Prisma.$ProjectClosingSubmissionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ProjectClosingSubmission that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProjectClosingSubmissionFindFirstArgs} args - Arguments to find a ProjectClosingSubmission
+     * @example
+     * // Get one ProjectClosingSubmission
+     * const projectClosingSubmission = await prisma.projectClosingSubmission.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ProjectClosingSubmissionFindFirstArgs>(args?: SelectSubset<T, ProjectClosingSubmissionFindFirstArgs<ExtArgs>>): Prisma__ProjectClosingSubmissionClient<$Result.GetResult<Prisma.$ProjectClosingSubmissionPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ProjectClosingSubmission that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProjectClosingSubmissionFindFirstOrThrowArgs} args - Arguments to find a ProjectClosingSubmission
+     * @example
+     * // Get one ProjectClosingSubmission
+     * const projectClosingSubmission = await prisma.projectClosingSubmission.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ProjectClosingSubmissionFindFirstOrThrowArgs>(args?: SelectSubset<T, ProjectClosingSubmissionFindFirstOrThrowArgs<ExtArgs>>): Prisma__ProjectClosingSubmissionClient<$Result.GetResult<Prisma.$ProjectClosingSubmissionPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more ProjectClosingSubmissions that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProjectClosingSubmissionFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all ProjectClosingSubmissions
+     * const projectClosingSubmissions = await prisma.projectClosingSubmission.findMany()
+     * 
+     * // Get first 10 ProjectClosingSubmissions
+     * const projectClosingSubmissions = await prisma.projectClosingSubmission.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const projectClosingSubmissionWithIdOnly = await prisma.projectClosingSubmission.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends ProjectClosingSubmissionFindManyArgs>(args?: SelectSubset<T, ProjectClosingSubmissionFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProjectClosingSubmissionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a ProjectClosingSubmission.
+     * @param {ProjectClosingSubmissionCreateArgs} args - Arguments to create a ProjectClosingSubmission.
+     * @example
+     * // Create one ProjectClosingSubmission
+     * const ProjectClosingSubmission = await prisma.projectClosingSubmission.create({
+     *   data: {
+     *     // ... data to create a ProjectClosingSubmission
+     *   }
+     * })
+     * 
+     */
+    create<T extends ProjectClosingSubmissionCreateArgs>(args: SelectSubset<T, ProjectClosingSubmissionCreateArgs<ExtArgs>>): Prisma__ProjectClosingSubmissionClient<$Result.GetResult<Prisma.$ProjectClosingSubmissionPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many ProjectClosingSubmissions.
+     * @param {ProjectClosingSubmissionCreateManyArgs} args - Arguments to create many ProjectClosingSubmissions.
+     * @example
+     * // Create many ProjectClosingSubmissions
+     * const projectClosingSubmission = await prisma.projectClosingSubmission.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ProjectClosingSubmissionCreateManyArgs>(args?: SelectSubset<T, ProjectClosingSubmissionCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many ProjectClosingSubmissions and returns the data saved in the database.
+     * @param {ProjectClosingSubmissionCreateManyAndReturnArgs} args - Arguments to create many ProjectClosingSubmissions.
+     * @example
+     * // Create many ProjectClosingSubmissions
+     * const projectClosingSubmission = await prisma.projectClosingSubmission.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many ProjectClosingSubmissions and only return the `id`
+     * const projectClosingSubmissionWithIdOnly = await prisma.projectClosingSubmission.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ProjectClosingSubmissionCreateManyAndReturnArgs>(args?: SelectSubset<T, ProjectClosingSubmissionCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProjectClosingSubmissionPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a ProjectClosingSubmission.
+     * @param {ProjectClosingSubmissionDeleteArgs} args - Arguments to delete one ProjectClosingSubmission.
+     * @example
+     * // Delete one ProjectClosingSubmission
+     * const ProjectClosingSubmission = await prisma.projectClosingSubmission.delete({
+     *   where: {
+     *     // ... filter to delete one ProjectClosingSubmission
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ProjectClosingSubmissionDeleteArgs>(args: SelectSubset<T, ProjectClosingSubmissionDeleteArgs<ExtArgs>>): Prisma__ProjectClosingSubmissionClient<$Result.GetResult<Prisma.$ProjectClosingSubmissionPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one ProjectClosingSubmission.
+     * @param {ProjectClosingSubmissionUpdateArgs} args - Arguments to update one ProjectClosingSubmission.
+     * @example
+     * // Update one ProjectClosingSubmission
+     * const projectClosingSubmission = await prisma.projectClosingSubmission.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ProjectClosingSubmissionUpdateArgs>(args: SelectSubset<T, ProjectClosingSubmissionUpdateArgs<ExtArgs>>): Prisma__ProjectClosingSubmissionClient<$Result.GetResult<Prisma.$ProjectClosingSubmissionPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more ProjectClosingSubmissions.
+     * @param {ProjectClosingSubmissionDeleteManyArgs} args - Arguments to filter ProjectClosingSubmissions to delete.
+     * @example
+     * // Delete a few ProjectClosingSubmissions
+     * const { count } = await prisma.projectClosingSubmission.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ProjectClosingSubmissionDeleteManyArgs>(args?: SelectSubset<T, ProjectClosingSubmissionDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ProjectClosingSubmissions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProjectClosingSubmissionUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many ProjectClosingSubmissions
+     * const projectClosingSubmission = await prisma.projectClosingSubmission.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ProjectClosingSubmissionUpdateManyArgs>(args: SelectSubset<T, ProjectClosingSubmissionUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ProjectClosingSubmissions and returns the data updated in the database.
+     * @param {ProjectClosingSubmissionUpdateManyAndReturnArgs} args - Arguments to update many ProjectClosingSubmissions.
+     * @example
+     * // Update many ProjectClosingSubmissions
+     * const projectClosingSubmission = await prisma.projectClosingSubmission.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more ProjectClosingSubmissions and only return the `id`
+     * const projectClosingSubmissionWithIdOnly = await prisma.projectClosingSubmission.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends ProjectClosingSubmissionUpdateManyAndReturnArgs>(args: SelectSubset<T, ProjectClosingSubmissionUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProjectClosingSubmissionPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one ProjectClosingSubmission.
+     * @param {ProjectClosingSubmissionUpsertArgs} args - Arguments to update or create a ProjectClosingSubmission.
+     * @example
+     * // Update or create a ProjectClosingSubmission
+     * const projectClosingSubmission = await prisma.projectClosingSubmission.upsert({
+     *   create: {
+     *     // ... data to create a ProjectClosingSubmission
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the ProjectClosingSubmission we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ProjectClosingSubmissionUpsertArgs>(args: SelectSubset<T, ProjectClosingSubmissionUpsertArgs<ExtArgs>>): Prisma__ProjectClosingSubmissionClient<$Result.GetResult<Prisma.$ProjectClosingSubmissionPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of ProjectClosingSubmissions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProjectClosingSubmissionCountArgs} args - Arguments to filter ProjectClosingSubmissions to count.
+     * @example
+     * // Count the number of ProjectClosingSubmissions
+     * const count = await prisma.projectClosingSubmission.count({
+     *   where: {
+     *     // ... the filter for the ProjectClosingSubmissions we want to count
+     *   }
+     * })
+    **/
+    count<T extends ProjectClosingSubmissionCountArgs>(
+      args?: Subset<T, ProjectClosingSubmissionCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ProjectClosingSubmissionCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a ProjectClosingSubmission.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProjectClosingSubmissionAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ProjectClosingSubmissionAggregateArgs>(args: Subset<T, ProjectClosingSubmissionAggregateArgs>): Prisma.PrismaPromise<GetProjectClosingSubmissionAggregateType<T>>
+
+    /**
+     * Group by ProjectClosingSubmission.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProjectClosingSubmissionGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ProjectClosingSubmissionGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ProjectClosingSubmissionGroupByArgs['orderBy'] }
+        : { orderBy?: ProjectClosingSubmissionGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ProjectClosingSubmissionGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetProjectClosingSubmissionGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the ProjectClosingSubmission model
+   */
+  readonly fields: ProjectClosingSubmissionFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for ProjectClosingSubmission.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ProjectClosingSubmissionClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    project<T extends ProjectDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ProjectDefaultArgs<ExtArgs>>): Prisma__ProjectClient<$Result.GetResult<Prisma.$ProjectPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the ProjectClosingSubmission model
+   */
+  interface ProjectClosingSubmissionFieldRefs {
+    readonly id: FieldRef<"ProjectClosingSubmission", 'String'>
+    readonly projectId: FieldRef<"ProjectClosingSubmission", 'String'>
+    readonly submittedById: FieldRef<"ProjectClosingSubmission", 'String'>
+    readonly status: FieldRef<"ProjectClosingSubmission", 'ProjectClosingStatus'>
+    readonly note: FieldRef<"ProjectClosingSubmission", 'String'>
+    readonly reportFiles: FieldRef<"ProjectClosingSubmission", 'Json'>
+    readonly researchSourceCodeFiles: FieldRef<"ProjectClosingSubmission", 'Json'>
+    readonly researchGuideFiles: FieldRef<"ProjectClosingSubmission", 'Json'>
+    readonly administrativeDefenseApplicationFiles: FieldRef<"ProjectClosingSubmission", 'Json'>
+    readonly administrativeAchievementEvidenceFiles: FieldRef<"ProjectClosingSubmission", 'Json'>
+    readonly administrativeAdvisorReviewFiles: FieldRef<"ProjectClosingSubmission", 'Json'>
+    readonly presentationSlideFiles: FieldRef<"ProjectClosingSubmission", 'Json'>
+    readonly presentationVideoFiles: FieldRef<"ProjectClosingSubmission", 'Json'>
+    readonly submittedAt: FieldRef<"ProjectClosingSubmission", 'DateTime'>
+    readonly createdAt: FieldRef<"ProjectClosingSubmission", 'DateTime'>
+    readonly updatedAt: FieldRef<"ProjectClosingSubmission", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * ProjectClosingSubmission findUnique
+   */
+  export type ProjectClosingSubmissionFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProjectClosingSubmission
+     */
+    select?: ProjectClosingSubmissionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProjectClosingSubmission
+     */
+    omit?: ProjectClosingSubmissionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProjectClosingSubmissionInclude<ExtArgs> | null
+    /**
+     * Filter, which ProjectClosingSubmission to fetch.
+     */
+    where: ProjectClosingSubmissionWhereUniqueInput
+  }
+
+  /**
+   * ProjectClosingSubmission findUniqueOrThrow
+   */
+  export type ProjectClosingSubmissionFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProjectClosingSubmission
+     */
+    select?: ProjectClosingSubmissionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProjectClosingSubmission
+     */
+    omit?: ProjectClosingSubmissionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProjectClosingSubmissionInclude<ExtArgs> | null
+    /**
+     * Filter, which ProjectClosingSubmission to fetch.
+     */
+    where: ProjectClosingSubmissionWhereUniqueInput
+  }
+
+  /**
+   * ProjectClosingSubmission findFirst
+   */
+  export type ProjectClosingSubmissionFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProjectClosingSubmission
+     */
+    select?: ProjectClosingSubmissionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProjectClosingSubmission
+     */
+    omit?: ProjectClosingSubmissionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProjectClosingSubmissionInclude<ExtArgs> | null
+    /**
+     * Filter, which ProjectClosingSubmission to fetch.
+     */
+    where?: ProjectClosingSubmissionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ProjectClosingSubmissions to fetch.
+     */
+    orderBy?: ProjectClosingSubmissionOrderByWithRelationInput | ProjectClosingSubmissionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ProjectClosingSubmissions.
+     */
+    cursor?: ProjectClosingSubmissionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ProjectClosingSubmissions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ProjectClosingSubmissions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ProjectClosingSubmissions.
+     */
+    distinct?: ProjectClosingSubmissionScalarFieldEnum | ProjectClosingSubmissionScalarFieldEnum[]
+  }
+
+  /**
+   * ProjectClosingSubmission findFirstOrThrow
+   */
+  export type ProjectClosingSubmissionFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProjectClosingSubmission
+     */
+    select?: ProjectClosingSubmissionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProjectClosingSubmission
+     */
+    omit?: ProjectClosingSubmissionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProjectClosingSubmissionInclude<ExtArgs> | null
+    /**
+     * Filter, which ProjectClosingSubmission to fetch.
+     */
+    where?: ProjectClosingSubmissionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ProjectClosingSubmissions to fetch.
+     */
+    orderBy?: ProjectClosingSubmissionOrderByWithRelationInput | ProjectClosingSubmissionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ProjectClosingSubmissions.
+     */
+    cursor?: ProjectClosingSubmissionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ProjectClosingSubmissions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ProjectClosingSubmissions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ProjectClosingSubmissions.
+     */
+    distinct?: ProjectClosingSubmissionScalarFieldEnum | ProjectClosingSubmissionScalarFieldEnum[]
+  }
+
+  /**
+   * ProjectClosingSubmission findMany
+   */
+  export type ProjectClosingSubmissionFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProjectClosingSubmission
+     */
+    select?: ProjectClosingSubmissionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProjectClosingSubmission
+     */
+    omit?: ProjectClosingSubmissionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProjectClosingSubmissionInclude<ExtArgs> | null
+    /**
+     * Filter, which ProjectClosingSubmissions to fetch.
+     */
+    where?: ProjectClosingSubmissionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ProjectClosingSubmissions to fetch.
+     */
+    orderBy?: ProjectClosingSubmissionOrderByWithRelationInput | ProjectClosingSubmissionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing ProjectClosingSubmissions.
+     */
+    cursor?: ProjectClosingSubmissionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ProjectClosingSubmissions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ProjectClosingSubmissions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ProjectClosingSubmissions.
+     */
+    distinct?: ProjectClosingSubmissionScalarFieldEnum | ProjectClosingSubmissionScalarFieldEnum[]
+  }
+
+  /**
+   * ProjectClosingSubmission create
+   */
+  export type ProjectClosingSubmissionCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProjectClosingSubmission
+     */
+    select?: ProjectClosingSubmissionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProjectClosingSubmission
+     */
+    omit?: ProjectClosingSubmissionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProjectClosingSubmissionInclude<ExtArgs> | null
+    /**
+     * The data needed to create a ProjectClosingSubmission.
+     */
+    data: XOR<ProjectClosingSubmissionCreateInput, ProjectClosingSubmissionUncheckedCreateInput>
+  }
+
+  /**
+   * ProjectClosingSubmission createMany
+   */
+  export type ProjectClosingSubmissionCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many ProjectClosingSubmissions.
+     */
+    data: ProjectClosingSubmissionCreateManyInput | ProjectClosingSubmissionCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * ProjectClosingSubmission createManyAndReturn
+   */
+  export type ProjectClosingSubmissionCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProjectClosingSubmission
+     */
+    select?: ProjectClosingSubmissionSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProjectClosingSubmission
+     */
+    omit?: ProjectClosingSubmissionOmit<ExtArgs> | null
+    /**
+     * The data used to create many ProjectClosingSubmissions.
+     */
+    data: ProjectClosingSubmissionCreateManyInput | ProjectClosingSubmissionCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProjectClosingSubmissionIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ProjectClosingSubmission update
+   */
+  export type ProjectClosingSubmissionUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProjectClosingSubmission
+     */
+    select?: ProjectClosingSubmissionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProjectClosingSubmission
+     */
+    omit?: ProjectClosingSubmissionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProjectClosingSubmissionInclude<ExtArgs> | null
+    /**
+     * The data needed to update a ProjectClosingSubmission.
+     */
+    data: XOR<ProjectClosingSubmissionUpdateInput, ProjectClosingSubmissionUncheckedUpdateInput>
+    /**
+     * Choose, which ProjectClosingSubmission to update.
+     */
+    where: ProjectClosingSubmissionWhereUniqueInput
+  }
+
+  /**
+   * ProjectClosingSubmission updateMany
+   */
+  export type ProjectClosingSubmissionUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update ProjectClosingSubmissions.
+     */
+    data: XOR<ProjectClosingSubmissionUpdateManyMutationInput, ProjectClosingSubmissionUncheckedUpdateManyInput>
+    /**
+     * Filter which ProjectClosingSubmissions to update
+     */
+    where?: ProjectClosingSubmissionWhereInput
+    /**
+     * Limit how many ProjectClosingSubmissions to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * ProjectClosingSubmission updateManyAndReturn
+   */
+  export type ProjectClosingSubmissionUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProjectClosingSubmission
+     */
+    select?: ProjectClosingSubmissionSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProjectClosingSubmission
+     */
+    omit?: ProjectClosingSubmissionOmit<ExtArgs> | null
+    /**
+     * The data used to update ProjectClosingSubmissions.
+     */
+    data: XOR<ProjectClosingSubmissionUpdateManyMutationInput, ProjectClosingSubmissionUncheckedUpdateManyInput>
+    /**
+     * Filter which ProjectClosingSubmissions to update
+     */
+    where?: ProjectClosingSubmissionWhereInput
+    /**
+     * Limit how many ProjectClosingSubmissions to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProjectClosingSubmissionIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ProjectClosingSubmission upsert
+   */
+  export type ProjectClosingSubmissionUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProjectClosingSubmission
+     */
+    select?: ProjectClosingSubmissionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProjectClosingSubmission
+     */
+    omit?: ProjectClosingSubmissionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProjectClosingSubmissionInclude<ExtArgs> | null
+    /**
+     * The filter to search for the ProjectClosingSubmission to update in case it exists.
+     */
+    where: ProjectClosingSubmissionWhereUniqueInput
+    /**
+     * In case the ProjectClosingSubmission found by the `where` argument doesn't exist, create a new ProjectClosingSubmission with this data.
+     */
+    create: XOR<ProjectClosingSubmissionCreateInput, ProjectClosingSubmissionUncheckedCreateInput>
+    /**
+     * In case the ProjectClosingSubmission was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ProjectClosingSubmissionUpdateInput, ProjectClosingSubmissionUncheckedUpdateInput>
+  }
+
+  /**
+   * ProjectClosingSubmission delete
+   */
+  export type ProjectClosingSubmissionDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProjectClosingSubmission
+     */
+    select?: ProjectClosingSubmissionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProjectClosingSubmission
+     */
+    omit?: ProjectClosingSubmissionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProjectClosingSubmissionInclude<ExtArgs> | null
+    /**
+     * Filter which ProjectClosingSubmission to delete.
+     */
+    where: ProjectClosingSubmissionWhereUniqueInput
+  }
+
+  /**
+   * ProjectClosingSubmission deleteMany
+   */
+  export type ProjectClosingSubmissionDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ProjectClosingSubmissions to delete
+     */
+    where?: ProjectClosingSubmissionWhereInput
+    /**
+     * Limit how many ProjectClosingSubmissions to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * ProjectClosingSubmission without action
+   */
+  export type ProjectClosingSubmissionDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProjectClosingSubmission
+     */
+    select?: ProjectClosingSubmissionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProjectClosingSubmission
+     */
+    omit?: ProjectClosingSubmissionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProjectClosingSubmissionInclude<ExtArgs> | null
   }
 
 
@@ -20714,6 +22015,7 @@ export namespace Prisma {
     title: number
     objective: number
     expectedOutput: number
+    proposalFiles: number
     teamMembers: number
     status: number
     cancelReason: number
@@ -20768,6 +22070,7 @@ export namespace Prisma {
     title?: true
     objective?: true
     expectedOutput?: true
+    proposalFiles?: true
     teamMembers?: true
     status?: true
     cancelReason?: true
@@ -20859,6 +22162,7 @@ export namespace Prisma {
     title: string
     objective: string
     expectedOutput: string | null
+    proposalFiles: JsonValue | null
     teamMembers: JsonValue | null
     status: $Enums.RegistrationStatus
     cancelReason: string | null
@@ -20894,6 +22198,7 @@ export namespace Prisma {
     title?: boolean
     objective?: boolean
     expectedOutput?: boolean
+    proposalFiles?: boolean
     teamMembers?: boolean
     status?: boolean
     cancelReason?: boolean
@@ -20917,6 +22222,7 @@ export namespace Prisma {
     title?: boolean
     objective?: boolean
     expectedOutput?: boolean
+    proposalFiles?: boolean
     teamMembers?: boolean
     status?: boolean
     cancelReason?: boolean
@@ -20939,6 +22245,7 @@ export namespace Prisma {
     title?: boolean
     objective?: boolean
     expectedOutput?: boolean
+    proposalFiles?: boolean
     teamMembers?: boolean
     status?: boolean
     cancelReason?: boolean
@@ -20961,6 +22268,7 @@ export namespace Prisma {
     title?: boolean
     objective?: boolean
     expectedOutput?: boolean
+    proposalFiles?: boolean
     teamMembers?: boolean
     status?: boolean
     cancelReason?: boolean
@@ -20972,7 +22280,7 @@ export namespace Prisma {
     facultyReviewerId?: boolean
   }
 
-  export type ProjectRegistrationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "callRoundId" | "title" | "objective" | "expectedOutput" | "teamMembers" | "status" | "cancelReason" | "createdAt" | "updatedAt" | "instructorId" | "instructorStatus" | "facultyStatus" | "facultyReviewerId", ExtArgs["result"]["projectRegistration"]>
+  export type ProjectRegistrationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "callRoundId" | "title" | "objective" | "expectedOutput" | "proposalFiles" | "teamMembers" | "status" | "cancelReason" | "createdAt" | "updatedAt" | "instructorId" | "instructorStatus" | "facultyStatus" | "facultyReviewerId", ExtArgs["result"]["projectRegistration"]>
   export type ProjectRegistrationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
     instructor?: boolean | ProjectRegistration$instructorArgs<ExtArgs>
@@ -21009,6 +22317,7 @@ export namespace Prisma {
       title: string
       objective: string
       expectedOutput: string | null
+      proposalFiles: Prisma.JsonValue | null
       teamMembers: Prisma.JsonValue | null
       status: $Enums.RegistrationStatus
       cancelReason: string | null
@@ -21452,6 +22761,7 @@ export namespace Prisma {
     readonly title: FieldRef<"ProjectRegistration", 'String'>
     readonly objective: FieldRef<"ProjectRegistration", 'String'>
     readonly expectedOutput: FieldRef<"ProjectRegistration", 'String'>
+    readonly proposalFiles: FieldRef<"ProjectRegistration", 'Json'>
     readonly teamMembers: FieldRef<"ProjectRegistration", 'Json'>
     readonly status: FieldRef<"ProjectRegistration", 'RegistrationStatus'>
     readonly cancelReason: FieldRef<"ProjectRegistration", 'String'>
@@ -34530,6 +35840,28 @@ export namespace Prisma {
   export type ProjectScalarFieldEnum = (typeof ProjectScalarFieldEnum)[keyof typeof ProjectScalarFieldEnum]
 
 
+  export const ProjectClosingSubmissionScalarFieldEnum: {
+    id: 'id',
+    projectId: 'projectId',
+    submittedById: 'submittedById',
+    status: 'status',
+    note: 'note',
+    reportFiles: 'reportFiles',
+    researchSourceCodeFiles: 'researchSourceCodeFiles',
+    researchGuideFiles: 'researchGuideFiles',
+    administrativeDefenseApplicationFiles: 'administrativeDefenseApplicationFiles',
+    administrativeAchievementEvidenceFiles: 'administrativeAchievementEvidenceFiles',
+    administrativeAdvisorReviewFiles: 'administrativeAdvisorReviewFiles',
+    presentationSlideFiles: 'presentationSlideFiles',
+    presentationVideoFiles: 'presentationVideoFiles',
+    submittedAt: 'submittedAt',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type ProjectClosingSubmissionScalarFieldEnum = (typeof ProjectClosingSubmissionScalarFieldEnum)[keyof typeof ProjectClosingSubmissionScalarFieldEnum]
+
+
   export const ProgressReportTemplateScalarFieldEnum: {
     id: 'id',
     name: 'name',
@@ -34639,6 +35971,7 @@ export namespace Prisma {
     title: 'title',
     objective: 'objective',
     expectedOutput: 'expectedOutput',
+    proposalFiles: 'proposalFiles',
     teamMembers: 'teamMembers',
     status: 'status',
     cancelReason: 'cancelReason',
@@ -34987,6 +36320,34 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'ProjectClosingStatus'
+   */
+  export type EnumProjectClosingStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ProjectClosingStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'ProjectClosingStatus[]'
+   */
+  export type ListEnumProjectClosingStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ProjectClosingStatus[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'Json'
+   */
+  export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
+    
+
+
+  /**
+   * Reference to a field of type 'QueryMode'
+   */
+  export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>
+    
+
+
+  /**
    * Reference to a field of type 'Float'
    */
   export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
@@ -35039,20 +36400,6 @@ export namespace Prisma {
    * Reference to a field of type 'RequestStatus[]'
    */
   export type ListEnumRequestStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'RequestStatus[]'>
-    
-
-
-  /**
-   * Reference to a field of type 'Json'
-   */
-  export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
-    
-
-
-  /**
-   * Reference to a field of type 'QueryMode'
-   */
-  export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>
     
 
 
@@ -35837,6 +37184,7 @@ export namespace Prisma {
     councilEvaluations?: CouncilEvaluationListRelationFilter
     disbursements?: FundingDisbursementListRelationFilter
     extensionRequests?: ExtensionRequestListRelationFilter
+    closingSubmission?: XOR<ProjectClosingSubmissionNullableScalarRelationFilter, ProjectClosingSubmissionWhereInput> | null
     instructor?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     officeMeetings?: OfficeMeetingListRelationFilter
   }
@@ -35868,6 +37216,7 @@ export namespace Prisma {
     councilEvaluations?: CouncilEvaluationOrderByRelationAggregateInput
     disbursements?: FundingDisbursementOrderByRelationAggregateInput
     extensionRequests?: ExtensionRequestOrderByRelationAggregateInput
+    closingSubmission?: ProjectClosingSubmissionOrderByWithRelationInput
     instructor?: UserOrderByWithRelationInput
     officeMeetings?: OfficeMeetingOrderByRelationAggregateInput
   }
@@ -35902,6 +37251,7 @@ export namespace Prisma {
     councilEvaluations?: CouncilEvaluationListRelationFilter
     disbursements?: FundingDisbursementListRelationFilter
     extensionRequests?: ExtensionRequestListRelationFilter
+    closingSubmission?: XOR<ProjectClosingSubmissionNullableScalarRelationFilter, ProjectClosingSubmissionWhereInput> | null
     instructor?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     officeMeetings?: OfficeMeetingListRelationFilter
   }, "id" | "code">
@@ -35954,6 +37304,116 @@ export namespace Prisma {
     createdAt?: DateTimeWithAggregatesFilter<"Project"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Project"> | Date | string
     instructorId?: StringNullableWithAggregatesFilter<"Project"> | string | null
+  }
+
+  export type ProjectClosingSubmissionWhereInput = {
+    AND?: ProjectClosingSubmissionWhereInput | ProjectClosingSubmissionWhereInput[]
+    OR?: ProjectClosingSubmissionWhereInput[]
+    NOT?: ProjectClosingSubmissionWhereInput | ProjectClosingSubmissionWhereInput[]
+    id?: StringFilter<"ProjectClosingSubmission"> | string
+    projectId?: StringFilter<"ProjectClosingSubmission"> | string
+    submittedById?: StringFilter<"ProjectClosingSubmission"> | string
+    status?: EnumProjectClosingStatusFilter<"ProjectClosingSubmission"> | $Enums.ProjectClosingStatus
+    note?: StringNullableFilter<"ProjectClosingSubmission"> | string | null
+    reportFiles?: JsonNullableFilter<"ProjectClosingSubmission">
+    researchSourceCodeFiles?: JsonNullableFilter<"ProjectClosingSubmission">
+    researchGuideFiles?: JsonNullableFilter<"ProjectClosingSubmission">
+    administrativeDefenseApplicationFiles?: JsonNullableFilter<"ProjectClosingSubmission">
+    administrativeAchievementEvidenceFiles?: JsonNullableFilter<"ProjectClosingSubmission">
+    administrativeAdvisorReviewFiles?: JsonNullableFilter<"ProjectClosingSubmission">
+    presentationSlideFiles?: JsonNullableFilter<"ProjectClosingSubmission">
+    presentationVideoFiles?: JsonNullableFilter<"ProjectClosingSubmission">
+    submittedAt?: DateTimeFilter<"ProjectClosingSubmission"> | Date | string
+    createdAt?: DateTimeFilter<"ProjectClosingSubmission"> | Date | string
+    updatedAt?: DateTimeFilter<"ProjectClosingSubmission"> | Date | string
+    project?: XOR<ProjectScalarRelationFilter, ProjectWhereInput>
+  }
+
+  export type ProjectClosingSubmissionOrderByWithRelationInput = {
+    id?: SortOrder
+    projectId?: SortOrder
+    submittedById?: SortOrder
+    status?: SortOrder
+    note?: SortOrderInput | SortOrder
+    reportFiles?: SortOrderInput | SortOrder
+    researchSourceCodeFiles?: SortOrderInput | SortOrder
+    researchGuideFiles?: SortOrderInput | SortOrder
+    administrativeDefenseApplicationFiles?: SortOrderInput | SortOrder
+    administrativeAchievementEvidenceFiles?: SortOrderInput | SortOrder
+    administrativeAdvisorReviewFiles?: SortOrderInput | SortOrder
+    presentationSlideFiles?: SortOrderInput | SortOrder
+    presentationVideoFiles?: SortOrderInput | SortOrder
+    submittedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    project?: ProjectOrderByWithRelationInput
+  }
+
+  export type ProjectClosingSubmissionWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    projectId?: string
+    AND?: ProjectClosingSubmissionWhereInput | ProjectClosingSubmissionWhereInput[]
+    OR?: ProjectClosingSubmissionWhereInput[]
+    NOT?: ProjectClosingSubmissionWhereInput | ProjectClosingSubmissionWhereInput[]
+    submittedById?: StringFilter<"ProjectClosingSubmission"> | string
+    status?: EnumProjectClosingStatusFilter<"ProjectClosingSubmission"> | $Enums.ProjectClosingStatus
+    note?: StringNullableFilter<"ProjectClosingSubmission"> | string | null
+    reportFiles?: JsonNullableFilter<"ProjectClosingSubmission">
+    researchSourceCodeFiles?: JsonNullableFilter<"ProjectClosingSubmission">
+    researchGuideFiles?: JsonNullableFilter<"ProjectClosingSubmission">
+    administrativeDefenseApplicationFiles?: JsonNullableFilter<"ProjectClosingSubmission">
+    administrativeAchievementEvidenceFiles?: JsonNullableFilter<"ProjectClosingSubmission">
+    administrativeAdvisorReviewFiles?: JsonNullableFilter<"ProjectClosingSubmission">
+    presentationSlideFiles?: JsonNullableFilter<"ProjectClosingSubmission">
+    presentationVideoFiles?: JsonNullableFilter<"ProjectClosingSubmission">
+    submittedAt?: DateTimeFilter<"ProjectClosingSubmission"> | Date | string
+    createdAt?: DateTimeFilter<"ProjectClosingSubmission"> | Date | string
+    updatedAt?: DateTimeFilter<"ProjectClosingSubmission"> | Date | string
+    project?: XOR<ProjectScalarRelationFilter, ProjectWhereInput>
+  }, "id" | "projectId">
+
+  export type ProjectClosingSubmissionOrderByWithAggregationInput = {
+    id?: SortOrder
+    projectId?: SortOrder
+    submittedById?: SortOrder
+    status?: SortOrder
+    note?: SortOrderInput | SortOrder
+    reportFiles?: SortOrderInput | SortOrder
+    researchSourceCodeFiles?: SortOrderInput | SortOrder
+    researchGuideFiles?: SortOrderInput | SortOrder
+    administrativeDefenseApplicationFiles?: SortOrderInput | SortOrder
+    administrativeAchievementEvidenceFiles?: SortOrderInput | SortOrder
+    administrativeAdvisorReviewFiles?: SortOrderInput | SortOrder
+    presentationSlideFiles?: SortOrderInput | SortOrder
+    presentationVideoFiles?: SortOrderInput | SortOrder
+    submittedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: ProjectClosingSubmissionCountOrderByAggregateInput
+    _max?: ProjectClosingSubmissionMaxOrderByAggregateInput
+    _min?: ProjectClosingSubmissionMinOrderByAggregateInput
+  }
+
+  export type ProjectClosingSubmissionScalarWhereWithAggregatesInput = {
+    AND?: ProjectClosingSubmissionScalarWhereWithAggregatesInput | ProjectClosingSubmissionScalarWhereWithAggregatesInput[]
+    OR?: ProjectClosingSubmissionScalarWhereWithAggregatesInput[]
+    NOT?: ProjectClosingSubmissionScalarWhereWithAggregatesInput | ProjectClosingSubmissionScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"ProjectClosingSubmission"> | string
+    projectId?: StringWithAggregatesFilter<"ProjectClosingSubmission"> | string
+    submittedById?: StringWithAggregatesFilter<"ProjectClosingSubmission"> | string
+    status?: EnumProjectClosingStatusWithAggregatesFilter<"ProjectClosingSubmission"> | $Enums.ProjectClosingStatus
+    note?: StringNullableWithAggregatesFilter<"ProjectClosingSubmission"> | string | null
+    reportFiles?: JsonNullableWithAggregatesFilter<"ProjectClosingSubmission">
+    researchSourceCodeFiles?: JsonNullableWithAggregatesFilter<"ProjectClosingSubmission">
+    researchGuideFiles?: JsonNullableWithAggregatesFilter<"ProjectClosingSubmission">
+    administrativeDefenseApplicationFiles?: JsonNullableWithAggregatesFilter<"ProjectClosingSubmission">
+    administrativeAchievementEvidenceFiles?: JsonNullableWithAggregatesFilter<"ProjectClosingSubmission">
+    administrativeAdvisorReviewFiles?: JsonNullableWithAggregatesFilter<"ProjectClosingSubmission">
+    presentationSlideFiles?: JsonNullableWithAggregatesFilter<"ProjectClosingSubmission">
+    presentationVideoFiles?: JsonNullableWithAggregatesFilter<"ProjectClosingSubmission">
+    submittedAt?: DateTimeWithAggregatesFilter<"ProjectClosingSubmission"> | Date | string
+    createdAt?: DateTimeWithAggregatesFilter<"ProjectClosingSubmission"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"ProjectClosingSubmission"> | Date | string
   }
 
   export type ProgressReportTemplateWhereInput = {
@@ -36499,6 +37959,7 @@ export namespace Prisma {
     title?: StringFilter<"ProjectRegistration"> | string
     objective?: StringFilter<"ProjectRegistration"> | string
     expectedOutput?: StringNullableFilter<"ProjectRegistration"> | string | null
+    proposalFiles?: JsonNullableFilter<"ProjectRegistration">
     teamMembers?: JsonNullableFilter<"ProjectRegistration">
     status?: EnumRegistrationStatusFilter<"ProjectRegistration"> | $Enums.RegistrationStatus
     cancelReason?: StringNullableFilter<"ProjectRegistration"> | string | null
@@ -36522,6 +37983,7 @@ export namespace Prisma {
     title?: SortOrder
     objective?: SortOrder
     expectedOutput?: SortOrderInput | SortOrder
+    proposalFiles?: SortOrderInput | SortOrder
     teamMembers?: SortOrderInput | SortOrder
     status?: SortOrder
     cancelReason?: SortOrderInput | SortOrder
@@ -36548,6 +38010,7 @@ export namespace Prisma {
     title?: StringFilter<"ProjectRegistration"> | string
     objective?: StringFilter<"ProjectRegistration"> | string
     expectedOutput?: StringNullableFilter<"ProjectRegistration"> | string | null
+    proposalFiles?: JsonNullableFilter<"ProjectRegistration">
     teamMembers?: JsonNullableFilter<"ProjectRegistration">
     status?: EnumRegistrationStatusFilter<"ProjectRegistration"> | $Enums.RegistrationStatus
     cancelReason?: StringNullableFilter<"ProjectRegistration"> | string | null
@@ -36571,6 +38034,7 @@ export namespace Prisma {
     title?: SortOrder
     objective?: SortOrder
     expectedOutput?: SortOrderInput | SortOrder
+    proposalFiles?: SortOrderInput | SortOrder
     teamMembers?: SortOrderInput | SortOrder
     status?: SortOrder
     cancelReason?: SortOrderInput | SortOrder
@@ -36595,6 +38059,7 @@ export namespace Prisma {
     title?: StringWithAggregatesFilter<"ProjectRegistration"> | string
     objective?: StringWithAggregatesFilter<"ProjectRegistration"> | string
     expectedOutput?: StringNullableWithAggregatesFilter<"ProjectRegistration"> | string | null
+    proposalFiles?: JsonNullableWithAggregatesFilter<"ProjectRegistration">
     teamMembers?: JsonNullableWithAggregatesFilter<"ProjectRegistration">
     status?: EnumRegistrationStatusWithAggregatesFilter<"ProjectRegistration"> | $Enums.RegistrationStatus
     cancelReason?: StringNullableWithAggregatesFilter<"ProjectRegistration"> | string | null
@@ -38211,6 +39676,7 @@ export namespace Prisma {
     councilEvaluations?: CouncilEvaluationCreateNestedManyWithoutProjectInput
     disbursements?: FundingDisbursementCreateNestedManyWithoutProjectInput
     extensionRequests?: ExtensionRequestCreateNestedManyWithoutProjectInput
+    closingSubmission?: ProjectClosingSubmissionCreateNestedOneWithoutProjectInput
     instructor?: UserCreateNestedOneWithoutInstructedProjectsInput
     officeMeetings?: OfficeMeetingCreateNestedManyWithoutProjectInput
   }
@@ -38238,6 +39704,7 @@ export namespace Prisma {
     councilEvaluations?: CouncilEvaluationUncheckedCreateNestedManyWithoutProjectInput
     disbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutProjectInput
     extensionRequests?: ExtensionRequestUncheckedCreateNestedManyWithoutProjectInput
+    closingSubmission?: ProjectClosingSubmissionUncheckedCreateNestedOneWithoutProjectInput
     officeMeetings?: OfficeMeetingUncheckedCreateNestedManyWithoutProjectInput
   }
 
@@ -38263,6 +39730,7 @@ export namespace Prisma {
     councilEvaluations?: CouncilEvaluationUpdateManyWithoutProjectNestedInput
     disbursements?: FundingDisbursementUpdateManyWithoutProjectNestedInput
     extensionRequests?: ExtensionRequestUpdateManyWithoutProjectNestedInput
+    closingSubmission?: ProjectClosingSubmissionUpdateOneWithoutProjectNestedInput
     instructor?: UserUpdateOneWithoutInstructedProjectsNestedInput
     officeMeetings?: OfficeMeetingUpdateManyWithoutProjectNestedInput
   }
@@ -38290,6 +39758,7 @@ export namespace Prisma {
     councilEvaluations?: CouncilEvaluationUncheckedUpdateManyWithoutProjectNestedInput
     disbursements?: FundingDisbursementUncheckedUpdateManyWithoutProjectNestedInput
     extensionRequests?: ExtensionRequestUncheckedUpdateManyWithoutProjectNestedInput
+    closingSubmission?: ProjectClosingSubmissionUncheckedUpdateOneWithoutProjectNestedInput
     officeMeetings?: OfficeMeetingUncheckedUpdateManyWithoutProjectNestedInput
   }
 
@@ -38349,6 +39818,138 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     instructorId?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type ProjectClosingSubmissionCreateInput = {
+    id?: string
+    submittedById: string
+    status?: $Enums.ProjectClosingStatus
+    note?: string | null
+    reportFiles?: NullableJsonNullValueInput | InputJsonValue
+    researchSourceCodeFiles?: NullableJsonNullValueInput | InputJsonValue
+    researchGuideFiles?: NullableJsonNullValueInput | InputJsonValue
+    administrativeDefenseApplicationFiles?: NullableJsonNullValueInput | InputJsonValue
+    administrativeAchievementEvidenceFiles?: NullableJsonNullValueInput | InputJsonValue
+    administrativeAdvisorReviewFiles?: NullableJsonNullValueInput | InputJsonValue
+    presentationSlideFiles?: NullableJsonNullValueInput | InputJsonValue
+    presentationVideoFiles?: NullableJsonNullValueInput | InputJsonValue
+    submittedAt?: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    project: ProjectCreateNestedOneWithoutClosingSubmissionInput
+  }
+
+  export type ProjectClosingSubmissionUncheckedCreateInput = {
+    id?: string
+    projectId: string
+    submittedById: string
+    status?: $Enums.ProjectClosingStatus
+    note?: string | null
+    reportFiles?: NullableJsonNullValueInput | InputJsonValue
+    researchSourceCodeFiles?: NullableJsonNullValueInput | InputJsonValue
+    researchGuideFiles?: NullableJsonNullValueInput | InputJsonValue
+    administrativeDefenseApplicationFiles?: NullableJsonNullValueInput | InputJsonValue
+    administrativeAchievementEvidenceFiles?: NullableJsonNullValueInput | InputJsonValue
+    administrativeAdvisorReviewFiles?: NullableJsonNullValueInput | InputJsonValue
+    presentationSlideFiles?: NullableJsonNullValueInput | InputJsonValue
+    presentationVideoFiles?: NullableJsonNullValueInput | InputJsonValue
+    submittedAt?: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ProjectClosingSubmissionUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    submittedById?: StringFieldUpdateOperationsInput | string
+    status?: EnumProjectClosingStatusFieldUpdateOperationsInput | $Enums.ProjectClosingStatus
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+    reportFiles?: NullableJsonNullValueInput | InputJsonValue
+    researchSourceCodeFiles?: NullableJsonNullValueInput | InputJsonValue
+    researchGuideFiles?: NullableJsonNullValueInput | InputJsonValue
+    administrativeDefenseApplicationFiles?: NullableJsonNullValueInput | InputJsonValue
+    administrativeAchievementEvidenceFiles?: NullableJsonNullValueInput | InputJsonValue
+    administrativeAdvisorReviewFiles?: NullableJsonNullValueInput | InputJsonValue
+    presentationSlideFiles?: NullableJsonNullValueInput | InputJsonValue
+    presentationVideoFiles?: NullableJsonNullValueInput | InputJsonValue
+    submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    project?: ProjectUpdateOneRequiredWithoutClosingSubmissionNestedInput
+  }
+
+  export type ProjectClosingSubmissionUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    projectId?: StringFieldUpdateOperationsInput | string
+    submittedById?: StringFieldUpdateOperationsInput | string
+    status?: EnumProjectClosingStatusFieldUpdateOperationsInput | $Enums.ProjectClosingStatus
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+    reportFiles?: NullableJsonNullValueInput | InputJsonValue
+    researchSourceCodeFiles?: NullableJsonNullValueInput | InputJsonValue
+    researchGuideFiles?: NullableJsonNullValueInput | InputJsonValue
+    administrativeDefenseApplicationFiles?: NullableJsonNullValueInput | InputJsonValue
+    administrativeAchievementEvidenceFiles?: NullableJsonNullValueInput | InputJsonValue
+    administrativeAdvisorReviewFiles?: NullableJsonNullValueInput | InputJsonValue
+    presentationSlideFiles?: NullableJsonNullValueInput | InputJsonValue
+    presentationVideoFiles?: NullableJsonNullValueInput | InputJsonValue
+    submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProjectClosingSubmissionCreateManyInput = {
+    id?: string
+    projectId: string
+    submittedById: string
+    status?: $Enums.ProjectClosingStatus
+    note?: string | null
+    reportFiles?: NullableJsonNullValueInput | InputJsonValue
+    researchSourceCodeFiles?: NullableJsonNullValueInput | InputJsonValue
+    researchGuideFiles?: NullableJsonNullValueInput | InputJsonValue
+    administrativeDefenseApplicationFiles?: NullableJsonNullValueInput | InputJsonValue
+    administrativeAchievementEvidenceFiles?: NullableJsonNullValueInput | InputJsonValue
+    administrativeAdvisorReviewFiles?: NullableJsonNullValueInput | InputJsonValue
+    presentationSlideFiles?: NullableJsonNullValueInput | InputJsonValue
+    presentationVideoFiles?: NullableJsonNullValueInput | InputJsonValue
+    submittedAt?: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ProjectClosingSubmissionUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    submittedById?: StringFieldUpdateOperationsInput | string
+    status?: EnumProjectClosingStatusFieldUpdateOperationsInput | $Enums.ProjectClosingStatus
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+    reportFiles?: NullableJsonNullValueInput | InputJsonValue
+    researchSourceCodeFiles?: NullableJsonNullValueInput | InputJsonValue
+    researchGuideFiles?: NullableJsonNullValueInput | InputJsonValue
+    administrativeDefenseApplicationFiles?: NullableJsonNullValueInput | InputJsonValue
+    administrativeAchievementEvidenceFiles?: NullableJsonNullValueInput | InputJsonValue
+    administrativeAdvisorReviewFiles?: NullableJsonNullValueInput | InputJsonValue
+    presentationSlideFiles?: NullableJsonNullValueInput | InputJsonValue
+    presentationVideoFiles?: NullableJsonNullValueInput | InputJsonValue
+    submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProjectClosingSubmissionUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    projectId?: StringFieldUpdateOperationsInput | string
+    submittedById?: StringFieldUpdateOperationsInput | string
+    status?: EnumProjectClosingStatusFieldUpdateOperationsInput | $Enums.ProjectClosingStatus
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+    reportFiles?: NullableJsonNullValueInput | InputJsonValue
+    researchSourceCodeFiles?: NullableJsonNullValueInput | InputJsonValue
+    researchGuideFiles?: NullableJsonNullValueInput | InputJsonValue
+    administrativeDefenseApplicationFiles?: NullableJsonNullValueInput | InputJsonValue
+    administrativeAchievementEvidenceFiles?: NullableJsonNullValueInput | InputJsonValue
+    administrativeAdvisorReviewFiles?: NullableJsonNullValueInput | InputJsonValue
+    presentationSlideFiles?: NullableJsonNullValueInput | InputJsonValue
+    presentationVideoFiles?: NullableJsonNullValueInput | InputJsonValue
+    submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ProgressReportTemplateCreateInput = {
@@ -38944,6 +40545,7 @@ export namespace Prisma {
     title: string
     objective: string
     expectedOutput?: string | null
+    proposalFiles?: NullableJsonNullValueInput | InputJsonValue
     teamMembers?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.RegistrationStatus
     cancelReason?: string | null
@@ -38965,6 +40567,7 @@ export namespace Prisma {
     title: string
     objective: string
     expectedOutput?: string | null
+    proposalFiles?: NullableJsonNullValueInput | InputJsonValue
     teamMembers?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.RegistrationStatus
     cancelReason?: string | null
@@ -38982,6 +40585,7 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     objective?: StringFieldUpdateOperationsInput | string
     expectedOutput?: NullableStringFieldUpdateOperationsInput | string | null
+    proposalFiles?: NullableJsonNullValueInput | InputJsonValue
     teamMembers?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumRegistrationStatusFieldUpdateOperationsInput | $Enums.RegistrationStatus
     cancelReason?: NullableStringFieldUpdateOperationsInput | string | null
@@ -39003,6 +40607,7 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     objective?: StringFieldUpdateOperationsInput | string
     expectedOutput?: NullableStringFieldUpdateOperationsInput | string | null
+    proposalFiles?: NullableJsonNullValueInput | InputJsonValue
     teamMembers?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumRegistrationStatusFieldUpdateOperationsInput | $Enums.RegistrationStatus
     cancelReason?: NullableStringFieldUpdateOperationsInput | string | null
@@ -39022,6 +40627,7 @@ export namespace Prisma {
     title: string
     objective: string
     expectedOutput?: string | null
+    proposalFiles?: NullableJsonNullValueInput | InputJsonValue
     teamMembers?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.RegistrationStatus
     cancelReason?: string | null
@@ -39038,6 +40644,7 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     objective?: StringFieldUpdateOperationsInput | string
     expectedOutput?: NullableStringFieldUpdateOperationsInput | string | null
+    proposalFiles?: NullableJsonNullValueInput | InputJsonValue
     teamMembers?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumRegistrationStatusFieldUpdateOperationsInput | $Enums.RegistrationStatus
     cancelReason?: NullableStringFieldUpdateOperationsInput | string | null
@@ -39054,6 +40661,7 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     objective?: StringFieldUpdateOperationsInput | string
     expectedOutput?: NullableStringFieldUpdateOperationsInput | string | null
+    proposalFiles?: NullableJsonNullValueInput | InputJsonValue
     teamMembers?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumRegistrationStatusFieldUpdateOperationsInput | $Enums.RegistrationStatus
     cancelReason?: NullableStringFieldUpdateOperationsInput | string | null
@@ -40736,6 +42344,11 @@ export namespace Prisma {
     none?: ExtensionRequestWhereInput
   }
 
+  export type ProjectClosingSubmissionNullableScalarRelationFilter = {
+    is?: ProjectClosingSubmissionWhereInput | null
+    isNot?: ProjectClosingSubmissionWhereInput | null
+  }
+
   export type ProgressReportOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -40843,6 +42456,118 @@ export namespace Prisma {
     _sum?: NestedIntFilter<$PrismaModel>
     _min?: NestedIntFilter<$PrismaModel>
     _max?: NestedIntFilter<$PrismaModel>
+  }
+
+  export type EnumProjectClosingStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.ProjectClosingStatus | EnumProjectClosingStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ProjectClosingStatus[] | ListEnumProjectClosingStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ProjectClosingStatus[] | ListEnumProjectClosingStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumProjectClosingStatusFilter<$PrismaModel> | $Enums.ProjectClosingStatus
+  }
+  export type JsonNullableFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<JsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonNullableFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonNullableFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
+
+  export type ProjectScalarRelationFilter = {
+    is?: ProjectWhereInput
+    isNot?: ProjectWhereInput
+  }
+
+  export type ProjectClosingSubmissionCountOrderByAggregateInput = {
+    id?: SortOrder
+    projectId?: SortOrder
+    submittedById?: SortOrder
+    status?: SortOrder
+    note?: SortOrder
+    reportFiles?: SortOrder
+    researchSourceCodeFiles?: SortOrder
+    researchGuideFiles?: SortOrder
+    administrativeDefenseApplicationFiles?: SortOrder
+    administrativeAchievementEvidenceFiles?: SortOrder
+    administrativeAdvisorReviewFiles?: SortOrder
+    presentationSlideFiles?: SortOrder
+    presentationVideoFiles?: SortOrder
+    submittedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ProjectClosingSubmissionMaxOrderByAggregateInput = {
+    id?: SortOrder
+    projectId?: SortOrder
+    submittedById?: SortOrder
+    status?: SortOrder
+    note?: SortOrder
+    submittedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ProjectClosingSubmissionMinOrderByAggregateInput = {
+    id?: SortOrder
+    projectId?: SortOrder
+    submittedById?: SortOrder
+    status?: SortOrder
+    note?: SortOrder
+    submittedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type EnumProjectClosingStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ProjectClosingStatus | EnumProjectClosingStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ProjectClosingStatus[] | ListEnumProjectClosingStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ProjectClosingStatus[] | ListEnumProjectClosingStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumProjectClosingStatusWithAggregatesFilter<$PrismaModel> | $Enums.ProjectClosingStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumProjectClosingStatusFilter<$PrismaModel>
+    _max?: NestedEnumProjectClosingStatusFilter<$PrismaModel>
+  }
+  export type JsonNullableWithAggregatesFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonNullableWithAggregatesFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedJsonNullableFilter<$PrismaModel>
+    _max?: NestedJsonNullableFilter<$PrismaModel>
   }
 
   export type ProgressReportTemplateItemListRelationFilter = {
@@ -40956,11 +42681,6 @@ export namespace Prisma {
     gt?: number | FloatFieldRefInput<$PrismaModel>
     gte?: number | FloatFieldRefInput<$PrismaModel>
     not?: NestedFloatNullableFilter<$PrismaModel> | number | null
-  }
-
-  export type ProjectScalarRelationFilter = {
-    is?: ProjectWhereInput
-    isNot?: ProjectWhereInput
   }
 
   export type ProgressReportCountOrderByAggregateInput = {
@@ -41297,29 +43017,6 @@ export namespace Prisma {
     _min?: NestedEnumRequestStatusFilter<$PrismaModel>
     _max?: NestedEnumRequestStatusFilter<$PrismaModel>
   }
-  export type JsonNullableFilter<$PrismaModel = never> =
-    | PatchUndefined<
-        Either<Required<JsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>,
-        Required<JsonNullableFilterBase<$PrismaModel>>
-      >
-    | OptionalFlat<Omit<Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>
-
-  export type JsonNullableFilterBase<$PrismaModel = never> = {
-    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-    path?: string[]
-    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
-    string_contains?: string | StringFieldRefInput<$PrismaModel>
-    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
-    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
-    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-  }
 
   export type EnumRegistrationStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.RegistrationStatus | EnumRegistrationStatusFieldRefInput<$PrismaModel>
@@ -41354,6 +43051,7 @@ export namespace Prisma {
     title?: SortOrder
     objective?: SortOrder
     expectedOutput?: SortOrder
+    proposalFiles?: SortOrder
     teamMembers?: SortOrder
     status?: SortOrder
     cancelReason?: SortOrder
@@ -41397,32 +43095,6 @@ export namespace Prisma {
     instructorStatus?: SortOrder
     facultyStatus?: SortOrder
     facultyReviewerId?: SortOrder
-  }
-  export type JsonNullableWithAggregatesFilter<$PrismaModel = never> =
-    | PatchUndefined<
-        Either<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>,
-        Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>
-      >
-    | OptionalFlat<Omit<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>
-
-  export type JsonNullableWithAggregatesFilterBase<$PrismaModel = never> = {
-    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-    path?: string[]
-    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
-    string_contains?: string | StringFieldRefInput<$PrismaModel>
-    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
-    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
-    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedJsonNullableFilter<$PrismaModel>
-    _max?: NestedJsonNullableFilter<$PrismaModel>
   }
 
   export type EnumRegistrationStatusWithAggregatesFilter<$PrismaModel = never> = {
@@ -43696,6 +45368,12 @@ export namespace Prisma {
     connect?: ExtensionRequestWhereUniqueInput | ExtensionRequestWhereUniqueInput[]
   }
 
+  export type ProjectClosingSubmissionCreateNestedOneWithoutProjectInput = {
+    create?: XOR<ProjectClosingSubmissionCreateWithoutProjectInput, ProjectClosingSubmissionUncheckedCreateWithoutProjectInput>
+    connectOrCreate?: ProjectClosingSubmissionCreateOrConnectWithoutProjectInput
+    connect?: ProjectClosingSubmissionWhereUniqueInput
+  }
+
   export type UserCreateNestedOneWithoutInstructedProjectsInput = {
     create?: XOR<UserCreateWithoutInstructedProjectsInput, UserUncheckedCreateWithoutInstructedProjectsInput>
     connectOrCreate?: UserCreateOrConnectWithoutInstructedProjectsInput
@@ -43735,6 +45413,12 @@ export namespace Prisma {
     connectOrCreate?: ExtensionRequestCreateOrConnectWithoutProjectInput | ExtensionRequestCreateOrConnectWithoutProjectInput[]
     createMany?: ExtensionRequestCreateManyProjectInputEnvelope
     connect?: ExtensionRequestWhereUniqueInput | ExtensionRequestWhereUniqueInput[]
+  }
+
+  export type ProjectClosingSubmissionUncheckedCreateNestedOneWithoutProjectInput = {
+    create?: XOR<ProjectClosingSubmissionCreateWithoutProjectInput, ProjectClosingSubmissionUncheckedCreateWithoutProjectInput>
+    connectOrCreate?: ProjectClosingSubmissionCreateOrConnectWithoutProjectInput
+    connect?: ProjectClosingSubmissionWhereUniqueInput
   }
 
   export type OfficeMeetingUncheckedCreateNestedManyWithoutProjectInput = {
@@ -43850,6 +45534,16 @@ export namespace Prisma {
     deleteMany?: ExtensionRequestScalarWhereInput | ExtensionRequestScalarWhereInput[]
   }
 
+  export type ProjectClosingSubmissionUpdateOneWithoutProjectNestedInput = {
+    create?: XOR<ProjectClosingSubmissionCreateWithoutProjectInput, ProjectClosingSubmissionUncheckedCreateWithoutProjectInput>
+    connectOrCreate?: ProjectClosingSubmissionCreateOrConnectWithoutProjectInput
+    upsert?: ProjectClosingSubmissionUpsertWithoutProjectInput
+    disconnect?: ProjectClosingSubmissionWhereInput | boolean
+    delete?: ProjectClosingSubmissionWhereInput | boolean
+    connect?: ProjectClosingSubmissionWhereUniqueInput
+    update?: XOR<XOR<ProjectClosingSubmissionUpdateToOneWithWhereWithoutProjectInput, ProjectClosingSubmissionUpdateWithoutProjectInput>, ProjectClosingSubmissionUncheckedUpdateWithoutProjectInput>
+  }
+
   export type UserUpdateOneWithoutInstructedProjectsNestedInput = {
     create?: XOR<UserCreateWithoutInstructedProjectsInput, UserUncheckedCreateWithoutInstructedProjectsInput>
     connectOrCreate?: UserCreateOrConnectWithoutInstructedProjectsInput
@@ -43930,6 +45624,16 @@ export namespace Prisma {
     deleteMany?: ExtensionRequestScalarWhereInput | ExtensionRequestScalarWhereInput[]
   }
 
+  export type ProjectClosingSubmissionUncheckedUpdateOneWithoutProjectNestedInput = {
+    create?: XOR<ProjectClosingSubmissionCreateWithoutProjectInput, ProjectClosingSubmissionUncheckedCreateWithoutProjectInput>
+    connectOrCreate?: ProjectClosingSubmissionCreateOrConnectWithoutProjectInput
+    upsert?: ProjectClosingSubmissionUpsertWithoutProjectInput
+    disconnect?: ProjectClosingSubmissionWhereInput | boolean
+    delete?: ProjectClosingSubmissionWhereInput | boolean
+    connect?: ProjectClosingSubmissionWhereUniqueInput
+    update?: XOR<XOR<ProjectClosingSubmissionUpdateToOneWithWhereWithoutProjectInput, ProjectClosingSubmissionUpdateWithoutProjectInput>, ProjectClosingSubmissionUncheckedUpdateWithoutProjectInput>
+  }
+
   export type OfficeMeetingUncheckedUpdateManyWithoutProjectNestedInput = {
     create?: XOR<OfficeMeetingCreateWithoutProjectInput, OfficeMeetingUncheckedCreateWithoutProjectInput> | OfficeMeetingCreateWithoutProjectInput[] | OfficeMeetingUncheckedCreateWithoutProjectInput[]
     connectOrCreate?: OfficeMeetingCreateOrConnectWithoutProjectInput | OfficeMeetingCreateOrConnectWithoutProjectInput[]
@@ -43942,6 +45646,24 @@ export namespace Prisma {
     update?: OfficeMeetingUpdateWithWhereUniqueWithoutProjectInput | OfficeMeetingUpdateWithWhereUniqueWithoutProjectInput[]
     updateMany?: OfficeMeetingUpdateManyWithWhereWithoutProjectInput | OfficeMeetingUpdateManyWithWhereWithoutProjectInput[]
     deleteMany?: OfficeMeetingScalarWhereInput | OfficeMeetingScalarWhereInput[]
+  }
+
+  export type ProjectCreateNestedOneWithoutClosingSubmissionInput = {
+    create?: XOR<ProjectCreateWithoutClosingSubmissionInput, ProjectUncheckedCreateWithoutClosingSubmissionInput>
+    connectOrCreate?: ProjectCreateOrConnectWithoutClosingSubmissionInput
+    connect?: ProjectWhereUniqueInput
+  }
+
+  export type EnumProjectClosingStatusFieldUpdateOperationsInput = {
+    set?: $Enums.ProjectClosingStatus
+  }
+
+  export type ProjectUpdateOneRequiredWithoutClosingSubmissionNestedInput = {
+    create?: XOR<ProjectCreateWithoutClosingSubmissionInput, ProjectUncheckedCreateWithoutClosingSubmissionInput>
+    connectOrCreate?: ProjectCreateOrConnectWithoutClosingSubmissionInput
+    upsert?: ProjectUpsertWithoutClosingSubmissionInput
+    connect?: ProjectWhereUniqueInput
+    update?: XOR<XOR<ProjectUpdateToOneWithWhereWithoutClosingSubmissionInput, ProjectUpdateWithoutClosingSubmissionInput>, ProjectUncheckedUpdateWithoutClosingSubmissionInput>
   }
 
   export type ProgressReportTemplateItemCreateNestedManyWithoutTemplateInput = {
@@ -45093,6 +46815,46 @@ export namespace Prisma {
     not?: NestedFloatFilter<$PrismaModel> | number
   }
 
+  export type NestedEnumProjectClosingStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.ProjectClosingStatus | EnumProjectClosingStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ProjectClosingStatus[] | ListEnumProjectClosingStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ProjectClosingStatus[] | ListEnumProjectClosingStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumProjectClosingStatusFilter<$PrismaModel> | $Enums.ProjectClosingStatus
+  }
+
+  export type NestedEnumProjectClosingStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ProjectClosingStatus | EnumProjectClosingStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ProjectClosingStatus[] | ListEnumProjectClosingStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ProjectClosingStatus[] | ListEnumProjectClosingStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumProjectClosingStatusWithAggregatesFilter<$PrismaModel> | $Enums.ProjectClosingStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumProjectClosingStatusFilter<$PrismaModel>
+    _max?: NestedEnumProjectClosingStatusFilter<$PrismaModel>
+  }
+  export type NestedJsonNullableFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<NestedJsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<NestedJsonNullableFilterBase<$PrismaModel>>, 'path'>>,
+        Required<NestedJsonNullableFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<NestedJsonNullableFilterBase<$PrismaModel>>, 'path'>>
+
+  export type NestedJsonNullableFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
+
   export type NestedFloatNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: number | FloatFieldRefInput<$PrismaModel> | null
     in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
@@ -45222,29 +46984,6 @@ export namespace Prisma {
     in?: $Enums.FacultyStatus[] | ListEnumFacultyStatusFieldRefInput<$PrismaModel>
     notIn?: $Enums.FacultyStatus[] | ListEnumFacultyStatusFieldRefInput<$PrismaModel>
     not?: NestedEnumFacultyStatusFilter<$PrismaModel> | $Enums.FacultyStatus
-  }
-  export type NestedJsonNullableFilter<$PrismaModel = never> =
-    | PatchUndefined<
-        Either<Required<NestedJsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<NestedJsonNullableFilterBase<$PrismaModel>>, 'path'>>,
-        Required<NestedJsonNullableFilterBase<$PrismaModel>>
-      >
-    | OptionalFlat<Omit<Required<NestedJsonNullableFilterBase<$PrismaModel>>, 'path'>>
-
-  export type NestedJsonNullableFilterBase<$PrismaModel = never> = {
-    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-    path?: string[]
-    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
-    string_contains?: string | StringFieldRefInput<$PrismaModel>
-    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
-    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
-    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
   }
 
   export type NestedEnumRegistrationStatusWithAggregatesFilter<$PrismaModel = never> = {
@@ -46509,6 +48248,7 @@ export namespace Prisma {
     councilEvaluations?: CouncilEvaluationCreateNestedManyWithoutProjectInput
     disbursements?: FundingDisbursementCreateNestedManyWithoutProjectInput
     extensionRequests?: ExtensionRequestCreateNestedManyWithoutProjectInput
+    closingSubmission?: ProjectClosingSubmissionCreateNestedOneWithoutProjectInput
     instructor?: UserCreateNestedOneWithoutInstructedProjectsInput
     officeMeetings?: OfficeMeetingCreateNestedManyWithoutProjectInput
   }
@@ -46535,6 +48275,7 @@ export namespace Prisma {
     councilEvaluations?: CouncilEvaluationUncheckedCreateNestedManyWithoutProjectInput
     disbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutProjectInput
     extensionRequests?: ExtensionRequestUncheckedCreateNestedManyWithoutProjectInput
+    closingSubmission?: ProjectClosingSubmissionUncheckedCreateNestedOneWithoutProjectInput
     officeMeetings?: OfficeMeetingUncheckedCreateNestedManyWithoutProjectInput
   }
 
@@ -46569,6 +48310,7 @@ export namespace Prisma {
     councilEvaluations?: CouncilEvaluationCreateNestedManyWithoutProjectInput
     disbursements?: FundingDisbursementCreateNestedManyWithoutProjectInput
     extensionRequests?: ExtensionRequestCreateNestedManyWithoutProjectInput
+    closingSubmission?: ProjectClosingSubmissionCreateNestedOneWithoutProjectInput
     instructor?: UserCreateNestedOneWithoutInstructedProjectsInput
     officeMeetings?: OfficeMeetingCreateNestedManyWithoutProjectInput
   }
@@ -46595,6 +48337,7 @@ export namespace Prisma {
     councilEvaluations?: CouncilEvaluationUncheckedCreateNestedManyWithoutProjectInput
     disbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutProjectInput
     extensionRequests?: ExtensionRequestUncheckedCreateNestedManyWithoutProjectInput
+    closingSubmission?: ProjectClosingSubmissionUncheckedCreateNestedOneWithoutProjectInput
     officeMeetings?: OfficeMeetingUncheckedCreateNestedManyWithoutProjectInput
   }
 
@@ -46643,6 +48386,7 @@ export namespace Prisma {
     title: string
     objective: string
     expectedOutput?: string | null
+    proposalFiles?: NullableJsonNullValueInput | InputJsonValue
     teamMembers?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.RegistrationStatus
     cancelReason?: string | null
@@ -46662,6 +48406,7 @@ export namespace Prisma {
     title: string
     objective: string
     expectedOutput?: string | null
+    proposalFiles?: NullableJsonNullValueInput | InputJsonValue
     teamMembers?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.RegistrationStatus
     cancelReason?: string | null
@@ -46689,6 +48434,7 @@ export namespace Prisma {
     title: string
     objective: string
     expectedOutput?: string | null
+    proposalFiles?: NullableJsonNullValueInput | InputJsonValue
     teamMembers?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.RegistrationStatus
     cancelReason?: string | null
@@ -46709,6 +48455,7 @@ export namespace Prisma {
     title: string
     objective: string
     expectedOutput?: string | null
+    proposalFiles?: NullableJsonNullValueInput | InputJsonValue
     teamMembers?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.RegistrationStatus
     cancelReason?: string | null
@@ -46752,6 +48499,7 @@ export namespace Prisma {
     councilEvaluations?: CouncilEvaluationCreateNestedManyWithoutProjectInput
     disbursements?: FundingDisbursementCreateNestedManyWithoutProjectInput
     extensionRequests?: ExtensionRequestCreateNestedManyWithoutProjectInput
+    closingSubmission?: ProjectClosingSubmissionCreateNestedOneWithoutProjectInput
     officeMeetings?: OfficeMeetingCreateNestedManyWithoutProjectInput
   }
 
@@ -46777,6 +48525,7 @@ export namespace Prisma {
     councilEvaluations?: CouncilEvaluationUncheckedCreateNestedManyWithoutProjectInput
     disbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutProjectInput
     extensionRequests?: ExtensionRequestUncheckedCreateNestedManyWithoutProjectInput
+    closingSubmission?: ProjectClosingSubmissionUncheckedCreateNestedOneWithoutProjectInput
     officeMeetings?: OfficeMeetingUncheckedCreateNestedManyWithoutProjectInput
   }
 
@@ -46795,6 +48544,7 @@ export namespace Prisma {
     title: string
     objective: string
     expectedOutput?: string | null
+    proposalFiles?: NullableJsonNullValueInput | InputJsonValue
     teamMembers?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.RegistrationStatus
     cancelReason?: string | null
@@ -46815,6 +48565,7 @@ export namespace Prisma {
     title: string
     objective: string
     expectedOutput?: string | null
+    proposalFiles?: NullableJsonNullValueInput | InputJsonValue
     teamMembers?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.RegistrationStatus
     cancelReason?: string | null
@@ -47395,6 +49146,7 @@ export namespace Prisma {
     title?: StringFilter<"ProjectRegistration"> | string
     objective?: StringFilter<"ProjectRegistration"> | string
     expectedOutput?: StringNullableFilter<"ProjectRegistration"> | string | null
+    proposalFiles?: JsonNullableFilter<"ProjectRegistration">
     teamMembers?: JsonNullableFilter<"ProjectRegistration">
     status?: EnumRegistrationStatusFilter<"ProjectRegistration"> | $Enums.RegistrationStatus
     cancelReason?: StringNullableFilter<"ProjectRegistration"> | string | null
@@ -47736,6 +49488,7 @@ export namespace Prisma {
     councilEvaluations?: CouncilEvaluationCreateNestedManyWithoutProjectInput
     disbursements?: FundingDisbursementCreateNestedManyWithoutProjectInput
     extensionRequests?: ExtensionRequestCreateNestedManyWithoutProjectInput
+    closingSubmission?: ProjectClosingSubmissionCreateNestedOneWithoutProjectInput
     instructor?: UserCreateNestedOneWithoutInstructedProjectsInput
     officeMeetings?: OfficeMeetingCreateNestedManyWithoutProjectInput
   }
@@ -47762,6 +49515,7 @@ export namespace Prisma {
     councilEvaluations?: CouncilEvaluationUncheckedCreateNestedManyWithoutProjectInput
     disbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutProjectInput
     extensionRequests?: ExtensionRequestUncheckedCreateNestedManyWithoutProjectInput
+    closingSubmission?: ProjectClosingSubmissionUncheckedCreateNestedOneWithoutProjectInput
     officeMeetings?: OfficeMeetingUncheckedCreateNestedManyWithoutProjectInput
   }
 
@@ -47780,6 +49534,7 @@ export namespace Prisma {
     title: string
     objective: string
     expectedOutput?: string | null
+    proposalFiles?: NullableJsonNullValueInput | InputJsonValue
     teamMembers?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.RegistrationStatus
     cancelReason?: string | null
@@ -47799,6 +49554,7 @@ export namespace Prisma {
     title: string
     objective: string
     expectedOutput?: string | null
+    proposalFiles?: NullableJsonNullValueInput | InputJsonValue
     teamMembers?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.RegistrationStatus
     cancelReason?: string | null
@@ -48295,6 +50051,7 @@ export namespace Prisma {
     councilEvaluations?: CouncilEvaluationCreateNestedManyWithoutProjectInput
     disbursements?: FundingDisbursementCreateNestedManyWithoutProjectInput
     extensionRequests?: ExtensionRequestCreateNestedManyWithoutProjectInput
+    closingSubmission?: ProjectClosingSubmissionCreateNestedOneWithoutProjectInput
     instructor?: UserCreateNestedOneWithoutInstructedProjectsInput
     officeMeetings?: OfficeMeetingCreateNestedManyWithoutProjectInput
   }
@@ -48321,6 +50078,7 @@ export namespace Prisma {
     councilEvaluations?: CouncilEvaluationUncheckedCreateNestedManyWithoutProjectInput
     disbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutProjectInput
     extensionRequests?: ExtensionRequestUncheckedCreateNestedManyWithoutProjectInput
+    closingSubmission?: ProjectClosingSubmissionUncheckedCreateNestedOneWithoutProjectInput
     officeMeetings?: OfficeMeetingUncheckedCreateNestedManyWithoutProjectInput
   }
 
@@ -48760,6 +50518,47 @@ export namespace Prisma {
   export type ExtensionRequestCreateManyProjectInputEnvelope = {
     data: ExtensionRequestCreateManyProjectInput | ExtensionRequestCreateManyProjectInput[]
     skipDuplicates?: boolean
+  }
+
+  export type ProjectClosingSubmissionCreateWithoutProjectInput = {
+    id?: string
+    submittedById: string
+    status?: $Enums.ProjectClosingStatus
+    note?: string | null
+    reportFiles?: NullableJsonNullValueInput | InputJsonValue
+    researchSourceCodeFiles?: NullableJsonNullValueInput | InputJsonValue
+    researchGuideFiles?: NullableJsonNullValueInput | InputJsonValue
+    administrativeDefenseApplicationFiles?: NullableJsonNullValueInput | InputJsonValue
+    administrativeAchievementEvidenceFiles?: NullableJsonNullValueInput | InputJsonValue
+    administrativeAdvisorReviewFiles?: NullableJsonNullValueInput | InputJsonValue
+    presentationSlideFiles?: NullableJsonNullValueInput | InputJsonValue
+    presentationVideoFiles?: NullableJsonNullValueInput | InputJsonValue
+    submittedAt?: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ProjectClosingSubmissionUncheckedCreateWithoutProjectInput = {
+    id?: string
+    submittedById: string
+    status?: $Enums.ProjectClosingStatus
+    note?: string | null
+    reportFiles?: NullableJsonNullValueInput | InputJsonValue
+    researchSourceCodeFiles?: NullableJsonNullValueInput | InputJsonValue
+    researchGuideFiles?: NullableJsonNullValueInput | InputJsonValue
+    administrativeDefenseApplicationFiles?: NullableJsonNullValueInput | InputJsonValue
+    administrativeAchievementEvidenceFiles?: NullableJsonNullValueInput | InputJsonValue
+    administrativeAdvisorReviewFiles?: NullableJsonNullValueInput | InputJsonValue
+    presentationSlideFiles?: NullableJsonNullValueInput | InputJsonValue
+    presentationVideoFiles?: NullableJsonNullValueInput | InputJsonValue
+    submittedAt?: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ProjectClosingSubmissionCreateOrConnectWithoutProjectInput = {
+    where: ProjectClosingSubmissionWhereUniqueInput
+    create: XOR<ProjectClosingSubmissionCreateWithoutProjectInput, ProjectClosingSubmissionUncheckedCreateWithoutProjectInput>
   }
 
   export type UserCreateWithoutInstructedProjectsInput = {
@@ -49261,6 +51060,53 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"ExtensionRequest"> | Date | string
   }
 
+  export type ProjectClosingSubmissionUpsertWithoutProjectInput = {
+    update: XOR<ProjectClosingSubmissionUpdateWithoutProjectInput, ProjectClosingSubmissionUncheckedUpdateWithoutProjectInput>
+    create: XOR<ProjectClosingSubmissionCreateWithoutProjectInput, ProjectClosingSubmissionUncheckedCreateWithoutProjectInput>
+    where?: ProjectClosingSubmissionWhereInput
+  }
+
+  export type ProjectClosingSubmissionUpdateToOneWithWhereWithoutProjectInput = {
+    where?: ProjectClosingSubmissionWhereInput
+    data: XOR<ProjectClosingSubmissionUpdateWithoutProjectInput, ProjectClosingSubmissionUncheckedUpdateWithoutProjectInput>
+  }
+
+  export type ProjectClosingSubmissionUpdateWithoutProjectInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    submittedById?: StringFieldUpdateOperationsInput | string
+    status?: EnumProjectClosingStatusFieldUpdateOperationsInput | $Enums.ProjectClosingStatus
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+    reportFiles?: NullableJsonNullValueInput | InputJsonValue
+    researchSourceCodeFiles?: NullableJsonNullValueInput | InputJsonValue
+    researchGuideFiles?: NullableJsonNullValueInput | InputJsonValue
+    administrativeDefenseApplicationFiles?: NullableJsonNullValueInput | InputJsonValue
+    administrativeAchievementEvidenceFiles?: NullableJsonNullValueInput | InputJsonValue
+    administrativeAdvisorReviewFiles?: NullableJsonNullValueInput | InputJsonValue
+    presentationSlideFiles?: NullableJsonNullValueInput | InputJsonValue
+    presentationVideoFiles?: NullableJsonNullValueInput | InputJsonValue
+    submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProjectClosingSubmissionUncheckedUpdateWithoutProjectInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    submittedById?: StringFieldUpdateOperationsInput | string
+    status?: EnumProjectClosingStatusFieldUpdateOperationsInput | $Enums.ProjectClosingStatus
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+    reportFiles?: NullableJsonNullValueInput | InputJsonValue
+    researchSourceCodeFiles?: NullableJsonNullValueInput | InputJsonValue
+    researchGuideFiles?: NullableJsonNullValueInput | InputJsonValue
+    administrativeDefenseApplicationFiles?: NullableJsonNullValueInput | InputJsonValue
+    administrativeAchievementEvidenceFiles?: NullableJsonNullValueInput | InputJsonValue
+    administrativeAdvisorReviewFiles?: NullableJsonNullValueInput | InputJsonValue
+    presentationSlideFiles?: NullableJsonNullValueInput | InputJsonValue
+    presentationVideoFiles?: NullableJsonNullValueInput | InputJsonValue
+    submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type UserUpsertWithoutInstructedProjectsInput = {
     update: XOR<UserUpdateWithoutInstructedProjectsInput, UserUncheckedUpdateWithoutInstructedProjectsInput>
     create: XOR<UserCreateWithoutInstructedProjectsInput, UserUncheckedCreateWithoutInstructedProjectsInput>
@@ -49356,6 +51202,126 @@ export namespace Prisma {
   export type OfficeMeetingUpdateManyWithWhereWithoutProjectInput = {
     where: OfficeMeetingScalarWhereInput
     data: XOR<OfficeMeetingUpdateManyMutationInput, OfficeMeetingUncheckedUpdateManyWithoutProjectInput>
+  }
+
+  export type ProjectCreateWithoutClosingSubmissionInput = {
+    id?: string
+    code?: string | null
+    title: string
+    objective: string
+    expectedOutput?: string | null
+    proposalFileUrl?: string | null
+    budgetRequested?: Decimal | DecimalJsLike | number | string | null
+    budgetApproved?: Decimal | DecimalJsLike | number | string | null
+    status?: $Enums.ProjectStatus
+    overdueReportCount?: number
+    budgetSuspended?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    leader: UserCreateNestedOneWithoutLeadProjectsInput
+    deanReviewer?: UserCreateNestedOneWithoutDeanReviewsInput
+    callRound?: CallRoundCreateNestedOneWithoutProjectsInput
+    projectType?: ProjectTypeCreateNestedOneWithoutProjectsInput
+    progressReports?: ProgressReportCreateNestedManyWithoutProjectInput
+    councilEvaluations?: CouncilEvaluationCreateNestedManyWithoutProjectInput
+    disbursements?: FundingDisbursementCreateNestedManyWithoutProjectInput
+    extensionRequests?: ExtensionRequestCreateNestedManyWithoutProjectInput
+    instructor?: UserCreateNestedOneWithoutInstructedProjectsInput
+    officeMeetings?: OfficeMeetingCreateNestedManyWithoutProjectInput
+  }
+
+  export type ProjectUncheckedCreateWithoutClosingSubmissionInput = {
+    id?: string
+    code?: string | null
+    title: string
+    objective: string
+    expectedOutput?: string | null
+    proposalFileUrl?: string | null
+    budgetRequested?: Decimal | DecimalJsLike | number | string | null
+    budgetApproved?: Decimal | DecimalJsLike | number | string | null
+    status?: $Enums.ProjectStatus
+    overdueReportCount?: number
+    budgetSuspended?: boolean
+    leaderId: string
+    deanReviewerId?: string | null
+    callRoundId?: string | null
+    projectTypeId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    instructorId?: string | null
+    progressReports?: ProgressReportUncheckedCreateNestedManyWithoutProjectInput
+    councilEvaluations?: CouncilEvaluationUncheckedCreateNestedManyWithoutProjectInput
+    disbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutProjectInput
+    extensionRequests?: ExtensionRequestUncheckedCreateNestedManyWithoutProjectInput
+    officeMeetings?: OfficeMeetingUncheckedCreateNestedManyWithoutProjectInput
+  }
+
+  export type ProjectCreateOrConnectWithoutClosingSubmissionInput = {
+    where: ProjectWhereUniqueInput
+    create: XOR<ProjectCreateWithoutClosingSubmissionInput, ProjectUncheckedCreateWithoutClosingSubmissionInput>
+  }
+
+  export type ProjectUpsertWithoutClosingSubmissionInput = {
+    update: XOR<ProjectUpdateWithoutClosingSubmissionInput, ProjectUncheckedUpdateWithoutClosingSubmissionInput>
+    create: XOR<ProjectCreateWithoutClosingSubmissionInput, ProjectUncheckedCreateWithoutClosingSubmissionInput>
+    where?: ProjectWhereInput
+  }
+
+  export type ProjectUpdateToOneWithWhereWithoutClosingSubmissionInput = {
+    where?: ProjectWhereInput
+    data: XOR<ProjectUpdateWithoutClosingSubmissionInput, ProjectUncheckedUpdateWithoutClosingSubmissionInput>
+  }
+
+  export type ProjectUpdateWithoutClosingSubmissionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    title?: StringFieldUpdateOperationsInput | string
+    objective?: StringFieldUpdateOperationsInput | string
+    expectedOutput?: NullableStringFieldUpdateOperationsInput | string | null
+    proposalFileUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    budgetRequested?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    budgetApproved?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    status?: EnumProjectStatusFieldUpdateOperationsInput | $Enums.ProjectStatus
+    overdueReportCount?: IntFieldUpdateOperationsInput | number
+    budgetSuspended?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    leader?: UserUpdateOneRequiredWithoutLeadProjectsNestedInput
+    deanReviewer?: UserUpdateOneWithoutDeanReviewsNestedInput
+    callRound?: CallRoundUpdateOneWithoutProjectsNestedInput
+    projectType?: ProjectTypeUpdateOneWithoutProjectsNestedInput
+    progressReports?: ProgressReportUpdateManyWithoutProjectNestedInput
+    councilEvaluations?: CouncilEvaluationUpdateManyWithoutProjectNestedInput
+    disbursements?: FundingDisbursementUpdateManyWithoutProjectNestedInput
+    extensionRequests?: ExtensionRequestUpdateManyWithoutProjectNestedInput
+    instructor?: UserUpdateOneWithoutInstructedProjectsNestedInput
+    officeMeetings?: OfficeMeetingUpdateManyWithoutProjectNestedInput
+  }
+
+  export type ProjectUncheckedUpdateWithoutClosingSubmissionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    title?: StringFieldUpdateOperationsInput | string
+    objective?: StringFieldUpdateOperationsInput | string
+    expectedOutput?: NullableStringFieldUpdateOperationsInput | string | null
+    proposalFileUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    budgetRequested?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    budgetApproved?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    status?: EnumProjectStatusFieldUpdateOperationsInput | $Enums.ProjectStatus
+    overdueReportCount?: IntFieldUpdateOperationsInput | number
+    budgetSuspended?: BoolFieldUpdateOperationsInput | boolean
+    leaderId?: StringFieldUpdateOperationsInput | string
+    deanReviewerId?: NullableStringFieldUpdateOperationsInput | string | null
+    callRoundId?: NullableStringFieldUpdateOperationsInput | string | null
+    projectTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    instructorId?: NullableStringFieldUpdateOperationsInput | string | null
+    progressReports?: ProgressReportUncheckedUpdateManyWithoutProjectNestedInput
+    councilEvaluations?: CouncilEvaluationUncheckedUpdateManyWithoutProjectNestedInput
+    disbursements?: FundingDisbursementUncheckedUpdateManyWithoutProjectNestedInput
+    extensionRequests?: ExtensionRequestUncheckedUpdateManyWithoutProjectNestedInput
+    officeMeetings?: OfficeMeetingUncheckedUpdateManyWithoutProjectNestedInput
   }
 
   export type ProgressReportTemplateItemCreateWithoutTemplateInput = {
@@ -49619,6 +51585,7 @@ export namespace Prisma {
     councilEvaluations?: CouncilEvaluationCreateNestedManyWithoutProjectInput
     disbursements?: FundingDisbursementCreateNestedManyWithoutProjectInput
     extensionRequests?: ExtensionRequestCreateNestedManyWithoutProjectInput
+    closingSubmission?: ProjectClosingSubmissionCreateNestedOneWithoutProjectInput
     instructor?: UserCreateNestedOneWithoutInstructedProjectsInput
     officeMeetings?: OfficeMeetingCreateNestedManyWithoutProjectInput
   }
@@ -49645,6 +51612,7 @@ export namespace Prisma {
     councilEvaluations?: CouncilEvaluationUncheckedCreateNestedManyWithoutProjectInput
     disbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutProjectInput
     extensionRequests?: ExtensionRequestUncheckedCreateNestedManyWithoutProjectInput
+    closingSubmission?: ProjectClosingSubmissionUncheckedCreateNestedOneWithoutProjectInput
     officeMeetings?: OfficeMeetingUncheckedCreateNestedManyWithoutProjectInput
   }
 
@@ -49685,6 +51653,7 @@ export namespace Prisma {
     councilEvaluations?: CouncilEvaluationUpdateManyWithoutProjectNestedInput
     disbursements?: FundingDisbursementUpdateManyWithoutProjectNestedInput
     extensionRequests?: ExtensionRequestUpdateManyWithoutProjectNestedInput
+    closingSubmission?: ProjectClosingSubmissionUpdateOneWithoutProjectNestedInput
     instructor?: UserUpdateOneWithoutInstructedProjectsNestedInput
     officeMeetings?: OfficeMeetingUpdateManyWithoutProjectNestedInput
   }
@@ -49711,6 +51680,7 @@ export namespace Prisma {
     councilEvaluations?: CouncilEvaluationUncheckedUpdateManyWithoutProjectNestedInput
     disbursements?: FundingDisbursementUncheckedUpdateManyWithoutProjectNestedInput
     extensionRequests?: ExtensionRequestUncheckedUpdateManyWithoutProjectNestedInput
+    closingSubmission?: ProjectClosingSubmissionUncheckedUpdateOneWithoutProjectNestedInput
     officeMeetings?: OfficeMeetingUncheckedUpdateManyWithoutProjectNestedInput
   }
 
@@ -49735,6 +51705,7 @@ export namespace Prisma {
     progressReports?: ProgressReportCreateNestedManyWithoutProjectInput
     disbursements?: FundingDisbursementCreateNestedManyWithoutProjectInput
     extensionRequests?: ExtensionRequestCreateNestedManyWithoutProjectInput
+    closingSubmission?: ProjectClosingSubmissionCreateNestedOneWithoutProjectInput
     instructor?: UserCreateNestedOneWithoutInstructedProjectsInput
     officeMeetings?: OfficeMeetingCreateNestedManyWithoutProjectInput
   }
@@ -49761,6 +51732,7 @@ export namespace Prisma {
     progressReports?: ProgressReportUncheckedCreateNestedManyWithoutProjectInput
     disbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutProjectInput
     extensionRequests?: ExtensionRequestUncheckedCreateNestedManyWithoutProjectInput
+    closingSubmission?: ProjectClosingSubmissionUncheckedCreateNestedOneWithoutProjectInput
     officeMeetings?: OfficeMeetingUncheckedCreateNestedManyWithoutProjectInput
   }
 
@@ -49876,6 +51848,7 @@ export namespace Prisma {
     progressReports?: ProgressReportUpdateManyWithoutProjectNestedInput
     disbursements?: FundingDisbursementUpdateManyWithoutProjectNestedInput
     extensionRequests?: ExtensionRequestUpdateManyWithoutProjectNestedInput
+    closingSubmission?: ProjectClosingSubmissionUpdateOneWithoutProjectNestedInput
     instructor?: UserUpdateOneWithoutInstructedProjectsNestedInput
     officeMeetings?: OfficeMeetingUpdateManyWithoutProjectNestedInput
   }
@@ -49902,6 +51875,7 @@ export namespace Prisma {
     progressReports?: ProgressReportUncheckedUpdateManyWithoutProjectNestedInput
     disbursements?: FundingDisbursementUncheckedUpdateManyWithoutProjectNestedInput
     extensionRequests?: ExtensionRequestUncheckedUpdateManyWithoutProjectNestedInput
+    closingSubmission?: ProjectClosingSubmissionUncheckedUpdateOneWithoutProjectNestedInput
     officeMeetings?: OfficeMeetingUncheckedUpdateManyWithoutProjectNestedInput
   }
 
@@ -50007,6 +51981,7 @@ export namespace Prisma {
     progressReports?: ProgressReportCreateNestedManyWithoutProjectInput
     councilEvaluations?: CouncilEvaluationCreateNestedManyWithoutProjectInput
     extensionRequests?: ExtensionRequestCreateNestedManyWithoutProjectInput
+    closingSubmission?: ProjectClosingSubmissionCreateNestedOneWithoutProjectInput
     instructor?: UserCreateNestedOneWithoutInstructedProjectsInput
     officeMeetings?: OfficeMeetingCreateNestedManyWithoutProjectInput
   }
@@ -50033,6 +52008,7 @@ export namespace Prisma {
     progressReports?: ProgressReportUncheckedCreateNestedManyWithoutProjectInput
     councilEvaluations?: CouncilEvaluationUncheckedCreateNestedManyWithoutProjectInput
     extensionRequests?: ExtensionRequestUncheckedCreateNestedManyWithoutProjectInput
+    closingSubmission?: ProjectClosingSubmissionUncheckedCreateNestedOneWithoutProjectInput
     officeMeetings?: OfficeMeetingUncheckedCreateNestedManyWithoutProjectInput
   }
 
@@ -50223,6 +52199,7 @@ export namespace Prisma {
     progressReports?: ProgressReportUpdateManyWithoutProjectNestedInput
     councilEvaluations?: CouncilEvaluationUpdateManyWithoutProjectNestedInput
     extensionRequests?: ExtensionRequestUpdateManyWithoutProjectNestedInput
+    closingSubmission?: ProjectClosingSubmissionUpdateOneWithoutProjectNestedInput
     instructor?: UserUpdateOneWithoutInstructedProjectsNestedInput
     officeMeetings?: OfficeMeetingUpdateManyWithoutProjectNestedInput
   }
@@ -50249,6 +52226,7 @@ export namespace Prisma {
     progressReports?: ProgressReportUncheckedUpdateManyWithoutProjectNestedInput
     councilEvaluations?: CouncilEvaluationUncheckedUpdateManyWithoutProjectNestedInput
     extensionRequests?: ExtensionRequestUncheckedUpdateManyWithoutProjectNestedInput
+    closingSubmission?: ProjectClosingSubmissionUncheckedUpdateOneWithoutProjectNestedInput
     officeMeetings?: OfficeMeetingUncheckedUpdateManyWithoutProjectNestedInput
   }
 
@@ -50435,6 +52413,7 @@ export namespace Prisma {
     progressReports?: ProgressReportCreateNestedManyWithoutProjectInput
     councilEvaluations?: CouncilEvaluationCreateNestedManyWithoutProjectInput
     disbursements?: FundingDisbursementCreateNestedManyWithoutProjectInput
+    closingSubmission?: ProjectClosingSubmissionCreateNestedOneWithoutProjectInput
     instructor?: UserCreateNestedOneWithoutInstructedProjectsInput
     officeMeetings?: OfficeMeetingCreateNestedManyWithoutProjectInput
   }
@@ -50461,6 +52440,7 @@ export namespace Prisma {
     progressReports?: ProgressReportUncheckedCreateNestedManyWithoutProjectInput
     councilEvaluations?: CouncilEvaluationUncheckedCreateNestedManyWithoutProjectInput
     disbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutProjectInput
+    closingSubmission?: ProjectClosingSubmissionUncheckedCreateNestedOneWithoutProjectInput
     officeMeetings?: OfficeMeetingUncheckedCreateNestedManyWithoutProjectInput
   }
 
@@ -50501,6 +52481,7 @@ export namespace Prisma {
     progressReports?: ProgressReportUpdateManyWithoutProjectNestedInput
     councilEvaluations?: CouncilEvaluationUpdateManyWithoutProjectNestedInput
     disbursements?: FundingDisbursementUpdateManyWithoutProjectNestedInput
+    closingSubmission?: ProjectClosingSubmissionUpdateOneWithoutProjectNestedInput
     instructor?: UserUpdateOneWithoutInstructedProjectsNestedInput
     officeMeetings?: OfficeMeetingUpdateManyWithoutProjectNestedInput
   }
@@ -50527,6 +52508,7 @@ export namespace Prisma {
     progressReports?: ProgressReportUncheckedUpdateManyWithoutProjectNestedInput
     councilEvaluations?: CouncilEvaluationUncheckedUpdateManyWithoutProjectNestedInput
     disbursements?: FundingDisbursementUncheckedUpdateManyWithoutProjectNestedInput
+    closingSubmission?: ProjectClosingSubmissionUncheckedUpdateOneWithoutProjectNestedInput
     officeMeetings?: OfficeMeetingUncheckedUpdateManyWithoutProjectNestedInput
   }
 
@@ -51902,6 +53884,7 @@ export namespace Prisma {
     councilEvaluations?: CouncilEvaluationCreateNestedManyWithoutProjectInput
     disbursements?: FundingDisbursementCreateNestedManyWithoutProjectInput
     extensionRequests?: ExtensionRequestCreateNestedManyWithoutProjectInput
+    closingSubmission?: ProjectClosingSubmissionCreateNestedOneWithoutProjectInput
     instructor?: UserCreateNestedOneWithoutInstructedProjectsInput
   }
 
@@ -51928,6 +53911,7 @@ export namespace Prisma {
     councilEvaluations?: CouncilEvaluationUncheckedCreateNestedManyWithoutProjectInput
     disbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutProjectInput
     extensionRequests?: ExtensionRequestUncheckedCreateNestedManyWithoutProjectInput
+    closingSubmission?: ProjectClosingSubmissionUncheckedCreateNestedOneWithoutProjectInput
   }
 
   export type ProjectCreateOrConnectWithoutOfficeMeetingsInput = {
@@ -52096,6 +54080,7 @@ export namespace Prisma {
     councilEvaluations?: CouncilEvaluationUpdateManyWithoutProjectNestedInput
     disbursements?: FundingDisbursementUpdateManyWithoutProjectNestedInput
     extensionRequests?: ExtensionRequestUpdateManyWithoutProjectNestedInput
+    closingSubmission?: ProjectClosingSubmissionUpdateOneWithoutProjectNestedInput
     instructor?: UserUpdateOneWithoutInstructedProjectsNestedInput
   }
 
@@ -52122,6 +54107,7 @@ export namespace Prisma {
     councilEvaluations?: CouncilEvaluationUncheckedUpdateManyWithoutProjectNestedInput
     disbursements?: FundingDisbursementUncheckedUpdateManyWithoutProjectNestedInput
     extensionRequests?: ExtensionRequestUncheckedUpdateManyWithoutProjectNestedInput
+    closingSubmission?: ProjectClosingSubmissionUncheckedUpdateOneWithoutProjectNestedInput
   }
 
   export type UserUpsertWithoutOfficeMeetingsAsInstructorInput = {
@@ -53690,6 +55676,7 @@ export namespace Prisma {
     title: string
     objective: string
     expectedOutput?: string | null
+    proposalFiles?: NullableJsonNullValueInput | InputJsonValue
     teamMembers?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.RegistrationStatus
     cancelReason?: string | null
@@ -53710,6 +55697,7 @@ export namespace Prisma {
     title: string
     objective: string
     expectedOutput?: string | null
+    proposalFiles?: NullableJsonNullValueInput | InputJsonValue
     teamMembers?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.RegistrationStatus
     cancelReason?: string | null
@@ -53777,6 +55765,7 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     objective?: StringFieldUpdateOperationsInput | string
     expectedOutput?: NullableStringFieldUpdateOperationsInput | string | null
+    proposalFiles?: NullableJsonNullValueInput | InputJsonValue
     teamMembers?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumRegistrationStatusFieldUpdateOperationsInput | $Enums.RegistrationStatus
     cancelReason?: NullableStringFieldUpdateOperationsInput | string | null
@@ -53797,6 +55786,7 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     objective?: StringFieldUpdateOperationsInput | string
     expectedOutput?: NullableStringFieldUpdateOperationsInput | string | null
+    proposalFiles?: NullableJsonNullValueInput | InputJsonValue
     teamMembers?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumRegistrationStatusFieldUpdateOperationsInput | $Enums.RegistrationStatus
     cancelReason?: NullableStringFieldUpdateOperationsInput | string | null
@@ -54908,6 +56898,7 @@ export namespace Prisma {
     title: string
     objective: string
     expectedOutput?: string | null
+    proposalFiles?: NullableJsonNullValueInput | InputJsonValue
     teamMembers?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.RegistrationStatus
     cancelReason?: string | null
@@ -54926,6 +56917,7 @@ export namespace Prisma {
     title: string
     objective: string
     expectedOutput?: string | null
+    proposalFiles?: NullableJsonNullValueInput | InputJsonValue
     teamMembers?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.RegistrationStatus
     cancelReason?: string | null
@@ -54963,6 +56955,7 @@ export namespace Prisma {
     title: string
     objective: string
     expectedOutput?: string | null
+    proposalFiles?: NullableJsonNullValueInput | InputJsonValue
     teamMembers?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.RegistrationStatus
     cancelReason?: string | null
@@ -55115,6 +57108,7 @@ export namespace Prisma {
     councilEvaluations?: CouncilEvaluationUpdateManyWithoutProjectNestedInput
     disbursements?: FundingDisbursementUpdateManyWithoutProjectNestedInput
     extensionRequests?: ExtensionRequestUpdateManyWithoutProjectNestedInput
+    closingSubmission?: ProjectClosingSubmissionUpdateOneWithoutProjectNestedInput
     instructor?: UserUpdateOneWithoutInstructedProjectsNestedInput
     officeMeetings?: OfficeMeetingUpdateManyWithoutProjectNestedInput
   }
@@ -55141,6 +57135,7 @@ export namespace Prisma {
     councilEvaluations?: CouncilEvaluationUncheckedUpdateManyWithoutProjectNestedInput
     disbursements?: FundingDisbursementUncheckedUpdateManyWithoutProjectNestedInput
     extensionRequests?: ExtensionRequestUncheckedUpdateManyWithoutProjectNestedInput
+    closingSubmission?: ProjectClosingSubmissionUncheckedUpdateOneWithoutProjectNestedInput
     officeMeetings?: OfficeMeetingUncheckedUpdateManyWithoutProjectNestedInput
   }
 
@@ -55185,6 +57180,7 @@ export namespace Prisma {
     councilEvaluations?: CouncilEvaluationUpdateManyWithoutProjectNestedInput
     disbursements?: FundingDisbursementUpdateManyWithoutProjectNestedInput
     extensionRequests?: ExtensionRequestUpdateManyWithoutProjectNestedInput
+    closingSubmission?: ProjectClosingSubmissionUpdateOneWithoutProjectNestedInput
     instructor?: UserUpdateOneWithoutInstructedProjectsNestedInput
     officeMeetings?: OfficeMeetingUpdateManyWithoutProjectNestedInput
   }
@@ -55211,6 +57207,7 @@ export namespace Prisma {
     councilEvaluations?: CouncilEvaluationUncheckedUpdateManyWithoutProjectNestedInput
     disbursements?: FundingDisbursementUncheckedUpdateManyWithoutProjectNestedInput
     extensionRequests?: ExtensionRequestUncheckedUpdateManyWithoutProjectNestedInput
+    closingSubmission?: ProjectClosingSubmissionUncheckedUpdateOneWithoutProjectNestedInput
     officeMeetings?: OfficeMeetingUncheckedUpdateManyWithoutProjectNestedInput
   }
 
@@ -55269,6 +57266,7 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     objective?: StringFieldUpdateOperationsInput | string
     expectedOutput?: NullableStringFieldUpdateOperationsInput | string | null
+    proposalFiles?: NullableJsonNullValueInput | InputJsonValue
     teamMembers?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumRegistrationStatusFieldUpdateOperationsInput | $Enums.RegistrationStatus
     cancelReason?: NullableStringFieldUpdateOperationsInput | string | null
@@ -55288,6 +57286,7 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     objective?: StringFieldUpdateOperationsInput | string
     expectedOutput?: NullableStringFieldUpdateOperationsInput | string | null
+    proposalFiles?: NullableJsonNullValueInput | InputJsonValue
     teamMembers?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumRegistrationStatusFieldUpdateOperationsInput | $Enums.RegistrationStatus
     cancelReason?: NullableStringFieldUpdateOperationsInput | string | null
@@ -55306,6 +57305,7 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     objective?: StringFieldUpdateOperationsInput | string
     expectedOutput?: NullableStringFieldUpdateOperationsInput | string | null
+    proposalFiles?: NullableJsonNullValueInput | InputJsonValue
     teamMembers?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumRegistrationStatusFieldUpdateOperationsInput | $Enums.RegistrationStatus
     cancelReason?: NullableStringFieldUpdateOperationsInput | string | null
@@ -55322,6 +57322,7 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     objective?: StringFieldUpdateOperationsInput | string
     expectedOutput?: NullableStringFieldUpdateOperationsInput | string | null
+    proposalFiles?: NullableJsonNullValueInput | InputJsonValue
     teamMembers?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumRegistrationStatusFieldUpdateOperationsInput | $Enums.RegistrationStatus
     cancelReason?: NullableStringFieldUpdateOperationsInput | string | null
@@ -55342,6 +57343,7 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     objective?: StringFieldUpdateOperationsInput | string
     expectedOutput?: NullableStringFieldUpdateOperationsInput | string | null
+    proposalFiles?: NullableJsonNullValueInput | InputJsonValue
     teamMembers?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumRegistrationStatusFieldUpdateOperationsInput | $Enums.RegistrationStatus
     cancelReason?: NullableStringFieldUpdateOperationsInput | string | null
@@ -55360,6 +57362,7 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     objective?: StringFieldUpdateOperationsInput | string
     expectedOutput?: NullableStringFieldUpdateOperationsInput | string | null
+    proposalFiles?: NullableJsonNullValueInput | InputJsonValue
     teamMembers?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumRegistrationStatusFieldUpdateOperationsInput | $Enums.RegistrationStatus
     cancelReason?: NullableStringFieldUpdateOperationsInput | string | null
@@ -55392,6 +57395,7 @@ export namespace Prisma {
     councilEvaluations?: CouncilEvaluationUpdateManyWithoutProjectNestedInput
     disbursements?: FundingDisbursementUpdateManyWithoutProjectNestedInput
     extensionRequests?: ExtensionRequestUpdateManyWithoutProjectNestedInput
+    closingSubmission?: ProjectClosingSubmissionUpdateOneWithoutProjectNestedInput
     officeMeetings?: OfficeMeetingUpdateManyWithoutProjectNestedInput
   }
 
@@ -55417,6 +57421,7 @@ export namespace Prisma {
     councilEvaluations?: CouncilEvaluationUncheckedUpdateManyWithoutProjectNestedInput
     disbursements?: FundingDisbursementUncheckedUpdateManyWithoutProjectNestedInput
     extensionRequests?: ExtensionRequestUncheckedUpdateManyWithoutProjectNestedInput
+    closingSubmission?: ProjectClosingSubmissionUncheckedUpdateOneWithoutProjectNestedInput
     officeMeetings?: OfficeMeetingUncheckedUpdateManyWithoutProjectNestedInput
   }
 
@@ -55445,6 +57450,7 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     objective?: StringFieldUpdateOperationsInput | string
     expectedOutput?: NullableStringFieldUpdateOperationsInput | string | null
+    proposalFiles?: NullableJsonNullValueInput | InputJsonValue
     teamMembers?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumRegistrationStatusFieldUpdateOperationsInput | $Enums.RegistrationStatus
     cancelReason?: NullableStringFieldUpdateOperationsInput | string | null
@@ -55465,6 +57471,7 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     objective?: StringFieldUpdateOperationsInput | string
     expectedOutput?: NullableStringFieldUpdateOperationsInput | string | null
+    proposalFiles?: NullableJsonNullValueInput | InputJsonValue
     teamMembers?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumRegistrationStatusFieldUpdateOperationsInput | $Enums.RegistrationStatus
     cancelReason?: NullableStringFieldUpdateOperationsInput | string | null
@@ -55483,6 +57490,7 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     objective?: StringFieldUpdateOperationsInput | string
     expectedOutput?: NullableStringFieldUpdateOperationsInput | string | null
+    proposalFiles?: NullableJsonNullValueInput | InputJsonValue
     teamMembers?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumRegistrationStatusFieldUpdateOperationsInput | $Enums.RegistrationStatus
     cancelReason?: NullableStringFieldUpdateOperationsInput | string | null
@@ -55884,6 +57892,7 @@ export namespace Prisma {
     title: string
     objective: string
     expectedOutput?: string | null
+    proposalFiles?: NullableJsonNullValueInput | InputJsonValue
     teamMembers?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.RegistrationStatus
     cancelReason?: string | null
@@ -55954,6 +57963,7 @@ export namespace Prisma {
     councilEvaluations?: CouncilEvaluationUpdateManyWithoutProjectNestedInput
     disbursements?: FundingDisbursementUpdateManyWithoutProjectNestedInput
     extensionRequests?: ExtensionRequestUpdateManyWithoutProjectNestedInput
+    closingSubmission?: ProjectClosingSubmissionUpdateOneWithoutProjectNestedInput
     instructor?: UserUpdateOneWithoutInstructedProjectsNestedInput
     officeMeetings?: OfficeMeetingUpdateManyWithoutProjectNestedInput
   }
@@ -55980,6 +57990,7 @@ export namespace Prisma {
     councilEvaluations?: CouncilEvaluationUncheckedUpdateManyWithoutProjectNestedInput
     disbursements?: FundingDisbursementUncheckedUpdateManyWithoutProjectNestedInput
     extensionRequests?: ExtensionRequestUncheckedUpdateManyWithoutProjectNestedInput
+    closingSubmission?: ProjectClosingSubmissionUncheckedUpdateOneWithoutProjectNestedInput
     officeMeetings?: OfficeMeetingUncheckedUpdateManyWithoutProjectNestedInput
   }
 
@@ -56008,6 +58019,7 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     objective?: StringFieldUpdateOperationsInput | string
     expectedOutput?: NullableStringFieldUpdateOperationsInput | string | null
+    proposalFiles?: NullableJsonNullValueInput | InputJsonValue
     teamMembers?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumRegistrationStatusFieldUpdateOperationsInput | $Enums.RegistrationStatus
     cancelReason?: NullableStringFieldUpdateOperationsInput | string | null
@@ -56027,6 +58039,7 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     objective?: StringFieldUpdateOperationsInput | string
     expectedOutput?: NullableStringFieldUpdateOperationsInput | string | null
+    proposalFiles?: NullableJsonNullValueInput | InputJsonValue
     teamMembers?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumRegistrationStatusFieldUpdateOperationsInput | $Enums.RegistrationStatus
     cancelReason?: NullableStringFieldUpdateOperationsInput | string | null
@@ -56045,6 +58058,7 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     objective?: StringFieldUpdateOperationsInput | string
     expectedOutput?: NullableStringFieldUpdateOperationsInput | string | null
+    proposalFiles?: NullableJsonNullValueInput | InputJsonValue
     teamMembers?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumRegistrationStatusFieldUpdateOperationsInput | $Enums.RegistrationStatus
     cancelReason?: NullableStringFieldUpdateOperationsInput | string | null
@@ -56313,6 +58327,7 @@ export namespace Prisma {
     councilEvaluations?: CouncilEvaluationUpdateManyWithoutProjectNestedInput
     disbursements?: FundingDisbursementUpdateManyWithoutProjectNestedInput
     extensionRequests?: ExtensionRequestUpdateManyWithoutProjectNestedInput
+    closingSubmission?: ProjectClosingSubmissionUpdateOneWithoutProjectNestedInput
     instructor?: UserUpdateOneWithoutInstructedProjectsNestedInput
     officeMeetings?: OfficeMeetingUpdateManyWithoutProjectNestedInput
   }
@@ -56339,6 +58354,7 @@ export namespace Prisma {
     councilEvaluations?: CouncilEvaluationUncheckedUpdateManyWithoutProjectNestedInput
     disbursements?: FundingDisbursementUncheckedUpdateManyWithoutProjectNestedInput
     extensionRequests?: ExtensionRequestUncheckedUpdateManyWithoutProjectNestedInput
+    closingSubmission?: ProjectClosingSubmissionUncheckedUpdateOneWithoutProjectNestedInput
     officeMeetings?: OfficeMeetingUncheckedUpdateManyWithoutProjectNestedInput
   }
 

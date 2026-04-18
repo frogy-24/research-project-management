@@ -184,6 +184,14 @@ export async function PATCH(request: Request, { params }: Params) {
         title: updateParsed.data.title,
         objective: updateParsed.data.objective,
         expectedOutput: updateParsed.data.expectedOutput ?? null,
+        ...(updateParsed.data.proposalFiles !== undefined
+          ? {
+              proposalFiles:
+                updateParsed.data.proposalFiles && updateParsed.data.proposalFiles.length > 0
+                  ? updateParsed.data.proposalFiles
+                  : [],
+            }
+          : {}),
         teamMembers: normalizedTeamMembers,
       },
     });

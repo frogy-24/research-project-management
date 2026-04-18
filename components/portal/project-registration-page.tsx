@@ -19,15 +19,30 @@ import {
     useUpdateMyProjectRegistration,
 } from '@/hooks/useMyProjectRegistrations';
 import { useMyTeamInvitations } from '@/hooks/useMyTeamInvitations';
-import { FileText, MonitorX, PlusCircle, CalendarClock, AlertCircle, Pencil, Plus, Trash2, Users } from 'lucide-react';
+import {
+    FileText,
+    MonitorX,
+    PlusCircle,
+    CalendarClock,
+    AlertCircle,
+    Pencil,
+    Plus,
+    Trash2,
+    Users,
+    Paperclip,
+    ExternalLink,
+    Download,
+    Upload,
+} from 'lucide-react';
 import { useUsers } from '@/hooks/useUsers';
 import { useAuthSession } from '@/hooks/useAuth';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { useCallRounds } from '@/hooks/useCallRounds';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { useMe } from '@/hooks/useMe';
+import { uploadApi } from '@/api/upload';
 import type { CallRoundWithTemplate } from '@/types/call-round.schema';
-import type { ProjectRegistration } from '@/types/project-registration.schema';
+import type { ProjectRegistration, RegistrationProposalFile } from '@/types/project-registration.schema';
 import type { User } from '@/types/user.schema';
 import { useDebounce } from '@/hooks/useDebounce';
 import { useMajors } from '@/hooks/useMajors';
@@ -142,6 +157,19 @@ const isCallRoundEnded = (item: ProjectRegistration): boolean => {
     return new Date() > toEndOfDay(endDate);
 };
 
+const formatFileSize = (sizeInBytes?: number | null): string => {
+    if (typeof sizeInBytes !== 'number' || Number.isNaN(sizeInBytes)) {
+        return 'N/A';
+    }
+
+    const kb = sizeInBytes / 1024;
+    if (kb < 1024) {
+        return `${kb.toFixed(1)} KB`;
+    }
+
+    return `${(kb / 1024).toFixed(1)} MB`;
+};
+
 export function ProjectRegistrationPage({ title }: ProjectRegistrationPageProps) {
     const [projectTitle, setProjectTitle] = useState('');
     const [objective, setObjective] = useState('');
@@ -162,6 +190,12 @@ export function ProjectRegistrationPage({ title }: ProjectRegistrationPageProps)
     const [historySearchKeyword, setHistorySearchKeyword] = useState('');
     const [historyCallRoundFilter, setHistoryCallRoundFilter] = useState('all');
     const [historyStatusFilter, setHistoryStatusFilter] = useState<'all' | DisplayRegistrationStatus>('all');
+    const [isAttachmentGuideOpen, setIsAttachmentGuideOpen] = useState(false);
+    const [proposalFiles, setProposalFiles] = useState<RegistrationProposalFile[]>([]);
+    const [editProposalFiles, setEditProposalFiles] = useState<RegistrationProposalFile[]>([]);
+    const [isUploadingProposalFile, setIsUploadingProposalFile] = useState(false);
+    const createProposalFileInputRef = React.useRef<HTMLInputElement | null>(null);
+    const editProposalFileInputRef = React.useRef<HTMLInputElement | null>(null);
     const { data: me } = useMe();
     const { data: session } = useAuthSession();
     const myDepartmentId = me?.departmentId ?? undefined;
@@ -237,6 +271,83 @@ export function ProjectRegistrationPage({ title }: ProjectRegistrationPageProps)
         }
 
         return activeCallRound.availableInstructors.filter((item) => item.invitationStatus === 'ACCEPTED');
+    }, [activeCallRound]);
+
+    const activeCallRoundAttachments = React.useMemo(() => {
+        if (!activeCallRound?.attachments || activeCallRound.attachments.length === 0) {
+            return [];
+        }
+
+        return [...activeCallRound.attachments].sort((a, b) => {
+            const aTime = new Date(a.createdAt).getTime();
+            const bTime = new Date(b.createdAt).getTime();
+            return bTime - aTime;
+        });
+    }, [activeCallRound]);
+
+    const importantFileNameList = React.useMemo(() => {
+        const rawGuidelines = activeCallRound?.guidelines?.trim();
+        if (!rawGuidelines) {
+            return [];
+        }
+
+        return rawGuidelines
+            .split('\n')
+            .map((line) => line.trim())
+            .filter((line) => line.length > 0);
+    }, [activeCallRound]);
+
+    const importantFileNameSet = React.useMemo(() => {
+        return new Set(importantFileNameList.map((item) => item.trim().toLowerCase()));
+    }, [importantFileNameList]);
+
+    const requiredCallRoundAttachments = React.useMemo(() => {
+        if (activeCallRoundAttachments.length === 0 || importantFileNameSet.size === 0) {
+            return [];
+        }
+
+        const requiredNames = Array.from(importantFileNameSet);
+
+        return activeCallRoundAttachments.filter((attachment) => {
+            const normalizedDescription = attachment.description?.trim().toLowerCase() ?? '';
+            const normalizedFileName = attachment.fileName.trim().toLowerCase();
+
+            return requiredNames.some((requiredName) => {
+                if (normalizedDescription.length > 0) {
+                    return (
+                        normalizedDescription === requiredName ||
+                        normalizedDescription.includes(requiredName) ||
+                        requiredName.includes(normalizedDescription)
+                    );
+                }
+
+                return normalizedFileName === requiredName || normalizedFileName.includes(requiredName);
+            });
+        });
+    }, [activeCallRoundAttachments, importantFileNameSet]);
+
+    const accompanyingCallRoundAttachments = React.useMemo(() => {
+        if (activeCallRoundAttachments.length === 0) {
+            return [];
+        }
+
+        const requiredAttachmentIdSet = new Set(requiredCallRoundAttachments.map((attachment) => attachment.id));
+
+        return activeCallRoundAttachments.filter((attachment) => {
+            return !requiredAttachmentIdSet.has(attachment.id);
+        });
+    }, [activeCallRoundAttachments, requiredCallRoundAttachments]);
+
+    const callRoundNoticeList = React.useMemo(() => {
+        const rawNotice = activeCallRound?.requirements?.trim();
+        if (!rawNotice) {
+            return [];
+        }
+
+        return rawNotice
+            .split('\n')
+            .map((line) => line.trim())
+            .filter((line) => line.length > 0);
     }, [activeCallRound]);
 
     React.useEffect(() => {
@@ -343,6 +454,84 @@ export function ProjectRegistrationPage({ title }: ProjectRegistrationPageProps)
 
     const isFormDisabled =
         !activeCallRound || hasRegistrationInSelectedCallRound || hasAcceptedInvitationInSelectedCallRound;
+
+    const handleChooseProposalFiles = () => {
+        createProposalFileInputRef.current?.click();
+    };
+
+    const handleCreateProposalFileSelect = async (event: React.ChangeEvent<HTMLInputElement>) => {
+        const selectedFiles = Array.from(event.target.files ?? []);
+        if (selectedFiles.length === 0) {
+            return;
+        }
+
+        setIsUploadingProposalFile(true);
+        try {
+            const uploadedFiles: RegistrationProposalFile[] = [];
+
+            for (const file of selectedFiles) {
+                const uploadResult = await uploadApi.file(file);
+                uploadedFiles.push({
+                    name: file.name,
+                    url: uploadResult.url,
+                    size: file.size,
+                    type: file.type || undefined,
+                });
+            }
+
+            setProposalFiles((prev) => [...prev, ...uploadedFiles]);
+            toast.success(`Đã tải lên ${uploadedFiles.length} tệp đính kèm`);
+        } catch (error) {
+            const message = error instanceof Error ? error.message : 'Không thể tải lên tệp';
+            toast.error(message);
+        } finally {
+            setIsUploadingProposalFile(false);
+            event.target.value = '';
+        }
+    };
+
+    const handleRemoveProposalFile = (index: number) => {
+        setProposalFiles((prev) => prev.filter((_, itemIndex) => itemIndex !== index));
+    };
+
+    const handleChooseEditProposalFiles = () => {
+        editProposalFileInputRef.current?.click();
+    };
+
+    const handleEditProposalFileSelect = async (event: React.ChangeEvent<HTMLInputElement>) => {
+        const selectedFiles = Array.from(event.target.files ?? []);
+        if (selectedFiles.length === 0) {
+            return;
+        }
+
+        setIsUploadingProposalFile(true);
+        try {
+            const uploadedFiles: RegistrationProposalFile[] = [];
+
+            for (const file of selectedFiles) {
+                const uploadResult = await uploadApi.file(file);
+                uploadedFiles.push({
+                    name: file.name,
+                    url: uploadResult.url,
+                    size: file.size,
+                    type: file.type || undefined,
+                });
+            }
+
+            setEditProposalFiles((prev) => [...prev, ...uploadedFiles]);
+            toast.success(`Đã tải lên ${uploadedFiles.length} tệp đính kèm`);
+        } catch (error) {
+            const message = error instanceof Error ? error.message : 'Không thể tải lên tệp';
+            toast.error(message);
+        } finally {
+            setIsUploadingProposalFile(false);
+            event.target.value = '';
+        }
+    };
+
+    const handleRemoveEditProposalFile = (index: number) => {
+        setEditProposalFiles((prev) => prev.filter((_, itemIndex) => itemIndex !== index));
+    };
 
     const normalizeTeamMembers = (members: TeamMemberInput[]) => {
         const trimmed = members.map((member) => ({
@@ -494,6 +683,7 @@ export function ProjectRegistrationPage({ title }: ProjectRegistrationPageProps)
                 title: projectTitle,
                 objective,
                 expectedOutput: expectedOutput.trim() ? expectedOutput : null,
+                proposalFiles,
                 teamMembers: normalizedMembers.data,
                 instructorId,
                 callRoundId: activeCallRound.id,
@@ -504,6 +694,7 @@ export function ProjectRegistrationPage({ title }: ProjectRegistrationPageProps)
                     setProjectTitle('');
                     setObjective('');
                     setExpectedOutput('');
+                    setProposalFiles([]);
                     setInstructorId('');
                     setTeamMembers([]);
                 },
@@ -547,6 +738,7 @@ export function ProjectRegistrationPage({ title }: ProjectRegistrationPageProps)
         setEditObjective(item.objective);
         setEditExpectedOutput(item.expectedOutput ?? '');
         setEditTeamMembers((item.teamMembers as TeamMemberInput[] | null | undefined) ?? []);
+        setEditProposalFiles(item.proposalFiles ?? []);
     };
 
     const closeEditDialog = () => {
@@ -555,6 +747,7 @@ export function ProjectRegistrationPage({ title }: ProjectRegistrationPageProps)
         setEditObjective('');
         setEditExpectedOutput('');
         setEditTeamMembers([]);
+        setEditProposalFiles([]);
     };
 
     const handleUpdate = () => {
@@ -581,6 +774,7 @@ export function ProjectRegistrationPage({ title }: ProjectRegistrationPageProps)
                     title: editTitle,
                     objective: editObjective,
                     expectedOutput: editExpectedOutput.trim() || null,
+                    proposalFiles: editProposalFiles,
                     teamMembers: normalizedMembers.data,
                 },
             },
@@ -713,6 +907,204 @@ export function ProjectRegistrationPage({ title }: ProjectRegistrationPageProps)
                                 </div>
                             )}
 
+                            {activeCallRound && (
+                                <div className="space-y-2 rounded-md border bg-muted/20 p-3">
+                                    <div className="flex items-center gap-2 text-sm font-medium">
+                                        <AlertCircle className="h-4 w-4" />
+                                        Lưu ý (*)
+                                    </div>
+
+                                    {callRoundNoticeList.length === 0 ? (
+                                        <p className="text-xs text-muted-foreground">
+                                            Chưa có lưu ý cho đợt đăng ký này.
+                                        </p>
+                                    ) : (
+                                        <ul className="space-y-1 text-xs text-muted-foreground">
+                                            {callRoundNoticeList.map((item, index) => (
+                                                <li key={`${index}-${item}`} className="list-inside list-disc">
+                                                    {item}
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    )}
+                                </div>
+                            )}
+
+                            {activeCallRound && (
+                                <div className="space-y-2 rounded-md border bg-muted/20 p-3">
+                                    <div className="flex items-center justify-between gap-2">
+                                        <div className="flex items-center gap-2 text-sm font-medium">
+                                            <Paperclip className="h-4 w-4" />
+                                            Tài liệu đợt đăng ký
+                                        </div>
+
+                                        <Button type="button" variant="outline" size="sm" onClick={() => setIsAttachmentGuideOpen(true)}>
+                                            Xem file đi kèm
+                                        </Button>
+                                    </div>
+
+                                    <p className="text-xs text-muted-foreground">
+                                        Mở popup để xem danh sách file bắt buộc và file đi kèm của đợt đăng ký này.
+                                    </p>
+                                </div>
+                            )}
+
+                            {activeCallRound && (
+                                <Dialog open={isAttachmentGuideOpen} onOpenChange={setIsAttachmentGuideOpen}>
+                                    <DialogContent className="sm:max-w-2xl">
+                                        <DialogHeader>
+                                            <DialogTitle>File đợt đăng ký đề tài</DialogTitle>
+                                        </DialogHeader>
+
+                                        <div className="space-y-4">
+                                            <div className="space-y-2 rounded-md border bg-muted/20 p-3">
+                                                <div className="flex items-center gap-2 text-sm font-medium">
+                                                    <FileText className="h-4 w-4" />
+                                                    File bắt buộc ({requiredCallRoundAttachments.length})
+                                                </div>
+
+                                                {importantFileNameList.length === 0 ? (
+                                                    <p className="text-xs text-muted-foreground">
+                                                        Chưa có danh sách file bắt buộc cho đợt đăng ký này.
+                                                    </p>
+                                                ) : (
+                                                    <p className="text-xs text-muted-foreground">
+                                                        Danh sách tên file bắt buộc đã hiển thị ở card phía ngoài.
+                                                    </p>
+                                                )}
+
+                                                {importantFileNameList.length > 0 && (
+                                                    <div className="space-y-2 pt-1">
+                                                        <p className="text-xs font-medium text-muted-foreground">
+                                                            Tệp bắt buộc đã tải lên
+                                                        </p>
+
+                                                        {requiredCallRoundAttachments.length === 0 ? (
+                                                            <p className="text-xs text-muted-foreground">
+                                                                Chưa có tệp bắt buộc được đính kèm.
+                                                            </p>
+                                                        ) : (
+                                                            <div className="space-y-2">
+                                                                {requiredCallRoundAttachments.map((attachment) => (
+                                                                    <div
+                                                                        key={attachment.id}
+                                                                        className="flex items-center justify-between gap-2 rounded-md border bg-background p-2"
+                                                                    >
+                                                                        <div className="min-w-0 flex-1">
+                                                                            <p className="truncate text-sm font-medium">
+                                                                                {attachment.fileName}
+                                                                            </p>
+                                                                            <p className="text-xs text-muted-foreground">
+                                                                                {formatFileSize(attachment.fileSize)}{' '}
+                                                                                {attachment.createdAt
+                                                                                    ? `• ${new Date(attachment.createdAt).toLocaleDateString('vi-VN')}`
+                                                                                    : ''}
+                                                                            </p>
+                                                                            {attachment.description && (
+                                                                                <p className="mt-0.5 truncate text-xs text-muted-foreground">
+                                                                                    {attachment.description}
+                                                                                </p>
+                                                                            )}
+                                                                        </div>
+
+                                                                        <div className="flex items-center gap-1">
+                                                                            <Button variant="ghost" size="sm" className="h-8 w-8 p-0" asChild>
+                                                                                <a
+                                                                                    href={attachment.fileUrl}
+                                                                                    download
+                                                                                    aria-label={`Tải xuống tệp ${attachment.fileName}`}
+                                                                                >
+                                                                                    <Download className="h-4 w-4" />
+                                                                                </a>
+                                                                            </Button>
+                                                                            <Button variant="ghost" size="sm" className="h-8 w-8 p-0" asChild>
+                                                                                <a
+                                                                                    href={attachment.fileUrl}
+                                                                                    target="_blank"
+                                                                                    rel="noopener noreferrer"
+                                                                                    aria-label={`Mở tệp ${attachment.fileName}`}
+                                                                                >
+                                                                                    <ExternalLink className="h-4 w-4" />
+                                                                                </a>
+                                                                            </Button>
+                                                                        </div>
+                                                                    </div>
+                                                                ))}
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                )}
+                                            </div>
+
+                                            <div className="space-y-2 rounded-md border bg-muted/20 p-3">
+                                                <div className="flex items-center gap-2 text-sm font-medium">
+                                                    <Paperclip className="h-4 w-4" />
+                                                    File đi kèm ({accompanyingCallRoundAttachments.length})
+                                                </div>
+
+                                                {accompanyingCallRoundAttachments.length === 0 ? (
+                                                    <p className="text-xs text-muted-foreground">
+                                                        Đợt đăng ký này chưa có file đi kèm.
+                                                    </p>
+                                                ) : (
+                                                    <div className="space-y-2">
+                                                        {accompanyingCallRoundAttachments.map((attachment) => (
+                                                            <div
+                                                                key={attachment.id}
+                                                                className="flex items-center justify-between gap-2 rounded-md border bg-background p-2"
+                                                            >
+                                                                <div className="min-w-0 flex-1">
+                                                                    <p className="truncate text-sm font-medium">{attachment.fileName}</p>
+                                                                    <p className="text-xs text-muted-foreground">
+                                                                        {formatFileSize(attachment.fileSize)}{' '}
+                                                                        {attachment.createdAt
+                                                                            ? `• ${new Date(attachment.createdAt).toLocaleDateString('vi-VN')}`
+                                                                            : ''}
+                                                                    </p>
+                                                                    {attachment.description && (
+                                                                        <p className="mt-0.5 truncate text-xs text-muted-foreground">
+                                                                            {attachment.description}
+                                                                        </p>
+                                                                    )}
+                                                                </div>
+
+                                                                <div className="flex items-center gap-1">
+                                                                    <Button variant="ghost" size="sm" className="h-8 w-8 p-0" asChild>
+                                                                        <a
+                                                                            href={attachment.fileUrl}
+                                                                            download
+                                                                            aria-label={`Tải xuống tệp ${attachment.fileName}`}
+                                                                        >
+                                                                            <Download className="h-4 w-4" />
+                                                                        </a>
+                                                                    </Button>
+                                                                    <Button variant="ghost" size="sm" className="h-8 w-8 p-0" asChild>
+                                                                        <a
+                                                                            href={attachment.fileUrl}
+                                                                            target="_blank"
+                                                                            rel="noopener noreferrer"
+                                                                            aria-label={`Mở tệp ${attachment.fileName}`}
+                                                                        >
+                                                                            <ExternalLink className="h-4 w-4" />
+                                                                        </a>
+                                                                    </Button>
+                                                                </div>
+                                                            </div>
+                                                        ))}
+                                                    </div>
+                                                )}
+                                            </div>
+                                        </div>
+
+                                        <div className="flex justify-end">
+                                            <Button type="button" variant="outline" onClick={() => setIsAttachmentGuideOpen(false)}>
+                                                Đóng
+                                            </Button>
+                                        </div>
+                                    </DialogContent>
+                                </Dialog>
+                            )}
+
                             <div className="space-y-2">
                                 <Label className="text-muted-foreground">
                                     Tên đề tài <span className="text-destructive">*</span>
@@ -748,6 +1140,69 @@ export function ProjectRegistrationPage({ title }: ProjectRegistrationPageProps)
                                     className="min-h-20 bg-background"
                                     disabled={isFormDisabled}
                                 />
+                            </div>
+
+                            <div className="space-y-2 rounded-md border bg-muted/20 p-3">
+                                <div className="flex items-center justify-between gap-2">
+                                    <Label className="text-muted-foreground">Tệp đăng ký đề tài (không bắt buộc)</Label>
+                                    <Button
+                                        type="button"
+                                        variant="outline"
+                                        size="sm"
+                                        onClick={handleChooseProposalFiles}
+                                        disabled={isFormDisabled || isUploadingProposalFile}
+                                    >
+                                        <Upload className="h-4 w-4 mr-1" />
+                                        {isUploadingProposalFile ? 'Đang tải lên...' : 'Tải tệp'}
+                                    </Button>
+                                    <input
+                                        ref={createProposalFileInputRef}
+                                        type="file"
+                                        multiple
+                                        accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.png,.jpg,.jpeg"
+                                        className="hidden"
+                                        onChange={handleCreateProposalFileSelect}
+                                    />
+                                </div>
+
+                                {proposalFiles.length === 0 ? (
+                                    <p className="text-xs text-muted-foreground">
+                                        Chưa có tệp nào. Bạn có thể bỏ qua bước này nếu không cần nộp file.
+                                    </p>
+                                ) : (
+                                    <div className="space-y-2">
+                                        {proposalFiles.map((file, index) => (
+                                            <div
+                                                key={`${file.url}-${index}`}
+                                                className="flex items-center justify-between gap-2 rounded-md border bg-background p-2"
+                                            >
+                                                <div className="min-w-0 flex-1">
+                                                    <p className="truncate text-sm font-medium">{file.name}</p>
+                                                    <p className="text-xs text-muted-foreground">
+                                                        {formatFileSize(file.size ?? null)}
+                                                    </p>
+                                                </div>
+                                                <div className="flex items-center gap-1">
+                                                    <Button variant="ghost" size="sm" className="h-8 w-8 p-0" asChild>
+                                                        <a href={file.url} target="_blank" rel="noopener noreferrer">
+                                                            <ExternalLink className="h-4 w-4" />
+                                                        </a>
+                                                    </Button>
+                                                    <Button
+                                                        type="button"
+                                                        variant="ghost"
+                                                        size="sm"
+                                                        className="h-8 w-8 p-0"
+                                                        onClick={() => handleRemoveProposalFile(index)}
+                                                        disabled={isFormDisabled || isUploadingProposalFile}
+                                                    >
+                                                        <Trash2 className="h-4 w-4" />
+                                                    </Button>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
                             </div>
 
                             <div className="space-y-2">
@@ -1166,6 +1621,44 @@ export function ProjectRegistrationPage({ title }: ProjectRegistrationPageProps)
                                                                                             {item.expectedOutput ||
                                                                                                 'Chưa có thông tin'}
                                                                                         </p>
+                                                                                    </div>
+                                                                                    <div>
+                                                                                        <h4 className="font-medium text-sm text-muted-foreground mb-1">
+                                                                                            File đính kèm hồ sơ đăng ký
+                                                                                        </h4>
+                                                                                        {item.proposalFiles && item.proposalFiles.length > 0 ? (
+                                                                                            <div className="space-y-2">
+                                                                                                {item.proposalFiles.map((file, fileIndex) => (
+                                                                                                    <div
+                                                                                                        key={`${file.url}-${fileIndex}`}
+                                                                                                        className="flex items-center justify-between gap-2 rounded-md border bg-muted/20 p-2"
+                                                                                                    >
+                                                                                                        <div className="min-w-0 flex-1">
+                                                                                                            <p className="truncate text-sm font-medium">{file.name}</p>
+                                                                                                            <p className="text-xs text-muted-foreground">
+                                                                                                                {formatFileSize(file.size ?? null)}
+                                                                                                            </p>
+                                                                                                        </div>
+                                                                                                        <Button
+                                                                                                            variant="ghost"
+                                                                                                            size="sm"
+                                                                                                            className="h-8 w-8 p-0"
+                                                                                                            asChild
+                                                                                                        >
+                                                                                                            <a
+                                                                                                                href={file.url}
+                                                                                                                target="_blank"
+                                                                                                                rel="noopener noreferrer"
+                                                                                                            >
+                                                                                                                <ExternalLink className="h-4 w-4" />
+                                                                                                            </a>
+                                                                                                        </Button>
+                                                                                                    </div>
+                                                                                                ))}
+                                                                                            </div>
+                                                                                        ) : (
+                                                                                            <p className="text-sm text-muted-foreground">Không có file đính kèm</p>
+                                                                                        )}
                                                                                     </div>
                                                                                     <div>
                                                                                         <h4 className="font-medium text-sm text-muted-foreground mb-1">
@@ -1599,6 +2092,72 @@ export function ProjectRegistrationPage({ title }: ProjectRegistrationPageProps)
                                 onChange={(e) => setEditExpectedOutput(e.target.value)}
                                 className="min-h-20"
                             />
+                        </div>
+                        <div className="space-y-2 rounded-md border bg-muted/20 p-3">
+                            <div className="flex items-center justify-between gap-2">
+                                <Label>Tệp đăng ký đề tài (không bắt buộc)</Label>
+                                <Button
+                                    type="button"
+                                    variant="outline"
+                                    size="sm"
+                                    onClick={handleChooseEditProposalFiles}
+                                    disabled={isUploadingProposalFile}
+                                >
+                                    <Upload className="h-4 w-4 mr-1" />
+                                    {isUploadingProposalFile ? 'Đang tải lên...' : 'Tải tệp'}
+                                </Button>
+                                <input
+                                    ref={editProposalFileInputRef}
+                                    type="file"
+                                    multiple
+                                    accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.png,.jpg,.jpeg"
+                                    className="hidden"
+                                    onChange={handleEditProposalFileSelect}
+                                />
+                            </div>
+
+                            {editProposalFiles.length === 0 ? (
+                                <p className="text-xs text-muted-foreground">Chưa có tệp nào.</p>
+                            ) : (
+                                <div className="space-y-2">
+                                    {editProposalFiles.map((file, index) => (
+                                        <div
+                                            key={`${file.url}-${index}`}
+                                            className="flex items-center justify-between rounded-md border bg-background p-2"
+                                        >
+                                            <div className="min-w-0 flex-1">
+                                                <p className="truncate text-sm font-medium">{file.name}</p>
+                                                <p className="text-xs text-muted-foreground">
+                                                    {typeof file.size === 'number'
+                                                        ? `${(file.size / 1024).toFixed(1)} KB`
+                                                        : 'N/A'}
+                                                </p>
+                                            </div>
+                                            <div className="flex items-center gap-1">
+                                                <Button variant="ghost" size="sm" className="h-8 w-8 p-0" asChild>
+                                                    <a
+                                                        href={file.url}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        aria-label={`Mở tệp ${file.name}`}
+                                                    >
+                                                        <ExternalLink className="h-4 w-4" />
+                                                    </a>
+                                                </Button>
+                                                <Button
+                                                    type="button"
+                                                    variant="ghost"
+                                                    size="sm"
+                                                    className="h-8 w-8 p-0 text-destructive hover:text-destructive"
+                                                    onClick={() => handleRemoveEditProposalFile(index)}
+                                                >
+                                                    <Trash2 className="h-4 w-4" />
+                                                </Button>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
                         </div>
                         <div className="space-y-2">
                             <div className="flex items-center justify-between">

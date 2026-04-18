@@ -83,6 +83,7 @@ export async function GET(req: Request) {
         title: true,
         objective: true,
         expectedOutput: true,
+        proposalFiles: true,
         teamMembers: true,
         callRoundId: true,
         instructorStatus: true,

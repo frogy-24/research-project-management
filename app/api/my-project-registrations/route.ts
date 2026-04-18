@@ -343,6 +343,10 @@ export async function POST(request: Request) {
         title: parsed.data.title,
         objective: parsed.data.objective,
         expectedOutput: parsed.data.expectedOutput ?? null,
+        proposalFiles:
+          parsed.data.proposalFiles && parsed.data.proposalFiles.length > 0
+            ? parsed.data.proposalFiles
+            : undefined,
         teamMembers: normalizedTeamMembers,
         instructorId: parsed.data.instructorId ?? null,
         callRoundId: activeCallRound.id,

@@ -10,7 +10,7 @@ if "src" not in sys.modules and str(Path(__file__).resolve().parents[2]) not in 
     sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
 from src.db import db
-from src.repositories import get_all_users, get_user_by_id
+from src.repositories import get_admin_statistics_snapshot, get_all_users, get_user_by_id
 from src.utilities import get_logger, log_async_execution
 
 logger = get_logger(__name__)
@@ -74,6 +74,17 @@ async def run_raw_sql(query: str, args: list[Any] | None = None) -> list[dict[st
     rows = await db.fetch(query, *params)
     logger.info(f"✅ Query thực thi thành công - Trả về {len(rows)} rows")
     return [dict(row) for row in rows]
+
+
+@mcp.tool(
+    name="get_admin_statistics_snapshot",
+    description="Lay snapshot thong ke he thong URMS de tao bao cao thong ke bang LLM",
+)
+@log_async_execution
+async def mcp_get_admin_statistics_snapshot() -> dict[str, Any]:
+    logger.info("📊 MCP Tool: get_admin_statistics_snapshot được gọi")
+    await _ensure_db_connected()
+    return await get_admin_statistics_snapshot()
 
 
 

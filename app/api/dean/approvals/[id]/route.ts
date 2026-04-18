@@ -106,11 +106,19 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
       // Logic shortcut for MVP: promote Registration directly to a live Project upon Dean's approval.
       // In a more complex architecture, there would be a separate step for final Academic Admin / Council validation.
       if (!existingProject) {
+        const uploadedProposalFiles = Array.isArray(existing.proposalFiles)
+          ? (existing.proposalFiles as Array<{ url?: string }>).filter(
+              (file) => typeof file?.url === "string" && file.url.length > 0
+            )
+          : [];
+
         await prisma.project.create({
           data: {
             title: existing.title,
             objective: existing.objective,
             expectedOutput: existing.expectedOutput,
+            proposalFileUrl:
+              uploadedProposalFiles.length > 0 ? uploadedProposalFiles[0].url : null,
             status: ProjectStatus.IN_PROGRESS, // Start progress reporting immediately
             leaderId: existing.userId,
             instructorId: existing.instructorId,

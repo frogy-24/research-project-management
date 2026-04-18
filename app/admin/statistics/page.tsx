@@ -75,7 +75,7 @@ export default function StatisticsPage() {
             <RefreshCw className="h-4 w-4" />
             Làm mới
           </Button>
-          <ExportButtons data={data} />
+          <ExportButtons />
         </div>
       </div>
 

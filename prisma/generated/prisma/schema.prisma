@@ -79,6 +79,12 @@ enum DisbursementStatus {
   REJECTED
 }
 
+enum ProjectClosingStatus {
+  SUBMITTED
+  REVISION_REQUESTED
+  APPROVED
+}
+
 model Department {
   id          String      @id @default(cuid())
   code        String      @unique
@@ -231,34 +237,58 @@ model ProjectType {
 }
 
 model Project {
-  id                 String                @id @default(cuid())
-  code               String?               @unique
+  id                 String                    @id @default(cuid())
+  code               String?                   @unique
   title              String
   objective          String
   expectedOutput     String?
   proposalFileUrl    String?
-  budgetRequested    Decimal?              @db.Decimal(12, 2)
-  budgetApproved     Decimal?              @db.Decimal(12, 2)
-  status             ProjectStatus         @default(DRAFT)
-  overdueReportCount Int                   @default(0)
-  budgetSuspended    Boolean               @default(false)
+  budgetRequested    Decimal?                  @db.Decimal(12, 2)
+  budgetApproved     Decimal?                  @db.Decimal(12, 2)
+  status             ProjectStatus             @default(DRAFT)
+  overdueReportCount Int                       @default(0)
+  budgetSuspended    Boolean                   @default(false)
   leaderId           String
   deanReviewerId     String?
   callRoundId        String?
   projectTypeId      String?
-  createdAt          DateTime              @default(now())
-  updatedAt          DateTime              @updatedAt
-  leader             User                  @relation("ProjectLeader", fields: [leaderId], references: [id])
-  deanReviewer       User?                 @relation("DeanReviewer", fields: [deanReviewerId], references: [id])
-  callRound          CallRound?            @relation(fields: [callRoundId], references: [id])
-  projectType        ProjectType?          @relation(fields: [projectTypeId], references: [id])
+  createdAt          DateTime                  @default(now())
+  updatedAt          DateTime                  @updatedAt
+  leader             User                      @relation("ProjectLeader", fields: [leaderId], references: [id])
+  deanReviewer       User?                     @relation("DeanReviewer", fields: [deanReviewerId], references: [id])
+  callRound          CallRound?                @relation(fields: [callRoundId], references: [id])
+  projectType        ProjectType?              @relation(fields: [projectTypeId], references: [id])
   progressReports    ProgressReport[]
   councilEvaluations CouncilEvaluation[]
   disbursements      FundingDisbursement[]
   extensionRequests  ExtensionRequest[]
+  closingSubmission  ProjectClosingSubmission?
   instructorId       String?
-  instructor         User?                 @relation("ProjectInstructor", fields: [instructorId], references: [id])
+  instructor         User?                     @relation("ProjectInstructor", fields: [instructorId], references: [id])
   officeMeetings     OfficeMeeting[]
+}
+
+model ProjectClosingSubmission {
+  id                                     String               @id @default(cuid())
+  projectId                              String               @unique
+  project                                Project              @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  submittedById                          String
+  status                                 ProjectClosingStatus @default(SUBMITTED)
+  note                                   String?
+  reportFiles                            Json?
+  researchSourceCodeFiles                Json?
+  researchGuideFiles                     Json?
+  administrativeDefenseApplicationFiles  Json?
+  administrativeAchievementEvidenceFiles Json?
+  administrativeAdvisorReviewFiles       Json?
+  presentationSlideFiles                 Json?
+  presentationVideoFiles                 Json?
+  submittedAt                            DateTime             @default(now())
+  createdAt                              DateTime             @default(now())
+  updatedAt                              DateTime             @updatedAt
+
+  @@index([submittedById])
+  @@index([status])
 }
 
 model ProgressReportTemplate {
@@ -371,6 +401,7 @@ model ProjectRegistration {
   title            String
   objective        String
   expectedOutput   String?
+  proposalFiles    Json?
   teamMembers      Json?
   status           RegistrationStatus @default(PENDING)
   cancelReason     String?

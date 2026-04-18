@@ -92,6 +92,12 @@ export type CallRoundFormData = {
     applicableFor: 'STUDENT' | 'LECTURER' | 'BOTH';
 };
 
+type PendingAttachmentRow = {
+    id: string;
+    displayName: string;
+    file: File | null;
+};
+
 const initialFormData: CallRoundFormData = {
     name: '',
     description: '',
@@ -111,6 +117,48 @@ const initialFormData: CallRoundFormData = {
     applicableFor: 'STUDENT',
 };
 
+const createPendingAttachmentRow = (): PendingAttachmentRow => ({
+    id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+    displayName: '',
+    file: null,
+});
+
+const normalizePendingAttachmentRows = (rows: PendingAttachmentRow[]) => {
+    const normalized = rows
+        .map((row) => ({
+            id: row.id,
+            displayName: row.displayName.trim(),
+            file: row.file,
+        }))
+        .filter((row) => row.displayName.length > 0 || row.file !== null);
+
+    const hasIncomplete = normalized.some((row) => row.displayName.length === 0 || row.file === null);
+
+    return {
+        hasIncomplete,
+        rows: normalized.filter((row): row is { id: string; displayName: string; file: File } => {
+            return row.displayName.length > 0 && row.file !== null;
+        }),
+        importantFileNamesText: normalized
+            .map((row) => row.displayName)
+            .filter((name) => name.length > 0)
+            .join('\n'),
+    };
+};
+
+const normalizeImportantFileNames = (value: string): string | undefined => {
+    const lines = value
+        .split('\n')
+        .map((line) => line.trim())
+        .filter((line) => line.length > 0);
+
+    if (lines.length === 0) {
+        return undefined;
+    }
+
+    return lines.join('\n');
+};
+
 interface CallRoundFormDialogProps {
     open: boolean;
     onOpenChange: (open: boolean) => void;
@@ -128,8 +176,12 @@ export function CallRoundFormDialog({
 }: CallRoundFormDialogProps) {
     const [formData, setFormData] = React.useState<CallRoundFormData>(initialFormData);
     const [attachments, setAttachments] = React.useState<CallRoundAttachment[]>([]);
-    const [pendingFiles, setPendingFiles] = React.useState<File[]>([]);
-    const fileInputRef = React.useRef<HTMLInputElement>(null);
+    const [pendingAttachmentRows, setPendingAttachmentRows] = React.useState<PendingAttachmentRow[]>([
+        createPendingAttachmentRow(),
+    ]);
+    const [pendingAdditionalFiles, setPendingAdditionalFiles] = React.useState<File[]>([]);
+    const fileInputRefs = React.useRef<Record<string, HTMLInputElement | null>>({});
+    const additionalFilesInputRef = React.useRef<HTMLInputElement | null>(null);
     const queryClient = useQueryClient();
     const createCallRound = useCreateCallRound();
     const updateCallRound = useUpdateCallRound();
@@ -189,23 +241,92 @@ export function CallRoundFormDialog({
         } else {
             setFormData(initialFormData);
         }
+
+        setPendingAttachmentRows([createPendingAttachmentRow()]);
+        setPendingAdditionalFiles([]);
     }, [editingCallRound, open]);
 
     const handleClose = () => {
-        setPendingFiles([]);
+        setPendingAttachmentRows([createPendingAttachmentRow()]);
+        setPendingAdditionalFiles([]);
         setAttachments([]);
         onOpenChange(false);
     };
 
-    // File upload handlers
-    const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (e.target.files) {
-            setPendingFiles((prev) => [...prev, ...Array.from(e.target.files!)]);
+    const handleAddAttachmentRow = () => {
+        setPendingAttachmentRows((prev) => [...prev, createPendingAttachmentRow()]);
+    };
+
+    const handleRemoveAttachmentRow = (rowId: string) => {
+        setPendingAttachmentRows((prev) => {
+            if (prev.length === 1) {
+                return [{ ...prev[0], displayName: '', file: null }];
+            }
+
+            return prev.filter((row) => row.id !== rowId);
+        });
+
+        if (fileInputRefs.current[rowId]) {
+            delete fileInputRefs.current[rowId];
         }
     };
 
-    const handleRemovePendingFile = (index: number) => {
-        setPendingFiles((prev) => prev.filter((_, i) => i !== index));
+    const handlePendingAttachmentNameChange = (rowId: string, value: string) => {
+        setPendingAttachmentRows((prev) =>
+            prev.map((row) => (row.id === rowId ? { ...row, displayName: value } : row)),
+        );
+    };
+
+    const handlePendingAttachmentFileChange = (rowId: string, event: React.ChangeEvent<HTMLInputElement>) => {
+        const selectedFile = event.target.files?.[0] ?? null;
+
+        setPendingAttachmentRows((prev) =>
+            prev.map((row) => {
+                if (row.id !== rowId) {
+                    return row;
+                }
+
+                if (!selectedFile) {
+                    return { ...row, file: null };
+                }
+
+                return {
+                    ...row,
+                    file: selectedFile,
+                    displayName: row.displayName.trim().length > 0 ? row.displayName : selectedFile.name,
+                };
+            }),
+        );
+    };
+
+    const handleChooseRowFile = (rowId: string) => {
+        fileInputRefs.current[rowId]?.click();
+    };
+
+    const handleChooseAdditionalFiles = () => {
+        additionalFilesInputRef.current?.click();
+    };
+
+    const handleAdditionalFilesChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const selectedFiles = Array.from(event.target.files ?? []);
+        if (selectedFiles.length === 0) {
+            return;
+        }
+
+        setPendingAdditionalFiles((prev) => {
+            const existingKeys = new Set(prev.map((file) => `${file.name}-${file.size}-${file.lastModified}`));
+            const newFiles = selectedFiles.filter((file) => {
+                const key = `${file.name}-${file.size}-${file.lastModified}`;
+                return !existingKeys.has(key);
+            });
+            return [...prev, ...newFiles];
+        });
+
+        event.target.value = '';
+    };
+
+    const handleRemoveAdditionalFile = (fileIndex: number) => {
+        setPendingAdditionalFiles((prev) => prev.filter((_, index) => index !== fileIndex));
     };
 
     const handleDeleteAttachment = async (attachmentId: string) => {
@@ -220,13 +341,28 @@ export function CallRoundFormDialog({
         }
     };
 
-    const handleUploadPendingFiles = async (callRoundId: string) => {
-        for (const file of pendingFiles) {
+    const handleUploadPendingFiles = async (
+        callRoundId: string,
+        rows: Array<{ id: string; displayName: string; file: File }>,
+    ) => {
+        for (const row of rows) {
             const formData = new FormData();
-            formData.append('file', file);
+            formData.append('file', row.file);
+            formData.append('description', row.displayName);
             await callRoundsApi.uploadAttachment(callRoundId, formData);
         }
-        setPendingFiles([]);
+        setPendingAttachmentRows([createPendingAttachmentRow()]);
+        queryClient.invalidateQueries({ queryKey: ['call-round-attachments', callRoundId] });
+    };
+
+    const handleUploadPendingAdditionalFiles = async (callRoundId: string, files: File[]) => {
+        for (const file of files) {
+            const formData = new FormData();
+            formData.append('file', file);
+            formData.append('description', file.name);
+            await callRoundsApi.uploadAttachment(callRoundId, formData);
+        }
+        setPendingAdditionalFiles([]);
         queryClient.invalidateQueries({ queryKey: ['call-round-attachments', callRoundId] });
     };
 
@@ -234,6 +370,12 @@ export function CallRoundFormDialog({
         e.preventDefault();
 
         try {
+            const normalizedPendingAttachments = normalizePendingAttachmentRows(pendingAttachmentRows);
+            if (normalizedPendingAttachments.hasIncomplete) {
+                toast.error('Mỗi dòng file quan trọng cần nhập đủ tên file và chọn file upload.');
+                return;
+            }
+
             const payload: any = {
                 name: formData.name,
                 description: formData.description || undefined,
@@ -249,6 +391,7 @@ export function CallRoundFormDialog({
                 maxProjects: formData.maxProjects ? parseInt(formData.maxProjects) : undefined,
                 budgetLimit: formData.budgetLimit ?? undefined,
                 requirements: formData.requirements || undefined,
+                guidelines: normalizeImportantFileNames(normalizedPendingAttachments.importantFileNamesText),
                 templateId: formData.templateId && formData.templateId !== 'none' ? formData.templateId : null,
                 instructorIds: formData.instructorIds,
                 councilMemberIds: formData.councilMemberIds,
@@ -260,15 +403,21 @@ export function CallRoundFormDialog({
             if (editingCallRound) {
                 await updateCallRound.mutateAsync({ id: editingCallRound.id, ...payload });
                 // Upload pending files after update
-                if (pendingFiles.length > 0) {
-                    await handleUploadPendingFiles(editingCallRound.id);
+                if (normalizedPendingAttachments.rows.length > 0) {
+                    await handleUploadPendingFiles(editingCallRound.id, normalizedPendingAttachments.rows);
+                }
+                if (pendingAdditionalFiles.length > 0) {
+                    await handleUploadPendingAdditionalFiles(editingCallRound.id, pendingAdditionalFiles);
                 }
                 toast.success('Cập nhật đợt đăng ký thành công!');
             } else {
                 const result = await createCallRound.mutateAsync(payload);
                 // Upload pending files after create
-                if (pendingFiles.length > 0 && result?.id) {
-                    await handleUploadPendingFiles(result.id);
+                if (normalizedPendingAttachments.rows.length > 0 && result?.id) {
+                    await handleUploadPendingFiles(result.id, normalizedPendingAttachments.rows);
+                }
+                if (pendingAdditionalFiles.length > 0 && result?.id) {
+                    await handleUploadPendingAdditionalFiles(result.id, pendingAdditionalFiles);
                 }
                 toast.success('Tạo đợt đăng ký thành công! Đang chờ Admin phê duyệt.');
             }
@@ -295,6 +444,40 @@ export function CallRoundFormDialog({
             setFormData({ ...formData, [field]: [...formData[field], lecturerId] });
         }
     };
+
+    const importantFileNameSet = React.useMemo(() => {
+        const guidelineText = editingCallRound?.guidelines ?? '';
+        const names = guidelineText
+            .split('\n')
+            .map((line) => line.trim().toLowerCase())
+            .filter((line) => line.length > 0);
+
+        return new Set(names);
+    }, [editingCallRound?.guidelines]);
+
+    const importantAttachments = React.useMemo(() => {
+        if (attachments.length === 0 || importantFileNameSet.size === 0) {
+            return [];
+        }
+
+        return attachments.filter((attachment) => {
+            const normalizedDescription = attachment.description?.trim().toLowerCase();
+            if (!normalizedDescription) {
+                return false;
+            }
+
+            return importantFileNameSet.has(normalizedDescription);
+        });
+    }, [attachments, importantFileNameSet]);
+
+    const additionalAttachments = React.useMemo(() => {
+        if (attachments.length === 0) {
+            return [];
+        }
+
+        const importantAttachmentIds = new Set(importantAttachments.map((attachment) => attachment.id));
+        return attachments.filter((attachment) => !importantAttachmentIds.has(attachment.id));
+    }, [attachments, importantAttachments]);
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
@@ -438,14 +621,225 @@ export function CallRoundFormDialog({
                     </div>
 
                     <div className="space-y-2">
-                        <Label htmlFor="requirements">Yêu cầu & Điều kiện</Label>
+                        <Label htmlFor="requirements">Lưu ý (*)</Label>
                         <Textarea
                             id="requirements"
                             value={formData.requirements}
                             onChange={(e) => setFormData({ ...formData, requirements: e.target.value })}
-                            placeholder="Các yêu cầu, điều kiện đăng ký..."
+                            placeholder="Nhập các lưu ý cần hiển thị cho sinh viên/giảng viên khi đăng ký đề tài..."
                             rows={3}
                         />
+                        <p className="text-xs text-muted-foreground">
+                            Nội dung này sẽ hiển thị tại trang đăng ký đề tài của sinh viên và giảng viên.
+                        </p>
+                    </div>
+
+                    <div className="space-y-2">
+                        <div className="flex items-center justify-between">
+                            <Label>Danh sách file quan trọng</Label>
+                            <Button type="button" variant="outline" size="sm" className="h-8 text-xs" onClick={handleAddAttachmentRow}>
+                                <PlusCircle className="w-3 h-3 mr-1" />
+                                Thêm dòng
+                            </Button>
+                        </div>
+
+                        <div className="space-y-2">
+                            {pendingAttachmentRows.map((row, index) => (
+                                <div key={row.id} className="space-y-1 rounded-md border bg-muted/20 p-2">
+                                    <div className="grid grid-cols-[1fr_auto_auto] gap-2">
+                                        <Input
+                                            value={row.displayName}
+                                            onChange={(e) => handlePendingAttachmentNameChange(row.id, e.target.value)}
+                                            placeholder={`Tên file quan trọng #${index + 1}`}
+                                        />
+
+                                        <Button type="button" variant="outline" onClick={() => handleChooseRowFile(row.id)}>
+                                            <Upload className="w-4 h-4 mr-1" />
+                                            Upload file
+                                        </Button>
+
+                                        <Button
+                                            type="button"
+                                            variant="ghost"
+                                            className="text-red-600 hover:text-red-700"
+                                            onClick={() => handleRemoveAttachmentRow(row.id)}
+                                        >
+                                            <Trash2 className="w-4 h-4" />
+                                        </Button>
+                                    </div>
+
+                                    <input
+                                        ref={(element) => {
+                                            fileInputRefs.current[row.id] = element;
+                                        }}
+                                        type="file"
+                                        accept=".pdf,.doc,.docx,.xls,.xlsx,.png,.jpg,.jpeg"
+                                        className="hidden"
+                                        onChange={(event) => handlePendingAttachmentFileChange(row.id, event)}
+                                    />
+
+                                    {row.file ? (
+                                        <p className="text-xs text-muted-foreground">
+                                            Đã chọn: {row.file.name} ({(row.file.size / 1024).toFixed(1)} KB)
+                                        </p>
+                                    ) : (
+                                        <p className="text-xs text-muted-foreground">Chưa chọn file upload</p>
+                                    )}
+                                </div>
+                            ))}
+                        </div>
+
+                        <p className="text-xs text-muted-foreground">
+                            Mỗi dòng gồm tên file quan trọng và 1 tệp upload tương ứng.
+                        </p>
+
+                        {importantAttachments.length > 0 && (
+                            <div className="space-y-2 rounded-md border bg-muted/20 p-2">
+                                <p className="text-xs font-medium">File quan trọng đã tải lên</p>
+                                {importantAttachments.map((attachment) => (
+                                    <div
+                                        key={attachment.id}
+                                        className="flex items-center justify-between rounded-md border bg-background p-2"
+                                    >
+                                        <div className="min-w-0 flex-1">
+                                            <p className="truncate text-sm font-medium">{attachment.fileName}</p>
+                                            <p className="text-xs text-muted-foreground">
+                                                {attachment.fileSize
+                                                    ? `${(attachment.fileSize / 1024).toFixed(1)} KB`
+                                                    : 'N/A'}{' '}
+                                                •{' '}
+                                                {attachment.createdAt
+                                                    ? new Date(attachment.createdAt).toLocaleDateString('vi-VN')
+                                                    : 'N/A'}
+                                            </p>
+                                        </div>
+                                        <div className="flex items-center gap-1">
+                                            <Button
+                                                type="button"
+                                                variant="ghost"
+                                                size="sm"
+                                                className="h-7 w-7 p-0"
+                                                asChild
+                                            >
+                                                <a href={attachment.fileUrl} target="_blank" rel="noopener noreferrer">
+                                                    <ExternalLink className="w-3.5 h-3.5" />
+                                                </a>
+                                            </Button>
+                                            <Button
+                                                type="button"
+                                                variant="ghost"
+                                                size="sm"
+                                                className="h-7 w-7 p-0 text-red-600 hover:text-red-700"
+                                                onClick={() => handleDeleteAttachment(attachment.id)}
+                                            >
+                                                <Trash2 className="w-3.5 h-3.5" />
+                                            </Button>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+                    </div>
+
+                    <div className="space-y-2">
+                        <div className="flex items-center justify-between">
+                            <Label>File đi kèm</Label>
+                            <Button
+                                type="button"
+                                variant="outline"
+                                size="sm"
+                                className="h-8 text-xs"
+                                onClick={handleChooseAdditionalFiles}
+                            >
+                                <Upload className="w-3 h-3 mr-1" />
+                                Upload nhiều file
+                            </Button>
+                        </div>
+
+                        <input
+                            ref={additionalFilesInputRef}
+                            type="file"
+                            accept=".pdf,.doc,.docx,.xls,.xlsx,.png,.jpg,.jpeg"
+                            className="hidden"
+                            multiple
+                            onChange={handleAdditionalFilesChange}
+                        />
+
+                        <div className="space-y-2">
+                            {pendingAdditionalFiles.length === 0 ? (
+                                <p className="text-xs text-muted-foreground">Chưa chọn file đi kèm.</p>
+                            ) : (
+                                pendingAdditionalFiles.map((file, index) => (
+                                    <div key={`${file.name}-${file.lastModified}-${index}`} className="flex items-center justify-between rounded-md border bg-muted/20 p-2">
+                                        <p className="text-xs text-muted-foreground">
+                                            {file.name} ({(file.size / 1024).toFixed(1)} KB)
+                                        </p>
+                                        <Button
+                                            type="button"
+                                            variant="ghost"
+                                            className="text-red-600 hover:text-red-700"
+                                            onClick={() => handleRemoveAdditionalFile(index)}
+                                        >
+                                            <Trash2 className="w-4 h-4" />
+                                        </Button>
+                                    </div>
+                                ))
+                            )}
+                        </div>
+
+                        <p className="text-xs text-muted-foreground">
+                            File đi kèm là tài liệu bổ sung ngoài danh sách file quan trọng (có thể chọn nhiều file).
+                        </p>
+
+                        {additionalAttachments.length > 0 && (
+                            <div className="space-y-2 rounded-md border bg-muted/20 p-2">
+                                <p className="text-xs font-medium">File đi kèm đã tải lên</p>
+                                {additionalAttachments.map((attachment) => (
+                                    <div
+                                        key={attachment.id}
+                                        className="flex items-center justify-between rounded-md border bg-background p-2"
+                                    >
+                                        <div className="min-w-0 flex-1">
+                                            <p className="truncate text-sm font-medium">{attachment.fileName}</p>
+                                            <p className="text-xs text-muted-foreground">
+                                                {attachment.fileSize
+                                                    ? `${(attachment.fileSize / 1024).toFixed(1)} KB`
+                                                    : 'N/A'}{' '}
+                                                •{' '}
+                                                {attachment.createdAt
+                                                    ? new Date(attachment.createdAt).toLocaleDateString('vi-VN')
+                                                    : 'N/A'}
+                                            </p>
+                                            {attachment.description && (
+                                                <p className="truncate text-xs text-muted-foreground">{attachment.description}</p>
+                                            )}
+                                        </div>
+                                        <div className="flex items-center gap-1">
+                                            <Button
+                                                type="button"
+                                                variant="ghost"
+                                                size="sm"
+                                                className="h-7 w-7 p-0"
+                                                asChild
+                                            >
+                                                <a href={attachment.fileUrl} target="_blank" rel="noopener noreferrer">
+                                                    <ExternalLink className="w-3.5 h-3.5" />
+                                                </a>
+                                            </Button>
+                                            <Button
+                                                type="button"
+                                                variant="ghost"
+                                                size="sm"
+                                                className="h-7 w-7 p-0 text-red-600 hover:text-red-700"
+                                                onClick={() => handleDeleteAttachment(attachment.id)}
+                                            >
+                                                <Trash2 className="w-3.5 h-3.5" />
+                                            </Button>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
                     </div>
 
                     <div className="space-y-2">
@@ -523,124 +917,6 @@ export function CallRoundFormDialog({
                         hint="Chọn thành viên hội đồng có thể chấm điểm và nghiệm thu đề tài trong đợt này."
                         selectedColor="text-emerald-600"
                     />
-
-                    <div className="space-y-2">
-                        <div className="flex items-center justify-between">
-                            <Label>Tệp đính kèm</Label>
-                            <Button
-                                type="button"
-                                variant="outline"
-                                size="sm"
-                                className="h-8 text-xs"
-                                onClick={() => fileInputRef.current?.click()}
-                            >
-                                <Upload className="w-3 h-3 mr-1" />
-                                Thêm tệp
-                            </Button>
-                            <input
-                                ref={fileInputRef}
-                                type="file"
-                                multiple
-                                accept=".pdf,.doc,.docx,.xls,.xlsx,.png,.jpg,.jpeg"
-                                className="hidden"
-                                onChange={handleFileSelect}
-                            />
-                        </div>
-
-                        {/* Existing attachments */}
-                        {attachments.length > 0 && (
-                            <div className="space-y-2">
-                                {attachments.map((attachment) => (
-                                    <div
-                                        key={attachment.id}
-                                        className="flex items-center justify-between p-2 rounded-md border bg-gray-50"
-                                    >
-                                        <div className="flex items-center gap-2 min-w-0 flex-1">
-                                            <FileText className="w-4 h-4 text-gray-500 shrink-0" />
-                                            <div className="min-w-0 flex-1">
-                                                <p className="text-sm font-medium truncate">{attachment.fileName}</p>
-                                                <p className="text-xs text-muted-foreground">
-                                                    {attachment.fileSize
-                                                        ? `${(attachment.fileSize / 1024).toFixed(1)} KB`
-                                                        : 'N/A'}{' '}
-                                                    •{' '}
-                                                    {attachment.createdAt
-                                                        ? new Date(attachment.createdAt).toLocaleDateString('vi-VN')
-                                                        : 'N/A'}
-                                                </p>
-                                            </div>
-                                        </div>
-                                        <div className="flex items-center gap-1">
-                                            <Button
-                                                type="button"
-                                                variant="ghost"
-                                                size="sm"
-                                                className="h-7 w-7 p-0"
-                                                asChild
-                                            >
-                                                <a href={attachment.fileUrl} target="_blank" rel="noopener noreferrer">
-                                                    <ExternalLink className="w-3.5 h-3.5" />
-                                                </a>
-                                            </Button>
-                                            <Button
-                                                type="button"
-                                                variant="ghost"
-                                                size="sm"
-                                                className="h-7 w-7 p-0 text-red-600 hover:text-red-700"
-                                                onClick={() => handleDeleteAttachment(attachment.id)}
-                                            >
-                                                <Trash2 className="w-3.5 h-3.5" />
-                                            </Button>
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                        )}
-
-                        {/* Pending files (not yet uploaded) */}
-                        {pendingFiles.length > 0 && (
-                            <div className="space-y-2">
-                                <p className="text-xs text-amber-600 font-medium">
-                                    Tệp chưa tải lên (sẽ được tải lên khi lưu):
-                                </p>
-                                {pendingFiles.map((file, index) => (
-                                    <div
-                                        key={index}
-                                        className="flex items-center justify-between p-2 rounded-md border bg-amber-50"
-                                    >
-                                        <div className="flex items-center gap-2 min-w-0 flex-1">
-                                            <Paperclip className="w-4 h-4 text-amber-500 shrink-0" />
-                                            <div className="min-w-0 flex-1">
-                                                <p className="text-sm font-medium truncate">{file.name}</p>
-                                                <p className="text-xs text-muted-foreground">
-                                                    {(file.size / 1024).toFixed(1)} KB
-                                                </p>
-                                            </div>
-                                        </div>
-                                        <Button
-                                            type="button"
-                                            variant="ghost"
-                                            size="sm"
-                                            className="h-7 w-7 p-0 text-red-600 hover:text-red-700"
-                                            onClick={() => handleRemovePendingFile(index)}
-                                        >
-                                            <X className="w-3.5 h-3.5" />
-                                        </Button>
-                                    </div>
-                                ))}
-                            </div>
-                        )}
-
-                        {attachments.length === 0 && pendingFiles.length === 0 && (
-                            <div className="text-center py-6 border-2 border-dashed rounded-md">
-                                <Paperclip className="w-8 h-8 mx-auto text-gray-400 mb-2" />
-                                <p className="text-sm text-muted-foreground">Chưa có tệp đính kèm</p>
-                                <p className="text-xs text-muted-foreground mt-1">
-                                    PDF, Word, Excel, PNG, JPG (tối đa 10MB/tệp)
-                                </p>
-                            </div>
-                        )}
-                    </div>
 
                     <DialogFooter>
                         <Button type="button" variant="outline" onClick={handleClose}>

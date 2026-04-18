@@ -1,92 +1,47 @@
 'use client';
 
+import { useState } from 'react';
+import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
-import { Download, FileSpreadsheet, Printer } from 'lucide-react';
-import * as XLSX from 'xlsx';
-import type { StatisticsData } from '@/api/admin-statistics';
+import { Bot, Printer } from 'lucide-react';
 
-const roleLabelMap: Record<string, string> = {
-  STUDENT: 'Sinh viên',
-  LECTURER: 'Giảng viên',
-  DEAN: 'Trưởng khoa',
-  ADMIN: 'QLKH',
-  COUNCIL: 'Hội đồng',
-  LEADER: 'Ban giám hiệu',
-};
+export function ExportButtons() {
+  const [isGenerating, setIsGenerating] = useState(false);
 
-const statusLabelMap: Record<string, string> = {
-  DRAFT: 'Bản nháp',
-  SUBMITTED: 'Đã nộp',
-  DEAN_APPROVED: 'Khoa duyệt',
-  DEAN_REVISION: 'Cần sửa',
-  ADMIN_REVIEW: 'Admin xem',
-  COUNCIL_EVALUATING: 'Hội đồng đánh giá',
-  APPROVED: 'Đã duyệt',
-  IN_PROGRESS: 'Đang thực hiện',
-  COMPLETED: 'Hoàn thành',
-  REJECTED: 'Từ chối',
-  SUSPENDED: 'Đình chỉ',
-  PENDING: 'Chờ xử lý',
-  CANCELED: 'Đã hủy',
-};
+  const generateAiReport = async () => {
+    try {
+      setIsGenerating(true);
 
-export function ExportButtons({ data }: { data: StatisticsData }) {
-  const exportToExcel = () => {
-    const wb = XLSX.utils.book_new();
+      const response = await fetch('/api/admin/statistics/ai-report', {
+        method: 'GET',
+      });
 
-    const overviewSheet = XLSX.utils.aoa_to_sheet([
-      ['Chỉ số', 'Giá trị'],
-      ['Tổng người dùng', data.overview.totalUsers],
-      ['Tổng đề tài', data.overview.totalProjects],
-      ['Tổng đăng ký', data.overview.totalRegistrations],
-      ['Báo cáo tiến độ', data.overview.totalProgressReports],
-      ['Khoa', data.overview.totalDepartments],
-      ['Ngành', data.overview.totalMajors],
-      ['Lớp học', data.overview.totalClasses],
-      ['Đợt đăng ký', data.overview.totalCallRounds],
-      ['Đợt đang hoạt động', data.overview.activeCallRounds],
-      ['Hội đồng', data.overview.totalCouncils],
-    ]);
-    XLSX.utils.book_append_sheet(wb, overviewSheet, 'Tổng quan');
+      if (!response.ok) {
+        const payload = (await response.json()) as { error?: string };
+        toast.error(payload.error || 'Khong the tao bao cao AI');
+        return;
+      }
 
-    const userRoleSheet = XLSX.utils.aoa_to_sheet(
-      [['Vai trò', 'Số lượng'], ...Object.entries(data.users.byRole).map(([k, v]) => [roleLabelMap[k] ?? k, v])]
-    );
-    XLSX.utils.book_append_sheet(wb, userRoleSheet, 'Người dùng theo vai trò');
+      const blob = await response.blob();
+      const contentDisposition = response.headers.get('content-disposition') || '';
+      const fileNameMatch = contentDisposition.match(/filename="?([^";]+)"?/i);
+      const fileName = fileNameMatch?.[1] || `BaoCaoThongKe_AI_URMS_${new Date().toISOString().slice(0, 10)}.md`;
 
-    const projectStatusSheet = XLSX.utils.aoa_to_sheet(
-      [['Trạng thái', 'Số lượng'], ...Object.entries(data.projects.byStatus).map(([k, v]) => [statusLabelMap[k] ?? k, v])]
-    );
-    XLSX.utils.book_append_sheet(wb, projectStatusSheet, 'Đề tài theo trạng thái');
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = fileName;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
 
-    const budgetSheet = XLSX.utils.aoa_to_sheet([
-      ['Chỉ số', 'Giá trị (VNĐ)'],
-      ['Tổng đề xuất', data.projects.budget.totalRequested],
-      ['Tổng duyệt', data.projects.budget.totalApproved],
-      ['TB đề xuất', data.projects.budget.avgRequested],
-      ['TB duyệt', data.projects.budget.avgApproved],
-    ]);
-    XLSX.utils.book_append_sheet(wb, budgetSheet, 'Ngân sách');
-
-    const regStatusSheet = XLSX.utils.aoa_to_sheet(
-      [['Trạng thái', 'Số lượng'], ...Object.entries(data.registrations.byStatus).map(([k, v]) => [statusLabelMap[k] ?? k, v])]
-    );
-    XLSX.utils.book_append_sheet(wb, regStatusSheet, 'Đăng ký theo trạng thái');
-
-    const fundingSheet = XLSX.utils.aoa_to_sheet(
-      [['Tháng', 'Số tiền (VNĐ)', 'Số giao dịch'], ...data.funding.byMonth.map((m) => [m.month, m.amount, m.count])]
-    );
-    XLSX.utils.book_append_sheet(wb, fundingSheet, 'Giải ngân');
-
-    const progressSheet = XLSX.utils.aoa_to_sheet([
-      ['Chỉ số', 'Giá trị'],
-      ['Tổng báo cáo', data.progressReports.total],
-      ['Điểm trung bình', data.progressReports.avgScore || 0],
-      ['Báo cáo quá hạn', data.progressReports.overdueTotal],
-    ]);
-    XLSX.utils.book_append_sheet(wb, progressSheet, 'Báo cáo tiến độ');
-
-    XLSX.writeFile(wb, `BaoCaoThongKe_URMS_${new Date().toISOString().slice(0, 10)}.xlsx`);
+      toast.success('Da tao bao cao AI va tai xuong thanh cong');
+    } catch {
+      toast.error('Khong the tao bao cao AI. Vui long thu lai.');
+    } finally {
+      setIsGenerating(false);
+    }
   };
 
   const handlePrint = () => {
@@ -95,9 +50,9 @@ export function ExportButtons({ data }: { data: StatisticsData }) {
 
   return (
     <div className="flex gap-2">
-      <Button onClick={exportToExcel} size="sm" className="gap-2">
-        <FileSpreadsheet className="h-4 w-4" />
-        Xuất Excel
+      <Button onClick={generateAiReport} size="sm" className="gap-2" disabled={isGenerating}>
+        <Bot className="h-4 w-4" />
+        {isGenerating ? 'Dang tao bao cao AI...' : 'Tao bao cao AI (MCP + LLM)'}
       </Button>
       <Button onClick={handlePrint} variant="outline" size="sm" className="gap-2">
         <Printer className="h-4 w-4" />

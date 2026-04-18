@@ -257,6 +257,14 @@ function AppSidebar({ session }: { session: AuthSession }) {
                 icon: ClipboardCheck,
             },
         );
+
+        if (session.role === 'LECTURER') {
+            navItems.push({
+                title: 'Nghiệm thu đề tài',
+                url: '/lecturer/project-closings',
+                icon: FileText,
+            });
+        }
     } else if (session.role === 'STUDENT') {
         navItems.push({
             title: 'Xem hội đồng',
@@ -278,6 +286,8 @@ function AppSidebar({ session }: { session: AuthSession }) {
                 items: [
                     { title: 'Duyệt đề tài Khoa', url: '/dean/approvals' },
                     { title: 'Gán đề tài hội đồng', url: '/dean/council-projects' },
+                    { title: 'Xem điểm hội đồng', url: '/dean/council-evaluations' },
+                    { title: 'Nghiệm thu đề tài', url: '/dean/project-closings' },
                 ],
             },
             {

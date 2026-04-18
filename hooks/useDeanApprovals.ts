@@ -1,6 +1,7 @@
 // hooks/useDeanApprovals.ts
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { api } from '@/lib/axios';
+import type { RegistrationProposalFile } from '@/types/project-registration.schema';
 
 type DeanApprovalStatus = 'PENDING' | 'APPROVED' | 'REJECTED';
 
@@ -9,6 +10,7 @@ interface DeanApproval {
     title: string;
     objective?: string | null;
     expectedOutput?: string | null;
+    proposalFiles?: RegistrationProposalFile[] | null;
     createdAt: string;
     user: {
         name: string;

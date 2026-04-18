@@ -14,6 +14,13 @@ export const registrationTeamMemberSchema = z.object({
   respondedAt: z.coerce.date().nullable().optional(),
 });
 
+export const registrationProposalFileSchema = z.object({
+  name: z.string().min(1, "Tên file không được để trống"),
+  url: z.string().min(1, "Đường dẫn file không hợp lệ"),
+  size: z.number().int().nonnegative().optional(),
+  type: z.string().optional(),
+});
+
 export const projectRegistrationSchema = z.object({
   id: z.string().cuid(),
   userId: z.string().cuid(),
@@ -21,6 +28,7 @@ export const projectRegistrationSchema = z.object({
   title: z.string().min(1),
   objective: z.string().min(1),
   expectedOutput: z.string().nullable().optional(),
+  proposalFiles: z.array(registrationProposalFileSchema).optional().nullable(),
   teamMembers: z.array(registrationTeamMemberSchema).max(5).nullable().optional(),
   instructorId: z.string().cuid().nullable().optional(),
   instructorStatus: InstructorStatusEnum.optional(),
@@ -72,10 +80,12 @@ export const updateProjectRegistrationSchema = z.object({
   title: z.string().min(1),
   objective: z.string().min(1),
   expectedOutput: z.string().nullable().optional(),
+  proposalFiles: z.array(registrationProposalFileSchema).optional().nullable(),
   teamMembers: z.array(registrationTeamMemberSchema).max(5).optional(),
 });
 
 export type ProjectRegistration = z.infer<typeof projectRegistrationSchema>;
+export type RegistrationProposalFile = z.infer<typeof registrationProposalFileSchema>;
 export type CreateProjectRegistrationInput = z.infer<typeof createProjectRegistrationSchema>;
 export type CancelProjectRegistrationInput = z.infer<typeof cancelProjectRegistrationSchema>;
 export type UpdateProjectRegistrationInput = z.infer<typeof updateProjectRegistrationSchema>;

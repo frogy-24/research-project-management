@@ -230,6 +230,25 @@ exports.Prisma.ProjectScalarFieldEnum = {
   instructorId: 'instructorId'
 };
 
+exports.Prisma.ProjectClosingSubmissionScalarFieldEnum = {
+  id: 'id',
+  projectId: 'projectId',
+  submittedById: 'submittedById',
+  status: 'status',
+  note: 'note',
+  reportFiles: 'reportFiles',
+  researchSourceCodeFiles: 'researchSourceCodeFiles',
+  researchGuideFiles: 'researchGuideFiles',
+  administrativeDefenseApplicationFiles: 'administrativeDefenseApplicationFiles',
+  administrativeAchievementEvidenceFiles: 'administrativeAchievementEvidenceFiles',
+  administrativeAdvisorReviewFiles: 'administrativeAdvisorReviewFiles',
+  presentationSlideFiles: 'presentationSlideFiles',
+  presentationVideoFiles: 'presentationVideoFiles',
+  submittedAt: 'submittedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.ProgressReportTemplateScalarFieldEnum = {
   id: 'id',
   name: 'name',
@@ -321,6 +340,7 @@ exports.Prisma.ProjectRegistrationScalarFieldEnum = {
   title: 'title',
   objective: 'objective',
   expectedOutput: 'expectedOutput',
+  proposalFiles: 'proposalFiles',
   teamMembers: 'teamMembers',
   status: 'status',
   cancelReason: 'cancelReason',
@@ -519,6 +539,12 @@ exports.ProjectStatus = exports.$Enums.ProjectStatus = {
   SUSPENDED: 'SUSPENDED'
 };
 
+exports.ProjectClosingStatus = exports.$Enums.ProjectClosingStatus = {
+  SUBMITTED: 'SUBMITTED',
+  REVISION_REQUESTED: 'REVISION_REQUESTED',
+  APPROVED: 'APPROVED'
+};
+
 exports.ReviewDecision = exports.$Enums.ReviewDecision = {
   PASS: 'PASS',
   NEED_REVISION: 'NEED_REVISION',
@@ -598,6 +624,7 @@ exports.Prisma.ModelName = {
   CallRound: 'CallRound',
   ProjectType: 'ProjectType',
   Project: 'Project',
+  ProjectClosingSubmission: 'ProjectClosingSubmission',
   ProgressReportTemplate: 'ProgressReportTemplate',
   ProgressReportTemplateItem: 'ProgressReportTemplateItem',
   ProgressReport: 'ProgressReport',

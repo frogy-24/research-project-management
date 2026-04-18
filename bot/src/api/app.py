@@ -2,11 +2,13 @@ import json
 import os
 import re
 import sys
+from datetime import datetime, timezone
 from typing import Any
 from pathlib import Path
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, HTTPException
+from fastapi.responses import Response
 from mcp import ClientSession
 from mcp.client.streamable_http import streamable_http_client
 from pydantic import BaseModel, Field
@@ -39,6 +41,22 @@ class ChatRequest(BaseModel):
 class ChatResponse(BaseModel):
     message: str
     answer: str
+
+
+def _build_admin_statistics_report_prompt() -> str:
+    return "\n".join(
+        [
+            "Ban la chuyen gia bao cao thong ke URMS.",
+            "Bat buoc goi MCP tool get_admin_statistics_snapshot de lay du lieu truoc khi viet bao cao.",
+            "Sau do viet mot bao cao markdown bang tieng Viet, co cau truc sau:",
+            "1) Tong quan he thong",
+            "2) Phan tich xu huong chinh",
+            "3) Rui ro va van de can uu tien",
+            "4) De xuat hanh dong cu the (3-7 muc)",
+            "5) Tom tat dieu hanh 5 dong.",
+            "Yeu cau: dua tren so lieu, neu thieu du lieu thi neu ro; khong bia dat.",
+        ]
+    )
 
 
 MCP_SERVER_URL = os.getenv("MCP_SERVER_URL", "http://127.0.0.1:9000/mcp")
@@ -200,6 +218,50 @@ async def chat(payload: ChatRequest) -> ChatResponse:
         raise HTTPException(status_code=400, detail=str(exc)) from exc
 
     return ChatResponse(message=payload.message, answer=answer)
+
+
+@app.get("/reports/admin-statistics")
+@log_api_request("/reports/admin-statistics", "GET")
+async def admin_statistics_report() -> Response:
+    logger.info("📄 Report API - Generate admin statistics report file")
+
+    model_name = os.getenv("OPENAI_MODEL", "gpt-5-mini")
+    max_rounds = 6
+    prompt = _build_admin_statistics_report_prompt()
+
+    try:
+        answer = await run_llm_with_mcp(
+            prompt=prompt,
+            model=model_name,
+            max_rounds=max_rounds,
+        )
+    except Exception as exc:
+        logger.error(f"❌ Report generation failed - Error: {str(exc)}")
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+
+    generated_at = datetime.now(timezone.utc).isoformat()
+    report_content = "\n".join(
+        [
+            "# Bao Cao Thong Ke URMS (AI + MCP)",
+            "",
+            f"Ngay tao: {generated_at}",
+            "",
+            answer,
+            "",
+        ]
+    )
+
+    file_stamp = datetime.now().strftime("%Y%m%d-%H%M")
+    filename = f"BaoCaoThongKe_AI_URMS_{file_stamp}.md"
+
+    return Response(
+        content=report_content,
+        media_type="text/markdown; charset=utf-8",
+        headers={
+            "Content-Disposition": f'attachment; filename="{filename}"',
+            "Cache-Control": "no-store",
+        },
+    )
 
 
 if __name__ == "__main__":
