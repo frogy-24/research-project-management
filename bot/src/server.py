@@ -21,8 +21,8 @@ class Service:
 
 
 SERVICES: list[Service] = [
-    Service(name="copilot_api", command=["npx", "copilot-api", "start"]),
-    Service(name="mcp_server", command=["uv", "run", "python", "-m", "src.mcp.server"]),
+    # Service(name="copilot_api", command=["npx", "copilot-api", "start"]),
+    # Service(name="mcp_server", command=["uv", "run", "python", "-m", "src.mcp.server"]),
     Service(
         name="fastapi",
         command=[

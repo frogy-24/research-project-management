@@ -90,6 +90,16 @@ const FACULTY_STATUS_OPTIONS = [
     { value: 'REJECTED', label: 'Đã từ chối' },
 ];
 
+const isWordFile = (fileName?: string, fileUrl?: string) => {
+    const value = `${fileName || ''} ${fileUrl || ''}`.toLowerCase();
+    return value.includes('.docx') || value.includes('.doc');
+};
+
+const isPdfFile = (fileName?: string, fileUrl?: string) => {
+    const value = `${fileName || ''} ${fileUrl || ''}`.toLowerCase();
+    return value.includes('.pdf');
+};
+
 export function DeanApprovalClient() {
     const [currentPage, setCurrentPage] = useState(1);
     const [searchInput, setSearchInput] = useState('');
@@ -331,12 +341,12 @@ export function DeanApprovalClient() {
                                                 <DialogTrigger asChild>
                                                     <Button variant="outline" size="sm">Chi tiết</Button>
                                                 </DialogTrigger>
-                                                <DialogContent className="sm:max-w-2xl">
+                                                <DialogContent className="sm:max-w-2xl max-h-[85vh] overflow-hidden">
                                                     <DialogHeader>
                                                         <DialogTitle>Chi tiết đề tài đăng ký</DialogTitle>
                                                     </DialogHeader>
 
-                                                    <div className="space-y-4 py-2">
+                                                    <div className="space-y-4 py-2 max-h-[calc(85vh-5rem)] overflow-y-auto pr-2">
                                                         <div className="rounded-lg border bg-muted/30 p-4">
                                                             <h4 className="text-sm font-medium mb-3">Thông tin sinh viên</h4>
                                                             <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
@@ -457,22 +467,24 @@ export function DeanApprovalClient() {
                                                                                     </p>
                                                                                 </div>
                                                                                 <div className="flex items-center gap-1">
-                                                                                    <Button
-                                                                                        type="button"
-                                                                                        variant="ghost"
-                                                                                        size="sm"
-                                                                                        className="h-8 w-8 p-0"
-                                                                                        asChild
-                                                                                    >
-                                                                                        <a
-                                                                                            href={file.url}
-                                                                                            target="_blank"
-                                                                                            rel="noopener noreferrer"
-                                                                                            aria-label={`Mở tệp ${file.name}`}
+                                                                                    {isPdfFile(file.name, file.url) && (
+                                                                                        <Button
+                                                                                            type="button"
+                                                                                            variant="ghost"
+                                                                                            size="sm"
+                                                                                            className="h-8 w-8 p-0"
+                                                                                            asChild
                                                                                         >
-                                                                                            <ExternalLink className="h-4 w-4" />
-                                                                                        </a>
-                                                                                    </Button>
+                                                                                            <a
+                                                                                                href={file.url}
+                                                                                                target="_blank"
+                                                                                                rel="noopener noreferrer"
+                                                                                                aria-label={`Xem tệp PDF ${file.name}`}
+                                                                                            >
+                                                                                                <ExternalLink className="h-4 w-4" />
+                                                                                            </a>
+                                                                                        </Button>
+                                                                                    )}
                                                                                     <Button
                                                                                         type="button"
                                                                                         variant="ghost"
@@ -482,8 +494,8 @@ export function DeanApprovalClient() {
                                                                                     >
                                                                                         <a
                                                                                             href={file.url}
-                                                                                            target="_blank"
-                                                                                            rel="noopener noreferrer"
+                                                                                            target={isWordFile(file.name, file.url) ? undefined : '_blank'}
+                                                                                            rel={isWordFile(file.name, file.url) ? undefined : 'noopener noreferrer'}
                                                                                             download={file.name}
                                                                                             aria-label={`Tải tệp ${file.name}`}
                                                                                         >
@@ -651,6 +663,7 @@ export function DeanApprovalClient() {
                     )}
                 </>
             )}
+
         </div>
     );
 }
