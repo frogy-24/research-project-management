@@ -22,6 +22,7 @@ import {
     PaginationNext,
     PaginationPrevious,
 } from '@/components/ui/pagination';
+import { AutoApprovalDialog } from '@/components/projects/auto-approval-dialog';
 
 interface Registration {
     id: string;
@@ -205,6 +206,14 @@ export function DeanApprovalClient() {
                             <X className="h-4 w-4 mr-1" />
                             Xóa bộ lọc
                         </Button>
+                    )}
+
+                    {/* Auto Approval Dialog - Only show when call round is selected */}
+                    {callRoundId && callRoundId !== 'ALL' && (
+                        <AutoApprovalDialog
+                            callRoundId={callRoundId}
+                            callRoundName={callRounds.find((round) => round.id === callRoundId)?.name}
+                        />
                     )}
                 </div>
 

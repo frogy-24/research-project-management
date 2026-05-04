@@ -129,6 +129,11 @@ export type CallRoundCouncilMember = $Result.DefaultSelection<Prisma.$CallRoundC
  */
 export type Council = $Result.DefaultSelection<Prisma.$CouncilPayload>
 /**
+ * Model AutoApprovalJob
+ * 
+ */
+export type AutoApprovalJob = $Result.DefaultSelection<Prisma.$AutoApprovalJobPayload>
+/**
  * Model CouncilMemberAssignment
  * 
  */
@@ -259,6 +264,16 @@ export const ProjectClosingStatus: {
 export type ProjectClosingStatus = (typeof ProjectClosingStatus)[keyof typeof ProjectClosingStatus]
 
 
+export const AutoApprovalJobStatus: {
+  QUEUED: 'QUEUED',
+  PROCESSING: 'PROCESSING',
+  COMPLETED: 'COMPLETED',
+  FAILED: 'FAILED'
+};
+
+export type AutoApprovalJobStatus = (typeof AutoApprovalJobStatus)[keyof typeof AutoApprovalJobStatus]
+
+
 export const InstructorStatus: {
   PENDING: 'PENDING',
   ACCEPTED: 'ACCEPTED',
@@ -358,6 +373,10 @@ export const DisbursementStatus: typeof $Enums.DisbursementStatus
 export type ProjectClosingStatus = $Enums.ProjectClosingStatus
 
 export const ProjectClosingStatus: typeof $Enums.ProjectClosingStatus
+
+export type AutoApprovalJobStatus = $Enums.AutoApprovalJobStatus
+
+export const AutoApprovalJobStatus: typeof $Enums.AutoApprovalJobStatus
 
 export type InstructorStatus = $Enums.InstructorStatus
 
@@ -729,6 +748,16 @@ export class PrismaClient<
     * ```
     */
   get council(): Prisma.CouncilDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.autoApprovalJob`: Exposes CRUD operations for the **AutoApprovalJob** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more AutoApprovalJobs
+    * const autoApprovalJobs = await prisma.autoApprovalJob.findMany()
+    * ```
+    */
+  get autoApprovalJob(): Prisma.AutoApprovalJobDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.councilMemberAssignment`: Exposes CRUD operations for the **CouncilMemberAssignment** model.
@@ -1216,6 +1245,7 @@ export namespace Prisma {
     CallRoundInstructor: 'CallRoundInstructor',
     CallRoundCouncilMember: 'CallRoundCouncilMember',
     Council: 'Council',
+    AutoApprovalJob: 'AutoApprovalJob',
     CouncilMemberAssignment: 'CouncilMemberAssignment',
     ProjectCouncilAssignment: 'ProjectCouncilAssignment',
     CallRoundAttachment: 'CallRoundAttachment'
@@ -1234,7 +1264,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "department" | "major" | "class" | "user" | "callRound" | "projectType" | "project" | "projectClosingSubmission" | "progressReportTemplate" | "progressReportTemplateItem" | "progressReport" | "councilEvaluation" | "fundingDisbursement" | "extensionRequest" | "projectRegistration" | "notification" | "post" | "room" | "officeMeeting" | "officeMeetingView" | "callRoundInstructor" | "callRoundCouncilMember" | "council" | "councilMemberAssignment" | "projectCouncilAssignment" | "callRoundAttachment"
+      modelProps: "department" | "major" | "class" | "user" | "callRound" | "projectType" | "project" | "projectClosingSubmission" | "progressReportTemplate" | "progressReportTemplateItem" | "progressReport" | "councilEvaluation" | "fundingDisbursement" | "extensionRequest" | "projectRegistration" | "notification" | "post" | "room" | "officeMeeting" | "officeMeetingView" | "callRoundInstructor" | "callRoundCouncilMember" | "council" | "autoApprovalJob" | "councilMemberAssignment" | "projectCouncilAssignment" | "callRoundAttachment"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -2940,6 +2970,80 @@ export namespace Prisma {
           }
         }
       }
+      AutoApprovalJob: {
+        payload: Prisma.$AutoApprovalJobPayload<ExtArgs>
+        fields: Prisma.AutoApprovalJobFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.AutoApprovalJobFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AutoApprovalJobPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.AutoApprovalJobFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AutoApprovalJobPayload>
+          }
+          findFirst: {
+            args: Prisma.AutoApprovalJobFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AutoApprovalJobPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.AutoApprovalJobFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AutoApprovalJobPayload>
+          }
+          findMany: {
+            args: Prisma.AutoApprovalJobFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AutoApprovalJobPayload>[]
+          }
+          create: {
+            args: Prisma.AutoApprovalJobCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AutoApprovalJobPayload>
+          }
+          createMany: {
+            args: Prisma.AutoApprovalJobCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.AutoApprovalJobCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AutoApprovalJobPayload>[]
+          }
+          delete: {
+            args: Prisma.AutoApprovalJobDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AutoApprovalJobPayload>
+          }
+          update: {
+            args: Prisma.AutoApprovalJobUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AutoApprovalJobPayload>
+          }
+          deleteMany: {
+            args: Prisma.AutoApprovalJobDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.AutoApprovalJobUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.AutoApprovalJobUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AutoApprovalJobPayload>[]
+          }
+          upsert: {
+            args: Prisma.AutoApprovalJobUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AutoApprovalJobPayload>
+          }
+          aggregate: {
+            args: Prisma.AutoApprovalJobAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateAutoApprovalJob>
+          }
+          groupBy: {
+            args: Prisma.AutoApprovalJobGroupByArgs<ExtArgs>
+            result: $Utils.Optional<AutoApprovalJobGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.AutoApprovalJobCountArgs<ExtArgs>
+            result: $Utils.Optional<AutoApprovalJobCountAggregateOutputType> | number
+          }
+        }
+      }
       CouncilMemberAssignment: {
         payload: Prisma.$CouncilMemberAssignmentPayload<ExtArgs>
         fields: Prisma.CouncilMemberAssignmentFieldRefs
@@ -3293,6 +3397,7 @@ export namespace Prisma {
     callRoundInstructor?: CallRoundInstructorOmit
     callRoundCouncilMember?: CallRoundCouncilMemberOmit
     council?: CouncilOmit
+    autoApprovalJob?: AutoApprovalJobOmit
     councilMemberAssignment?: CouncilMemberAssignmentOmit
     projectCouncilAssignment?: ProjectCouncilAssignmentOmit
     callRoundAttachment?: CallRoundAttachmentOmit
@@ -3549,6 +3654,7 @@ export namespace Prisma {
     approvedPosts: number
     createdDisbursements: number
     approvedDisbursements: number
+    autoApprovalJobs: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -3569,6 +3675,7 @@ export namespace Prisma {
     approvedPosts?: boolean | UserCountOutputTypeCountApprovedPostsArgs
     createdDisbursements?: boolean | UserCountOutputTypeCountCreatedDisbursementsArgs
     approvedDisbursements?: boolean | UserCountOutputTypeCountApprovedDisbursementsArgs
+    autoApprovalJobs?: boolean | UserCountOutputTypeCountAutoApprovalJobsArgs
   }
 
   // Custom InputTypes
@@ -3699,6 +3806,13 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountApprovedDisbursementsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: FundingDisbursementWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountAutoApprovalJobsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AutoApprovalJobWhereInput
   }
 
 
@@ -7830,6 +7944,7 @@ export namespace Prisma {
     approvedPosts?: boolean | User$approvedPostsArgs<ExtArgs>
     createdDisbursements?: boolean | User$createdDisbursementsArgs<ExtArgs>
     approvedDisbursements?: boolean | User$approvedDisbursementsArgs<ExtArgs>
+    autoApprovalJobs?: boolean | User$autoApprovalJobsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -7918,6 +8033,7 @@ export namespace Prisma {
     approvedPosts?: boolean | User$approvedPostsArgs<ExtArgs>
     createdDisbursements?: boolean | User$createdDisbursementsArgs<ExtArgs>
     approvedDisbursements?: boolean | User$approvedDisbursementsArgs<ExtArgs>
+    autoApprovalJobs?: boolean | User$autoApprovalJobsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -7954,6 +8070,7 @@ export namespace Prisma {
       approvedPosts: Prisma.$PostPayload<ExtArgs>[]
       createdDisbursements: Prisma.$FundingDisbursementPayload<ExtArgs>[]
       approvedDisbursements: Prisma.$FundingDisbursementPayload<ExtArgs>[]
+      autoApprovalJobs: Prisma.$AutoApprovalJobPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -8386,6 +8503,7 @@ export namespace Prisma {
     approvedPosts<T extends User$approvedPostsArgs<ExtArgs> = {}>(args?: Subset<T, User$approvedPostsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PostPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     createdDisbursements<T extends User$createdDisbursementsArgs<ExtArgs> = {}>(args?: Subset<T, User$createdDisbursementsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FundingDisbursementPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     approvedDisbursements<T extends User$approvedDisbursementsArgs<ExtArgs> = {}>(args?: Subset<T, User$approvedDisbursementsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FundingDisbursementPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    autoApprovalJobs<T extends User$autoApprovalJobsArgs<ExtArgs> = {}>(args?: Subset<T, User$autoApprovalJobsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AutoApprovalJobPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -9294,6 +9412,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: FundingDisbursementScalarFieldEnum | FundingDisbursementScalarFieldEnum[]
+  }
+
+  /**
+   * User.autoApprovalJobs
+   */
+  export type User$autoApprovalJobsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AutoApprovalJob
+     */
+    select?: AutoApprovalJobSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AutoApprovalJob
+     */
+    omit?: AutoApprovalJobOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AutoApprovalJobInclude<ExtArgs> | null
+    where?: AutoApprovalJobWhereInput
+    orderBy?: AutoApprovalJobOrderByWithRelationInput | AutoApprovalJobOrderByWithRelationInput[]
+    cursor?: AutoApprovalJobWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: AutoApprovalJobScalarFieldEnum | AutoApprovalJobScalarFieldEnum[]
   }
 
   /**
@@ -32431,6 +32573,1169 @@ export namespace Prisma {
 
 
   /**
+   * Model AutoApprovalJob
+   */
+
+  export type AggregateAutoApprovalJob = {
+    _count: AutoApprovalJobCountAggregateOutputType | null
+    _avg: AutoApprovalJobAvgAggregateOutputType | null
+    _sum: AutoApprovalJobSumAggregateOutputType | null
+    _min: AutoApprovalJobMinAggregateOutputType | null
+    _max: AutoApprovalJobMaxAggregateOutputType | null
+  }
+
+  export type AutoApprovalJobAvgAggregateOutputType = {
+    progress: number | null
+  }
+
+  export type AutoApprovalJobSumAggregateOutputType = {
+    progress: number | null
+  }
+
+  export type AutoApprovalJobMinAggregateOutputType = {
+    id: string | null
+    deanId: string | null
+    status: $Enums.AutoApprovalJobStatus | null
+    progress: number | null
+    error: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    completedAt: Date | null
+  }
+
+  export type AutoApprovalJobMaxAggregateOutputType = {
+    id: string | null
+    deanId: string | null
+    status: $Enums.AutoApprovalJobStatus | null
+    progress: number | null
+    error: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    completedAt: Date | null
+  }
+
+  export type AutoApprovalJobCountAggregateOutputType = {
+    id: number
+    deanId: number
+    filters: number
+    criteria: number
+    status: number
+    progress: number
+    results: number
+    error: number
+    createdAt: number
+    updatedAt: number
+    completedAt: number
+    _all: number
+  }
+
+
+  export type AutoApprovalJobAvgAggregateInputType = {
+    progress?: true
+  }
+
+  export type AutoApprovalJobSumAggregateInputType = {
+    progress?: true
+  }
+
+  export type AutoApprovalJobMinAggregateInputType = {
+    id?: true
+    deanId?: true
+    status?: true
+    progress?: true
+    error?: true
+    createdAt?: true
+    updatedAt?: true
+    completedAt?: true
+  }
+
+  export type AutoApprovalJobMaxAggregateInputType = {
+    id?: true
+    deanId?: true
+    status?: true
+    progress?: true
+    error?: true
+    createdAt?: true
+    updatedAt?: true
+    completedAt?: true
+  }
+
+  export type AutoApprovalJobCountAggregateInputType = {
+    id?: true
+    deanId?: true
+    filters?: true
+    criteria?: true
+    status?: true
+    progress?: true
+    results?: true
+    error?: true
+    createdAt?: true
+    updatedAt?: true
+    completedAt?: true
+    _all?: true
+  }
+
+  export type AutoApprovalJobAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which AutoApprovalJob to aggregate.
+     */
+    where?: AutoApprovalJobWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AutoApprovalJobs to fetch.
+     */
+    orderBy?: AutoApprovalJobOrderByWithRelationInput | AutoApprovalJobOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: AutoApprovalJobWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AutoApprovalJobs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AutoApprovalJobs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned AutoApprovalJobs
+    **/
+    _count?: true | AutoApprovalJobCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: AutoApprovalJobAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: AutoApprovalJobSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: AutoApprovalJobMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: AutoApprovalJobMaxAggregateInputType
+  }
+
+  export type GetAutoApprovalJobAggregateType<T extends AutoApprovalJobAggregateArgs> = {
+        [P in keyof T & keyof AggregateAutoApprovalJob]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateAutoApprovalJob[P]>
+      : GetScalarType<T[P], AggregateAutoApprovalJob[P]>
+  }
+
+
+
+
+  export type AutoApprovalJobGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AutoApprovalJobWhereInput
+    orderBy?: AutoApprovalJobOrderByWithAggregationInput | AutoApprovalJobOrderByWithAggregationInput[]
+    by: AutoApprovalJobScalarFieldEnum[] | AutoApprovalJobScalarFieldEnum
+    having?: AutoApprovalJobScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: AutoApprovalJobCountAggregateInputType | true
+    _avg?: AutoApprovalJobAvgAggregateInputType
+    _sum?: AutoApprovalJobSumAggregateInputType
+    _min?: AutoApprovalJobMinAggregateInputType
+    _max?: AutoApprovalJobMaxAggregateInputType
+  }
+
+  export type AutoApprovalJobGroupByOutputType = {
+    id: string
+    deanId: string
+    filters: JsonValue
+    criteria: JsonValue
+    status: $Enums.AutoApprovalJobStatus
+    progress: number
+    results: JsonValue | null
+    error: string | null
+    createdAt: Date
+    updatedAt: Date
+    completedAt: Date | null
+    _count: AutoApprovalJobCountAggregateOutputType | null
+    _avg: AutoApprovalJobAvgAggregateOutputType | null
+    _sum: AutoApprovalJobSumAggregateOutputType | null
+    _min: AutoApprovalJobMinAggregateOutputType | null
+    _max: AutoApprovalJobMaxAggregateOutputType | null
+  }
+
+  type GetAutoApprovalJobGroupByPayload<T extends AutoApprovalJobGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<AutoApprovalJobGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof AutoApprovalJobGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], AutoApprovalJobGroupByOutputType[P]>
+            : GetScalarType<T[P], AutoApprovalJobGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type AutoApprovalJobSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    deanId?: boolean
+    filters?: boolean
+    criteria?: boolean
+    status?: boolean
+    progress?: boolean
+    results?: boolean
+    error?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    completedAt?: boolean
+    dean?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["autoApprovalJob"]>
+
+  export type AutoApprovalJobSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    deanId?: boolean
+    filters?: boolean
+    criteria?: boolean
+    status?: boolean
+    progress?: boolean
+    results?: boolean
+    error?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    completedAt?: boolean
+    dean?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["autoApprovalJob"]>
+
+  export type AutoApprovalJobSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    deanId?: boolean
+    filters?: boolean
+    criteria?: boolean
+    status?: boolean
+    progress?: boolean
+    results?: boolean
+    error?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    completedAt?: boolean
+    dean?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["autoApprovalJob"]>
+
+  export type AutoApprovalJobSelectScalar = {
+    id?: boolean
+    deanId?: boolean
+    filters?: boolean
+    criteria?: boolean
+    status?: boolean
+    progress?: boolean
+    results?: boolean
+    error?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    completedAt?: boolean
+  }
+
+  export type AutoApprovalJobOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "deanId" | "filters" | "criteria" | "status" | "progress" | "results" | "error" | "createdAt" | "updatedAt" | "completedAt", ExtArgs["result"]["autoApprovalJob"]>
+  export type AutoApprovalJobInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    dean?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type AutoApprovalJobIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    dean?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type AutoApprovalJobIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    dean?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $AutoApprovalJobPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "AutoApprovalJob"
+    objects: {
+      dean: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      deanId: string
+      filters: Prisma.JsonValue
+      criteria: Prisma.JsonValue
+      status: $Enums.AutoApprovalJobStatus
+      progress: number
+      results: Prisma.JsonValue | null
+      error: string | null
+      createdAt: Date
+      updatedAt: Date
+      completedAt: Date | null
+    }, ExtArgs["result"]["autoApprovalJob"]>
+    composites: {}
+  }
+
+  type AutoApprovalJobGetPayload<S extends boolean | null | undefined | AutoApprovalJobDefaultArgs> = $Result.GetResult<Prisma.$AutoApprovalJobPayload, S>
+
+  type AutoApprovalJobCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<AutoApprovalJobFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: AutoApprovalJobCountAggregateInputType | true
+    }
+
+  export interface AutoApprovalJobDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['AutoApprovalJob'], meta: { name: 'AutoApprovalJob' } }
+    /**
+     * Find zero or one AutoApprovalJob that matches the filter.
+     * @param {AutoApprovalJobFindUniqueArgs} args - Arguments to find a AutoApprovalJob
+     * @example
+     * // Get one AutoApprovalJob
+     * const autoApprovalJob = await prisma.autoApprovalJob.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends AutoApprovalJobFindUniqueArgs>(args: SelectSubset<T, AutoApprovalJobFindUniqueArgs<ExtArgs>>): Prisma__AutoApprovalJobClient<$Result.GetResult<Prisma.$AutoApprovalJobPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one AutoApprovalJob that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {AutoApprovalJobFindUniqueOrThrowArgs} args - Arguments to find a AutoApprovalJob
+     * @example
+     * // Get one AutoApprovalJob
+     * const autoApprovalJob = await prisma.autoApprovalJob.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends AutoApprovalJobFindUniqueOrThrowArgs>(args: SelectSubset<T, AutoApprovalJobFindUniqueOrThrowArgs<ExtArgs>>): Prisma__AutoApprovalJobClient<$Result.GetResult<Prisma.$AutoApprovalJobPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first AutoApprovalJob that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AutoApprovalJobFindFirstArgs} args - Arguments to find a AutoApprovalJob
+     * @example
+     * // Get one AutoApprovalJob
+     * const autoApprovalJob = await prisma.autoApprovalJob.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends AutoApprovalJobFindFirstArgs>(args?: SelectSubset<T, AutoApprovalJobFindFirstArgs<ExtArgs>>): Prisma__AutoApprovalJobClient<$Result.GetResult<Prisma.$AutoApprovalJobPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first AutoApprovalJob that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AutoApprovalJobFindFirstOrThrowArgs} args - Arguments to find a AutoApprovalJob
+     * @example
+     * // Get one AutoApprovalJob
+     * const autoApprovalJob = await prisma.autoApprovalJob.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends AutoApprovalJobFindFirstOrThrowArgs>(args?: SelectSubset<T, AutoApprovalJobFindFirstOrThrowArgs<ExtArgs>>): Prisma__AutoApprovalJobClient<$Result.GetResult<Prisma.$AutoApprovalJobPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more AutoApprovalJobs that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AutoApprovalJobFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all AutoApprovalJobs
+     * const autoApprovalJobs = await prisma.autoApprovalJob.findMany()
+     * 
+     * // Get first 10 AutoApprovalJobs
+     * const autoApprovalJobs = await prisma.autoApprovalJob.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const autoApprovalJobWithIdOnly = await prisma.autoApprovalJob.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends AutoApprovalJobFindManyArgs>(args?: SelectSubset<T, AutoApprovalJobFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AutoApprovalJobPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a AutoApprovalJob.
+     * @param {AutoApprovalJobCreateArgs} args - Arguments to create a AutoApprovalJob.
+     * @example
+     * // Create one AutoApprovalJob
+     * const AutoApprovalJob = await prisma.autoApprovalJob.create({
+     *   data: {
+     *     // ... data to create a AutoApprovalJob
+     *   }
+     * })
+     * 
+     */
+    create<T extends AutoApprovalJobCreateArgs>(args: SelectSubset<T, AutoApprovalJobCreateArgs<ExtArgs>>): Prisma__AutoApprovalJobClient<$Result.GetResult<Prisma.$AutoApprovalJobPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many AutoApprovalJobs.
+     * @param {AutoApprovalJobCreateManyArgs} args - Arguments to create many AutoApprovalJobs.
+     * @example
+     * // Create many AutoApprovalJobs
+     * const autoApprovalJob = await prisma.autoApprovalJob.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends AutoApprovalJobCreateManyArgs>(args?: SelectSubset<T, AutoApprovalJobCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many AutoApprovalJobs and returns the data saved in the database.
+     * @param {AutoApprovalJobCreateManyAndReturnArgs} args - Arguments to create many AutoApprovalJobs.
+     * @example
+     * // Create many AutoApprovalJobs
+     * const autoApprovalJob = await prisma.autoApprovalJob.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many AutoApprovalJobs and only return the `id`
+     * const autoApprovalJobWithIdOnly = await prisma.autoApprovalJob.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends AutoApprovalJobCreateManyAndReturnArgs>(args?: SelectSubset<T, AutoApprovalJobCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AutoApprovalJobPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a AutoApprovalJob.
+     * @param {AutoApprovalJobDeleteArgs} args - Arguments to delete one AutoApprovalJob.
+     * @example
+     * // Delete one AutoApprovalJob
+     * const AutoApprovalJob = await prisma.autoApprovalJob.delete({
+     *   where: {
+     *     // ... filter to delete one AutoApprovalJob
+     *   }
+     * })
+     * 
+     */
+    delete<T extends AutoApprovalJobDeleteArgs>(args: SelectSubset<T, AutoApprovalJobDeleteArgs<ExtArgs>>): Prisma__AutoApprovalJobClient<$Result.GetResult<Prisma.$AutoApprovalJobPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one AutoApprovalJob.
+     * @param {AutoApprovalJobUpdateArgs} args - Arguments to update one AutoApprovalJob.
+     * @example
+     * // Update one AutoApprovalJob
+     * const autoApprovalJob = await prisma.autoApprovalJob.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends AutoApprovalJobUpdateArgs>(args: SelectSubset<T, AutoApprovalJobUpdateArgs<ExtArgs>>): Prisma__AutoApprovalJobClient<$Result.GetResult<Prisma.$AutoApprovalJobPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more AutoApprovalJobs.
+     * @param {AutoApprovalJobDeleteManyArgs} args - Arguments to filter AutoApprovalJobs to delete.
+     * @example
+     * // Delete a few AutoApprovalJobs
+     * const { count } = await prisma.autoApprovalJob.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends AutoApprovalJobDeleteManyArgs>(args?: SelectSubset<T, AutoApprovalJobDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more AutoApprovalJobs.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AutoApprovalJobUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many AutoApprovalJobs
+     * const autoApprovalJob = await prisma.autoApprovalJob.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends AutoApprovalJobUpdateManyArgs>(args: SelectSubset<T, AutoApprovalJobUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more AutoApprovalJobs and returns the data updated in the database.
+     * @param {AutoApprovalJobUpdateManyAndReturnArgs} args - Arguments to update many AutoApprovalJobs.
+     * @example
+     * // Update many AutoApprovalJobs
+     * const autoApprovalJob = await prisma.autoApprovalJob.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more AutoApprovalJobs and only return the `id`
+     * const autoApprovalJobWithIdOnly = await prisma.autoApprovalJob.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends AutoApprovalJobUpdateManyAndReturnArgs>(args: SelectSubset<T, AutoApprovalJobUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AutoApprovalJobPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one AutoApprovalJob.
+     * @param {AutoApprovalJobUpsertArgs} args - Arguments to update or create a AutoApprovalJob.
+     * @example
+     * // Update or create a AutoApprovalJob
+     * const autoApprovalJob = await prisma.autoApprovalJob.upsert({
+     *   create: {
+     *     // ... data to create a AutoApprovalJob
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the AutoApprovalJob we want to update
+     *   }
+     * })
+     */
+    upsert<T extends AutoApprovalJobUpsertArgs>(args: SelectSubset<T, AutoApprovalJobUpsertArgs<ExtArgs>>): Prisma__AutoApprovalJobClient<$Result.GetResult<Prisma.$AutoApprovalJobPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of AutoApprovalJobs.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AutoApprovalJobCountArgs} args - Arguments to filter AutoApprovalJobs to count.
+     * @example
+     * // Count the number of AutoApprovalJobs
+     * const count = await prisma.autoApprovalJob.count({
+     *   where: {
+     *     // ... the filter for the AutoApprovalJobs we want to count
+     *   }
+     * })
+    **/
+    count<T extends AutoApprovalJobCountArgs>(
+      args?: Subset<T, AutoApprovalJobCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], AutoApprovalJobCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a AutoApprovalJob.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AutoApprovalJobAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends AutoApprovalJobAggregateArgs>(args: Subset<T, AutoApprovalJobAggregateArgs>): Prisma.PrismaPromise<GetAutoApprovalJobAggregateType<T>>
+
+    /**
+     * Group by AutoApprovalJob.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AutoApprovalJobGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends AutoApprovalJobGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: AutoApprovalJobGroupByArgs['orderBy'] }
+        : { orderBy?: AutoApprovalJobGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, AutoApprovalJobGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetAutoApprovalJobGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the AutoApprovalJob model
+   */
+  readonly fields: AutoApprovalJobFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for AutoApprovalJob.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__AutoApprovalJobClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    dean<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the AutoApprovalJob model
+   */
+  interface AutoApprovalJobFieldRefs {
+    readonly id: FieldRef<"AutoApprovalJob", 'String'>
+    readonly deanId: FieldRef<"AutoApprovalJob", 'String'>
+    readonly filters: FieldRef<"AutoApprovalJob", 'Json'>
+    readonly criteria: FieldRef<"AutoApprovalJob", 'Json'>
+    readonly status: FieldRef<"AutoApprovalJob", 'AutoApprovalJobStatus'>
+    readonly progress: FieldRef<"AutoApprovalJob", 'Int'>
+    readonly results: FieldRef<"AutoApprovalJob", 'Json'>
+    readonly error: FieldRef<"AutoApprovalJob", 'String'>
+    readonly createdAt: FieldRef<"AutoApprovalJob", 'DateTime'>
+    readonly updatedAt: FieldRef<"AutoApprovalJob", 'DateTime'>
+    readonly completedAt: FieldRef<"AutoApprovalJob", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * AutoApprovalJob findUnique
+   */
+  export type AutoApprovalJobFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AutoApprovalJob
+     */
+    select?: AutoApprovalJobSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AutoApprovalJob
+     */
+    omit?: AutoApprovalJobOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AutoApprovalJobInclude<ExtArgs> | null
+    /**
+     * Filter, which AutoApprovalJob to fetch.
+     */
+    where: AutoApprovalJobWhereUniqueInput
+  }
+
+  /**
+   * AutoApprovalJob findUniqueOrThrow
+   */
+  export type AutoApprovalJobFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AutoApprovalJob
+     */
+    select?: AutoApprovalJobSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AutoApprovalJob
+     */
+    omit?: AutoApprovalJobOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AutoApprovalJobInclude<ExtArgs> | null
+    /**
+     * Filter, which AutoApprovalJob to fetch.
+     */
+    where: AutoApprovalJobWhereUniqueInput
+  }
+
+  /**
+   * AutoApprovalJob findFirst
+   */
+  export type AutoApprovalJobFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AutoApprovalJob
+     */
+    select?: AutoApprovalJobSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AutoApprovalJob
+     */
+    omit?: AutoApprovalJobOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AutoApprovalJobInclude<ExtArgs> | null
+    /**
+     * Filter, which AutoApprovalJob to fetch.
+     */
+    where?: AutoApprovalJobWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AutoApprovalJobs to fetch.
+     */
+    orderBy?: AutoApprovalJobOrderByWithRelationInput | AutoApprovalJobOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for AutoApprovalJobs.
+     */
+    cursor?: AutoApprovalJobWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AutoApprovalJobs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AutoApprovalJobs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of AutoApprovalJobs.
+     */
+    distinct?: AutoApprovalJobScalarFieldEnum | AutoApprovalJobScalarFieldEnum[]
+  }
+
+  /**
+   * AutoApprovalJob findFirstOrThrow
+   */
+  export type AutoApprovalJobFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AutoApprovalJob
+     */
+    select?: AutoApprovalJobSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AutoApprovalJob
+     */
+    omit?: AutoApprovalJobOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AutoApprovalJobInclude<ExtArgs> | null
+    /**
+     * Filter, which AutoApprovalJob to fetch.
+     */
+    where?: AutoApprovalJobWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AutoApprovalJobs to fetch.
+     */
+    orderBy?: AutoApprovalJobOrderByWithRelationInput | AutoApprovalJobOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for AutoApprovalJobs.
+     */
+    cursor?: AutoApprovalJobWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AutoApprovalJobs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AutoApprovalJobs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of AutoApprovalJobs.
+     */
+    distinct?: AutoApprovalJobScalarFieldEnum | AutoApprovalJobScalarFieldEnum[]
+  }
+
+  /**
+   * AutoApprovalJob findMany
+   */
+  export type AutoApprovalJobFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AutoApprovalJob
+     */
+    select?: AutoApprovalJobSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AutoApprovalJob
+     */
+    omit?: AutoApprovalJobOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AutoApprovalJobInclude<ExtArgs> | null
+    /**
+     * Filter, which AutoApprovalJobs to fetch.
+     */
+    where?: AutoApprovalJobWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AutoApprovalJobs to fetch.
+     */
+    orderBy?: AutoApprovalJobOrderByWithRelationInput | AutoApprovalJobOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing AutoApprovalJobs.
+     */
+    cursor?: AutoApprovalJobWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AutoApprovalJobs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AutoApprovalJobs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of AutoApprovalJobs.
+     */
+    distinct?: AutoApprovalJobScalarFieldEnum | AutoApprovalJobScalarFieldEnum[]
+  }
+
+  /**
+   * AutoApprovalJob create
+   */
+  export type AutoApprovalJobCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AutoApprovalJob
+     */
+    select?: AutoApprovalJobSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AutoApprovalJob
+     */
+    omit?: AutoApprovalJobOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AutoApprovalJobInclude<ExtArgs> | null
+    /**
+     * The data needed to create a AutoApprovalJob.
+     */
+    data: XOR<AutoApprovalJobCreateInput, AutoApprovalJobUncheckedCreateInput>
+  }
+
+  /**
+   * AutoApprovalJob createMany
+   */
+  export type AutoApprovalJobCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many AutoApprovalJobs.
+     */
+    data: AutoApprovalJobCreateManyInput | AutoApprovalJobCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * AutoApprovalJob createManyAndReturn
+   */
+  export type AutoApprovalJobCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AutoApprovalJob
+     */
+    select?: AutoApprovalJobSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the AutoApprovalJob
+     */
+    omit?: AutoApprovalJobOmit<ExtArgs> | null
+    /**
+     * The data used to create many AutoApprovalJobs.
+     */
+    data: AutoApprovalJobCreateManyInput | AutoApprovalJobCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AutoApprovalJobIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * AutoApprovalJob update
+   */
+  export type AutoApprovalJobUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AutoApprovalJob
+     */
+    select?: AutoApprovalJobSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AutoApprovalJob
+     */
+    omit?: AutoApprovalJobOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AutoApprovalJobInclude<ExtArgs> | null
+    /**
+     * The data needed to update a AutoApprovalJob.
+     */
+    data: XOR<AutoApprovalJobUpdateInput, AutoApprovalJobUncheckedUpdateInput>
+    /**
+     * Choose, which AutoApprovalJob to update.
+     */
+    where: AutoApprovalJobWhereUniqueInput
+  }
+
+  /**
+   * AutoApprovalJob updateMany
+   */
+  export type AutoApprovalJobUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update AutoApprovalJobs.
+     */
+    data: XOR<AutoApprovalJobUpdateManyMutationInput, AutoApprovalJobUncheckedUpdateManyInput>
+    /**
+     * Filter which AutoApprovalJobs to update
+     */
+    where?: AutoApprovalJobWhereInput
+    /**
+     * Limit how many AutoApprovalJobs to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * AutoApprovalJob updateManyAndReturn
+   */
+  export type AutoApprovalJobUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AutoApprovalJob
+     */
+    select?: AutoApprovalJobSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the AutoApprovalJob
+     */
+    omit?: AutoApprovalJobOmit<ExtArgs> | null
+    /**
+     * The data used to update AutoApprovalJobs.
+     */
+    data: XOR<AutoApprovalJobUpdateManyMutationInput, AutoApprovalJobUncheckedUpdateManyInput>
+    /**
+     * Filter which AutoApprovalJobs to update
+     */
+    where?: AutoApprovalJobWhereInput
+    /**
+     * Limit how many AutoApprovalJobs to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AutoApprovalJobIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * AutoApprovalJob upsert
+   */
+  export type AutoApprovalJobUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AutoApprovalJob
+     */
+    select?: AutoApprovalJobSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AutoApprovalJob
+     */
+    omit?: AutoApprovalJobOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AutoApprovalJobInclude<ExtArgs> | null
+    /**
+     * The filter to search for the AutoApprovalJob to update in case it exists.
+     */
+    where: AutoApprovalJobWhereUniqueInput
+    /**
+     * In case the AutoApprovalJob found by the `where` argument doesn't exist, create a new AutoApprovalJob with this data.
+     */
+    create: XOR<AutoApprovalJobCreateInput, AutoApprovalJobUncheckedCreateInput>
+    /**
+     * In case the AutoApprovalJob was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<AutoApprovalJobUpdateInput, AutoApprovalJobUncheckedUpdateInput>
+  }
+
+  /**
+   * AutoApprovalJob delete
+   */
+  export type AutoApprovalJobDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AutoApprovalJob
+     */
+    select?: AutoApprovalJobSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AutoApprovalJob
+     */
+    omit?: AutoApprovalJobOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AutoApprovalJobInclude<ExtArgs> | null
+    /**
+     * Filter which AutoApprovalJob to delete.
+     */
+    where: AutoApprovalJobWhereUniqueInput
+  }
+
+  /**
+   * AutoApprovalJob deleteMany
+   */
+  export type AutoApprovalJobDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which AutoApprovalJobs to delete
+     */
+    where?: AutoApprovalJobWhereInput
+    /**
+     * Limit how many AutoApprovalJobs to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * AutoApprovalJob without action
+   */
+  export type AutoApprovalJobDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AutoApprovalJob
+     */
+    select?: AutoApprovalJobSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AutoApprovalJob
+     */
+    omit?: AutoApprovalJobOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AutoApprovalJobInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Model CouncilMemberAssignment
    */
 
@@ -36105,6 +37410,23 @@ export namespace Prisma {
   export type CouncilScalarFieldEnum = (typeof CouncilScalarFieldEnum)[keyof typeof CouncilScalarFieldEnum]
 
 
+  export const AutoApprovalJobScalarFieldEnum: {
+    id: 'id',
+    deanId: 'deanId',
+    filters: 'filters',
+    criteria: 'criteria',
+    status: 'status',
+    progress: 'progress',
+    results: 'results',
+    error: 'error',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt',
+    completedAt: 'completedAt'
+  };
+
+  export type AutoApprovalJobScalarFieldEnum = (typeof AutoApprovalJobScalarFieldEnum)[keyof typeof AutoApprovalJobScalarFieldEnum]
+
+
   export const CouncilMemberAssignmentScalarFieldEnum: {
     id: 'id',
     councilId: 'councilId',
@@ -36154,6 +37476,13 @@ export namespace Prisma {
   };
 
   export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
+
+
+  export const JsonNullValueInput: {
+    JsonNull: typeof JsonNull
+  };
+
+  export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
 
 
   export const QueryMode: {
@@ -36499,6 +37828,20 @@ export namespace Prisma {
    */
   export type ListEnumInvitationStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'InvitationStatus[]'>
     
+
+
+  /**
+   * Reference to a field of type 'AutoApprovalJobStatus'
+   */
+  export type EnumAutoApprovalJobStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AutoApprovalJobStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'AutoApprovalJobStatus[]'
+   */
+  export type ListEnumAutoApprovalJobStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AutoApprovalJobStatus[]'>
+    
   /**
    * Deep Input Types
    */
@@ -36756,6 +38099,7 @@ export namespace Prisma {
     approvedPosts?: PostListRelationFilter
     createdDisbursements?: FundingDisbursementListRelationFilter
     approvedDisbursements?: FundingDisbursementListRelationFilter
+    autoApprovalJobs?: AutoApprovalJobListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -36795,6 +38139,7 @@ export namespace Prisma {
     approvedPosts?: PostOrderByRelationAggregateInput
     createdDisbursements?: FundingDisbursementOrderByRelationAggregateInput
     approvedDisbursements?: FundingDisbursementOrderByRelationAggregateInput
+    autoApprovalJobs?: AutoApprovalJobOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -36837,6 +38182,7 @@ export namespace Prisma {
     approvedPosts?: PostListRelationFilter
     createdDisbursements?: FundingDisbursementListRelationFilter
     approvedDisbursements?: FundingDisbursementListRelationFilter
+    autoApprovalJobs?: AutoApprovalJobListRelationFilter
   }, "id" | "code" | "email">
 
   export type UserOrderByWithAggregationInput = {
@@ -38705,6 +40051,93 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"Council"> | Date | string
   }
 
+  export type AutoApprovalJobWhereInput = {
+    AND?: AutoApprovalJobWhereInput | AutoApprovalJobWhereInput[]
+    OR?: AutoApprovalJobWhereInput[]
+    NOT?: AutoApprovalJobWhereInput | AutoApprovalJobWhereInput[]
+    id?: StringFilter<"AutoApprovalJob"> | string
+    deanId?: StringFilter<"AutoApprovalJob"> | string
+    filters?: JsonFilter<"AutoApprovalJob">
+    criteria?: JsonFilter<"AutoApprovalJob">
+    status?: EnumAutoApprovalJobStatusFilter<"AutoApprovalJob"> | $Enums.AutoApprovalJobStatus
+    progress?: IntFilter<"AutoApprovalJob"> | number
+    results?: JsonNullableFilter<"AutoApprovalJob">
+    error?: StringNullableFilter<"AutoApprovalJob"> | string | null
+    createdAt?: DateTimeFilter<"AutoApprovalJob"> | Date | string
+    updatedAt?: DateTimeFilter<"AutoApprovalJob"> | Date | string
+    completedAt?: DateTimeNullableFilter<"AutoApprovalJob"> | Date | string | null
+    dean?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }
+
+  export type AutoApprovalJobOrderByWithRelationInput = {
+    id?: SortOrder
+    deanId?: SortOrder
+    filters?: SortOrder
+    criteria?: SortOrder
+    status?: SortOrder
+    progress?: SortOrder
+    results?: SortOrderInput | SortOrder
+    error?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    completedAt?: SortOrderInput | SortOrder
+    dean?: UserOrderByWithRelationInput
+  }
+
+  export type AutoApprovalJobWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: AutoApprovalJobWhereInput | AutoApprovalJobWhereInput[]
+    OR?: AutoApprovalJobWhereInput[]
+    NOT?: AutoApprovalJobWhereInput | AutoApprovalJobWhereInput[]
+    deanId?: StringFilter<"AutoApprovalJob"> | string
+    filters?: JsonFilter<"AutoApprovalJob">
+    criteria?: JsonFilter<"AutoApprovalJob">
+    status?: EnumAutoApprovalJobStatusFilter<"AutoApprovalJob"> | $Enums.AutoApprovalJobStatus
+    progress?: IntFilter<"AutoApprovalJob"> | number
+    results?: JsonNullableFilter<"AutoApprovalJob">
+    error?: StringNullableFilter<"AutoApprovalJob"> | string | null
+    createdAt?: DateTimeFilter<"AutoApprovalJob"> | Date | string
+    updatedAt?: DateTimeFilter<"AutoApprovalJob"> | Date | string
+    completedAt?: DateTimeNullableFilter<"AutoApprovalJob"> | Date | string | null
+    dean?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }, "id">
+
+  export type AutoApprovalJobOrderByWithAggregationInput = {
+    id?: SortOrder
+    deanId?: SortOrder
+    filters?: SortOrder
+    criteria?: SortOrder
+    status?: SortOrder
+    progress?: SortOrder
+    results?: SortOrderInput | SortOrder
+    error?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    completedAt?: SortOrderInput | SortOrder
+    _count?: AutoApprovalJobCountOrderByAggregateInput
+    _avg?: AutoApprovalJobAvgOrderByAggregateInput
+    _max?: AutoApprovalJobMaxOrderByAggregateInput
+    _min?: AutoApprovalJobMinOrderByAggregateInput
+    _sum?: AutoApprovalJobSumOrderByAggregateInput
+  }
+
+  export type AutoApprovalJobScalarWhereWithAggregatesInput = {
+    AND?: AutoApprovalJobScalarWhereWithAggregatesInput | AutoApprovalJobScalarWhereWithAggregatesInput[]
+    OR?: AutoApprovalJobScalarWhereWithAggregatesInput[]
+    NOT?: AutoApprovalJobScalarWhereWithAggregatesInput | AutoApprovalJobScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"AutoApprovalJob"> | string
+    deanId?: StringWithAggregatesFilter<"AutoApprovalJob"> | string
+    filters?: JsonWithAggregatesFilter<"AutoApprovalJob">
+    criteria?: JsonWithAggregatesFilter<"AutoApprovalJob">
+    status?: EnumAutoApprovalJobStatusWithAggregatesFilter<"AutoApprovalJob"> | $Enums.AutoApprovalJobStatus
+    progress?: IntWithAggregatesFilter<"AutoApprovalJob"> | number
+    results?: JsonNullableWithAggregatesFilter<"AutoApprovalJob">
+    error?: StringNullableWithAggregatesFilter<"AutoApprovalJob"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"AutoApprovalJob"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"AutoApprovalJob"> | Date | string
+    completedAt?: DateTimeNullableWithAggregatesFilter<"AutoApprovalJob"> | Date | string | null
+  }
+
   export type CouncilMemberAssignmentWhereInput = {
     AND?: CouncilMemberAssignmentWhereInput | CouncilMemberAssignmentWhereInput[]
     OR?: CouncilMemberAssignmentWhereInput[]
@@ -39157,6 +40590,7 @@ export namespace Prisma {
     approvedPosts?: PostCreateNestedManyWithoutApprovedByInput
     createdDisbursements?: FundingDisbursementCreateNestedManyWithoutCreatedByInput
     approvedDisbursements?: FundingDisbursementCreateNestedManyWithoutApprovedByInput
+    autoApprovalJobs?: AutoApprovalJobCreateNestedManyWithoutDeanInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -39193,6 +40627,7 @@ export namespace Prisma {
     approvedPosts?: PostUncheckedCreateNestedManyWithoutApprovedByInput
     createdDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutCreatedByInput
     approvedDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutApprovedByInput
+    autoApprovalJobs?: AutoApprovalJobUncheckedCreateNestedManyWithoutDeanInput
   }
 
   export type UserUpdateInput = {
@@ -39229,6 +40664,7 @@ export namespace Prisma {
     approvedPosts?: PostUpdateManyWithoutApprovedByNestedInput
     createdDisbursements?: FundingDisbursementUpdateManyWithoutCreatedByNestedInput
     approvedDisbursements?: FundingDisbursementUpdateManyWithoutApprovedByNestedInput
+    autoApprovalJobs?: AutoApprovalJobUpdateManyWithoutDeanNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -39265,6 +40701,7 @@ export namespace Prisma {
     approvedPosts?: PostUncheckedUpdateManyWithoutApprovedByNestedInput
     createdDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutCreatedByNestedInput
     approvedDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutApprovedByNestedInput
+    autoApprovalJobs?: AutoApprovalJobUncheckedUpdateManyWithoutDeanNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -41339,6 +42776,103 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type AutoApprovalJobCreateInput = {
+    id?: string
+    filters: JsonNullValueInput | InputJsonValue
+    criteria: JsonNullValueInput | InputJsonValue
+    status?: $Enums.AutoApprovalJobStatus
+    progress?: number
+    results?: NullableJsonNullValueInput | InputJsonValue
+    error?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    completedAt?: Date | string | null
+    dean: UserCreateNestedOneWithoutAutoApprovalJobsInput
+  }
+
+  export type AutoApprovalJobUncheckedCreateInput = {
+    id?: string
+    deanId: string
+    filters: JsonNullValueInput | InputJsonValue
+    criteria: JsonNullValueInput | InputJsonValue
+    status?: $Enums.AutoApprovalJobStatus
+    progress?: number
+    results?: NullableJsonNullValueInput | InputJsonValue
+    error?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    completedAt?: Date | string | null
+  }
+
+  export type AutoApprovalJobUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    filters?: JsonNullValueInput | InputJsonValue
+    criteria?: JsonNullValueInput | InputJsonValue
+    status?: EnumAutoApprovalJobStatusFieldUpdateOperationsInput | $Enums.AutoApprovalJobStatus
+    progress?: IntFieldUpdateOperationsInput | number
+    results?: NullableJsonNullValueInput | InputJsonValue
+    error?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dean?: UserUpdateOneRequiredWithoutAutoApprovalJobsNestedInput
+  }
+
+  export type AutoApprovalJobUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    deanId?: StringFieldUpdateOperationsInput | string
+    filters?: JsonNullValueInput | InputJsonValue
+    criteria?: JsonNullValueInput | InputJsonValue
+    status?: EnumAutoApprovalJobStatusFieldUpdateOperationsInput | $Enums.AutoApprovalJobStatus
+    progress?: IntFieldUpdateOperationsInput | number
+    results?: NullableJsonNullValueInput | InputJsonValue
+    error?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type AutoApprovalJobCreateManyInput = {
+    id?: string
+    deanId: string
+    filters: JsonNullValueInput | InputJsonValue
+    criteria: JsonNullValueInput | InputJsonValue
+    status?: $Enums.AutoApprovalJobStatus
+    progress?: number
+    results?: NullableJsonNullValueInput | InputJsonValue
+    error?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    completedAt?: Date | string | null
+  }
+
+  export type AutoApprovalJobUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    filters?: JsonNullValueInput | InputJsonValue
+    criteria?: JsonNullValueInput | InputJsonValue
+    status?: EnumAutoApprovalJobStatusFieldUpdateOperationsInput | $Enums.AutoApprovalJobStatus
+    progress?: IntFieldUpdateOperationsInput | number
+    results?: NullableJsonNullValueInput | InputJsonValue
+    error?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type AutoApprovalJobUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    deanId?: StringFieldUpdateOperationsInput | string
+    filters?: JsonNullValueInput | InputJsonValue
+    criteria?: JsonNullValueInput | InputJsonValue
+    status?: EnumAutoApprovalJobStatusFieldUpdateOperationsInput | $Enums.AutoApprovalJobStatus
+    progress?: IntFieldUpdateOperationsInput | number
+    results?: NullableJsonNullValueInput | InputJsonValue
+    error?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
   export type CouncilMemberAssignmentCreateInput = {
     id?: string
     role?: string | null
@@ -41866,6 +43400,12 @@ export namespace Prisma {
     none?: FundingDisbursementWhereInput
   }
 
+  export type AutoApprovalJobListRelationFilter = {
+    every?: AutoApprovalJobWhereInput
+    some?: AutoApprovalJobWhereInput
+    none?: AutoApprovalJobWhereInput
+  }
+
   export type ProjectOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -41903,6 +43443,10 @@ export namespace Prisma {
   }
 
   export type FundingDisbursementOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type AutoApprovalJobOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -43536,6 +45080,116 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
+  export type JsonFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<JsonFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
+
+  export type EnumAutoApprovalJobStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.AutoApprovalJobStatus | EnumAutoApprovalJobStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.AutoApprovalJobStatus[] | ListEnumAutoApprovalJobStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.AutoApprovalJobStatus[] | ListEnumAutoApprovalJobStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumAutoApprovalJobStatusFilter<$PrismaModel> | $Enums.AutoApprovalJobStatus
+  }
+
+  export type AutoApprovalJobCountOrderByAggregateInput = {
+    id?: SortOrder
+    deanId?: SortOrder
+    filters?: SortOrder
+    criteria?: SortOrder
+    status?: SortOrder
+    progress?: SortOrder
+    results?: SortOrder
+    error?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    completedAt?: SortOrder
+  }
+
+  export type AutoApprovalJobAvgOrderByAggregateInput = {
+    progress?: SortOrder
+  }
+
+  export type AutoApprovalJobMaxOrderByAggregateInput = {
+    id?: SortOrder
+    deanId?: SortOrder
+    status?: SortOrder
+    progress?: SortOrder
+    error?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    completedAt?: SortOrder
+  }
+
+  export type AutoApprovalJobMinOrderByAggregateInput = {
+    id?: SortOrder
+    deanId?: SortOrder
+    status?: SortOrder
+    progress?: SortOrder
+    error?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    completedAt?: SortOrder
+  }
+
+  export type AutoApprovalJobSumOrderByAggregateInput = {
+    progress?: SortOrder
+  }
+  export type JsonWithAggregatesFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<JsonWithAggregatesFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonWithAggregatesFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonWithAggregatesFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonWithAggregatesFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonWithAggregatesFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedJsonFilter<$PrismaModel>
+    _max?: NestedJsonFilter<$PrismaModel>
+  }
+
+  export type EnumAutoApprovalJobStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.AutoApprovalJobStatus | EnumAutoApprovalJobStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.AutoApprovalJobStatus[] | ListEnumAutoApprovalJobStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.AutoApprovalJobStatus[] | ListEnumAutoApprovalJobStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumAutoApprovalJobStatusWithAggregatesFilter<$PrismaModel> | $Enums.AutoApprovalJobStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumAutoApprovalJobStatusFilter<$PrismaModel>
+    _max?: NestedEnumAutoApprovalJobStatusFilter<$PrismaModel>
+  }
 
   export type CouncilScalarRelationFilter = {
     is?: CouncilWhereInput
@@ -44223,6 +45877,13 @@ export namespace Prisma {
     connect?: FundingDisbursementWhereUniqueInput | FundingDisbursementWhereUniqueInput[]
   }
 
+  export type AutoApprovalJobCreateNestedManyWithoutDeanInput = {
+    create?: XOR<AutoApprovalJobCreateWithoutDeanInput, AutoApprovalJobUncheckedCreateWithoutDeanInput> | AutoApprovalJobCreateWithoutDeanInput[] | AutoApprovalJobUncheckedCreateWithoutDeanInput[]
+    connectOrCreate?: AutoApprovalJobCreateOrConnectWithoutDeanInput | AutoApprovalJobCreateOrConnectWithoutDeanInput[]
+    createMany?: AutoApprovalJobCreateManyDeanInputEnvelope
+    connect?: AutoApprovalJobWhereUniqueInput | AutoApprovalJobWhereUniqueInput[]
+  }
+
   export type ProjectUncheckedCreateNestedManyWithoutLeaderInput = {
     create?: XOR<ProjectCreateWithoutLeaderInput, ProjectUncheckedCreateWithoutLeaderInput> | ProjectCreateWithoutLeaderInput[] | ProjectUncheckedCreateWithoutLeaderInput[]
     connectOrCreate?: ProjectCreateOrConnectWithoutLeaderInput | ProjectCreateOrConnectWithoutLeaderInput[]
@@ -44340,6 +46001,13 @@ export namespace Prisma {
     connectOrCreate?: FundingDisbursementCreateOrConnectWithoutApprovedByInput | FundingDisbursementCreateOrConnectWithoutApprovedByInput[]
     createMany?: FundingDisbursementCreateManyApprovedByInputEnvelope
     connect?: FundingDisbursementWhereUniqueInput | FundingDisbursementWhereUniqueInput[]
+  }
+
+  export type AutoApprovalJobUncheckedCreateNestedManyWithoutDeanInput = {
+    create?: XOR<AutoApprovalJobCreateWithoutDeanInput, AutoApprovalJobUncheckedCreateWithoutDeanInput> | AutoApprovalJobCreateWithoutDeanInput[] | AutoApprovalJobUncheckedCreateWithoutDeanInput[]
+    connectOrCreate?: AutoApprovalJobCreateOrConnectWithoutDeanInput | AutoApprovalJobCreateOrConnectWithoutDeanInput[]
+    createMany?: AutoApprovalJobCreateManyDeanInputEnvelope
+    connect?: AutoApprovalJobWhereUniqueInput | AutoApprovalJobWhereUniqueInput[]
   }
 
   export type NullableDateTimeFieldUpdateOperationsInput = {
@@ -44622,6 +46290,20 @@ export namespace Prisma {
     deleteMany?: FundingDisbursementScalarWhereInput | FundingDisbursementScalarWhereInput[]
   }
 
+  export type AutoApprovalJobUpdateManyWithoutDeanNestedInput = {
+    create?: XOR<AutoApprovalJobCreateWithoutDeanInput, AutoApprovalJobUncheckedCreateWithoutDeanInput> | AutoApprovalJobCreateWithoutDeanInput[] | AutoApprovalJobUncheckedCreateWithoutDeanInput[]
+    connectOrCreate?: AutoApprovalJobCreateOrConnectWithoutDeanInput | AutoApprovalJobCreateOrConnectWithoutDeanInput[]
+    upsert?: AutoApprovalJobUpsertWithWhereUniqueWithoutDeanInput | AutoApprovalJobUpsertWithWhereUniqueWithoutDeanInput[]
+    createMany?: AutoApprovalJobCreateManyDeanInputEnvelope
+    set?: AutoApprovalJobWhereUniqueInput | AutoApprovalJobWhereUniqueInput[]
+    disconnect?: AutoApprovalJobWhereUniqueInput | AutoApprovalJobWhereUniqueInput[]
+    delete?: AutoApprovalJobWhereUniqueInput | AutoApprovalJobWhereUniqueInput[]
+    connect?: AutoApprovalJobWhereUniqueInput | AutoApprovalJobWhereUniqueInput[]
+    update?: AutoApprovalJobUpdateWithWhereUniqueWithoutDeanInput | AutoApprovalJobUpdateWithWhereUniqueWithoutDeanInput[]
+    updateMany?: AutoApprovalJobUpdateManyWithWhereWithoutDeanInput | AutoApprovalJobUpdateManyWithWhereWithoutDeanInput[]
+    deleteMany?: AutoApprovalJobScalarWhereInput | AutoApprovalJobScalarWhereInput[]
+  }
+
   export type ProjectUncheckedUpdateManyWithoutLeaderNestedInput = {
     create?: XOR<ProjectCreateWithoutLeaderInput, ProjectUncheckedCreateWithoutLeaderInput> | ProjectCreateWithoutLeaderInput[] | ProjectUncheckedCreateWithoutLeaderInput[]
     connectOrCreate?: ProjectCreateOrConnectWithoutLeaderInput | ProjectCreateOrConnectWithoutLeaderInput[]
@@ -44858,6 +46540,20 @@ export namespace Prisma {
     update?: FundingDisbursementUpdateWithWhereUniqueWithoutApprovedByInput | FundingDisbursementUpdateWithWhereUniqueWithoutApprovedByInput[]
     updateMany?: FundingDisbursementUpdateManyWithWhereWithoutApprovedByInput | FundingDisbursementUpdateManyWithWhereWithoutApprovedByInput[]
     deleteMany?: FundingDisbursementScalarWhereInput | FundingDisbursementScalarWhereInput[]
+  }
+
+  export type AutoApprovalJobUncheckedUpdateManyWithoutDeanNestedInput = {
+    create?: XOR<AutoApprovalJobCreateWithoutDeanInput, AutoApprovalJobUncheckedCreateWithoutDeanInput> | AutoApprovalJobCreateWithoutDeanInput[] | AutoApprovalJobUncheckedCreateWithoutDeanInput[]
+    connectOrCreate?: AutoApprovalJobCreateOrConnectWithoutDeanInput | AutoApprovalJobCreateOrConnectWithoutDeanInput[]
+    upsert?: AutoApprovalJobUpsertWithWhereUniqueWithoutDeanInput | AutoApprovalJobUpsertWithWhereUniqueWithoutDeanInput[]
+    createMany?: AutoApprovalJobCreateManyDeanInputEnvelope
+    set?: AutoApprovalJobWhereUniqueInput | AutoApprovalJobWhereUniqueInput[]
+    disconnect?: AutoApprovalJobWhereUniqueInput | AutoApprovalJobWhereUniqueInput[]
+    delete?: AutoApprovalJobWhereUniqueInput | AutoApprovalJobWhereUniqueInput[]
+    connect?: AutoApprovalJobWhereUniqueInput | AutoApprovalJobWhereUniqueInput[]
+    update?: AutoApprovalJobUpdateWithWhereUniqueWithoutDeanInput | AutoApprovalJobUpdateWithWhereUniqueWithoutDeanInput[]
+    updateMany?: AutoApprovalJobUpdateManyWithWhereWithoutDeanInput | AutoApprovalJobUpdateManyWithWhereWithoutDeanInput[]
+    deleteMany?: AutoApprovalJobScalarWhereInput | AutoApprovalJobScalarWhereInput[]
   }
 
   export type ProjectCreateNestedManyWithoutCallRoundInput = {
@@ -46415,6 +48111,24 @@ export namespace Prisma {
     deleteMany?: ProjectCouncilAssignmentScalarWhereInput | ProjectCouncilAssignmentScalarWhereInput[]
   }
 
+  export type UserCreateNestedOneWithoutAutoApprovalJobsInput = {
+    create?: XOR<UserCreateWithoutAutoApprovalJobsInput, UserUncheckedCreateWithoutAutoApprovalJobsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutAutoApprovalJobsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type EnumAutoApprovalJobStatusFieldUpdateOperationsInput = {
+    set?: $Enums.AutoApprovalJobStatus
+  }
+
+  export type UserUpdateOneRequiredWithoutAutoApprovalJobsNestedInput = {
+    create?: XOR<UserCreateWithoutAutoApprovalJobsInput, UserUncheckedCreateWithoutAutoApprovalJobsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutAutoApprovalJobsInput
+    upsert?: UserUpsertWithoutAutoApprovalJobsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutAutoApprovalJobsInput, UserUpdateWithoutAutoApprovalJobsInput>, UserUncheckedUpdateWithoutAutoApprovalJobsInput>
+  }
+
   export type CouncilCreateNestedOneWithoutMembersInput = {
     create?: XOR<CouncilCreateWithoutMembersInput, CouncilUncheckedCreateWithoutMembersInput>
     connectOrCreate?: CouncilCreateOrConnectWithoutMembersInput
@@ -47084,6 +48798,46 @@ export namespace Prisma {
     _max?: NestedEnumInvitationStatusFilter<$PrismaModel>
   }
 
+  export type NestedEnumAutoApprovalJobStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.AutoApprovalJobStatus | EnumAutoApprovalJobStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.AutoApprovalJobStatus[] | ListEnumAutoApprovalJobStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.AutoApprovalJobStatus[] | ListEnumAutoApprovalJobStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumAutoApprovalJobStatusFilter<$PrismaModel> | $Enums.AutoApprovalJobStatus
+  }
+  export type NestedJsonFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<NestedJsonFilterBase<$PrismaModel>>, Exclude<keyof Required<NestedJsonFilterBase<$PrismaModel>>, 'path'>>,
+        Required<NestedJsonFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<NestedJsonFilterBase<$PrismaModel>>, 'path'>>
+
+  export type NestedJsonFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
+
+  export type NestedEnumAutoApprovalJobStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.AutoApprovalJobStatus | EnumAutoApprovalJobStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.AutoApprovalJobStatus[] | ListEnumAutoApprovalJobStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.AutoApprovalJobStatus[] | ListEnumAutoApprovalJobStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumAutoApprovalJobStatusWithAggregatesFilter<$PrismaModel> | $Enums.AutoApprovalJobStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumAutoApprovalJobStatusFilter<$PrismaModel>
+    _max?: NestedEnumAutoApprovalJobStatusFilter<$PrismaModel>
+  }
+
   export type MajorCreateWithoutDepartmentInput = {
     id?: string
     code: string
@@ -47151,6 +48905,7 @@ export namespace Prisma {
     approvedPosts?: PostCreateNestedManyWithoutApprovedByInput
     createdDisbursements?: FundingDisbursementCreateNestedManyWithoutCreatedByInput
     approvedDisbursements?: FundingDisbursementCreateNestedManyWithoutApprovedByInput
+    autoApprovalJobs?: AutoApprovalJobCreateNestedManyWithoutDeanInput
   }
 
   export type UserUncheckedCreateWithoutDepartmentRefInput = {
@@ -47186,6 +48941,7 @@ export namespace Prisma {
     approvedPosts?: PostUncheckedCreateNestedManyWithoutApprovedByInput
     createdDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutCreatedByInput
     approvedDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutApprovedByInput
+    autoApprovalJobs?: AutoApprovalJobUncheckedCreateNestedManyWithoutDeanInput
   }
 
   export type UserCreateOrConnectWithoutDepartmentRefInput = {
@@ -47644,6 +49400,7 @@ export namespace Prisma {
     approvedPosts?: PostCreateNestedManyWithoutApprovedByInput
     createdDisbursements?: FundingDisbursementCreateNestedManyWithoutCreatedByInput
     approvedDisbursements?: FundingDisbursementCreateNestedManyWithoutApprovedByInput
+    autoApprovalJobs?: AutoApprovalJobCreateNestedManyWithoutDeanInput
   }
 
   export type UserUncheckedCreateWithoutMajorInput = {
@@ -47679,6 +49436,7 @@ export namespace Prisma {
     approvedPosts?: PostUncheckedCreateNestedManyWithoutApprovedByInput
     createdDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutCreatedByInput
     approvedDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutApprovedByInput
+    autoApprovalJobs?: AutoApprovalJobUncheckedCreateNestedManyWithoutDeanInput
   }
 
   export type UserCreateOrConnectWithoutMajorInput = {
@@ -47939,6 +49697,7 @@ export namespace Prisma {
     approvedPosts?: PostCreateNestedManyWithoutApprovedByInput
     createdDisbursements?: FundingDisbursementCreateNestedManyWithoutCreatedByInput
     approvedDisbursements?: FundingDisbursementCreateNestedManyWithoutApprovedByInput
+    autoApprovalJobs?: AutoApprovalJobCreateNestedManyWithoutDeanInput
   }
 
   export type UserUncheckedCreateWithoutClassInput = {
@@ -47974,6 +49733,7 @@ export namespace Prisma {
     approvedPosts?: PostUncheckedCreateNestedManyWithoutApprovedByInput
     createdDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutCreatedByInput
     approvedDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutApprovedByInput
+    autoApprovalJobs?: AutoApprovalJobUncheckedCreateNestedManyWithoutDeanInput
   }
 
   export type UserCreateOrConnectWithoutClassInput = {
@@ -48931,6 +50691,42 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type AutoApprovalJobCreateWithoutDeanInput = {
+    id?: string
+    filters: JsonNullValueInput | InputJsonValue
+    criteria: JsonNullValueInput | InputJsonValue
+    status?: $Enums.AutoApprovalJobStatus
+    progress?: number
+    results?: NullableJsonNullValueInput | InputJsonValue
+    error?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    completedAt?: Date | string | null
+  }
+
+  export type AutoApprovalJobUncheckedCreateWithoutDeanInput = {
+    id?: string
+    filters: JsonNullValueInput | InputJsonValue
+    criteria: JsonNullValueInput | InputJsonValue
+    status?: $Enums.AutoApprovalJobStatus
+    progress?: number
+    results?: NullableJsonNullValueInput | InputJsonValue
+    error?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    completedAt?: Date | string | null
+  }
+
+  export type AutoApprovalJobCreateOrConnectWithoutDeanInput = {
+    where: AutoApprovalJobWhereUniqueInput
+    create: XOR<AutoApprovalJobCreateWithoutDeanInput, AutoApprovalJobUncheckedCreateWithoutDeanInput>
+  }
+
+  export type AutoApprovalJobCreateManyDeanInputEnvelope = {
+    data: AutoApprovalJobCreateManyDeanInput | AutoApprovalJobCreateManyDeanInput[]
+    skipDuplicates?: boolean
+  }
+
   export type DepartmentUpsertWithoutUsersInput = {
     update: XOR<DepartmentUpdateWithoutUsersInput, DepartmentUncheckedUpdateWithoutUsersInput>
     create: XOR<DepartmentCreateWithoutUsersInput, DepartmentUncheckedCreateWithoutUsersInput>
@@ -49465,6 +51261,39 @@ export namespace Prisma {
   export type FundingDisbursementUpdateManyWithWhereWithoutApprovedByInput = {
     where: FundingDisbursementScalarWhereInput
     data: XOR<FundingDisbursementUpdateManyMutationInput, FundingDisbursementUncheckedUpdateManyWithoutApprovedByInput>
+  }
+
+  export type AutoApprovalJobUpsertWithWhereUniqueWithoutDeanInput = {
+    where: AutoApprovalJobWhereUniqueInput
+    update: XOR<AutoApprovalJobUpdateWithoutDeanInput, AutoApprovalJobUncheckedUpdateWithoutDeanInput>
+    create: XOR<AutoApprovalJobCreateWithoutDeanInput, AutoApprovalJobUncheckedCreateWithoutDeanInput>
+  }
+
+  export type AutoApprovalJobUpdateWithWhereUniqueWithoutDeanInput = {
+    where: AutoApprovalJobWhereUniqueInput
+    data: XOR<AutoApprovalJobUpdateWithoutDeanInput, AutoApprovalJobUncheckedUpdateWithoutDeanInput>
+  }
+
+  export type AutoApprovalJobUpdateManyWithWhereWithoutDeanInput = {
+    where: AutoApprovalJobScalarWhereInput
+    data: XOR<AutoApprovalJobUpdateManyMutationInput, AutoApprovalJobUncheckedUpdateManyWithoutDeanInput>
+  }
+
+  export type AutoApprovalJobScalarWhereInput = {
+    AND?: AutoApprovalJobScalarWhereInput | AutoApprovalJobScalarWhereInput[]
+    OR?: AutoApprovalJobScalarWhereInput[]
+    NOT?: AutoApprovalJobScalarWhereInput | AutoApprovalJobScalarWhereInput[]
+    id?: StringFilter<"AutoApprovalJob"> | string
+    deanId?: StringFilter<"AutoApprovalJob"> | string
+    filters?: JsonFilter<"AutoApprovalJob">
+    criteria?: JsonFilter<"AutoApprovalJob">
+    status?: EnumAutoApprovalJobStatusFilter<"AutoApprovalJob"> | $Enums.AutoApprovalJobStatus
+    progress?: IntFilter<"AutoApprovalJob"> | number
+    results?: JsonNullableFilter<"AutoApprovalJob">
+    error?: StringNullableFilter<"AutoApprovalJob"> | string | null
+    createdAt?: DateTimeFilter<"AutoApprovalJob"> | Date | string
+    updatedAt?: DateTimeFilter<"AutoApprovalJob"> | Date | string
+    completedAt?: DateTimeNullableFilter<"AutoApprovalJob"> | Date | string | null
   }
 
   export type ProjectCreateWithoutCallRoundInput = {
@@ -50141,6 +51970,7 @@ export namespace Prisma {
     approvedPosts?: PostCreateNestedManyWithoutApprovedByInput
     createdDisbursements?: FundingDisbursementCreateNestedManyWithoutCreatedByInput
     approvedDisbursements?: FundingDisbursementCreateNestedManyWithoutApprovedByInput
+    autoApprovalJobs?: AutoApprovalJobCreateNestedManyWithoutDeanInput
   }
 
   export type UserUncheckedCreateWithoutLeadProjectsInput = {
@@ -50176,6 +52006,7 @@ export namespace Prisma {
     approvedPosts?: PostUncheckedCreateNestedManyWithoutApprovedByInput
     createdDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutCreatedByInput
     approvedDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutApprovedByInput
+    autoApprovalJobs?: AutoApprovalJobUncheckedCreateNestedManyWithoutDeanInput
   }
 
   export type UserCreateOrConnectWithoutLeadProjectsInput = {
@@ -50216,6 +52047,7 @@ export namespace Prisma {
     approvedPosts?: PostCreateNestedManyWithoutApprovedByInput
     createdDisbursements?: FundingDisbursementCreateNestedManyWithoutCreatedByInput
     approvedDisbursements?: FundingDisbursementCreateNestedManyWithoutApprovedByInput
+    autoApprovalJobs?: AutoApprovalJobCreateNestedManyWithoutDeanInput
   }
 
   export type UserUncheckedCreateWithoutDeanReviewsInput = {
@@ -50251,6 +52083,7 @@ export namespace Prisma {
     approvedPosts?: PostUncheckedCreateNestedManyWithoutApprovedByInput
     createdDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutCreatedByInput
     approvedDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutApprovedByInput
+    autoApprovalJobs?: AutoApprovalJobUncheckedCreateNestedManyWithoutDeanInput
   }
 
   export type UserCreateOrConnectWithoutDeanReviewsInput = {
@@ -50594,6 +52427,7 @@ export namespace Prisma {
     approvedPosts?: PostCreateNestedManyWithoutApprovedByInput
     createdDisbursements?: FundingDisbursementCreateNestedManyWithoutCreatedByInput
     approvedDisbursements?: FundingDisbursementCreateNestedManyWithoutApprovedByInput
+    autoApprovalJobs?: AutoApprovalJobCreateNestedManyWithoutDeanInput
   }
 
   export type UserUncheckedCreateWithoutInstructedProjectsInput = {
@@ -50629,6 +52463,7 @@ export namespace Prisma {
     approvedPosts?: PostUncheckedCreateNestedManyWithoutApprovedByInput
     createdDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutCreatedByInput
     approvedDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutApprovedByInput
+    autoApprovalJobs?: AutoApprovalJobUncheckedCreateNestedManyWithoutDeanInput
   }
 
   export type UserCreateOrConnectWithoutInstructedProjectsInput = {
@@ -50718,6 +52553,7 @@ export namespace Prisma {
     approvedPosts?: PostUpdateManyWithoutApprovedByNestedInput
     createdDisbursements?: FundingDisbursementUpdateManyWithoutCreatedByNestedInput
     approvedDisbursements?: FundingDisbursementUpdateManyWithoutApprovedByNestedInput
+    autoApprovalJobs?: AutoApprovalJobUpdateManyWithoutDeanNestedInput
   }
 
   export type UserUncheckedUpdateWithoutLeadProjectsInput = {
@@ -50753,6 +52589,7 @@ export namespace Prisma {
     approvedPosts?: PostUncheckedUpdateManyWithoutApprovedByNestedInput
     createdDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutCreatedByNestedInput
     approvedDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutApprovedByNestedInput
+    autoApprovalJobs?: AutoApprovalJobUncheckedUpdateManyWithoutDeanNestedInput
   }
 
   export type UserUpsertWithoutDeanReviewsInput = {
@@ -50799,6 +52636,7 @@ export namespace Prisma {
     approvedPosts?: PostUpdateManyWithoutApprovedByNestedInput
     createdDisbursements?: FundingDisbursementUpdateManyWithoutCreatedByNestedInput
     approvedDisbursements?: FundingDisbursementUpdateManyWithoutApprovedByNestedInput
+    autoApprovalJobs?: AutoApprovalJobUpdateManyWithoutDeanNestedInput
   }
 
   export type UserUncheckedUpdateWithoutDeanReviewsInput = {
@@ -50834,6 +52672,7 @@ export namespace Prisma {
     approvedPosts?: PostUncheckedUpdateManyWithoutApprovedByNestedInput
     createdDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutCreatedByNestedInput
     approvedDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutApprovedByNestedInput
+    autoApprovalJobs?: AutoApprovalJobUncheckedUpdateManyWithoutDeanNestedInput
   }
 
   export type CallRoundUpsertWithoutProjectsInput = {
@@ -51151,6 +52990,7 @@ export namespace Prisma {
     approvedPosts?: PostUpdateManyWithoutApprovedByNestedInput
     createdDisbursements?: FundingDisbursementUpdateManyWithoutCreatedByNestedInput
     approvedDisbursements?: FundingDisbursementUpdateManyWithoutApprovedByNestedInput
+    autoApprovalJobs?: AutoApprovalJobUpdateManyWithoutDeanNestedInput
   }
 
   export type UserUncheckedUpdateWithoutInstructedProjectsInput = {
@@ -51186,6 +53026,7 @@ export namespace Prisma {
     approvedPosts?: PostUncheckedUpdateManyWithoutApprovedByNestedInput
     createdDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutCreatedByNestedInput
     approvedDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutApprovedByNestedInput
+    autoApprovalJobs?: AutoApprovalJobUncheckedUpdateManyWithoutDeanNestedInput
   }
 
   export type OfficeMeetingUpsertWithWhereUniqueWithoutProjectInput = {
@@ -51774,6 +53615,7 @@ export namespace Prisma {
     approvedPosts?: PostCreateNestedManyWithoutApprovedByInput
     createdDisbursements?: FundingDisbursementCreateNestedManyWithoutCreatedByInput
     approvedDisbursements?: FundingDisbursementCreateNestedManyWithoutApprovedByInput
+    autoApprovalJobs?: AutoApprovalJobCreateNestedManyWithoutDeanInput
   }
 
   export type UserUncheckedCreateWithoutCouncilEvaluationsInput = {
@@ -51809,6 +53651,7 @@ export namespace Prisma {
     approvedPosts?: PostUncheckedCreateNestedManyWithoutApprovedByInput
     createdDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutCreatedByInput
     approvedDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutApprovedByInput
+    autoApprovalJobs?: AutoApprovalJobUncheckedCreateNestedManyWithoutDeanInput
   }
 
   export type UserCreateOrConnectWithoutCouncilEvaluationsInput = {
@@ -51923,6 +53766,7 @@ export namespace Prisma {
     approvedPosts?: PostUpdateManyWithoutApprovedByNestedInput
     createdDisbursements?: FundingDisbursementUpdateManyWithoutCreatedByNestedInput
     approvedDisbursements?: FundingDisbursementUpdateManyWithoutApprovedByNestedInput
+    autoApprovalJobs?: AutoApprovalJobUpdateManyWithoutDeanNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCouncilEvaluationsInput = {
@@ -51958,6 +53802,7 @@ export namespace Prisma {
     approvedPosts?: PostUncheckedUpdateManyWithoutApprovedByNestedInput
     createdDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutCreatedByNestedInput
     approvedDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutApprovedByNestedInput
+    autoApprovalJobs?: AutoApprovalJobUncheckedUpdateManyWithoutDeanNestedInput
   }
 
   export type ProjectCreateWithoutDisbursementsInput = {
@@ -52050,6 +53895,7 @@ export namespace Prisma {
     posts?: PostCreateNestedManyWithoutAuthorInput
     approvedPosts?: PostCreateNestedManyWithoutApprovedByInput
     approvedDisbursements?: FundingDisbursementCreateNestedManyWithoutApprovedByInput
+    autoApprovalJobs?: AutoApprovalJobCreateNestedManyWithoutDeanInput
   }
 
   export type UserUncheckedCreateWithoutCreatedDisbursementsInput = {
@@ -52085,6 +53931,7 @@ export namespace Prisma {
     posts?: PostUncheckedCreateNestedManyWithoutAuthorInput
     approvedPosts?: PostUncheckedCreateNestedManyWithoutApprovedByInput
     approvedDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutApprovedByInput
+    autoApprovalJobs?: AutoApprovalJobUncheckedCreateNestedManyWithoutDeanInput
   }
 
   export type UserCreateOrConnectWithoutCreatedDisbursementsInput = {
@@ -52125,6 +53972,7 @@ export namespace Prisma {
     posts?: PostCreateNestedManyWithoutAuthorInput
     approvedPosts?: PostCreateNestedManyWithoutApprovedByInput
     createdDisbursements?: FundingDisbursementCreateNestedManyWithoutCreatedByInput
+    autoApprovalJobs?: AutoApprovalJobCreateNestedManyWithoutDeanInput
   }
 
   export type UserUncheckedCreateWithoutApprovedDisbursementsInput = {
@@ -52160,6 +54008,7 @@ export namespace Prisma {
     posts?: PostUncheckedCreateNestedManyWithoutAuthorInput
     approvedPosts?: PostUncheckedCreateNestedManyWithoutApprovedByInput
     createdDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutCreatedByInput
+    autoApprovalJobs?: AutoApprovalJobUncheckedCreateNestedManyWithoutDeanInput
   }
 
   export type UserCreateOrConnectWithoutApprovedDisbursementsInput = {
@@ -52274,6 +54123,7 @@ export namespace Prisma {
     posts?: PostUpdateManyWithoutAuthorNestedInput
     approvedPosts?: PostUpdateManyWithoutApprovedByNestedInput
     approvedDisbursements?: FundingDisbursementUpdateManyWithoutApprovedByNestedInput
+    autoApprovalJobs?: AutoApprovalJobUpdateManyWithoutDeanNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedDisbursementsInput = {
@@ -52309,6 +54159,7 @@ export namespace Prisma {
     posts?: PostUncheckedUpdateManyWithoutAuthorNestedInput
     approvedPosts?: PostUncheckedUpdateManyWithoutApprovedByNestedInput
     approvedDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutApprovedByNestedInput
+    autoApprovalJobs?: AutoApprovalJobUncheckedUpdateManyWithoutDeanNestedInput
   }
 
   export type UserUpsertWithoutApprovedDisbursementsInput = {
@@ -52355,6 +54206,7 @@ export namespace Prisma {
     posts?: PostUpdateManyWithoutAuthorNestedInput
     approvedPosts?: PostUpdateManyWithoutApprovedByNestedInput
     createdDisbursements?: FundingDisbursementUpdateManyWithoutCreatedByNestedInput
+    autoApprovalJobs?: AutoApprovalJobUpdateManyWithoutDeanNestedInput
   }
 
   export type UserUncheckedUpdateWithoutApprovedDisbursementsInput = {
@@ -52390,6 +54242,7 @@ export namespace Prisma {
     posts?: PostUncheckedUpdateManyWithoutAuthorNestedInput
     approvedPosts?: PostUncheckedUpdateManyWithoutApprovedByNestedInput
     createdDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutCreatedByNestedInput
+    autoApprovalJobs?: AutoApprovalJobUncheckedUpdateManyWithoutDeanNestedInput
   }
 
   export type ProjectCreateWithoutExtensionRequestsInput = {
@@ -52545,6 +54398,7 @@ export namespace Prisma {
     approvedPosts?: PostCreateNestedManyWithoutApprovedByInput
     createdDisbursements?: FundingDisbursementCreateNestedManyWithoutCreatedByInput
     approvedDisbursements?: FundingDisbursementCreateNestedManyWithoutApprovedByInput
+    autoApprovalJobs?: AutoApprovalJobCreateNestedManyWithoutDeanInput
   }
 
   export type UserUncheckedCreateWithoutRegistrationsInput = {
@@ -52580,6 +54434,7 @@ export namespace Prisma {
     approvedPosts?: PostUncheckedCreateNestedManyWithoutApprovedByInput
     createdDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutCreatedByInput
     approvedDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutApprovedByInput
+    autoApprovalJobs?: AutoApprovalJobUncheckedCreateNestedManyWithoutDeanInput
   }
 
   export type UserCreateOrConnectWithoutRegistrationsInput = {
@@ -52620,6 +54475,7 @@ export namespace Prisma {
     approvedPosts?: PostCreateNestedManyWithoutApprovedByInput
     createdDisbursements?: FundingDisbursementCreateNestedManyWithoutCreatedByInput
     approvedDisbursements?: FundingDisbursementCreateNestedManyWithoutApprovedByInput
+    autoApprovalJobs?: AutoApprovalJobCreateNestedManyWithoutDeanInput
   }
 
   export type UserUncheckedCreateWithoutInstructedRegistrationsInput = {
@@ -52655,6 +54511,7 @@ export namespace Prisma {
     approvedPosts?: PostUncheckedCreateNestedManyWithoutApprovedByInput
     createdDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutCreatedByInput
     approvedDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutApprovedByInput
+    autoApprovalJobs?: AutoApprovalJobUncheckedCreateNestedManyWithoutDeanInput
   }
 
   export type UserCreateOrConnectWithoutInstructedRegistrationsInput = {
@@ -52784,6 +54641,7 @@ export namespace Prisma {
     approvedPosts?: PostCreateNestedManyWithoutApprovedByInput
     createdDisbursements?: FundingDisbursementCreateNestedManyWithoutCreatedByInput
     approvedDisbursements?: FundingDisbursementCreateNestedManyWithoutApprovedByInput
+    autoApprovalJobs?: AutoApprovalJobCreateNestedManyWithoutDeanInput
   }
 
   export type UserUncheckedCreateWithoutFacultyReviewsInput = {
@@ -52819,6 +54677,7 @@ export namespace Prisma {
     approvedPosts?: PostUncheckedCreateNestedManyWithoutApprovedByInput
     createdDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutCreatedByInput
     approvedDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutApprovedByInput
+    autoApprovalJobs?: AutoApprovalJobUncheckedCreateNestedManyWithoutDeanInput
   }
 
   export type UserCreateOrConnectWithoutFacultyReviewsInput = {
@@ -52887,6 +54746,7 @@ export namespace Prisma {
     approvedPosts?: PostUpdateManyWithoutApprovedByNestedInput
     createdDisbursements?: FundingDisbursementUpdateManyWithoutCreatedByNestedInput
     approvedDisbursements?: FundingDisbursementUpdateManyWithoutApprovedByNestedInput
+    autoApprovalJobs?: AutoApprovalJobUpdateManyWithoutDeanNestedInput
   }
 
   export type UserUncheckedUpdateWithoutRegistrationsInput = {
@@ -52922,6 +54782,7 @@ export namespace Prisma {
     approvedPosts?: PostUncheckedUpdateManyWithoutApprovedByNestedInput
     createdDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutCreatedByNestedInput
     approvedDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutApprovedByNestedInput
+    autoApprovalJobs?: AutoApprovalJobUncheckedUpdateManyWithoutDeanNestedInput
   }
 
   export type UserUpsertWithoutInstructedRegistrationsInput = {
@@ -52968,6 +54829,7 @@ export namespace Prisma {
     approvedPosts?: PostUpdateManyWithoutApprovedByNestedInput
     createdDisbursements?: FundingDisbursementUpdateManyWithoutCreatedByNestedInput
     approvedDisbursements?: FundingDisbursementUpdateManyWithoutApprovedByNestedInput
+    autoApprovalJobs?: AutoApprovalJobUpdateManyWithoutDeanNestedInput
   }
 
   export type UserUncheckedUpdateWithoutInstructedRegistrationsInput = {
@@ -53003,6 +54865,7 @@ export namespace Prisma {
     approvedPosts?: PostUncheckedUpdateManyWithoutApprovedByNestedInput
     createdDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutCreatedByNestedInput
     approvedDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutApprovedByNestedInput
+    autoApprovalJobs?: AutoApprovalJobUncheckedUpdateManyWithoutDeanNestedInput
   }
 
   export type CallRoundUpsertWithoutRegistrationsInput = {
@@ -53144,6 +55007,7 @@ export namespace Prisma {
     approvedPosts?: PostUpdateManyWithoutApprovedByNestedInput
     createdDisbursements?: FundingDisbursementUpdateManyWithoutCreatedByNestedInput
     approvedDisbursements?: FundingDisbursementUpdateManyWithoutApprovedByNestedInput
+    autoApprovalJobs?: AutoApprovalJobUpdateManyWithoutDeanNestedInput
   }
 
   export type UserUncheckedUpdateWithoutFacultyReviewsInput = {
@@ -53179,6 +55043,7 @@ export namespace Prisma {
     approvedPosts?: PostUncheckedUpdateManyWithoutApprovedByNestedInput
     createdDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutCreatedByNestedInput
     approvedDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutApprovedByNestedInput
+    autoApprovalJobs?: AutoApprovalJobUncheckedUpdateManyWithoutDeanNestedInput
   }
 
   export type ProjectCouncilAssignmentUpsertWithoutProjectRegistrationInput = {
@@ -53237,6 +55102,7 @@ export namespace Prisma {
     approvedPosts?: PostCreateNestedManyWithoutApprovedByInput
     createdDisbursements?: FundingDisbursementCreateNestedManyWithoutCreatedByInput
     approvedDisbursements?: FundingDisbursementCreateNestedManyWithoutApprovedByInput
+    autoApprovalJobs?: AutoApprovalJobCreateNestedManyWithoutDeanInput
   }
 
   export type UserUncheckedCreateWithoutNotificationsInput = {
@@ -53272,6 +55138,7 @@ export namespace Prisma {
     approvedPosts?: PostUncheckedCreateNestedManyWithoutApprovedByInput
     createdDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutCreatedByInput
     approvedDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutApprovedByInput
+    autoApprovalJobs?: AutoApprovalJobUncheckedCreateNestedManyWithoutDeanInput
   }
 
   export type UserCreateOrConnectWithoutNotificationsInput = {
@@ -53323,6 +55190,7 @@ export namespace Prisma {
     approvedPosts?: PostUpdateManyWithoutApprovedByNestedInput
     createdDisbursements?: FundingDisbursementUpdateManyWithoutCreatedByNestedInput
     approvedDisbursements?: FundingDisbursementUpdateManyWithoutApprovedByNestedInput
+    autoApprovalJobs?: AutoApprovalJobUpdateManyWithoutDeanNestedInput
   }
 
   export type UserUncheckedUpdateWithoutNotificationsInput = {
@@ -53358,6 +55226,7 @@ export namespace Prisma {
     approvedPosts?: PostUncheckedUpdateManyWithoutApprovedByNestedInput
     createdDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutCreatedByNestedInput
     approvedDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutApprovedByNestedInput
+    autoApprovalJobs?: AutoApprovalJobUncheckedUpdateManyWithoutDeanNestedInput
   }
 
   export type UserCreateWithoutPostsInput = {
@@ -53393,6 +55262,7 @@ export namespace Prisma {
     approvedPosts?: PostCreateNestedManyWithoutApprovedByInput
     createdDisbursements?: FundingDisbursementCreateNestedManyWithoutCreatedByInput
     approvedDisbursements?: FundingDisbursementCreateNestedManyWithoutApprovedByInput
+    autoApprovalJobs?: AutoApprovalJobCreateNestedManyWithoutDeanInput
   }
 
   export type UserUncheckedCreateWithoutPostsInput = {
@@ -53428,6 +55298,7 @@ export namespace Prisma {
     approvedPosts?: PostUncheckedCreateNestedManyWithoutApprovedByInput
     createdDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutCreatedByInput
     approvedDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutApprovedByInput
+    autoApprovalJobs?: AutoApprovalJobUncheckedCreateNestedManyWithoutDeanInput
   }
 
   export type UserCreateOrConnectWithoutPostsInput = {
@@ -53499,6 +55370,7 @@ export namespace Prisma {
     posts?: PostCreateNestedManyWithoutAuthorInput
     createdDisbursements?: FundingDisbursementCreateNestedManyWithoutCreatedByInput
     approvedDisbursements?: FundingDisbursementCreateNestedManyWithoutApprovedByInput
+    autoApprovalJobs?: AutoApprovalJobCreateNestedManyWithoutDeanInput
   }
 
   export type UserUncheckedCreateWithoutApprovedPostsInput = {
@@ -53534,6 +55406,7 @@ export namespace Prisma {
     posts?: PostUncheckedCreateNestedManyWithoutAuthorInput
     createdDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutCreatedByInput
     approvedDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutApprovedByInput
+    autoApprovalJobs?: AutoApprovalJobUncheckedCreateNestedManyWithoutDeanInput
   }
 
   export type UserCreateOrConnectWithoutApprovedPostsInput = {
@@ -53585,6 +55458,7 @@ export namespace Prisma {
     approvedPosts?: PostUpdateManyWithoutApprovedByNestedInput
     createdDisbursements?: FundingDisbursementUpdateManyWithoutCreatedByNestedInput
     approvedDisbursements?: FundingDisbursementUpdateManyWithoutApprovedByNestedInput
+    autoApprovalJobs?: AutoApprovalJobUpdateManyWithoutDeanNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPostsInput = {
@@ -53620,6 +55494,7 @@ export namespace Prisma {
     approvedPosts?: PostUncheckedUpdateManyWithoutApprovedByNestedInput
     createdDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutCreatedByNestedInput
     approvedDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutApprovedByNestedInput
+    autoApprovalJobs?: AutoApprovalJobUncheckedUpdateManyWithoutDeanNestedInput
   }
 
   export type DepartmentUpsertWithoutPostsInput = {
@@ -53703,6 +55578,7 @@ export namespace Prisma {
     posts?: PostUpdateManyWithoutAuthorNestedInput
     createdDisbursements?: FundingDisbursementUpdateManyWithoutCreatedByNestedInput
     approvedDisbursements?: FundingDisbursementUpdateManyWithoutApprovedByNestedInput
+    autoApprovalJobs?: AutoApprovalJobUpdateManyWithoutDeanNestedInput
   }
 
   export type UserUncheckedUpdateWithoutApprovedPostsInput = {
@@ -53738,6 +55614,7 @@ export namespace Prisma {
     posts?: PostUncheckedUpdateManyWithoutAuthorNestedInput
     createdDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutCreatedByNestedInput
     approvedDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutApprovedByNestedInput
+    autoApprovalJobs?: AutoApprovalJobUncheckedUpdateManyWithoutDeanNestedInput
   }
 
   export type DepartmentCreateWithoutRoomsInput = {
@@ -53952,6 +55829,7 @@ export namespace Prisma {
     approvedPosts?: PostCreateNestedManyWithoutApprovedByInput
     createdDisbursements?: FundingDisbursementCreateNestedManyWithoutCreatedByInput
     approvedDisbursements?: FundingDisbursementCreateNestedManyWithoutApprovedByInput
+    autoApprovalJobs?: AutoApprovalJobCreateNestedManyWithoutDeanInput
   }
 
   export type UserUncheckedCreateWithoutOfficeMeetingsAsInstructorInput = {
@@ -53987,6 +55865,7 @@ export namespace Prisma {
     approvedPosts?: PostUncheckedCreateNestedManyWithoutApprovedByInput
     createdDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutCreatedByInput
     approvedDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutApprovedByInput
+    autoApprovalJobs?: AutoApprovalJobUncheckedCreateNestedManyWithoutDeanInput
   }
 
   export type UserCreateOrConnectWithoutOfficeMeetingsAsInstructorInput = {
@@ -54154,6 +56033,7 @@ export namespace Prisma {
     approvedPosts?: PostUpdateManyWithoutApprovedByNestedInput
     createdDisbursements?: FundingDisbursementUpdateManyWithoutCreatedByNestedInput
     approvedDisbursements?: FundingDisbursementUpdateManyWithoutApprovedByNestedInput
+    autoApprovalJobs?: AutoApprovalJobUpdateManyWithoutDeanNestedInput
   }
 
   export type UserUncheckedUpdateWithoutOfficeMeetingsAsInstructorInput = {
@@ -54189,6 +56069,7 @@ export namespace Prisma {
     approvedPosts?: PostUncheckedUpdateManyWithoutApprovedByNestedInput
     createdDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutCreatedByNestedInput
     approvedDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutApprovedByNestedInput
+    autoApprovalJobs?: AutoApprovalJobUncheckedUpdateManyWithoutDeanNestedInput
   }
 
   export type RoomUpsertWithoutOfficeMeetingsInput = {
@@ -54308,6 +56189,7 @@ export namespace Prisma {
     approvedPosts?: PostCreateNestedManyWithoutApprovedByInput
     createdDisbursements?: FundingDisbursementCreateNestedManyWithoutCreatedByInput
     approvedDisbursements?: FundingDisbursementCreateNestedManyWithoutApprovedByInput
+    autoApprovalJobs?: AutoApprovalJobCreateNestedManyWithoutDeanInput
   }
 
   export type UserUncheckedCreateWithoutOfficeMeetingViewsInput = {
@@ -54343,6 +56225,7 @@ export namespace Prisma {
     approvedPosts?: PostUncheckedCreateNestedManyWithoutApprovedByInput
     createdDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutCreatedByInput
     approvedDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutApprovedByInput
+    autoApprovalJobs?: AutoApprovalJobUncheckedCreateNestedManyWithoutDeanInput
   }
 
   export type UserCreateOrConnectWithoutOfficeMeetingViewsInput = {
@@ -54433,6 +56316,7 @@ export namespace Prisma {
     approvedPosts?: PostUpdateManyWithoutApprovedByNestedInput
     createdDisbursements?: FundingDisbursementUpdateManyWithoutCreatedByNestedInput
     approvedDisbursements?: FundingDisbursementUpdateManyWithoutApprovedByNestedInput
+    autoApprovalJobs?: AutoApprovalJobUpdateManyWithoutDeanNestedInput
   }
 
   export type UserUncheckedUpdateWithoutOfficeMeetingViewsInput = {
@@ -54468,6 +56352,7 @@ export namespace Prisma {
     approvedPosts?: PostUncheckedUpdateManyWithoutApprovedByNestedInput
     createdDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutCreatedByNestedInput
     approvedDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutApprovedByNestedInput
+    autoApprovalJobs?: AutoApprovalJobUncheckedUpdateManyWithoutDeanNestedInput
   }
 
   export type CallRoundCreateWithoutAvailableInstructorsInput = {
@@ -54592,6 +56477,7 @@ export namespace Prisma {
     approvedPosts?: PostCreateNestedManyWithoutApprovedByInput
     createdDisbursements?: FundingDisbursementCreateNestedManyWithoutCreatedByInput
     approvedDisbursements?: FundingDisbursementCreateNestedManyWithoutApprovedByInput
+    autoApprovalJobs?: AutoApprovalJobCreateNestedManyWithoutDeanInput
   }
 
   export type UserUncheckedCreateWithoutCallRoundInstructorsInput = {
@@ -54627,6 +56513,7 @@ export namespace Prisma {
     approvedPosts?: PostUncheckedCreateNestedManyWithoutApprovedByInput
     createdDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutCreatedByInput
     approvedDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutApprovedByInput
+    autoApprovalJobs?: AutoApprovalJobUncheckedCreateNestedManyWithoutDeanInput
   }
 
   export type UserCreateOrConnectWithoutCallRoundInstructorsInput = {
@@ -54773,6 +56660,7 @@ export namespace Prisma {
     approvedPosts?: PostUpdateManyWithoutApprovedByNestedInput
     createdDisbursements?: FundingDisbursementUpdateManyWithoutCreatedByNestedInput
     approvedDisbursements?: FundingDisbursementUpdateManyWithoutApprovedByNestedInput
+    autoApprovalJobs?: AutoApprovalJobUpdateManyWithoutDeanNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCallRoundInstructorsInput = {
@@ -54808,6 +56696,7 @@ export namespace Prisma {
     approvedPosts?: PostUncheckedUpdateManyWithoutApprovedByNestedInput
     createdDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutCreatedByNestedInput
     approvedDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutApprovedByNestedInput
+    autoApprovalJobs?: AutoApprovalJobUncheckedUpdateManyWithoutDeanNestedInput
   }
 
   export type CallRoundCreateWithoutAvailableCouncilMembersInput = {
@@ -54932,6 +56821,7 @@ export namespace Prisma {
     approvedPosts?: PostCreateNestedManyWithoutApprovedByInput
     createdDisbursements?: FundingDisbursementCreateNestedManyWithoutCreatedByInput
     approvedDisbursements?: FundingDisbursementCreateNestedManyWithoutApprovedByInput
+    autoApprovalJobs?: AutoApprovalJobCreateNestedManyWithoutDeanInput
   }
 
   export type UserUncheckedCreateWithoutCallRoundCouncilMembersInput = {
@@ -54967,6 +56857,7 @@ export namespace Prisma {
     approvedPosts?: PostUncheckedCreateNestedManyWithoutApprovedByInput
     createdDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutCreatedByInput
     approvedDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutApprovedByInput
+    autoApprovalJobs?: AutoApprovalJobUncheckedCreateNestedManyWithoutDeanInput
   }
 
   export type UserCreateOrConnectWithoutCallRoundCouncilMembersInput = {
@@ -55113,6 +57004,7 @@ export namespace Prisma {
     approvedPosts?: PostUpdateManyWithoutApprovedByNestedInput
     createdDisbursements?: FundingDisbursementUpdateManyWithoutCreatedByNestedInput
     approvedDisbursements?: FundingDisbursementUpdateManyWithoutApprovedByNestedInput
+    autoApprovalJobs?: AutoApprovalJobUpdateManyWithoutDeanNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCallRoundCouncilMembersInput = {
@@ -55148,6 +57040,7 @@ export namespace Prisma {
     approvedPosts?: PostUncheckedUpdateManyWithoutApprovedByNestedInput
     createdDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutCreatedByNestedInput
     approvedDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutApprovedByNestedInput
+    autoApprovalJobs?: AutoApprovalJobUncheckedUpdateManyWithoutDeanNestedInput
   }
 
   export type CallRoundCreateWithoutCouncilsInput = {
@@ -55422,6 +57315,166 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"ProjectCouncilAssignment"> | Date | string
   }
 
+  export type UserCreateWithoutAutoApprovalJobsInput = {
+    id?: string
+    code?: string | null
+    name: string
+    email: string
+    password?: string | null
+    dateOfBirth?: Date | string | null
+    gender?: $Enums.Gender | null
+    phone?: string | null
+    address?: string | null
+    role?: $Enums.Role
+    department?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    departmentRef?: DepartmentCreateNestedOneWithoutUsersInput
+    major?: MajorCreateNestedOneWithoutUsersInput
+    class?: ClassCreateNestedOneWithoutUsersInput
+    leadProjects?: ProjectCreateNestedManyWithoutLeaderInput
+    deanReviews?: ProjectCreateNestedManyWithoutDeanReviewerInput
+    councilEvaluations?: CouncilEvaluationCreateNestedManyWithoutCouncilMemberInput
+    registrations?: ProjectRegistrationCreateNestedManyWithoutUserInput
+    instructedRegistrations?: ProjectRegistrationCreateNestedManyWithoutInstructorInput
+    instructedProjects?: ProjectCreateNestedManyWithoutInstructorInput
+    facultyReviews?: ProjectRegistrationCreateNestedManyWithoutFacultyReviewerInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    callRoundInstructors?: CallRoundInstructorCreateNestedManyWithoutInstructorInput
+    callRoundCouncilMembers?: CallRoundCouncilMemberCreateNestedManyWithoutCouncilMemberInput
+    councilAssignments?: CouncilMemberAssignmentCreateNestedManyWithoutCouncilMemberInput
+    officeMeetingsAsInstructor?: OfficeMeetingCreateNestedManyWithoutInstructorInput
+    officeMeetingViews?: OfficeMeetingViewCreateNestedManyWithoutUserInput
+    posts?: PostCreateNestedManyWithoutAuthorInput
+    approvedPosts?: PostCreateNestedManyWithoutApprovedByInput
+    createdDisbursements?: FundingDisbursementCreateNestedManyWithoutCreatedByInput
+    approvedDisbursements?: FundingDisbursementCreateNestedManyWithoutApprovedByInput
+  }
+
+  export type UserUncheckedCreateWithoutAutoApprovalJobsInput = {
+    id?: string
+    code?: string | null
+    name: string
+    email: string
+    password?: string | null
+    dateOfBirth?: Date | string | null
+    gender?: $Enums.Gender | null
+    phone?: string | null
+    address?: string | null
+    role?: $Enums.Role
+    department?: string | null
+    departmentId?: string | null
+    majorId?: string | null
+    classId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    leadProjects?: ProjectUncheckedCreateNestedManyWithoutLeaderInput
+    deanReviews?: ProjectUncheckedCreateNestedManyWithoutDeanReviewerInput
+    councilEvaluations?: CouncilEvaluationUncheckedCreateNestedManyWithoutCouncilMemberInput
+    registrations?: ProjectRegistrationUncheckedCreateNestedManyWithoutUserInput
+    instructedRegistrations?: ProjectRegistrationUncheckedCreateNestedManyWithoutInstructorInput
+    instructedProjects?: ProjectUncheckedCreateNestedManyWithoutInstructorInput
+    facultyReviews?: ProjectRegistrationUncheckedCreateNestedManyWithoutFacultyReviewerInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    callRoundInstructors?: CallRoundInstructorUncheckedCreateNestedManyWithoutInstructorInput
+    callRoundCouncilMembers?: CallRoundCouncilMemberUncheckedCreateNestedManyWithoutCouncilMemberInput
+    councilAssignments?: CouncilMemberAssignmentUncheckedCreateNestedManyWithoutCouncilMemberInput
+    officeMeetingsAsInstructor?: OfficeMeetingUncheckedCreateNestedManyWithoutInstructorInput
+    officeMeetingViews?: OfficeMeetingViewUncheckedCreateNestedManyWithoutUserInput
+    posts?: PostUncheckedCreateNestedManyWithoutAuthorInput
+    approvedPosts?: PostUncheckedCreateNestedManyWithoutApprovedByInput
+    createdDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutCreatedByInput
+    approvedDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutApprovedByInput
+  }
+
+  export type UserCreateOrConnectWithoutAutoApprovalJobsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutAutoApprovalJobsInput, UserUncheckedCreateWithoutAutoApprovalJobsInput>
+  }
+
+  export type UserUpsertWithoutAutoApprovalJobsInput = {
+    update: XOR<UserUpdateWithoutAutoApprovalJobsInput, UserUncheckedUpdateWithoutAutoApprovalJobsInput>
+    create: XOR<UserCreateWithoutAutoApprovalJobsInput, UserUncheckedCreateWithoutAutoApprovalJobsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutAutoApprovalJobsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutAutoApprovalJobsInput, UserUncheckedUpdateWithoutAutoApprovalJobsInput>
+  }
+
+  export type UserUpdateWithoutAutoApprovalJobsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    departmentRef?: DepartmentUpdateOneWithoutUsersNestedInput
+    major?: MajorUpdateOneWithoutUsersNestedInput
+    class?: ClassUpdateOneWithoutUsersNestedInput
+    leadProjects?: ProjectUpdateManyWithoutLeaderNestedInput
+    deanReviews?: ProjectUpdateManyWithoutDeanReviewerNestedInput
+    councilEvaluations?: CouncilEvaluationUpdateManyWithoutCouncilMemberNestedInput
+    registrations?: ProjectRegistrationUpdateManyWithoutUserNestedInput
+    instructedRegistrations?: ProjectRegistrationUpdateManyWithoutInstructorNestedInput
+    instructedProjects?: ProjectUpdateManyWithoutInstructorNestedInput
+    facultyReviews?: ProjectRegistrationUpdateManyWithoutFacultyReviewerNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    callRoundInstructors?: CallRoundInstructorUpdateManyWithoutInstructorNestedInput
+    callRoundCouncilMembers?: CallRoundCouncilMemberUpdateManyWithoutCouncilMemberNestedInput
+    councilAssignments?: CouncilMemberAssignmentUpdateManyWithoutCouncilMemberNestedInput
+    officeMeetingsAsInstructor?: OfficeMeetingUpdateManyWithoutInstructorNestedInput
+    officeMeetingViews?: OfficeMeetingViewUpdateManyWithoutUserNestedInput
+    posts?: PostUpdateManyWithoutAuthorNestedInput
+    approvedPosts?: PostUpdateManyWithoutApprovedByNestedInput
+    createdDisbursements?: FundingDisbursementUpdateManyWithoutCreatedByNestedInput
+    approvedDisbursements?: FundingDisbursementUpdateManyWithoutApprovedByNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutAutoApprovalJobsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    departmentId?: NullableStringFieldUpdateOperationsInput | string | null
+    majorId?: NullableStringFieldUpdateOperationsInput | string | null
+    classId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    leadProjects?: ProjectUncheckedUpdateManyWithoutLeaderNestedInput
+    deanReviews?: ProjectUncheckedUpdateManyWithoutDeanReviewerNestedInput
+    councilEvaluations?: CouncilEvaluationUncheckedUpdateManyWithoutCouncilMemberNestedInput
+    registrations?: ProjectRegistrationUncheckedUpdateManyWithoutUserNestedInput
+    instructedRegistrations?: ProjectRegistrationUncheckedUpdateManyWithoutInstructorNestedInput
+    instructedProjects?: ProjectUncheckedUpdateManyWithoutInstructorNestedInput
+    facultyReviews?: ProjectRegistrationUncheckedUpdateManyWithoutFacultyReviewerNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    callRoundInstructors?: CallRoundInstructorUncheckedUpdateManyWithoutInstructorNestedInput
+    callRoundCouncilMembers?: CallRoundCouncilMemberUncheckedUpdateManyWithoutCouncilMemberNestedInput
+    councilAssignments?: CouncilMemberAssignmentUncheckedUpdateManyWithoutCouncilMemberNestedInput
+    officeMeetingsAsInstructor?: OfficeMeetingUncheckedUpdateManyWithoutInstructorNestedInput
+    officeMeetingViews?: OfficeMeetingViewUncheckedUpdateManyWithoutUserNestedInput
+    posts?: PostUncheckedUpdateManyWithoutAuthorNestedInput
+    approvedPosts?: PostUncheckedUpdateManyWithoutApprovedByNestedInput
+    createdDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutCreatedByNestedInput
+    approvedDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutApprovedByNestedInput
+  }
+
   export type CouncilCreateWithoutMembersInput = {
     id?: string
     name: string
@@ -55484,6 +57537,7 @@ export namespace Prisma {
     approvedPosts?: PostCreateNestedManyWithoutApprovedByInput
     createdDisbursements?: FundingDisbursementCreateNestedManyWithoutCreatedByInput
     approvedDisbursements?: FundingDisbursementCreateNestedManyWithoutApprovedByInput
+    autoApprovalJobs?: AutoApprovalJobCreateNestedManyWithoutDeanInput
   }
 
   export type UserUncheckedCreateWithoutCouncilAssignmentsInput = {
@@ -55519,6 +57573,7 @@ export namespace Prisma {
     approvedPosts?: PostUncheckedCreateNestedManyWithoutApprovedByInput
     createdDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutCreatedByInput
     approvedDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutApprovedByInput
+    autoApprovalJobs?: AutoApprovalJobUncheckedCreateNestedManyWithoutDeanInput
   }
 
   export type UserCreateOrConnectWithoutCouncilAssignmentsInput = {
@@ -55605,6 +57660,7 @@ export namespace Prisma {
     approvedPosts?: PostUpdateManyWithoutApprovedByNestedInput
     createdDisbursements?: FundingDisbursementUpdateManyWithoutCreatedByNestedInput
     approvedDisbursements?: FundingDisbursementUpdateManyWithoutApprovedByNestedInput
+    autoApprovalJobs?: AutoApprovalJobUpdateManyWithoutDeanNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCouncilAssignmentsInput = {
@@ -55640,6 +57696,7 @@ export namespace Prisma {
     approvedPosts?: PostUncheckedUpdateManyWithoutApprovedByNestedInput
     createdDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutCreatedByNestedInput
     approvedDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutApprovedByNestedInput
+    autoApprovalJobs?: AutoApprovalJobUncheckedUpdateManyWithoutDeanNestedInput
   }
 
   export type CouncilCreateWithoutProjectsInput = {
@@ -56102,6 +58159,7 @@ export namespace Prisma {
     approvedPosts?: PostUpdateManyWithoutApprovedByNestedInput
     createdDisbursements?: FundingDisbursementUpdateManyWithoutCreatedByNestedInput
     approvedDisbursements?: FundingDisbursementUpdateManyWithoutApprovedByNestedInput
+    autoApprovalJobs?: AutoApprovalJobUpdateManyWithoutDeanNestedInput
   }
 
   export type UserUncheckedUpdateWithoutDepartmentRefInput = {
@@ -56137,6 +58195,7 @@ export namespace Prisma {
     approvedPosts?: PostUncheckedUpdateManyWithoutApprovedByNestedInput
     createdDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutCreatedByNestedInput
     approvedDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutApprovedByNestedInput
+    autoApprovalJobs?: AutoApprovalJobUncheckedUpdateManyWithoutDeanNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutDepartmentRefInput = {
@@ -56445,6 +58504,7 @@ export namespace Prisma {
     approvedPosts?: PostUpdateManyWithoutApprovedByNestedInput
     createdDisbursements?: FundingDisbursementUpdateManyWithoutCreatedByNestedInput
     approvedDisbursements?: FundingDisbursementUpdateManyWithoutApprovedByNestedInput
+    autoApprovalJobs?: AutoApprovalJobUpdateManyWithoutDeanNestedInput
   }
 
   export type UserUncheckedUpdateWithoutMajorInput = {
@@ -56480,6 +58540,7 @@ export namespace Prisma {
     approvedPosts?: PostUncheckedUpdateManyWithoutApprovedByNestedInput
     createdDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutCreatedByNestedInput
     approvedDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutApprovedByNestedInput
+    autoApprovalJobs?: AutoApprovalJobUncheckedUpdateManyWithoutDeanNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutMajorInput = {
@@ -56669,6 +58730,7 @@ export namespace Prisma {
     approvedPosts?: PostUpdateManyWithoutApprovedByNestedInput
     createdDisbursements?: FundingDisbursementUpdateManyWithoutCreatedByNestedInput
     approvedDisbursements?: FundingDisbursementUpdateManyWithoutApprovedByNestedInput
+    autoApprovalJobs?: AutoApprovalJobUpdateManyWithoutDeanNestedInput
   }
 
   export type UserUncheckedUpdateWithoutClassInput = {
@@ -56704,6 +58766,7 @@ export namespace Prisma {
     approvedPosts?: PostUncheckedUpdateManyWithoutApprovedByNestedInput
     createdDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutCreatedByNestedInput
     approvedDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutApprovedByNestedInput
+    autoApprovalJobs?: AutoApprovalJobUncheckedUpdateManyWithoutDeanNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutClassInput = {
@@ -57085,6 +59148,19 @@ export namespace Prisma {
     rejectionNote?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+  }
+
+  export type AutoApprovalJobCreateManyDeanInput = {
+    id?: string
+    filters: JsonNullValueInput | InputJsonValue
+    criteria: JsonNullValueInput | InputJsonValue
+    status?: $Enums.AutoApprovalJobStatus
+    progress?: number
+    results?: NullableJsonNullValueInput | InputJsonValue
+    error?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    completedAt?: Date | string | null
   }
 
   export type ProjectUpdateWithoutLeaderInput = {
@@ -57864,6 +59940,45 @@ export namespace Prisma {
     rejectionNote?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AutoApprovalJobUpdateWithoutDeanInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    filters?: JsonNullValueInput | InputJsonValue
+    criteria?: JsonNullValueInput | InputJsonValue
+    status?: EnumAutoApprovalJobStatusFieldUpdateOperationsInput | $Enums.AutoApprovalJobStatus
+    progress?: IntFieldUpdateOperationsInput | number
+    results?: NullableJsonNullValueInput | InputJsonValue
+    error?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type AutoApprovalJobUncheckedUpdateWithoutDeanInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    filters?: JsonNullValueInput | InputJsonValue
+    criteria?: JsonNullValueInput | InputJsonValue
+    status?: EnumAutoApprovalJobStatusFieldUpdateOperationsInput | $Enums.AutoApprovalJobStatus
+    progress?: IntFieldUpdateOperationsInput | number
+    results?: NullableJsonNullValueInput | InputJsonValue
+    error?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type AutoApprovalJobUncheckedUpdateManyWithoutDeanInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    filters?: JsonNullValueInput | InputJsonValue
+    criteria?: JsonNullValueInput | InputJsonValue
+    status?: EnumAutoApprovalJobStatusFieldUpdateOperationsInput | $Enums.AutoApprovalJobStatus
+    progress?: IntFieldUpdateOperationsInput | number
+    results?: NullableJsonNullValueInput | InputJsonValue
+    error?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type ProjectCreateManyCallRoundInput = {
