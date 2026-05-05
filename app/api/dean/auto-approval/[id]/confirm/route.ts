@@ -8,7 +8,7 @@ import { getActorUserId } from '@/lib/project-permissions';
  */
 export async function POST(
     request: NextRequest,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
     try {
         const userId = getActorUserId(request);
@@ -26,7 +26,11 @@ export async function POST(
             return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
         }
 
-        const jobId = params.id;
+        const { id: jobId } = await params;
+
+        if (!jobId) {
+            return NextResponse.json({ error: 'Missing job id' }, { status: 400 });
+        }
 
         // Fetch job from database
         const job = await prisma.autoApprovalJob.findUnique({
@@ -45,36 +49,24 @@ export async function POST(
         }
 
         // Parse results
-        const results = job.results as any;
-        if (!results?.evaluations || !Array.isArray(results.evaluations)) {
+        const results = job.results as unknown;
+        if (!isAutoApprovalResults(results)) {
             return NextResponse.json(
                 { error: 'No evaluations found in job results' },
                 { status: 400 }
             );
         }
 
-        const evaluations = results.evaluations as Array<{
-            registrationId: string;
-            projectId: string;
-            projectTitle: string;
-            decision: 'APPROVE' | 'REVISION' | 'REJECT' | 'ERROR';
-            reason: string;
-            score: number;
-        }>;
-
-        // Apply decisions to project registrations
+        const evaluations = results.evaluations;
         let successCount = 0;
         let errorCount = 0;
 
         for (const evaluation of evaluations) {
             try {
-                // Skip ERROR decisions
                 if (evaluation.decision === 'ERROR') {
                     errorCount++;
                     continue;
                 }
-
-                // Map AI decision to registration status
                 let status: 'APPROVED' | 'REJECTED' | 'PENDING';
                 switch (evaluation.decision) {
                     case 'APPROVE':
@@ -132,4 +124,47 @@ export async function POST(
             { status: 500 }
         );
     }
+}
+
+type AutoApprovalEvaluation = {
+    registrationId: string;
+    projectId: string;
+    projectTitle: string;
+    decision: 'APPROVE' | 'REVISION' | 'REJECT' | 'ERROR';
+    reason: string;
+    score: number;
+};
+
+type AutoApprovalResults = {
+    evaluations: AutoApprovalEvaluation[];
+};
+
+function isAutoApprovalResults(value: unknown): value is AutoApprovalResults {
+    if (!value || typeof value !== 'object') {
+        return false;
+    }
+
+    const record = value as { evaluations?: unknown };
+    if (!Array.isArray(record.evaluations)) {
+        return false;
+    }
+
+    return record.evaluations.every((item) => {
+        if (!item || typeof item !== 'object') {
+            return false;
+        }
+
+        const evaluation = item as Partial<AutoApprovalEvaluation>;
+        return (
+            typeof evaluation.registrationId === 'string' &&
+            typeof evaluation.projectId === 'string' &&
+            typeof evaluation.projectTitle === 'string' &&
+            (evaluation.decision === 'APPROVE' ||
+                evaluation.decision === 'REVISION' ||
+                evaluation.decision === 'REJECT' ||
+                evaluation.decision === 'ERROR') &&
+            typeof evaluation.reason === 'string' &&
+            typeof evaluation.score === 'number'
+        );
+    });
 }

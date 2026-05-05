@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useMemo } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { Download, ExternalLink, FileText, Search, X } from 'lucide-react';
 import { useDeanApprovals, useUpdateDeanApprovalStatus, type DeanApprovalsFilters } from '@/hooks/useDeanApprovals';
@@ -121,6 +122,7 @@ export function DeanApprovalClient() {
     const { data, isLoading } = useDeanApprovals(currentPage, PAGE_SIZE, filters);
     const { data: callRounds = [] } = useCallRounds();
     const mutation = useUpdateDeanApprovalStatus();
+    const queryClient = useQueryClient();
 
     const registrations = data?.data ?? [];
     const pagination = data?.pagination;
@@ -143,6 +145,10 @@ export function DeanApprovalClient() {
         Boolean(searchInput) ||
         Boolean(facultyStatus && facultyStatus !== 'ALL') ||
         Boolean(callRoundId && callRoundId !== 'ALL');
+
+    const handleAutoApprovalConfirmed = () => {
+        queryClient.invalidateQueries({ queryKey: ['dean-approvals'] });
+    };
 
     return (
         <div className="space-y-4">
@@ -213,6 +219,7 @@ export function DeanApprovalClient() {
                         <AutoApprovalDialog
                             callRoundId={callRoundId}
                             callRoundName={callRounds.find((round) => round.id === callRoundId)?.name}
+                            onApprovalConfirmed={handleAutoApprovalConfirmed}
                         />
                     )}
                 </div>

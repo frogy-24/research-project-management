@@ -42,6 +42,7 @@ interface AutoApprovalJob {
 interface AutoApprovalDialogProps {
     callRoundId: string;
     callRoundName?: string;
+    onApprovalConfirmed?: () => void;
 }
 
 const STATUS_CONFIG = {
@@ -192,7 +193,7 @@ function ResultsDialog({ job, onApprovalConfirmed }: { job: AutoApprovalJob; onA
     );
 }
 
-export function AutoApprovalDialog({ callRoundId, callRoundName }: AutoApprovalDialogProps) {
+export function AutoApprovalDialog({ callRoundId, callRoundName, onApprovalConfirmed }: AutoApprovalDialogProps) {
     const [open, setOpen] = useState(false);
     const [loading, setLoading] = useState(false);
     const [jobs, setJobs] = useState<AutoApprovalJob[]>([]);
@@ -435,7 +436,7 @@ export function AutoApprovalDialog({ callRoundId, callRoundName }: AutoApprovalD
                                                                 <div className="text-sm font-semibold text-red-600">{job.results.summary.rejected}</div>
                                                             </div>
                                                         </div>
-                                                        <ResultsDialog job={job} />
+                                                        <ResultsDialog job={job} onApprovalConfirmed={onApprovalConfirmed} />
                                                     </>
                                                 )}
 
