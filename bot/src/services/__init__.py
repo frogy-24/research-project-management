@@ -7,7 +7,12 @@ from src.services.docx_to_pdf_service import (
     is_docx_filename,
     save_upload_file,
 )
-from src.services.ocr_service import is_supported_ocr_filename, run_ocr_with_vllm
+from src.services.ocr_service import (
+    SUPPORTED_IMAGE_EXTENSIONS,
+    is_supported_ocr_filename,
+    ocr_image,
+    run_ocr_with_vllm,
+)
 
 __all__ = [
     "is_docx_filename",
@@ -15,6 +20,8 @@ __all__ = [
     "save_upload_file",
     "convert_docx_file_to_pdf",
     "cleanup_files",
+    "SUPPORTED_IMAGE_EXTENSIONS",
     "is_supported_ocr_filename",
+    "ocr_image",
     "run_ocr_with_vllm",
 ]

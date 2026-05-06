@@ -124,11 +124,18 @@ async def run_ocr_with_vllm(
     filename: str,
     prompt: str | None = None,
 ) -> OcrResult:
-
-
     model_name = os.getenv("MODEL_OCR", "openrouter/baidu/qianfan-ocr-fast:free")
     ocr_prompt = _build_ocr_prompt(prompt)
     client     = _build_vllm_client()
+
+    # ✅ Sửa lỗi: tạo image_data_urls trước vòng lặp
+    lower_name = filename.lower()
+    if lower_name.endswith(".pdf"):
+        image_data_urls = _pdf_to_page_data_urls(file_bytes)
+    elif any(lower_name.endswith(ext) for ext in SUPPORTED_IMAGE_EXTENSIONS):
+        image_data_urls = [_image_bytes_to_data_url(file_bytes, filename)]
+    else:
+        raise ValueError(f"Định dạng file không được hỗ trợ: {filename}")
 
     # Gọi OCR từng trang riêng biệt
     pages: list[dict] = []
@@ -137,16 +144,92 @@ async def run_ocr_with_vllm(
         text = await _ocr_single_image(client, model_name, data_url, ocr_prompt, page_num)
         pages.append({"page": page_num, "text": text})
 
-    # Ghép toàn bộ text thành 1 đoạn liền mạch
-    full_text = "\n\n".join(
-        p["text"]
-        for p in pages
-        if p["text"]
-    )
+    full_text = "\n\n".join(p["text"] for p in pages if p["text"])
 
     return OcrResult(
         text=full_text,
         page_count=len(pages),
         model=model_name,
         pages=pages,
+    )
+
+
+@log_async_execution
+async def ocr_file(
+    file_path: str,
+    prompt: str | None = None,
+) -> OcrResult:
+    """
+    OCR một file từ đường dẫn trên disk.
+
+    Args:
+        file_path: Đường dẫn tuyệt đối hoặc tương đối tới file PDF / ảnh.
+        prompt:    Prompt tuỳ chỉnh; None sẽ dùng prompt mặc định.
+
+    Returns:
+        OcrResult chứa toàn bộ văn bản đã trích xuất.
+
+    Raises:
+        FileNotFoundError: Nếu file không tồn tại.
+        ValueError:        Nếu định dạng file không được hỗ trợ.
+    """
+    if not os.path.isfile(file_path):
+        raise FileNotFoundError(f"Không tìm thấy file: {file_path}")
+
+    filename = os.path.basename(file_path)
+
+    if not is_supported_ocr_filename(filename):
+        raise ValueError(f"Định dạng file không được hỗ trợ: {filename}")
+
+    logger.info(f"Đọc file từ disk: {file_path}")
+    with open(file_path, "rb") as fh:
+        file_bytes = fh.read()
+
+    return await run_ocr_with_vllm(file_bytes, filename, prompt)
+
+
+@log_async_execution
+async def ocr_image(
+    image_bytes: bytes,
+    filename: str = "image.jpg",
+    prompt: str | None = None,
+) -> OcrResult:
+    """
+    OCR một ảnh từ bytes trong bộ nhớ (không cần ghi ra disk).
+
+    Args:
+        image_bytes: Nội dung ảnh dạng bytes (PNG, JPEG, WEBP, …).
+        filename:    Tên file giả để xác định MIME type; mặc định "image.jpg".
+        prompt:      Prompt tuỳ chỉnh; None sẽ dùng prompt mặc định.
+
+    Returns:
+        OcrResult với page_count = 1.
+
+    Raises:
+        ValueError: Nếu filename có đuôi không phải ảnh hoặc là PDF.
+    """
+    lower_name = filename.lower()
+
+    # Chỉ chấp nhận ảnh, không nhận PDF (dùng ocr_file / run_ocr_with_vllm cho PDF)
+    if not any(lower_name.endswith(ext) for ext in SUPPORTED_IMAGE_EXTENSIONS):
+        raise ValueError(
+            f"ocr_image chỉ hỗ trợ ảnh. "
+            f"Định dạng không hợp lệ: {filename}. "
+            f"Dùng ocr_file() hoặc run_ocr_with_vllm() cho PDF."
+        )
+
+    model_name = os.getenv("MODEL_OCR", "openrouter/baidu/qianfan-ocr-fast:free")
+    ocr_prompt = _build_ocr_prompt(prompt)
+    client     = _build_vllm_client()
+
+    data_url = _image_bytes_to_data_url(image_bytes, filename)
+
+    logger.info(f"OCR ảnh: {filename} ({len(image_bytes):,} bytes)")
+    text = await _ocr_single_image(client, model_name, data_url, ocr_prompt, page_num=1)
+
+    return OcrResult(
+        text=text,
+        page_count=1,
+        model=model_name,
+        pages=[{"page": 1, "text": text}],
     )
