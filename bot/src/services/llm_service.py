@@ -31,8 +31,8 @@ class LLMService:
         base_url = os.getenv("BASE_URL") or os.getenv("OPENAI_BASE_URL")
         api_key = os.getenv("API_KEY") or os.getenv("OPENAI_API_KEY")
         
-        if not api_key:
-            raise RuntimeError("Missing API_KEY/OPENAI_API_KEY")
+        # if not api_key:
+        #     raise RuntimeError("Missing API_KEY/OPENAI_API_KEY")
         
         if base_url:
             logger.info(f"Using custom base_url: {base_url}")
