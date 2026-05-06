@@ -85,6 +85,13 @@ enum ProjectClosingStatus {
   APPROVED
 }
 
+enum AutoApprovalJobStatus {
+  QUEUED
+  PROCESSING
+  COMPLETED
+  FAILED
+}
+
 model Department {
   id          String      @id @default(cuid())
   code        String      @unique
@@ -162,6 +169,7 @@ model User {
   approvedPosts              Post[]                    @relation("PostApprover")
   createdDisbursements       FundingDisbursement[]     @relation("DisbursementCreator")
   approvedDisbursements      FundingDisbursement[]     @relation("DisbursementApprover")
+  autoApprovalJobs           AutoApprovalJob[]         @relation("DeanAutoApprovalJobs")
 }
 
 model CallRound {
@@ -610,6 +618,25 @@ model Council {
   projects  ProjectCouncilAssignment[] // Đề tài được phân cho hội đồng này
 
   @@index([callRoundId])
+}
+
+// Auto Approval Job - Phê duyệt tự động với LLM
+model AutoApprovalJob {
+  id          String                @id @default(cuid())
+  deanId      String
+  dean        User                  @relation("DeanAutoApprovalJobs", fields: [deanId], references: [id], onDelete: Cascade)
+  filters     Json // Điều kiện lọc đề tài
+  criteria    Json // Tiêu chí đánh giá từ user
+  status      AutoApprovalJobStatus @default(QUEUED)
+  progress    Int                   @default(0) // 0-100
+  results     Json? // Kết quả từ LLM
+  error       String? // Lỗi nếu có
+  createdAt   DateTime              @default(now())
+  updatedAt   DateTime              @updatedAt
+  completedAt DateTime? // Thời điểm hoàn thành
+
+  @@index([deanId, status])
+  @@index([createdAt])
 }
 
 // Junction table: Phân công thành viên vào hội đồng cụ thể

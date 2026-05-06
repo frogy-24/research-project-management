@@ -5,6 +5,7 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
+	"aio-pika>=9.5.4",
 	"asyncpg>=0.30.0",
 	"docx2pdf>=0.1.8",
 	"fastmcp>=2.10.6",
@@ -12,6 +13,8 @@ dependencies = [
 	"openai>=1.76.0",
 	"python-dotenv>=1.2.2",
 	"python-multipart>=0.0.20",
+	"pymupdf>=1.26.4",
 	"fastapi>=0.116.1",
 	"uvicorn>=0.42.0",
+	"vllm>=0.19.1",
 ]

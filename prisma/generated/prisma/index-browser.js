@@ -447,6 +447,20 @@ exports.Prisma.CouncilScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.AutoApprovalJobScalarFieldEnum = {
+  id: 'id',
+  deanId: 'deanId',
+  filters: 'filters',
+  criteria: 'criteria',
+  status: 'status',
+  progress: 'progress',
+  results: 'results',
+  error: 'error',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  completedAt: 'completedAt'
+};
+
 exports.Prisma.CouncilMemberAssignmentScalarFieldEnum = {
   id: 'id',
   councilId: 'councilId',
@@ -480,6 +494,10 @@ exports.Prisma.SortOrder = {
 
 exports.Prisma.NullableJsonNullValueInput = {
   DbNull: Prisma.DbNull,
+  JsonNull: Prisma.JsonNull
+};
+
+exports.Prisma.JsonNullValueInput = {
   JsonNull: Prisma.JsonNull
 };
 
@@ -616,6 +634,13 @@ exports.InvitationStatus = exports.$Enums.InvitationStatus = {
   REJECTED: 'REJECTED'
 };
 
+exports.AutoApprovalJobStatus = exports.$Enums.AutoApprovalJobStatus = {
+  QUEUED: 'QUEUED',
+  PROCESSING: 'PROCESSING',
+  COMPLETED: 'COMPLETED',
+  FAILED: 'FAILED'
+};
+
 exports.Prisma.ModelName = {
   Department: 'Department',
   Major: 'Major',
@@ -640,6 +665,7 @@ exports.Prisma.ModelName = {
   CallRoundInstructor: 'CallRoundInstructor',
   CallRoundCouncilMember: 'CallRoundCouncilMember',
   Council: 'Council',
+  AutoApprovalJob: 'AutoApprovalJob',
   CouncilMemberAssignment: 'CouncilMemberAssignment',
   ProjectCouncilAssignment: 'ProjectCouncilAssignment',
   CallRoundAttachment: 'CallRoundAttachment'
