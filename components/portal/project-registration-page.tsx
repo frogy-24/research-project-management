@@ -252,6 +252,7 @@ export function ProjectRegistrationPage({ title }: ProjectRegistrationPageProps)
 
         return (callRounds as CallRoundWithTemplate[]).filter((round) => {
             if (!round.isActive) return false;
+            if (round.isLocked) return false; // Lọc bỏ các đợt đã bị khóa
             if (round.approvalStatus !== 'APPROVED') return false;
             if (role === 'STUDENT' && !['STUDENT', 'BOTH'].includes(round.applicableFor)) return false;
             if (role === 'LECTURER' && !['LECTURER', 'BOTH'].includes(round.applicableFor)) return false;
@@ -465,12 +466,20 @@ export function ProjectRegistrationPage({ title }: ProjectRegistrationPageProps)
             return;
         }
 
+        if (!activeCallRound) {
+            toast.error('Vui lòng chọn đợt đăng ký trước khi tải file');
+            return;
+        }
+
         setIsUploadingProposalFile(true);
         try {
             const uploadedFiles: RegistrationProposalFile[] = [];
 
             for (const file of selectedFiles) {
-                const uploadResult = await uploadApi.file(file);
+                const uploadResult = await uploadApi.file(file, {
+                    callRoundId: activeCallRound.id,
+                    callRoundName: activeCallRound.name,
+                });
                 uploadedFiles.push({
                     name: file.name,
                     url: uploadResult.url,
@@ -490,8 +499,19 @@ export function ProjectRegistrationPage({ title }: ProjectRegistrationPageProps)
         }
     };
 
-    const handleRemoveProposalFile = (index: number) => {
-        setProposalFiles((prev) => prev.filter((_, itemIndex) => itemIndex !== index));
+    const handleRemoveProposalFile = async (index: number) => {
+        const fileToRemove = proposalFiles[index];
+        if (!fileToRemove) return;
+
+        try {
+            // Delete file from server
+            await uploadApi.deleteFile(fileToRemove.url);
+            setProposalFiles((prev) => prev.filter((_, itemIndex) => itemIndex !== index));
+            toast.success('Đã xóa tệp đính kèm');
+        } catch (error) {
+            const message = error instanceof Error ? error.message : 'Không thể xóa tệp';
+            toast.error(message);
+        }
     };
 
     const handleChooseEditProposalFiles = () => {
@@ -504,12 +524,20 @@ export function ProjectRegistrationPage({ title }: ProjectRegistrationPageProps)
             return;
         }
 
+        if (!editingRegistration?.callRound) {
+            toast.error('Không xác định được đợt đăng ký');
+            return;
+        }
+
         setIsUploadingProposalFile(true);
         try {
             const uploadedFiles: RegistrationProposalFile[] = [];
 
             for (const file of selectedFiles) {
-                const uploadResult = await uploadApi.file(file);
+                const uploadResult = await uploadApi.file(file, {
+                    callRoundId: editingRegistration.callRound.id,
+                    callRoundName: editingRegistration.callRound.name,
+                });
                 uploadedFiles.push({
                     name: file.name,
                     url: uploadResult.url,
@@ -529,8 +557,19 @@ export function ProjectRegistrationPage({ title }: ProjectRegistrationPageProps)
         }
     };
 
-    const handleRemoveEditProposalFile = (index: number) => {
-        setEditProposalFiles((prev) => prev.filter((_, itemIndex) => itemIndex !== index));
+    const handleRemoveEditProposalFile = async (index: number) => {
+        const fileToRemove = editProposalFiles[index];
+        if (!fileToRemove) return;
+
+        try {
+            // Delete file from server
+            await uploadApi.deleteFile(fileToRemove.url);
+            setEditProposalFiles((prev) => prev.filter((_, itemIndex) => itemIndex !== index));
+            toast.success('Đã xóa tệp đính kèm');
+        } catch (error) {
+            const message = error instanceof Error ? error.message : 'Không thể xóa tệp';
+            toast.error(message);
+        }
     };
 
     const normalizeTeamMembers = (members: TeamMemberInput[]) => {
@@ -803,7 +842,7 @@ export function ProjectRegistrationPage({ title }: ProjectRegistrationPageProps)
                     <AlertCircle className="h-4 w-4" />
                     <AlertTitle>Chưa mở đợt đăng ký</AlertTitle>
                     <AlertDescription>
-                        Hiện tại chưa có đợt đăng ký phù hợp (đã duyệt và đúng đối tượng) đang mở. Vui lòng liên hệ quản
+                        Hiện tại chưa có đợt đăng ký phù hợp (đã duyệt, đúng đối tượng và chưa bị khóa) đang mở. Vui lòng liên hệ quản
                         trị viên để biết thêm chi tiết.
                     </AlertDescription>
                 </Alert>

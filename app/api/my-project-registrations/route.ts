@@ -140,6 +140,7 @@ export async function POST(request: Request) {
     const openCallRounds = await prisma.callRound.findMany({
       where: {
         isActive: true,
+        isLocked: false, // Chỉ lấy các đợt chưa bị khóa
         approvalStatus: "APPROVED",
         applicableFor: { in: applicableFor },
         registrationStartDate: { lte: todayEnd },
@@ -162,7 +163,7 @@ export async function POST(request: Request) {
       return NextResponse.json(
         {
           success: false,
-          error: "Hiện tại chưa có đợt đăng ký phù hợp (đã duyệt và đúng đối tượng) đang mở.",
+          error: "Hiện tại chưa có đợt đăng ký phù hợp (đã duyệt, đúng đối tượng và chưa bị khóa) đang mở.",
         },
         { status: 400 }
       );
@@ -176,12 +177,23 @@ export async function POST(request: Request) {
         return NextResponse.json(
           {
             success: false,
-            error: "Đợt đăng ký được chọn không hợp lệ hoặc đã đóng.",
+            error: "Đợt đăng ký được chọn không hợp lệ, đã đóng hoặc đã bị khóa.",
           },
           { status: 400 }
         );
       }
       activeCallRound = found;
+    }
+
+    // Double-check if the selected call round is locked
+    if (activeCallRound.isLocked) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: "Đợt đăng ký này đã bị khóa bởi quản trị viên. Không thể đăng ký đề tài mới.",
+        },
+        { status: 403 }
+      );
     }
 
     // Get user's department, major, and class

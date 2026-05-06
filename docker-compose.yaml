@@ -1,14 +1,22 @@
 services:
-  db:
+  postgres:
     image: postgres:16-alpine
-    restart: always
-    shm_size: 128mb
+    container_name: postgres
     environment:
-      POSTGRES_PASSWORD: example
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
     ports:
       - "5432:5432"
     volumes:
-      - pgdata:/var/lib/postgresql/data
+      - type: bind
+        source: C:/docker_local_data/postgres/data
+        target: /var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d postgres"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
 
   adminer:
     image: adminer:latest
