@@ -1,6 +1,8 @@
 import json
 import os
 import re
+import subprocess
+import tempfile
 from pathlib import Path
 from typing import Any
 from urllib.parse import urlparse
@@ -56,7 +58,9 @@ def _match_filenames() -> list[str]:
 
 
 def _should_ocr_file(filename: str, match_names: list[str]) -> bool:
-    return filename.lower() in match_names
+    """Check if filename contains any of the match patterns (partial matching)."""
+    filename_lower = filename.lower()
+    return any(pattern in filename_lower for pattern in match_names)
 
 
 def _normalize_collection_name(value: str) -> str:
@@ -67,11 +71,54 @@ def _normalize_collection_name(value: str) -> str:
     return slug[:62]
 
 
+def _convert_doc_to_pdf(file_path: Path) -> Path | None:
+    """Convert .doc file to PDF using antiword + LibreOffice."""
+    temp_dir = Path(tempfile.gettempdir())
+    pdf_name = file_path.stem + ".pdf"
+    pdf_path = temp_dir / pdf_name
+
+    # Try antiword first (fast, no LibreOffice needed)
+    try:
+        result = subprocess.run(
+            ["antiword", "-o", str(pdf_path), str(file_path)],
+            capture_output=True,
+            timeout=30,
+        )
+        if result.returncode == 0 and pdf_path.exists():
+            logger.info(f"DOC converted via antiword: {file_path.name}")
+            return pdf_path
+    except (FileNotFoundError, subprocess.TimeoutExpired):
+        pass
+
+    # Fallback: LibreOffice
+    try:
+        result = subprocess.run(
+            ["libreoffice", "--headless", "--convert-to", "pdf",
+             "--outdir", str(temp_dir), str(file_path)],
+            capture_output=True,
+            timeout=60,
+        )
+        expected_pdf = temp_dir / f"{file_path.stem}.pdf"
+        if expected_pdf.exists():
+            logger.info(f"DOC converted via LibreOffice: {file_path.name}")
+            return expected_pdf
+    except (FileNotFoundError, subprocess.TimeoutExpired):
+        pass
+
+    return None
+
+
 def _prepare_ocr_bytes(file_path: Path) -> tuple[bytes, str] | None:
     suffix = file_path.suffix.lower()
 
     if suffix == ".doc":
-        logger.warning(f"DOC khong duoc ho tro de OCR: {file_path.name}")
+        logger.warning(f"DOC file - attempting conversion: {file_path.name}")
+        try:
+            pdf_path = _convert_doc_to_pdf(file_path)
+            if pdf_path and pdf_path.exists():
+                return pdf_path.read_bytes(), f"{file_path.stem}.pdf"
+        except Exception as exc:
+            logger.error(f"DOC to PDF conversion failed: {exc}")
         return None
 
     if suffix == ".docx":

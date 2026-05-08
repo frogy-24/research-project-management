@@ -34,6 +34,7 @@ export async function GET(request: Request) {
       include: {
         departmentRef: true,
         class: true,
+        major: true,
       }
     });
 

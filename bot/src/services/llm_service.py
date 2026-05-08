@@ -24,15 +24,15 @@ class LLMService:
     def __init__(self):
         """Khởi tạo LLM service"""
         self.client = self._build_client()
-        self.default_model = os.getenv("OPENAI_MODEL", "gpt-4o-mini")
+        self.default_model = os.getenv("LLM_MODEL", "gpt-4o-mini")
     
     def _build_client(self) -> AsyncOpenAI:
         """Build OpenAI client"""
-        base_url = os.getenv("BASE_URL") or os.getenv("OPENAI_BASE_URL")
-        api_key = os.getenv("API_KEY") or os.getenv("OPENAI_API_KEY")
+        base_url = os.getenv("BASE_URL") or os.getenv("COPILOT_BASE_URL")
+        api_key = os.getenv("API_KEY") or os.getenv("COPILOT_API_KEY")
         
         # if not api_key:
-        #     raise RuntimeError("Missing API_KEY/OPENAI_API_KEY")
+        #     raise RuntimeError("Missing API_KEY/COPILOT_API_KEY")
         
         if base_url:
             logger.info(f"Using custom base_url: {base_url}")
@@ -86,7 +86,10 @@ class LLMService:
         self,
         project: Dict[str, Any],
         criteria: Dict[str, Any],
-        model: Optional[str] = None
+        model: Optional[str] = None,
+        similar_context: str = "",
+        is_duplicate: bool = False,
+        duplicate_info: Optional[Dict[str, Any]] = None,
     ) -> Dict[str, Any]:
         """
         Đánh giá đề tài nghiên cứu bằng LLM
@@ -95,10 +98,24 @@ class LLMService:
             project: Thông tin đề tài (title, objective, expectedOutput, etc.)
             criteria: Tiêu chí đánh giá
             model: Model name (default: gpt-4o-mini)
+            similar_context: Context từ Qdrant về các đề tài tương tự
+            is_duplicate: Có phải là đề tài trùng lặp không
+            duplicate_info: Thông tin về đề tài trùng lặp
         
         Returns:
             Dict với score, decision, reason
         """
+        # Build duplicate warning if needed
+        duplicate_warning = ""
+        if is_duplicate and duplicate_info:
+            duplicate_warning = f"""
+        **⚠️ CẢNH BÁO TRÙNG LẶP:**
+        Đề tài này có độ tương đồng cao ({duplicate_info.get('score', 0):.2f}) với đề tài đã duyệt:
+        - Đề tài trùng: {duplicate_info.get('projectTitle', 'N/A')}
+        - Chủ nhiệm: {duplicate_info.get('leaderName', 'N/A')}
+        Hãy cân nhắc kỹ và có thể yêu cầu REVISION hoặc REJECT nếu quá giống.
+        """
+        
         prompt = f"""Bạn là chuyên gia đánh giá đề tài nghiên cứu khoa học. Hãy đánh giá đề tài sau dựa trên các tiêu chí được cung cấp.
 
         **Thông tin đề tài:**
@@ -109,11 +126,15 @@ class LLMService:
 
         **Tiêu chí đánh giá:**
         {criteria.get('description', 'Đánh giá tổng quan về tính khả thi, tính mới và ý nghĩa khoa học của đề tài')}
+        
+        {similar_context}
+        {duplicate_warning}
 
         **Yêu cầu:**
         1. Đánh giá đề tài theo thang điểm 0-100
         2. Đưa ra quyết định: APPROVE (điểm >= 70), REVISION (50-69), hoặc REJECT (< 50)
-        3. Giải thích ngắn gọn lý do
+        3. Nếu phát hiện trùng lặp, cân nhắc giảm điểm hoặc yêu cầu REVISION
+        4. Giải thích ngắn gọn lý do
 
         Trả về kết quả dưới dạng JSON với format:
         {{

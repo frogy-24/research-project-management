@@ -20,7 +20,7 @@ async def run_ocr_with_vllm(
     filename: str,
     prompt: str | None = None,
 ) -> OcrResult:
-    model_name = os.getenv("MODEL_OCR", "openrouter/baidu/qianfan-ocr-fast:free")
+    model_name = os.getenv("OCR_MODEL", "openrouter/baidu/qianfan-ocr-fast:free")
     ocr_prompt = build_ocr_prompt(prompt)
     client = build_ocr_client()
 
@@ -83,7 +83,7 @@ async def ocr_image(
             "Dung ocr_file() hoac run_ocr_with_vllm() cho PDF."
         )
 
-    model_name = os.getenv("MODEL_OCR", "openrouter/baidu/qianfan-ocr-fast:free")
+    model_name = os.getenv("OCR_MODEL", "openrouter/baidu/qianfan-ocr-fast:free")
     ocr_prompt = build_ocr_prompt(prompt)
     client = build_ocr_client()
 

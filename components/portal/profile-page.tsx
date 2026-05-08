@@ -125,10 +125,39 @@ export function ProfilePage({ title }: ProfilePageProps) {
                         />
                     </div>
 
+                     
+
                     <div className="space-y-2">
                         <Label className="text-muted-foreground">Đơn vị / Khoa</Label>
                         <Input
                             value={me?.departmentRef?.name || form.department || 'Chưa cập nhật'}
+                            readOnly
+                            className="bg-muted/50 cursor-not-allowed"
+                        />
+                    </div>
+
+                      <div className="space-y-2">
+                        <Label className="text-muted-foreground">Mã ngành học</Label>
+                        <Input
+                            value={me?.major?.code || 'Chưa cập nhật'}
+                            readOnly
+                            className="bg-muted/50 cursor-not-allowed"
+                        />
+                    </div>
+
+                    <div className="space-y-2">
+                        <Label className="text-muted-foreground">Ngành học</Label>
+                        <Input
+                            value={me?.major?.name || 'Chưa cập nhật'}
+                            readOnly
+                            className="bg-muted/50 cursor-not-allowed"
+                        />
+                    </div>
+
+                      <div className="space-y-2">
+                        <Label className="text-muted-foreground">Mã lớp</Label>
+                        <Input
+                            value={me?.class?.code || 'Chưa cập nhật'}
                             readOnly
                             className="bg-muted/50 cursor-not-allowed"
                         />

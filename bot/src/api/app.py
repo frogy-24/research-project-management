@@ -18,7 +18,7 @@ if "src" not in sys.modules and str(Path(__file__).resolve().parents[2]) not in 
     sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
 from src.clients.llm_mcp_client import run_llm_with_mcp
-from src.api.routes import docx_to_pdf_router, ocr_router
+from src.api.routes import docx_to_pdf_router, ocr_router, project_registrations_router
 from src.api.routes.councils import router as councils_router
 from src.db import db  # Import the database instance
 from src.utilities import get_logger, log_api_request, log_async_execution, log_execution
@@ -89,6 +89,7 @@ app = FastAPI(title="FastAPI -> FastMCP Bridge", version="1.0.0", lifespan=lifes
 app.include_router(docx_to_pdf_router)
 app.include_router(ocr_router)
 app.include_router(councils_router)
+app.include_router(project_registrations_router)
 
 logger.info("🚀 FastAPI Application khởi tạo thành công")
 logger.info(f"MCP Server URL: {MCP_SERVER_URL}")
@@ -224,7 +225,7 @@ async def chat(payload: ChatRequest) -> ChatResponse:
         logger.warning("❌ Empty message received")
         raise HTTPException(status_code=400, detail="message must not be empty")
 
-    model_name = os.getenv("OPENAI_MODEL", "gpt-5-mini")
+    model_name = os.getenv("LLM_MODEL", "gpt-5-mini")
     max_rounds = 6
 
     try:
@@ -251,7 +252,7 @@ async def chat(payload: ChatRequest) -> ChatResponse:
 async def admin_statistics_report() -> Response:
     logger.info("📄 Report API - Generate admin statistics report file")
 
-    model_name = os.getenv("OPENAI_MODEL", "gpt-5-mini")
+    model_name = os.getenv("LLM_MODEL", "gpt-5-mini")
     max_rounds = 6
     prompt = _build_admin_statistics_report_prompt()
 

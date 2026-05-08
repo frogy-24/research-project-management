@@ -73,6 +73,120 @@ async def fetch_projects_for_approval(
 
 
 @log_async_execution
+async def fetch_registration_files(
+    pool: asyncpg.Pool, registration_ids: List[str]
+) -> Dict[str, List[Dict[str, Any]]]:
+    """
+    Lấy thông tin file từ ProjectRegistration dựa trên danh sách IDs.
+    Trả về dict với key là registration_id và value là list các file.
+    
+    OCR patterns để match: mau_dang_ky, maudangky, de_tai, detai, dang_ky
+    """
+    if not registration_ids:
+        return {}
+    
+    async with pool.acquire() as conn:
+        # Convert list to PostgreSQL array format
+        placeholders = [f"${i+1}" for i in range(len(registration_ids))]
+        query = f"""
+            SELECT 
+                id,
+                title,
+                "proposalFiles",
+                "teamMembers"
+            FROM "ProjectRegistration"
+            WHERE id IN ({', '.join(placeholders)})
+        """
+        
+        rows = await conn.fetch(query, *registration_ids)
+        result = {}
+        
+        for row in rows:
+            reg_id = row["id"]
+            proposal_files = row.get("proposalFiles")
+            
+            # Parse files từ JSON
+            files = []
+            if proposal_files:
+                if isinstance(proposal_files, list):
+                    files = proposal_files
+                elif isinstance(proposal_files, str):
+                    try:
+                        files = json.loads(proposal_files)
+                    except json.JSONDecodeError:
+                        files = []
+            
+            result[reg_id] = {
+                "id": reg_id,
+                "title": row["title"],
+                "files": files,
+                "teamMembers": row.get("teamMembers")
+            }
+        
+        return result
+
+
+@log_async_execution
+async def fetch_all_pending_registrations(
+    pool: asyncpg.Pool
+) -> List[Dict[str, Any]]:
+    """
+    Lấy tất cả ProjectRegistrations đang chờ phê duyệt (facultyStatus = PENDING)
+    với thông tin đầy đủ bao gồm files.
+    """
+    async with pool.acquire() as conn:
+        query = """
+            SELECT 
+                pr.id,
+                pr.title,
+                pr.objective,
+                pr."expectedOutput",
+                pr."createdAt",
+                pr."proposalFiles",
+                pr."teamMembers",
+                pr."facultyStatus",
+                pr."callRoundId",
+                cr.name as "callRoundName",
+                u.id as "userId",
+                u.name as "leaderName",
+                u.email as "leaderEmail",
+                u.code as "leaderCode",
+                iu.name as "instructorName",
+                fu.name as "facultyReviewerName"
+            FROM "ProjectRegistration" pr
+            JOIN "User" u ON pr."userId" = u.id
+            LEFT JOIN "CallRound" cr ON pr."callRoundId" = cr.id
+            LEFT JOIN "User" iu ON pr."instructorId" = iu.id
+            LEFT JOIN "User" fu ON pr."facultyReviewerId" = fu.id
+            WHERE pr."facultyStatus" = 'PENDING'
+            ORDER BY pr."createdAt" DESC
+        """
+        
+        rows = await conn.fetch(query)
+        results = []
+        
+        for row in rows:
+            record = dict(row)
+            
+            # Parse proposalFiles
+            proposal_files = record.get("proposalFiles")
+            files = []
+            if proposal_files:
+                if isinstance(proposal_files, list):
+                    files = proposal_files
+                elif isinstance(proposal_files, str):
+                    try:
+                        files = json.loads(proposal_files)
+                    except json.JSONDecodeError:
+                        files = []
+            
+            record["files"] = files
+            results.append(record)
+        
+        return results
+
+
+@log_async_execution
 async def update_job_status(
     pool: asyncpg.Pool,
     job_id: str,

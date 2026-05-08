@@ -24,8 +24,8 @@ File .env:
 
 ```
 DATABASE_URL=postgresql://postgres:example@localhost:5432/postgres?schema=public
-COPILOT_API=http://localhost:4141/
-OPENAI_MODEL=gpt-5-mini
+COPILOT_BASE_URL=http://localhost:4141/
+LLM_MODEL=gpt-5-mini
 ```
 
 ## Cai dat

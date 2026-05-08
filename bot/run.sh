@@ -74,7 +74,7 @@ if [ -z "$cmd" ]; then
 fi
 
 start_all() {
-  start_service "copilot_api" "cd '$PWD' && npx copilot-api start"
+  start_service "COPILOT_BASE_URL" "cd '$PWD' && npx copilot-api start"
   start_service "mcp_server" "cd '$PWD' && uv run python -m src.mcp.server"
   start_service "fastapi" "cd '$PWD' && uv run uvicorn src.api.app:app --host 127.0.0.1 --port 8000"
 }
@@ -82,11 +82,11 @@ start_all() {
 stop_all() {
   stop_service "fastapi"
   stop_service "mcp_server"
-  stop_service "copilot_api"
+  stop_service "COPILOT_BASE_URL"
 }
 
 status_all() {
-  status_service "copilot_api"
+  status_service "COPILOT_BASE_URL"
   status_service "mcp_server"
   status_service "fastapi"
 }

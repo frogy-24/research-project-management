@@ -1456,9 +1456,9 @@ export function ProjectRegistrationPage({ title }: ProjectRegistrationPageProps)
 
                                                     return (
                                                         <TableRow key={item.id} className="group">
-                                                            <TableCell className="pl-6 py-4">
+                                                            <TableCell className="pl-6 py-4 whitespace-normal break-words">
                                                                 <div className="flex flex-col gap-1">
-                                                                    <p className="font-semibold text-primary leading-tight hover:underline cursor-pointer">
+                                                                    <p className="font-semibold text-primary leading-tight hover:underline cursor-pointer whitespace-normal break-words">
                                                                         <Dialog>
                                                                             <DialogTrigger asChild>
                                                                                 <span>{item.title}</span>

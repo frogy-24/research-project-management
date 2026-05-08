@@ -21,7 +21,7 @@ class Service:
 
 
 SERVICES: list[Service] = [
-    # Service(name="copilot_api", command=["npx", "copilot-api", "start"]),
+    # Service(name="COPILOT_BASE_URL", command=["npx", "copilot-api", "start"]),
     # Service(name="mcp_server", command=["uv", "run", "python", "-m", "src.mcp.server"]),
     Service(
         name="fastapi",
@@ -101,7 +101,7 @@ def _stop_process(proc: subprocess.Popen[str], name: str) -> None:
 def _filter_services(include_copilot: bool) -> list[Service]:
     if include_copilot:
         return SERVICES
-    return [service for service in SERVICES if service.name != "copilot_api"]
+    return [service for service in SERVICES if service.name != "COPILOT_BASE_URL"]
 
 
 def run_all(include_copilot: bool) -> int:

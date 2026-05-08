@@ -52,16 +52,16 @@ async def open_mcp_session() -> Any:
 
 @log_execution
 def _build_llm_client() -> AsyncOpenAI:
-    base_url = os.getenv("BASE_URL") or os.getenv("OPENAI_BASE_URL") or os.getenv("COPILOT_API")
-    api_key = os.getenv("API_KEY") or os.getenv("OPENAI_API_KEY")
+    base_url = os.getenv("BASE_URL") or os.getenv("COPILOT_BASE_URL") or os.getenv("COPILOT_BASE_URL")
+    api_key = os.getenv("API_KEY") or os.getenv("COPILOT_API_KEY")
 
     if not api_key and base_url:
-        api_key = os.getenv("COPILOT_API_KEY", "dummy-key")
-        logger.debug("Sử dụng COPILOT_API_KEY fallback")
+        api_key = os.getenv("COPILOT_BASE_URL_KEY", "dummy-key")
+        logger.debug("Sử dụng COPILOT_BASE_URL_KEY fallback")
 
     if not api_key:
         logger.error("❌ Missing API key")
-        raise RuntimeError("Missing API_KEY/OPENAI_API_KEY (or set COPILOT_API + COPILOT_API_KEY)")
+        raise RuntimeError("Missing API_KEY/COPILOT_API_KEY (or set COPILOT_BASE_URL + COPILOT_BASE_URL_KEY)")
 
     if base_url:
         logger.info(f"Sử dụng custom base_url: {base_url}")
@@ -383,7 +383,7 @@ async def run_llm_with_mcp(
 def _parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="LLM client calling MCP tools")
     parser.add_argument("prompt", nargs="?", help="Prompt for the LLM")
-    parser.add_argument("--model", default=os.getenv("OPENAI_MODEL", os.getenv("MODEL", "gpt-5-mini")))
+    parser.add_argument("--model", default=os.getenv("LLM_MODEL", os.getenv("MODEL", "gpt-5-mini")))
     parser.add_argument("--max-rounds", type=int, default=6)
     return parser.parse_args()
 

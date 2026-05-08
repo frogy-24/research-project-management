@@ -9,8 +9,8 @@ logger = get_logger(__name__)
 
 @log_execution
 def build_ocr_client() -> AsyncOpenAI:
-    base_url = os.getenv("BASE_URL_1", "http://localhost:20128/v1")
-    api_key = os.getenv("API_KEY_1", "placeholder")
+    base_url = os.getenv("COPILOT_BASE_URL", "http://localhost:20128/v1")
+    api_key = os.getenv("COPILOT_API_KEY", "placeholder")
     return AsyncOpenAI(base_url=base_url, api_key=api_key)
 
 
@@ -38,7 +38,7 @@ async def ocr_single_image(
         )
         return response.choices[0].message.content or ""
     except Exception as exc:
-        base_url = os.getenv("BASE_URL_1", "http://localhost:20128/v1")
+        base_url = os.getenv("COPILOT_BASE_URL", "http://localhost:20128/v1")
         error_msg = f"[Trang {page_num}] Loi khi goi AI server tai {base_url}: {exc}"
         logger.error(error_msg)
         raise ConnectionError(error_msg) from exc
