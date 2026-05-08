@@ -106,7 +106,7 @@ function ResultsDialog({ job, onApprovalConfirmed }: { job: AutoApprovalJob; onA
                     </DialogDescription>
                 </DialogHeader>
 
-                <ScrollArea className="flex-1">
+                <ScrollArea className="flex-1 overflow-y-auto">
                     <div className="rounded-md border">
                         <table className="w-full text-sm">
                             <thead className="bg-muted/50">

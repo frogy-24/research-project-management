@@ -101,27 +101,27 @@ class LLMService:
         """
         prompt = f"""Bạn là chuyên gia đánh giá đề tài nghiên cứu khoa học. Hãy đánh giá đề tài sau dựa trên các tiêu chí được cung cấp.
 
-**Thông tin đề tài:**
-- Tiêu đề: {project.get('title', 'N/A')}
-- Mục tiêu: {project.get('objective', 'N/A')}
-- Kết quả dự kiến: {project.get('expectedOutput', 'Không có')}
-- Sinh viên: {project.get('leaderName', 'N/A')} ({project.get('leaderCode', 'N/A')})
+        **Thông tin đề tài:**
+        - Tiêu đề: {project.get('title', 'N/A')}
+        - Mục tiêu: {project.get('objective', 'N/A')}
+        - Kết quả dự kiến: {project.get('expectedOutput', 'Không có')}
+        - Sinh viên: {project.get('leaderName', 'N/A')} ({project.get('leaderCode', 'N/A')})
 
-**Tiêu chí đánh giá:**
-{criteria.get('description', 'Đánh giá tổng quan về tính khả thi, tính mới và ý nghĩa khoa học của đề tài')}
+        **Tiêu chí đánh giá:**
+        {criteria.get('description', 'Đánh giá tổng quan về tính khả thi, tính mới và ý nghĩa khoa học của đề tài')}
 
-**Yêu cầu:**
-1. Đánh giá đề tài theo thang điểm 0-100
-2. Đưa ra quyết định: APPROVE (điểm >= 70), REVISION (50-69), hoặc REJECT (< 50)
-3. Giải thích ngắn gọn lý do
+        **Yêu cầu:**
+        1. Đánh giá đề tài theo thang điểm 0-100
+        2. Đưa ra quyết định: APPROVE (điểm >= 70), REVISION (50-69), hoặc REJECT (< 50)
+        3. Giải thích ngắn gọn lý do
 
-Trả về kết quả dưới dạng JSON với format:
-{{
-    "score": <số điểm 0-100>,
-    "decision": "<APPROVE|REVISION|REJECT>",
-    "reason": "<lý do ngắn gọn>"
-}}
-"""
+        Trả về kết quả dưới dạng JSON với format:
+        {{
+            "score": <số điểm 0-100>,
+            "decision": "<APPROVE|REVISION|REJECT>",
+            "reason": "<lý do ngắn gọn>"
+        }}
+        """
         
         try:
             response = await self.chat_completion(
@@ -196,18 +196,18 @@ Trả về kết quả dưới dạng JSON với format:
         """
         prompt = f"""Hãy tóm tắt văn bản sau trong tối đa {max_length} từ:
 
-{text}
+        {text}
 
-Tóm tắt:"""
-        
+        Tóm tắt:"""
+
         response = await self.chat_completion(
             messages=[
                 {"role": "system", "content": "You are a helpful assistant that summarizes text concisely."},
-                {"role": "user", "content": prompt}
+                {"role": "user", "content": prompt},
             ],
             model=model,
             temperature=0.3,
-            max_tokens=max_length * 2
+            max_tokens=max_length * 2,
         )
         
         return response.strip()

@@ -70,6 +70,7 @@ import {
 import type { CouncilWithRelations } from '@/types/council.schema';
 import type { CouncilMember } from '@/api/council-members';
 import { Label } from '@/components/ui/label';
+import { Textarea } from '../ui/textarea';
 
 // Create Council Dialog Component
 function CreateCouncilDialog({
@@ -326,8 +327,7 @@ function CreateCouncilDialog({
 
 function QuickAddCouncilsDialog({ callRoundId }: { callRoundId: string }) {
     const [isOpen, setIsOpen] = useState(false);
-    const [minProjectsPerCouncil, setMinProjectsPerCouncil] = useState(5);
-    const [maxProjectsPerCouncil, setMaxProjectsPerCouncil] = useState(10);
+    const [requiredFromUser, setRequiredFromUser] = useState("");
     const [clearExisting, setClearExisting] = useState(false);
     const [previewItems, setPreviewItems] = useState<
         Array<{
@@ -336,11 +336,24 @@ function QuickAddCouncilsDialog({ callRoundId }: { callRoundId: string }) {
             description?: string | null;
             projectCount: number;
             memberCount: number;
+            members: Array<{
+                id: string;
+                name: string;
+                email?: string | null;
+                role?: string | null;
+            }>;
+            projects: Array<{
+                id: string;
+                title: string;
+                instructorName?: string | null;
+                studentNames: string[];
+            }>;
             agreeButton: { label: string; action: string; payload: { councilId: string } };
         }>
     >([]);
     const [selectedCouncilIds, setSelectedCouncilIds] = useState<string[]>([]);
     const [summary, setSummary] = useState('');
+    const [expandedCouncilId, setExpandedCouncilId] = useState<string | null>(null);
 
     const quickAddMutation = useQuickAddCouncilsAI(callRoundId);
     const confirmMutation = useConfirmQuickAddCouncilsAI(callRoundId);
@@ -351,16 +364,11 @@ function QuickAddCouncilsDialog({ callRoundId }: { callRoundId: string }) {
             return;
         }
 
-        if (minProjectsPerCouncil > maxProjectsPerCouncil) {
-            toast.error('Giá trị tối thiểu không được lớn hơn tối đa');
-            return;
-        }
 
         quickAddMutation.mutate(
             {
                 callRoundId,
-                minProjectsPerCouncil,
-                maxProjectsPerCouncil,
+                requiredFromUser,
                 clearExisting,
             },
             {
@@ -394,6 +402,7 @@ function QuickAddCouncilsDialog({ callRoundId }: { callRoundId: string }) {
             {
                 callRoundId,
                 selectedCouncilIds,
+                items: previewItems.filter((item) => selectedCouncilIds.includes(item.councilId)),
             },
             {
                 onSuccess: (result) => {
@@ -415,6 +424,7 @@ function QuickAddCouncilsDialog({ callRoundId }: { callRoundId: string }) {
             {
                 callRoundId,
                 selectedCouncilIds: [councilId],
+                items: previewItems.filter((item) => item.councilId === councilId),
             },
             {
                 onSuccess: (result) => {
@@ -436,7 +446,7 @@ function QuickAddCouncilsDialog({ callRoundId }: { callRoundId: string }) {
                     Thêm nhanh hội đồng (AI)
                 </Button>
             </DialogTrigger>
-            <DialogContent className="max-w-3xl">
+            <DialogContent className="max-w-3xl sm:max-w-1/2">
                 <DialogHeader>
                     <DialogTitle>Thêm nhanh hội đồng</DialogTitle>
                     <DialogDescription>
@@ -445,25 +455,13 @@ function QuickAddCouncilsDialog({ callRoundId }: { callRoundId: string }) {
                 </DialogHeader>
 
                 <div className="space-y-4">
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                    <div className="grid grid-cols-1 gap-3">
                         <div className="space-y-2">
-                            <Label>Số đề tài tối thiểu / hội đồng</Label>
-                            <Input
-                                type="number"
-                                min={1}
-                                max={20}
-                                value={minProjectsPerCouncil}
-                                onChange={(e) => setMinProjectsPerCouncil(Number(e.target.value || 1))}
-                            />
-                        </div>
-                        <div className="space-y-2">
-                            <Label>Số đề tài tối đa / hội đồng</Label>
-                            <Input
-                                type="number"
-                                min={1}
-                                max={20}
-                                value={maxProjectsPerCouncil}
-                                onChange={(e) => setMaxProjectsPerCouncil(Number(e.target.value || 1))}
+                            <Label>Yêu cầu thêm</Label>
+                            <Textarea
+                                rows={3}
+                                value={requiredFromUser}
+                                onChange={(e) => setRequiredFromUser(e.target.value)}
                             />
                         </div>
                         <div className="space-y-2">
@@ -497,31 +495,99 @@ function QuickAddCouncilsDialog({ callRoundId }: { callRoundId: string }) {
                             <div className="px-3 py-2 border-b bg-muted/30 text-sm text-muted-foreground">
                                 Danh sách hội đồng đề xuất ({previewItems.length})
                             </div>
-                            <ScrollArea className="h-72">
+                            <ScrollArea className="h-96">
                                 <div className="p-2 space-y-2">
                                     {previewItems.map((item) => (
-                                        <div key={item.councilId} className="border rounded-md p-3 flex items-start gap-3">
-                                            <Checkbox
-                                                checked={selectedCouncilIds.includes(item.councilId)}
-                                                onCheckedChange={() => toggleCouncilSelection(item.councilId)}
-                                            />
-                                            <div className="flex-1 min-w-0">
-                                                <p className="font-medium">{item.name}</p>
-                                                {item.description && (
-                                                    <p className="text-xs text-muted-foreground mt-1">{item.description}</p>
-                                                )}
-                                                <div className="mt-2 flex items-center gap-2">
-                                                    <Badge variant="secondary">{item.memberCount} thành viên</Badge>
-                                                    <Badge>{item.projectCount} đề tài</Badge>
+                                        <div key={item.councilId} className="border rounded-md p-3">
+                                            <div className="flex items-start gap-3">
+                                                <Checkbox
+                                                    checked={selectedCouncilIds.includes(item.councilId)}
+                                                    onCheckedChange={() => toggleCouncilSelection(item.councilId)}
+                                                />
+                                                <div className="flex-1 min-w-0">
+                                                    <div className="flex items-start justify-between gap-2">
+                                                        <div>
+                                                            <p className="font-medium">{item.name}</p>
+                                                            {item.description && (
+                                                                <p className="text-xs text-muted-foreground mt-1">{item.description}</p>
+                                                            )}
+                                                            <div className="mt-2 flex items-center gap-2">
+                                                                <Badge variant="secondary">{item.memberCount} thành viên</Badge>
+                                                                <Badge>{item.projectCount} đề tài</Badge>
+                                                            </div>
+                                                        </div>
+                                                        <div className="flex items-center gap-2">
+                                                            <Button
+                                                                variant="outline"
+                                                                size="sm"
+                                                                onClick={() => setExpandedCouncilId(expandedCouncilId === item.councilId ? null : item.councilId)}
+                                                            >
+                                                                {expandedCouncilId === item.councilId ? 'Thu gọn' : 'Chi tiết'}
+                                                            </Button>
+                                                            <Button
+                                                                size="sm"
+                                                                onClick={() => handleConfirmSingle(item.councilId)}
+                                                                disabled={confirmMutation.isPending}
+                                                            >
+                                                                {item.agreeButton.label || 'Đồng ý'}
+                                                            </Button>
+                                                        </div>
+                                                    </div>
+
+                                                    {/* Expanded Details */}
+                                                    {expandedCouncilId === item.councilId && (
+                                                        <div className="mt-4 space-y-4 border-t pt-4">
+                                                            {/* Members */}
+                                                            {item.members.length > 0 && (
+                                                                <div>
+                                                                    <h4 className="text-sm font-medium mb-2 flex items-center gap-2">
+                                                                        <Users className="h-4 w-4" />
+                                                                        Thành viên hội đồng
+                                                                    </h4>
+                                                                    <div className="space-y-2">
+                                                                        {item.members.map((member) => (
+                                                                            <div key={member.id} className="flex items-center gap-3 p-2 bg-muted/30 rounded-md">
+                                                                                <Badge variant="outline">{member.role || 'Ủy viên'}</Badge>
+                                                                                <span className="font-medium text-sm">{member.name}</span>
+                                                                                {member.email && (
+                                                                                    <span className="text-xs text-muted-foreground">{member.email}</span>
+                                                                                )}
+                                                                            </div>
+                                                                        ))}
+                                                                    </div>
+                                                                </div>
+                                                            )}
+
+                                                            {/* Projects */}
+                                                            {item.projects.length > 0 && (
+                                                                <div>
+                                                                    <h4 className="text-sm font-medium mb-2 flex items-center gap-2">
+                                                                        <FileText className="h-4 w-4" />
+                                                                        Đề tài được phân công
+                                                                    </h4>
+                                                                    <div className="space-y-2">
+                                                                        {item.projects.map((project) => (
+                                                                            <div key={project.id} className="p-2 bg-muted/30 rounded-md">
+                                                                                <p className="font-medium text-sm">{project.title}</p>
+                                                                                {project.instructorName && (
+                                                                                    <p className="text-xs text-muted-foreground mt-1">
+                                                                                        GVHD: {project.instructorName}
+                                                                                    </p>
+                                                                                )}
+                                                                                {project.studentNames.length > 0 && (
+                                                                                    <p className="text-xs text-muted-foreground">
+                                                                                        Sinh viên: {project.studentNames.join(', ')}
+                                                                                    </p>
+                                                                                )}
+                                                                            </div>
+                                                                        ))}
+                                                                    </div>
+                                                                </div>
+                                                            )}
+                                                        </div>
+                                                    )}
                                                 </div>
                                             </div>
-                                            <Button
-                                                size="sm"
-                                                onClick={() => handleConfirmSingle(item.councilId)}
-                                                disabled={confirmMutation.isPending}
-                                            >
-                                                {item.agreeButton.label || 'Đồng ý'}
-                                            </Button>
                                         </div>
                                     ))}
                                 </div>

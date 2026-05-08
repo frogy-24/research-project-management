@@ -2,10 +2,10 @@ import json
 import os
 import re
 import sys
-from datetime import datetime, timezone
-from typing import Any
-from pathlib import Path
 from contextlib import asynccontextmanager
+from datetime import datetime, timezone
+from pathlib import Path
+from typing import Any
 
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import Response
@@ -19,6 +19,8 @@ if "src" not in sys.modules and str(Path(__file__).resolve().parents[2]) not in 
 
 from src.clients.llm_mcp_client import run_llm_with_mcp
 from src.api.routes import docx_to_pdf_router, ocr_router
+from src.api.routes.councils import router as councils_router
+from src.db import db  # Import the database instance
 from src.utilities import get_logger, log_api_request, log_async_execution, log_execution
 
 logger = get_logger(__name__)
@@ -59,11 +61,34 @@ def _build_admin_statistics_report_prompt() -> str:
     )
 
 
+@asynccontextmanager
+async def lifespan(app: FastAPI) -> Any:
+    """Lifespan handler for startup/shutdown events."""
+    # Startup: connect to database
+    logger.info("🚀 FastAPI Starting up - connecting to database...")
+    try:
+        await db.connect()
+        logger.info("✅ Database connection established")
+    except Exception as exc:
+        logger.error(f"❌ Failed to connect to database: {exc}")
+    
+    yield  # Application runs here
+    
+    # Shutdown: disconnect from database
+    logger.info("🛑 FastAPI Shutting down - disconnecting from database...")
+    try:
+        await db.close()
+        logger.info("✅ Database connection closed")
+    except Exception as exc:
+        logger.error(f"❌ Error closing database: {exc}")
+
+
 MCP_SERVER_URL = os.getenv("MCP_SERVER_URL", "http://127.0.0.1:9000/mcp")
 
-app = FastAPI(title="FastAPI -> FastMCP Bridge", version="1.0.0")
+app = FastAPI(title="FastAPI -> FastMCP Bridge", version="1.0.0", lifespan=lifespan)
 app.include_router(docx_to_pdf_router)
 app.include_router(ocr_router)
+app.include_router(councils_router)
 
 logger.info("🚀 FastAPI Application khởi tạo thành công")
 logger.info(f"MCP Server URL: {MCP_SERVER_URL}")

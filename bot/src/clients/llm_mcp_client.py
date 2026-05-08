@@ -30,6 +30,12 @@ SYSTEM_PROMPT = (
     "- NEVER call healthcheck unless explicitly asked\n"
     "- Prefer direct SQL queries over multiple tool calls\n"
     "- Be efficient and minimize round trips"
+    "\n\n## Council Management Tools:\n"
+    "- generate_councils: Tạo hội đồng chấm đồ án từ prompt (cần call_round_id, prompt, creator_id)\n"
+    "- get_council_preview: Xem trước các hội đồng đã tạo theo session_id\n"
+    "- confirm_councils: Xác nhận và áp dụng các hội đồng vào database (sau khi preview)\n"
+    "- cancel_councils: Hủy bỏ các hội đồng tạm thời\n"
+    "- Quy trình: generate_councils -> get_council_preview -> confirm_councils/cancel_councils\n"
 )
 USER_ID_PATTERN = re.compile(r"\b[a-z0-9]{20,40}\b", re.IGNORECASE)
 

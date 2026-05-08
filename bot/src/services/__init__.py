@@ -2,6 +2,9 @@
 
 from src.services.auto_approval_ocr_service import maybe_index_project_documents
 from src.services.auto_approval_service import evaluate_project_with_llm, process_job
+from src.services.council_service import (
+    generate_councils_from_prompt
+)
 from src.services.docx_to_pdf_service import (
     build_pdf_filename,
     cleanup_files,
@@ -35,4 +38,8 @@ __all__ = [
     "ocr_image",
     "run_ocr_with_vllm",
     "index_ocr_document",
+    "generate_councils_from_prompt",
+    "confirm_councils",
+    "cancel_councils",
+    "get_preview",
 ]

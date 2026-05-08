@@ -254,12 +254,25 @@ export type StudentCouncilItem = z.infer<typeof studentCouncilItemSchema>;
 
 export const quickAddCouncilsInputSchema = z.object({
   callRoundId: z.string().min(1),
-  minProjectsPerCouncil: z.number().min(1).max(20).default(5),
-  maxProjectsPerCouncil: z.number().min(1).max(20).default(10),
+  requiredFromUser: z.string().min(1).optional(),
   clearExisting: z.boolean().default(false),
 });
 
 export type QuickAddCouncilsInput = z.infer<typeof quickAddCouncilsInputSchema>;
+
+export const quickAddCouncilMemberSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  email: z.string().nullable().optional(),
+  role: z.string().nullable().optional(),
+});
+
+export const quickAddCouncilProjectSchema = z.object({
+  id: z.string(),
+  title: z.string(),
+  instructorName: z.string().nullable().optional(),
+  studentNames: z.array(z.string()).default([]),
+});
 
 export const quickAddCouncilItemSchema = z.object({
   councilId: z.string(),
@@ -267,6 +280,8 @@ export const quickAddCouncilItemSchema = z.object({
   description: z.string().nullable().optional(),
   projectCount: z.number(),
   memberCount: z.number(),
+  members: z.array(quickAddCouncilMemberSchema).default([]),
+  projects: z.array(quickAddCouncilProjectSchema).default([]),
   agreeButton: z.object({
     label: z.string(),
     action: z.string(),
@@ -302,7 +317,8 @@ export type QuickAddCouncilsResponse = z.infer<typeof quickAddCouncilsResponseSc
 
 export const confirmQuickAddCouncilsInputSchema = z.object({
   callRoundId: z.string().min(1),
-  selectedCouncilIds: z.array(z.string()).min(1),
+  items: z.array(quickAddCouncilItemSchema).min(1),
+  selectedCouncilIds: z.array(z.string()).optional(),
 });
 
 export type ConfirmQuickAddCouncilsInput = z.infer<typeof confirmQuickAddCouncilsInputSchema>;

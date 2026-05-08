@@ -47,7 +47,7 @@ async def worker_loop():
         while True:
             iteration += 1
             try:
-                print(f"\n[Iteration #{iteration}] 🔍 Checking for pending jobs...")
+                print(f"\n[Iteration #{iteration}] 🔍Sửa Checking for pending jobs...")
                 
                 # Fetch pending jobs
                 jobs = await fetch_pending_jobs(pool)

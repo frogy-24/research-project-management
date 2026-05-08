@@ -11,6 +11,12 @@ if "src" not in sys.modules and str(Path(__file__).resolve().parents[2]) not in 
 
 from src.db import db
 from src.repositories import get_admin_statistics_snapshot, get_all_users, get_user_by_id
+from src.services.council_service import (
+	cancel_councils,
+	confirm_councils,
+	generate_councils_from_prompt,
+	get_preview,
+)
 from src.utilities import get_logger, log_async_execution
 
 logger = get_logger(__name__)
@@ -85,6 +91,58 @@ async def mcp_get_admin_statistics_snapshot() -> dict[str, Any]:
     logger.info("📊 MCP Tool: get_admin_statistics_snapshot được gọi")
     await _ensure_db_connected()
     return await get_admin_statistics_snapshot()
+
+
+@mcp.tool(
+    name="generate_councils",
+    description="Tao hoi dong chuang dien bang LLM tu prompt mo ta yeu cau",
+)
+@log_async_execution
+async def mcp_generate_councils(
+    call_round_id: str,
+    prompt: str,
+    creator_id: str,
+) -> dict[str, Any]:
+    logger.info(f"🏛️ MCP Tool: generate_councils - call_round={call_round_id}, prompt={prompt[:50]}...")
+    await _ensure_db_connected()
+    return await generate_councils_from_prompt(
+        call_round_id=call_round_id,
+        prompt=prompt,
+        creator_id=creator_id,
+    )
+
+
+@mcp.tool(
+    name="confirm_councils",
+    description="Xac nhan va apply cac hoi dong ao thanh that",
+)
+@log_async_execution
+async def mcp_confirm_councils(session_id: str) -> dict[str, Any]:
+    logger.info(f"✅ MCP Tool: confirm_councils - session={session_id}")
+    await _ensure_db_connected()
+    return await confirm_councils(session_id)
+
+
+@mcp.tool(
+    name="cancel_councils",
+    description="Huy bo cac hoi dong ao",
+)
+@log_async_execution
+async def mcp_cancel_councils(session_id: str) -> dict[str, Any]:
+    logger.info(f"❌ MCP Tool: cancel_councils - session={session_id}")
+    await _ensure_db_connected()
+    return await cancel_councils(session_id)
+
+
+@mcp.tool(
+    name="get_council_preview",
+    description="Lay danh sach hoi dong ao theo session de preview",
+)
+@log_async_execution
+async def mcp_get_council_preview(session_id: str) -> list[dict[str, Any]]:
+    logger.info(f"👁️ MCP Tool: get_council_preview - session={session_id}")
+    await _ensure_db_connected()
+    return await get_preview(session_id)
 
 
 
