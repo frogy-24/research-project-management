@@ -14,7 +14,7 @@ from pathlib import Path
 if "src" not in sys.modules and str(Path(__file__).resolve().parents[2]) not in sys.path:
     sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
-from src.mcp.server import _generate_sql_from_request_async, _generate_sql_from_request
+from src.services.sql_assistant_service import _generate_sql_with_llm
 from src.db import db
 from src.utilities import get_logger, log_async_execution
 
@@ -45,7 +45,8 @@ async def sql_assistant_query(request: dict[str, Any]) -> dict[str, Any]:
     question = (
         request.get("question", "").strip() or
         request.get("query", "").strip() or
-        request.get("text", "").strip()
+        request.get("text", "").strip() or
+        request.get("note", "").strip()
     )
     
     if not question:
@@ -58,7 +59,7 @@ async def sql_assistant_query(request: dict[str, Any]) -> dict[str, Any]:
     
     try:
         # 1. Generate SQL từ câu hỏi tiếng Việt (dùng LLM)
-        sql_result = await _generate_sql_from_request_async(question)
+        sql_result = await _generate_sql_with_llm(question, None)
         sql = sql_result["sql"]
         explanation = sql_result["explanation"]
         logger.info(f"📝 LLM Generated SQL: {sql[:100]}...")
@@ -87,7 +88,7 @@ async def sql_assistant_query(request: dict[str, Any]) -> dict[str, Any]:
 @router.get("/schema")
 async def get_schema() -> dict[str, Any]:
     """Trả về database schema để user biết có thể hỏi gì"""
-    from src.mcp.server import DATABASE_SCHEMA
+    from src.services.sql_assistant_service import DATABASE_SCHEMA
     return {
         "schema": DATABASE_SCHEMA,
         "example_questions": [
