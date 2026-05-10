@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
-import { getActorUserId } from "@/lib/project-permissions";
+import { getActorRole, getActorUserId } from "@/lib/project-permissions";
 
 
 export async function GET(req: Request) {
@@ -135,6 +135,75 @@ export async function GET(req: Request) {
         total,
         totalPages: Math.ceil(total / limit),
       }
+    });
+  } catch (error: any) {
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
+}
+
+export async function POST(req: Request) {
+  try {
+    const userId = getActorUserId(req);
+    const role = getActorRole(req);
+
+    if (!userId || role !== "DEAN") {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    const body = await req.json();
+    const { filters, criteria } = body ?? {};
+
+    if (!filters || !criteria) {
+      return NextResponse.json(
+        { error: "Missing filters or criteria" },
+        { status: 400 }
+      );
+    }
+
+    const job = await prisma.autoApprovalJob.create({
+      data: {
+        deanId: userId,
+        filters,
+        criteria,
+        status: "QUEUED",
+        progress: 0,
+      },
+    });
+
+    const botBaseUrl = process.env.AI_API_URL || process.env.BOT_API_URL || "http://localhost:8000";
+    const response = await fetch(`${botBaseUrl}/api/dean/evaluate-with-ai`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        filters,
+        criteria,
+        jobId: job.id,
+      }),
+      cache: "no-store",
+    });
+
+    if (!response.ok) {
+      const detail = await response.text();
+      await prisma.autoApprovalJob.update({
+        where: { id: job.id },
+        data: {
+          status: "FAILED",
+          error: `Publish failed: ${detail}`,
+          completedAt: new Date(),
+        },
+      });
+      return NextResponse.json(
+        { error: "Publish evaluate-with-ai failed", details: detail },
+        { status: 502 }
+      );
+    }
+
+    return NextResponse.json({
+      success: true,
+      jobId: job.id,
+      status: job.status,
     });
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });

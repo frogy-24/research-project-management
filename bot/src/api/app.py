@@ -18,7 +18,13 @@ if "src" not in sys.modules and str(Path(__file__).resolve().parents[2]) not in 
     sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
 from src.clients.llm_mcp_client import run_llm_with_mcp
-from src.api.routes import docx_to_pdf_router, ocr_router, project_registrations_router
+from src.api.routes import (
+    dean_auto_approval_router,
+    docx_to_pdf_router,
+    ocr_router,
+    project_registrations_router,
+    sql_assistant_router,
+)
 from src.api.routes.councils import router as councils_router
 from src.db import db  # Import the database instance
 from src.utilities import get_logger, log_api_request, log_async_execution, log_execution
@@ -86,10 +92,12 @@ async def lifespan(app: FastAPI) -> Any:
 MCP_SERVER_URL = os.getenv("MCP_SERVER_URL", "http://127.0.0.1:9000/mcp")
 
 app = FastAPI(title="FastAPI -> FastMCP Bridge", version="1.0.0", lifespan=lifespan)
+app.include_router(dean_auto_approval_router)
 app.include_router(docx_to_pdf_router)
 app.include_router(ocr_router)
 app.include_router(councils_router)
 app.include_router(project_registrations_router)
+app.include_router(sql_assistant_router)
 
 logger.info("🚀 FastAPI Application khởi tạo thành công")
 logger.info(f"MCP Server URL: {MCP_SERVER_URL}")

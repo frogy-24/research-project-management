@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { Prisma } from '@/prisma/generated/prisma';
 import prisma from '@/lib/prisma';
 import { getActorUserId, getActorRole } from '@/lib/project-permissions';
 
@@ -22,25 +23,30 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Tạo job trong database
-    const job = await prisma.autoApprovalJob.create({
-      data: {
-        deanId: userId,
+    const botBaseUrl = process.env.AI_API_URL || process.env.BOT_API_URL || 'http://localhost:8000';
+    const response = await fetch(`${botBaseUrl}/api/dean/evaluate-with-ai`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
         filters,
         criteria,
-        status: 'QUEUED',
-        progress: 0,
-      },
+        wait: true,
+        timeoutSeconds: 600,
+      }),
+      cache: 'no-store',
     });
 
-    // Gửi message vào RabbitMQ queue (sẽ được Python worker xử lý)
-    // Note: Không cần RabbitMQ client ở đây, Python worker sẽ poll database
-    
-    return NextResponse.json({
-      success: true,
-      jobId: job.id,
-      message: 'Job created successfully',
-    });
+    const responseData = await response.json();
+    if (!response.ok) {
+      return NextResponse.json(
+        { error: 'Evaluate-with-ai failed', details: responseData },
+        { status: response.status },
+      );
+    }
+
+    return NextResponse.json(responseData);
   } catch (error) {
     console.error('Error creating auto-approval job:', error);
     return NextResponse.json(
@@ -55,24 +61,21 @@ export async function GET(request: NextRequest) {
   try {
     const userId = getActorUserId(request);
     const role = getActorRole(request);
-    
+
     if (!userId || role !== 'DEAN') {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    // Get callRoundId from query params
     const { searchParams } = new URL(request.url);
     const callRoundId = searchParams.get('callRoundId');
 
-    // Build where clause
-    const where: any = {
+    const where: Prisma.AutoApprovalJobWhereInput = {
       deanId: userId,
       status: {
         in: ['QUEUED', 'PROCESSING', 'COMPLETED', 'FAILED'],
       },
     };
 
-    // Filter by callRoundId if provided
     if (callRoundId) {
       where.filters = {
         path: ['callRoundId'],

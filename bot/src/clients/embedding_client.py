@@ -75,7 +75,7 @@ async def embed_text(
     if not text or not text.strip():
         return None
 
-    model_name = model or os.getenv("EMBEDDING_MODEL", "text-embedding-3-small")
+    model_name = model or os.getenv("EMBEDDING_MODEL", "sentence-transformers/all-MiniLM-L6-v2")
 
     if _is_local_embedding(model_name):
         return await _embed_text_local(text, model_name)

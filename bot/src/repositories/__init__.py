@@ -8,6 +8,8 @@ from .council_repository import (
 )
 from .statistics_repository import get_admin_statistics_snapshot
 from .user_repository import get_all_users, get_user_by_id
+from .callround_repository import get_callround_by_id
+from .project_registration import get_project_registration_by_call_round_id
 
 __all__ = [
 	"fetch_pending_jobs",
@@ -17,4 +19,6 @@ __all__ = [
 	"get_user_by_id",
 	"get_admin_statistics_snapshot",
 	"get_lecturers_for_council"
+	"get_callround_by_id",
+	"get_project_registration_by_call_round_id",
 ]
