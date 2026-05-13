@@ -14,9 +14,9 @@ from pathlib import Path
 if "src" not in sys.modules and str(Path(__file__).resolve().parents[2]) not in sys.path:
     sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
-from src.services.sql_assistant_service import _generate_sql_with_llm
 from src.db import db
 from src.utilities import get_logger, log_async_execution
+from src.api.mcp_client import call_mcp_tool
 
 logger = get_logger(__name__)
 router = APIRouter(prefix="/sql-assistant", tags=["SQL Assistant"])
@@ -56,13 +56,13 @@ async def sql_assistant_query(request: dict[str, Any]) -> dict[str, Any]:
         )
     
     logger.info(f"🔍 SQL Assistant nhận câu hỏi: {question}")
-    
+
     try:
-        # 1. Generate SQL từ câu hỏi tiếng Việt (dùng LLM)
-        sql_result = await _generate_sql_with_llm(question, None)
+        # 1. Generate SQL từ câu hỏi tiếng Việt qua MCP tool
+        sql_result = await call_mcp_tool("generate_sql", {"user_request": question})
         sql = sql_result["sql"]
         explanation = sql_result["explanation"]
-        logger.info(f"📝 LLM Generated SQL: {sql[:100]}...")
+        logger.info(f"📝 MCP Generated SQL: {sql[:100]}...")
         
         # 2. Execute SQL
         await db.connect()
