@@ -3,7 +3,7 @@
 import { useState, useMemo } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
-import { Download, ExternalLink, FileText, Search, X } from 'lucide-react';
+import { Download, ExternalLink, FileText, Search, X, RefreshCw, Plus } from 'lucide-react';
 import { useDeanApprovals, useUpdateDeanApprovalStatus, type DeanApprovalsFilters } from '@/hooks/useDeanApprovals';
 import { useCallRounds } from '@/hooks/useCallRounds';
 import { useDebounce } from '@/hooks/useDebounce';
@@ -11,6 +11,8 @@ import type { RegistrationProposalFile } from '@/types/project-registration.sche
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Card, CardContent } from '@/components/ui/card';
+import { Progress } from '@/components/ui/progress';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -24,6 +26,9 @@ import {
     PaginationPrevious,
 } from '@/components/ui/pagination';
 import { AutoApprovalDialog } from '@/components/projects/auto-approval-dialog';
+import { ReportTemplateDialog } from '@/components/projects/report-template-dialog';
+import { useReportJobs } from '@/hooks/useReports';
+import type { ReportJob } from '@/api/reports';
 
 interface Registration {
     id: string;
@@ -107,6 +112,8 @@ export function DeanApprovalClient() {
     const [searchInput, setSearchInput] = useState('');
     const [facultyStatus, setFacultyStatus] = useState('');
     const [callRoundId, setCallRoundId] = useState('');
+    const [showReportDialog, setShowReportDialog] = useState(false);
+    const [showReportHistoryDialog, setShowReportHistoryDialog] = useState(false);
 
     // Debounce search input for better performance
     const debouncedSearch = useDebounce(searchInput, 300);
@@ -216,12 +223,43 @@ export function DeanApprovalClient() {
 
                     {/* Auto Approval Dialog - Only show when call round is selected */}
                     {callRoundId && callRoundId !== 'ALL' && (
-                        <AutoApprovalDialog
-                            callRoundId={callRoundId}
-                            callRoundName={callRounds.find((round) => round.id === callRoundId)?.name}
-                            onApprovalConfirmed={handleAutoApprovalConfirmed}
-                        />
+                        <>
+                            <AutoApprovalDialog
+                                callRoundId={callRoundId}
+                                callRoundName={callRounds.find((round) => round.id === callRoundId)?.name}
+                                onApprovalConfirmed={handleAutoApprovalConfirmed}
+                            />
+                            <ReportTemplateDialog
+                                open={showReportDialog}
+                                onOpenChange={setShowReportDialog}
+                                callRoundId={callRoundId}
+                                callRoundName={callRounds.find((round) => round.id === callRoundId)?.name}
+                                onReportCreated={() => {}}
+                            />
+                            <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => setShowReportDialog(true)}
+                            >
+                                <Plus className="h-4 w-4 mr-1" />
+                                Tạo báo cáo
+                            </Button>
+                            <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => setShowReportHistoryDialog(true)}
+                            >
+                                <FileText className="h-4 w-4 mr-1" />
+                                Xem báo cáo
+                            </Button>
+                        </>
                     )}
+
+                    {/* Report History Dialog */}
+                    <ReportHistoryDialog
+                        open={showReportHistoryDialog}
+                        onOpenChange={setShowReportHistoryDialog}
+                    />
                 </div>
 
                 {/* Active Filters Display */}
@@ -681,5 +719,115 @@ export function DeanApprovalClient() {
             )}
 
         </div>
+    );
+}
+
+function ReportHistoryDialog({ open, onOpenChange }: { open: boolean; onOpenChange: (v: boolean) => void }) {
+    const { data, isLoading, refetch } = useReportJobs();
+    const jobs = data?.data || [];
+
+    const statusColors: Record<string, string> = {
+        QUEUED: 'bg-yellow-500',
+        PROCESSING: 'bg-blue-500',
+        COMPLETED: 'bg-green-500',
+        FAILED: 'bg-red-500',
+    };
+
+    const statusLabels: Record<string, string> = {
+        QUEUED: 'Đang chờ',
+        PROCESSING: 'Đang xử lý',
+        COMPLETED: 'Hoàn thành',
+        FAILED: 'Thất bại',
+    };
+
+    const reportTypeLabels: Record<string, string> = {
+        PROJECT_SUMMARY: 'Tổng hợp đề tài',
+        COUNCIL_REVIEW: 'Hội đồng chấm điểm',
+        DISBURSEMENT: 'Giải ngân',
+        STUDENT_PROGRESS: 'Tiến độ sinh viên',
+        CUSTOM: 'Tùy chỉnh',
+    };
+
+    const handleDownload = (job: ReportJob) => {
+        if (!job.resultUrl) return;
+        window.open(job.resultUrl, '_blank');
+    };
+
+    return (
+        <Dialog open={open} onOpenChange={onOpenChange}>
+            <DialogContent className="max-w-3xl max-h-[80vh] overflow-hidden flex flex-col sm:max-w-1/2">
+                <DialogHeader>
+                    <DialogTitle className="flex items-center gap-2">
+                        <FileText className="h-5 w-5" />
+                        Lịch sử báo cáo
+                    </DialogTitle>
+                </DialogHeader>
+
+                <div className="flex items-center justify-between mb-4">
+                    <p className="text-sm text-muted-foreground">
+                        {jobs.length} báo cáo đã tạo
+                    </p>
+                    <Button variant="outline" size="sm" onClick={() => refetch()}>
+                        <RefreshCw className="h-4 w-4 mr-1" />
+                        Làm mới
+                    </Button>
+                </div>
+
+                <div className="flex-1 overflow-y-auto space-y-3 pr-2">
+                    {isLoading ? (
+                        <div className="flex items-center justify-center h-40">
+                            <RefreshCw className="w-6 h-6 animate-spin" />
+                        </div>
+                    ) : jobs.length === 0 ? (
+                        <div className="flex flex-col items-center justify-center h-40 text-muted-foreground">
+                            <FileText className="w-12 h-12 mb-3" />
+                            <p>Chưa có báo cáo nào</p>
+                        </div>
+                    ) : (
+                        jobs.map((job: ReportJob) => (
+                            <Card key={job.id} className="p-4">
+                                <div className="flex items-start justify-between gap-4">
+                                    <div className="flex-1 min-w-0">
+                                        <div className="flex items-center gap-2 mb-1">
+                                            <span className="font-medium">
+                                                {reportTypeLabels[job.reportType] || job.reportType}
+                                            </span>
+                                            <Badge className={`${statusColors[job.status]} text-white text-xs`}>
+                                                {statusLabels[job.status]}
+                                            </Badge>
+                                        </div>
+                                        <p className="text-sm text-muted-foreground">
+                                            {job.parameters?.callRoundId ? `Đợt: ${job.parameters.callRoundId}` : 'Không rõ đợt'}
+                                        </p>
+                                        <p className="text-xs text-muted-foreground mt-1">
+                                            {new Date(job.createdAt).toLocaleString('vi-VN')}
+                                        </p>
+                                        {(job.status === 'QUEUED' || job.status === 'PROCESSING') && (
+                                            <div className="mt-2">
+                                                <div className="flex justify-between text-xs mb-1">
+                                                    <span>Đang xử lý...</span>
+                                                    <span>{job.progress}%</span>
+                                                </div>
+                                                <Progress value={job.progress} className="h-2" />
+                                            </div>
+                                        )}
+                                        {job.status === 'FAILED' && job.error && (
+                                            <p className="text-xs text-red-500 mt-1">{job.error}</p>
+                                        )}
+                                    </div>
+
+                                    {job.status === 'COMPLETED' && job.resultUrl && (
+                                        <Button size="sm" onClick={() => handleDownload(job)}>
+                                            <Download className="h-4 w-4 mr-1" />
+                                            Tải xuống
+                                        </Button>
+                                    )}
+                                </div>
+                            </Card>
+                        ))
+                    )}
+                </div>
+            </DialogContent>
+        </Dialog>
     );
 }

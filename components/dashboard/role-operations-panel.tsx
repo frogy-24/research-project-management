@@ -187,10 +187,11 @@ export function RoleOperationsPanel({ role }: RoleOperationsPanelProps) {
       {
         projectId: selectedProjectId,
         payload: {
+          projectId: selectedProjectId,
           amount: Number(disbursementAmount),
           disbursedAt: new Date(disbursementDate),
-          voucherNo: voucherNo.trim() ? voucherNo : null,
-          voucherFileUrl: voucherFileUrl.trim() ? voucherFileUrl : null,
+          voucherNo: voucherNo.trim() || undefined,
+          voucherFileUrl: voucherFileUrl.trim() || undefined,
         },
       },
       {
@@ -589,6 +590,14 @@ export function RoleOperationsPanel({ role }: RoleOperationsPanelProps) {
               <CardContent className="py-4">
                 <p className="text-sm text-muted-foreground">Đã hoàn thành</p>
                 <p className="text-2xl font-semibold">{completedCount}</p>
+              </CardContent>
+            </Card>
+            <Card className="md:col-span-3">
+              <CardContent className="py-4">
+                <p className="text-sm text-muted-foreground mb-2">Báo cáo</p>
+                <Button asChild variant="outline">
+                  <a href="/dean/reports">Quản lý báo cáo</a>
+                </Button>
               </CardContent>
             </Card>
           </div>

@@ -92,6 +92,13 @@ enum AutoApprovalJobStatus {
   FAILED
 }
 
+enum ReportJobStatus {
+  QUEUED
+  PROCESSING
+  COMPLETED
+  FAILED
+}
+
 model Department {
   id          String      @id @default(cuid())
   code        String      @unique
@@ -634,6 +641,46 @@ model AutoApprovalJob {
   createdAt   DateTime               @default(now())
   updatedAt   DateTime               @updatedAt
   completedAt DateTime?              // Thời điểm hoàn thành
+
+  @@index([deanId, status])
+  @@index([createdAt])
+}
+
+// Report Template - Mẫu báo cáo upload
+model ReportTemplate {
+  id        String   @id @default(cuid())
+  name      String
+  fileUrl   String
+  fileType  String
+  fileSize  Int
+  uploadedBy String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  jobs ReportJob[]
+
+  @@index([uploadedBy])
+}
+
+// Report Generation Job - Tạo báo cáo với RabbitMQ + LLM
+model ReportJob {
+  id          String          @id @default(cuid())
+  deanId      String
+  reportType  String // Loại báo cáo (VD: "project_summary", "budget_report")
+  templateUrl String? // URL file template upload
+  templateId  String? // FK tới ReportTemplate
+  callRoundId String? // Đợt đăng ký liên quan
+  templateType String? // Loại template ("default", "uploaded")
+  parameters  Json // Tham số lọc (date range, callRoundId, etc.)
+  status      ReportJobStatus @default(QUEUED)
+  progress    Int             @default(0) // 0-100
+  resultUrl   String? // URL file báo cáo đã tạo
+  error       String? // Lỗi nếu có
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+  completedAt DateTime? // Thời điểm hoàn thành
+
+  template   ReportTemplate? @relation(fields: [templateId], references: [id], onDelete: SetNull)
 
   @@index([deanId, status])
   @@index([createdAt])

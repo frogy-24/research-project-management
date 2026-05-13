@@ -3,11 +3,13 @@ import { AUTH_COOKIE_NAME, verifyAuthToken } from "@/lib/auth";
 import { getDashboardRoute, getExpectedRoleByPathname } from "@/lib/role-routes";
 
 const isApiAuthRoute = (pathname: string) => pathname.startsWith("/api/auth");
+const isPublicUploadRoute = (pathname: string) =>
+  pathname === "/api/upload" || pathname === "/api/reports/upload";
 
 export async function proxy (request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  if (isApiAuthRoute(pathname)) {
+  if (isApiAuthRoute(pathname) || isPublicUploadRoute(pathname)) {
     return NextResponse.next();
   }
 

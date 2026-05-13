@@ -324,6 +324,11 @@ function AppSidebar({ session }: { session: AuthSession }) {
                 url: '/dean/rooms',
                 icon: DoorOpen,
             },
+            {
+                title: 'Báo cáo',
+                url: '/dean/reports',
+                icon: BarChart3,
+            },
         );
     } else if (session.role === 'ADMIN') {
         navItems.push(

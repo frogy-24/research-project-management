@@ -5,6 +5,7 @@ from src.api.routes.docx_to_pdf import router as docx_to_pdf_router
 from src.api.routes.ocr import router as ocr_router
 from src.api.routes.project_registrations import router as project_registrations_router
 from src.api.routes.sql_assistant import router as sql_assistant_router
+from src.api.routes.file_processor import router as file_processor_router
 
 __all__ = [
 	"dean_auto_approval_router",
@@ -12,4 +13,5 @@ __all__ = [
 	"ocr_router",
 	"project_registrations_router",
 	"sql_assistant_router",
+	"file_processor_router",
 ]

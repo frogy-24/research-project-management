@@ -59,3 +59,30 @@ services:
       interval: 10s
       timeout: 5s
       retries: 10
+
+  reports:
+    image: alpine:latest
+    container_name: reports
+    restart: always
+    volumes:
+      - /home/caoviet/Documents/reports_shared:/tmp/reports
+
+  bot:
+    build:
+      context: ./bot
+      dockerfile: Dockerfile
+    container_name: urms-bot
+    restart: always
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/postgres
+      - RABBITMQ_URL=amqp://admin:admin123@rabbitmq:5672/
+      - NEXTJS_BASE_URL=http://host.docker.internal:3000
+    volumes:
+      - /home/caoviet/Documents/reports_shared:/tmp/reports
+    depends_on:
+      postgres:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    extra_hosts:
+      - "host.docker.internal:host-gateway"

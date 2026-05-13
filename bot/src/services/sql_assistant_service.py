@@ -164,10 +164,10 @@ SQL_GENERATION_PROMPT = """
   
     Chỉ trả về JSON hợp lệ:
 
-    {
+    {{
     "sql": "SELECT ...",
     "explanation": "Giải thích ngắn gọn"
-    }
+    }}
 
     ==================================================
     VÍ DỤ SQL ĐÚNG
@@ -396,7 +396,9 @@ class SqlAssistantService:
                 response_format={"type": "json_object"}
             )
             
-            result = json.loads(response)
+            # Strip whitespace/newlines that LLM might add before JSON
+            response_clean = response.strip()
+            result = json.loads(response_clean)
             sql = result.get("sql", "").strip()
             explanation = result.get("explanation", "Truy vấn dữ liệu từ database")
             

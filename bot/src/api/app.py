@@ -9,6 +9,7 @@ from typing import Any
 
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import Response
+from pydantic import BaseModel as PydanticBaseModel
 from mcp import ClientSession
 from mcp.client.streamable_http import streamable_http_client
 from pydantic import BaseModel, Field
@@ -24,8 +25,10 @@ from src.api.routes import (
     ocr_router,
     project_registrations_router,
     sql_assistant_router,
+    file_processor_router,
 )
 from src.api.routes.councils import router as councils_router
+from src.clients.rabbitmq_client import publish_message
 from src.db import db  # Import the database instance
 from src.utilities import get_logger, log_api_request, log_async_execution, log_execution
 
@@ -49,6 +52,11 @@ class ChatRequest(BaseModel):
 class ChatResponse(BaseModel):
     message: str
     answer: str
+
+
+class QueuePublishRequest(PydanticBaseModel):
+    queue: str = Field(..., description="RabbitMQ queue name")
+    payload: dict[str, Any] = Field(default_factory=dict, description="Message payload")
 
 
 def _build_admin_statistics_report_prompt() -> str:
@@ -98,6 +106,7 @@ app.include_router(ocr_router)
 app.include_router(councils_router)
 app.include_router(project_registrations_router)
 app.include_router(sql_assistant_router)
+app.include_router(file_processor_router)
 
 logger.info("🚀 FastAPI Application khởi tạo thành công")
 logger.info(f"MCP Server URL: {MCP_SERVER_URL}")
@@ -108,6 +117,22 @@ logger.info(f"MCP Server URL: {MCP_SERVER_URL}")
 async def health() -> dict[str, str]:
     logger.info("🏥 Health check endpoint được gọi")
     return {"status": "ok"}
+
+
+@app.post("/queues/publish")
+@log_api_request("/queues/publish", "POST")
+async def publish_to_queue(payload: QueuePublishRequest) -> dict[str, Any]:
+    logger.info(f"📤 Queue Publish API - Queue: {payload.queue}")
+    try:
+        message_id = await publish_message(
+            payload=payload.payload,
+            queue_name=payload.queue,
+        )
+        logger.info(f"✅ Message published to queue {payload.queue} - ID: {message_id}")
+        return {"success": True, "messageId": message_id, "queue": payload.queue}
+    except Exception as exc:
+        logger.error(f"❌ Failed to publish to queue {payload.queue}: {str(exc)}")
+        raise HTTPException(status_code=500, detail=str(exc)) from exc
 
 
 @asynccontextmanager

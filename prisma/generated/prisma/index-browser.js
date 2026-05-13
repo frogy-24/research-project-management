@@ -461,6 +461,35 @@ exports.Prisma.AutoApprovalJobScalarFieldEnum = {
   completedAt: 'completedAt'
 };
 
+exports.Prisma.ReportTemplateScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  fileUrl: 'fileUrl',
+  fileType: 'fileType',
+  fileSize: 'fileSize',
+  uploadedBy: 'uploadedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.ReportJobScalarFieldEnum = {
+  id: 'id',
+  deanId: 'deanId',
+  reportType: 'reportType',
+  templateUrl: 'templateUrl',
+  templateId: 'templateId',
+  callRoundId: 'callRoundId',
+  templateType: 'templateType',
+  parameters: 'parameters',
+  status: 'status',
+  progress: 'progress',
+  resultUrl: 'resultUrl',
+  error: 'error',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  completedAt: 'completedAt'
+};
+
 exports.Prisma.CouncilMemberAssignmentScalarFieldEnum = {
   id: 'id',
   councilId: 'councilId',
@@ -641,6 +670,13 @@ exports.AutoApprovalJobStatus = exports.$Enums.AutoApprovalJobStatus = {
   FAILED: 'FAILED'
 };
 
+exports.ReportJobStatus = exports.$Enums.ReportJobStatus = {
+  QUEUED: 'QUEUED',
+  PROCESSING: 'PROCESSING',
+  COMPLETED: 'COMPLETED',
+  FAILED: 'FAILED'
+};
+
 exports.Prisma.ModelName = {
   Department: 'Department',
   Major: 'Major',
@@ -666,6 +702,8 @@ exports.Prisma.ModelName = {
   CallRoundCouncilMember: 'CallRoundCouncilMember',
   Council: 'Council',
   AutoApprovalJob: 'AutoApprovalJob',
+  ReportTemplate: 'ReportTemplate',
+  ReportJob: 'ReportJob',
   CouncilMemberAssignment: 'CouncilMemberAssignment',
   ProjectCouncilAssignment: 'ProjectCouncilAssignment',
   CallRoundAttachment: 'CallRoundAttachment'

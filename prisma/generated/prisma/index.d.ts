@@ -134,6 +134,16 @@ export type Council = $Result.DefaultSelection<Prisma.$CouncilPayload>
  */
 export type AutoApprovalJob = $Result.DefaultSelection<Prisma.$AutoApprovalJobPayload>
 /**
+ * Model ReportTemplate
+ * 
+ */
+export type ReportTemplate = $Result.DefaultSelection<Prisma.$ReportTemplatePayload>
+/**
+ * Model ReportJob
+ * 
+ */
+export type ReportJob = $Result.DefaultSelection<Prisma.$ReportJobPayload>
+/**
  * Model CouncilMemberAssignment
  * 
  */
@@ -274,6 +284,16 @@ export const AutoApprovalJobStatus: {
 export type AutoApprovalJobStatus = (typeof AutoApprovalJobStatus)[keyof typeof AutoApprovalJobStatus]
 
 
+export const ReportJobStatus: {
+  QUEUED: 'QUEUED',
+  PROCESSING: 'PROCESSING',
+  COMPLETED: 'COMPLETED',
+  FAILED: 'FAILED'
+};
+
+export type ReportJobStatus = (typeof ReportJobStatus)[keyof typeof ReportJobStatus]
+
+
 export const InstructorStatus: {
   PENDING: 'PENDING',
   ACCEPTED: 'ACCEPTED',
@@ -377,6 +397,10 @@ export const ProjectClosingStatus: typeof $Enums.ProjectClosingStatus
 export type AutoApprovalJobStatus = $Enums.AutoApprovalJobStatus
 
 export const AutoApprovalJobStatus: typeof $Enums.AutoApprovalJobStatus
+
+export type ReportJobStatus = $Enums.ReportJobStatus
+
+export const ReportJobStatus: typeof $Enums.ReportJobStatus
 
 export type InstructorStatus = $Enums.InstructorStatus
 
@@ -758,6 +782,26 @@ export class PrismaClient<
     * ```
     */
   get autoApprovalJob(): Prisma.AutoApprovalJobDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.reportTemplate`: Exposes CRUD operations for the **ReportTemplate** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ReportTemplates
+    * const reportTemplates = await prisma.reportTemplate.findMany()
+    * ```
+    */
+  get reportTemplate(): Prisma.ReportTemplateDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.reportJob`: Exposes CRUD operations for the **ReportJob** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ReportJobs
+    * const reportJobs = await prisma.reportJob.findMany()
+    * ```
+    */
+  get reportJob(): Prisma.ReportJobDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.councilMemberAssignment`: Exposes CRUD operations for the **CouncilMemberAssignment** model.
@@ -1246,6 +1290,8 @@ export namespace Prisma {
     CallRoundCouncilMember: 'CallRoundCouncilMember',
     Council: 'Council',
     AutoApprovalJob: 'AutoApprovalJob',
+    ReportTemplate: 'ReportTemplate',
+    ReportJob: 'ReportJob',
     CouncilMemberAssignment: 'CouncilMemberAssignment',
     ProjectCouncilAssignment: 'ProjectCouncilAssignment',
     CallRoundAttachment: 'CallRoundAttachment'
@@ -1264,7 +1310,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "department" | "major" | "class" | "user" | "callRound" | "projectType" | "project" | "projectClosingSubmission" | "progressReportTemplate" | "progressReportTemplateItem" | "progressReport" | "councilEvaluation" | "fundingDisbursement" | "extensionRequest" | "projectRegistration" | "notification" | "post" | "room" | "officeMeeting" | "officeMeetingView" | "callRoundInstructor" | "callRoundCouncilMember" | "council" | "autoApprovalJob" | "councilMemberAssignment" | "projectCouncilAssignment" | "callRoundAttachment"
+      modelProps: "department" | "major" | "class" | "user" | "callRound" | "projectType" | "project" | "projectClosingSubmission" | "progressReportTemplate" | "progressReportTemplateItem" | "progressReport" | "councilEvaluation" | "fundingDisbursement" | "extensionRequest" | "projectRegistration" | "notification" | "post" | "room" | "officeMeeting" | "officeMeetingView" | "callRoundInstructor" | "callRoundCouncilMember" | "council" | "autoApprovalJob" | "reportTemplate" | "reportJob" | "councilMemberAssignment" | "projectCouncilAssignment" | "callRoundAttachment"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -3044,6 +3090,154 @@ export namespace Prisma {
           }
         }
       }
+      ReportTemplate: {
+        payload: Prisma.$ReportTemplatePayload<ExtArgs>
+        fields: Prisma.ReportTemplateFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ReportTemplateFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReportTemplatePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ReportTemplateFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReportTemplatePayload>
+          }
+          findFirst: {
+            args: Prisma.ReportTemplateFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReportTemplatePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ReportTemplateFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReportTemplatePayload>
+          }
+          findMany: {
+            args: Prisma.ReportTemplateFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReportTemplatePayload>[]
+          }
+          create: {
+            args: Prisma.ReportTemplateCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReportTemplatePayload>
+          }
+          createMany: {
+            args: Prisma.ReportTemplateCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ReportTemplateCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReportTemplatePayload>[]
+          }
+          delete: {
+            args: Prisma.ReportTemplateDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReportTemplatePayload>
+          }
+          update: {
+            args: Prisma.ReportTemplateUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReportTemplatePayload>
+          }
+          deleteMany: {
+            args: Prisma.ReportTemplateDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ReportTemplateUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.ReportTemplateUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReportTemplatePayload>[]
+          }
+          upsert: {
+            args: Prisma.ReportTemplateUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReportTemplatePayload>
+          }
+          aggregate: {
+            args: Prisma.ReportTemplateAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateReportTemplate>
+          }
+          groupBy: {
+            args: Prisma.ReportTemplateGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ReportTemplateGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ReportTemplateCountArgs<ExtArgs>
+            result: $Utils.Optional<ReportTemplateCountAggregateOutputType> | number
+          }
+        }
+      }
+      ReportJob: {
+        payload: Prisma.$ReportJobPayload<ExtArgs>
+        fields: Prisma.ReportJobFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ReportJobFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReportJobPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ReportJobFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReportJobPayload>
+          }
+          findFirst: {
+            args: Prisma.ReportJobFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReportJobPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ReportJobFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReportJobPayload>
+          }
+          findMany: {
+            args: Prisma.ReportJobFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReportJobPayload>[]
+          }
+          create: {
+            args: Prisma.ReportJobCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReportJobPayload>
+          }
+          createMany: {
+            args: Prisma.ReportJobCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ReportJobCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReportJobPayload>[]
+          }
+          delete: {
+            args: Prisma.ReportJobDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReportJobPayload>
+          }
+          update: {
+            args: Prisma.ReportJobUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReportJobPayload>
+          }
+          deleteMany: {
+            args: Prisma.ReportJobDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ReportJobUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.ReportJobUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReportJobPayload>[]
+          }
+          upsert: {
+            args: Prisma.ReportJobUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReportJobPayload>
+          }
+          aggregate: {
+            args: Prisma.ReportJobAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateReportJob>
+          }
+          groupBy: {
+            args: Prisma.ReportJobGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ReportJobGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ReportJobCountArgs<ExtArgs>
+            result: $Utils.Optional<ReportJobCountAggregateOutputType> | number
+          }
+        }
+      }
       CouncilMemberAssignment: {
         payload: Prisma.$CouncilMemberAssignmentPayload<ExtArgs>
         fields: Prisma.CouncilMemberAssignmentFieldRefs
@@ -3398,6 +3592,8 @@ export namespace Prisma {
     callRoundCouncilMember?: CallRoundCouncilMemberOmit
     council?: CouncilOmit
     autoApprovalJob?: AutoApprovalJobOmit
+    reportTemplate?: ReportTemplateOmit
+    reportJob?: ReportJobOmit
     councilMemberAssignment?: CouncilMemberAssignmentOmit
     projectCouncilAssignment?: ProjectCouncilAssignmentOmit
     callRoundAttachment?: CallRoundAttachmentOmit
@@ -4156,6 +4352,37 @@ export namespace Prisma {
    */
   export type CouncilCountOutputTypeCountProjectsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: ProjectCouncilAssignmentWhereInput
+  }
+
+
+  /**
+   * Count Type ReportTemplateCountOutputType
+   */
+
+  export type ReportTemplateCountOutputType = {
+    jobs: number
+  }
+
+  export type ReportTemplateCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    jobs?: boolean | ReportTemplateCountOutputTypeCountJobsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * ReportTemplateCountOutputType without action
+   */
+  export type ReportTemplateCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReportTemplateCountOutputType
+     */
+    select?: ReportTemplateCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * ReportTemplateCountOutputType without action
+   */
+  export type ReportTemplateCountOutputTypeCountJobsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ReportJobWhereInput
   }
 
 
@@ -33736,6 +33963,2396 @@ export namespace Prisma {
 
 
   /**
+   * Model ReportTemplate
+   */
+
+  export type AggregateReportTemplate = {
+    _count: ReportTemplateCountAggregateOutputType | null
+    _avg: ReportTemplateAvgAggregateOutputType | null
+    _sum: ReportTemplateSumAggregateOutputType | null
+    _min: ReportTemplateMinAggregateOutputType | null
+    _max: ReportTemplateMaxAggregateOutputType | null
+  }
+
+  export type ReportTemplateAvgAggregateOutputType = {
+    fileSize: number | null
+  }
+
+  export type ReportTemplateSumAggregateOutputType = {
+    fileSize: number | null
+  }
+
+  export type ReportTemplateMinAggregateOutputType = {
+    id: string | null
+    name: string | null
+    fileUrl: string | null
+    fileType: string | null
+    fileSize: number | null
+    uploadedBy: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type ReportTemplateMaxAggregateOutputType = {
+    id: string | null
+    name: string | null
+    fileUrl: string | null
+    fileType: string | null
+    fileSize: number | null
+    uploadedBy: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type ReportTemplateCountAggregateOutputType = {
+    id: number
+    name: number
+    fileUrl: number
+    fileType: number
+    fileSize: number
+    uploadedBy: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type ReportTemplateAvgAggregateInputType = {
+    fileSize?: true
+  }
+
+  export type ReportTemplateSumAggregateInputType = {
+    fileSize?: true
+  }
+
+  export type ReportTemplateMinAggregateInputType = {
+    id?: true
+    name?: true
+    fileUrl?: true
+    fileType?: true
+    fileSize?: true
+    uploadedBy?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type ReportTemplateMaxAggregateInputType = {
+    id?: true
+    name?: true
+    fileUrl?: true
+    fileType?: true
+    fileSize?: true
+    uploadedBy?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type ReportTemplateCountAggregateInputType = {
+    id?: true
+    name?: true
+    fileUrl?: true
+    fileType?: true
+    fileSize?: true
+    uploadedBy?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type ReportTemplateAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ReportTemplate to aggregate.
+     */
+    where?: ReportTemplateWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ReportTemplates to fetch.
+     */
+    orderBy?: ReportTemplateOrderByWithRelationInput | ReportTemplateOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ReportTemplateWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ReportTemplates from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ReportTemplates.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned ReportTemplates
+    **/
+    _count?: true | ReportTemplateCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: ReportTemplateAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: ReportTemplateSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ReportTemplateMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ReportTemplateMaxAggregateInputType
+  }
+
+  export type GetReportTemplateAggregateType<T extends ReportTemplateAggregateArgs> = {
+        [P in keyof T & keyof AggregateReportTemplate]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateReportTemplate[P]>
+      : GetScalarType<T[P], AggregateReportTemplate[P]>
+  }
+
+
+
+
+  export type ReportTemplateGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ReportTemplateWhereInput
+    orderBy?: ReportTemplateOrderByWithAggregationInput | ReportTemplateOrderByWithAggregationInput[]
+    by: ReportTemplateScalarFieldEnum[] | ReportTemplateScalarFieldEnum
+    having?: ReportTemplateScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ReportTemplateCountAggregateInputType | true
+    _avg?: ReportTemplateAvgAggregateInputType
+    _sum?: ReportTemplateSumAggregateInputType
+    _min?: ReportTemplateMinAggregateInputType
+    _max?: ReportTemplateMaxAggregateInputType
+  }
+
+  export type ReportTemplateGroupByOutputType = {
+    id: string
+    name: string
+    fileUrl: string
+    fileType: string
+    fileSize: number
+    uploadedBy: string
+    createdAt: Date
+    updatedAt: Date
+    _count: ReportTemplateCountAggregateOutputType | null
+    _avg: ReportTemplateAvgAggregateOutputType | null
+    _sum: ReportTemplateSumAggregateOutputType | null
+    _min: ReportTemplateMinAggregateOutputType | null
+    _max: ReportTemplateMaxAggregateOutputType | null
+  }
+
+  type GetReportTemplateGroupByPayload<T extends ReportTemplateGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ReportTemplateGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ReportTemplateGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ReportTemplateGroupByOutputType[P]>
+            : GetScalarType<T[P], ReportTemplateGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ReportTemplateSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    fileUrl?: boolean
+    fileType?: boolean
+    fileSize?: boolean
+    uploadedBy?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    jobs?: boolean | ReportTemplate$jobsArgs<ExtArgs>
+    _count?: boolean | ReportTemplateCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["reportTemplate"]>
+
+  export type ReportTemplateSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    fileUrl?: boolean
+    fileType?: boolean
+    fileSize?: boolean
+    uploadedBy?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["reportTemplate"]>
+
+  export type ReportTemplateSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    fileUrl?: boolean
+    fileType?: boolean
+    fileSize?: boolean
+    uploadedBy?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["reportTemplate"]>
+
+  export type ReportTemplateSelectScalar = {
+    id?: boolean
+    name?: boolean
+    fileUrl?: boolean
+    fileType?: boolean
+    fileSize?: boolean
+    uploadedBy?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type ReportTemplateOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "fileUrl" | "fileType" | "fileSize" | "uploadedBy" | "createdAt" | "updatedAt", ExtArgs["result"]["reportTemplate"]>
+  export type ReportTemplateInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    jobs?: boolean | ReportTemplate$jobsArgs<ExtArgs>
+    _count?: boolean | ReportTemplateCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type ReportTemplateIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type ReportTemplateIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+
+  export type $ReportTemplatePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "ReportTemplate"
+    objects: {
+      jobs: Prisma.$ReportJobPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      name: string
+      fileUrl: string
+      fileType: string
+      fileSize: number
+      uploadedBy: string
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["reportTemplate"]>
+    composites: {}
+  }
+
+  type ReportTemplateGetPayload<S extends boolean | null | undefined | ReportTemplateDefaultArgs> = $Result.GetResult<Prisma.$ReportTemplatePayload, S>
+
+  type ReportTemplateCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<ReportTemplateFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: ReportTemplateCountAggregateInputType | true
+    }
+
+  export interface ReportTemplateDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ReportTemplate'], meta: { name: 'ReportTemplate' } }
+    /**
+     * Find zero or one ReportTemplate that matches the filter.
+     * @param {ReportTemplateFindUniqueArgs} args - Arguments to find a ReportTemplate
+     * @example
+     * // Get one ReportTemplate
+     * const reportTemplate = await prisma.reportTemplate.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ReportTemplateFindUniqueArgs>(args: SelectSubset<T, ReportTemplateFindUniqueArgs<ExtArgs>>): Prisma__ReportTemplateClient<$Result.GetResult<Prisma.$ReportTemplatePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one ReportTemplate that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {ReportTemplateFindUniqueOrThrowArgs} args - Arguments to find a ReportTemplate
+     * @example
+     * // Get one ReportTemplate
+     * const reportTemplate = await prisma.reportTemplate.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ReportTemplateFindUniqueOrThrowArgs>(args: SelectSubset<T, ReportTemplateFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ReportTemplateClient<$Result.GetResult<Prisma.$ReportTemplatePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ReportTemplate that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ReportTemplateFindFirstArgs} args - Arguments to find a ReportTemplate
+     * @example
+     * // Get one ReportTemplate
+     * const reportTemplate = await prisma.reportTemplate.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ReportTemplateFindFirstArgs>(args?: SelectSubset<T, ReportTemplateFindFirstArgs<ExtArgs>>): Prisma__ReportTemplateClient<$Result.GetResult<Prisma.$ReportTemplatePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ReportTemplate that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ReportTemplateFindFirstOrThrowArgs} args - Arguments to find a ReportTemplate
+     * @example
+     * // Get one ReportTemplate
+     * const reportTemplate = await prisma.reportTemplate.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ReportTemplateFindFirstOrThrowArgs>(args?: SelectSubset<T, ReportTemplateFindFirstOrThrowArgs<ExtArgs>>): Prisma__ReportTemplateClient<$Result.GetResult<Prisma.$ReportTemplatePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more ReportTemplates that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ReportTemplateFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all ReportTemplates
+     * const reportTemplates = await prisma.reportTemplate.findMany()
+     * 
+     * // Get first 10 ReportTemplates
+     * const reportTemplates = await prisma.reportTemplate.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const reportTemplateWithIdOnly = await prisma.reportTemplate.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends ReportTemplateFindManyArgs>(args?: SelectSubset<T, ReportTemplateFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReportTemplatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a ReportTemplate.
+     * @param {ReportTemplateCreateArgs} args - Arguments to create a ReportTemplate.
+     * @example
+     * // Create one ReportTemplate
+     * const ReportTemplate = await prisma.reportTemplate.create({
+     *   data: {
+     *     // ... data to create a ReportTemplate
+     *   }
+     * })
+     * 
+     */
+    create<T extends ReportTemplateCreateArgs>(args: SelectSubset<T, ReportTemplateCreateArgs<ExtArgs>>): Prisma__ReportTemplateClient<$Result.GetResult<Prisma.$ReportTemplatePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many ReportTemplates.
+     * @param {ReportTemplateCreateManyArgs} args - Arguments to create many ReportTemplates.
+     * @example
+     * // Create many ReportTemplates
+     * const reportTemplate = await prisma.reportTemplate.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ReportTemplateCreateManyArgs>(args?: SelectSubset<T, ReportTemplateCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many ReportTemplates and returns the data saved in the database.
+     * @param {ReportTemplateCreateManyAndReturnArgs} args - Arguments to create many ReportTemplates.
+     * @example
+     * // Create many ReportTemplates
+     * const reportTemplate = await prisma.reportTemplate.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many ReportTemplates and only return the `id`
+     * const reportTemplateWithIdOnly = await prisma.reportTemplate.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ReportTemplateCreateManyAndReturnArgs>(args?: SelectSubset<T, ReportTemplateCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReportTemplatePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a ReportTemplate.
+     * @param {ReportTemplateDeleteArgs} args - Arguments to delete one ReportTemplate.
+     * @example
+     * // Delete one ReportTemplate
+     * const ReportTemplate = await prisma.reportTemplate.delete({
+     *   where: {
+     *     // ... filter to delete one ReportTemplate
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ReportTemplateDeleteArgs>(args: SelectSubset<T, ReportTemplateDeleteArgs<ExtArgs>>): Prisma__ReportTemplateClient<$Result.GetResult<Prisma.$ReportTemplatePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one ReportTemplate.
+     * @param {ReportTemplateUpdateArgs} args - Arguments to update one ReportTemplate.
+     * @example
+     * // Update one ReportTemplate
+     * const reportTemplate = await prisma.reportTemplate.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ReportTemplateUpdateArgs>(args: SelectSubset<T, ReportTemplateUpdateArgs<ExtArgs>>): Prisma__ReportTemplateClient<$Result.GetResult<Prisma.$ReportTemplatePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more ReportTemplates.
+     * @param {ReportTemplateDeleteManyArgs} args - Arguments to filter ReportTemplates to delete.
+     * @example
+     * // Delete a few ReportTemplates
+     * const { count } = await prisma.reportTemplate.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ReportTemplateDeleteManyArgs>(args?: SelectSubset<T, ReportTemplateDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ReportTemplates.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ReportTemplateUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many ReportTemplates
+     * const reportTemplate = await prisma.reportTemplate.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ReportTemplateUpdateManyArgs>(args: SelectSubset<T, ReportTemplateUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ReportTemplates and returns the data updated in the database.
+     * @param {ReportTemplateUpdateManyAndReturnArgs} args - Arguments to update many ReportTemplates.
+     * @example
+     * // Update many ReportTemplates
+     * const reportTemplate = await prisma.reportTemplate.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more ReportTemplates and only return the `id`
+     * const reportTemplateWithIdOnly = await prisma.reportTemplate.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends ReportTemplateUpdateManyAndReturnArgs>(args: SelectSubset<T, ReportTemplateUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReportTemplatePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one ReportTemplate.
+     * @param {ReportTemplateUpsertArgs} args - Arguments to update or create a ReportTemplate.
+     * @example
+     * // Update or create a ReportTemplate
+     * const reportTemplate = await prisma.reportTemplate.upsert({
+     *   create: {
+     *     // ... data to create a ReportTemplate
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the ReportTemplate we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ReportTemplateUpsertArgs>(args: SelectSubset<T, ReportTemplateUpsertArgs<ExtArgs>>): Prisma__ReportTemplateClient<$Result.GetResult<Prisma.$ReportTemplatePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of ReportTemplates.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ReportTemplateCountArgs} args - Arguments to filter ReportTemplates to count.
+     * @example
+     * // Count the number of ReportTemplates
+     * const count = await prisma.reportTemplate.count({
+     *   where: {
+     *     // ... the filter for the ReportTemplates we want to count
+     *   }
+     * })
+    **/
+    count<T extends ReportTemplateCountArgs>(
+      args?: Subset<T, ReportTemplateCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ReportTemplateCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a ReportTemplate.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ReportTemplateAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ReportTemplateAggregateArgs>(args: Subset<T, ReportTemplateAggregateArgs>): Prisma.PrismaPromise<GetReportTemplateAggregateType<T>>
+
+    /**
+     * Group by ReportTemplate.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ReportTemplateGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ReportTemplateGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ReportTemplateGroupByArgs['orderBy'] }
+        : { orderBy?: ReportTemplateGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ReportTemplateGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetReportTemplateGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the ReportTemplate model
+   */
+  readonly fields: ReportTemplateFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for ReportTemplate.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ReportTemplateClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    jobs<T extends ReportTemplate$jobsArgs<ExtArgs> = {}>(args?: Subset<T, ReportTemplate$jobsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReportJobPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the ReportTemplate model
+   */
+  interface ReportTemplateFieldRefs {
+    readonly id: FieldRef<"ReportTemplate", 'String'>
+    readonly name: FieldRef<"ReportTemplate", 'String'>
+    readonly fileUrl: FieldRef<"ReportTemplate", 'String'>
+    readonly fileType: FieldRef<"ReportTemplate", 'String'>
+    readonly fileSize: FieldRef<"ReportTemplate", 'Int'>
+    readonly uploadedBy: FieldRef<"ReportTemplate", 'String'>
+    readonly createdAt: FieldRef<"ReportTemplate", 'DateTime'>
+    readonly updatedAt: FieldRef<"ReportTemplate", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * ReportTemplate findUnique
+   */
+  export type ReportTemplateFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReportTemplate
+     */
+    select?: ReportTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReportTemplate
+     */
+    omit?: ReportTemplateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReportTemplateInclude<ExtArgs> | null
+    /**
+     * Filter, which ReportTemplate to fetch.
+     */
+    where: ReportTemplateWhereUniqueInput
+  }
+
+  /**
+   * ReportTemplate findUniqueOrThrow
+   */
+  export type ReportTemplateFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReportTemplate
+     */
+    select?: ReportTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReportTemplate
+     */
+    omit?: ReportTemplateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReportTemplateInclude<ExtArgs> | null
+    /**
+     * Filter, which ReportTemplate to fetch.
+     */
+    where: ReportTemplateWhereUniqueInput
+  }
+
+  /**
+   * ReportTemplate findFirst
+   */
+  export type ReportTemplateFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReportTemplate
+     */
+    select?: ReportTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReportTemplate
+     */
+    omit?: ReportTemplateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReportTemplateInclude<ExtArgs> | null
+    /**
+     * Filter, which ReportTemplate to fetch.
+     */
+    where?: ReportTemplateWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ReportTemplates to fetch.
+     */
+    orderBy?: ReportTemplateOrderByWithRelationInput | ReportTemplateOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ReportTemplates.
+     */
+    cursor?: ReportTemplateWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ReportTemplates from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ReportTemplates.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ReportTemplates.
+     */
+    distinct?: ReportTemplateScalarFieldEnum | ReportTemplateScalarFieldEnum[]
+  }
+
+  /**
+   * ReportTemplate findFirstOrThrow
+   */
+  export type ReportTemplateFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReportTemplate
+     */
+    select?: ReportTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReportTemplate
+     */
+    omit?: ReportTemplateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReportTemplateInclude<ExtArgs> | null
+    /**
+     * Filter, which ReportTemplate to fetch.
+     */
+    where?: ReportTemplateWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ReportTemplates to fetch.
+     */
+    orderBy?: ReportTemplateOrderByWithRelationInput | ReportTemplateOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ReportTemplates.
+     */
+    cursor?: ReportTemplateWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ReportTemplates from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ReportTemplates.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ReportTemplates.
+     */
+    distinct?: ReportTemplateScalarFieldEnum | ReportTemplateScalarFieldEnum[]
+  }
+
+  /**
+   * ReportTemplate findMany
+   */
+  export type ReportTemplateFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReportTemplate
+     */
+    select?: ReportTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReportTemplate
+     */
+    omit?: ReportTemplateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReportTemplateInclude<ExtArgs> | null
+    /**
+     * Filter, which ReportTemplates to fetch.
+     */
+    where?: ReportTemplateWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ReportTemplates to fetch.
+     */
+    orderBy?: ReportTemplateOrderByWithRelationInput | ReportTemplateOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing ReportTemplates.
+     */
+    cursor?: ReportTemplateWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ReportTemplates from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ReportTemplates.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ReportTemplates.
+     */
+    distinct?: ReportTemplateScalarFieldEnum | ReportTemplateScalarFieldEnum[]
+  }
+
+  /**
+   * ReportTemplate create
+   */
+  export type ReportTemplateCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReportTemplate
+     */
+    select?: ReportTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReportTemplate
+     */
+    omit?: ReportTemplateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReportTemplateInclude<ExtArgs> | null
+    /**
+     * The data needed to create a ReportTemplate.
+     */
+    data: XOR<ReportTemplateCreateInput, ReportTemplateUncheckedCreateInput>
+  }
+
+  /**
+   * ReportTemplate createMany
+   */
+  export type ReportTemplateCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many ReportTemplates.
+     */
+    data: ReportTemplateCreateManyInput | ReportTemplateCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * ReportTemplate createManyAndReturn
+   */
+  export type ReportTemplateCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReportTemplate
+     */
+    select?: ReportTemplateSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReportTemplate
+     */
+    omit?: ReportTemplateOmit<ExtArgs> | null
+    /**
+     * The data used to create many ReportTemplates.
+     */
+    data: ReportTemplateCreateManyInput | ReportTemplateCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * ReportTemplate update
+   */
+  export type ReportTemplateUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReportTemplate
+     */
+    select?: ReportTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReportTemplate
+     */
+    omit?: ReportTemplateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReportTemplateInclude<ExtArgs> | null
+    /**
+     * The data needed to update a ReportTemplate.
+     */
+    data: XOR<ReportTemplateUpdateInput, ReportTemplateUncheckedUpdateInput>
+    /**
+     * Choose, which ReportTemplate to update.
+     */
+    where: ReportTemplateWhereUniqueInput
+  }
+
+  /**
+   * ReportTemplate updateMany
+   */
+  export type ReportTemplateUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update ReportTemplates.
+     */
+    data: XOR<ReportTemplateUpdateManyMutationInput, ReportTemplateUncheckedUpdateManyInput>
+    /**
+     * Filter which ReportTemplates to update
+     */
+    where?: ReportTemplateWhereInput
+    /**
+     * Limit how many ReportTemplates to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * ReportTemplate updateManyAndReturn
+   */
+  export type ReportTemplateUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReportTemplate
+     */
+    select?: ReportTemplateSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReportTemplate
+     */
+    omit?: ReportTemplateOmit<ExtArgs> | null
+    /**
+     * The data used to update ReportTemplates.
+     */
+    data: XOR<ReportTemplateUpdateManyMutationInput, ReportTemplateUncheckedUpdateManyInput>
+    /**
+     * Filter which ReportTemplates to update
+     */
+    where?: ReportTemplateWhereInput
+    /**
+     * Limit how many ReportTemplates to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * ReportTemplate upsert
+   */
+  export type ReportTemplateUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReportTemplate
+     */
+    select?: ReportTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReportTemplate
+     */
+    omit?: ReportTemplateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReportTemplateInclude<ExtArgs> | null
+    /**
+     * The filter to search for the ReportTemplate to update in case it exists.
+     */
+    where: ReportTemplateWhereUniqueInput
+    /**
+     * In case the ReportTemplate found by the `where` argument doesn't exist, create a new ReportTemplate with this data.
+     */
+    create: XOR<ReportTemplateCreateInput, ReportTemplateUncheckedCreateInput>
+    /**
+     * In case the ReportTemplate was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ReportTemplateUpdateInput, ReportTemplateUncheckedUpdateInput>
+  }
+
+  /**
+   * ReportTemplate delete
+   */
+  export type ReportTemplateDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReportTemplate
+     */
+    select?: ReportTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReportTemplate
+     */
+    omit?: ReportTemplateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReportTemplateInclude<ExtArgs> | null
+    /**
+     * Filter which ReportTemplate to delete.
+     */
+    where: ReportTemplateWhereUniqueInput
+  }
+
+  /**
+   * ReportTemplate deleteMany
+   */
+  export type ReportTemplateDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ReportTemplates to delete
+     */
+    where?: ReportTemplateWhereInput
+    /**
+     * Limit how many ReportTemplates to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * ReportTemplate.jobs
+   */
+  export type ReportTemplate$jobsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReportJob
+     */
+    select?: ReportJobSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReportJob
+     */
+    omit?: ReportJobOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReportJobInclude<ExtArgs> | null
+    where?: ReportJobWhereInput
+    orderBy?: ReportJobOrderByWithRelationInput | ReportJobOrderByWithRelationInput[]
+    cursor?: ReportJobWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ReportJobScalarFieldEnum | ReportJobScalarFieldEnum[]
+  }
+
+  /**
+   * ReportTemplate without action
+   */
+  export type ReportTemplateDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReportTemplate
+     */
+    select?: ReportTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReportTemplate
+     */
+    omit?: ReportTemplateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReportTemplateInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model ReportJob
+   */
+
+  export type AggregateReportJob = {
+    _count: ReportJobCountAggregateOutputType | null
+    _avg: ReportJobAvgAggregateOutputType | null
+    _sum: ReportJobSumAggregateOutputType | null
+    _min: ReportJobMinAggregateOutputType | null
+    _max: ReportJobMaxAggregateOutputType | null
+  }
+
+  export type ReportJobAvgAggregateOutputType = {
+    progress: number | null
+  }
+
+  export type ReportJobSumAggregateOutputType = {
+    progress: number | null
+  }
+
+  export type ReportJobMinAggregateOutputType = {
+    id: string | null
+    deanId: string | null
+    reportType: string | null
+    templateUrl: string | null
+    templateId: string | null
+    callRoundId: string | null
+    templateType: string | null
+    status: $Enums.ReportJobStatus | null
+    progress: number | null
+    resultUrl: string | null
+    error: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    completedAt: Date | null
+  }
+
+  export type ReportJobMaxAggregateOutputType = {
+    id: string | null
+    deanId: string | null
+    reportType: string | null
+    templateUrl: string | null
+    templateId: string | null
+    callRoundId: string | null
+    templateType: string | null
+    status: $Enums.ReportJobStatus | null
+    progress: number | null
+    resultUrl: string | null
+    error: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    completedAt: Date | null
+  }
+
+  export type ReportJobCountAggregateOutputType = {
+    id: number
+    deanId: number
+    reportType: number
+    templateUrl: number
+    templateId: number
+    callRoundId: number
+    templateType: number
+    parameters: number
+    status: number
+    progress: number
+    resultUrl: number
+    error: number
+    createdAt: number
+    updatedAt: number
+    completedAt: number
+    _all: number
+  }
+
+
+  export type ReportJobAvgAggregateInputType = {
+    progress?: true
+  }
+
+  export type ReportJobSumAggregateInputType = {
+    progress?: true
+  }
+
+  export type ReportJobMinAggregateInputType = {
+    id?: true
+    deanId?: true
+    reportType?: true
+    templateUrl?: true
+    templateId?: true
+    callRoundId?: true
+    templateType?: true
+    status?: true
+    progress?: true
+    resultUrl?: true
+    error?: true
+    createdAt?: true
+    updatedAt?: true
+    completedAt?: true
+  }
+
+  export type ReportJobMaxAggregateInputType = {
+    id?: true
+    deanId?: true
+    reportType?: true
+    templateUrl?: true
+    templateId?: true
+    callRoundId?: true
+    templateType?: true
+    status?: true
+    progress?: true
+    resultUrl?: true
+    error?: true
+    createdAt?: true
+    updatedAt?: true
+    completedAt?: true
+  }
+
+  export type ReportJobCountAggregateInputType = {
+    id?: true
+    deanId?: true
+    reportType?: true
+    templateUrl?: true
+    templateId?: true
+    callRoundId?: true
+    templateType?: true
+    parameters?: true
+    status?: true
+    progress?: true
+    resultUrl?: true
+    error?: true
+    createdAt?: true
+    updatedAt?: true
+    completedAt?: true
+    _all?: true
+  }
+
+  export type ReportJobAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ReportJob to aggregate.
+     */
+    where?: ReportJobWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ReportJobs to fetch.
+     */
+    orderBy?: ReportJobOrderByWithRelationInput | ReportJobOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ReportJobWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ReportJobs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ReportJobs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned ReportJobs
+    **/
+    _count?: true | ReportJobCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: ReportJobAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: ReportJobSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ReportJobMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ReportJobMaxAggregateInputType
+  }
+
+  export type GetReportJobAggregateType<T extends ReportJobAggregateArgs> = {
+        [P in keyof T & keyof AggregateReportJob]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateReportJob[P]>
+      : GetScalarType<T[P], AggregateReportJob[P]>
+  }
+
+
+
+
+  export type ReportJobGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ReportJobWhereInput
+    orderBy?: ReportJobOrderByWithAggregationInput | ReportJobOrderByWithAggregationInput[]
+    by: ReportJobScalarFieldEnum[] | ReportJobScalarFieldEnum
+    having?: ReportJobScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ReportJobCountAggregateInputType | true
+    _avg?: ReportJobAvgAggregateInputType
+    _sum?: ReportJobSumAggregateInputType
+    _min?: ReportJobMinAggregateInputType
+    _max?: ReportJobMaxAggregateInputType
+  }
+
+  export type ReportJobGroupByOutputType = {
+    id: string
+    deanId: string
+    reportType: string
+    templateUrl: string | null
+    templateId: string | null
+    callRoundId: string | null
+    templateType: string | null
+    parameters: JsonValue
+    status: $Enums.ReportJobStatus
+    progress: number
+    resultUrl: string | null
+    error: string | null
+    createdAt: Date
+    updatedAt: Date
+    completedAt: Date | null
+    _count: ReportJobCountAggregateOutputType | null
+    _avg: ReportJobAvgAggregateOutputType | null
+    _sum: ReportJobSumAggregateOutputType | null
+    _min: ReportJobMinAggregateOutputType | null
+    _max: ReportJobMaxAggregateOutputType | null
+  }
+
+  type GetReportJobGroupByPayload<T extends ReportJobGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ReportJobGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ReportJobGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ReportJobGroupByOutputType[P]>
+            : GetScalarType<T[P], ReportJobGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ReportJobSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    deanId?: boolean
+    reportType?: boolean
+    templateUrl?: boolean
+    templateId?: boolean
+    callRoundId?: boolean
+    templateType?: boolean
+    parameters?: boolean
+    status?: boolean
+    progress?: boolean
+    resultUrl?: boolean
+    error?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    completedAt?: boolean
+    template?: boolean | ReportJob$templateArgs<ExtArgs>
+  }, ExtArgs["result"]["reportJob"]>
+
+  export type ReportJobSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    deanId?: boolean
+    reportType?: boolean
+    templateUrl?: boolean
+    templateId?: boolean
+    callRoundId?: boolean
+    templateType?: boolean
+    parameters?: boolean
+    status?: boolean
+    progress?: boolean
+    resultUrl?: boolean
+    error?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    completedAt?: boolean
+    template?: boolean | ReportJob$templateArgs<ExtArgs>
+  }, ExtArgs["result"]["reportJob"]>
+
+  export type ReportJobSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    deanId?: boolean
+    reportType?: boolean
+    templateUrl?: boolean
+    templateId?: boolean
+    callRoundId?: boolean
+    templateType?: boolean
+    parameters?: boolean
+    status?: boolean
+    progress?: boolean
+    resultUrl?: boolean
+    error?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    completedAt?: boolean
+    template?: boolean | ReportJob$templateArgs<ExtArgs>
+  }, ExtArgs["result"]["reportJob"]>
+
+  export type ReportJobSelectScalar = {
+    id?: boolean
+    deanId?: boolean
+    reportType?: boolean
+    templateUrl?: boolean
+    templateId?: boolean
+    callRoundId?: boolean
+    templateType?: boolean
+    parameters?: boolean
+    status?: boolean
+    progress?: boolean
+    resultUrl?: boolean
+    error?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    completedAt?: boolean
+  }
+
+  export type ReportJobOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "deanId" | "reportType" | "templateUrl" | "templateId" | "callRoundId" | "templateType" | "parameters" | "status" | "progress" | "resultUrl" | "error" | "createdAt" | "updatedAt" | "completedAt", ExtArgs["result"]["reportJob"]>
+  export type ReportJobInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    template?: boolean | ReportJob$templateArgs<ExtArgs>
+  }
+  export type ReportJobIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    template?: boolean | ReportJob$templateArgs<ExtArgs>
+  }
+  export type ReportJobIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    template?: boolean | ReportJob$templateArgs<ExtArgs>
+  }
+
+  export type $ReportJobPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "ReportJob"
+    objects: {
+      template: Prisma.$ReportTemplatePayload<ExtArgs> | null
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      deanId: string
+      reportType: string
+      templateUrl: string | null
+      templateId: string | null
+      callRoundId: string | null
+      templateType: string | null
+      parameters: Prisma.JsonValue
+      status: $Enums.ReportJobStatus
+      progress: number
+      resultUrl: string | null
+      error: string | null
+      createdAt: Date
+      updatedAt: Date
+      completedAt: Date | null
+    }, ExtArgs["result"]["reportJob"]>
+    composites: {}
+  }
+
+  type ReportJobGetPayload<S extends boolean | null | undefined | ReportJobDefaultArgs> = $Result.GetResult<Prisma.$ReportJobPayload, S>
+
+  type ReportJobCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<ReportJobFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: ReportJobCountAggregateInputType | true
+    }
+
+  export interface ReportJobDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ReportJob'], meta: { name: 'ReportJob' } }
+    /**
+     * Find zero or one ReportJob that matches the filter.
+     * @param {ReportJobFindUniqueArgs} args - Arguments to find a ReportJob
+     * @example
+     * // Get one ReportJob
+     * const reportJob = await prisma.reportJob.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ReportJobFindUniqueArgs>(args: SelectSubset<T, ReportJobFindUniqueArgs<ExtArgs>>): Prisma__ReportJobClient<$Result.GetResult<Prisma.$ReportJobPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one ReportJob that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {ReportJobFindUniqueOrThrowArgs} args - Arguments to find a ReportJob
+     * @example
+     * // Get one ReportJob
+     * const reportJob = await prisma.reportJob.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ReportJobFindUniqueOrThrowArgs>(args: SelectSubset<T, ReportJobFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ReportJobClient<$Result.GetResult<Prisma.$ReportJobPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ReportJob that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ReportJobFindFirstArgs} args - Arguments to find a ReportJob
+     * @example
+     * // Get one ReportJob
+     * const reportJob = await prisma.reportJob.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ReportJobFindFirstArgs>(args?: SelectSubset<T, ReportJobFindFirstArgs<ExtArgs>>): Prisma__ReportJobClient<$Result.GetResult<Prisma.$ReportJobPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ReportJob that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ReportJobFindFirstOrThrowArgs} args - Arguments to find a ReportJob
+     * @example
+     * // Get one ReportJob
+     * const reportJob = await prisma.reportJob.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ReportJobFindFirstOrThrowArgs>(args?: SelectSubset<T, ReportJobFindFirstOrThrowArgs<ExtArgs>>): Prisma__ReportJobClient<$Result.GetResult<Prisma.$ReportJobPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more ReportJobs that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ReportJobFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all ReportJobs
+     * const reportJobs = await prisma.reportJob.findMany()
+     * 
+     * // Get first 10 ReportJobs
+     * const reportJobs = await prisma.reportJob.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const reportJobWithIdOnly = await prisma.reportJob.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends ReportJobFindManyArgs>(args?: SelectSubset<T, ReportJobFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReportJobPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a ReportJob.
+     * @param {ReportJobCreateArgs} args - Arguments to create a ReportJob.
+     * @example
+     * // Create one ReportJob
+     * const ReportJob = await prisma.reportJob.create({
+     *   data: {
+     *     // ... data to create a ReportJob
+     *   }
+     * })
+     * 
+     */
+    create<T extends ReportJobCreateArgs>(args: SelectSubset<T, ReportJobCreateArgs<ExtArgs>>): Prisma__ReportJobClient<$Result.GetResult<Prisma.$ReportJobPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many ReportJobs.
+     * @param {ReportJobCreateManyArgs} args - Arguments to create many ReportJobs.
+     * @example
+     * // Create many ReportJobs
+     * const reportJob = await prisma.reportJob.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ReportJobCreateManyArgs>(args?: SelectSubset<T, ReportJobCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many ReportJobs and returns the data saved in the database.
+     * @param {ReportJobCreateManyAndReturnArgs} args - Arguments to create many ReportJobs.
+     * @example
+     * // Create many ReportJobs
+     * const reportJob = await prisma.reportJob.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many ReportJobs and only return the `id`
+     * const reportJobWithIdOnly = await prisma.reportJob.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ReportJobCreateManyAndReturnArgs>(args?: SelectSubset<T, ReportJobCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReportJobPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a ReportJob.
+     * @param {ReportJobDeleteArgs} args - Arguments to delete one ReportJob.
+     * @example
+     * // Delete one ReportJob
+     * const ReportJob = await prisma.reportJob.delete({
+     *   where: {
+     *     // ... filter to delete one ReportJob
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ReportJobDeleteArgs>(args: SelectSubset<T, ReportJobDeleteArgs<ExtArgs>>): Prisma__ReportJobClient<$Result.GetResult<Prisma.$ReportJobPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one ReportJob.
+     * @param {ReportJobUpdateArgs} args - Arguments to update one ReportJob.
+     * @example
+     * // Update one ReportJob
+     * const reportJob = await prisma.reportJob.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ReportJobUpdateArgs>(args: SelectSubset<T, ReportJobUpdateArgs<ExtArgs>>): Prisma__ReportJobClient<$Result.GetResult<Prisma.$ReportJobPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more ReportJobs.
+     * @param {ReportJobDeleteManyArgs} args - Arguments to filter ReportJobs to delete.
+     * @example
+     * // Delete a few ReportJobs
+     * const { count } = await prisma.reportJob.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ReportJobDeleteManyArgs>(args?: SelectSubset<T, ReportJobDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ReportJobs.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ReportJobUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many ReportJobs
+     * const reportJob = await prisma.reportJob.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ReportJobUpdateManyArgs>(args: SelectSubset<T, ReportJobUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ReportJobs and returns the data updated in the database.
+     * @param {ReportJobUpdateManyAndReturnArgs} args - Arguments to update many ReportJobs.
+     * @example
+     * // Update many ReportJobs
+     * const reportJob = await prisma.reportJob.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more ReportJobs and only return the `id`
+     * const reportJobWithIdOnly = await prisma.reportJob.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends ReportJobUpdateManyAndReturnArgs>(args: SelectSubset<T, ReportJobUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReportJobPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one ReportJob.
+     * @param {ReportJobUpsertArgs} args - Arguments to update or create a ReportJob.
+     * @example
+     * // Update or create a ReportJob
+     * const reportJob = await prisma.reportJob.upsert({
+     *   create: {
+     *     // ... data to create a ReportJob
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the ReportJob we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ReportJobUpsertArgs>(args: SelectSubset<T, ReportJobUpsertArgs<ExtArgs>>): Prisma__ReportJobClient<$Result.GetResult<Prisma.$ReportJobPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of ReportJobs.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ReportJobCountArgs} args - Arguments to filter ReportJobs to count.
+     * @example
+     * // Count the number of ReportJobs
+     * const count = await prisma.reportJob.count({
+     *   where: {
+     *     // ... the filter for the ReportJobs we want to count
+     *   }
+     * })
+    **/
+    count<T extends ReportJobCountArgs>(
+      args?: Subset<T, ReportJobCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ReportJobCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a ReportJob.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ReportJobAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ReportJobAggregateArgs>(args: Subset<T, ReportJobAggregateArgs>): Prisma.PrismaPromise<GetReportJobAggregateType<T>>
+
+    /**
+     * Group by ReportJob.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ReportJobGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ReportJobGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ReportJobGroupByArgs['orderBy'] }
+        : { orderBy?: ReportJobGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ReportJobGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetReportJobGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the ReportJob model
+   */
+  readonly fields: ReportJobFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for ReportJob.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ReportJobClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    template<T extends ReportJob$templateArgs<ExtArgs> = {}>(args?: Subset<T, ReportJob$templateArgs<ExtArgs>>): Prisma__ReportTemplateClient<$Result.GetResult<Prisma.$ReportTemplatePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the ReportJob model
+   */
+  interface ReportJobFieldRefs {
+    readonly id: FieldRef<"ReportJob", 'String'>
+    readonly deanId: FieldRef<"ReportJob", 'String'>
+    readonly reportType: FieldRef<"ReportJob", 'String'>
+    readonly templateUrl: FieldRef<"ReportJob", 'String'>
+    readonly templateId: FieldRef<"ReportJob", 'String'>
+    readonly callRoundId: FieldRef<"ReportJob", 'String'>
+    readonly templateType: FieldRef<"ReportJob", 'String'>
+    readonly parameters: FieldRef<"ReportJob", 'Json'>
+    readonly status: FieldRef<"ReportJob", 'ReportJobStatus'>
+    readonly progress: FieldRef<"ReportJob", 'Int'>
+    readonly resultUrl: FieldRef<"ReportJob", 'String'>
+    readonly error: FieldRef<"ReportJob", 'String'>
+    readonly createdAt: FieldRef<"ReportJob", 'DateTime'>
+    readonly updatedAt: FieldRef<"ReportJob", 'DateTime'>
+    readonly completedAt: FieldRef<"ReportJob", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * ReportJob findUnique
+   */
+  export type ReportJobFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReportJob
+     */
+    select?: ReportJobSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReportJob
+     */
+    omit?: ReportJobOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReportJobInclude<ExtArgs> | null
+    /**
+     * Filter, which ReportJob to fetch.
+     */
+    where: ReportJobWhereUniqueInput
+  }
+
+  /**
+   * ReportJob findUniqueOrThrow
+   */
+  export type ReportJobFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReportJob
+     */
+    select?: ReportJobSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReportJob
+     */
+    omit?: ReportJobOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReportJobInclude<ExtArgs> | null
+    /**
+     * Filter, which ReportJob to fetch.
+     */
+    where: ReportJobWhereUniqueInput
+  }
+
+  /**
+   * ReportJob findFirst
+   */
+  export type ReportJobFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReportJob
+     */
+    select?: ReportJobSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReportJob
+     */
+    omit?: ReportJobOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReportJobInclude<ExtArgs> | null
+    /**
+     * Filter, which ReportJob to fetch.
+     */
+    where?: ReportJobWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ReportJobs to fetch.
+     */
+    orderBy?: ReportJobOrderByWithRelationInput | ReportJobOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ReportJobs.
+     */
+    cursor?: ReportJobWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ReportJobs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ReportJobs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ReportJobs.
+     */
+    distinct?: ReportJobScalarFieldEnum | ReportJobScalarFieldEnum[]
+  }
+
+  /**
+   * ReportJob findFirstOrThrow
+   */
+  export type ReportJobFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReportJob
+     */
+    select?: ReportJobSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReportJob
+     */
+    omit?: ReportJobOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReportJobInclude<ExtArgs> | null
+    /**
+     * Filter, which ReportJob to fetch.
+     */
+    where?: ReportJobWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ReportJobs to fetch.
+     */
+    orderBy?: ReportJobOrderByWithRelationInput | ReportJobOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ReportJobs.
+     */
+    cursor?: ReportJobWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ReportJobs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ReportJobs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ReportJobs.
+     */
+    distinct?: ReportJobScalarFieldEnum | ReportJobScalarFieldEnum[]
+  }
+
+  /**
+   * ReportJob findMany
+   */
+  export type ReportJobFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReportJob
+     */
+    select?: ReportJobSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReportJob
+     */
+    omit?: ReportJobOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReportJobInclude<ExtArgs> | null
+    /**
+     * Filter, which ReportJobs to fetch.
+     */
+    where?: ReportJobWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ReportJobs to fetch.
+     */
+    orderBy?: ReportJobOrderByWithRelationInput | ReportJobOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing ReportJobs.
+     */
+    cursor?: ReportJobWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ReportJobs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ReportJobs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ReportJobs.
+     */
+    distinct?: ReportJobScalarFieldEnum | ReportJobScalarFieldEnum[]
+  }
+
+  /**
+   * ReportJob create
+   */
+  export type ReportJobCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReportJob
+     */
+    select?: ReportJobSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReportJob
+     */
+    omit?: ReportJobOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReportJobInclude<ExtArgs> | null
+    /**
+     * The data needed to create a ReportJob.
+     */
+    data: XOR<ReportJobCreateInput, ReportJobUncheckedCreateInput>
+  }
+
+  /**
+   * ReportJob createMany
+   */
+  export type ReportJobCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many ReportJobs.
+     */
+    data: ReportJobCreateManyInput | ReportJobCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * ReportJob createManyAndReturn
+   */
+  export type ReportJobCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReportJob
+     */
+    select?: ReportJobSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReportJob
+     */
+    omit?: ReportJobOmit<ExtArgs> | null
+    /**
+     * The data used to create many ReportJobs.
+     */
+    data: ReportJobCreateManyInput | ReportJobCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReportJobIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ReportJob update
+   */
+  export type ReportJobUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReportJob
+     */
+    select?: ReportJobSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReportJob
+     */
+    omit?: ReportJobOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReportJobInclude<ExtArgs> | null
+    /**
+     * The data needed to update a ReportJob.
+     */
+    data: XOR<ReportJobUpdateInput, ReportJobUncheckedUpdateInput>
+    /**
+     * Choose, which ReportJob to update.
+     */
+    where: ReportJobWhereUniqueInput
+  }
+
+  /**
+   * ReportJob updateMany
+   */
+  export type ReportJobUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update ReportJobs.
+     */
+    data: XOR<ReportJobUpdateManyMutationInput, ReportJobUncheckedUpdateManyInput>
+    /**
+     * Filter which ReportJobs to update
+     */
+    where?: ReportJobWhereInput
+    /**
+     * Limit how many ReportJobs to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * ReportJob updateManyAndReturn
+   */
+  export type ReportJobUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReportJob
+     */
+    select?: ReportJobSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReportJob
+     */
+    omit?: ReportJobOmit<ExtArgs> | null
+    /**
+     * The data used to update ReportJobs.
+     */
+    data: XOR<ReportJobUpdateManyMutationInput, ReportJobUncheckedUpdateManyInput>
+    /**
+     * Filter which ReportJobs to update
+     */
+    where?: ReportJobWhereInput
+    /**
+     * Limit how many ReportJobs to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReportJobIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ReportJob upsert
+   */
+  export type ReportJobUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReportJob
+     */
+    select?: ReportJobSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReportJob
+     */
+    omit?: ReportJobOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReportJobInclude<ExtArgs> | null
+    /**
+     * The filter to search for the ReportJob to update in case it exists.
+     */
+    where: ReportJobWhereUniqueInput
+    /**
+     * In case the ReportJob found by the `where` argument doesn't exist, create a new ReportJob with this data.
+     */
+    create: XOR<ReportJobCreateInput, ReportJobUncheckedCreateInput>
+    /**
+     * In case the ReportJob was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ReportJobUpdateInput, ReportJobUncheckedUpdateInput>
+  }
+
+  /**
+   * ReportJob delete
+   */
+  export type ReportJobDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReportJob
+     */
+    select?: ReportJobSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReportJob
+     */
+    omit?: ReportJobOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReportJobInclude<ExtArgs> | null
+    /**
+     * Filter which ReportJob to delete.
+     */
+    where: ReportJobWhereUniqueInput
+  }
+
+  /**
+   * ReportJob deleteMany
+   */
+  export type ReportJobDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ReportJobs to delete
+     */
+    where?: ReportJobWhereInput
+    /**
+     * Limit how many ReportJobs to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * ReportJob.template
+   */
+  export type ReportJob$templateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReportTemplate
+     */
+    select?: ReportTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReportTemplate
+     */
+    omit?: ReportTemplateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReportTemplateInclude<ExtArgs> | null
+    where?: ReportTemplateWhereInput
+  }
+
+  /**
+   * ReportJob without action
+   */
+  export type ReportJobDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReportJob
+     */
+    select?: ReportJobSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReportJob
+     */
+    omit?: ReportJobOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReportJobInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Model CouncilMemberAssignment
    */
 
@@ -37427,6 +40044,41 @@ export namespace Prisma {
   export type AutoApprovalJobScalarFieldEnum = (typeof AutoApprovalJobScalarFieldEnum)[keyof typeof AutoApprovalJobScalarFieldEnum]
 
 
+  export const ReportTemplateScalarFieldEnum: {
+    id: 'id',
+    name: 'name',
+    fileUrl: 'fileUrl',
+    fileType: 'fileType',
+    fileSize: 'fileSize',
+    uploadedBy: 'uploadedBy',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type ReportTemplateScalarFieldEnum = (typeof ReportTemplateScalarFieldEnum)[keyof typeof ReportTemplateScalarFieldEnum]
+
+
+  export const ReportJobScalarFieldEnum: {
+    id: 'id',
+    deanId: 'deanId',
+    reportType: 'reportType',
+    templateUrl: 'templateUrl',
+    templateId: 'templateId',
+    callRoundId: 'callRoundId',
+    templateType: 'templateType',
+    parameters: 'parameters',
+    status: 'status',
+    progress: 'progress',
+    resultUrl: 'resultUrl',
+    error: 'error',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt',
+    completedAt: 'completedAt'
+  };
+
+  export type ReportJobScalarFieldEnum = (typeof ReportJobScalarFieldEnum)[keyof typeof ReportJobScalarFieldEnum]
+
+
   export const CouncilMemberAssignmentScalarFieldEnum: {
     id: 'id',
     councilId: 'councilId',
@@ -37841,6 +40493,20 @@ export namespace Prisma {
    * Reference to a field of type 'AutoApprovalJobStatus[]'
    */
   export type ListEnumAutoApprovalJobStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AutoApprovalJobStatus[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'ReportJobStatus'
+   */
+  export type EnumReportJobStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ReportJobStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'ReportJobStatus[]'
+   */
+  export type ListEnumReportJobStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ReportJobStatus[]'>
     
   /**
    * Deep Input Types
@@ -40136,6 +42802,185 @@ export namespace Prisma {
     createdAt?: DateTimeWithAggregatesFilter<"AutoApprovalJob"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"AutoApprovalJob"> | Date | string
     completedAt?: DateTimeNullableWithAggregatesFilter<"AutoApprovalJob"> | Date | string | null
+  }
+
+  export type ReportTemplateWhereInput = {
+    AND?: ReportTemplateWhereInput | ReportTemplateWhereInput[]
+    OR?: ReportTemplateWhereInput[]
+    NOT?: ReportTemplateWhereInput | ReportTemplateWhereInput[]
+    id?: StringFilter<"ReportTemplate"> | string
+    name?: StringFilter<"ReportTemplate"> | string
+    fileUrl?: StringFilter<"ReportTemplate"> | string
+    fileType?: StringFilter<"ReportTemplate"> | string
+    fileSize?: IntFilter<"ReportTemplate"> | number
+    uploadedBy?: StringFilter<"ReportTemplate"> | string
+    createdAt?: DateTimeFilter<"ReportTemplate"> | Date | string
+    updatedAt?: DateTimeFilter<"ReportTemplate"> | Date | string
+    jobs?: ReportJobListRelationFilter
+  }
+
+  export type ReportTemplateOrderByWithRelationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    fileUrl?: SortOrder
+    fileType?: SortOrder
+    fileSize?: SortOrder
+    uploadedBy?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    jobs?: ReportJobOrderByRelationAggregateInput
+  }
+
+  export type ReportTemplateWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: ReportTemplateWhereInput | ReportTemplateWhereInput[]
+    OR?: ReportTemplateWhereInput[]
+    NOT?: ReportTemplateWhereInput | ReportTemplateWhereInput[]
+    name?: StringFilter<"ReportTemplate"> | string
+    fileUrl?: StringFilter<"ReportTemplate"> | string
+    fileType?: StringFilter<"ReportTemplate"> | string
+    fileSize?: IntFilter<"ReportTemplate"> | number
+    uploadedBy?: StringFilter<"ReportTemplate"> | string
+    createdAt?: DateTimeFilter<"ReportTemplate"> | Date | string
+    updatedAt?: DateTimeFilter<"ReportTemplate"> | Date | string
+    jobs?: ReportJobListRelationFilter
+  }, "id">
+
+  export type ReportTemplateOrderByWithAggregationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    fileUrl?: SortOrder
+    fileType?: SortOrder
+    fileSize?: SortOrder
+    uploadedBy?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: ReportTemplateCountOrderByAggregateInput
+    _avg?: ReportTemplateAvgOrderByAggregateInput
+    _max?: ReportTemplateMaxOrderByAggregateInput
+    _min?: ReportTemplateMinOrderByAggregateInput
+    _sum?: ReportTemplateSumOrderByAggregateInput
+  }
+
+  export type ReportTemplateScalarWhereWithAggregatesInput = {
+    AND?: ReportTemplateScalarWhereWithAggregatesInput | ReportTemplateScalarWhereWithAggregatesInput[]
+    OR?: ReportTemplateScalarWhereWithAggregatesInput[]
+    NOT?: ReportTemplateScalarWhereWithAggregatesInput | ReportTemplateScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"ReportTemplate"> | string
+    name?: StringWithAggregatesFilter<"ReportTemplate"> | string
+    fileUrl?: StringWithAggregatesFilter<"ReportTemplate"> | string
+    fileType?: StringWithAggregatesFilter<"ReportTemplate"> | string
+    fileSize?: IntWithAggregatesFilter<"ReportTemplate"> | number
+    uploadedBy?: StringWithAggregatesFilter<"ReportTemplate"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"ReportTemplate"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"ReportTemplate"> | Date | string
+  }
+
+  export type ReportJobWhereInput = {
+    AND?: ReportJobWhereInput | ReportJobWhereInput[]
+    OR?: ReportJobWhereInput[]
+    NOT?: ReportJobWhereInput | ReportJobWhereInput[]
+    id?: StringFilter<"ReportJob"> | string
+    deanId?: StringFilter<"ReportJob"> | string
+    reportType?: StringFilter<"ReportJob"> | string
+    templateUrl?: StringNullableFilter<"ReportJob"> | string | null
+    templateId?: StringNullableFilter<"ReportJob"> | string | null
+    callRoundId?: StringNullableFilter<"ReportJob"> | string | null
+    templateType?: StringNullableFilter<"ReportJob"> | string | null
+    parameters?: JsonFilter<"ReportJob">
+    status?: EnumReportJobStatusFilter<"ReportJob"> | $Enums.ReportJobStatus
+    progress?: IntFilter<"ReportJob"> | number
+    resultUrl?: StringNullableFilter<"ReportJob"> | string | null
+    error?: StringNullableFilter<"ReportJob"> | string | null
+    createdAt?: DateTimeFilter<"ReportJob"> | Date | string
+    updatedAt?: DateTimeFilter<"ReportJob"> | Date | string
+    completedAt?: DateTimeNullableFilter<"ReportJob"> | Date | string | null
+    template?: XOR<ReportTemplateNullableScalarRelationFilter, ReportTemplateWhereInput> | null
+  }
+
+  export type ReportJobOrderByWithRelationInput = {
+    id?: SortOrder
+    deanId?: SortOrder
+    reportType?: SortOrder
+    templateUrl?: SortOrderInput | SortOrder
+    templateId?: SortOrderInput | SortOrder
+    callRoundId?: SortOrderInput | SortOrder
+    templateType?: SortOrderInput | SortOrder
+    parameters?: SortOrder
+    status?: SortOrder
+    progress?: SortOrder
+    resultUrl?: SortOrderInput | SortOrder
+    error?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    completedAt?: SortOrderInput | SortOrder
+    template?: ReportTemplateOrderByWithRelationInput
+  }
+
+  export type ReportJobWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: ReportJobWhereInput | ReportJobWhereInput[]
+    OR?: ReportJobWhereInput[]
+    NOT?: ReportJobWhereInput | ReportJobWhereInput[]
+    deanId?: StringFilter<"ReportJob"> | string
+    reportType?: StringFilter<"ReportJob"> | string
+    templateUrl?: StringNullableFilter<"ReportJob"> | string | null
+    templateId?: StringNullableFilter<"ReportJob"> | string | null
+    callRoundId?: StringNullableFilter<"ReportJob"> | string | null
+    templateType?: StringNullableFilter<"ReportJob"> | string | null
+    parameters?: JsonFilter<"ReportJob">
+    status?: EnumReportJobStatusFilter<"ReportJob"> | $Enums.ReportJobStatus
+    progress?: IntFilter<"ReportJob"> | number
+    resultUrl?: StringNullableFilter<"ReportJob"> | string | null
+    error?: StringNullableFilter<"ReportJob"> | string | null
+    createdAt?: DateTimeFilter<"ReportJob"> | Date | string
+    updatedAt?: DateTimeFilter<"ReportJob"> | Date | string
+    completedAt?: DateTimeNullableFilter<"ReportJob"> | Date | string | null
+    template?: XOR<ReportTemplateNullableScalarRelationFilter, ReportTemplateWhereInput> | null
+  }, "id">
+
+  export type ReportJobOrderByWithAggregationInput = {
+    id?: SortOrder
+    deanId?: SortOrder
+    reportType?: SortOrder
+    templateUrl?: SortOrderInput | SortOrder
+    templateId?: SortOrderInput | SortOrder
+    callRoundId?: SortOrderInput | SortOrder
+    templateType?: SortOrderInput | SortOrder
+    parameters?: SortOrder
+    status?: SortOrder
+    progress?: SortOrder
+    resultUrl?: SortOrderInput | SortOrder
+    error?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    completedAt?: SortOrderInput | SortOrder
+    _count?: ReportJobCountOrderByAggregateInput
+    _avg?: ReportJobAvgOrderByAggregateInput
+    _max?: ReportJobMaxOrderByAggregateInput
+    _min?: ReportJobMinOrderByAggregateInput
+    _sum?: ReportJobSumOrderByAggregateInput
+  }
+
+  export type ReportJobScalarWhereWithAggregatesInput = {
+    AND?: ReportJobScalarWhereWithAggregatesInput | ReportJobScalarWhereWithAggregatesInput[]
+    OR?: ReportJobScalarWhereWithAggregatesInput[]
+    NOT?: ReportJobScalarWhereWithAggregatesInput | ReportJobScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"ReportJob"> | string
+    deanId?: StringWithAggregatesFilter<"ReportJob"> | string
+    reportType?: StringWithAggregatesFilter<"ReportJob"> | string
+    templateUrl?: StringNullableWithAggregatesFilter<"ReportJob"> | string | null
+    templateId?: StringNullableWithAggregatesFilter<"ReportJob"> | string | null
+    callRoundId?: StringNullableWithAggregatesFilter<"ReportJob"> | string | null
+    templateType?: StringNullableWithAggregatesFilter<"ReportJob"> | string | null
+    parameters?: JsonWithAggregatesFilter<"ReportJob">
+    status?: EnumReportJobStatusWithAggregatesFilter<"ReportJob"> | $Enums.ReportJobStatus
+    progress?: IntWithAggregatesFilter<"ReportJob"> | number
+    resultUrl?: StringNullableWithAggregatesFilter<"ReportJob"> | string | null
+    error?: StringNullableWithAggregatesFilter<"ReportJob"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"ReportJob"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"ReportJob"> | Date | string
+    completedAt?: DateTimeNullableWithAggregatesFilter<"ReportJob"> | Date | string | null
   }
 
   export type CouncilMemberAssignmentWhereInput = {
@@ -42873,6 +45718,212 @@ export namespace Prisma {
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
+  export type ReportTemplateCreateInput = {
+    id?: string
+    name: string
+    fileUrl: string
+    fileType: string
+    fileSize: number
+    uploadedBy: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    jobs?: ReportJobCreateNestedManyWithoutTemplateInput
+  }
+
+  export type ReportTemplateUncheckedCreateInput = {
+    id?: string
+    name: string
+    fileUrl: string
+    fileType: string
+    fileSize: number
+    uploadedBy: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    jobs?: ReportJobUncheckedCreateNestedManyWithoutTemplateInput
+  }
+
+  export type ReportTemplateUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    fileUrl?: StringFieldUpdateOperationsInput | string
+    fileType?: StringFieldUpdateOperationsInput | string
+    fileSize?: IntFieldUpdateOperationsInput | number
+    uploadedBy?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    jobs?: ReportJobUpdateManyWithoutTemplateNestedInput
+  }
+
+  export type ReportTemplateUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    fileUrl?: StringFieldUpdateOperationsInput | string
+    fileType?: StringFieldUpdateOperationsInput | string
+    fileSize?: IntFieldUpdateOperationsInput | number
+    uploadedBy?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    jobs?: ReportJobUncheckedUpdateManyWithoutTemplateNestedInput
+  }
+
+  export type ReportTemplateCreateManyInput = {
+    id?: string
+    name: string
+    fileUrl: string
+    fileType: string
+    fileSize: number
+    uploadedBy: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ReportTemplateUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    fileUrl?: StringFieldUpdateOperationsInput | string
+    fileType?: StringFieldUpdateOperationsInput | string
+    fileSize?: IntFieldUpdateOperationsInput | number
+    uploadedBy?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ReportTemplateUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    fileUrl?: StringFieldUpdateOperationsInput | string
+    fileType?: StringFieldUpdateOperationsInput | string
+    fileSize?: IntFieldUpdateOperationsInput | number
+    uploadedBy?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ReportJobCreateInput = {
+    id?: string
+    deanId: string
+    reportType: string
+    templateUrl?: string | null
+    callRoundId?: string | null
+    templateType?: string | null
+    parameters: JsonNullValueInput | InputJsonValue
+    status?: $Enums.ReportJobStatus
+    progress?: number
+    resultUrl?: string | null
+    error?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    completedAt?: Date | string | null
+    template?: ReportTemplateCreateNestedOneWithoutJobsInput
+  }
+
+  export type ReportJobUncheckedCreateInput = {
+    id?: string
+    deanId: string
+    reportType: string
+    templateUrl?: string | null
+    templateId?: string | null
+    callRoundId?: string | null
+    templateType?: string | null
+    parameters: JsonNullValueInput | InputJsonValue
+    status?: $Enums.ReportJobStatus
+    progress?: number
+    resultUrl?: string | null
+    error?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    completedAt?: Date | string | null
+  }
+
+  export type ReportJobUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    deanId?: StringFieldUpdateOperationsInput | string
+    reportType?: StringFieldUpdateOperationsInput | string
+    templateUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    callRoundId?: NullableStringFieldUpdateOperationsInput | string | null
+    templateType?: NullableStringFieldUpdateOperationsInput | string | null
+    parameters?: JsonNullValueInput | InputJsonValue
+    status?: EnumReportJobStatusFieldUpdateOperationsInput | $Enums.ReportJobStatus
+    progress?: IntFieldUpdateOperationsInput | number
+    resultUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    error?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    template?: ReportTemplateUpdateOneWithoutJobsNestedInput
+  }
+
+  export type ReportJobUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    deanId?: StringFieldUpdateOperationsInput | string
+    reportType?: StringFieldUpdateOperationsInput | string
+    templateUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    templateId?: NullableStringFieldUpdateOperationsInput | string | null
+    callRoundId?: NullableStringFieldUpdateOperationsInput | string | null
+    templateType?: NullableStringFieldUpdateOperationsInput | string | null
+    parameters?: JsonNullValueInput | InputJsonValue
+    status?: EnumReportJobStatusFieldUpdateOperationsInput | $Enums.ReportJobStatus
+    progress?: IntFieldUpdateOperationsInput | number
+    resultUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    error?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type ReportJobCreateManyInput = {
+    id?: string
+    deanId: string
+    reportType: string
+    templateUrl?: string | null
+    templateId?: string | null
+    callRoundId?: string | null
+    templateType?: string | null
+    parameters: JsonNullValueInput | InputJsonValue
+    status?: $Enums.ReportJobStatus
+    progress?: number
+    resultUrl?: string | null
+    error?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    completedAt?: Date | string | null
+  }
+
+  export type ReportJobUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    deanId?: StringFieldUpdateOperationsInput | string
+    reportType?: StringFieldUpdateOperationsInput | string
+    templateUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    callRoundId?: NullableStringFieldUpdateOperationsInput | string | null
+    templateType?: NullableStringFieldUpdateOperationsInput | string | null
+    parameters?: JsonNullValueInput | InputJsonValue
+    status?: EnumReportJobStatusFieldUpdateOperationsInput | $Enums.ReportJobStatus
+    progress?: IntFieldUpdateOperationsInput | number
+    resultUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    error?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type ReportJobUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    deanId?: StringFieldUpdateOperationsInput | string
+    reportType?: StringFieldUpdateOperationsInput | string
+    templateUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    templateId?: NullableStringFieldUpdateOperationsInput | string | null
+    callRoundId?: NullableStringFieldUpdateOperationsInput | string | null
+    templateType?: NullableStringFieldUpdateOperationsInput | string | null
+    parameters?: JsonNullValueInput | InputJsonValue
+    status?: EnumReportJobStatusFieldUpdateOperationsInput | $Enums.ReportJobStatus
+    progress?: IntFieldUpdateOperationsInput | number
+    resultUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    error?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
   export type CouncilMemberAssignmentCreateInput = {
     id?: string
     role?: string | null
@@ -45189,6 +48240,139 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumAutoApprovalJobStatusFilter<$PrismaModel>
     _max?: NestedEnumAutoApprovalJobStatusFilter<$PrismaModel>
+  }
+
+  export type ReportJobListRelationFilter = {
+    every?: ReportJobWhereInput
+    some?: ReportJobWhereInput
+    none?: ReportJobWhereInput
+  }
+
+  export type ReportJobOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type ReportTemplateCountOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    fileUrl?: SortOrder
+    fileType?: SortOrder
+    fileSize?: SortOrder
+    uploadedBy?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ReportTemplateAvgOrderByAggregateInput = {
+    fileSize?: SortOrder
+  }
+
+  export type ReportTemplateMaxOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    fileUrl?: SortOrder
+    fileType?: SortOrder
+    fileSize?: SortOrder
+    uploadedBy?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ReportTemplateMinOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    fileUrl?: SortOrder
+    fileType?: SortOrder
+    fileSize?: SortOrder
+    uploadedBy?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ReportTemplateSumOrderByAggregateInput = {
+    fileSize?: SortOrder
+  }
+
+  export type EnumReportJobStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.ReportJobStatus | EnumReportJobStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ReportJobStatus[] | ListEnumReportJobStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ReportJobStatus[] | ListEnumReportJobStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumReportJobStatusFilter<$PrismaModel> | $Enums.ReportJobStatus
+  }
+
+  export type ReportTemplateNullableScalarRelationFilter = {
+    is?: ReportTemplateWhereInput | null
+    isNot?: ReportTemplateWhereInput | null
+  }
+
+  export type ReportJobCountOrderByAggregateInput = {
+    id?: SortOrder
+    deanId?: SortOrder
+    reportType?: SortOrder
+    templateUrl?: SortOrder
+    templateId?: SortOrder
+    callRoundId?: SortOrder
+    templateType?: SortOrder
+    parameters?: SortOrder
+    status?: SortOrder
+    progress?: SortOrder
+    resultUrl?: SortOrder
+    error?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    completedAt?: SortOrder
+  }
+
+  export type ReportJobAvgOrderByAggregateInput = {
+    progress?: SortOrder
+  }
+
+  export type ReportJobMaxOrderByAggregateInput = {
+    id?: SortOrder
+    deanId?: SortOrder
+    reportType?: SortOrder
+    templateUrl?: SortOrder
+    templateId?: SortOrder
+    callRoundId?: SortOrder
+    templateType?: SortOrder
+    status?: SortOrder
+    progress?: SortOrder
+    resultUrl?: SortOrder
+    error?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    completedAt?: SortOrder
+  }
+
+  export type ReportJobMinOrderByAggregateInput = {
+    id?: SortOrder
+    deanId?: SortOrder
+    reportType?: SortOrder
+    templateUrl?: SortOrder
+    templateId?: SortOrder
+    callRoundId?: SortOrder
+    templateType?: SortOrder
+    status?: SortOrder
+    progress?: SortOrder
+    resultUrl?: SortOrder
+    error?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    completedAt?: SortOrder
+  }
+
+  export type ReportJobSumOrderByAggregateInput = {
+    progress?: SortOrder
+  }
+
+  export type EnumReportJobStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ReportJobStatus | EnumReportJobStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ReportJobStatus[] | ListEnumReportJobStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ReportJobStatus[] | ListEnumReportJobStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumReportJobStatusWithAggregatesFilter<$PrismaModel> | $Enums.ReportJobStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumReportJobStatusFilter<$PrismaModel>
+    _max?: NestedEnumReportJobStatusFilter<$PrismaModel>
   }
 
   export type CouncilScalarRelationFilter = {
@@ -48129,6 +51313,68 @@ export namespace Prisma {
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutAutoApprovalJobsInput, UserUpdateWithoutAutoApprovalJobsInput>, UserUncheckedUpdateWithoutAutoApprovalJobsInput>
   }
 
+  export type ReportJobCreateNestedManyWithoutTemplateInput = {
+    create?: XOR<ReportJobCreateWithoutTemplateInput, ReportJobUncheckedCreateWithoutTemplateInput> | ReportJobCreateWithoutTemplateInput[] | ReportJobUncheckedCreateWithoutTemplateInput[]
+    connectOrCreate?: ReportJobCreateOrConnectWithoutTemplateInput | ReportJobCreateOrConnectWithoutTemplateInput[]
+    createMany?: ReportJobCreateManyTemplateInputEnvelope
+    connect?: ReportJobWhereUniqueInput | ReportJobWhereUniqueInput[]
+  }
+
+  export type ReportJobUncheckedCreateNestedManyWithoutTemplateInput = {
+    create?: XOR<ReportJobCreateWithoutTemplateInput, ReportJobUncheckedCreateWithoutTemplateInput> | ReportJobCreateWithoutTemplateInput[] | ReportJobUncheckedCreateWithoutTemplateInput[]
+    connectOrCreate?: ReportJobCreateOrConnectWithoutTemplateInput | ReportJobCreateOrConnectWithoutTemplateInput[]
+    createMany?: ReportJobCreateManyTemplateInputEnvelope
+    connect?: ReportJobWhereUniqueInput | ReportJobWhereUniqueInput[]
+  }
+
+  export type ReportJobUpdateManyWithoutTemplateNestedInput = {
+    create?: XOR<ReportJobCreateWithoutTemplateInput, ReportJobUncheckedCreateWithoutTemplateInput> | ReportJobCreateWithoutTemplateInput[] | ReportJobUncheckedCreateWithoutTemplateInput[]
+    connectOrCreate?: ReportJobCreateOrConnectWithoutTemplateInput | ReportJobCreateOrConnectWithoutTemplateInput[]
+    upsert?: ReportJobUpsertWithWhereUniqueWithoutTemplateInput | ReportJobUpsertWithWhereUniqueWithoutTemplateInput[]
+    createMany?: ReportJobCreateManyTemplateInputEnvelope
+    set?: ReportJobWhereUniqueInput | ReportJobWhereUniqueInput[]
+    disconnect?: ReportJobWhereUniqueInput | ReportJobWhereUniqueInput[]
+    delete?: ReportJobWhereUniqueInput | ReportJobWhereUniqueInput[]
+    connect?: ReportJobWhereUniqueInput | ReportJobWhereUniqueInput[]
+    update?: ReportJobUpdateWithWhereUniqueWithoutTemplateInput | ReportJobUpdateWithWhereUniqueWithoutTemplateInput[]
+    updateMany?: ReportJobUpdateManyWithWhereWithoutTemplateInput | ReportJobUpdateManyWithWhereWithoutTemplateInput[]
+    deleteMany?: ReportJobScalarWhereInput | ReportJobScalarWhereInput[]
+  }
+
+  export type ReportJobUncheckedUpdateManyWithoutTemplateNestedInput = {
+    create?: XOR<ReportJobCreateWithoutTemplateInput, ReportJobUncheckedCreateWithoutTemplateInput> | ReportJobCreateWithoutTemplateInput[] | ReportJobUncheckedCreateWithoutTemplateInput[]
+    connectOrCreate?: ReportJobCreateOrConnectWithoutTemplateInput | ReportJobCreateOrConnectWithoutTemplateInput[]
+    upsert?: ReportJobUpsertWithWhereUniqueWithoutTemplateInput | ReportJobUpsertWithWhereUniqueWithoutTemplateInput[]
+    createMany?: ReportJobCreateManyTemplateInputEnvelope
+    set?: ReportJobWhereUniqueInput | ReportJobWhereUniqueInput[]
+    disconnect?: ReportJobWhereUniqueInput | ReportJobWhereUniqueInput[]
+    delete?: ReportJobWhereUniqueInput | ReportJobWhereUniqueInput[]
+    connect?: ReportJobWhereUniqueInput | ReportJobWhereUniqueInput[]
+    update?: ReportJobUpdateWithWhereUniqueWithoutTemplateInput | ReportJobUpdateWithWhereUniqueWithoutTemplateInput[]
+    updateMany?: ReportJobUpdateManyWithWhereWithoutTemplateInput | ReportJobUpdateManyWithWhereWithoutTemplateInput[]
+    deleteMany?: ReportJobScalarWhereInput | ReportJobScalarWhereInput[]
+  }
+
+  export type ReportTemplateCreateNestedOneWithoutJobsInput = {
+    create?: XOR<ReportTemplateCreateWithoutJobsInput, ReportTemplateUncheckedCreateWithoutJobsInput>
+    connectOrCreate?: ReportTemplateCreateOrConnectWithoutJobsInput
+    connect?: ReportTemplateWhereUniqueInput
+  }
+
+  export type EnumReportJobStatusFieldUpdateOperationsInput = {
+    set?: $Enums.ReportJobStatus
+  }
+
+  export type ReportTemplateUpdateOneWithoutJobsNestedInput = {
+    create?: XOR<ReportTemplateCreateWithoutJobsInput, ReportTemplateUncheckedCreateWithoutJobsInput>
+    connectOrCreate?: ReportTemplateCreateOrConnectWithoutJobsInput
+    upsert?: ReportTemplateUpsertWithoutJobsInput
+    disconnect?: ReportTemplateWhereInput | boolean
+    delete?: ReportTemplateWhereInput | boolean
+    connect?: ReportTemplateWhereUniqueInput
+    update?: XOR<XOR<ReportTemplateUpdateToOneWithWhereWithoutJobsInput, ReportTemplateUpdateWithoutJobsInput>, ReportTemplateUncheckedUpdateWithoutJobsInput>
+  }
+
   export type CouncilCreateNestedOneWithoutMembersInput = {
     create?: XOR<CouncilCreateWithoutMembersInput, CouncilUncheckedCreateWithoutMembersInput>
     connectOrCreate?: CouncilCreateOrConnectWithoutMembersInput
@@ -48836,6 +52082,23 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumAutoApprovalJobStatusFilter<$PrismaModel>
     _max?: NestedEnumAutoApprovalJobStatusFilter<$PrismaModel>
+  }
+
+  export type NestedEnumReportJobStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.ReportJobStatus | EnumReportJobStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ReportJobStatus[] | ListEnumReportJobStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ReportJobStatus[] | ListEnumReportJobStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumReportJobStatusFilter<$PrismaModel> | $Enums.ReportJobStatus
+  }
+
+  export type NestedEnumReportJobStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ReportJobStatus | EnumReportJobStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ReportJobStatus[] | ListEnumReportJobStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ReportJobStatus[] | ListEnumReportJobStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumReportJobStatusWithAggregatesFilter<$PrismaModel> | $Enums.ReportJobStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumReportJobStatusFilter<$PrismaModel>
+    _max?: NestedEnumReportJobStatusFilter<$PrismaModel>
   }
 
   export type MajorCreateWithoutDepartmentInput = {
@@ -57475,6 +60738,147 @@ export namespace Prisma {
     approvedDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutApprovedByNestedInput
   }
 
+  export type ReportJobCreateWithoutTemplateInput = {
+    id?: string
+    deanId: string
+    reportType: string
+    templateUrl?: string | null
+    callRoundId?: string | null
+    templateType?: string | null
+    parameters: JsonNullValueInput | InputJsonValue
+    status?: $Enums.ReportJobStatus
+    progress?: number
+    resultUrl?: string | null
+    error?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    completedAt?: Date | string | null
+  }
+
+  export type ReportJobUncheckedCreateWithoutTemplateInput = {
+    id?: string
+    deanId: string
+    reportType: string
+    templateUrl?: string | null
+    callRoundId?: string | null
+    templateType?: string | null
+    parameters: JsonNullValueInput | InputJsonValue
+    status?: $Enums.ReportJobStatus
+    progress?: number
+    resultUrl?: string | null
+    error?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    completedAt?: Date | string | null
+  }
+
+  export type ReportJobCreateOrConnectWithoutTemplateInput = {
+    where: ReportJobWhereUniqueInput
+    create: XOR<ReportJobCreateWithoutTemplateInput, ReportJobUncheckedCreateWithoutTemplateInput>
+  }
+
+  export type ReportJobCreateManyTemplateInputEnvelope = {
+    data: ReportJobCreateManyTemplateInput | ReportJobCreateManyTemplateInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type ReportJobUpsertWithWhereUniqueWithoutTemplateInput = {
+    where: ReportJobWhereUniqueInput
+    update: XOR<ReportJobUpdateWithoutTemplateInput, ReportJobUncheckedUpdateWithoutTemplateInput>
+    create: XOR<ReportJobCreateWithoutTemplateInput, ReportJobUncheckedCreateWithoutTemplateInput>
+  }
+
+  export type ReportJobUpdateWithWhereUniqueWithoutTemplateInput = {
+    where: ReportJobWhereUniqueInput
+    data: XOR<ReportJobUpdateWithoutTemplateInput, ReportJobUncheckedUpdateWithoutTemplateInput>
+  }
+
+  export type ReportJobUpdateManyWithWhereWithoutTemplateInput = {
+    where: ReportJobScalarWhereInput
+    data: XOR<ReportJobUpdateManyMutationInput, ReportJobUncheckedUpdateManyWithoutTemplateInput>
+  }
+
+  export type ReportJobScalarWhereInput = {
+    AND?: ReportJobScalarWhereInput | ReportJobScalarWhereInput[]
+    OR?: ReportJobScalarWhereInput[]
+    NOT?: ReportJobScalarWhereInput | ReportJobScalarWhereInput[]
+    id?: StringFilter<"ReportJob"> | string
+    deanId?: StringFilter<"ReportJob"> | string
+    reportType?: StringFilter<"ReportJob"> | string
+    templateUrl?: StringNullableFilter<"ReportJob"> | string | null
+    templateId?: StringNullableFilter<"ReportJob"> | string | null
+    callRoundId?: StringNullableFilter<"ReportJob"> | string | null
+    templateType?: StringNullableFilter<"ReportJob"> | string | null
+    parameters?: JsonFilter<"ReportJob">
+    status?: EnumReportJobStatusFilter<"ReportJob"> | $Enums.ReportJobStatus
+    progress?: IntFilter<"ReportJob"> | number
+    resultUrl?: StringNullableFilter<"ReportJob"> | string | null
+    error?: StringNullableFilter<"ReportJob"> | string | null
+    createdAt?: DateTimeFilter<"ReportJob"> | Date | string
+    updatedAt?: DateTimeFilter<"ReportJob"> | Date | string
+    completedAt?: DateTimeNullableFilter<"ReportJob"> | Date | string | null
+  }
+
+  export type ReportTemplateCreateWithoutJobsInput = {
+    id?: string
+    name: string
+    fileUrl: string
+    fileType: string
+    fileSize: number
+    uploadedBy: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ReportTemplateUncheckedCreateWithoutJobsInput = {
+    id?: string
+    name: string
+    fileUrl: string
+    fileType: string
+    fileSize: number
+    uploadedBy: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ReportTemplateCreateOrConnectWithoutJobsInput = {
+    where: ReportTemplateWhereUniqueInput
+    create: XOR<ReportTemplateCreateWithoutJobsInput, ReportTemplateUncheckedCreateWithoutJobsInput>
+  }
+
+  export type ReportTemplateUpsertWithoutJobsInput = {
+    update: XOR<ReportTemplateUpdateWithoutJobsInput, ReportTemplateUncheckedUpdateWithoutJobsInput>
+    create: XOR<ReportTemplateCreateWithoutJobsInput, ReportTemplateUncheckedCreateWithoutJobsInput>
+    where?: ReportTemplateWhereInput
+  }
+
+  export type ReportTemplateUpdateToOneWithWhereWithoutJobsInput = {
+    where?: ReportTemplateWhereInput
+    data: XOR<ReportTemplateUpdateWithoutJobsInput, ReportTemplateUncheckedUpdateWithoutJobsInput>
+  }
+
+  export type ReportTemplateUpdateWithoutJobsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    fileUrl?: StringFieldUpdateOperationsInput | string
+    fileType?: StringFieldUpdateOperationsInput | string
+    fileSize?: IntFieldUpdateOperationsInput | number
+    uploadedBy?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ReportTemplateUncheckedUpdateWithoutJobsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    fileUrl?: StringFieldUpdateOperationsInput | string
+    fileType?: StringFieldUpdateOperationsInput | string
+    fileSize?: IntFieldUpdateOperationsInput | number
+    uploadedBy?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type CouncilCreateWithoutMembersInput = {
     id?: string
     name: string
@@ -61101,6 +64505,74 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     projectRegistrationId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ReportJobCreateManyTemplateInput = {
+    id?: string
+    deanId: string
+    reportType: string
+    templateUrl?: string | null
+    callRoundId?: string | null
+    templateType?: string | null
+    parameters: JsonNullValueInput | InputJsonValue
+    status?: $Enums.ReportJobStatus
+    progress?: number
+    resultUrl?: string | null
+    error?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    completedAt?: Date | string | null
+  }
+
+  export type ReportJobUpdateWithoutTemplateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    deanId?: StringFieldUpdateOperationsInput | string
+    reportType?: StringFieldUpdateOperationsInput | string
+    templateUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    callRoundId?: NullableStringFieldUpdateOperationsInput | string | null
+    templateType?: NullableStringFieldUpdateOperationsInput | string | null
+    parameters?: JsonNullValueInput | InputJsonValue
+    status?: EnumReportJobStatusFieldUpdateOperationsInput | $Enums.ReportJobStatus
+    progress?: IntFieldUpdateOperationsInput | number
+    resultUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    error?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type ReportJobUncheckedUpdateWithoutTemplateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    deanId?: StringFieldUpdateOperationsInput | string
+    reportType?: StringFieldUpdateOperationsInput | string
+    templateUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    callRoundId?: NullableStringFieldUpdateOperationsInput | string | null
+    templateType?: NullableStringFieldUpdateOperationsInput | string | null
+    parameters?: JsonNullValueInput | InputJsonValue
+    status?: EnumReportJobStatusFieldUpdateOperationsInput | $Enums.ReportJobStatus
+    progress?: IntFieldUpdateOperationsInput | number
+    resultUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    error?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type ReportJobUncheckedUpdateManyWithoutTemplateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    deanId?: StringFieldUpdateOperationsInput | string
+    reportType?: StringFieldUpdateOperationsInput | string
+    templateUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    callRoundId?: NullableStringFieldUpdateOperationsInput | string | null
+    templateType?: NullableStringFieldUpdateOperationsInput | string | null
+    parameters?: JsonNullValueInput | InputJsonValue
+    status?: EnumReportJobStatusFieldUpdateOperationsInput | $Enums.ReportJobStatus
+    progress?: IntFieldUpdateOperationsInput | number
+    resultUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    error?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
 
