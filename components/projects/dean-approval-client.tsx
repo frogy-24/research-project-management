@@ -3,7 +3,7 @@
 import { useState, useMemo } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
-import { Download, ExternalLink, FileText, Search, X, RefreshCw, Plus } from 'lucide-react';
+import { Download, ExternalLink, FileText, Search, X, RefreshCw, Plus, FileSpreadsheet } from 'lucide-react';
 import { useDeanApprovals, useUpdateDeanApprovalStatus, type DeanApprovalsFilters } from '@/hooks/useDeanApprovals';
 import { useCallRounds } from '@/hooks/useCallRounds';
 import { useDebounce } from '@/hooks/useDebounce';
@@ -16,7 +16,7 @@ import { Progress } from '@/components/ui/progress';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Skeleton } from '@/components/ui/skeleton';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogClose } from '@/components/ui/dialog';
 import {
     Pagination,
     PaginationContent,
@@ -114,6 +114,7 @@ export function DeanApprovalClient() {
     const [callRoundId, setCallRoundId] = useState('');
     const [showReportDialog, setShowReportDialog] = useState(false);
     const [showReportHistoryDialog, setShowReportHistoryDialog] = useState(false);
+    const [showExportDialog, setShowExportDialog] = useState(false);
 
     // Debounce search input for better performance
     const debouncedSearch = useDebounce(searchInput, 300);
@@ -155,6 +156,23 @@ export function DeanApprovalClient() {
 
     const handleAutoApprovalConfirmed = () => {
         queryClient.invalidateQueries({ queryKey: ['dean-approvals'] });
+    };
+
+    const handleExportReport = () => {
+        setShowExportDialog(true);
+    };
+
+    const handleConfirmExport = (exportFacultyStatus: string) => {
+        const params = new URLSearchParams();
+        if (callRoundId && callRoundId !== 'ALL') {
+            params.set('callRoundId', callRoundId);
+        }
+        params.set('facultyStatus', exportFacultyStatus);
+        const queryString = params.toString();
+        const url = `/api/dean/approvals/export${queryString ? `?${queryString}` : ''}`;
+        window.open(url, '_blank');
+        setShowExportDialog(false);
+        toast.success('Đang xuất file Excel...');
     };
 
     return (
@@ -221,6 +239,16 @@ export function DeanApprovalClient() {
                         </Button>
                     )}
 
+                    {/* Export Report Button */}
+                    <Button
+                        variant="default"
+                        size="sm"
+                        onClick={handleExportReport}
+                    >
+                        <FileSpreadsheet className="h-4 w-4 mr-1" />
+                        Xuất Excel
+                    </Button>
+
                     {/* Auto Approval Dialog - Only show when call round is selected */}
                     {callRoundId && callRoundId !== 'ALL' && (
                         <>
@@ -259,6 +287,13 @@ export function DeanApprovalClient() {
                     <ReportHistoryDialog
                         open={showReportHistoryDialog}
                         onOpenChange={setShowReportHistoryDialog}
+                    />
+
+                    {/* Export Dialog */}
+                    <ExportDialog
+                        open={showExportDialog}
+                        onOpenChange={setShowExportDialog}
+                        onExport={handleConfirmExport}
                     />
                 </div>
 
@@ -719,6 +754,70 @@ export function DeanApprovalClient() {
             )}
 
         </div>
+    );
+}
+
+function ExportDialog({ open, onOpenChange, onExport }: { open: boolean; onOpenChange: (v: boolean) => void; onExport: (status: string) => void }) {
+    const [selectedStatus, setSelectedStatus] = useState('ALL');
+
+    const statusOptions = [
+        { value: 'ALL', label: 'Tất cả các trạng thái', description: 'Xuất tất cả đề tài không phân biệt trạng thái duyệt' },
+        { value: 'APPROVED', label: 'Chỉ đề tài đã duyệt', description: 'Chỉ xuất các đề tài đã được duyệt cấp Khoa' },
+        { value: 'PENDING', label: 'Chỉ đề tài chờ duyệt', description: 'Chỉ xuất các đề tài đang chờ duyệt' },
+        { value: 'REJECTED', label: 'Chỉ đề tài bị từ chối', description: 'Chỉ xuất các đề tài bị từ chối' },
+    ];
+
+    return (
+        <Dialog open={open} onOpenChange={onOpenChange}>
+            <DialogContent className="sm:max-w-md">
+                <DialogHeader>
+                    <DialogTitle className="flex items-center gap-2">
+                        <FileSpreadsheet className="h-5 w-5" />
+                        Xuất báo cáo thống kê đề tài NCKH
+                    </DialogTitle>
+                </DialogHeader>
+                <div className="space-y-4 py-4">
+                    <p className="text-sm text-muted-foreground">
+                        Chọn trạng thái duyệt cấp Khoa để xuất báo cáo:
+                    </p>
+                    <div className="space-y-2">
+                        {statusOptions.map((option) => (
+                            <button
+                                key={option.value}
+                                type="button"
+                                className={`w-full flex items-start gap-3 p-3 rounded-lg border text-left transition-colors ${
+                                    selectedStatus === option.value
+                                        ? 'border-primary bg-primary/5 ring-1 ring-primary'
+                                        : 'border-border hover:bg-muted/50'
+                                }`}
+                                onClick={() => setSelectedStatus(option.value)}
+                            >
+                                <div className={`mt-0.5 h-4 w-4 rounded-full border-2 flex items-center justify-center shrink-0 ${
+                                    selectedStatus === option.value ? 'border-primary' : 'border-muted-foreground'
+                                }`}>
+                                    {selectedStatus === option.value && (
+                                        <div className="h-2 w-2 rounded-full bg-primary" />
+                                    )}
+                                </div>
+                                <div>
+                                    <p className="font-medium text-sm">{option.label}</p>
+                                    <p className="text-xs text-muted-foreground mt-0.5">{option.description}</p>
+                                </div>
+                            </button>
+                        ))}
+                    </div>
+                </div>
+                <DialogFooter>
+                    <DialogClose asChild>
+                        <Button variant="outline">Hủy</Button>
+                    </DialogClose>
+                    <Button onClick={() => onExport(selectedStatus)}>
+                        <FileSpreadsheet className="h-4 w-4 mr-2" />
+                        Xuất Excel
+                    </Button>
+                </DialogFooter>
+            </DialogContent>
+        </Dialog>
     );
 }
 
