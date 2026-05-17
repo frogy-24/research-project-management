@@ -18,76 +18,80 @@ logger = get_logger(__name__)
 
 # Prompt template cho LLM phân tích file và sinh SQL
 FILE_ANALYSIS_PROMPT = """
-Ban la chuyen gia phan tich du lieu va thiet ke co so du lieu.
+Bạn là chuyên gia phân tích dữ liệu và thiết kế truy vấn SQL cho file Excel.
 
-Nhiem vu:
-1. Phan tich cau truc file Excel
-2. Xac dinh y nghia cua cac cot/columns
-3. Doan doan du lieu nao can lay tu database
-4. Sinh cau lenh SQL de lay du lieu
+Nhiệm vụ:
+1. Đọc cấu trúc file Excel (headers/cột).
+2. Xác định ý nghĩa từng cột.
+3. Sinh SQL để lấy dữ liệu tương ứng.
+4. Trả về mapping cột Excel -> cột dữ liệu.
 
 ==================================================
-FILE STRUCTURE
+CẤU TRÚC FILE EXCEL
 ==================================================
 
 {file_structure}
 
 ==================================================
-DATABASE SCHEMA (tham khao)
+DATABASE SCHEMA
 ==================================================
 
 {schema}
 
 ==================================================
-QUY TAC QUAN TRONG
+RÀNG BUỘC BẮT BUỘC
 ==================================================
 
-1. Phan tich file:
-   - Neu co cot "Ten de tai" / "Project Title" -> can lay thong tin de tai
-   - Neu co cot "Ten sinh vien" / "Student Name" -> can lay thong tin sinh vien
-   - Neu co cot "Ma sinh vien" / "Student Code" -> co the join voi bang User
-   - Neu co cot "Trang thai" / "Status" -> hien thi trang thai hien tai
+1. CHỈ được dùng 3 bảng:
+   - "ProjectRegistration"
+   - "User"
+   - "CallRound"
 
-2. Xac dinh du lieu can lay:
-   - Thong tin dang ky de tai: ProjectRegistration + User + CallRound
-   - Thong tin de tai: Project + User (leader)
-   - Thong tin giang vien: User (role = LECTURER)
+2. SQL sinh ra phải:
+   - Chỉ SELECT (không INSERT/UPDATE/DELETE/ALTER/DROP).
+   - Chỉ dùng bảng/cột tồn tại trong schema.
+   - Dùng JOIN đúng quan hệ.
 
-3. SQL sinh ra phai:
-   - Chi SELECT (khong INSERT/UPDATE/DELETE)
-   - Su dung den ngoac kep cho ten bang va cot
-   - JOIN dung quan he
+3. Mapping cột:
+   - `columnMappings` có key là TẤT CẢ cột Excel.
+   - Value là tên cột trả về trong SQL (alias) hoặc null.
+   - Cột nào không map được bắt buộc trả về null.
 
-4. Tra ve JSON format:
-   {{
-     "analysis": "Mo ta ngan ve y nghia cua file",
-     "dataType": "PROJECT_REGISTRATION | PROJECT | USER | COUNCIL | CALL_ROUND | OTHER",
-     "sql": "SELECT ... FROM ... WHERE ...",
-     "columnMappings": {{
-       "cot_1": "ten_cot_database_1",
-       "cot_2": "ten_cot_database_2"
-     }},
-     "filters": ["mo ta filter neu can"]
-   }}
-
-==================================================
-VI DU
-==================================================
-
-File co cau truc:
-- Cot 1: Ma SV (text)
-- Cot 2: Ten de tai (text)  
-- Cot 3: Trang thai (text)
-
-Tra ve:
+4. Trả về JSON hợp lệ theo format:
 {{
-  "analysis": "Danh sach sinh vien dang ky de tai",
-  "dataType": "PROJECT_REGISTRATION",
-  "sql": "SELECT pr.\"title\" as \"Ten de tai\", u.\"name\" as \"Ten sinh vien\", u.\"code\" as \"Ma SV\", pr.\"status\" as \"Trang thai\" FROM \"ProjectRegistration\" pr JOIN \"User\" u ON pr.\"userId\" = u.id",
-  "columnMappings": {{}},
-  "filters": []
+  "analysis": "Mô tả ngắn",
+  "dataType": "PROJECT_REGISTRATION | USER | CALL_ROUND | OTHER",
+  "sql": "SELECT ... FROM ...",
+  "columnMappings": {{
+    "<ten_cot_excel_1>": "<ten_alias_sql_1>",
+    "<ten_cot_excel_2>": null
+  }},
+  "filters": ["mô tả filter nếu có"]
 }}
 
+==================================================
+VÍ DỤ
+==================================================
+
+File có cột:
+- Mã SV
+- Tên đề tài
+- Trạng thái
+- Ghi chú
+
+Trả về:
+{{
+  "analysis": "Danh sách sinh viên đăng ký đề tài",
+  "dataType": "PROJECT_REGISTRATION",
+  "sql": "SELECT pr.\"title\" AS \"Tên đề tài\", u.\"name\" AS \"Tên sinh viên\", u.\"code\" AS \"Mã SV\", pr.\"status\" AS \"Trạng thái\" FROM \"ProjectRegistration\" pr JOIN \"User\" u ON pr.\"userId\" = u.\"id\"",
+  "columnMappings": {{
+    "Mã SV": "Mã SV",
+    "Tên đề tài": "Tên đề tài",
+    "Trạng thái": "Trạng thái",
+    "Ghi chú": null
+  }},
+  "filters": []
+}}
 """
 
 
@@ -215,7 +219,7 @@ class FileDataFillerService:
         
         try:
             await db.connect()
-            rows = await db.fetch_all(sql)
+            rows = await db.fetch(sql)
             return [dict(row) for row in rows]
         except Exception as e:
             logger.error(f"❌ SQL execution error: {e}")
@@ -241,37 +245,74 @@ class FileDataFillerService:
         
         column_mappings = llm_result.get("columnMappings", {})
         
-        # Find last row with data
-        start_row = 2  # Assuming headers are in row 1
-        
-        # Try to find where data ends (look for first empty row in column A)
-        data_row = start_row
-        for row in range(start_row, ws.max_row + 100):
-            if ws.cell(row=row, column=1).value is None:
-                data_row = row
-                break
-            data_row = row + 1
-        
+        # Detect header row (avoid hardcode row=1)
+        mapping_keys = {str(k).strip() for k in column_mappings.keys() if k is not None and str(k).strip()}
+        header_row = 1
+        best_score = -1
+        for r in range(1, min(ws.max_row, 30) + 1):
+            row_headers = [ws.cell(row=r, column=c).value for c in range(1, ws.max_column + 1)]
+            normalized = {str(h).strip() for h in row_headers if h is not None and str(h).strip()}
+            score = len(normalized & mapping_keys) if mapping_keys else len(normalized)
+            if score > best_score:
+                best_score = score
+                header_row = r
+
+        headers = [ws.cell(row=header_row, column=c).value for c in range(1, ws.max_column + 1)]
+        header_to_col_index = {
+            str(header).strip(): idx
+            for idx, header in enumerate(headers, 1)
+            if header is not None and str(header).strip()
+        }
+
+        # find first empty row below detected header
+        data_row = header_row + 1
+        while data_row <= ws.max_row and ws.cell(row=data_row, column=1).value is not None:
+            data_row += 1
+
+        logger.info(f"Detected header row={header_row}, data_row={data_row}")
+
+        # clear old rows under header so output không bị trộn data cũ
+        for r in range(header_row + 1, ws.max_row + 1):
+            for c in range(1, ws.max_column + 1):
+                ws.cell(row=r, column=c, value=None)
+
+        data_row = header_row + 1
+
+        if output_dir is None:
+            output_dir = tempfile.gettempdir()
+        output_dir = os.path.normpath(output_dir)
+        os.makedirs(output_dir, exist_ok=True)
+
+
+        def _write_cell_safe(row_num: int, col_num: int, value: Any) -> None:
+            cell = ws.cell(row=row_num, column=col_num)
+            if cell.__class__.__name__ != "MergedCell":
+                cell.value = value
+                return
+
+            for merged_range in ws.merged_cells.ranges:
+                if merged_range.min_row <= row_num <= merged_range.max_row and merged_range.min_col <= col_num <= merged_range.max_col:
+                    ws.cell(row=merged_range.min_row, column=merged_range.min_col, value=value)
+                    return
+
         # Fill data
         for idx, row_data in enumerate(data):
             row_num = data_row + idx
-            
-            # Map column mappings
-            for col_idx, db_col in column_mappings.items():
-                if db_col in row_data:
-                    ws.cell(row=row_num, column=col_idx, value=row_data[db_col])
-            
-            # Also try to auto-map based on header names
-            headers = [ws.cell(row=1, column=c).value for c in range(1, ws.max_column + 1)]
+
+            # Map theo format: {"<ten_cot_excel>": "<ten_cot_sql_or_db> | null"}
+            for excel_col, data_col in column_mappings.items():
+                if not data_col:
+                    continue
+                col_index = header_to_col_index.get(str(excel_col).strip())
+                if col_index and data_col in row_data:
+                    _write_cell_safe(row_num, col_index, row_data[data_col])
+
+            # Auto-map fallback theo trùng tên header với key row_data
             for col_idx, header in enumerate(headers, 1):
-                if header and header in row_data:
-                    ws.cell(row=row_num, column=col_idx, value=row_data[header])
+                if header and header in row_data and ws.cell(row=row_num, column=col_idx).value is None:
+                    _write_cell_safe(row_num, col_idx, row_data[header])
         
         # Save output
-        if output_dir is None:
-            output_dir = "/tmp"
-        
-        os.makedirs(output_dir, exist_ok=True)
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         filename = f"filled_{timestamp}.xlsx"
         output_path = os.path.join(output_dir, filename)

@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pnpm build *)",
+      "Bash(uv add *)",
+      "Bash(git -C \"c:\\\\Users\\\\frog\\\\Documents\\\\123\\\\research-project-management\\\\.claude\\\\worktrees\\\\agent-a6c764cb4882b4c09\" diff -- \"*.py\")"
+    ]
+  }
+}

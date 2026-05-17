@@ -34,6 +34,7 @@ import {
     UserSquare2,
     UserX,
     Users,
+    ChevronDown,
 } from 'lucide-react';
 
 const SEARCH_FIELD_OPTIONS = [
@@ -51,7 +52,10 @@ const teamInvitationStatusLabel: Record<'PENDING' | 'ACCEPTED' | 'REJECTED' | 'C
     CANCELED: 'Đã hủy',
 };
 
-const teamInvitationStatusVariant: Record<'PENDING' | 'ACCEPTED' | 'REJECTED' | 'CANCELED', 'secondary' | 'default' | 'destructive' | 'outline'> = {
+const teamInvitationStatusVariant: Record<
+    'PENDING' | 'ACCEPTED' | 'REJECTED' | 'CANCELED',
+    'secondary' | 'default' | 'destructive' | 'outline'
+> = {
     PENDING: 'secondary',
     ACCEPTED: 'default',
     REJECTED: 'destructive',
@@ -63,7 +67,9 @@ export function GuidancePageClient() {
     const [limit] = useState(10);
     const [selectedCallRoundId, setSelectedCallRoundId] = useState('ALL');
     const [selectedStatus, setSelectedStatus] = useState<'ALL' | 'PENDING' | 'ACCEPTED' | 'REJECTED'>('ALL');
-    const [searchField, setSearchField] = useState<'all' | 'title' | 'studentName' | 'studentEmail' | 'studentCode'>('all');
+    const [searchField, setSearchField] = useState<'all' | 'title' | 'studentName' | 'studentEmail' | 'studentCode'>(
+        'all',
+    );
     const [searchInput, setSearchInput] = useState('');
     const debouncedSearch = useDebounce(searchInput, 400);
 
@@ -84,7 +90,8 @@ export function GuidancePageClient() {
     const mutation = useUpdateInstructorStatus();
 
     const rangeStart = pagination && pagination.total > 0 ? (pagination.page - 1) * pagination.limit + 1 : 0;
-    const rangeEnd = pagination && pagination.total > 0 ? Math.min(pagination.page * pagination.limit, pagination.total) : 0;
+    const rangeEnd =
+        pagination && pagination.total > 0 ? Math.min(pagination.page * pagination.limit, pagination.total) : 0;
 
     const statusSummary = useMemo(() => {
         return registrations.reduce(
@@ -119,7 +126,9 @@ export function GuidancePageClient() {
             pages.add(totalPages - 3);
         }
 
-        return Array.from(pages).filter((p) => p >= 1 && p <= totalPages).sort((a, b) => a - b);
+        return Array.from(pages)
+            .filter((p) => p >= 1 && p <= totalPages)
+            .sort((a, b) => a - b);
     }, [pagination]);
 
     const handleCallRoundChange = (value: string) => {
@@ -363,7 +372,7 @@ export function GuidancePageClient() {
                                                             Chi tiết
                                                         </Button>
                                                     </DialogTrigger>
-                                                    <DialogContent className="sm:max-w-2xl">
+                                                    <DialogContent className="sm:max-w-2xl max-h-[90vh] overflow-y-auto">
                                                         <DialogHeader>
                                                             <DialogTitle>Chi tiết đăng ký hướng dẫn</DialogTitle>
                                                         </DialogHeader>
@@ -375,27 +384,47 @@ export function GuidancePageClient() {
                                                                 </h4>
                                                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
                                                                     <div>
-                                                                        <p className="text-muted-foreground text-xs">Họ và tên</p>
+                                                                        <p className="text-muted-foreground text-xs">
+                                                                            Họ và tên
+                                                                        </p>
                                                                         <p className="font-medium">{req.user.name}</p>
                                                                     </div>
                                                                     <div>
-                                                                        <p className="text-muted-foreground text-xs">Mã sinh viên</p>
-                                                                        <p className="font-medium">{req.user.code || 'N/A'}</p>
+                                                                        <p className="text-muted-foreground text-xs">
+                                                                            Mã sinh viên
+                                                                        </p>
+                                                                        <p className="font-medium">
+                                                                            {req.user.code || 'N/A'}
+                                                                        </p>
                                                                     </div>
                                                                     <div>
-                                                                        <p className="text-muted-foreground text-xs">Lớp</p>
-                                                                        <p className="font-medium">{req.user.class?.name || 'N/A'}</p>
+                                                                        <p className="text-muted-foreground text-xs">
+                                                                            Lớp
+                                                                        </p>
+                                                                        <p className="font-medium">
+                                                                            {req.user.class?.name || 'N/A'}
+                                                                        </p>
                                                                     </div>
                                                                     <div>
-                                                                        <p className="text-muted-foreground text-xs">Ngành</p>
-                                                                        <p className="font-medium">{req.user.major?.name || 'N/A'}</p>
+                                                                        <p className="text-muted-foreground text-xs">
+                                                                            Ngành
+                                                                        </p>
+                                                                        <p className="font-medium">
+                                                                            {req.user.major?.name || 'N/A'}
+                                                                        </p>
                                                                     </div>
                                                                     <div>
-                                                                        <p className="text-muted-foreground text-xs">Khoa</p>
-                                                                        <p className="font-medium">{req.user.departmentRef?.name || 'N/A'}</p>
+                                                                        <p className="text-muted-foreground text-xs">
+                                                                            Khoa
+                                                                        </p>
+                                                                        <p className="font-medium">
+                                                                            {req.user.departmentRef?.name || 'N/A'}
+                                                                        </p>
                                                                     </div>
                                                                     <div>
-                                                                        <p className="text-muted-foreground text-xs">Email</p>
+                                                                        <p className="text-muted-foreground text-xs">
+                                                                            Email
+                                                                        </p>
                                                                         <p className="font-medium flex items-center gap-1.5">
                                                                             <Mail className="h-3.5 w-3.5 text-muted-foreground" />
                                                                             {req.user.email}
@@ -409,14 +438,18 @@ export function GuidancePageClient() {
                                                                     <h4 className="text-sm font-medium text-muted-foreground mb-1">
                                                                         Tên đề tài
                                                                     </h4>
-                                                                    <p className="text-sm font-semibold leading-6">{req.title}</p>
+                                                                    <p className="text-sm font-semibold leading-6">
+                                                                        {req.title}
+                                                                    </p>
                                                                 </div>
                                                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
                                                                     <div>
                                                                         <p className="text-muted-foreground text-xs mb-1">
                                                                             Đợt đăng ký
                                                                         </p>
-                                                                        <p className="font-medium">{req.callRound?.name || 'N/A'}</p>
+                                                                        <p className="font-medium">
+                                                                            {req.callRound?.name || 'N/A'}
+                                                                        </p>
                                                                     </div>
                                                                     <div>
                                                                         <p className="text-muted-foreground text-xs mb-1">
@@ -426,7 +459,8 @@ export function GuidancePageClient() {
                                                                             variant={
                                                                                 req.instructorStatus === 'ACCEPTED'
                                                                                     ? 'default'
-                                                                                    : req.instructorStatus === 'REJECTED'
+                                                                                    : req.instructorStatus ===
+                                                                                        'REJECTED'
                                                                                       ? 'destructive'
                                                                                       : 'secondary'
                                                                             }
@@ -459,64 +493,72 @@ export function GuidancePageClient() {
                                                                     <h4 className="text-sm font-medium text-muted-foreground mb-2">
                                                                         File đính kèm
                                                                     </h4>
-                                                                    {req.proposalFiles && req.proposalFiles.length > 0 ? (
+                                                                    {req.proposalFiles &&
+                                                                    req.proposalFiles.length > 0 ? (
                                                                         <div className="space-y-2">
-                                                                            {req.proposalFiles.map((file, fileIndex) => (
-                                                                                <div
-                                                                                    key={`${file.url}-${fileIndex}`}
-                                                                                    className="rounded-md border bg-muted/20 px-3 py-2 flex items-center justify-between gap-2"
-                                                                                >
-                                                                                    <div className="min-w-0">
-                                                                                        <p className="font-medium text-sm truncate flex items-center gap-1.5">
-                                                                                            <FileText className="h-3.5 w-3.5 text-primary shrink-0" />
-                                                                                            <span className="truncate">{file.name}</span>
-                                                                                        </p>
-                                                                                        <p className="text-xs text-muted-foreground">
-                                                                                            {typeof file.size === 'number'
-                                                                                                ? `${(file.size / 1024).toFixed(1)} KB`
-                                                                                                : 'Kích thước không xác định'}
-                                                                                        </p>
-                                                                                    </div>
-                                                                                    <div className="flex items-center gap-1">
-                                                                                        <Button
-                                                                                            type="button"
-                                                                                            variant="ghost"
-                                                                                            size="sm"
-                                                                                            className="h-8 w-8 p-0"
-                                                                                            asChild
-                                                                                        >
-                                                                                            <a
-                                                                                                href={file.url}
-                                                                                                target="_blank"
-                                                                                                rel="noopener noreferrer"
-                                                                                                aria-label={`Mở tệp ${file.name}`}
+                                                                            {req.proposalFiles.map(
+                                                                                (file, fileIndex) => (
+                                                                                    <div
+                                                                                        key={`${file.url}-${fileIndex}`}
+                                                                                        className="rounded-md border bg-muted/20 px-3 py-2 flex items-center justify-between gap-2"
+                                                                                    >
+                                                                                        <div className="min-w-0">
+                                                                                            <p className="font-medium text-sm truncate flex items-center gap-1.5">
+                                                                                                <FileText className="h-3.5 w-3.5 text-primary shrink-0" />
+                                                                                                <span className="truncate">
+                                                                                                    {file.name}
+                                                                                                </span>
+                                                                                            </p>
+                                                                                            <p className="text-xs text-muted-foreground">
+                                                                                                {typeof file.size ===
+                                                                                                'number'
+                                                                                                    ? `${(file.size / 1024).toFixed(1)} KB`
+                                                                                                    : 'Kích thước không xác định'}
+                                                                                            </p>
+                                                                                        </div>
+                                                                                        <div className="flex items-center gap-1">
+                                                                                            <Button
+                                                                                                type="button"
+                                                                                                variant="ghost"
+                                                                                                size="sm"
+                                                                                                className="h-8 w-8 p-0"
+                                                                                                asChild
                                                                                             >
-                                                                                                <ExternalLink className="h-4 w-4" />
-                                                                                            </a>
-                                                                                        </Button>
-                                                                                        <Button
-                                                                                            type="button"
-                                                                                            variant="ghost"
-                                                                                            size="sm"
-                                                                                            className="h-8 w-8 p-0"
-                                                                                            asChild
-                                                                                        >
-                                                                                            <a
-                                                                                                href={file.url}
-                                                                                                target="_blank"
-                                                                                                rel="noopener noreferrer"
-                                                                                                download={file.name}
-                                                                                                aria-label={`Tải tệp ${file.name}`}
+                                                                                                <a
+                                                                                                    href={file.url}
+                                                                                                    target="_blank"
+                                                                                                    rel="noopener noreferrer"
+                                                                                                    aria-label={`Mở tệp ${file.name}`}
+                                                                                                >
+                                                                                                    <ExternalLink className="h-4 w-4" />
+                                                                                                </a>
+                                                                                            </Button>
+                                                                                            <Button
+                                                                                                type="button"
+                                                                                                variant="ghost"
+                                                                                                size="sm"
+                                                                                                className="h-8 w-8 p-0"
+                                                                                                asChild
                                                                                             >
-                                                                                                <Download className="h-4 w-4" />
-                                                                                            </a>
-                                                                                        </Button>
+                                                                                                <a
+                                                                                                    href={file.url}
+                                                                                                    target="_blank"
+                                                                                                    rel="noopener noreferrer"
+                                                                                                    download={file.name}
+                                                                                                    aria-label={`Tải tệp ${file.name}`}
+                                                                                                >
+                                                                                                    <Download className="h-4 w-4" />
+                                                                                                </a>
+                                                                                            </Button>
+                                                                                        </div>
                                                                                     </div>
-                                                                                </div>
-                                                                            ))}
+                                                                                ),
+                                                                            )}
                                                                         </div>
                                                                     ) : (
-                                                                        <p className="text-sm text-muted-foreground">Chưa có file đính kèm.</p>
+                                                                        <p className="text-sm text-muted-foreground">
+                                                                            Chưa có file đính kèm.
+                                                                        </p>
                                                                     )}
                                                                 </div>
                                                                 <div>
@@ -525,22 +567,119 @@ export function GuidancePageClient() {
                                                                     </h4>
                                                                     {req.teamMembers && req.teamMembers.length > 0 ? (
                                                                         <div className="space-y-2">
-                                                                            {req.teamMembers.map((member, memberIndex) => {
-                                                                                const invitationStatus = member.invitationStatus || 'PENDING';
+                                                                            {req.teamMembers.map(
+                                                                                (member, memberIndex) => {
+                                                                                    const invitationStatus =
+                                                                                        member.invitationStatus ||
+                                                                                        'PENDING';
 
-                                                                                return (
-                                                                                    <div
-                                                                                        key={`${member.name}-${memberIndex}`}
-                                                                                        className="rounded-md border bg-muted/20 px-3 py-2 flex flex-wrap items-center gap-2"
-                                                                                    >
-                                                                                        <span className="font-medium text-sm">{member.name}</span>
-                                                                                        <Badge variant="outline">{member.role}</Badge>
-                                                                                        <Badge variant={teamInvitationStatusVariant[invitationStatus]}>
-                                                                                            {teamInvitationStatusLabel[invitationStatus]}
-                                                                                        </Badge>
-                                                                                    </div>
-                                                                                );
-                                                                            })}
+                                                                                    return (
+                                                                                        <details
+                                                                                            key={`${member.name}-${memberIndex}`}
+                                                                                            className="group rounded-md border bg-muted/20 px-3 py-2"
+                                                                                        >
+                                                                                            <summary className="flex flex-wrap items-center justify-between gap-2 cursor-pointer list-none">
+                                                                                                <div className="flex flex-wrap items-center gap-2">
+                                                                                                    <span className="font-medium text-sm">
+                                                                                                        {member.name}
+                                                                                                    </span>
+                                                                                                    <Badge variant="outline">
+                                                                                                        {member.role}
+                                                                                                    </Badge>
+                                                                                                    <Badge
+                                                                                                        variant={
+                                                                                                            teamInvitationStatusVariant[
+                                                                                                                invitationStatus
+                                                                                                            ]
+                                                                                                        }
+                                                                                                    >
+                                                                                                        {
+                                                                                                            teamInvitationStatusLabel[
+                                                                                                                invitationStatus
+                                                                                                            ]
+                                                                                                        }
+                                                                                                    </Badge>
+                                                                                                </div>
+                                                                                                <span className="inline-flex items-center gap-1 text-xs text-muted-foreground">
+                                                                                                    Xem thông tin
+                                                                                                    <ChevronDown className="h-3.5 w-3.5 transition-transform group-open:rotate-180" />
+                                                                                                </span>
+                                                                                            </summary>
+                                                                                            <div className="mt-3 rounded-md border bg-background p-3">
+                                                                                                <h5 className="text-sm font-semibold mb-2">
+                                                                                                    Thông tin sinh viên
+                                                                                                </h5>
+                                                                                                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
+                                                                                                    <div>
+                                                                                                        <p className="text-xs text-muted-foreground">
+                                                                                                            Họ và tên
+                                                                                                        </p>
+                                                                                                        <p className="font-medium">
+                                                                                                            {
+                                                                                                                member.name
+                                                                                                            }
+                                                                                                        </p>
+                                                                                                    </div>
+                                                                                                    <div>
+                                                                                                        <p className="text-xs text-muted-foreground">
+                                                                                                            Mã sinh viên
+                                                                                                        </p>
+                                                                                                        <p className="font-medium">
+                                                                                                            {member.studentCode ||
+                                                                                                                req.user
+                                                                                                                    .code ||
+                                                                                                                'N/A'}
+                                                                                                        </p>
+                                                                                                    </div>
+                                                                                                    <div>
+                                                                                                        <p className="text-xs text-muted-foreground">
+                                                                                                            Lớp
+                                                                                                        </p>
+                                                                                                        <p className="font-medium">
+                                                                                                            {req.user
+                                                                                                                .class
+                                                                                                                ?.name ||
+                                                                                                                'N/A'}
+                                                                                                        </p>
+                                                                                                    </div>
+                                                                                                    <div>
+                                                                                                        <p className="text-xs text-muted-foreground">
+                                                                                                            Ngành
+                                                                                                        </p>
+                                                                                                        <p className="font-medium">
+                                                                                                            {req.user
+                                                                                                                .major
+                                                                                                                ?.name ||
+                                                                                                                'N/A'}
+                                                                                                        </p>
+                                                                                                    </div>
+                                                                                                    <div>
+                                                                                                        <p className="text-xs text-muted-foreground">
+                                                                                                            Khoa
+                                                                                                        </p>
+                                                                                                        <p className="font-medium">
+                                                                                                            {req.user
+                                                                                                                .departmentRef
+                                                                                                                ?.name ||
+                                                                                                                'N/A'}
+                                                                                                        </p>
+                                                                                                    </div>
+                                                                                                    <div>
+                                                                                                        <p className="text-xs text-muted-foreground">
+                                                                                                            Email
+                                                                                                        </p>
+                                                                                                        <p className="font-medium">
+                                                                                                            {req.user
+                                                                                                                .email ||
+                                                                                                                'N/A'}
+                                                                                                        </p>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </details>
+                                                                                    );
+                                                                                },
+                                                                            )}
                                                                         </div>
                                                                     ) : (
                                                                         <p className="text-sm text-muted-foreground">
@@ -567,9 +706,7 @@ export function GuidancePageClient() {
                                                                                 'Cập nhật trạng thái thành công',
                                                                             ),
                                                                         onError: () =>
-                                                                            toast.error(
-                                                                                'Đã xảy ra lỗi khi cập nhật',
-                                                                            ),
+                                                                            toast.error('Đã xảy ra lỗi khi cập nhật'),
                                                                     },
                                                                 )
                                                             }
@@ -589,9 +726,7 @@ export function GuidancePageClient() {
                                                                                 'Cập nhật trạng thái thành công',
                                                                             ),
                                                                         onError: () =>
-                                                                            toast.error(
-                                                                                'Đã xảy ra lỗi khi cập nhật',
-                                                                            ),
+                                                                            toast.error('Đã xảy ra lỗi khi cập nhật'),
                                                                     },
                                                                 )
                                                             }

@@ -10,6 +10,7 @@ from typing import Any
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import Response
 from pydantic import BaseModel as PydanticBaseModel
+import sentry_sdk
 from mcp import ClientSession
 from mcp.client.streamable_http import streamable_http_client
 from pydantic import BaseModel, Field
@@ -33,6 +34,13 @@ from src.db import db  # Import the database instance
 from src.utilities import get_logger, log_api_request, log_async_execution, log_execution
 
 logger = get_logger(__name__)
+
+SENTRY_DSN = os.getenv("SENTRY_DSN")
+if SENTRY_DSN:
+    sentry_sdk.init(
+        dsn=SENTRY_DSN,
+        send_default_pii=True,
+    )
 
 
 class McpCallRequest(BaseModel):

@@ -43,6 +43,7 @@ export interface GuidanceRequest {
         name: string;
         role: string;
         studentId?: string;
+        studentCode?: string;
         invitationStatus?: 'PENDING' | 'ACCEPTED' | 'REJECTED' | 'CANCELED';
         invitedAt?: string | Date;
         respondedAt?: string | Date | null;
@@ -95,7 +96,7 @@ export function useGuidanceRequests(filters: GuidanceRequestsFilters = {}) {
 // Hook to update instructor status on a guidance request
 export function useUpdateInstructorStatus() {
     const queryClient = useQueryClient();
-    
+
     return useMutation({
         mutationFn: async ({ id, status }: { id: string; status: InstructorStatus }) => {
             const res = await api.patch(`/my-project-registrations/${id}/instructor-status`, { status });
