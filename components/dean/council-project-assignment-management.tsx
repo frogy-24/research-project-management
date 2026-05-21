@@ -280,6 +280,66 @@ export function CouncilProjectAssignmentManagement({
             .sort((a, b) => b.evaluatedAt.getTime() - a.evaluatedAt.getTime());
     }, [filteredEvaluationItems, selectedEvaluationDetail]);
 
+    const groupedEvaluationItems = useMemo(() => {
+        const hasCallRoundFilter = selectedEvaluationCallRoundId !== '' && selectedEvaluationCallRoundId !== 'all';
+
+        if (hasCallRoundFilter) {
+            const projectMap = new Map<string, { projectTitle: string; items: typeof sortedEvaluationItems }>();
+
+            sortedEvaluationItems.forEach((item) => {
+                const existing = projectMap.get(item.projectId);
+                if (!existing) {
+                    projectMap.set(item.projectId, { projectTitle: item.projectTitle, items: [item] });
+                    return;
+                }
+                existing.items.push(item);
+            });
+
+            return {
+                hasCallRoundFilter,
+                groups: [
+                    {
+                        callRoundName: null as string | null,
+                        projectGroups: Array.from(projectMap.values()),
+                    },
+                ],
+            };
+        }
+
+        const callRoundMap = new Map<
+            string,
+            {
+                callRoundName: string;
+                projectMap: Map<string, { projectTitle: string; items: typeof sortedEvaluationItems }>;
+            }
+        >();
+
+        sortedEvaluationItems.forEach((item) => {
+            const callRoundEntry = callRoundMap.get(item.callRoundId);
+            if (!callRoundEntry) {
+                const projectMap = new Map<string, { projectTitle: string; items: typeof sortedEvaluationItems }>();
+                projectMap.set(item.projectId, { projectTitle: item.projectTitle, items: [item] });
+                callRoundMap.set(item.callRoundId, { callRoundName: item.callRoundName, projectMap });
+                return;
+            }
+
+            const projectEntry = callRoundEntry.projectMap.get(item.projectId);
+            if (!projectEntry) {
+                callRoundEntry.projectMap.set(item.projectId, { projectTitle: item.projectTitle, items: [item] });
+                return;
+            }
+            projectEntry.items.push(item);
+        });
+
+        return {
+            hasCallRoundFilter,
+            groups: Array.from(callRoundMap.values()).map((entry) => ({
+                callRoundName: entry.callRoundName,
+                projectGroups: Array.from(entry.projectMap.values()),
+            })),
+        };
+    }, [sortedEvaluationItems, selectedEvaluationCallRoundId]);
+
     const assignedProjects = useMemo(() => {
         if (!selectedCouncilId) return [];
         return approvedProjects.filter((project) => project.councilAssignment?.councilId === selectedCouncilId);
@@ -745,7 +805,9 @@ export function CouncilProjectAssignmentManagement({
                         <DialogContent className="sm:max-w-md">
                             <DialogHeader>
                                 <DialogTitle>Sắp xếp kết quả chấm điểm</DialogTitle>
-                                <DialogDescription>Chọn tiêu chí và thứ tự hiển thị cho bảng kết quả.</DialogDescription>
+                                <DialogDescription>
+                                    Chọn tiêu chí và thứ tự hiển thị cho bảng kết quả.
+                                </DialogDescription>
                             </DialogHeader>
                             <div className="space-y-3">
                                 <div className="space-y-1.5">
@@ -848,7 +910,8 @@ export function CouncilProjectAssignmentManagement({
                                                 {formatDetailDateTime(selectedEvaluationDetail.defenseDate)}
                                             </p>
                                             <p className="mt-1 text-xs text-muted-foreground">
-                                                Nơi bảo vệ: {selectedEvaluationDetail.defenseLocation || 'Chưa cập nhật'}
+                                                Nơi bảo vệ:{' '}
+                                                {selectedEvaluationDetail.defenseLocation || 'Chưa cập nhật'}
                                             </p>
                                         </div>
                                     </div>
@@ -867,7 +930,10 @@ export function CouncilProjectAssignmentManagement({
                                             <TableBody>
                                                 {selectedEvaluationItemsByProject.length === 0 ? (
                                                     <TableRow>
-                                                        <TableCell colSpan={5} className="text-center text-muted-foreground">
+                                                        <TableCell
+                                                            colSpan={5}
+                                                            className="text-center text-muted-foreground"
+                                                        >
                                                             Chưa có dữ liệu chấm điểm chi tiết.
                                                         </TableCell>
                                                     </TableRow>
@@ -882,7 +948,9 @@ export function CouncilProjectAssignmentManagement({
                                                                 </span>
                                                             </TableCell>
                                                             <TableCell>{getDecisionBadge(item.decision)}</TableCell>
-                                                            <TableCell>{item.evaluatedAt.toLocaleString('vi-VN')}</TableCell>
+                                                            <TableCell>
+                                                                {item.evaluatedAt.toLocaleString('vi-VN')}
+                                                            </TableCell>
                                                         </TableRow>
                                                     ))
                                                 )}
@@ -906,7 +974,8 @@ export function CouncilProjectAssignmentManagement({
                         <div className="rounded-md border bg-muted/20 p-3">
                             <p className="text-xs text-muted-foreground">Điểm trung bình</p>
                             <p className="mt-1 text-lg font-semibold">
-                                {evaluationSummary?.averageScore !== null && evaluationSummary?.averageScore !== undefined
+                                {evaluationSummary?.averageScore !== null &&
+                                evaluationSummary?.averageScore !== undefined
                                     ? `${evaluationSummary.averageScore}/10`
                                     : 'Chưa có'}
                             </p>
@@ -928,50 +997,78 @@ export function CouncilProjectAssignmentManagement({
                             Chưa có dữ liệu điểm chấm cho bộ lọc hiện tại.
                         </p>
                     ) : (
-                        <div className="rounded-md border overflow-hidden">
-                            <Table>
-                                <TableHeader>
-                                    <TableRow>
-                                        <TableHead>STT</TableHead>
-                                        <TableHead>Đợt đề tài</TableHead>
-                                        <TableHead>Hội đồng</TableHead>
-                                        <TableHead>Đề tài</TableHead>
-                                        <TableHead>Người chấm</TableHead>
-                                        <TableHead>Điểm</TableHead>
-                                        <TableHead>Quyết định</TableHead>
-                                        <TableHead>Thời gian chấm</TableHead>
-                                    </TableRow>
-                                </TableHeader>
-                                <TableBody>
-                                    {sortedEvaluationItems.map((item, index) => (
-                                        <TableRow
-                                            key={item.id}
-                                            className="cursor-pointer hover:bg-muted/40"
-                                            onClick={() => handleOpenDetailFromEvaluationRow(item.projectId)}
-                                        >
-                                            <TableCell>{index + 1}</TableCell>
-                                            <TableCell>{item.callRoundName}</TableCell>
-                                            <TableCell>{item.councilName}</TableCell>
-                                            <TableCell className="max-w-xs">
-                                                <p className="line-clamp-2 font-medium">{item.projectTitle}</p>
-                                            </TableCell>
-                                            <TableCell>
-                                                <div className="space-y-0.5">
-                                                    <p className="font-medium">{item.evaluator.name}</p>
-                                                    <p className="text-xs text-muted-foreground">
-                                                        {item.evaluator.code || item.evaluator.email || 'N/A'}
-                                                    </p>
-                                                </div>
-                                            </TableCell>
-                                            <TableCell>
-                                                <span className="font-semibold text-emerald-700">{item.score}/10</span>
-                                            </TableCell>
-                                            <TableCell>{getDecisionBadge(item.decision)}</TableCell>
-                                            <TableCell>{new Date(item.evaluatedAt).toLocaleString('vi-VN')}</TableCell>
-                                        </TableRow>
+                        <div className="space-y-4">
+                            {groupedEvaluationItems.groups.map((callRoundGroup, callRoundIndex) => (
+                                <div
+                                    key={`${callRoundGroup.callRoundName || 'filtered'}-${callRoundIndex}`}
+                                    className="rounded-md border overflow-hidden"
+                                >
+                                    {!groupedEvaluationItems.hasCallRoundFilter && (
+                                        <div className="px-4 py-2 border-b bg-muted/30 font-semibold">
+                                            Đợt đề tài: {callRoundGroup.callRoundName}
+                                        </div>
+                                    )}
+
+                                    {callRoundGroup.projectGroups.map((projectGroup, projectIndex) => (
+                                        <div key={`${projectGroup.projectTitle}-${projectIndex}`}>
+                                            <div className="px-4 py-2 border-b bg-muted/10 font-medium">
+                                                Đề tài: {projectGroup.projectTitle}
+                                            </div>
+                                            <Table>
+                                                <TableHeader>
+                                                    <TableRow>
+                                                        <TableHead>STT</TableHead>
+                                                        {!groupedEvaluationItems.hasCallRoundFilter && (
+                                                            <TableHead>Đợt đề tài</TableHead>
+                                                        )}
+                                                        <TableHead>Hội đồng</TableHead>
+                                                        <TableHead>Người chấm</TableHead>
+                                                        <TableHead>Điểm</TableHead>
+                                                        <TableHead>Quyết định</TableHead>
+                                                        <TableHead>Thời gian chấm</TableHead>
+                                                    </TableRow>
+                                                </TableHeader>
+                                                <TableBody>
+                                                    {projectGroup.items.map((item, index) => (
+                                                        <TableRow
+                                                            key={item.id}
+                                                            className="cursor-pointer hover:bg-muted/40"
+                                                            onClick={() =>
+                                                                handleOpenDetailFromEvaluationRow(item.projectId)
+                                                            }
+                                                        >
+                                                            <TableCell>{index + 1}</TableCell>
+                                                            {!groupedEvaluationItems.hasCallRoundFilter && (
+                                                                <TableCell>{item.callRoundName}</TableCell>
+                                                            )}
+                                                            <TableCell>{item.councilName}</TableCell>
+                                                            <TableCell>
+                                                                <div className="space-y-0.5">
+                                                                    <p className="font-medium">{item.evaluator.name}</p>
+                                                                    <p className="text-xs text-muted-foreground">
+                                                                        {item.evaluator.code ||
+                                                                            item.evaluator.email ||
+                                                                            'N/A'}
+                                                                    </p>
+                                                                </div>
+                                                            </TableCell>
+                                                            <TableCell>
+                                                                <span className="font-semibold text-emerald-700">
+                                                                    {item.score}/10
+                                                                </span>
+                                                            </TableCell>
+                                                            <TableCell>{getDecisionBadge(item.decision)}</TableCell>
+                                                            <TableCell>
+                                                                {new Date(item.evaluatedAt).toLocaleString('vi-VN')}
+                                                            </TableCell>
+                                                        </TableRow>
+                                                    ))}
+                                                </TableBody>
+                                            </Table>
+                                        </div>
                                     ))}
-                                </TableBody>
-                            </Table>
+                                </div>
+                            ))}
                         </div>
                     )}
                 </CardContent>
@@ -982,9 +1079,7 @@ export function CouncilProjectAssignmentManagement({
                     <Card>
                         <CardHeader>
                             <CardTitle>Đề tài chưa gán hội đồng</CardTitle>
-                            <CardDescription>
-                                Chọn các đề tài để gán vào hội đồng đã chọn.
-                            </CardDescription>
+                            <CardDescription>Chọn các đề tài để gán vào hội đồng đã chọn.</CardDescription>
                         </CardHeader>
                         <CardContent className="space-y-4">
                             <div className="relative">
@@ -1031,7 +1126,9 @@ export function CouncilProjectAssignmentManagement({
                             )}
 
                             <div className="flex items-center justify-between">
-                                <p className="text-sm text-muted-foreground">Đã chọn {selectedProjectIds.length} đề tài</p>
+                                <p className="text-sm text-muted-foreground">
+                                    Đã chọn {selectedProjectIds.length} đề tài
+                                </p>
                                 <Button
                                     onClick={handleAssign}
                                     disabled={

@@ -74,6 +74,16 @@ export type ProgressReport = $Result.DefaultSelection<Prisma.$ProgressReportPayl
  */
 export type CouncilEvaluation = $Result.DefaultSelection<Prisma.$CouncilEvaluationPayload>
 /**
+ * Model Lecturer
+ * 
+ */
+export type Lecturer = $Result.DefaultSelection<Prisma.$LecturerPayload>
+/**
+ * Model LecturerPublication
+ * 
+ */
+export type LecturerPublication = $Result.DefaultSelection<Prisma.$LecturerPublicationPayload>
+/**
  * Model FundingDisbursement
  * 
  */
@@ -294,6 +304,47 @@ export const ReportJobStatus: {
 export type ReportJobStatus = (typeof ReportJobStatus)[keyof typeof ReportJobStatus]
 
 
+export const AcademicRank: {
+  BACHELOR: 'BACHELOR',
+  MASTER: 'MASTER',
+  DOCTOR: 'DOCTOR',
+  ASSOCIATE_PROFESSOR: 'ASSOCIATE_PROFESSOR',
+  PROFESSOR: 'PROFESSOR'
+};
+
+export type AcademicRank = (typeof AcademicRank)[keyof typeof AcademicRank]
+
+
+export const ProjectParticipationLevel: {
+  SCHOOL: 'SCHOOL',
+  MINISTRY: 'MINISTRY',
+  STATE: 'STATE'
+};
+
+export type ProjectParticipationLevel = (typeof ProjectParticipationLevel)[keyof typeof ProjectParticipationLevel]
+
+
+export const LecturerProjectRole: {
+  PRINCIPAL_INVESTIGATOR: 'PRINCIPAL_INVESTIGATOR',
+  SUPERVISOR: 'SUPERVISOR',
+  RESEARCH_MEMBER: 'RESEARCH_MEMBER',
+  SECRETARY: 'SECRETARY',
+  COUNCIL_MEMBER: 'COUNCIL_MEMBER'
+};
+
+export type LecturerProjectRole = (typeof LecturerProjectRole)[keyof typeof LecturerProjectRole]
+
+
+export const PublicationType: {
+  JOURNAL: 'JOURNAL',
+  CONFERENCE: 'CONFERENCE',
+  BOOK_CHAPTER: 'BOOK_CHAPTER',
+  OTHER: 'OTHER'
+};
+
+export type PublicationType = (typeof PublicationType)[keyof typeof PublicationType]
+
+
 export const InstructorStatus: {
   PENDING: 'PENDING',
   ACCEPTED: 'ACCEPTED',
@@ -401,6 +452,22 @@ export const AutoApprovalJobStatus: typeof $Enums.AutoApprovalJobStatus
 export type ReportJobStatus = $Enums.ReportJobStatus
 
 export const ReportJobStatus: typeof $Enums.ReportJobStatus
+
+export type AcademicRank = $Enums.AcademicRank
+
+export const AcademicRank: typeof $Enums.AcademicRank
+
+export type ProjectParticipationLevel = $Enums.ProjectParticipationLevel
+
+export const ProjectParticipationLevel: typeof $Enums.ProjectParticipationLevel
+
+export type LecturerProjectRole = $Enums.LecturerProjectRole
+
+export const LecturerProjectRole: typeof $Enums.LecturerProjectRole
+
+export type PublicationType = $Enums.PublicationType
+
+export const PublicationType: typeof $Enums.PublicationType
 
 export type InstructorStatus = $Enums.InstructorStatus
 
@@ -662,6 +729,26 @@ export class PrismaClient<
     * ```
     */
   get councilEvaluation(): Prisma.CouncilEvaluationDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.lecturer`: Exposes CRUD operations for the **Lecturer** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Lecturers
+    * const lecturers = await prisma.lecturer.findMany()
+    * ```
+    */
+  get lecturer(): Prisma.LecturerDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.lecturerPublication`: Exposes CRUD operations for the **LecturerPublication** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more LecturerPublications
+    * const lecturerPublications = await prisma.lecturerPublication.findMany()
+    * ```
+    */
+  get lecturerPublication(): Prisma.LecturerPublicationDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.fundingDisbursement`: Exposes CRUD operations for the **FundingDisbursement** model.
@@ -1278,6 +1365,8 @@ export namespace Prisma {
     ProgressReportTemplateItem: 'ProgressReportTemplateItem',
     ProgressReport: 'ProgressReport',
     CouncilEvaluation: 'CouncilEvaluation',
+    Lecturer: 'Lecturer',
+    LecturerPublication: 'LecturerPublication',
     FundingDisbursement: 'FundingDisbursement',
     ExtensionRequest: 'ExtensionRequest',
     ProjectRegistration: 'ProjectRegistration',
@@ -1310,7 +1399,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "department" | "major" | "class" | "user" | "callRound" | "projectType" | "project" | "projectClosingSubmission" | "progressReportTemplate" | "progressReportTemplateItem" | "progressReport" | "councilEvaluation" | "fundingDisbursement" | "extensionRequest" | "projectRegistration" | "notification" | "post" | "room" | "officeMeeting" | "officeMeetingView" | "callRoundInstructor" | "callRoundCouncilMember" | "council" | "autoApprovalJob" | "reportTemplate" | "reportJob" | "councilMemberAssignment" | "projectCouncilAssignment" | "callRoundAttachment"
+      modelProps: "department" | "major" | "class" | "user" | "callRound" | "projectType" | "project" | "projectClosingSubmission" | "progressReportTemplate" | "progressReportTemplateItem" | "progressReport" | "councilEvaluation" | "lecturer" | "lecturerPublication" | "fundingDisbursement" | "extensionRequest" | "projectRegistration" | "notification" | "post" | "room" | "officeMeeting" | "officeMeetingView" | "callRoundInstructor" | "callRoundCouncilMember" | "council" | "autoApprovalJob" | "reportTemplate" | "reportJob" | "councilMemberAssignment" | "projectCouncilAssignment" | "callRoundAttachment"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -2199,6 +2288,154 @@ export namespace Prisma {
           count: {
             args: Prisma.CouncilEvaluationCountArgs<ExtArgs>
             result: $Utils.Optional<CouncilEvaluationCountAggregateOutputType> | number
+          }
+        }
+      }
+      Lecturer: {
+        payload: Prisma.$LecturerPayload<ExtArgs>
+        fields: Prisma.LecturerFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.LecturerFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LecturerPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.LecturerFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LecturerPayload>
+          }
+          findFirst: {
+            args: Prisma.LecturerFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LecturerPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.LecturerFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LecturerPayload>
+          }
+          findMany: {
+            args: Prisma.LecturerFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LecturerPayload>[]
+          }
+          create: {
+            args: Prisma.LecturerCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LecturerPayload>
+          }
+          createMany: {
+            args: Prisma.LecturerCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.LecturerCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LecturerPayload>[]
+          }
+          delete: {
+            args: Prisma.LecturerDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LecturerPayload>
+          }
+          update: {
+            args: Prisma.LecturerUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LecturerPayload>
+          }
+          deleteMany: {
+            args: Prisma.LecturerDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.LecturerUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.LecturerUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LecturerPayload>[]
+          }
+          upsert: {
+            args: Prisma.LecturerUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LecturerPayload>
+          }
+          aggregate: {
+            args: Prisma.LecturerAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateLecturer>
+          }
+          groupBy: {
+            args: Prisma.LecturerGroupByArgs<ExtArgs>
+            result: $Utils.Optional<LecturerGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.LecturerCountArgs<ExtArgs>
+            result: $Utils.Optional<LecturerCountAggregateOutputType> | number
+          }
+        }
+      }
+      LecturerPublication: {
+        payload: Prisma.$LecturerPublicationPayload<ExtArgs>
+        fields: Prisma.LecturerPublicationFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.LecturerPublicationFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LecturerPublicationPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.LecturerPublicationFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LecturerPublicationPayload>
+          }
+          findFirst: {
+            args: Prisma.LecturerPublicationFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LecturerPublicationPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.LecturerPublicationFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LecturerPublicationPayload>
+          }
+          findMany: {
+            args: Prisma.LecturerPublicationFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LecturerPublicationPayload>[]
+          }
+          create: {
+            args: Prisma.LecturerPublicationCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LecturerPublicationPayload>
+          }
+          createMany: {
+            args: Prisma.LecturerPublicationCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.LecturerPublicationCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LecturerPublicationPayload>[]
+          }
+          delete: {
+            args: Prisma.LecturerPublicationDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LecturerPublicationPayload>
+          }
+          update: {
+            args: Prisma.LecturerPublicationUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LecturerPublicationPayload>
+          }
+          deleteMany: {
+            args: Prisma.LecturerPublicationDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.LecturerPublicationUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.LecturerPublicationUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LecturerPublicationPayload>[]
+          }
+          upsert: {
+            args: Prisma.LecturerPublicationUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LecturerPublicationPayload>
+          }
+          aggregate: {
+            args: Prisma.LecturerPublicationAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateLecturerPublication>
+          }
+          groupBy: {
+            args: Prisma.LecturerPublicationGroupByArgs<ExtArgs>
+            result: $Utils.Optional<LecturerPublicationGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.LecturerPublicationCountArgs<ExtArgs>
+            result: $Utils.Optional<LecturerPublicationCountAggregateOutputType> | number
           }
         }
       }
@@ -3580,6 +3817,8 @@ export namespace Prisma {
     progressReportTemplateItem?: ProgressReportTemplateItemOmit
     progressReport?: ProgressReportOmit
     councilEvaluation?: CouncilEvaluationOmit
+    lecturer?: LecturerOmit
+    lecturerPublication?: LecturerPublicationOmit
     fundingDisbursement?: FundingDisbursementOmit
     extensionRequest?: ExtensionRequestOmit
     projectRegistration?: ProjectRegistrationOmit
@@ -4250,6 +4489,37 @@ export namespace Prisma {
    */
   export type ProgressReportTemplateCountOutputTypeCountCallRoundsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: CallRoundWhereInput
+  }
+
+
+  /**
+   * Count Type LecturerCountOutputType
+   */
+
+  export type LecturerCountOutputType = {
+    publications: number
+  }
+
+  export type LecturerCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    publications?: boolean | LecturerCountOutputTypeCountPublicationsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * LecturerCountOutputType without action
+   */
+  export type LecturerCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LecturerCountOutputType
+     */
+    select?: LecturerCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * LecturerCountOutputType without action
+   */
+  export type LecturerCountOutputTypeCountPublicationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: LecturerPublicationWhereInput
   }
 
 
@@ -8172,6 +8442,7 @@ export namespace Prisma {
     createdDisbursements?: boolean | User$createdDisbursementsArgs<ExtArgs>
     approvedDisbursements?: boolean | User$approvedDisbursementsArgs<ExtArgs>
     autoApprovalJobs?: boolean | User$autoApprovalJobsArgs<ExtArgs>
+    lecturerProfile?: boolean | User$lecturerProfileArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -8261,6 +8532,7 @@ export namespace Prisma {
     createdDisbursements?: boolean | User$createdDisbursementsArgs<ExtArgs>
     approvedDisbursements?: boolean | User$approvedDisbursementsArgs<ExtArgs>
     autoApprovalJobs?: boolean | User$autoApprovalJobsArgs<ExtArgs>
+    lecturerProfile?: boolean | User$lecturerProfileArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -8298,6 +8570,7 @@ export namespace Prisma {
       createdDisbursements: Prisma.$FundingDisbursementPayload<ExtArgs>[]
       approvedDisbursements: Prisma.$FundingDisbursementPayload<ExtArgs>[]
       autoApprovalJobs: Prisma.$AutoApprovalJobPayload<ExtArgs>[]
+      lecturerProfile: Prisma.$LecturerPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -8731,6 +9004,7 @@ export namespace Prisma {
     createdDisbursements<T extends User$createdDisbursementsArgs<ExtArgs> = {}>(args?: Subset<T, User$createdDisbursementsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FundingDisbursementPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     approvedDisbursements<T extends User$approvedDisbursementsArgs<ExtArgs> = {}>(args?: Subset<T, User$approvedDisbursementsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FundingDisbursementPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     autoApprovalJobs<T extends User$autoApprovalJobsArgs<ExtArgs> = {}>(args?: Subset<T, User$autoApprovalJobsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AutoApprovalJobPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    lecturerProfile<T extends User$lecturerProfileArgs<ExtArgs> = {}>(args?: Subset<T, User$lecturerProfileArgs<ExtArgs>>): Prisma__LecturerClient<$Result.GetResult<Prisma.$LecturerPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -9663,6 +9937,25 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: AutoApprovalJobScalarFieldEnum | AutoApprovalJobScalarFieldEnum[]
+  }
+
+  /**
+   * User.lecturerProfile
+   */
+  export type User$lecturerProfileArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Lecturer
+     */
+    select?: LecturerSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Lecturer
+     */
+    omit?: LecturerOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LecturerInclude<ExtArgs> | null
+    where?: LecturerWhereInput
   }
 
   /**
@@ -19932,6 +20225,2532 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: CouncilEvaluationInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model Lecturer
+   */
+
+  export type AggregateLecturer = {
+    _count: LecturerCountAggregateOutputType | null
+    _avg: LecturerAvgAggregateOutputType | null
+    _sum: LecturerSumAggregateOutputType | null
+    _min: LecturerMinAggregateOutputType | null
+    _max: LecturerMaxAggregateOutputType | null
+  }
+
+  export type LecturerAvgAggregateOutputType = {
+    totalProjectsSchoolLevel: number | null
+    totalProjectsMinistryLevel: number | null
+    totalProjectsStateLevel: number | null
+    totalPrincipalInvestigatorRoles: number | null
+    totalSupervisorRoles: number | null
+    totalResearchMemberRoles: number | null
+    totalSecretaryRoles: number | null
+    totalCouncilMemberRoles: number | null
+  }
+
+  export type LecturerSumAggregateOutputType = {
+    totalProjectsSchoolLevel: number | null
+    totalProjectsMinistryLevel: number | null
+    totalProjectsStateLevel: number | null
+    totalPrincipalInvestigatorRoles: number | null
+    totalSupervisorRoles: number | null
+    totalResearchMemberRoles: number | null
+    totalSecretaryRoles: number | null
+    totalCouncilMemberRoles: number | null
+  }
+
+  export type LecturerMinAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    staffId: string | null
+    academicRank: $Enums.AcademicRank | null
+    departmentName: string | null
+    facultyName: string | null
+    googleScholarUrl: string | null
+    orcidId: string | null
+    researchGateUrl: string | null
+    totalProjectsSchoolLevel: number | null
+    totalProjectsMinistryLevel: number | null
+    totalProjectsStateLevel: number | null
+    totalPrincipalInvestigatorRoles: number | null
+    totalSupervisorRoles: number | null
+    totalResearchMemberRoles: number | null
+    totalSecretaryRoles: number | null
+    totalCouncilMemberRoles: number | null
+    profileNote: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type LecturerMaxAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    staffId: string | null
+    academicRank: $Enums.AcademicRank | null
+    departmentName: string | null
+    facultyName: string | null
+    googleScholarUrl: string | null
+    orcidId: string | null
+    researchGateUrl: string | null
+    totalProjectsSchoolLevel: number | null
+    totalProjectsMinistryLevel: number | null
+    totalProjectsStateLevel: number | null
+    totalPrincipalInvestigatorRoles: number | null
+    totalSupervisorRoles: number | null
+    totalResearchMemberRoles: number | null
+    totalSecretaryRoles: number | null
+    totalCouncilMemberRoles: number | null
+    profileNote: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type LecturerCountAggregateOutputType = {
+    id: number
+    userId: number
+    staffId: number
+    academicRank: number
+    departmentName: number
+    facultyName: number
+    researchInterests: number
+    googleScholarUrl: number
+    orcidId: number
+    researchGateUrl: number
+    totalProjectsSchoolLevel: number
+    totalProjectsMinistryLevel: number
+    totalProjectsStateLevel: number
+    totalPrincipalInvestigatorRoles: number
+    totalSupervisorRoles: number
+    totalResearchMemberRoles: number
+    totalSecretaryRoles: number
+    totalCouncilMemberRoles: number
+    profileNote: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type LecturerAvgAggregateInputType = {
+    totalProjectsSchoolLevel?: true
+    totalProjectsMinistryLevel?: true
+    totalProjectsStateLevel?: true
+    totalPrincipalInvestigatorRoles?: true
+    totalSupervisorRoles?: true
+    totalResearchMemberRoles?: true
+    totalSecretaryRoles?: true
+    totalCouncilMemberRoles?: true
+  }
+
+  export type LecturerSumAggregateInputType = {
+    totalProjectsSchoolLevel?: true
+    totalProjectsMinistryLevel?: true
+    totalProjectsStateLevel?: true
+    totalPrincipalInvestigatorRoles?: true
+    totalSupervisorRoles?: true
+    totalResearchMemberRoles?: true
+    totalSecretaryRoles?: true
+    totalCouncilMemberRoles?: true
+  }
+
+  export type LecturerMinAggregateInputType = {
+    id?: true
+    userId?: true
+    staffId?: true
+    academicRank?: true
+    departmentName?: true
+    facultyName?: true
+    googleScholarUrl?: true
+    orcidId?: true
+    researchGateUrl?: true
+    totalProjectsSchoolLevel?: true
+    totalProjectsMinistryLevel?: true
+    totalProjectsStateLevel?: true
+    totalPrincipalInvestigatorRoles?: true
+    totalSupervisorRoles?: true
+    totalResearchMemberRoles?: true
+    totalSecretaryRoles?: true
+    totalCouncilMemberRoles?: true
+    profileNote?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type LecturerMaxAggregateInputType = {
+    id?: true
+    userId?: true
+    staffId?: true
+    academicRank?: true
+    departmentName?: true
+    facultyName?: true
+    googleScholarUrl?: true
+    orcidId?: true
+    researchGateUrl?: true
+    totalProjectsSchoolLevel?: true
+    totalProjectsMinistryLevel?: true
+    totalProjectsStateLevel?: true
+    totalPrincipalInvestigatorRoles?: true
+    totalSupervisorRoles?: true
+    totalResearchMemberRoles?: true
+    totalSecretaryRoles?: true
+    totalCouncilMemberRoles?: true
+    profileNote?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type LecturerCountAggregateInputType = {
+    id?: true
+    userId?: true
+    staffId?: true
+    academicRank?: true
+    departmentName?: true
+    facultyName?: true
+    researchInterests?: true
+    googleScholarUrl?: true
+    orcidId?: true
+    researchGateUrl?: true
+    totalProjectsSchoolLevel?: true
+    totalProjectsMinistryLevel?: true
+    totalProjectsStateLevel?: true
+    totalPrincipalInvestigatorRoles?: true
+    totalSupervisorRoles?: true
+    totalResearchMemberRoles?: true
+    totalSecretaryRoles?: true
+    totalCouncilMemberRoles?: true
+    profileNote?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type LecturerAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Lecturer to aggregate.
+     */
+    where?: LecturerWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Lecturers to fetch.
+     */
+    orderBy?: LecturerOrderByWithRelationInput | LecturerOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: LecturerWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Lecturers from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Lecturers.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Lecturers
+    **/
+    _count?: true | LecturerCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: LecturerAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: LecturerSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: LecturerMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: LecturerMaxAggregateInputType
+  }
+
+  export type GetLecturerAggregateType<T extends LecturerAggregateArgs> = {
+        [P in keyof T & keyof AggregateLecturer]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateLecturer[P]>
+      : GetScalarType<T[P], AggregateLecturer[P]>
+  }
+
+
+
+
+  export type LecturerGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: LecturerWhereInput
+    orderBy?: LecturerOrderByWithAggregationInput | LecturerOrderByWithAggregationInput[]
+    by: LecturerScalarFieldEnum[] | LecturerScalarFieldEnum
+    having?: LecturerScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: LecturerCountAggregateInputType | true
+    _avg?: LecturerAvgAggregateInputType
+    _sum?: LecturerSumAggregateInputType
+    _min?: LecturerMinAggregateInputType
+    _max?: LecturerMaxAggregateInputType
+  }
+
+  export type LecturerGroupByOutputType = {
+    id: string
+    userId: string
+    staffId: string | null
+    academicRank: $Enums.AcademicRank | null
+    departmentName: string | null
+    facultyName: string | null
+    researchInterests: string[]
+    googleScholarUrl: string | null
+    orcidId: string | null
+    researchGateUrl: string | null
+    totalProjectsSchoolLevel: number
+    totalProjectsMinistryLevel: number
+    totalProjectsStateLevel: number
+    totalPrincipalInvestigatorRoles: number
+    totalSupervisorRoles: number
+    totalResearchMemberRoles: number
+    totalSecretaryRoles: number
+    totalCouncilMemberRoles: number
+    profileNote: string | null
+    createdAt: Date
+    updatedAt: Date
+    _count: LecturerCountAggregateOutputType | null
+    _avg: LecturerAvgAggregateOutputType | null
+    _sum: LecturerSumAggregateOutputType | null
+    _min: LecturerMinAggregateOutputType | null
+    _max: LecturerMaxAggregateOutputType | null
+  }
+
+  type GetLecturerGroupByPayload<T extends LecturerGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<LecturerGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof LecturerGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], LecturerGroupByOutputType[P]>
+            : GetScalarType<T[P], LecturerGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type LecturerSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    staffId?: boolean
+    academicRank?: boolean
+    departmentName?: boolean
+    facultyName?: boolean
+    researchInterests?: boolean
+    googleScholarUrl?: boolean
+    orcidId?: boolean
+    researchGateUrl?: boolean
+    totalProjectsSchoolLevel?: boolean
+    totalProjectsMinistryLevel?: boolean
+    totalProjectsStateLevel?: boolean
+    totalPrincipalInvestigatorRoles?: boolean
+    totalSupervisorRoles?: boolean
+    totalResearchMemberRoles?: boolean
+    totalSecretaryRoles?: boolean
+    totalCouncilMemberRoles?: boolean
+    profileNote?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    publications?: boolean | Lecturer$publicationsArgs<ExtArgs>
+    _count?: boolean | LecturerCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["lecturer"]>
+
+  export type LecturerSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    staffId?: boolean
+    academicRank?: boolean
+    departmentName?: boolean
+    facultyName?: boolean
+    researchInterests?: boolean
+    googleScholarUrl?: boolean
+    orcidId?: boolean
+    researchGateUrl?: boolean
+    totalProjectsSchoolLevel?: boolean
+    totalProjectsMinistryLevel?: boolean
+    totalProjectsStateLevel?: boolean
+    totalPrincipalInvestigatorRoles?: boolean
+    totalSupervisorRoles?: boolean
+    totalResearchMemberRoles?: boolean
+    totalSecretaryRoles?: boolean
+    totalCouncilMemberRoles?: boolean
+    profileNote?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["lecturer"]>
+
+  export type LecturerSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    staffId?: boolean
+    academicRank?: boolean
+    departmentName?: boolean
+    facultyName?: boolean
+    researchInterests?: boolean
+    googleScholarUrl?: boolean
+    orcidId?: boolean
+    researchGateUrl?: boolean
+    totalProjectsSchoolLevel?: boolean
+    totalProjectsMinistryLevel?: boolean
+    totalProjectsStateLevel?: boolean
+    totalPrincipalInvestigatorRoles?: boolean
+    totalSupervisorRoles?: boolean
+    totalResearchMemberRoles?: boolean
+    totalSecretaryRoles?: boolean
+    totalCouncilMemberRoles?: boolean
+    profileNote?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["lecturer"]>
+
+  export type LecturerSelectScalar = {
+    id?: boolean
+    userId?: boolean
+    staffId?: boolean
+    academicRank?: boolean
+    departmentName?: boolean
+    facultyName?: boolean
+    researchInterests?: boolean
+    googleScholarUrl?: boolean
+    orcidId?: boolean
+    researchGateUrl?: boolean
+    totalProjectsSchoolLevel?: boolean
+    totalProjectsMinistryLevel?: boolean
+    totalProjectsStateLevel?: boolean
+    totalPrincipalInvestigatorRoles?: boolean
+    totalSupervisorRoles?: boolean
+    totalResearchMemberRoles?: boolean
+    totalSecretaryRoles?: boolean
+    totalCouncilMemberRoles?: boolean
+    profileNote?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type LecturerOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "staffId" | "academicRank" | "departmentName" | "facultyName" | "researchInterests" | "googleScholarUrl" | "orcidId" | "researchGateUrl" | "totalProjectsSchoolLevel" | "totalProjectsMinistryLevel" | "totalProjectsStateLevel" | "totalPrincipalInvestigatorRoles" | "totalSupervisorRoles" | "totalResearchMemberRoles" | "totalSecretaryRoles" | "totalCouncilMemberRoles" | "profileNote" | "createdAt" | "updatedAt", ExtArgs["result"]["lecturer"]>
+  export type LecturerInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    publications?: boolean | Lecturer$publicationsArgs<ExtArgs>
+    _count?: boolean | LecturerCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type LecturerIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type LecturerIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $LecturerPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Lecturer"
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs>
+      publications: Prisma.$LecturerPublicationPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      userId: string
+      staffId: string | null
+      academicRank: $Enums.AcademicRank | null
+      departmentName: string | null
+      facultyName: string | null
+      researchInterests: string[]
+      googleScholarUrl: string | null
+      orcidId: string | null
+      researchGateUrl: string | null
+      totalProjectsSchoolLevel: number
+      totalProjectsMinistryLevel: number
+      totalProjectsStateLevel: number
+      totalPrincipalInvestigatorRoles: number
+      totalSupervisorRoles: number
+      totalResearchMemberRoles: number
+      totalSecretaryRoles: number
+      totalCouncilMemberRoles: number
+      profileNote: string | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["lecturer"]>
+    composites: {}
+  }
+
+  type LecturerGetPayload<S extends boolean | null | undefined | LecturerDefaultArgs> = $Result.GetResult<Prisma.$LecturerPayload, S>
+
+  type LecturerCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<LecturerFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: LecturerCountAggregateInputType | true
+    }
+
+  export interface LecturerDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Lecturer'], meta: { name: 'Lecturer' } }
+    /**
+     * Find zero or one Lecturer that matches the filter.
+     * @param {LecturerFindUniqueArgs} args - Arguments to find a Lecturer
+     * @example
+     * // Get one Lecturer
+     * const lecturer = await prisma.lecturer.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends LecturerFindUniqueArgs>(args: SelectSubset<T, LecturerFindUniqueArgs<ExtArgs>>): Prisma__LecturerClient<$Result.GetResult<Prisma.$LecturerPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Lecturer that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {LecturerFindUniqueOrThrowArgs} args - Arguments to find a Lecturer
+     * @example
+     * // Get one Lecturer
+     * const lecturer = await prisma.lecturer.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends LecturerFindUniqueOrThrowArgs>(args: SelectSubset<T, LecturerFindUniqueOrThrowArgs<ExtArgs>>): Prisma__LecturerClient<$Result.GetResult<Prisma.$LecturerPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Lecturer that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LecturerFindFirstArgs} args - Arguments to find a Lecturer
+     * @example
+     * // Get one Lecturer
+     * const lecturer = await prisma.lecturer.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends LecturerFindFirstArgs>(args?: SelectSubset<T, LecturerFindFirstArgs<ExtArgs>>): Prisma__LecturerClient<$Result.GetResult<Prisma.$LecturerPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Lecturer that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LecturerFindFirstOrThrowArgs} args - Arguments to find a Lecturer
+     * @example
+     * // Get one Lecturer
+     * const lecturer = await prisma.lecturer.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends LecturerFindFirstOrThrowArgs>(args?: SelectSubset<T, LecturerFindFirstOrThrowArgs<ExtArgs>>): Prisma__LecturerClient<$Result.GetResult<Prisma.$LecturerPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Lecturers that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LecturerFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Lecturers
+     * const lecturers = await prisma.lecturer.findMany()
+     * 
+     * // Get first 10 Lecturers
+     * const lecturers = await prisma.lecturer.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const lecturerWithIdOnly = await prisma.lecturer.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends LecturerFindManyArgs>(args?: SelectSubset<T, LecturerFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LecturerPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Lecturer.
+     * @param {LecturerCreateArgs} args - Arguments to create a Lecturer.
+     * @example
+     * // Create one Lecturer
+     * const Lecturer = await prisma.lecturer.create({
+     *   data: {
+     *     // ... data to create a Lecturer
+     *   }
+     * })
+     * 
+     */
+    create<T extends LecturerCreateArgs>(args: SelectSubset<T, LecturerCreateArgs<ExtArgs>>): Prisma__LecturerClient<$Result.GetResult<Prisma.$LecturerPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Lecturers.
+     * @param {LecturerCreateManyArgs} args - Arguments to create many Lecturers.
+     * @example
+     * // Create many Lecturers
+     * const lecturer = await prisma.lecturer.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends LecturerCreateManyArgs>(args?: SelectSubset<T, LecturerCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Lecturers and returns the data saved in the database.
+     * @param {LecturerCreateManyAndReturnArgs} args - Arguments to create many Lecturers.
+     * @example
+     * // Create many Lecturers
+     * const lecturer = await prisma.lecturer.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Lecturers and only return the `id`
+     * const lecturerWithIdOnly = await prisma.lecturer.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends LecturerCreateManyAndReturnArgs>(args?: SelectSubset<T, LecturerCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LecturerPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Lecturer.
+     * @param {LecturerDeleteArgs} args - Arguments to delete one Lecturer.
+     * @example
+     * // Delete one Lecturer
+     * const Lecturer = await prisma.lecturer.delete({
+     *   where: {
+     *     // ... filter to delete one Lecturer
+     *   }
+     * })
+     * 
+     */
+    delete<T extends LecturerDeleteArgs>(args: SelectSubset<T, LecturerDeleteArgs<ExtArgs>>): Prisma__LecturerClient<$Result.GetResult<Prisma.$LecturerPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Lecturer.
+     * @param {LecturerUpdateArgs} args - Arguments to update one Lecturer.
+     * @example
+     * // Update one Lecturer
+     * const lecturer = await prisma.lecturer.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends LecturerUpdateArgs>(args: SelectSubset<T, LecturerUpdateArgs<ExtArgs>>): Prisma__LecturerClient<$Result.GetResult<Prisma.$LecturerPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Lecturers.
+     * @param {LecturerDeleteManyArgs} args - Arguments to filter Lecturers to delete.
+     * @example
+     * // Delete a few Lecturers
+     * const { count } = await prisma.lecturer.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends LecturerDeleteManyArgs>(args?: SelectSubset<T, LecturerDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Lecturers.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LecturerUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Lecturers
+     * const lecturer = await prisma.lecturer.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends LecturerUpdateManyArgs>(args: SelectSubset<T, LecturerUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Lecturers and returns the data updated in the database.
+     * @param {LecturerUpdateManyAndReturnArgs} args - Arguments to update many Lecturers.
+     * @example
+     * // Update many Lecturers
+     * const lecturer = await prisma.lecturer.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Lecturers and only return the `id`
+     * const lecturerWithIdOnly = await prisma.lecturer.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends LecturerUpdateManyAndReturnArgs>(args: SelectSubset<T, LecturerUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LecturerPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Lecturer.
+     * @param {LecturerUpsertArgs} args - Arguments to update or create a Lecturer.
+     * @example
+     * // Update or create a Lecturer
+     * const lecturer = await prisma.lecturer.upsert({
+     *   create: {
+     *     // ... data to create a Lecturer
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Lecturer we want to update
+     *   }
+     * })
+     */
+    upsert<T extends LecturerUpsertArgs>(args: SelectSubset<T, LecturerUpsertArgs<ExtArgs>>): Prisma__LecturerClient<$Result.GetResult<Prisma.$LecturerPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Lecturers.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LecturerCountArgs} args - Arguments to filter Lecturers to count.
+     * @example
+     * // Count the number of Lecturers
+     * const count = await prisma.lecturer.count({
+     *   where: {
+     *     // ... the filter for the Lecturers we want to count
+     *   }
+     * })
+    **/
+    count<T extends LecturerCountArgs>(
+      args?: Subset<T, LecturerCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], LecturerCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Lecturer.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LecturerAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends LecturerAggregateArgs>(args: Subset<T, LecturerAggregateArgs>): Prisma.PrismaPromise<GetLecturerAggregateType<T>>
+
+    /**
+     * Group by Lecturer.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LecturerGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends LecturerGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: LecturerGroupByArgs['orderBy'] }
+        : { orderBy?: LecturerGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, LecturerGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetLecturerGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Lecturer model
+   */
+  readonly fields: LecturerFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Lecturer.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__LecturerClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    publications<T extends Lecturer$publicationsArgs<ExtArgs> = {}>(args?: Subset<T, Lecturer$publicationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LecturerPublicationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Lecturer model
+   */
+  interface LecturerFieldRefs {
+    readonly id: FieldRef<"Lecturer", 'String'>
+    readonly userId: FieldRef<"Lecturer", 'String'>
+    readonly staffId: FieldRef<"Lecturer", 'String'>
+    readonly academicRank: FieldRef<"Lecturer", 'AcademicRank'>
+    readonly departmentName: FieldRef<"Lecturer", 'String'>
+    readonly facultyName: FieldRef<"Lecturer", 'String'>
+    readonly researchInterests: FieldRef<"Lecturer", 'String[]'>
+    readonly googleScholarUrl: FieldRef<"Lecturer", 'String'>
+    readonly orcidId: FieldRef<"Lecturer", 'String'>
+    readonly researchGateUrl: FieldRef<"Lecturer", 'String'>
+    readonly totalProjectsSchoolLevel: FieldRef<"Lecturer", 'Int'>
+    readonly totalProjectsMinistryLevel: FieldRef<"Lecturer", 'Int'>
+    readonly totalProjectsStateLevel: FieldRef<"Lecturer", 'Int'>
+    readonly totalPrincipalInvestigatorRoles: FieldRef<"Lecturer", 'Int'>
+    readonly totalSupervisorRoles: FieldRef<"Lecturer", 'Int'>
+    readonly totalResearchMemberRoles: FieldRef<"Lecturer", 'Int'>
+    readonly totalSecretaryRoles: FieldRef<"Lecturer", 'Int'>
+    readonly totalCouncilMemberRoles: FieldRef<"Lecturer", 'Int'>
+    readonly profileNote: FieldRef<"Lecturer", 'String'>
+    readonly createdAt: FieldRef<"Lecturer", 'DateTime'>
+    readonly updatedAt: FieldRef<"Lecturer", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Lecturer findUnique
+   */
+  export type LecturerFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Lecturer
+     */
+    select?: LecturerSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Lecturer
+     */
+    omit?: LecturerOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LecturerInclude<ExtArgs> | null
+    /**
+     * Filter, which Lecturer to fetch.
+     */
+    where: LecturerWhereUniqueInput
+  }
+
+  /**
+   * Lecturer findUniqueOrThrow
+   */
+  export type LecturerFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Lecturer
+     */
+    select?: LecturerSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Lecturer
+     */
+    omit?: LecturerOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LecturerInclude<ExtArgs> | null
+    /**
+     * Filter, which Lecturer to fetch.
+     */
+    where: LecturerWhereUniqueInput
+  }
+
+  /**
+   * Lecturer findFirst
+   */
+  export type LecturerFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Lecturer
+     */
+    select?: LecturerSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Lecturer
+     */
+    omit?: LecturerOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LecturerInclude<ExtArgs> | null
+    /**
+     * Filter, which Lecturer to fetch.
+     */
+    where?: LecturerWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Lecturers to fetch.
+     */
+    orderBy?: LecturerOrderByWithRelationInput | LecturerOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Lecturers.
+     */
+    cursor?: LecturerWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Lecturers from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Lecturers.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Lecturers.
+     */
+    distinct?: LecturerScalarFieldEnum | LecturerScalarFieldEnum[]
+  }
+
+  /**
+   * Lecturer findFirstOrThrow
+   */
+  export type LecturerFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Lecturer
+     */
+    select?: LecturerSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Lecturer
+     */
+    omit?: LecturerOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LecturerInclude<ExtArgs> | null
+    /**
+     * Filter, which Lecturer to fetch.
+     */
+    where?: LecturerWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Lecturers to fetch.
+     */
+    orderBy?: LecturerOrderByWithRelationInput | LecturerOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Lecturers.
+     */
+    cursor?: LecturerWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Lecturers from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Lecturers.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Lecturers.
+     */
+    distinct?: LecturerScalarFieldEnum | LecturerScalarFieldEnum[]
+  }
+
+  /**
+   * Lecturer findMany
+   */
+  export type LecturerFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Lecturer
+     */
+    select?: LecturerSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Lecturer
+     */
+    omit?: LecturerOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LecturerInclude<ExtArgs> | null
+    /**
+     * Filter, which Lecturers to fetch.
+     */
+    where?: LecturerWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Lecturers to fetch.
+     */
+    orderBy?: LecturerOrderByWithRelationInput | LecturerOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Lecturers.
+     */
+    cursor?: LecturerWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Lecturers from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Lecturers.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Lecturers.
+     */
+    distinct?: LecturerScalarFieldEnum | LecturerScalarFieldEnum[]
+  }
+
+  /**
+   * Lecturer create
+   */
+  export type LecturerCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Lecturer
+     */
+    select?: LecturerSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Lecturer
+     */
+    omit?: LecturerOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LecturerInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Lecturer.
+     */
+    data: XOR<LecturerCreateInput, LecturerUncheckedCreateInput>
+  }
+
+  /**
+   * Lecturer createMany
+   */
+  export type LecturerCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Lecturers.
+     */
+    data: LecturerCreateManyInput | LecturerCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Lecturer createManyAndReturn
+   */
+  export type LecturerCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Lecturer
+     */
+    select?: LecturerSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Lecturer
+     */
+    omit?: LecturerOmit<ExtArgs> | null
+    /**
+     * The data used to create many Lecturers.
+     */
+    data: LecturerCreateManyInput | LecturerCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LecturerIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Lecturer update
+   */
+  export type LecturerUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Lecturer
+     */
+    select?: LecturerSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Lecturer
+     */
+    omit?: LecturerOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LecturerInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Lecturer.
+     */
+    data: XOR<LecturerUpdateInput, LecturerUncheckedUpdateInput>
+    /**
+     * Choose, which Lecturer to update.
+     */
+    where: LecturerWhereUniqueInput
+  }
+
+  /**
+   * Lecturer updateMany
+   */
+  export type LecturerUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Lecturers.
+     */
+    data: XOR<LecturerUpdateManyMutationInput, LecturerUncheckedUpdateManyInput>
+    /**
+     * Filter which Lecturers to update
+     */
+    where?: LecturerWhereInput
+    /**
+     * Limit how many Lecturers to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Lecturer updateManyAndReturn
+   */
+  export type LecturerUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Lecturer
+     */
+    select?: LecturerSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Lecturer
+     */
+    omit?: LecturerOmit<ExtArgs> | null
+    /**
+     * The data used to update Lecturers.
+     */
+    data: XOR<LecturerUpdateManyMutationInput, LecturerUncheckedUpdateManyInput>
+    /**
+     * Filter which Lecturers to update
+     */
+    where?: LecturerWhereInput
+    /**
+     * Limit how many Lecturers to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LecturerIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Lecturer upsert
+   */
+  export type LecturerUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Lecturer
+     */
+    select?: LecturerSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Lecturer
+     */
+    omit?: LecturerOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LecturerInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Lecturer to update in case it exists.
+     */
+    where: LecturerWhereUniqueInput
+    /**
+     * In case the Lecturer found by the `where` argument doesn't exist, create a new Lecturer with this data.
+     */
+    create: XOR<LecturerCreateInput, LecturerUncheckedCreateInput>
+    /**
+     * In case the Lecturer was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<LecturerUpdateInput, LecturerUncheckedUpdateInput>
+  }
+
+  /**
+   * Lecturer delete
+   */
+  export type LecturerDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Lecturer
+     */
+    select?: LecturerSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Lecturer
+     */
+    omit?: LecturerOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LecturerInclude<ExtArgs> | null
+    /**
+     * Filter which Lecturer to delete.
+     */
+    where: LecturerWhereUniqueInput
+  }
+
+  /**
+   * Lecturer deleteMany
+   */
+  export type LecturerDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Lecturers to delete
+     */
+    where?: LecturerWhereInput
+    /**
+     * Limit how many Lecturers to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Lecturer.publications
+   */
+  export type Lecturer$publicationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LecturerPublication
+     */
+    select?: LecturerPublicationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LecturerPublication
+     */
+    omit?: LecturerPublicationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LecturerPublicationInclude<ExtArgs> | null
+    where?: LecturerPublicationWhereInput
+    orderBy?: LecturerPublicationOrderByWithRelationInput | LecturerPublicationOrderByWithRelationInput[]
+    cursor?: LecturerPublicationWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: LecturerPublicationScalarFieldEnum | LecturerPublicationScalarFieldEnum[]
+  }
+
+  /**
+   * Lecturer without action
+   */
+  export type LecturerDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Lecturer
+     */
+    select?: LecturerSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Lecturer
+     */
+    omit?: LecturerOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LecturerInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model LecturerPublication
+   */
+
+  export type AggregateLecturerPublication = {
+    _count: LecturerPublicationCountAggregateOutputType | null
+    _min: LecturerPublicationMinAggregateOutputType | null
+    _max: LecturerPublicationMaxAggregateOutputType | null
+  }
+
+  export type LecturerPublicationMinAggregateOutputType = {
+    id: string | null
+    lecturerId: string | null
+    title: string | null
+    publicationType: $Enums.PublicationType | null
+    venue: string | null
+    publishedAt: Date | null
+    doi: string | null
+    url: string | null
+    indexedScopus: boolean | null
+    indexedIsi: boolean | null
+    coAuthors: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type LecturerPublicationMaxAggregateOutputType = {
+    id: string | null
+    lecturerId: string | null
+    title: string | null
+    publicationType: $Enums.PublicationType | null
+    venue: string | null
+    publishedAt: Date | null
+    doi: string | null
+    url: string | null
+    indexedScopus: boolean | null
+    indexedIsi: boolean | null
+    coAuthors: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type LecturerPublicationCountAggregateOutputType = {
+    id: number
+    lecturerId: number
+    title: number
+    publicationType: number
+    venue: number
+    publishedAt: number
+    doi: number
+    url: number
+    indexedScopus: number
+    indexedIsi: number
+    coAuthors: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type LecturerPublicationMinAggregateInputType = {
+    id?: true
+    lecturerId?: true
+    title?: true
+    publicationType?: true
+    venue?: true
+    publishedAt?: true
+    doi?: true
+    url?: true
+    indexedScopus?: true
+    indexedIsi?: true
+    coAuthors?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type LecturerPublicationMaxAggregateInputType = {
+    id?: true
+    lecturerId?: true
+    title?: true
+    publicationType?: true
+    venue?: true
+    publishedAt?: true
+    doi?: true
+    url?: true
+    indexedScopus?: true
+    indexedIsi?: true
+    coAuthors?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type LecturerPublicationCountAggregateInputType = {
+    id?: true
+    lecturerId?: true
+    title?: true
+    publicationType?: true
+    venue?: true
+    publishedAt?: true
+    doi?: true
+    url?: true
+    indexedScopus?: true
+    indexedIsi?: true
+    coAuthors?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type LecturerPublicationAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which LecturerPublication to aggregate.
+     */
+    where?: LecturerPublicationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of LecturerPublications to fetch.
+     */
+    orderBy?: LecturerPublicationOrderByWithRelationInput | LecturerPublicationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: LecturerPublicationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` LecturerPublications from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` LecturerPublications.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned LecturerPublications
+    **/
+    _count?: true | LecturerPublicationCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: LecturerPublicationMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: LecturerPublicationMaxAggregateInputType
+  }
+
+  export type GetLecturerPublicationAggregateType<T extends LecturerPublicationAggregateArgs> = {
+        [P in keyof T & keyof AggregateLecturerPublication]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateLecturerPublication[P]>
+      : GetScalarType<T[P], AggregateLecturerPublication[P]>
+  }
+
+
+
+
+  export type LecturerPublicationGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: LecturerPublicationWhereInput
+    orderBy?: LecturerPublicationOrderByWithAggregationInput | LecturerPublicationOrderByWithAggregationInput[]
+    by: LecturerPublicationScalarFieldEnum[] | LecturerPublicationScalarFieldEnum
+    having?: LecturerPublicationScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: LecturerPublicationCountAggregateInputType | true
+    _min?: LecturerPublicationMinAggregateInputType
+    _max?: LecturerPublicationMaxAggregateInputType
+  }
+
+  export type LecturerPublicationGroupByOutputType = {
+    id: string
+    lecturerId: string
+    title: string
+    publicationType: $Enums.PublicationType
+    venue: string | null
+    publishedAt: Date | null
+    doi: string | null
+    url: string | null
+    indexedScopus: boolean
+    indexedIsi: boolean
+    coAuthors: string | null
+    createdAt: Date
+    updatedAt: Date
+    _count: LecturerPublicationCountAggregateOutputType | null
+    _min: LecturerPublicationMinAggregateOutputType | null
+    _max: LecturerPublicationMaxAggregateOutputType | null
+  }
+
+  type GetLecturerPublicationGroupByPayload<T extends LecturerPublicationGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<LecturerPublicationGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof LecturerPublicationGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], LecturerPublicationGroupByOutputType[P]>
+            : GetScalarType<T[P], LecturerPublicationGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type LecturerPublicationSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    lecturerId?: boolean
+    title?: boolean
+    publicationType?: boolean
+    venue?: boolean
+    publishedAt?: boolean
+    doi?: boolean
+    url?: boolean
+    indexedScopus?: boolean
+    indexedIsi?: boolean
+    coAuthors?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    lecturer?: boolean | LecturerDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["lecturerPublication"]>
+
+  export type LecturerPublicationSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    lecturerId?: boolean
+    title?: boolean
+    publicationType?: boolean
+    venue?: boolean
+    publishedAt?: boolean
+    doi?: boolean
+    url?: boolean
+    indexedScopus?: boolean
+    indexedIsi?: boolean
+    coAuthors?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    lecturer?: boolean | LecturerDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["lecturerPublication"]>
+
+  export type LecturerPublicationSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    lecturerId?: boolean
+    title?: boolean
+    publicationType?: boolean
+    venue?: boolean
+    publishedAt?: boolean
+    doi?: boolean
+    url?: boolean
+    indexedScopus?: boolean
+    indexedIsi?: boolean
+    coAuthors?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    lecturer?: boolean | LecturerDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["lecturerPublication"]>
+
+  export type LecturerPublicationSelectScalar = {
+    id?: boolean
+    lecturerId?: boolean
+    title?: boolean
+    publicationType?: boolean
+    venue?: boolean
+    publishedAt?: boolean
+    doi?: boolean
+    url?: boolean
+    indexedScopus?: boolean
+    indexedIsi?: boolean
+    coAuthors?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type LecturerPublicationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "lecturerId" | "title" | "publicationType" | "venue" | "publishedAt" | "doi" | "url" | "indexedScopus" | "indexedIsi" | "coAuthors" | "createdAt" | "updatedAt", ExtArgs["result"]["lecturerPublication"]>
+  export type LecturerPublicationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    lecturer?: boolean | LecturerDefaultArgs<ExtArgs>
+  }
+  export type LecturerPublicationIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    lecturer?: boolean | LecturerDefaultArgs<ExtArgs>
+  }
+  export type LecturerPublicationIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    lecturer?: boolean | LecturerDefaultArgs<ExtArgs>
+  }
+
+  export type $LecturerPublicationPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "LecturerPublication"
+    objects: {
+      lecturer: Prisma.$LecturerPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      lecturerId: string
+      title: string
+      publicationType: $Enums.PublicationType
+      venue: string | null
+      publishedAt: Date | null
+      doi: string | null
+      url: string | null
+      indexedScopus: boolean
+      indexedIsi: boolean
+      coAuthors: string | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["lecturerPublication"]>
+    composites: {}
+  }
+
+  type LecturerPublicationGetPayload<S extends boolean | null | undefined | LecturerPublicationDefaultArgs> = $Result.GetResult<Prisma.$LecturerPublicationPayload, S>
+
+  type LecturerPublicationCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<LecturerPublicationFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: LecturerPublicationCountAggregateInputType | true
+    }
+
+  export interface LecturerPublicationDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['LecturerPublication'], meta: { name: 'LecturerPublication' } }
+    /**
+     * Find zero or one LecturerPublication that matches the filter.
+     * @param {LecturerPublicationFindUniqueArgs} args - Arguments to find a LecturerPublication
+     * @example
+     * // Get one LecturerPublication
+     * const lecturerPublication = await prisma.lecturerPublication.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends LecturerPublicationFindUniqueArgs>(args: SelectSubset<T, LecturerPublicationFindUniqueArgs<ExtArgs>>): Prisma__LecturerPublicationClient<$Result.GetResult<Prisma.$LecturerPublicationPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one LecturerPublication that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {LecturerPublicationFindUniqueOrThrowArgs} args - Arguments to find a LecturerPublication
+     * @example
+     * // Get one LecturerPublication
+     * const lecturerPublication = await prisma.lecturerPublication.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends LecturerPublicationFindUniqueOrThrowArgs>(args: SelectSubset<T, LecturerPublicationFindUniqueOrThrowArgs<ExtArgs>>): Prisma__LecturerPublicationClient<$Result.GetResult<Prisma.$LecturerPublicationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first LecturerPublication that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LecturerPublicationFindFirstArgs} args - Arguments to find a LecturerPublication
+     * @example
+     * // Get one LecturerPublication
+     * const lecturerPublication = await prisma.lecturerPublication.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends LecturerPublicationFindFirstArgs>(args?: SelectSubset<T, LecturerPublicationFindFirstArgs<ExtArgs>>): Prisma__LecturerPublicationClient<$Result.GetResult<Prisma.$LecturerPublicationPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first LecturerPublication that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LecturerPublicationFindFirstOrThrowArgs} args - Arguments to find a LecturerPublication
+     * @example
+     * // Get one LecturerPublication
+     * const lecturerPublication = await prisma.lecturerPublication.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends LecturerPublicationFindFirstOrThrowArgs>(args?: SelectSubset<T, LecturerPublicationFindFirstOrThrowArgs<ExtArgs>>): Prisma__LecturerPublicationClient<$Result.GetResult<Prisma.$LecturerPublicationPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more LecturerPublications that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LecturerPublicationFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all LecturerPublications
+     * const lecturerPublications = await prisma.lecturerPublication.findMany()
+     * 
+     * // Get first 10 LecturerPublications
+     * const lecturerPublications = await prisma.lecturerPublication.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const lecturerPublicationWithIdOnly = await prisma.lecturerPublication.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends LecturerPublicationFindManyArgs>(args?: SelectSubset<T, LecturerPublicationFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LecturerPublicationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a LecturerPublication.
+     * @param {LecturerPublicationCreateArgs} args - Arguments to create a LecturerPublication.
+     * @example
+     * // Create one LecturerPublication
+     * const LecturerPublication = await prisma.lecturerPublication.create({
+     *   data: {
+     *     // ... data to create a LecturerPublication
+     *   }
+     * })
+     * 
+     */
+    create<T extends LecturerPublicationCreateArgs>(args: SelectSubset<T, LecturerPublicationCreateArgs<ExtArgs>>): Prisma__LecturerPublicationClient<$Result.GetResult<Prisma.$LecturerPublicationPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many LecturerPublications.
+     * @param {LecturerPublicationCreateManyArgs} args - Arguments to create many LecturerPublications.
+     * @example
+     * // Create many LecturerPublications
+     * const lecturerPublication = await prisma.lecturerPublication.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends LecturerPublicationCreateManyArgs>(args?: SelectSubset<T, LecturerPublicationCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many LecturerPublications and returns the data saved in the database.
+     * @param {LecturerPublicationCreateManyAndReturnArgs} args - Arguments to create many LecturerPublications.
+     * @example
+     * // Create many LecturerPublications
+     * const lecturerPublication = await prisma.lecturerPublication.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many LecturerPublications and only return the `id`
+     * const lecturerPublicationWithIdOnly = await prisma.lecturerPublication.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends LecturerPublicationCreateManyAndReturnArgs>(args?: SelectSubset<T, LecturerPublicationCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LecturerPublicationPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a LecturerPublication.
+     * @param {LecturerPublicationDeleteArgs} args - Arguments to delete one LecturerPublication.
+     * @example
+     * // Delete one LecturerPublication
+     * const LecturerPublication = await prisma.lecturerPublication.delete({
+     *   where: {
+     *     // ... filter to delete one LecturerPublication
+     *   }
+     * })
+     * 
+     */
+    delete<T extends LecturerPublicationDeleteArgs>(args: SelectSubset<T, LecturerPublicationDeleteArgs<ExtArgs>>): Prisma__LecturerPublicationClient<$Result.GetResult<Prisma.$LecturerPublicationPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one LecturerPublication.
+     * @param {LecturerPublicationUpdateArgs} args - Arguments to update one LecturerPublication.
+     * @example
+     * // Update one LecturerPublication
+     * const lecturerPublication = await prisma.lecturerPublication.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends LecturerPublicationUpdateArgs>(args: SelectSubset<T, LecturerPublicationUpdateArgs<ExtArgs>>): Prisma__LecturerPublicationClient<$Result.GetResult<Prisma.$LecturerPublicationPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more LecturerPublications.
+     * @param {LecturerPublicationDeleteManyArgs} args - Arguments to filter LecturerPublications to delete.
+     * @example
+     * // Delete a few LecturerPublications
+     * const { count } = await prisma.lecturerPublication.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends LecturerPublicationDeleteManyArgs>(args?: SelectSubset<T, LecturerPublicationDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more LecturerPublications.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LecturerPublicationUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many LecturerPublications
+     * const lecturerPublication = await prisma.lecturerPublication.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends LecturerPublicationUpdateManyArgs>(args: SelectSubset<T, LecturerPublicationUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more LecturerPublications and returns the data updated in the database.
+     * @param {LecturerPublicationUpdateManyAndReturnArgs} args - Arguments to update many LecturerPublications.
+     * @example
+     * // Update many LecturerPublications
+     * const lecturerPublication = await prisma.lecturerPublication.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more LecturerPublications and only return the `id`
+     * const lecturerPublicationWithIdOnly = await prisma.lecturerPublication.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends LecturerPublicationUpdateManyAndReturnArgs>(args: SelectSubset<T, LecturerPublicationUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LecturerPublicationPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one LecturerPublication.
+     * @param {LecturerPublicationUpsertArgs} args - Arguments to update or create a LecturerPublication.
+     * @example
+     * // Update or create a LecturerPublication
+     * const lecturerPublication = await prisma.lecturerPublication.upsert({
+     *   create: {
+     *     // ... data to create a LecturerPublication
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the LecturerPublication we want to update
+     *   }
+     * })
+     */
+    upsert<T extends LecturerPublicationUpsertArgs>(args: SelectSubset<T, LecturerPublicationUpsertArgs<ExtArgs>>): Prisma__LecturerPublicationClient<$Result.GetResult<Prisma.$LecturerPublicationPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of LecturerPublications.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LecturerPublicationCountArgs} args - Arguments to filter LecturerPublications to count.
+     * @example
+     * // Count the number of LecturerPublications
+     * const count = await prisma.lecturerPublication.count({
+     *   where: {
+     *     // ... the filter for the LecturerPublications we want to count
+     *   }
+     * })
+    **/
+    count<T extends LecturerPublicationCountArgs>(
+      args?: Subset<T, LecturerPublicationCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], LecturerPublicationCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a LecturerPublication.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LecturerPublicationAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends LecturerPublicationAggregateArgs>(args: Subset<T, LecturerPublicationAggregateArgs>): Prisma.PrismaPromise<GetLecturerPublicationAggregateType<T>>
+
+    /**
+     * Group by LecturerPublication.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LecturerPublicationGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends LecturerPublicationGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: LecturerPublicationGroupByArgs['orderBy'] }
+        : { orderBy?: LecturerPublicationGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, LecturerPublicationGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetLecturerPublicationGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the LecturerPublication model
+   */
+  readonly fields: LecturerPublicationFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for LecturerPublication.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__LecturerPublicationClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    lecturer<T extends LecturerDefaultArgs<ExtArgs> = {}>(args?: Subset<T, LecturerDefaultArgs<ExtArgs>>): Prisma__LecturerClient<$Result.GetResult<Prisma.$LecturerPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the LecturerPublication model
+   */
+  interface LecturerPublicationFieldRefs {
+    readonly id: FieldRef<"LecturerPublication", 'String'>
+    readonly lecturerId: FieldRef<"LecturerPublication", 'String'>
+    readonly title: FieldRef<"LecturerPublication", 'String'>
+    readonly publicationType: FieldRef<"LecturerPublication", 'PublicationType'>
+    readonly venue: FieldRef<"LecturerPublication", 'String'>
+    readonly publishedAt: FieldRef<"LecturerPublication", 'DateTime'>
+    readonly doi: FieldRef<"LecturerPublication", 'String'>
+    readonly url: FieldRef<"LecturerPublication", 'String'>
+    readonly indexedScopus: FieldRef<"LecturerPublication", 'Boolean'>
+    readonly indexedIsi: FieldRef<"LecturerPublication", 'Boolean'>
+    readonly coAuthors: FieldRef<"LecturerPublication", 'String'>
+    readonly createdAt: FieldRef<"LecturerPublication", 'DateTime'>
+    readonly updatedAt: FieldRef<"LecturerPublication", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * LecturerPublication findUnique
+   */
+  export type LecturerPublicationFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LecturerPublication
+     */
+    select?: LecturerPublicationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LecturerPublication
+     */
+    omit?: LecturerPublicationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LecturerPublicationInclude<ExtArgs> | null
+    /**
+     * Filter, which LecturerPublication to fetch.
+     */
+    where: LecturerPublicationWhereUniqueInput
+  }
+
+  /**
+   * LecturerPublication findUniqueOrThrow
+   */
+  export type LecturerPublicationFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LecturerPublication
+     */
+    select?: LecturerPublicationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LecturerPublication
+     */
+    omit?: LecturerPublicationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LecturerPublicationInclude<ExtArgs> | null
+    /**
+     * Filter, which LecturerPublication to fetch.
+     */
+    where: LecturerPublicationWhereUniqueInput
+  }
+
+  /**
+   * LecturerPublication findFirst
+   */
+  export type LecturerPublicationFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LecturerPublication
+     */
+    select?: LecturerPublicationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LecturerPublication
+     */
+    omit?: LecturerPublicationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LecturerPublicationInclude<ExtArgs> | null
+    /**
+     * Filter, which LecturerPublication to fetch.
+     */
+    where?: LecturerPublicationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of LecturerPublications to fetch.
+     */
+    orderBy?: LecturerPublicationOrderByWithRelationInput | LecturerPublicationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for LecturerPublications.
+     */
+    cursor?: LecturerPublicationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` LecturerPublications from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` LecturerPublications.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of LecturerPublications.
+     */
+    distinct?: LecturerPublicationScalarFieldEnum | LecturerPublicationScalarFieldEnum[]
+  }
+
+  /**
+   * LecturerPublication findFirstOrThrow
+   */
+  export type LecturerPublicationFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LecturerPublication
+     */
+    select?: LecturerPublicationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LecturerPublication
+     */
+    omit?: LecturerPublicationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LecturerPublicationInclude<ExtArgs> | null
+    /**
+     * Filter, which LecturerPublication to fetch.
+     */
+    where?: LecturerPublicationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of LecturerPublications to fetch.
+     */
+    orderBy?: LecturerPublicationOrderByWithRelationInput | LecturerPublicationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for LecturerPublications.
+     */
+    cursor?: LecturerPublicationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` LecturerPublications from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` LecturerPublications.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of LecturerPublications.
+     */
+    distinct?: LecturerPublicationScalarFieldEnum | LecturerPublicationScalarFieldEnum[]
+  }
+
+  /**
+   * LecturerPublication findMany
+   */
+  export type LecturerPublicationFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LecturerPublication
+     */
+    select?: LecturerPublicationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LecturerPublication
+     */
+    omit?: LecturerPublicationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LecturerPublicationInclude<ExtArgs> | null
+    /**
+     * Filter, which LecturerPublications to fetch.
+     */
+    where?: LecturerPublicationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of LecturerPublications to fetch.
+     */
+    orderBy?: LecturerPublicationOrderByWithRelationInput | LecturerPublicationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing LecturerPublications.
+     */
+    cursor?: LecturerPublicationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` LecturerPublications from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` LecturerPublications.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of LecturerPublications.
+     */
+    distinct?: LecturerPublicationScalarFieldEnum | LecturerPublicationScalarFieldEnum[]
+  }
+
+  /**
+   * LecturerPublication create
+   */
+  export type LecturerPublicationCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LecturerPublication
+     */
+    select?: LecturerPublicationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LecturerPublication
+     */
+    omit?: LecturerPublicationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LecturerPublicationInclude<ExtArgs> | null
+    /**
+     * The data needed to create a LecturerPublication.
+     */
+    data: XOR<LecturerPublicationCreateInput, LecturerPublicationUncheckedCreateInput>
+  }
+
+  /**
+   * LecturerPublication createMany
+   */
+  export type LecturerPublicationCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many LecturerPublications.
+     */
+    data: LecturerPublicationCreateManyInput | LecturerPublicationCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * LecturerPublication createManyAndReturn
+   */
+  export type LecturerPublicationCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LecturerPublication
+     */
+    select?: LecturerPublicationSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the LecturerPublication
+     */
+    omit?: LecturerPublicationOmit<ExtArgs> | null
+    /**
+     * The data used to create many LecturerPublications.
+     */
+    data: LecturerPublicationCreateManyInput | LecturerPublicationCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LecturerPublicationIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * LecturerPublication update
+   */
+  export type LecturerPublicationUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LecturerPublication
+     */
+    select?: LecturerPublicationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LecturerPublication
+     */
+    omit?: LecturerPublicationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LecturerPublicationInclude<ExtArgs> | null
+    /**
+     * The data needed to update a LecturerPublication.
+     */
+    data: XOR<LecturerPublicationUpdateInput, LecturerPublicationUncheckedUpdateInput>
+    /**
+     * Choose, which LecturerPublication to update.
+     */
+    where: LecturerPublicationWhereUniqueInput
+  }
+
+  /**
+   * LecturerPublication updateMany
+   */
+  export type LecturerPublicationUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update LecturerPublications.
+     */
+    data: XOR<LecturerPublicationUpdateManyMutationInput, LecturerPublicationUncheckedUpdateManyInput>
+    /**
+     * Filter which LecturerPublications to update
+     */
+    where?: LecturerPublicationWhereInput
+    /**
+     * Limit how many LecturerPublications to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * LecturerPublication updateManyAndReturn
+   */
+  export type LecturerPublicationUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LecturerPublication
+     */
+    select?: LecturerPublicationSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the LecturerPublication
+     */
+    omit?: LecturerPublicationOmit<ExtArgs> | null
+    /**
+     * The data used to update LecturerPublications.
+     */
+    data: XOR<LecturerPublicationUpdateManyMutationInput, LecturerPublicationUncheckedUpdateManyInput>
+    /**
+     * Filter which LecturerPublications to update
+     */
+    where?: LecturerPublicationWhereInput
+    /**
+     * Limit how many LecturerPublications to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LecturerPublicationIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * LecturerPublication upsert
+   */
+  export type LecturerPublicationUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LecturerPublication
+     */
+    select?: LecturerPublicationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LecturerPublication
+     */
+    omit?: LecturerPublicationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LecturerPublicationInclude<ExtArgs> | null
+    /**
+     * The filter to search for the LecturerPublication to update in case it exists.
+     */
+    where: LecturerPublicationWhereUniqueInput
+    /**
+     * In case the LecturerPublication found by the `where` argument doesn't exist, create a new LecturerPublication with this data.
+     */
+    create: XOR<LecturerPublicationCreateInput, LecturerPublicationUncheckedCreateInput>
+    /**
+     * In case the LecturerPublication was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<LecturerPublicationUpdateInput, LecturerPublicationUncheckedUpdateInput>
+  }
+
+  /**
+   * LecturerPublication delete
+   */
+  export type LecturerPublicationDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LecturerPublication
+     */
+    select?: LecturerPublicationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LecturerPublication
+     */
+    omit?: LecturerPublicationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LecturerPublicationInclude<ExtArgs> | null
+    /**
+     * Filter which LecturerPublication to delete.
+     */
+    where: LecturerPublicationWhereUniqueInput
+  }
+
+  /**
+   * LecturerPublication deleteMany
+   */
+  export type LecturerPublicationDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which LecturerPublications to delete
+     */
+    where?: LecturerPublicationWhereInput
+    /**
+     * Limit how many LecturerPublications to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * LecturerPublication without action
+   */
+  export type LecturerPublicationDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LecturerPublication
+     */
+    select?: LecturerPublicationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LecturerPublication
+     */
+    omit?: LecturerPublicationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LecturerPublicationInclude<ExtArgs> | null
   }
 
 
@@ -39851,6 +42670,52 @@ export namespace Prisma {
   export type CouncilEvaluationScalarFieldEnum = (typeof CouncilEvaluationScalarFieldEnum)[keyof typeof CouncilEvaluationScalarFieldEnum]
 
 
+  export const LecturerScalarFieldEnum: {
+    id: 'id',
+    userId: 'userId',
+    staffId: 'staffId',
+    academicRank: 'academicRank',
+    departmentName: 'departmentName',
+    facultyName: 'facultyName',
+    researchInterests: 'researchInterests',
+    googleScholarUrl: 'googleScholarUrl',
+    orcidId: 'orcidId',
+    researchGateUrl: 'researchGateUrl',
+    totalProjectsSchoolLevel: 'totalProjectsSchoolLevel',
+    totalProjectsMinistryLevel: 'totalProjectsMinistryLevel',
+    totalProjectsStateLevel: 'totalProjectsStateLevel',
+    totalPrincipalInvestigatorRoles: 'totalPrincipalInvestigatorRoles',
+    totalSupervisorRoles: 'totalSupervisorRoles',
+    totalResearchMemberRoles: 'totalResearchMemberRoles',
+    totalSecretaryRoles: 'totalSecretaryRoles',
+    totalCouncilMemberRoles: 'totalCouncilMemberRoles',
+    profileNote: 'profileNote',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type LecturerScalarFieldEnum = (typeof LecturerScalarFieldEnum)[keyof typeof LecturerScalarFieldEnum]
+
+
+  export const LecturerPublicationScalarFieldEnum: {
+    id: 'id',
+    lecturerId: 'lecturerId',
+    title: 'title',
+    publicationType: 'publicationType',
+    venue: 'venue',
+    publishedAt: 'publishedAt',
+    doi: 'doi',
+    url: 'url',
+    indexedScopus: 'indexedScopus',
+    indexedIsi: 'indexedIsi',
+    coAuthors: 'coAuthors',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type LecturerPublicationScalarFieldEnum = (typeof LecturerPublicationScalarFieldEnum)[keyof typeof LecturerPublicationScalarFieldEnum]
+
+
   export const FundingDisbursementScalarFieldEnum: {
     id: 'id',
     projectId: 'projectId',
@@ -40357,6 +43222,34 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'AcademicRank'
+   */
+  export type EnumAcademicRankFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AcademicRank'>
+    
+
+
+  /**
+   * Reference to a field of type 'AcademicRank[]'
+   */
+  export type ListEnumAcademicRankFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AcademicRank[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'PublicationType'
+   */
+  export type EnumPublicationTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PublicationType'>
+    
+
+
+  /**
+   * Reference to a field of type 'PublicationType[]'
+   */
+  export type ListEnumPublicationTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PublicationType[]'>
+    
+
+
+  /**
    * Reference to a field of type 'DisbursementStatus'
    */
   export type EnumDisbursementStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DisbursementStatus'>
@@ -40766,6 +43659,7 @@ export namespace Prisma {
     createdDisbursements?: FundingDisbursementListRelationFilter
     approvedDisbursements?: FundingDisbursementListRelationFilter
     autoApprovalJobs?: AutoApprovalJobListRelationFilter
+    lecturerProfile?: XOR<LecturerNullableScalarRelationFilter, LecturerWhereInput> | null
   }
 
   export type UserOrderByWithRelationInput = {
@@ -40806,6 +43700,7 @@ export namespace Prisma {
     createdDisbursements?: FundingDisbursementOrderByRelationAggregateInput
     approvedDisbursements?: FundingDisbursementOrderByRelationAggregateInput
     autoApprovalJobs?: AutoApprovalJobOrderByRelationAggregateInput
+    lecturerProfile?: LecturerOrderByWithRelationInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -40849,6 +43744,7 @@ export namespace Prisma {
     createdDisbursements?: FundingDisbursementListRelationFilter
     approvedDisbursements?: FundingDisbursementListRelationFilter
     autoApprovalJobs?: AutoApprovalJobListRelationFilter
+    lecturerProfile?: XOR<LecturerNullableScalarRelationFilter, LecturerWhereInput> | null
   }, "id" | "code" | "email">
 
   export type UserOrderByWithAggregationInput = {
@@ -41774,6 +44670,241 @@ export namespace Prisma {
     comment?: StringNullableWithAggregatesFilter<"CouncilEvaluation"> | string | null
     evaluatedAt?: DateTimeWithAggregatesFilter<"CouncilEvaluation"> | Date | string
     createdAt?: DateTimeWithAggregatesFilter<"CouncilEvaluation"> | Date | string
+  }
+
+  export type LecturerWhereInput = {
+    AND?: LecturerWhereInput | LecturerWhereInput[]
+    OR?: LecturerWhereInput[]
+    NOT?: LecturerWhereInput | LecturerWhereInput[]
+    id?: StringFilter<"Lecturer"> | string
+    userId?: StringFilter<"Lecturer"> | string
+    staffId?: StringNullableFilter<"Lecturer"> | string | null
+    academicRank?: EnumAcademicRankNullableFilter<"Lecturer"> | $Enums.AcademicRank | null
+    departmentName?: StringNullableFilter<"Lecturer"> | string | null
+    facultyName?: StringNullableFilter<"Lecturer"> | string | null
+    researchInterests?: StringNullableListFilter<"Lecturer">
+    googleScholarUrl?: StringNullableFilter<"Lecturer"> | string | null
+    orcidId?: StringNullableFilter<"Lecturer"> | string | null
+    researchGateUrl?: StringNullableFilter<"Lecturer"> | string | null
+    totalProjectsSchoolLevel?: IntFilter<"Lecturer"> | number
+    totalProjectsMinistryLevel?: IntFilter<"Lecturer"> | number
+    totalProjectsStateLevel?: IntFilter<"Lecturer"> | number
+    totalPrincipalInvestigatorRoles?: IntFilter<"Lecturer"> | number
+    totalSupervisorRoles?: IntFilter<"Lecturer"> | number
+    totalResearchMemberRoles?: IntFilter<"Lecturer"> | number
+    totalSecretaryRoles?: IntFilter<"Lecturer"> | number
+    totalCouncilMemberRoles?: IntFilter<"Lecturer"> | number
+    profileNote?: StringNullableFilter<"Lecturer"> | string | null
+    createdAt?: DateTimeFilter<"Lecturer"> | Date | string
+    updatedAt?: DateTimeFilter<"Lecturer"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    publications?: LecturerPublicationListRelationFilter
+  }
+
+  export type LecturerOrderByWithRelationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    staffId?: SortOrderInput | SortOrder
+    academicRank?: SortOrderInput | SortOrder
+    departmentName?: SortOrderInput | SortOrder
+    facultyName?: SortOrderInput | SortOrder
+    researchInterests?: SortOrder
+    googleScholarUrl?: SortOrderInput | SortOrder
+    orcidId?: SortOrderInput | SortOrder
+    researchGateUrl?: SortOrderInput | SortOrder
+    totalProjectsSchoolLevel?: SortOrder
+    totalProjectsMinistryLevel?: SortOrder
+    totalProjectsStateLevel?: SortOrder
+    totalPrincipalInvestigatorRoles?: SortOrder
+    totalSupervisorRoles?: SortOrder
+    totalResearchMemberRoles?: SortOrder
+    totalSecretaryRoles?: SortOrder
+    totalCouncilMemberRoles?: SortOrder
+    profileNote?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    user?: UserOrderByWithRelationInput
+    publications?: LecturerPublicationOrderByRelationAggregateInput
+  }
+
+  export type LecturerWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    userId?: string
+    staffId?: string
+    AND?: LecturerWhereInput | LecturerWhereInput[]
+    OR?: LecturerWhereInput[]
+    NOT?: LecturerWhereInput | LecturerWhereInput[]
+    academicRank?: EnumAcademicRankNullableFilter<"Lecturer"> | $Enums.AcademicRank | null
+    departmentName?: StringNullableFilter<"Lecturer"> | string | null
+    facultyName?: StringNullableFilter<"Lecturer"> | string | null
+    researchInterests?: StringNullableListFilter<"Lecturer">
+    googleScholarUrl?: StringNullableFilter<"Lecturer"> | string | null
+    orcidId?: StringNullableFilter<"Lecturer"> | string | null
+    researchGateUrl?: StringNullableFilter<"Lecturer"> | string | null
+    totalProjectsSchoolLevel?: IntFilter<"Lecturer"> | number
+    totalProjectsMinistryLevel?: IntFilter<"Lecturer"> | number
+    totalProjectsStateLevel?: IntFilter<"Lecturer"> | number
+    totalPrincipalInvestigatorRoles?: IntFilter<"Lecturer"> | number
+    totalSupervisorRoles?: IntFilter<"Lecturer"> | number
+    totalResearchMemberRoles?: IntFilter<"Lecturer"> | number
+    totalSecretaryRoles?: IntFilter<"Lecturer"> | number
+    totalCouncilMemberRoles?: IntFilter<"Lecturer"> | number
+    profileNote?: StringNullableFilter<"Lecturer"> | string | null
+    createdAt?: DateTimeFilter<"Lecturer"> | Date | string
+    updatedAt?: DateTimeFilter<"Lecturer"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    publications?: LecturerPublicationListRelationFilter
+  }, "id" | "userId" | "staffId">
+
+  export type LecturerOrderByWithAggregationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    staffId?: SortOrderInput | SortOrder
+    academicRank?: SortOrderInput | SortOrder
+    departmentName?: SortOrderInput | SortOrder
+    facultyName?: SortOrderInput | SortOrder
+    researchInterests?: SortOrder
+    googleScholarUrl?: SortOrderInput | SortOrder
+    orcidId?: SortOrderInput | SortOrder
+    researchGateUrl?: SortOrderInput | SortOrder
+    totalProjectsSchoolLevel?: SortOrder
+    totalProjectsMinistryLevel?: SortOrder
+    totalProjectsStateLevel?: SortOrder
+    totalPrincipalInvestigatorRoles?: SortOrder
+    totalSupervisorRoles?: SortOrder
+    totalResearchMemberRoles?: SortOrder
+    totalSecretaryRoles?: SortOrder
+    totalCouncilMemberRoles?: SortOrder
+    profileNote?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: LecturerCountOrderByAggregateInput
+    _avg?: LecturerAvgOrderByAggregateInput
+    _max?: LecturerMaxOrderByAggregateInput
+    _min?: LecturerMinOrderByAggregateInput
+    _sum?: LecturerSumOrderByAggregateInput
+  }
+
+  export type LecturerScalarWhereWithAggregatesInput = {
+    AND?: LecturerScalarWhereWithAggregatesInput | LecturerScalarWhereWithAggregatesInput[]
+    OR?: LecturerScalarWhereWithAggregatesInput[]
+    NOT?: LecturerScalarWhereWithAggregatesInput | LecturerScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Lecturer"> | string
+    userId?: StringWithAggregatesFilter<"Lecturer"> | string
+    staffId?: StringNullableWithAggregatesFilter<"Lecturer"> | string | null
+    academicRank?: EnumAcademicRankNullableWithAggregatesFilter<"Lecturer"> | $Enums.AcademicRank | null
+    departmentName?: StringNullableWithAggregatesFilter<"Lecturer"> | string | null
+    facultyName?: StringNullableWithAggregatesFilter<"Lecturer"> | string | null
+    researchInterests?: StringNullableListFilter<"Lecturer">
+    googleScholarUrl?: StringNullableWithAggregatesFilter<"Lecturer"> | string | null
+    orcidId?: StringNullableWithAggregatesFilter<"Lecturer"> | string | null
+    researchGateUrl?: StringNullableWithAggregatesFilter<"Lecturer"> | string | null
+    totalProjectsSchoolLevel?: IntWithAggregatesFilter<"Lecturer"> | number
+    totalProjectsMinistryLevel?: IntWithAggregatesFilter<"Lecturer"> | number
+    totalProjectsStateLevel?: IntWithAggregatesFilter<"Lecturer"> | number
+    totalPrincipalInvestigatorRoles?: IntWithAggregatesFilter<"Lecturer"> | number
+    totalSupervisorRoles?: IntWithAggregatesFilter<"Lecturer"> | number
+    totalResearchMemberRoles?: IntWithAggregatesFilter<"Lecturer"> | number
+    totalSecretaryRoles?: IntWithAggregatesFilter<"Lecturer"> | number
+    totalCouncilMemberRoles?: IntWithAggregatesFilter<"Lecturer"> | number
+    profileNote?: StringNullableWithAggregatesFilter<"Lecturer"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"Lecturer"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Lecturer"> | Date | string
+  }
+
+  export type LecturerPublicationWhereInput = {
+    AND?: LecturerPublicationWhereInput | LecturerPublicationWhereInput[]
+    OR?: LecturerPublicationWhereInput[]
+    NOT?: LecturerPublicationWhereInput | LecturerPublicationWhereInput[]
+    id?: StringFilter<"LecturerPublication"> | string
+    lecturerId?: StringFilter<"LecturerPublication"> | string
+    title?: StringFilter<"LecturerPublication"> | string
+    publicationType?: EnumPublicationTypeFilter<"LecturerPublication"> | $Enums.PublicationType
+    venue?: StringNullableFilter<"LecturerPublication"> | string | null
+    publishedAt?: DateTimeNullableFilter<"LecturerPublication"> | Date | string | null
+    doi?: StringNullableFilter<"LecturerPublication"> | string | null
+    url?: StringNullableFilter<"LecturerPublication"> | string | null
+    indexedScopus?: BoolFilter<"LecturerPublication"> | boolean
+    indexedIsi?: BoolFilter<"LecturerPublication"> | boolean
+    coAuthors?: StringNullableFilter<"LecturerPublication"> | string | null
+    createdAt?: DateTimeFilter<"LecturerPublication"> | Date | string
+    updatedAt?: DateTimeFilter<"LecturerPublication"> | Date | string
+    lecturer?: XOR<LecturerScalarRelationFilter, LecturerWhereInput>
+  }
+
+  export type LecturerPublicationOrderByWithRelationInput = {
+    id?: SortOrder
+    lecturerId?: SortOrder
+    title?: SortOrder
+    publicationType?: SortOrder
+    venue?: SortOrderInput | SortOrder
+    publishedAt?: SortOrderInput | SortOrder
+    doi?: SortOrderInput | SortOrder
+    url?: SortOrderInput | SortOrder
+    indexedScopus?: SortOrder
+    indexedIsi?: SortOrder
+    coAuthors?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    lecturer?: LecturerOrderByWithRelationInput
+  }
+
+  export type LecturerPublicationWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: LecturerPublicationWhereInput | LecturerPublicationWhereInput[]
+    OR?: LecturerPublicationWhereInput[]
+    NOT?: LecturerPublicationWhereInput | LecturerPublicationWhereInput[]
+    lecturerId?: StringFilter<"LecturerPublication"> | string
+    title?: StringFilter<"LecturerPublication"> | string
+    publicationType?: EnumPublicationTypeFilter<"LecturerPublication"> | $Enums.PublicationType
+    venue?: StringNullableFilter<"LecturerPublication"> | string | null
+    publishedAt?: DateTimeNullableFilter<"LecturerPublication"> | Date | string | null
+    doi?: StringNullableFilter<"LecturerPublication"> | string | null
+    url?: StringNullableFilter<"LecturerPublication"> | string | null
+    indexedScopus?: BoolFilter<"LecturerPublication"> | boolean
+    indexedIsi?: BoolFilter<"LecturerPublication"> | boolean
+    coAuthors?: StringNullableFilter<"LecturerPublication"> | string | null
+    createdAt?: DateTimeFilter<"LecturerPublication"> | Date | string
+    updatedAt?: DateTimeFilter<"LecturerPublication"> | Date | string
+    lecturer?: XOR<LecturerScalarRelationFilter, LecturerWhereInput>
+  }, "id">
+
+  export type LecturerPublicationOrderByWithAggregationInput = {
+    id?: SortOrder
+    lecturerId?: SortOrder
+    title?: SortOrder
+    publicationType?: SortOrder
+    venue?: SortOrderInput | SortOrder
+    publishedAt?: SortOrderInput | SortOrder
+    doi?: SortOrderInput | SortOrder
+    url?: SortOrderInput | SortOrder
+    indexedScopus?: SortOrder
+    indexedIsi?: SortOrder
+    coAuthors?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: LecturerPublicationCountOrderByAggregateInput
+    _max?: LecturerPublicationMaxOrderByAggregateInput
+    _min?: LecturerPublicationMinOrderByAggregateInput
+  }
+
+  export type LecturerPublicationScalarWhereWithAggregatesInput = {
+    AND?: LecturerPublicationScalarWhereWithAggregatesInput | LecturerPublicationScalarWhereWithAggregatesInput[]
+    OR?: LecturerPublicationScalarWhereWithAggregatesInput[]
+    NOT?: LecturerPublicationScalarWhereWithAggregatesInput | LecturerPublicationScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"LecturerPublication"> | string
+    lecturerId?: StringWithAggregatesFilter<"LecturerPublication"> | string
+    title?: StringWithAggregatesFilter<"LecturerPublication"> | string
+    publicationType?: EnumPublicationTypeWithAggregatesFilter<"LecturerPublication"> | $Enums.PublicationType
+    venue?: StringNullableWithAggregatesFilter<"LecturerPublication"> | string | null
+    publishedAt?: DateTimeNullableWithAggregatesFilter<"LecturerPublication"> | Date | string | null
+    doi?: StringNullableWithAggregatesFilter<"LecturerPublication"> | string | null
+    url?: StringNullableWithAggregatesFilter<"LecturerPublication"> | string | null
+    indexedScopus?: BoolWithAggregatesFilter<"LecturerPublication"> | boolean
+    indexedIsi?: BoolWithAggregatesFilter<"LecturerPublication"> | boolean
+    coAuthors?: StringNullableWithAggregatesFilter<"LecturerPublication"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"LecturerPublication"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"LecturerPublication"> | Date | string
   }
 
   export type FundingDisbursementWhereInput = {
@@ -43436,6 +46567,7 @@ export namespace Prisma {
     createdDisbursements?: FundingDisbursementCreateNestedManyWithoutCreatedByInput
     approvedDisbursements?: FundingDisbursementCreateNestedManyWithoutApprovedByInput
     autoApprovalJobs?: AutoApprovalJobCreateNestedManyWithoutDeanInput
+    lecturerProfile?: LecturerCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -43473,6 +46605,7 @@ export namespace Prisma {
     createdDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutCreatedByInput
     approvedDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutApprovedByInput
     autoApprovalJobs?: AutoApprovalJobUncheckedCreateNestedManyWithoutDeanInput
+    lecturerProfile?: LecturerUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserUpdateInput = {
@@ -43510,6 +46643,7 @@ export namespace Prisma {
     createdDisbursements?: FundingDisbursementUpdateManyWithoutCreatedByNestedInput
     approvedDisbursements?: FundingDisbursementUpdateManyWithoutApprovedByNestedInput
     autoApprovalJobs?: AutoApprovalJobUpdateManyWithoutDeanNestedInput
+    lecturerProfile?: LecturerUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -43547,6 +46681,7 @@ export namespace Prisma {
     createdDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutCreatedByNestedInput
     approvedDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutApprovedByNestedInput
     autoApprovalJobs?: AutoApprovalJobUncheckedUpdateManyWithoutDeanNestedInput
+    lecturerProfile?: LecturerUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -44621,6 +47756,288 @@ export namespace Prisma {
     comment?: NullableStringFieldUpdateOperationsInput | string | null
     evaluatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LecturerCreateInput = {
+    id?: string
+    staffId?: string | null
+    academicRank?: $Enums.AcademicRank | null
+    departmentName?: string | null
+    facultyName?: string | null
+    researchInterests?: LecturerCreateresearchInterestsInput | string[]
+    googleScholarUrl?: string | null
+    orcidId?: string | null
+    researchGateUrl?: string | null
+    totalProjectsSchoolLevel?: number
+    totalProjectsMinistryLevel?: number
+    totalProjectsStateLevel?: number
+    totalPrincipalInvestigatorRoles?: number
+    totalSupervisorRoles?: number
+    totalResearchMemberRoles?: number
+    totalSecretaryRoles?: number
+    totalCouncilMemberRoles?: number
+    profileNote?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user: UserCreateNestedOneWithoutLecturerProfileInput
+    publications?: LecturerPublicationCreateNestedManyWithoutLecturerInput
+  }
+
+  export type LecturerUncheckedCreateInput = {
+    id?: string
+    userId: string
+    staffId?: string | null
+    academicRank?: $Enums.AcademicRank | null
+    departmentName?: string | null
+    facultyName?: string | null
+    researchInterests?: LecturerCreateresearchInterestsInput | string[]
+    googleScholarUrl?: string | null
+    orcidId?: string | null
+    researchGateUrl?: string | null
+    totalProjectsSchoolLevel?: number
+    totalProjectsMinistryLevel?: number
+    totalProjectsStateLevel?: number
+    totalPrincipalInvestigatorRoles?: number
+    totalSupervisorRoles?: number
+    totalResearchMemberRoles?: number
+    totalSecretaryRoles?: number
+    totalCouncilMemberRoles?: number
+    profileNote?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    publications?: LecturerPublicationUncheckedCreateNestedManyWithoutLecturerInput
+  }
+
+  export type LecturerUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    staffId?: NullableStringFieldUpdateOperationsInput | string | null
+    academicRank?: NullableEnumAcademicRankFieldUpdateOperationsInput | $Enums.AcademicRank | null
+    departmentName?: NullableStringFieldUpdateOperationsInput | string | null
+    facultyName?: NullableStringFieldUpdateOperationsInput | string | null
+    researchInterests?: LecturerUpdateresearchInterestsInput | string[]
+    googleScholarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    orcidId?: NullableStringFieldUpdateOperationsInput | string | null
+    researchGateUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    totalProjectsSchoolLevel?: IntFieldUpdateOperationsInput | number
+    totalProjectsMinistryLevel?: IntFieldUpdateOperationsInput | number
+    totalProjectsStateLevel?: IntFieldUpdateOperationsInput | number
+    totalPrincipalInvestigatorRoles?: IntFieldUpdateOperationsInput | number
+    totalSupervisorRoles?: IntFieldUpdateOperationsInput | number
+    totalResearchMemberRoles?: IntFieldUpdateOperationsInput | number
+    totalSecretaryRoles?: IntFieldUpdateOperationsInput | number
+    totalCouncilMemberRoles?: IntFieldUpdateOperationsInput | number
+    profileNote?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutLecturerProfileNestedInput
+    publications?: LecturerPublicationUpdateManyWithoutLecturerNestedInput
+  }
+
+  export type LecturerUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    staffId?: NullableStringFieldUpdateOperationsInput | string | null
+    academicRank?: NullableEnumAcademicRankFieldUpdateOperationsInput | $Enums.AcademicRank | null
+    departmentName?: NullableStringFieldUpdateOperationsInput | string | null
+    facultyName?: NullableStringFieldUpdateOperationsInput | string | null
+    researchInterests?: LecturerUpdateresearchInterestsInput | string[]
+    googleScholarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    orcidId?: NullableStringFieldUpdateOperationsInput | string | null
+    researchGateUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    totalProjectsSchoolLevel?: IntFieldUpdateOperationsInput | number
+    totalProjectsMinistryLevel?: IntFieldUpdateOperationsInput | number
+    totalProjectsStateLevel?: IntFieldUpdateOperationsInput | number
+    totalPrincipalInvestigatorRoles?: IntFieldUpdateOperationsInput | number
+    totalSupervisorRoles?: IntFieldUpdateOperationsInput | number
+    totalResearchMemberRoles?: IntFieldUpdateOperationsInput | number
+    totalSecretaryRoles?: IntFieldUpdateOperationsInput | number
+    totalCouncilMemberRoles?: IntFieldUpdateOperationsInput | number
+    profileNote?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    publications?: LecturerPublicationUncheckedUpdateManyWithoutLecturerNestedInput
+  }
+
+  export type LecturerCreateManyInput = {
+    id?: string
+    userId: string
+    staffId?: string | null
+    academicRank?: $Enums.AcademicRank | null
+    departmentName?: string | null
+    facultyName?: string | null
+    researchInterests?: LecturerCreateresearchInterestsInput | string[]
+    googleScholarUrl?: string | null
+    orcidId?: string | null
+    researchGateUrl?: string | null
+    totalProjectsSchoolLevel?: number
+    totalProjectsMinistryLevel?: number
+    totalProjectsStateLevel?: number
+    totalPrincipalInvestigatorRoles?: number
+    totalSupervisorRoles?: number
+    totalResearchMemberRoles?: number
+    totalSecretaryRoles?: number
+    totalCouncilMemberRoles?: number
+    profileNote?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type LecturerUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    staffId?: NullableStringFieldUpdateOperationsInput | string | null
+    academicRank?: NullableEnumAcademicRankFieldUpdateOperationsInput | $Enums.AcademicRank | null
+    departmentName?: NullableStringFieldUpdateOperationsInput | string | null
+    facultyName?: NullableStringFieldUpdateOperationsInput | string | null
+    researchInterests?: LecturerUpdateresearchInterestsInput | string[]
+    googleScholarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    orcidId?: NullableStringFieldUpdateOperationsInput | string | null
+    researchGateUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    totalProjectsSchoolLevel?: IntFieldUpdateOperationsInput | number
+    totalProjectsMinistryLevel?: IntFieldUpdateOperationsInput | number
+    totalProjectsStateLevel?: IntFieldUpdateOperationsInput | number
+    totalPrincipalInvestigatorRoles?: IntFieldUpdateOperationsInput | number
+    totalSupervisorRoles?: IntFieldUpdateOperationsInput | number
+    totalResearchMemberRoles?: IntFieldUpdateOperationsInput | number
+    totalSecretaryRoles?: IntFieldUpdateOperationsInput | number
+    totalCouncilMemberRoles?: IntFieldUpdateOperationsInput | number
+    profileNote?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LecturerUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    staffId?: NullableStringFieldUpdateOperationsInput | string | null
+    academicRank?: NullableEnumAcademicRankFieldUpdateOperationsInput | $Enums.AcademicRank | null
+    departmentName?: NullableStringFieldUpdateOperationsInput | string | null
+    facultyName?: NullableStringFieldUpdateOperationsInput | string | null
+    researchInterests?: LecturerUpdateresearchInterestsInput | string[]
+    googleScholarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    orcidId?: NullableStringFieldUpdateOperationsInput | string | null
+    researchGateUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    totalProjectsSchoolLevel?: IntFieldUpdateOperationsInput | number
+    totalProjectsMinistryLevel?: IntFieldUpdateOperationsInput | number
+    totalProjectsStateLevel?: IntFieldUpdateOperationsInput | number
+    totalPrincipalInvestigatorRoles?: IntFieldUpdateOperationsInput | number
+    totalSupervisorRoles?: IntFieldUpdateOperationsInput | number
+    totalResearchMemberRoles?: IntFieldUpdateOperationsInput | number
+    totalSecretaryRoles?: IntFieldUpdateOperationsInput | number
+    totalCouncilMemberRoles?: IntFieldUpdateOperationsInput | number
+    profileNote?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LecturerPublicationCreateInput = {
+    id?: string
+    title: string
+    publicationType?: $Enums.PublicationType
+    venue?: string | null
+    publishedAt?: Date | string | null
+    doi?: string | null
+    url?: string | null
+    indexedScopus?: boolean
+    indexedIsi?: boolean
+    coAuthors?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    lecturer: LecturerCreateNestedOneWithoutPublicationsInput
+  }
+
+  export type LecturerPublicationUncheckedCreateInput = {
+    id?: string
+    lecturerId: string
+    title: string
+    publicationType?: $Enums.PublicationType
+    venue?: string | null
+    publishedAt?: Date | string | null
+    doi?: string | null
+    url?: string | null
+    indexedScopus?: boolean
+    indexedIsi?: boolean
+    coAuthors?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type LecturerPublicationUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    publicationType?: EnumPublicationTypeFieldUpdateOperationsInput | $Enums.PublicationType
+    venue?: NullableStringFieldUpdateOperationsInput | string | null
+    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    doi?: NullableStringFieldUpdateOperationsInput | string | null
+    url?: NullableStringFieldUpdateOperationsInput | string | null
+    indexedScopus?: BoolFieldUpdateOperationsInput | boolean
+    indexedIsi?: BoolFieldUpdateOperationsInput | boolean
+    coAuthors?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    lecturer?: LecturerUpdateOneRequiredWithoutPublicationsNestedInput
+  }
+
+  export type LecturerPublicationUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    lecturerId?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    publicationType?: EnumPublicationTypeFieldUpdateOperationsInput | $Enums.PublicationType
+    venue?: NullableStringFieldUpdateOperationsInput | string | null
+    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    doi?: NullableStringFieldUpdateOperationsInput | string | null
+    url?: NullableStringFieldUpdateOperationsInput | string | null
+    indexedScopus?: BoolFieldUpdateOperationsInput | boolean
+    indexedIsi?: BoolFieldUpdateOperationsInput | boolean
+    coAuthors?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LecturerPublicationCreateManyInput = {
+    id?: string
+    lecturerId: string
+    title: string
+    publicationType?: $Enums.PublicationType
+    venue?: string | null
+    publishedAt?: Date | string | null
+    doi?: string | null
+    url?: string | null
+    indexedScopus?: boolean
+    indexedIsi?: boolean
+    coAuthors?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type LecturerPublicationUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    publicationType?: EnumPublicationTypeFieldUpdateOperationsInput | $Enums.PublicationType
+    venue?: NullableStringFieldUpdateOperationsInput | string | null
+    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    doi?: NullableStringFieldUpdateOperationsInput | string | null
+    url?: NullableStringFieldUpdateOperationsInput | string | null
+    indexedScopus?: BoolFieldUpdateOperationsInput | boolean
+    indexedIsi?: BoolFieldUpdateOperationsInput | boolean
+    coAuthors?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LecturerPublicationUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    lecturerId?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    publicationType?: EnumPublicationTypeFieldUpdateOperationsInput | $Enums.PublicationType
+    venue?: NullableStringFieldUpdateOperationsInput | string | null
+    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    doi?: NullableStringFieldUpdateOperationsInput | string | null
+    url?: NullableStringFieldUpdateOperationsInput | string | null
+    indexedScopus?: BoolFieldUpdateOperationsInput | boolean
+    indexedIsi?: BoolFieldUpdateOperationsInput | boolean
+    coAuthors?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type FundingDisbursementCreateInput = {
@@ -46457,6 +49874,11 @@ export namespace Prisma {
     none?: AutoApprovalJobWhereInput
   }
 
+  export type LecturerNullableScalarRelationFilter = {
+    is?: LecturerWhereInput | null
+    isNot?: LecturerWhereInput | null
+  }
+
   export type ProjectOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -47449,6 +50871,203 @@ export namespace Prisma {
     _max?: NestedEnumReviewDecisionFilter<$PrismaModel>
   }
 
+  export type EnumAcademicRankNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.AcademicRank | EnumAcademicRankFieldRefInput<$PrismaModel> | null
+    in?: $Enums.AcademicRank[] | ListEnumAcademicRankFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.AcademicRank[] | ListEnumAcademicRankFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumAcademicRankNullableFilter<$PrismaModel> | $Enums.AcademicRank | null
+  }
+
+  export type StringNullableListFilter<$PrismaModel = never> = {
+    equals?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    has?: string | StringFieldRefInput<$PrismaModel> | null
+    hasEvery?: string[] | ListStringFieldRefInput<$PrismaModel>
+    hasSome?: string[] | ListStringFieldRefInput<$PrismaModel>
+    isEmpty?: boolean
+  }
+
+  export type LecturerPublicationListRelationFilter = {
+    every?: LecturerPublicationWhereInput
+    some?: LecturerPublicationWhereInput
+    none?: LecturerPublicationWhereInput
+  }
+
+  export type LecturerPublicationOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type LecturerCountOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    staffId?: SortOrder
+    academicRank?: SortOrder
+    departmentName?: SortOrder
+    facultyName?: SortOrder
+    researchInterests?: SortOrder
+    googleScholarUrl?: SortOrder
+    orcidId?: SortOrder
+    researchGateUrl?: SortOrder
+    totalProjectsSchoolLevel?: SortOrder
+    totalProjectsMinistryLevel?: SortOrder
+    totalProjectsStateLevel?: SortOrder
+    totalPrincipalInvestigatorRoles?: SortOrder
+    totalSupervisorRoles?: SortOrder
+    totalResearchMemberRoles?: SortOrder
+    totalSecretaryRoles?: SortOrder
+    totalCouncilMemberRoles?: SortOrder
+    profileNote?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type LecturerAvgOrderByAggregateInput = {
+    totalProjectsSchoolLevel?: SortOrder
+    totalProjectsMinistryLevel?: SortOrder
+    totalProjectsStateLevel?: SortOrder
+    totalPrincipalInvestigatorRoles?: SortOrder
+    totalSupervisorRoles?: SortOrder
+    totalResearchMemberRoles?: SortOrder
+    totalSecretaryRoles?: SortOrder
+    totalCouncilMemberRoles?: SortOrder
+  }
+
+  export type LecturerMaxOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    staffId?: SortOrder
+    academicRank?: SortOrder
+    departmentName?: SortOrder
+    facultyName?: SortOrder
+    googleScholarUrl?: SortOrder
+    orcidId?: SortOrder
+    researchGateUrl?: SortOrder
+    totalProjectsSchoolLevel?: SortOrder
+    totalProjectsMinistryLevel?: SortOrder
+    totalProjectsStateLevel?: SortOrder
+    totalPrincipalInvestigatorRoles?: SortOrder
+    totalSupervisorRoles?: SortOrder
+    totalResearchMemberRoles?: SortOrder
+    totalSecretaryRoles?: SortOrder
+    totalCouncilMemberRoles?: SortOrder
+    profileNote?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type LecturerMinOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    staffId?: SortOrder
+    academicRank?: SortOrder
+    departmentName?: SortOrder
+    facultyName?: SortOrder
+    googleScholarUrl?: SortOrder
+    orcidId?: SortOrder
+    researchGateUrl?: SortOrder
+    totalProjectsSchoolLevel?: SortOrder
+    totalProjectsMinistryLevel?: SortOrder
+    totalProjectsStateLevel?: SortOrder
+    totalPrincipalInvestigatorRoles?: SortOrder
+    totalSupervisorRoles?: SortOrder
+    totalResearchMemberRoles?: SortOrder
+    totalSecretaryRoles?: SortOrder
+    totalCouncilMemberRoles?: SortOrder
+    profileNote?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type LecturerSumOrderByAggregateInput = {
+    totalProjectsSchoolLevel?: SortOrder
+    totalProjectsMinistryLevel?: SortOrder
+    totalProjectsStateLevel?: SortOrder
+    totalPrincipalInvestigatorRoles?: SortOrder
+    totalSupervisorRoles?: SortOrder
+    totalResearchMemberRoles?: SortOrder
+    totalSecretaryRoles?: SortOrder
+    totalCouncilMemberRoles?: SortOrder
+  }
+
+  export type EnumAcademicRankNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.AcademicRank | EnumAcademicRankFieldRefInput<$PrismaModel> | null
+    in?: $Enums.AcademicRank[] | ListEnumAcademicRankFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.AcademicRank[] | ListEnumAcademicRankFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumAcademicRankNullableWithAggregatesFilter<$PrismaModel> | $Enums.AcademicRank | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumAcademicRankNullableFilter<$PrismaModel>
+    _max?: NestedEnumAcademicRankNullableFilter<$PrismaModel>
+  }
+
+  export type EnumPublicationTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.PublicationType | EnumPublicationTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.PublicationType[] | ListEnumPublicationTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.PublicationType[] | ListEnumPublicationTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumPublicationTypeFilter<$PrismaModel> | $Enums.PublicationType
+  }
+
+  export type LecturerScalarRelationFilter = {
+    is?: LecturerWhereInput
+    isNot?: LecturerWhereInput
+  }
+
+  export type LecturerPublicationCountOrderByAggregateInput = {
+    id?: SortOrder
+    lecturerId?: SortOrder
+    title?: SortOrder
+    publicationType?: SortOrder
+    venue?: SortOrder
+    publishedAt?: SortOrder
+    doi?: SortOrder
+    url?: SortOrder
+    indexedScopus?: SortOrder
+    indexedIsi?: SortOrder
+    coAuthors?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type LecturerPublicationMaxOrderByAggregateInput = {
+    id?: SortOrder
+    lecturerId?: SortOrder
+    title?: SortOrder
+    publicationType?: SortOrder
+    venue?: SortOrder
+    publishedAt?: SortOrder
+    doi?: SortOrder
+    url?: SortOrder
+    indexedScopus?: SortOrder
+    indexedIsi?: SortOrder
+    coAuthors?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type LecturerPublicationMinOrderByAggregateInput = {
+    id?: SortOrder
+    lecturerId?: SortOrder
+    title?: SortOrder
+    publicationType?: SortOrder
+    venue?: SortOrder
+    publishedAt?: SortOrder
+    doi?: SortOrder
+    url?: SortOrder
+    indexedScopus?: SortOrder
+    indexedIsi?: SortOrder
+    coAuthors?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type EnumPublicationTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.PublicationType | EnumPublicationTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.PublicationType[] | ListEnumPublicationTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.PublicationType[] | ListEnumPublicationTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumPublicationTypeWithAggregatesFilter<$PrismaModel> | $Enums.PublicationType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumPublicationTypeFilter<$PrismaModel>
+    _max?: NestedEnumPublicationTypeFilter<$PrismaModel>
+  }
+
   export type DecimalFilter<$PrismaModel = never> = {
     equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
     in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
@@ -47908,14 +51527,6 @@ export namespace Prisma {
 
   export type RoomSumOrderByAggregateInput = {
     capacity?: SortOrder
-  }
-
-  export type StringNullableListFilter<$PrismaModel = never> = {
-    equals?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    has?: string | StringFieldRefInput<$PrismaModel> | null
-    hasEvery?: string[] | ListStringFieldRefInput<$PrismaModel>
-    hasSome?: string[] | ListStringFieldRefInput<$PrismaModel>
-    isEmpty?: boolean
   }
 
   export type RoomNullableScalarRelationFilter = {
@@ -49068,6 +52679,12 @@ export namespace Prisma {
     connect?: AutoApprovalJobWhereUniqueInput | AutoApprovalJobWhereUniqueInput[]
   }
 
+  export type LecturerCreateNestedOneWithoutUserInput = {
+    create?: XOR<LecturerCreateWithoutUserInput, LecturerUncheckedCreateWithoutUserInput>
+    connectOrCreate?: LecturerCreateOrConnectWithoutUserInput
+    connect?: LecturerWhereUniqueInput
+  }
+
   export type ProjectUncheckedCreateNestedManyWithoutLeaderInput = {
     create?: XOR<ProjectCreateWithoutLeaderInput, ProjectUncheckedCreateWithoutLeaderInput> | ProjectCreateWithoutLeaderInput[] | ProjectUncheckedCreateWithoutLeaderInput[]
     connectOrCreate?: ProjectCreateOrConnectWithoutLeaderInput | ProjectCreateOrConnectWithoutLeaderInput[]
@@ -49192,6 +52809,12 @@ export namespace Prisma {
     connectOrCreate?: AutoApprovalJobCreateOrConnectWithoutDeanInput | AutoApprovalJobCreateOrConnectWithoutDeanInput[]
     createMany?: AutoApprovalJobCreateManyDeanInputEnvelope
     connect?: AutoApprovalJobWhereUniqueInput | AutoApprovalJobWhereUniqueInput[]
+  }
+
+  export type LecturerUncheckedCreateNestedOneWithoutUserInput = {
+    create?: XOR<LecturerCreateWithoutUserInput, LecturerUncheckedCreateWithoutUserInput>
+    connectOrCreate?: LecturerCreateOrConnectWithoutUserInput
+    connect?: LecturerWhereUniqueInput
   }
 
   export type NullableDateTimeFieldUpdateOperationsInput = {
@@ -49488,6 +53111,16 @@ export namespace Prisma {
     deleteMany?: AutoApprovalJobScalarWhereInput | AutoApprovalJobScalarWhereInput[]
   }
 
+  export type LecturerUpdateOneWithoutUserNestedInput = {
+    create?: XOR<LecturerCreateWithoutUserInput, LecturerUncheckedCreateWithoutUserInput>
+    connectOrCreate?: LecturerCreateOrConnectWithoutUserInput
+    upsert?: LecturerUpsertWithoutUserInput
+    disconnect?: LecturerWhereInput | boolean
+    delete?: LecturerWhereInput | boolean
+    connect?: LecturerWhereUniqueInput
+    update?: XOR<XOR<LecturerUpdateToOneWithWhereWithoutUserInput, LecturerUpdateWithoutUserInput>, LecturerUncheckedUpdateWithoutUserInput>
+  }
+
   export type ProjectUncheckedUpdateManyWithoutLeaderNestedInput = {
     create?: XOR<ProjectCreateWithoutLeaderInput, ProjectUncheckedCreateWithoutLeaderInput> | ProjectCreateWithoutLeaderInput[] | ProjectUncheckedCreateWithoutLeaderInput[]
     connectOrCreate?: ProjectCreateOrConnectWithoutLeaderInput | ProjectCreateOrConnectWithoutLeaderInput[]
@@ -49738,6 +53371,16 @@ export namespace Prisma {
     update?: AutoApprovalJobUpdateWithWhereUniqueWithoutDeanInput | AutoApprovalJobUpdateWithWhereUniqueWithoutDeanInput[]
     updateMany?: AutoApprovalJobUpdateManyWithWhereWithoutDeanInput | AutoApprovalJobUpdateManyWithWhereWithoutDeanInput[]
     deleteMany?: AutoApprovalJobScalarWhereInput | AutoApprovalJobScalarWhereInput[]
+  }
+
+  export type LecturerUncheckedUpdateOneWithoutUserNestedInput = {
+    create?: XOR<LecturerCreateWithoutUserInput, LecturerUncheckedCreateWithoutUserInput>
+    connectOrCreate?: LecturerCreateOrConnectWithoutUserInput
+    upsert?: LecturerUpsertWithoutUserInput
+    disconnect?: LecturerWhereInput | boolean
+    delete?: LecturerWhereInput | boolean
+    connect?: LecturerWhereUniqueInput
+    update?: XOR<XOR<LecturerUpdateToOneWithWhereWithoutUserInput, LecturerUpdateWithoutUserInput>, LecturerUncheckedUpdateWithoutUserInput>
   }
 
   export type ProjectCreateNestedManyWithoutCallRoundInput = {
@@ -50704,6 +54347,93 @@ export namespace Prisma {
     upsert?: UserUpsertWithoutCouncilEvaluationsInput
     connect?: UserWhereUniqueInput
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutCouncilEvaluationsInput, UserUpdateWithoutCouncilEvaluationsInput>, UserUncheckedUpdateWithoutCouncilEvaluationsInput>
+  }
+
+  export type LecturerCreateresearchInterestsInput = {
+    set: string[]
+  }
+
+  export type UserCreateNestedOneWithoutLecturerProfileInput = {
+    create?: XOR<UserCreateWithoutLecturerProfileInput, UserUncheckedCreateWithoutLecturerProfileInput>
+    connectOrCreate?: UserCreateOrConnectWithoutLecturerProfileInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type LecturerPublicationCreateNestedManyWithoutLecturerInput = {
+    create?: XOR<LecturerPublicationCreateWithoutLecturerInput, LecturerPublicationUncheckedCreateWithoutLecturerInput> | LecturerPublicationCreateWithoutLecturerInput[] | LecturerPublicationUncheckedCreateWithoutLecturerInput[]
+    connectOrCreate?: LecturerPublicationCreateOrConnectWithoutLecturerInput | LecturerPublicationCreateOrConnectWithoutLecturerInput[]
+    createMany?: LecturerPublicationCreateManyLecturerInputEnvelope
+    connect?: LecturerPublicationWhereUniqueInput | LecturerPublicationWhereUniqueInput[]
+  }
+
+  export type LecturerPublicationUncheckedCreateNestedManyWithoutLecturerInput = {
+    create?: XOR<LecturerPublicationCreateWithoutLecturerInput, LecturerPublicationUncheckedCreateWithoutLecturerInput> | LecturerPublicationCreateWithoutLecturerInput[] | LecturerPublicationUncheckedCreateWithoutLecturerInput[]
+    connectOrCreate?: LecturerPublicationCreateOrConnectWithoutLecturerInput | LecturerPublicationCreateOrConnectWithoutLecturerInput[]
+    createMany?: LecturerPublicationCreateManyLecturerInputEnvelope
+    connect?: LecturerPublicationWhereUniqueInput | LecturerPublicationWhereUniqueInput[]
+  }
+
+  export type NullableEnumAcademicRankFieldUpdateOperationsInput = {
+    set?: $Enums.AcademicRank | null
+  }
+
+  export type LecturerUpdateresearchInterestsInput = {
+    set?: string[]
+    push?: string | string[]
+  }
+
+  export type UserUpdateOneRequiredWithoutLecturerProfileNestedInput = {
+    create?: XOR<UserCreateWithoutLecturerProfileInput, UserUncheckedCreateWithoutLecturerProfileInput>
+    connectOrCreate?: UserCreateOrConnectWithoutLecturerProfileInput
+    upsert?: UserUpsertWithoutLecturerProfileInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutLecturerProfileInput, UserUpdateWithoutLecturerProfileInput>, UserUncheckedUpdateWithoutLecturerProfileInput>
+  }
+
+  export type LecturerPublicationUpdateManyWithoutLecturerNestedInput = {
+    create?: XOR<LecturerPublicationCreateWithoutLecturerInput, LecturerPublicationUncheckedCreateWithoutLecturerInput> | LecturerPublicationCreateWithoutLecturerInput[] | LecturerPublicationUncheckedCreateWithoutLecturerInput[]
+    connectOrCreate?: LecturerPublicationCreateOrConnectWithoutLecturerInput | LecturerPublicationCreateOrConnectWithoutLecturerInput[]
+    upsert?: LecturerPublicationUpsertWithWhereUniqueWithoutLecturerInput | LecturerPublicationUpsertWithWhereUniqueWithoutLecturerInput[]
+    createMany?: LecturerPublicationCreateManyLecturerInputEnvelope
+    set?: LecturerPublicationWhereUniqueInput | LecturerPublicationWhereUniqueInput[]
+    disconnect?: LecturerPublicationWhereUniqueInput | LecturerPublicationWhereUniqueInput[]
+    delete?: LecturerPublicationWhereUniqueInput | LecturerPublicationWhereUniqueInput[]
+    connect?: LecturerPublicationWhereUniqueInput | LecturerPublicationWhereUniqueInput[]
+    update?: LecturerPublicationUpdateWithWhereUniqueWithoutLecturerInput | LecturerPublicationUpdateWithWhereUniqueWithoutLecturerInput[]
+    updateMany?: LecturerPublicationUpdateManyWithWhereWithoutLecturerInput | LecturerPublicationUpdateManyWithWhereWithoutLecturerInput[]
+    deleteMany?: LecturerPublicationScalarWhereInput | LecturerPublicationScalarWhereInput[]
+  }
+
+  export type LecturerPublicationUncheckedUpdateManyWithoutLecturerNestedInput = {
+    create?: XOR<LecturerPublicationCreateWithoutLecturerInput, LecturerPublicationUncheckedCreateWithoutLecturerInput> | LecturerPublicationCreateWithoutLecturerInput[] | LecturerPublicationUncheckedCreateWithoutLecturerInput[]
+    connectOrCreate?: LecturerPublicationCreateOrConnectWithoutLecturerInput | LecturerPublicationCreateOrConnectWithoutLecturerInput[]
+    upsert?: LecturerPublicationUpsertWithWhereUniqueWithoutLecturerInput | LecturerPublicationUpsertWithWhereUniqueWithoutLecturerInput[]
+    createMany?: LecturerPublicationCreateManyLecturerInputEnvelope
+    set?: LecturerPublicationWhereUniqueInput | LecturerPublicationWhereUniqueInput[]
+    disconnect?: LecturerPublicationWhereUniqueInput | LecturerPublicationWhereUniqueInput[]
+    delete?: LecturerPublicationWhereUniqueInput | LecturerPublicationWhereUniqueInput[]
+    connect?: LecturerPublicationWhereUniqueInput | LecturerPublicationWhereUniqueInput[]
+    update?: LecturerPublicationUpdateWithWhereUniqueWithoutLecturerInput | LecturerPublicationUpdateWithWhereUniqueWithoutLecturerInput[]
+    updateMany?: LecturerPublicationUpdateManyWithWhereWithoutLecturerInput | LecturerPublicationUpdateManyWithWhereWithoutLecturerInput[]
+    deleteMany?: LecturerPublicationScalarWhereInput | LecturerPublicationScalarWhereInput[]
+  }
+
+  export type LecturerCreateNestedOneWithoutPublicationsInput = {
+    create?: XOR<LecturerCreateWithoutPublicationsInput, LecturerUncheckedCreateWithoutPublicationsInput>
+    connectOrCreate?: LecturerCreateOrConnectWithoutPublicationsInput
+    connect?: LecturerWhereUniqueInput
+  }
+
+  export type EnumPublicationTypeFieldUpdateOperationsInput = {
+    set?: $Enums.PublicationType
+  }
+
+  export type LecturerUpdateOneRequiredWithoutPublicationsNestedInput = {
+    create?: XOR<LecturerCreateWithoutPublicationsInput, LecturerUncheckedCreateWithoutPublicationsInput>
+    connectOrCreate?: LecturerCreateOrConnectWithoutPublicationsInput
+    upsert?: LecturerUpsertWithoutPublicationsInput
+    connect?: LecturerWhereUniqueInput
+    update?: XOR<XOR<LecturerUpdateToOneWithWhereWithoutPublicationsInput, LecturerUpdateWithoutPublicationsInput>, LecturerUncheckedUpdateWithoutPublicationsInput>
   }
 
   export type ProjectCreateNestedOneWithoutDisbursementsInput = {
@@ -51864,6 +55594,40 @@ export namespace Prisma {
     _max?: NestedEnumReviewDecisionFilter<$PrismaModel>
   }
 
+  export type NestedEnumAcademicRankNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.AcademicRank | EnumAcademicRankFieldRefInput<$PrismaModel> | null
+    in?: $Enums.AcademicRank[] | ListEnumAcademicRankFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.AcademicRank[] | ListEnumAcademicRankFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumAcademicRankNullableFilter<$PrismaModel> | $Enums.AcademicRank | null
+  }
+
+  export type NestedEnumAcademicRankNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.AcademicRank | EnumAcademicRankFieldRefInput<$PrismaModel> | null
+    in?: $Enums.AcademicRank[] | ListEnumAcademicRankFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.AcademicRank[] | ListEnumAcademicRankFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumAcademicRankNullableWithAggregatesFilter<$PrismaModel> | $Enums.AcademicRank | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumAcademicRankNullableFilter<$PrismaModel>
+    _max?: NestedEnumAcademicRankNullableFilter<$PrismaModel>
+  }
+
+  export type NestedEnumPublicationTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.PublicationType | EnumPublicationTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.PublicationType[] | ListEnumPublicationTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.PublicationType[] | ListEnumPublicationTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumPublicationTypeFilter<$PrismaModel> | $Enums.PublicationType
+  }
+
+  export type NestedEnumPublicationTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.PublicationType | EnumPublicationTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.PublicationType[] | ListEnumPublicationTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.PublicationType[] | ListEnumPublicationTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumPublicationTypeWithAggregatesFilter<$PrismaModel> | $Enums.PublicationType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumPublicationTypeFilter<$PrismaModel>
+    _max?: NestedEnumPublicationTypeFilter<$PrismaModel>
+  }
+
   export type NestedDecimalFilter<$PrismaModel = never> = {
     equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
     in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
@@ -52169,6 +55933,7 @@ export namespace Prisma {
     createdDisbursements?: FundingDisbursementCreateNestedManyWithoutCreatedByInput
     approvedDisbursements?: FundingDisbursementCreateNestedManyWithoutApprovedByInput
     autoApprovalJobs?: AutoApprovalJobCreateNestedManyWithoutDeanInput
+    lecturerProfile?: LecturerCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutDepartmentRefInput = {
@@ -52205,6 +55970,7 @@ export namespace Prisma {
     createdDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutCreatedByInput
     approvedDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutApprovedByInput
     autoApprovalJobs?: AutoApprovalJobUncheckedCreateNestedManyWithoutDeanInput
+    lecturerProfile?: LecturerUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutDepartmentRefInput = {
@@ -52664,6 +56430,7 @@ export namespace Prisma {
     createdDisbursements?: FundingDisbursementCreateNestedManyWithoutCreatedByInput
     approvedDisbursements?: FundingDisbursementCreateNestedManyWithoutApprovedByInput
     autoApprovalJobs?: AutoApprovalJobCreateNestedManyWithoutDeanInput
+    lecturerProfile?: LecturerCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutMajorInput = {
@@ -52700,6 +56467,7 @@ export namespace Prisma {
     createdDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutCreatedByInput
     approvedDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutApprovedByInput
     autoApprovalJobs?: AutoApprovalJobUncheckedCreateNestedManyWithoutDeanInput
+    lecturerProfile?: LecturerUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutMajorInput = {
@@ -52961,6 +56729,7 @@ export namespace Prisma {
     createdDisbursements?: FundingDisbursementCreateNestedManyWithoutCreatedByInput
     approvedDisbursements?: FundingDisbursementCreateNestedManyWithoutApprovedByInput
     autoApprovalJobs?: AutoApprovalJobCreateNestedManyWithoutDeanInput
+    lecturerProfile?: LecturerCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutClassInput = {
@@ -52997,6 +56766,7 @@ export namespace Prisma {
     createdDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutCreatedByInput
     approvedDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutApprovedByInput
     autoApprovalJobs?: AutoApprovalJobUncheckedCreateNestedManyWithoutDeanInput
+    lecturerProfile?: LecturerUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutClassInput = {
@@ -53990,6 +57760,59 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type LecturerCreateWithoutUserInput = {
+    id?: string
+    staffId?: string | null
+    academicRank?: $Enums.AcademicRank | null
+    departmentName?: string | null
+    facultyName?: string | null
+    researchInterests?: LecturerCreateresearchInterestsInput | string[]
+    googleScholarUrl?: string | null
+    orcidId?: string | null
+    researchGateUrl?: string | null
+    totalProjectsSchoolLevel?: number
+    totalProjectsMinistryLevel?: number
+    totalProjectsStateLevel?: number
+    totalPrincipalInvestigatorRoles?: number
+    totalSupervisorRoles?: number
+    totalResearchMemberRoles?: number
+    totalSecretaryRoles?: number
+    totalCouncilMemberRoles?: number
+    profileNote?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    publications?: LecturerPublicationCreateNestedManyWithoutLecturerInput
+  }
+
+  export type LecturerUncheckedCreateWithoutUserInput = {
+    id?: string
+    staffId?: string | null
+    academicRank?: $Enums.AcademicRank | null
+    departmentName?: string | null
+    facultyName?: string | null
+    researchInterests?: LecturerCreateresearchInterestsInput | string[]
+    googleScholarUrl?: string | null
+    orcidId?: string | null
+    researchGateUrl?: string | null
+    totalProjectsSchoolLevel?: number
+    totalProjectsMinistryLevel?: number
+    totalProjectsStateLevel?: number
+    totalPrincipalInvestigatorRoles?: number
+    totalSupervisorRoles?: number
+    totalResearchMemberRoles?: number
+    totalSecretaryRoles?: number
+    totalCouncilMemberRoles?: number
+    profileNote?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    publications?: LecturerPublicationUncheckedCreateNestedManyWithoutLecturerInput
+  }
+
+  export type LecturerCreateOrConnectWithoutUserInput = {
+    where: LecturerWhereUniqueInput
+    create: XOR<LecturerCreateWithoutUserInput, LecturerUncheckedCreateWithoutUserInput>
+  }
+
   export type DepartmentUpsertWithoutUsersInput = {
     update: XOR<DepartmentUpdateWithoutUsersInput, DepartmentUncheckedUpdateWithoutUsersInput>
     create: XOR<DepartmentCreateWithoutUsersInput, DepartmentUncheckedCreateWithoutUsersInput>
@@ -54557,6 +58380,65 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"AutoApprovalJob"> | Date | string
     updatedAt?: DateTimeFilter<"AutoApprovalJob"> | Date | string
     completedAt?: DateTimeNullableFilter<"AutoApprovalJob"> | Date | string | null
+  }
+
+  export type LecturerUpsertWithoutUserInput = {
+    update: XOR<LecturerUpdateWithoutUserInput, LecturerUncheckedUpdateWithoutUserInput>
+    create: XOR<LecturerCreateWithoutUserInput, LecturerUncheckedCreateWithoutUserInput>
+    where?: LecturerWhereInput
+  }
+
+  export type LecturerUpdateToOneWithWhereWithoutUserInput = {
+    where?: LecturerWhereInput
+    data: XOR<LecturerUpdateWithoutUserInput, LecturerUncheckedUpdateWithoutUserInput>
+  }
+
+  export type LecturerUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    staffId?: NullableStringFieldUpdateOperationsInput | string | null
+    academicRank?: NullableEnumAcademicRankFieldUpdateOperationsInput | $Enums.AcademicRank | null
+    departmentName?: NullableStringFieldUpdateOperationsInput | string | null
+    facultyName?: NullableStringFieldUpdateOperationsInput | string | null
+    researchInterests?: LecturerUpdateresearchInterestsInput | string[]
+    googleScholarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    orcidId?: NullableStringFieldUpdateOperationsInput | string | null
+    researchGateUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    totalProjectsSchoolLevel?: IntFieldUpdateOperationsInput | number
+    totalProjectsMinistryLevel?: IntFieldUpdateOperationsInput | number
+    totalProjectsStateLevel?: IntFieldUpdateOperationsInput | number
+    totalPrincipalInvestigatorRoles?: IntFieldUpdateOperationsInput | number
+    totalSupervisorRoles?: IntFieldUpdateOperationsInput | number
+    totalResearchMemberRoles?: IntFieldUpdateOperationsInput | number
+    totalSecretaryRoles?: IntFieldUpdateOperationsInput | number
+    totalCouncilMemberRoles?: IntFieldUpdateOperationsInput | number
+    profileNote?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    publications?: LecturerPublicationUpdateManyWithoutLecturerNestedInput
+  }
+
+  export type LecturerUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    staffId?: NullableStringFieldUpdateOperationsInput | string | null
+    academicRank?: NullableEnumAcademicRankFieldUpdateOperationsInput | $Enums.AcademicRank | null
+    departmentName?: NullableStringFieldUpdateOperationsInput | string | null
+    facultyName?: NullableStringFieldUpdateOperationsInput | string | null
+    researchInterests?: LecturerUpdateresearchInterestsInput | string[]
+    googleScholarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    orcidId?: NullableStringFieldUpdateOperationsInput | string | null
+    researchGateUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    totalProjectsSchoolLevel?: IntFieldUpdateOperationsInput | number
+    totalProjectsMinistryLevel?: IntFieldUpdateOperationsInput | number
+    totalProjectsStateLevel?: IntFieldUpdateOperationsInput | number
+    totalPrincipalInvestigatorRoles?: IntFieldUpdateOperationsInput | number
+    totalSupervisorRoles?: IntFieldUpdateOperationsInput | number
+    totalResearchMemberRoles?: IntFieldUpdateOperationsInput | number
+    totalSecretaryRoles?: IntFieldUpdateOperationsInput | number
+    totalCouncilMemberRoles?: IntFieldUpdateOperationsInput | number
+    profileNote?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    publications?: LecturerPublicationUncheckedUpdateManyWithoutLecturerNestedInput
   }
 
   export type ProjectCreateWithoutCallRoundInput = {
@@ -55234,6 +59116,7 @@ export namespace Prisma {
     createdDisbursements?: FundingDisbursementCreateNestedManyWithoutCreatedByInput
     approvedDisbursements?: FundingDisbursementCreateNestedManyWithoutApprovedByInput
     autoApprovalJobs?: AutoApprovalJobCreateNestedManyWithoutDeanInput
+    lecturerProfile?: LecturerCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutLeadProjectsInput = {
@@ -55270,6 +59153,7 @@ export namespace Prisma {
     createdDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutCreatedByInput
     approvedDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutApprovedByInput
     autoApprovalJobs?: AutoApprovalJobUncheckedCreateNestedManyWithoutDeanInput
+    lecturerProfile?: LecturerUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutLeadProjectsInput = {
@@ -55311,6 +59195,7 @@ export namespace Prisma {
     createdDisbursements?: FundingDisbursementCreateNestedManyWithoutCreatedByInput
     approvedDisbursements?: FundingDisbursementCreateNestedManyWithoutApprovedByInput
     autoApprovalJobs?: AutoApprovalJobCreateNestedManyWithoutDeanInput
+    lecturerProfile?: LecturerCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutDeanReviewsInput = {
@@ -55347,6 +59232,7 @@ export namespace Prisma {
     createdDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutCreatedByInput
     approvedDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutApprovedByInput
     autoApprovalJobs?: AutoApprovalJobUncheckedCreateNestedManyWithoutDeanInput
+    lecturerProfile?: LecturerUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutDeanReviewsInput = {
@@ -55691,6 +59577,7 @@ export namespace Prisma {
     createdDisbursements?: FundingDisbursementCreateNestedManyWithoutCreatedByInput
     approvedDisbursements?: FundingDisbursementCreateNestedManyWithoutApprovedByInput
     autoApprovalJobs?: AutoApprovalJobCreateNestedManyWithoutDeanInput
+    lecturerProfile?: LecturerCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutInstructedProjectsInput = {
@@ -55727,6 +59614,7 @@ export namespace Prisma {
     createdDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutCreatedByInput
     approvedDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutApprovedByInput
     autoApprovalJobs?: AutoApprovalJobUncheckedCreateNestedManyWithoutDeanInput
+    lecturerProfile?: LecturerUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutInstructedProjectsInput = {
@@ -55817,6 +59705,7 @@ export namespace Prisma {
     createdDisbursements?: FundingDisbursementUpdateManyWithoutCreatedByNestedInput
     approvedDisbursements?: FundingDisbursementUpdateManyWithoutApprovedByNestedInput
     autoApprovalJobs?: AutoApprovalJobUpdateManyWithoutDeanNestedInput
+    lecturerProfile?: LecturerUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutLeadProjectsInput = {
@@ -55853,6 +59742,7 @@ export namespace Prisma {
     createdDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutCreatedByNestedInput
     approvedDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutApprovedByNestedInput
     autoApprovalJobs?: AutoApprovalJobUncheckedUpdateManyWithoutDeanNestedInput
+    lecturerProfile?: LecturerUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type UserUpsertWithoutDeanReviewsInput = {
@@ -55900,6 +59790,7 @@ export namespace Prisma {
     createdDisbursements?: FundingDisbursementUpdateManyWithoutCreatedByNestedInput
     approvedDisbursements?: FundingDisbursementUpdateManyWithoutApprovedByNestedInput
     autoApprovalJobs?: AutoApprovalJobUpdateManyWithoutDeanNestedInput
+    lecturerProfile?: LecturerUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutDeanReviewsInput = {
@@ -55936,6 +59827,7 @@ export namespace Prisma {
     createdDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutCreatedByNestedInput
     approvedDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutApprovedByNestedInput
     autoApprovalJobs?: AutoApprovalJobUncheckedUpdateManyWithoutDeanNestedInput
+    lecturerProfile?: LecturerUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type CallRoundUpsertWithoutProjectsInput = {
@@ -56254,6 +60146,7 @@ export namespace Prisma {
     createdDisbursements?: FundingDisbursementUpdateManyWithoutCreatedByNestedInput
     approvedDisbursements?: FundingDisbursementUpdateManyWithoutApprovedByNestedInput
     autoApprovalJobs?: AutoApprovalJobUpdateManyWithoutDeanNestedInput
+    lecturerProfile?: LecturerUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutInstructedProjectsInput = {
@@ -56290,6 +60183,7 @@ export namespace Prisma {
     createdDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutCreatedByNestedInput
     approvedDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutApprovedByNestedInput
     autoApprovalJobs?: AutoApprovalJobUncheckedUpdateManyWithoutDeanNestedInput
+    lecturerProfile?: LecturerUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type OfficeMeetingUpsertWithWhereUniqueWithoutProjectInput = {
@@ -56879,6 +60773,7 @@ export namespace Prisma {
     createdDisbursements?: FundingDisbursementCreateNestedManyWithoutCreatedByInput
     approvedDisbursements?: FundingDisbursementCreateNestedManyWithoutApprovedByInput
     autoApprovalJobs?: AutoApprovalJobCreateNestedManyWithoutDeanInput
+    lecturerProfile?: LecturerCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutCouncilEvaluationsInput = {
@@ -56915,6 +60810,7 @@ export namespace Prisma {
     createdDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutCreatedByInput
     approvedDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutApprovedByInput
     autoApprovalJobs?: AutoApprovalJobUncheckedCreateNestedManyWithoutDeanInput
+    lecturerProfile?: LecturerUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutCouncilEvaluationsInput = {
@@ -57030,6 +60926,7 @@ export namespace Prisma {
     createdDisbursements?: FundingDisbursementUpdateManyWithoutCreatedByNestedInput
     approvedDisbursements?: FundingDisbursementUpdateManyWithoutApprovedByNestedInput
     autoApprovalJobs?: AutoApprovalJobUpdateManyWithoutDeanNestedInput
+    lecturerProfile?: LecturerUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCouncilEvaluationsInput = {
@@ -57066,6 +60963,358 @@ export namespace Prisma {
     createdDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutCreatedByNestedInput
     approvedDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutApprovedByNestedInput
     autoApprovalJobs?: AutoApprovalJobUncheckedUpdateManyWithoutDeanNestedInput
+    lecturerProfile?: LecturerUncheckedUpdateOneWithoutUserNestedInput
+  }
+
+  export type UserCreateWithoutLecturerProfileInput = {
+    id?: string
+    code?: string | null
+    name: string
+    email: string
+    password?: string | null
+    dateOfBirth?: Date | string | null
+    gender?: $Enums.Gender | null
+    phone?: string | null
+    address?: string | null
+    role?: $Enums.Role
+    department?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    departmentRef?: DepartmentCreateNestedOneWithoutUsersInput
+    major?: MajorCreateNestedOneWithoutUsersInput
+    class?: ClassCreateNestedOneWithoutUsersInput
+    leadProjects?: ProjectCreateNestedManyWithoutLeaderInput
+    deanReviews?: ProjectCreateNestedManyWithoutDeanReviewerInput
+    councilEvaluations?: CouncilEvaluationCreateNestedManyWithoutCouncilMemberInput
+    registrations?: ProjectRegistrationCreateNestedManyWithoutUserInput
+    instructedRegistrations?: ProjectRegistrationCreateNestedManyWithoutInstructorInput
+    instructedProjects?: ProjectCreateNestedManyWithoutInstructorInput
+    facultyReviews?: ProjectRegistrationCreateNestedManyWithoutFacultyReviewerInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    callRoundInstructors?: CallRoundInstructorCreateNestedManyWithoutInstructorInput
+    callRoundCouncilMembers?: CallRoundCouncilMemberCreateNestedManyWithoutCouncilMemberInput
+    councilAssignments?: CouncilMemberAssignmentCreateNestedManyWithoutCouncilMemberInput
+    officeMeetingsAsInstructor?: OfficeMeetingCreateNestedManyWithoutInstructorInput
+    officeMeetingViews?: OfficeMeetingViewCreateNestedManyWithoutUserInput
+    posts?: PostCreateNestedManyWithoutAuthorInput
+    approvedPosts?: PostCreateNestedManyWithoutApprovedByInput
+    createdDisbursements?: FundingDisbursementCreateNestedManyWithoutCreatedByInput
+    approvedDisbursements?: FundingDisbursementCreateNestedManyWithoutApprovedByInput
+    autoApprovalJobs?: AutoApprovalJobCreateNestedManyWithoutDeanInput
+  }
+
+  export type UserUncheckedCreateWithoutLecturerProfileInput = {
+    id?: string
+    code?: string | null
+    name: string
+    email: string
+    password?: string | null
+    dateOfBirth?: Date | string | null
+    gender?: $Enums.Gender | null
+    phone?: string | null
+    address?: string | null
+    role?: $Enums.Role
+    department?: string | null
+    departmentId?: string | null
+    majorId?: string | null
+    classId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    leadProjects?: ProjectUncheckedCreateNestedManyWithoutLeaderInput
+    deanReviews?: ProjectUncheckedCreateNestedManyWithoutDeanReviewerInput
+    councilEvaluations?: CouncilEvaluationUncheckedCreateNestedManyWithoutCouncilMemberInput
+    registrations?: ProjectRegistrationUncheckedCreateNestedManyWithoutUserInput
+    instructedRegistrations?: ProjectRegistrationUncheckedCreateNestedManyWithoutInstructorInput
+    instructedProjects?: ProjectUncheckedCreateNestedManyWithoutInstructorInput
+    facultyReviews?: ProjectRegistrationUncheckedCreateNestedManyWithoutFacultyReviewerInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    callRoundInstructors?: CallRoundInstructorUncheckedCreateNestedManyWithoutInstructorInput
+    callRoundCouncilMembers?: CallRoundCouncilMemberUncheckedCreateNestedManyWithoutCouncilMemberInput
+    councilAssignments?: CouncilMemberAssignmentUncheckedCreateNestedManyWithoutCouncilMemberInput
+    officeMeetingsAsInstructor?: OfficeMeetingUncheckedCreateNestedManyWithoutInstructorInput
+    officeMeetingViews?: OfficeMeetingViewUncheckedCreateNestedManyWithoutUserInput
+    posts?: PostUncheckedCreateNestedManyWithoutAuthorInput
+    approvedPosts?: PostUncheckedCreateNestedManyWithoutApprovedByInput
+    createdDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutCreatedByInput
+    approvedDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutApprovedByInput
+    autoApprovalJobs?: AutoApprovalJobUncheckedCreateNestedManyWithoutDeanInput
+  }
+
+  export type UserCreateOrConnectWithoutLecturerProfileInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutLecturerProfileInput, UserUncheckedCreateWithoutLecturerProfileInput>
+  }
+
+  export type LecturerPublicationCreateWithoutLecturerInput = {
+    id?: string
+    title: string
+    publicationType?: $Enums.PublicationType
+    venue?: string | null
+    publishedAt?: Date | string | null
+    doi?: string | null
+    url?: string | null
+    indexedScopus?: boolean
+    indexedIsi?: boolean
+    coAuthors?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type LecturerPublicationUncheckedCreateWithoutLecturerInput = {
+    id?: string
+    title: string
+    publicationType?: $Enums.PublicationType
+    venue?: string | null
+    publishedAt?: Date | string | null
+    doi?: string | null
+    url?: string | null
+    indexedScopus?: boolean
+    indexedIsi?: boolean
+    coAuthors?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type LecturerPublicationCreateOrConnectWithoutLecturerInput = {
+    where: LecturerPublicationWhereUniqueInput
+    create: XOR<LecturerPublicationCreateWithoutLecturerInput, LecturerPublicationUncheckedCreateWithoutLecturerInput>
+  }
+
+  export type LecturerPublicationCreateManyLecturerInputEnvelope = {
+    data: LecturerPublicationCreateManyLecturerInput | LecturerPublicationCreateManyLecturerInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type UserUpsertWithoutLecturerProfileInput = {
+    update: XOR<UserUpdateWithoutLecturerProfileInput, UserUncheckedUpdateWithoutLecturerProfileInput>
+    create: XOR<UserCreateWithoutLecturerProfileInput, UserUncheckedCreateWithoutLecturerProfileInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutLecturerProfileInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutLecturerProfileInput, UserUncheckedUpdateWithoutLecturerProfileInput>
+  }
+
+  export type UserUpdateWithoutLecturerProfileInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    departmentRef?: DepartmentUpdateOneWithoutUsersNestedInput
+    major?: MajorUpdateOneWithoutUsersNestedInput
+    class?: ClassUpdateOneWithoutUsersNestedInput
+    leadProjects?: ProjectUpdateManyWithoutLeaderNestedInput
+    deanReviews?: ProjectUpdateManyWithoutDeanReviewerNestedInput
+    councilEvaluations?: CouncilEvaluationUpdateManyWithoutCouncilMemberNestedInput
+    registrations?: ProjectRegistrationUpdateManyWithoutUserNestedInput
+    instructedRegistrations?: ProjectRegistrationUpdateManyWithoutInstructorNestedInput
+    instructedProjects?: ProjectUpdateManyWithoutInstructorNestedInput
+    facultyReviews?: ProjectRegistrationUpdateManyWithoutFacultyReviewerNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    callRoundInstructors?: CallRoundInstructorUpdateManyWithoutInstructorNestedInput
+    callRoundCouncilMembers?: CallRoundCouncilMemberUpdateManyWithoutCouncilMemberNestedInput
+    councilAssignments?: CouncilMemberAssignmentUpdateManyWithoutCouncilMemberNestedInput
+    officeMeetingsAsInstructor?: OfficeMeetingUpdateManyWithoutInstructorNestedInput
+    officeMeetingViews?: OfficeMeetingViewUpdateManyWithoutUserNestedInput
+    posts?: PostUpdateManyWithoutAuthorNestedInput
+    approvedPosts?: PostUpdateManyWithoutApprovedByNestedInput
+    createdDisbursements?: FundingDisbursementUpdateManyWithoutCreatedByNestedInput
+    approvedDisbursements?: FundingDisbursementUpdateManyWithoutApprovedByNestedInput
+    autoApprovalJobs?: AutoApprovalJobUpdateManyWithoutDeanNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutLecturerProfileInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    departmentId?: NullableStringFieldUpdateOperationsInput | string | null
+    majorId?: NullableStringFieldUpdateOperationsInput | string | null
+    classId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    leadProjects?: ProjectUncheckedUpdateManyWithoutLeaderNestedInput
+    deanReviews?: ProjectUncheckedUpdateManyWithoutDeanReviewerNestedInput
+    councilEvaluations?: CouncilEvaluationUncheckedUpdateManyWithoutCouncilMemberNestedInput
+    registrations?: ProjectRegistrationUncheckedUpdateManyWithoutUserNestedInput
+    instructedRegistrations?: ProjectRegistrationUncheckedUpdateManyWithoutInstructorNestedInput
+    instructedProjects?: ProjectUncheckedUpdateManyWithoutInstructorNestedInput
+    facultyReviews?: ProjectRegistrationUncheckedUpdateManyWithoutFacultyReviewerNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    callRoundInstructors?: CallRoundInstructorUncheckedUpdateManyWithoutInstructorNestedInput
+    callRoundCouncilMembers?: CallRoundCouncilMemberUncheckedUpdateManyWithoutCouncilMemberNestedInput
+    councilAssignments?: CouncilMemberAssignmentUncheckedUpdateManyWithoutCouncilMemberNestedInput
+    officeMeetingsAsInstructor?: OfficeMeetingUncheckedUpdateManyWithoutInstructorNestedInput
+    officeMeetingViews?: OfficeMeetingViewUncheckedUpdateManyWithoutUserNestedInput
+    posts?: PostUncheckedUpdateManyWithoutAuthorNestedInput
+    approvedPosts?: PostUncheckedUpdateManyWithoutApprovedByNestedInput
+    createdDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutCreatedByNestedInput
+    approvedDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutApprovedByNestedInput
+    autoApprovalJobs?: AutoApprovalJobUncheckedUpdateManyWithoutDeanNestedInput
+  }
+
+  export type LecturerPublicationUpsertWithWhereUniqueWithoutLecturerInput = {
+    where: LecturerPublicationWhereUniqueInput
+    update: XOR<LecturerPublicationUpdateWithoutLecturerInput, LecturerPublicationUncheckedUpdateWithoutLecturerInput>
+    create: XOR<LecturerPublicationCreateWithoutLecturerInput, LecturerPublicationUncheckedCreateWithoutLecturerInput>
+  }
+
+  export type LecturerPublicationUpdateWithWhereUniqueWithoutLecturerInput = {
+    where: LecturerPublicationWhereUniqueInput
+    data: XOR<LecturerPublicationUpdateWithoutLecturerInput, LecturerPublicationUncheckedUpdateWithoutLecturerInput>
+  }
+
+  export type LecturerPublicationUpdateManyWithWhereWithoutLecturerInput = {
+    where: LecturerPublicationScalarWhereInput
+    data: XOR<LecturerPublicationUpdateManyMutationInput, LecturerPublicationUncheckedUpdateManyWithoutLecturerInput>
+  }
+
+  export type LecturerPublicationScalarWhereInput = {
+    AND?: LecturerPublicationScalarWhereInput | LecturerPublicationScalarWhereInput[]
+    OR?: LecturerPublicationScalarWhereInput[]
+    NOT?: LecturerPublicationScalarWhereInput | LecturerPublicationScalarWhereInput[]
+    id?: StringFilter<"LecturerPublication"> | string
+    lecturerId?: StringFilter<"LecturerPublication"> | string
+    title?: StringFilter<"LecturerPublication"> | string
+    publicationType?: EnumPublicationTypeFilter<"LecturerPublication"> | $Enums.PublicationType
+    venue?: StringNullableFilter<"LecturerPublication"> | string | null
+    publishedAt?: DateTimeNullableFilter<"LecturerPublication"> | Date | string | null
+    doi?: StringNullableFilter<"LecturerPublication"> | string | null
+    url?: StringNullableFilter<"LecturerPublication"> | string | null
+    indexedScopus?: BoolFilter<"LecturerPublication"> | boolean
+    indexedIsi?: BoolFilter<"LecturerPublication"> | boolean
+    coAuthors?: StringNullableFilter<"LecturerPublication"> | string | null
+    createdAt?: DateTimeFilter<"LecturerPublication"> | Date | string
+    updatedAt?: DateTimeFilter<"LecturerPublication"> | Date | string
+  }
+
+  export type LecturerCreateWithoutPublicationsInput = {
+    id?: string
+    staffId?: string | null
+    academicRank?: $Enums.AcademicRank | null
+    departmentName?: string | null
+    facultyName?: string | null
+    researchInterests?: LecturerCreateresearchInterestsInput | string[]
+    googleScholarUrl?: string | null
+    orcidId?: string | null
+    researchGateUrl?: string | null
+    totalProjectsSchoolLevel?: number
+    totalProjectsMinistryLevel?: number
+    totalProjectsStateLevel?: number
+    totalPrincipalInvestigatorRoles?: number
+    totalSupervisorRoles?: number
+    totalResearchMemberRoles?: number
+    totalSecretaryRoles?: number
+    totalCouncilMemberRoles?: number
+    profileNote?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user: UserCreateNestedOneWithoutLecturerProfileInput
+  }
+
+  export type LecturerUncheckedCreateWithoutPublicationsInput = {
+    id?: string
+    userId: string
+    staffId?: string | null
+    academicRank?: $Enums.AcademicRank | null
+    departmentName?: string | null
+    facultyName?: string | null
+    researchInterests?: LecturerCreateresearchInterestsInput | string[]
+    googleScholarUrl?: string | null
+    orcidId?: string | null
+    researchGateUrl?: string | null
+    totalProjectsSchoolLevel?: number
+    totalProjectsMinistryLevel?: number
+    totalProjectsStateLevel?: number
+    totalPrincipalInvestigatorRoles?: number
+    totalSupervisorRoles?: number
+    totalResearchMemberRoles?: number
+    totalSecretaryRoles?: number
+    totalCouncilMemberRoles?: number
+    profileNote?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type LecturerCreateOrConnectWithoutPublicationsInput = {
+    where: LecturerWhereUniqueInput
+    create: XOR<LecturerCreateWithoutPublicationsInput, LecturerUncheckedCreateWithoutPublicationsInput>
+  }
+
+  export type LecturerUpsertWithoutPublicationsInput = {
+    update: XOR<LecturerUpdateWithoutPublicationsInput, LecturerUncheckedUpdateWithoutPublicationsInput>
+    create: XOR<LecturerCreateWithoutPublicationsInput, LecturerUncheckedCreateWithoutPublicationsInput>
+    where?: LecturerWhereInput
+  }
+
+  export type LecturerUpdateToOneWithWhereWithoutPublicationsInput = {
+    where?: LecturerWhereInput
+    data: XOR<LecturerUpdateWithoutPublicationsInput, LecturerUncheckedUpdateWithoutPublicationsInput>
+  }
+
+  export type LecturerUpdateWithoutPublicationsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    staffId?: NullableStringFieldUpdateOperationsInput | string | null
+    academicRank?: NullableEnumAcademicRankFieldUpdateOperationsInput | $Enums.AcademicRank | null
+    departmentName?: NullableStringFieldUpdateOperationsInput | string | null
+    facultyName?: NullableStringFieldUpdateOperationsInput | string | null
+    researchInterests?: LecturerUpdateresearchInterestsInput | string[]
+    googleScholarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    orcidId?: NullableStringFieldUpdateOperationsInput | string | null
+    researchGateUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    totalProjectsSchoolLevel?: IntFieldUpdateOperationsInput | number
+    totalProjectsMinistryLevel?: IntFieldUpdateOperationsInput | number
+    totalProjectsStateLevel?: IntFieldUpdateOperationsInput | number
+    totalPrincipalInvestigatorRoles?: IntFieldUpdateOperationsInput | number
+    totalSupervisorRoles?: IntFieldUpdateOperationsInput | number
+    totalResearchMemberRoles?: IntFieldUpdateOperationsInput | number
+    totalSecretaryRoles?: IntFieldUpdateOperationsInput | number
+    totalCouncilMemberRoles?: IntFieldUpdateOperationsInput | number
+    profileNote?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutLecturerProfileNestedInput
+  }
+
+  export type LecturerUncheckedUpdateWithoutPublicationsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    staffId?: NullableStringFieldUpdateOperationsInput | string | null
+    academicRank?: NullableEnumAcademicRankFieldUpdateOperationsInput | $Enums.AcademicRank | null
+    departmentName?: NullableStringFieldUpdateOperationsInput | string | null
+    facultyName?: NullableStringFieldUpdateOperationsInput | string | null
+    researchInterests?: LecturerUpdateresearchInterestsInput | string[]
+    googleScholarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    orcidId?: NullableStringFieldUpdateOperationsInput | string | null
+    researchGateUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    totalProjectsSchoolLevel?: IntFieldUpdateOperationsInput | number
+    totalProjectsMinistryLevel?: IntFieldUpdateOperationsInput | number
+    totalProjectsStateLevel?: IntFieldUpdateOperationsInput | number
+    totalPrincipalInvestigatorRoles?: IntFieldUpdateOperationsInput | number
+    totalSupervisorRoles?: IntFieldUpdateOperationsInput | number
+    totalResearchMemberRoles?: IntFieldUpdateOperationsInput | number
+    totalSecretaryRoles?: IntFieldUpdateOperationsInput | number
+    totalCouncilMemberRoles?: IntFieldUpdateOperationsInput | number
+    profileNote?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ProjectCreateWithoutDisbursementsInput = {
@@ -57159,6 +61408,7 @@ export namespace Prisma {
     approvedPosts?: PostCreateNestedManyWithoutApprovedByInput
     approvedDisbursements?: FundingDisbursementCreateNestedManyWithoutApprovedByInput
     autoApprovalJobs?: AutoApprovalJobCreateNestedManyWithoutDeanInput
+    lecturerProfile?: LecturerCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutCreatedDisbursementsInput = {
@@ -57195,6 +61445,7 @@ export namespace Prisma {
     approvedPosts?: PostUncheckedCreateNestedManyWithoutApprovedByInput
     approvedDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutApprovedByInput
     autoApprovalJobs?: AutoApprovalJobUncheckedCreateNestedManyWithoutDeanInput
+    lecturerProfile?: LecturerUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutCreatedDisbursementsInput = {
@@ -57236,6 +61487,7 @@ export namespace Prisma {
     approvedPosts?: PostCreateNestedManyWithoutApprovedByInput
     createdDisbursements?: FundingDisbursementCreateNestedManyWithoutCreatedByInput
     autoApprovalJobs?: AutoApprovalJobCreateNestedManyWithoutDeanInput
+    lecturerProfile?: LecturerCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutApprovedDisbursementsInput = {
@@ -57272,6 +61524,7 @@ export namespace Prisma {
     approvedPosts?: PostUncheckedCreateNestedManyWithoutApprovedByInput
     createdDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutCreatedByInput
     autoApprovalJobs?: AutoApprovalJobUncheckedCreateNestedManyWithoutDeanInput
+    lecturerProfile?: LecturerUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutApprovedDisbursementsInput = {
@@ -57387,6 +61640,7 @@ export namespace Prisma {
     approvedPosts?: PostUpdateManyWithoutApprovedByNestedInput
     approvedDisbursements?: FundingDisbursementUpdateManyWithoutApprovedByNestedInput
     autoApprovalJobs?: AutoApprovalJobUpdateManyWithoutDeanNestedInput
+    lecturerProfile?: LecturerUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedDisbursementsInput = {
@@ -57423,6 +61677,7 @@ export namespace Prisma {
     approvedPosts?: PostUncheckedUpdateManyWithoutApprovedByNestedInput
     approvedDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutApprovedByNestedInput
     autoApprovalJobs?: AutoApprovalJobUncheckedUpdateManyWithoutDeanNestedInput
+    lecturerProfile?: LecturerUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type UserUpsertWithoutApprovedDisbursementsInput = {
@@ -57470,6 +61725,7 @@ export namespace Prisma {
     approvedPosts?: PostUpdateManyWithoutApprovedByNestedInput
     createdDisbursements?: FundingDisbursementUpdateManyWithoutCreatedByNestedInput
     autoApprovalJobs?: AutoApprovalJobUpdateManyWithoutDeanNestedInput
+    lecturerProfile?: LecturerUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutApprovedDisbursementsInput = {
@@ -57506,6 +61762,7 @@ export namespace Prisma {
     approvedPosts?: PostUncheckedUpdateManyWithoutApprovedByNestedInput
     createdDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutCreatedByNestedInput
     autoApprovalJobs?: AutoApprovalJobUncheckedUpdateManyWithoutDeanNestedInput
+    lecturerProfile?: LecturerUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type ProjectCreateWithoutExtensionRequestsInput = {
@@ -57662,6 +61919,7 @@ export namespace Prisma {
     createdDisbursements?: FundingDisbursementCreateNestedManyWithoutCreatedByInput
     approvedDisbursements?: FundingDisbursementCreateNestedManyWithoutApprovedByInput
     autoApprovalJobs?: AutoApprovalJobCreateNestedManyWithoutDeanInput
+    lecturerProfile?: LecturerCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutRegistrationsInput = {
@@ -57698,6 +61956,7 @@ export namespace Prisma {
     createdDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutCreatedByInput
     approvedDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutApprovedByInput
     autoApprovalJobs?: AutoApprovalJobUncheckedCreateNestedManyWithoutDeanInput
+    lecturerProfile?: LecturerUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutRegistrationsInput = {
@@ -57739,6 +61998,7 @@ export namespace Prisma {
     createdDisbursements?: FundingDisbursementCreateNestedManyWithoutCreatedByInput
     approvedDisbursements?: FundingDisbursementCreateNestedManyWithoutApprovedByInput
     autoApprovalJobs?: AutoApprovalJobCreateNestedManyWithoutDeanInput
+    lecturerProfile?: LecturerCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutInstructedRegistrationsInput = {
@@ -57775,6 +62035,7 @@ export namespace Prisma {
     createdDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutCreatedByInput
     approvedDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutApprovedByInput
     autoApprovalJobs?: AutoApprovalJobUncheckedCreateNestedManyWithoutDeanInput
+    lecturerProfile?: LecturerUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutInstructedRegistrationsInput = {
@@ -57905,6 +62166,7 @@ export namespace Prisma {
     createdDisbursements?: FundingDisbursementCreateNestedManyWithoutCreatedByInput
     approvedDisbursements?: FundingDisbursementCreateNestedManyWithoutApprovedByInput
     autoApprovalJobs?: AutoApprovalJobCreateNestedManyWithoutDeanInput
+    lecturerProfile?: LecturerCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutFacultyReviewsInput = {
@@ -57941,6 +62203,7 @@ export namespace Prisma {
     createdDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutCreatedByInput
     approvedDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutApprovedByInput
     autoApprovalJobs?: AutoApprovalJobUncheckedCreateNestedManyWithoutDeanInput
+    lecturerProfile?: LecturerUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutFacultyReviewsInput = {
@@ -58010,6 +62273,7 @@ export namespace Prisma {
     createdDisbursements?: FundingDisbursementUpdateManyWithoutCreatedByNestedInput
     approvedDisbursements?: FundingDisbursementUpdateManyWithoutApprovedByNestedInput
     autoApprovalJobs?: AutoApprovalJobUpdateManyWithoutDeanNestedInput
+    lecturerProfile?: LecturerUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutRegistrationsInput = {
@@ -58046,6 +62310,7 @@ export namespace Prisma {
     createdDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutCreatedByNestedInput
     approvedDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutApprovedByNestedInput
     autoApprovalJobs?: AutoApprovalJobUncheckedUpdateManyWithoutDeanNestedInput
+    lecturerProfile?: LecturerUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type UserUpsertWithoutInstructedRegistrationsInput = {
@@ -58093,6 +62358,7 @@ export namespace Prisma {
     createdDisbursements?: FundingDisbursementUpdateManyWithoutCreatedByNestedInput
     approvedDisbursements?: FundingDisbursementUpdateManyWithoutApprovedByNestedInput
     autoApprovalJobs?: AutoApprovalJobUpdateManyWithoutDeanNestedInput
+    lecturerProfile?: LecturerUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutInstructedRegistrationsInput = {
@@ -58129,6 +62395,7 @@ export namespace Prisma {
     createdDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutCreatedByNestedInput
     approvedDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutApprovedByNestedInput
     autoApprovalJobs?: AutoApprovalJobUncheckedUpdateManyWithoutDeanNestedInput
+    lecturerProfile?: LecturerUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type CallRoundUpsertWithoutRegistrationsInput = {
@@ -58271,6 +62538,7 @@ export namespace Prisma {
     createdDisbursements?: FundingDisbursementUpdateManyWithoutCreatedByNestedInput
     approvedDisbursements?: FundingDisbursementUpdateManyWithoutApprovedByNestedInput
     autoApprovalJobs?: AutoApprovalJobUpdateManyWithoutDeanNestedInput
+    lecturerProfile?: LecturerUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutFacultyReviewsInput = {
@@ -58307,6 +62575,7 @@ export namespace Prisma {
     createdDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutCreatedByNestedInput
     approvedDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutApprovedByNestedInput
     autoApprovalJobs?: AutoApprovalJobUncheckedUpdateManyWithoutDeanNestedInput
+    lecturerProfile?: LecturerUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type ProjectCouncilAssignmentUpsertWithoutProjectRegistrationInput = {
@@ -58366,6 +62635,7 @@ export namespace Prisma {
     createdDisbursements?: FundingDisbursementCreateNestedManyWithoutCreatedByInput
     approvedDisbursements?: FundingDisbursementCreateNestedManyWithoutApprovedByInput
     autoApprovalJobs?: AutoApprovalJobCreateNestedManyWithoutDeanInput
+    lecturerProfile?: LecturerCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutNotificationsInput = {
@@ -58402,6 +62672,7 @@ export namespace Prisma {
     createdDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutCreatedByInput
     approvedDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutApprovedByInput
     autoApprovalJobs?: AutoApprovalJobUncheckedCreateNestedManyWithoutDeanInput
+    lecturerProfile?: LecturerUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutNotificationsInput = {
@@ -58454,6 +62725,7 @@ export namespace Prisma {
     createdDisbursements?: FundingDisbursementUpdateManyWithoutCreatedByNestedInput
     approvedDisbursements?: FundingDisbursementUpdateManyWithoutApprovedByNestedInput
     autoApprovalJobs?: AutoApprovalJobUpdateManyWithoutDeanNestedInput
+    lecturerProfile?: LecturerUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutNotificationsInput = {
@@ -58490,6 +62762,7 @@ export namespace Prisma {
     createdDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutCreatedByNestedInput
     approvedDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutApprovedByNestedInput
     autoApprovalJobs?: AutoApprovalJobUncheckedUpdateManyWithoutDeanNestedInput
+    lecturerProfile?: LecturerUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type UserCreateWithoutPostsInput = {
@@ -58526,6 +62799,7 @@ export namespace Prisma {
     createdDisbursements?: FundingDisbursementCreateNestedManyWithoutCreatedByInput
     approvedDisbursements?: FundingDisbursementCreateNestedManyWithoutApprovedByInput
     autoApprovalJobs?: AutoApprovalJobCreateNestedManyWithoutDeanInput
+    lecturerProfile?: LecturerCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutPostsInput = {
@@ -58562,6 +62836,7 @@ export namespace Prisma {
     createdDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutCreatedByInput
     approvedDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutApprovedByInput
     autoApprovalJobs?: AutoApprovalJobUncheckedCreateNestedManyWithoutDeanInput
+    lecturerProfile?: LecturerUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutPostsInput = {
@@ -58634,6 +62909,7 @@ export namespace Prisma {
     createdDisbursements?: FundingDisbursementCreateNestedManyWithoutCreatedByInput
     approvedDisbursements?: FundingDisbursementCreateNestedManyWithoutApprovedByInput
     autoApprovalJobs?: AutoApprovalJobCreateNestedManyWithoutDeanInput
+    lecturerProfile?: LecturerCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutApprovedPostsInput = {
@@ -58670,6 +62946,7 @@ export namespace Prisma {
     createdDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutCreatedByInput
     approvedDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutApprovedByInput
     autoApprovalJobs?: AutoApprovalJobUncheckedCreateNestedManyWithoutDeanInput
+    lecturerProfile?: LecturerUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutApprovedPostsInput = {
@@ -58722,6 +62999,7 @@ export namespace Prisma {
     createdDisbursements?: FundingDisbursementUpdateManyWithoutCreatedByNestedInput
     approvedDisbursements?: FundingDisbursementUpdateManyWithoutApprovedByNestedInput
     autoApprovalJobs?: AutoApprovalJobUpdateManyWithoutDeanNestedInput
+    lecturerProfile?: LecturerUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPostsInput = {
@@ -58758,6 +63036,7 @@ export namespace Prisma {
     createdDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutCreatedByNestedInput
     approvedDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutApprovedByNestedInput
     autoApprovalJobs?: AutoApprovalJobUncheckedUpdateManyWithoutDeanNestedInput
+    lecturerProfile?: LecturerUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type DepartmentUpsertWithoutPostsInput = {
@@ -58842,6 +63121,7 @@ export namespace Prisma {
     createdDisbursements?: FundingDisbursementUpdateManyWithoutCreatedByNestedInput
     approvedDisbursements?: FundingDisbursementUpdateManyWithoutApprovedByNestedInput
     autoApprovalJobs?: AutoApprovalJobUpdateManyWithoutDeanNestedInput
+    lecturerProfile?: LecturerUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutApprovedPostsInput = {
@@ -58878,6 +63158,7 @@ export namespace Prisma {
     createdDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutCreatedByNestedInput
     approvedDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutApprovedByNestedInput
     autoApprovalJobs?: AutoApprovalJobUncheckedUpdateManyWithoutDeanNestedInput
+    lecturerProfile?: LecturerUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type DepartmentCreateWithoutRoomsInput = {
@@ -59093,6 +63374,7 @@ export namespace Prisma {
     createdDisbursements?: FundingDisbursementCreateNestedManyWithoutCreatedByInput
     approvedDisbursements?: FundingDisbursementCreateNestedManyWithoutApprovedByInput
     autoApprovalJobs?: AutoApprovalJobCreateNestedManyWithoutDeanInput
+    lecturerProfile?: LecturerCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutOfficeMeetingsAsInstructorInput = {
@@ -59129,6 +63411,7 @@ export namespace Prisma {
     createdDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutCreatedByInput
     approvedDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutApprovedByInput
     autoApprovalJobs?: AutoApprovalJobUncheckedCreateNestedManyWithoutDeanInput
+    lecturerProfile?: LecturerUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutOfficeMeetingsAsInstructorInput = {
@@ -59297,6 +63580,7 @@ export namespace Prisma {
     createdDisbursements?: FundingDisbursementUpdateManyWithoutCreatedByNestedInput
     approvedDisbursements?: FundingDisbursementUpdateManyWithoutApprovedByNestedInput
     autoApprovalJobs?: AutoApprovalJobUpdateManyWithoutDeanNestedInput
+    lecturerProfile?: LecturerUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutOfficeMeetingsAsInstructorInput = {
@@ -59333,6 +63617,7 @@ export namespace Prisma {
     createdDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutCreatedByNestedInput
     approvedDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutApprovedByNestedInput
     autoApprovalJobs?: AutoApprovalJobUncheckedUpdateManyWithoutDeanNestedInput
+    lecturerProfile?: LecturerUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type RoomUpsertWithoutOfficeMeetingsInput = {
@@ -59453,6 +63738,7 @@ export namespace Prisma {
     createdDisbursements?: FundingDisbursementCreateNestedManyWithoutCreatedByInput
     approvedDisbursements?: FundingDisbursementCreateNestedManyWithoutApprovedByInput
     autoApprovalJobs?: AutoApprovalJobCreateNestedManyWithoutDeanInput
+    lecturerProfile?: LecturerCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutOfficeMeetingViewsInput = {
@@ -59489,6 +63775,7 @@ export namespace Prisma {
     createdDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutCreatedByInput
     approvedDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutApprovedByInput
     autoApprovalJobs?: AutoApprovalJobUncheckedCreateNestedManyWithoutDeanInput
+    lecturerProfile?: LecturerUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutOfficeMeetingViewsInput = {
@@ -59580,6 +63867,7 @@ export namespace Prisma {
     createdDisbursements?: FundingDisbursementUpdateManyWithoutCreatedByNestedInput
     approvedDisbursements?: FundingDisbursementUpdateManyWithoutApprovedByNestedInput
     autoApprovalJobs?: AutoApprovalJobUpdateManyWithoutDeanNestedInput
+    lecturerProfile?: LecturerUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutOfficeMeetingViewsInput = {
@@ -59616,6 +63904,7 @@ export namespace Prisma {
     createdDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutCreatedByNestedInput
     approvedDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutApprovedByNestedInput
     autoApprovalJobs?: AutoApprovalJobUncheckedUpdateManyWithoutDeanNestedInput
+    lecturerProfile?: LecturerUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type CallRoundCreateWithoutAvailableInstructorsInput = {
@@ -59741,6 +64030,7 @@ export namespace Prisma {
     createdDisbursements?: FundingDisbursementCreateNestedManyWithoutCreatedByInput
     approvedDisbursements?: FundingDisbursementCreateNestedManyWithoutApprovedByInput
     autoApprovalJobs?: AutoApprovalJobCreateNestedManyWithoutDeanInput
+    lecturerProfile?: LecturerCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutCallRoundInstructorsInput = {
@@ -59777,6 +64067,7 @@ export namespace Prisma {
     createdDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutCreatedByInput
     approvedDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutApprovedByInput
     autoApprovalJobs?: AutoApprovalJobUncheckedCreateNestedManyWithoutDeanInput
+    lecturerProfile?: LecturerUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutCallRoundInstructorsInput = {
@@ -59924,6 +64215,7 @@ export namespace Prisma {
     createdDisbursements?: FundingDisbursementUpdateManyWithoutCreatedByNestedInput
     approvedDisbursements?: FundingDisbursementUpdateManyWithoutApprovedByNestedInput
     autoApprovalJobs?: AutoApprovalJobUpdateManyWithoutDeanNestedInput
+    lecturerProfile?: LecturerUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCallRoundInstructorsInput = {
@@ -59960,6 +64252,7 @@ export namespace Prisma {
     createdDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutCreatedByNestedInput
     approvedDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutApprovedByNestedInput
     autoApprovalJobs?: AutoApprovalJobUncheckedUpdateManyWithoutDeanNestedInput
+    lecturerProfile?: LecturerUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type CallRoundCreateWithoutAvailableCouncilMembersInput = {
@@ -60085,6 +64378,7 @@ export namespace Prisma {
     createdDisbursements?: FundingDisbursementCreateNestedManyWithoutCreatedByInput
     approvedDisbursements?: FundingDisbursementCreateNestedManyWithoutApprovedByInput
     autoApprovalJobs?: AutoApprovalJobCreateNestedManyWithoutDeanInput
+    lecturerProfile?: LecturerCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutCallRoundCouncilMembersInput = {
@@ -60121,6 +64415,7 @@ export namespace Prisma {
     createdDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutCreatedByInput
     approvedDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutApprovedByInput
     autoApprovalJobs?: AutoApprovalJobUncheckedCreateNestedManyWithoutDeanInput
+    lecturerProfile?: LecturerUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutCallRoundCouncilMembersInput = {
@@ -60268,6 +64563,7 @@ export namespace Prisma {
     createdDisbursements?: FundingDisbursementUpdateManyWithoutCreatedByNestedInput
     approvedDisbursements?: FundingDisbursementUpdateManyWithoutApprovedByNestedInput
     autoApprovalJobs?: AutoApprovalJobUpdateManyWithoutDeanNestedInput
+    lecturerProfile?: LecturerUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCallRoundCouncilMembersInput = {
@@ -60304,6 +64600,7 @@ export namespace Prisma {
     createdDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutCreatedByNestedInput
     approvedDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutApprovedByNestedInput
     autoApprovalJobs?: AutoApprovalJobUncheckedUpdateManyWithoutDeanNestedInput
+    lecturerProfile?: LecturerUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type CallRoundCreateWithoutCouncilsInput = {
@@ -60612,6 +64909,7 @@ export namespace Prisma {
     approvedPosts?: PostCreateNestedManyWithoutApprovedByInput
     createdDisbursements?: FundingDisbursementCreateNestedManyWithoutCreatedByInput
     approvedDisbursements?: FundingDisbursementCreateNestedManyWithoutApprovedByInput
+    lecturerProfile?: LecturerCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutAutoApprovalJobsInput = {
@@ -60648,6 +64946,7 @@ export namespace Prisma {
     approvedPosts?: PostUncheckedCreateNestedManyWithoutApprovedByInput
     createdDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutCreatedByInput
     approvedDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutApprovedByInput
+    lecturerProfile?: LecturerUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutAutoApprovalJobsInput = {
@@ -60700,6 +64999,7 @@ export namespace Prisma {
     approvedPosts?: PostUpdateManyWithoutApprovedByNestedInput
     createdDisbursements?: FundingDisbursementUpdateManyWithoutCreatedByNestedInput
     approvedDisbursements?: FundingDisbursementUpdateManyWithoutApprovedByNestedInput
+    lecturerProfile?: LecturerUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAutoApprovalJobsInput = {
@@ -60736,6 +65036,7 @@ export namespace Prisma {
     approvedPosts?: PostUncheckedUpdateManyWithoutApprovedByNestedInput
     createdDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutCreatedByNestedInput
     approvedDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutApprovedByNestedInput
+    lecturerProfile?: LecturerUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type ReportJobCreateWithoutTemplateInput = {
@@ -60942,6 +65243,7 @@ export namespace Prisma {
     createdDisbursements?: FundingDisbursementCreateNestedManyWithoutCreatedByInput
     approvedDisbursements?: FundingDisbursementCreateNestedManyWithoutApprovedByInput
     autoApprovalJobs?: AutoApprovalJobCreateNestedManyWithoutDeanInput
+    lecturerProfile?: LecturerCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutCouncilAssignmentsInput = {
@@ -60978,6 +65280,7 @@ export namespace Prisma {
     createdDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutCreatedByInput
     approvedDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutApprovedByInput
     autoApprovalJobs?: AutoApprovalJobUncheckedCreateNestedManyWithoutDeanInput
+    lecturerProfile?: LecturerUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutCouncilAssignmentsInput = {
@@ -61065,6 +65368,7 @@ export namespace Prisma {
     createdDisbursements?: FundingDisbursementUpdateManyWithoutCreatedByNestedInput
     approvedDisbursements?: FundingDisbursementUpdateManyWithoutApprovedByNestedInput
     autoApprovalJobs?: AutoApprovalJobUpdateManyWithoutDeanNestedInput
+    lecturerProfile?: LecturerUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCouncilAssignmentsInput = {
@@ -61101,6 +65405,7 @@ export namespace Prisma {
     createdDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutCreatedByNestedInput
     approvedDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutApprovedByNestedInput
     autoApprovalJobs?: AutoApprovalJobUncheckedUpdateManyWithoutDeanNestedInput
+    lecturerProfile?: LecturerUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type CouncilCreateWithoutProjectsInput = {
@@ -61564,6 +65869,7 @@ export namespace Prisma {
     createdDisbursements?: FundingDisbursementUpdateManyWithoutCreatedByNestedInput
     approvedDisbursements?: FundingDisbursementUpdateManyWithoutApprovedByNestedInput
     autoApprovalJobs?: AutoApprovalJobUpdateManyWithoutDeanNestedInput
+    lecturerProfile?: LecturerUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutDepartmentRefInput = {
@@ -61600,6 +65906,7 @@ export namespace Prisma {
     createdDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutCreatedByNestedInput
     approvedDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutApprovedByNestedInput
     autoApprovalJobs?: AutoApprovalJobUncheckedUpdateManyWithoutDeanNestedInput
+    lecturerProfile?: LecturerUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutDepartmentRefInput = {
@@ -61909,6 +66216,7 @@ export namespace Prisma {
     createdDisbursements?: FundingDisbursementUpdateManyWithoutCreatedByNestedInput
     approvedDisbursements?: FundingDisbursementUpdateManyWithoutApprovedByNestedInput
     autoApprovalJobs?: AutoApprovalJobUpdateManyWithoutDeanNestedInput
+    lecturerProfile?: LecturerUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutMajorInput = {
@@ -61945,6 +66253,7 @@ export namespace Prisma {
     createdDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutCreatedByNestedInput
     approvedDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutApprovedByNestedInput
     autoApprovalJobs?: AutoApprovalJobUncheckedUpdateManyWithoutDeanNestedInput
+    lecturerProfile?: LecturerUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutMajorInput = {
@@ -62135,6 +66444,7 @@ export namespace Prisma {
     createdDisbursements?: FundingDisbursementUpdateManyWithoutCreatedByNestedInput
     approvedDisbursements?: FundingDisbursementUpdateManyWithoutApprovedByNestedInput
     autoApprovalJobs?: AutoApprovalJobUpdateManyWithoutDeanNestedInput
+    lecturerProfile?: LecturerUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutClassInput = {
@@ -62171,6 +66481,7 @@ export namespace Prisma {
     createdDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutCreatedByNestedInput
     approvedDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutApprovedByNestedInput
     autoApprovalJobs?: AutoApprovalJobUncheckedUpdateManyWithoutDeanNestedInput
+    lecturerProfile?: LecturerUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutClassInput = {
@@ -64371,6 +68682,66 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     invitationDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type LecturerPublicationCreateManyLecturerInput = {
+    id?: string
+    title: string
+    publicationType?: $Enums.PublicationType
+    venue?: string | null
+    publishedAt?: Date | string | null
+    doi?: string | null
+    url?: string | null
+    indexedScopus?: boolean
+    indexedIsi?: boolean
+    coAuthors?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type LecturerPublicationUpdateWithoutLecturerInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    publicationType?: EnumPublicationTypeFieldUpdateOperationsInput | $Enums.PublicationType
+    venue?: NullableStringFieldUpdateOperationsInput | string | null
+    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    doi?: NullableStringFieldUpdateOperationsInput | string | null
+    url?: NullableStringFieldUpdateOperationsInput | string | null
+    indexedScopus?: BoolFieldUpdateOperationsInput | boolean
+    indexedIsi?: BoolFieldUpdateOperationsInput | boolean
+    coAuthors?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LecturerPublicationUncheckedUpdateWithoutLecturerInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    publicationType?: EnumPublicationTypeFieldUpdateOperationsInput | $Enums.PublicationType
+    venue?: NullableStringFieldUpdateOperationsInput | string | null
+    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    doi?: NullableStringFieldUpdateOperationsInput | string | null
+    url?: NullableStringFieldUpdateOperationsInput | string | null
+    indexedScopus?: BoolFieldUpdateOperationsInput | boolean
+    indexedIsi?: BoolFieldUpdateOperationsInput | boolean
+    coAuthors?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LecturerPublicationUncheckedUpdateManyWithoutLecturerInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    publicationType?: EnumPublicationTypeFieldUpdateOperationsInput | $Enums.PublicationType
+    venue?: NullableStringFieldUpdateOperationsInput | string | null
+    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    doi?: NullableStringFieldUpdateOperationsInput | string | null
+    url?: NullableStringFieldUpdateOperationsInput | string | null
+    indexedScopus?: BoolFieldUpdateOperationsInput | boolean
+    indexedIsi?: BoolFieldUpdateOperationsInput | boolean
+    coAuthors?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type OfficeMeetingCreateManyRoomInput = {

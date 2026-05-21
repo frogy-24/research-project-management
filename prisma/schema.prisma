@@ -99,6 +99,47 @@ enum ReportJobStatus {
   FAILED
 }
 
+enum AcademicRank {
+  BACHELOR
+  MASTER
+  DOCTOR
+  DOCTOR_OF_SCIENCE
+  ASSOCIATE_PROFESSOR
+  PROFESSOR
+}
+
+enum LecturerEmploymentType {
+  FULL_TIME
+  ADJUNCT
+}
+
+enum LecturerWorkingStatus {
+  ACTIVE
+  RETIRED
+  RESIGNED
+}
+
+enum ProjectParticipationLevel {
+  SCHOOL
+  MINISTRY
+  STATE
+}
+
+enum LecturerProjectRole {
+  PRINCIPAL_INVESTIGATOR
+  SUPERVISOR
+  RESEARCH_MEMBER
+  SECRETARY
+  COUNCIL_MEMBER
+}
+
+enum PublicationType {
+  JOURNAL
+  CONFERENCE
+  BOOK_CHAPTER
+  OTHER
+}
+
 model Department {
   id          String      @id @default(cuid())
   code        String      @unique
@@ -177,6 +218,7 @@ model User {
   createdDisbursements       FundingDisbursement[]     @relation("DisbursementCreator")
   approvedDisbursements      FundingDisbursement[]     @relation("DisbursementApprover")
   autoApprovalJobs           AutoApprovalJob[]         @relation("DeanAutoApprovalJobs")
+  lecturerProfile            Lecturer?
 }
 
 model CallRound {
@@ -369,6 +411,76 @@ model CouncilEvaluation {
   createdAt       DateTime       @default(now())
   project         Project        @relation(fields: [projectId], references: [id], onDelete: Cascade)
   councilMember   User           @relation(fields: [councilMemberId], references: [id])
+}
+
+model Lecturer {
+  id                               String                       @id @default(cuid())
+  userId                           String                       @unique
+  user                             User                         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  staffId                          String?                      @unique
+  academicRank                     AcademicRank?
+  positionTitle                    String?
+  workStartDate                    DateTime?
+  yearsOfService                   Int?
+  teachingExperience               String?
+  coursesTaught                    String?
+  teachingYears                    Int?
+  trainingSystem                   String?
+  pedagogyCertificate              String?
+  workHistory                      String?
+  degreeName                       String?
+  degreeMajor                      String?
+  degreeInstitution                String?
+  degreeCountry                    String?
+  degreeYear                       Int?
+  degreeScanUrl                    String?
+  academicTitleYear                Int?
+  academicTitleDecision            String?
+  academicTitleProofUrl            String?
+  organizationMajor                String?
+  positionRole                     String?
+  lecturerType                     LecturerEmploymentType?
+  civilServantCode                 String?
+  civilServantGrade                String?
+  workingStatus                    LecturerWorkingStatus?
+  joinedAt                         DateTime?
+  departmentName                   String?
+  facultyName                      String?
+  researchInterests                String[]                     @default([])
+  googleScholarUrl                 String?
+  orcidId                          String?
+  researchGateUrl                  String?
+  totalProjectsSchoolLevel         Int                          @default(0)
+  totalProjectsMinistryLevel       Int                          @default(0)
+  totalProjectsStateLevel          Int                          @default(0)
+  totalPrincipalInvestigatorRoles  Int                          @default(0)
+  totalSupervisorRoles             Int                          @default(0)
+  totalResearchMemberRoles         Int                          @default(0)
+  totalSecretaryRoles              Int                          @default(0)
+  totalCouncilMemberRoles          Int                          @default(0)
+  profileNote                      String?
+  createdAt                        DateTime                     @default(now())
+  updatedAt                        DateTime                     @updatedAt
+  publications                     LecturerPublication[]
+}
+
+model LecturerPublication {
+  id                 String          @id @default(cuid())
+  lecturerId         String
+  lecturer           Lecturer        @relation(fields: [lecturerId], references: [id], onDelete: Cascade)
+  title              String
+  publicationType    PublicationType @default(JOURNAL)
+  venue              String?
+  publishedAt        DateTime?
+  doi                String?
+  url                String?
+  indexedScopus      Boolean         @default(false)
+  indexedIsi         Boolean         @default(false)
+  coAuthors          String?
+  createdAt          DateTime        @default(now())
+  updatedAt          DateTime        @updatedAt
+
+  @@index([lecturerId, publishedAt])
 }
 
 model FundingDisbursement {

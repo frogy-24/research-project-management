@@ -304,6 +304,46 @@ exports.Prisma.CouncilEvaluationScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
+exports.Prisma.LecturerScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  staffId: 'staffId',
+  academicRank: 'academicRank',
+  departmentName: 'departmentName',
+  facultyName: 'facultyName',
+  researchInterests: 'researchInterests',
+  googleScholarUrl: 'googleScholarUrl',
+  orcidId: 'orcidId',
+  researchGateUrl: 'researchGateUrl',
+  totalProjectsSchoolLevel: 'totalProjectsSchoolLevel',
+  totalProjectsMinistryLevel: 'totalProjectsMinistryLevel',
+  totalProjectsStateLevel: 'totalProjectsStateLevel',
+  totalPrincipalInvestigatorRoles: 'totalPrincipalInvestigatorRoles',
+  totalSupervisorRoles: 'totalSupervisorRoles',
+  totalResearchMemberRoles: 'totalResearchMemberRoles',
+  totalSecretaryRoles: 'totalSecretaryRoles',
+  totalCouncilMemberRoles: 'totalCouncilMemberRoles',
+  profileNote: 'profileNote',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.LecturerPublicationScalarFieldEnum = {
+  id: 'id',
+  lecturerId: 'lecturerId',
+  title: 'title',
+  publicationType: 'publicationType',
+  venue: 'venue',
+  publishedAt: 'publishedAt',
+  doi: 'doi',
+  url: 'url',
+  indexedScopus: 'indexedScopus',
+  indexedIsi: 'indexedIsi',
+  coAuthors: 'coAuthors',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.FundingDisbursementScalarFieldEnum = {
   id: 'id',
   projectId: 'projectId',
@@ -598,6 +638,21 @@ exports.ReviewDecision = exports.$Enums.ReviewDecision = {
   FAIL: 'FAIL'
 };
 
+exports.AcademicRank = exports.$Enums.AcademicRank = {
+  BACHELOR: 'BACHELOR',
+  MASTER: 'MASTER',
+  DOCTOR: 'DOCTOR',
+  ASSOCIATE_PROFESSOR: 'ASSOCIATE_PROFESSOR',
+  PROFESSOR: 'PROFESSOR'
+};
+
+exports.PublicationType = exports.$Enums.PublicationType = {
+  JOURNAL: 'JOURNAL',
+  CONFERENCE: 'CONFERENCE',
+  BOOK_CHAPTER: 'BOOK_CHAPTER',
+  OTHER: 'OTHER'
+};
+
 exports.DisbursementStatus = exports.$Enums.DisbursementStatus = {
   PENDING: 'PENDING',
   APPROVED: 'APPROVED',
@@ -690,6 +745,8 @@ exports.Prisma.ModelName = {
   ProgressReportTemplateItem: 'ProgressReportTemplateItem',
   ProgressReport: 'ProgressReport',
   CouncilEvaluation: 'CouncilEvaluation',
+  Lecturer: 'Lecturer',
+  LecturerPublication: 'LecturerPublication',
   FundingDisbursement: 'FundingDisbursement',
   ExtensionRequest: 'ExtensionRequest',
   ProjectRegistration: 'ProjectRegistration',
