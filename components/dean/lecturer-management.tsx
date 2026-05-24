@@ -812,7 +812,7 @@ export function LecturerManagement() {
                                                                 type="number"
                                                                 min={0}
                                                                 placeholder="Ví dụ: 5"
-                                                                value={field.value ?? ''}
+                                                                value={typeof field.value === 'number' || typeof field.value === 'string' ? field.value : ''}
                                                                 onChange={(e) => {
                                                                     const v = e.target.value;
                                                                     field.onChange(v === '' ? null : Number(v));

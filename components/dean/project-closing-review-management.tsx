@@ -322,7 +322,7 @@ export function DeanProjectClosingReviewManagement() {
             </Card>
 
             <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-                <DialogContent className="w-[min(95vw,1100px)] max-h-[90vh] overflow-y-auto">
+                <DialogContent className="w-[min(95vw,1100px)] max-h-[90vh] overflow-y-auto sm:max-w-1/2">
                     <DialogHeader>
                         <DialogTitle>Xem và duyệt hồ sơ nghiệm thu</DialogTitle>
                         <DialogDescription>

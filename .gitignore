@@ -56,3 +56,5 @@ next-env.d.ts
 
 /.kilo.json
 BC_DATN.docx
+
+/.claude

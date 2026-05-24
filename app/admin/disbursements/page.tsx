@@ -1,5 +1,6 @@
 // app/admin/disbursements/page.tsx
 import { Metadata } from 'next';
+import { DeanDisbursementManagement } from '@/components/disbursements/dean-disbursement-management';
 
 export const metadata: Metadata = {
   title: 'Quản lý Giải ngân | Admin',
@@ -16,14 +17,7 @@ export default function AdminDisbursementsPage() {
         </p>
       </div>
 
-      <div className="rounded-lg border bg-card p-8 text-center">
-        <p className="text-muted-foreground">
-          Trang quản lý giải ngân đang được phát triển...
-        </p>
-        <p className="text-sm text-muted-foreground mt-2">
-          Chức năng: Xem tất cả giải ngân, tạo giải ngân mới, thống kê
-        </p>
-      </div>
+      <DeanDisbursementManagement />
     </div>
   );
 }

@@ -308,11 +308,29 @@ export const AcademicRank: {
   BACHELOR: 'BACHELOR',
   MASTER: 'MASTER',
   DOCTOR: 'DOCTOR',
+  DOCTOR_OF_SCIENCE: 'DOCTOR_OF_SCIENCE',
   ASSOCIATE_PROFESSOR: 'ASSOCIATE_PROFESSOR',
   PROFESSOR: 'PROFESSOR'
 };
 
 export type AcademicRank = (typeof AcademicRank)[keyof typeof AcademicRank]
+
+
+export const LecturerEmploymentType: {
+  FULL_TIME: 'FULL_TIME',
+  ADJUNCT: 'ADJUNCT'
+};
+
+export type LecturerEmploymentType = (typeof LecturerEmploymentType)[keyof typeof LecturerEmploymentType]
+
+
+export const LecturerWorkingStatus: {
+  ACTIVE: 'ACTIVE',
+  RETIRED: 'RETIRED',
+  RESIGNED: 'RESIGNED'
+};
+
+export type LecturerWorkingStatus = (typeof LecturerWorkingStatus)[keyof typeof LecturerWorkingStatus]
 
 
 export const ProjectParticipationLevel: {
@@ -456,6 +474,14 @@ export const ReportJobStatus: typeof $Enums.ReportJobStatus
 export type AcademicRank = $Enums.AcademicRank
 
 export const AcademicRank: typeof $Enums.AcademicRank
+
+export type LecturerEmploymentType = $Enums.LecturerEmploymentType
+
+export const LecturerEmploymentType: typeof $Enums.LecturerEmploymentType
+
+export type LecturerWorkingStatus = $Enums.LecturerWorkingStatus
+
+export const LecturerWorkingStatus: typeof $Enums.LecturerWorkingStatus
 
 export type ProjectParticipationLevel = $Enums.ProjectParticipationLevel
 
@@ -20241,6 +20267,10 @@ export namespace Prisma {
   }
 
   export type LecturerAvgAggregateOutputType = {
+    yearsOfService: number | null
+    teachingYears: number | null
+    degreeYear: number | null
+    academicTitleYear: number | null
     totalProjectsSchoolLevel: number | null
     totalProjectsMinistryLevel: number | null
     totalProjectsStateLevel: number | null
@@ -20252,6 +20282,10 @@ export namespace Prisma {
   }
 
   export type LecturerSumAggregateOutputType = {
+    yearsOfService: number | null
+    teachingYears: number | null
+    degreeYear: number | null
+    academicTitleYear: number | null
     totalProjectsSchoolLevel: number | null
     totalProjectsMinistryLevel: number | null
     totalProjectsStateLevel: number | null
@@ -20267,6 +20301,31 @@ export namespace Prisma {
     userId: string | null
     staffId: string | null
     academicRank: $Enums.AcademicRank | null
+    positionTitle: string | null
+    workStartDate: Date | null
+    yearsOfService: number | null
+    teachingExperience: string | null
+    coursesTaught: string | null
+    teachingYears: number | null
+    trainingSystem: string | null
+    pedagogyCertificate: string | null
+    workHistory: string | null
+    degreeName: string | null
+    degreeMajor: string | null
+    degreeInstitution: string | null
+    degreeCountry: string | null
+    degreeYear: number | null
+    degreeScanUrl: string | null
+    academicTitleYear: number | null
+    academicTitleDecision: string | null
+    academicTitleProofUrl: string | null
+    organizationMajor: string | null
+    positionRole: string | null
+    lecturerType: $Enums.LecturerEmploymentType | null
+    civilServantCode: string | null
+    civilServantGrade: string | null
+    workingStatus: $Enums.LecturerWorkingStatus | null
+    joinedAt: Date | null
     departmentName: string | null
     facultyName: string | null
     googleScholarUrl: string | null
@@ -20290,6 +20349,31 @@ export namespace Prisma {
     userId: string | null
     staffId: string | null
     academicRank: $Enums.AcademicRank | null
+    positionTitle: string | null
+    workStartDate: Date | null
+    yearsOfService: number | null
+    teachingExperience: string | null
+    coursesTaught: string | null
+    teachingYears: number | null
+    trainingSystem: string | null
+    pedagogyCertificate: string | null
+    workHistory: string | null
+    degreeName: string | null
+    degreeMajor: string | null
+    degreeInstitution: string | null
+    degreeCountry: string | null
+    degreeYear: number | null
+    degreeScanUrl: string | null
+    academicTitleYear: number | null
+    academicTitleDecision: string | null
+    academicTitleProofUrl: string | null
+    organizationMajor: string | null
+    positionRole: string | null
+    lecturerType: $Enums.LecturerEmploymentType | null
+    civilServantCode: string | null
+    civilServantGrade: string | null
+    workingStatus: $Enums.LecturerWorkingStatus | null
+    joinedAt: Date | null
     departmentName: string | null
     facultyName: string | null
     googleScholarUrl: string | null
@@ -20313,6 +20397,31 @@ export namespace Prisma {
     userId: number
     staffId: number
     academicRank: number
+    positionTitle: number
+    workStartDate: number
+    yearsOfService: number
+    teachingExperience: number
+    coursesTaught: number
+    teachingYears: number
+    trainingSystem: number
+    pedagogyCertificate: number
+    workHistory: number
+    degreeName: number
+    degreeMajor: number
+    degreeInstitution: number
+    degreeCountry: number
+    degreeYear: number
+    degreeScanUrl: number
+    academicTitleYear: number
+    academicTitleDecision: number
+    academicTitleProofUrl: number
+    organizationMajor: number
+    positionRole: number
+    lecturerType: number
+    civilServantCode: number
+    civilServantGrade: number
+    workingStatus: number
+    joinedAt: number
     departmentName: number
     facultyName: number
     researchInterests: number
@@ -20335,6 +20444,10 @@ export namespace Prisma {
 
 
   export type LecturerAvgAggregateInputType = {
+    yearsOfService?: true
+    teachingYears?: true
+    degreeYear?: true
+    academicTitleYear?: true
     totalProjectsSchoolLevel?: true
     totalProjectsMinistryLevel?: true
     totalProjectsStateLevel?: true
@@ -20346,6 +20459,10 @@ export namespace Prisma {
   }
 
   export type LecturerSumAggregateInputType = {
+    yearsOfService?: true
+    teachingYears?: true
+    degreeYear?: true
+    academicTitleYear?: true
     totalProjectsSchoolLevel?: true
     totalProjectsMinistryLevel?: true
     totalProjectsStateLevel?: true
@@ -20361,6 +20478,31 @@ export namespace Prisma {
     userId?: true
     staffId?: true
     academicRank?: true
+    positionTitle?: true
+    workStartDate?: true
+    yearsOfService?: true
+    teachingExperience?: true
+    coursesTaught?: true
+    teachingYears?: true
+    trainingSystem?: true
+    pedagogyCertificate?: true
+    workHistory?: true
+    degreeName?: true
+    degreeMajor?: true
+    degreeInstitution?: true
+    degreeCountry?: true
+    degreeYear?: true
+    degreeScanUrl?: true
+    academicTitleYear?: true
+    academicTitleDecision?: true
+    academicTitleProofUrl?: true
+    organizationMajor?: true
+    positionRole?: true
+    lecturerType?: true
+    civilServantCode?: true
+    civilServantGrade?: true
+    workingStatus?: true
+    joinedAt?: true
     departmentName?: true
     facultyName?: true
     googleScholarUrl?: true
@@ -20384,6 +20526,31 @@ export namespace Prisma {
     userId?: true
     staffId?: true
     academicRank?: true
+    positionTitle?: true
+    workStartDate?: true
+    yearsOfService?: true
+    teachingExperience?: true
+    coursesTaught?: true
+    teachingYears?: true
+    trainingSystem?: true
+    pedagogyCertificate?: true
+    workHistory?: true
+    degreeName?: true
+    degreeMajor?: true
+    degreeInstitution?: true
+    degreeCountry?: true
+    degreeYear?: true
+    degreeScanUrl?: true
+    academicTitleYear?: true
+    academicTitleDecision?: true
+    academicTitleProofUrl?: true
+    organizationMajor?: true
+    positionRole?: true
+    lecturerType?: true
+    civilServantCode?: true
+    civilServantGrade?: true
+    workingStatus?: true
+    joinedAt?: true
     departmentName?: true
     facultyName?: true
     googleScholarUrl?: true
@@ -20407,6 +20574,31 @@ export namespace Prisma {
     userId?: true
     staffId?: true
     academicRank?: true
+    positionTitle?: true
+    workStartDate?: true
+    yearsOfService?: true
+    teachingExperience?: true
+    coursesTaught?: true
+    teachingYears?: true
+    trainingSystem?: true
+    pedagogyCertificate?: true
+    workHistory?: true
+    degreeName?: true
+    degreeMajor?: true
+    degreeInstitution?: true
+    degreeCountry?: true
+    degreeYear?: true
+    degreeScanUrl?: true
+    academicTitleYear?: true
+    academicTitleDecision?: true
+    academicTitleProofUrl?: true
+    organizationMajor?: true
+    positionRole?: true
+    lecturerType?: true
+    civilServantCode?: true
+    civilServantGrade?: true
+    workingStatus?: true
+    joinedAt?: true
     departmentName?: true
     facultyName?: true
     researchInterests?: true
@@ -20518,6 +20710,31 @@ export namespace Prisma {
     userId: string
     staffId: string | null
     academicRank: $Enums.AcademicRank | null
+    positionTitle: string | null
+    workStartDate: Date | null
+    yearsOfService: number | null
+    teachingExperience: string | null
+    coursesTaught: string | null
+    teachingYears: number | null
+    trainingSystem: string | null
+    pedagogyCertificate: string | null
+    workHistory: string | null
+    degreeName: string | null
+    degreeMajor: string | null
+    degreeInstitution: string | null
+    degreeCountry: string | null
+    degreeYear: number | null
+    degreeScanUrl: string | null
+    academicTitleYear: number | null
+    academicTitleDecision: string | null
+    academicTitleProofUrl: string | null
+    organizationMajor: string | null
+    positionRole: string | null
+    lecturerType: $Enums.LecturerEmploymentType | null
+    civilServantCode: string | null
+    civilServantGrade: string | null
+    workingStatus: $Enums.LecturerWorkingStatus | null
+    joinedAt: Date | null
     departmentName: string | null
     facultyName: string | null
     researchInterests: string[]
@@ -20561,6 +20778,31 @@ export namespace Prisma {
     userId?: boolean
     staffId?: boolean
     academicRank?: boolean
+    positionTitle?: boolean
+    workStartDate?: boolean
+    yearsOfService?: boolean
+    teachingExperience?: boolean
+    coursesTaught?: boolean
+    teachingYears?: boolean
+    trainingSystem?: boolean
+    pedagogyCertificate?: boolean
+    workHistory?: boolean
+    degreeName?: boolean
+    degreeMajor?: boolean
+    degreeInstitution?: boolean
+    degreeCountry?: boolean
+    degreeYear?: boolean
+    degreeScanUrl?: boolean
+    academicTitleYear?: boolean
+    academicTitleDecision?: boolean
+    academicTitleProofUrl?: boolean
+    organizationMajor?: boolean
+    positionRole?: boolean
+    lecturerType?: boolean
+    civilServantCode?: boolean
+    civilServantGrade?: boolean
+    workingStatus?: boolean
+    joinedAt?: boolean
     departmentName?: boolean
     facultyName?: boolean
     researchInterests?: boolean
@@ -20588,6 +20830,31 @@ export namespace Prisma {
     userId?: boolean
     staffId?: boolean
     academicRank?: boolean
+    positionTitle?: boolean
+    workStartDate?: boolean
+    yearsOfService?: boolean
+    teachingExperience?: boolean
+    coursesTaught?: boolean
+    teachingYears?: boolean
+    trainingSystem?: boolean
+    pedagogyCertificate?: boolean
+    workHistory?: boolean
+    degreeName?: boolean
+    degreeMajor?: boolean
+    degreeInstitution?: boolean
+    degreeCountry?: boolean
+    degreeYear?: boolean
+    degreeScanUrl?: boolean
+    academicTitleYear?: boolean
+    academicTitleDecision?: boolean
+    academicTitleProofUrl?: boolean
+    organizationMajor?: boolean
+    positionRole?: boolean
+    lecturerType?: boolean
+    civilServantCode?: boolean
+    civilServantGrade?: boolean
+    workingStatus?: boolean
+    joinedAt?: boolean
     departmentName?: boolean
     facultyName?: boolean
     researchInterests?: boolean
@@ -20613,6 +20880,31 @@ export namespace Prisma {
     userId?: boolean
     staffId?: boolean
     academicRank?: boolean
+    positionTitle?: boolean
+    workStartDate?: boolean
+    yearsOfService?: boolean
+    teachingExperience?: boolean
+    coursesTaught?: boolean
+    teachingYears?: boolean
+    trainingSystem?: boolean
+    pedagogyCertificate?: boolean
+    workHistory?: boolean
+    degreeName?: boolean
+    degreeMajor?: boolean
+    degreeInstitution?: boolean
+    degreeCountry?: boolean
+    degreeYear?: boolean
+    degreeScanUrl?: boolean
+    academicTitleYear?: boolean
+    academicTitleDecision?: boolean
+    academicTitleProofUrl?: boolean
+    organizationMajor?: boolean
+    positionRole?: boolean
+    lecturerType?: boolean
+    civilServantCode?: boolean
+    civilServantGrade?: boolean
+    workingStatus?: boolean
+    joinedAt?: boolean
     departmentName?: boolean
     facultyName?: boolean
     researchInterests?: boolean
@@ -20638,6 +20930,31 @@ export namespace Prisma {
     userId?: boolean
     staffId?: boolean
     academicRank?: boolean
+    positionTitle?: boolean
+    workStartDate?: boolean
+    yearsOfService?: boolean
+    teachingExperience?: boolean
+    coursesTaught?: boolean
+    teachingYears?: boolean
+    trainingSystem?: boolean
+    pedagogyCertificate?: boolean
+    workHistory?: boolean
+    degreeName?: boolean
+    degreeMajor?: boolean
+    degreeInstitution?: boolean
+    degreeCountry?: boolean
+    degreeYear?: boolean
+    degreeScanUrl?: boolean
+    academicTitleYear?: boolean
+    academicTitleDecision?: boolean
+    academicTitleProofUrl?: boolean
+    organizationMajor?: boolean
+    positionRole?: boolean
+    lecturerType?: boolean
+    civilServantCode?: boolean
+    civilServantGrade?: boolean
+    workingStatus?: boolean
+    joinedAt?: boolean
     departmentName?: boolean
     facultyName?: boolean
     researchInterests?: boolean
@@ -20657,7 +20974,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type LecturerOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "staffId" | "academicRank" | "departmentName" | "facultyName" | "researchInterests" | "googleScholarUrl" | "orcidId" | "researchGateUrl" | "totalProjectsSchoolLevel" | "totalProjectsMinistryLevel" | "totalProjectsStateLevel" | "totalPrincipalInvestigatorRoles" | "totalSupervisorRoles" | "totalResearchMemberRoles" | "totalSecretaryRoles" | "totalCouncilMemberRoles" | "profileNote" | "createdAt" | "updatedAt", ExtArgs["result"]["lecturer"]>
+  export type LecturerOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "staffId" | "academicRank" | "positionTitle" | "workStartDate" | "yearsOfService" | "teachingExperience" | "coursesTaught" | "teachingYears" | "trainingSystem" | "pedagogyCertificate" | "workHistory" | "degreeName" | "degreeMajor" | "degreeInstitution" | "degreeCountry" | "degreeYear" | "degreeScanUrl" | "academicTitleYear" | "academicTitleDecision" | "academicTitleProofUrl" | "organizationMajor" | "positionRole" | "lecturerType" | "civilServantCode" | "civilServantGrade" | "workingStatus" | "joinedAt" | "departmentName" | "facultyName" | "researchInterests" | "googleScholarUrl" | "orcidId" | "researchGateUrl" | "totalProjectsSchoolLevel" | "totalProjectsMinistryLevel" | "totalProjectsStateLevel" | "totalPrincipalInvestigatorRoles" | "totalSupervisorRoles" | "totalResearchMemberRoles" | "totalSecretaryRoles" | "totalCouncilMemberRoles" | "profileNote" | "createdAt" | "updatedAt", ExtArgs["result"]["lecturer"]>
   export type LecturerInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
     publications?: boolean | Lecturer$publicationsArgs<ExtArgs>
@@ -20681,6 +20998,31 @@ export namespace Prisma {
       userId: string
       staffId: string | null
       academicRank: $Enums.AcademicRank | null
+      positionTitle: string | null
+      workStartDate: Date | null
+      yearsOfService: number | null
+      teachingExperience: string | null
+      coursesTaught: string | null
+      teachingYears: number | null
+      trainingSystem: string | null
+      pedagogyCertificate: string | null
+      workHistory: string | null
+      degreeName: string | null
+      degreeMajor: string | null
+      degreeInstitution: string | null
+      degreeCountry: string | null
+      degreeYear: number | null
+      degreeScanUrl: string | null
+      academicTitleYear: number | null
+      academicTitleDecision: string | null
+      academicTitleProofUrl: string | null
+      organizationMajor: string | null
+      positionRole: string | null
+      lecturerType: $Enums.LecturerEmploymentType | null
+      civilServantCode: string | null
+      civilServantGrade: string | null
+      workingStatus: $Enums.LecturerWorkingStatus | null
+      joinedAt: Date | null
       departmentName: string | null
       facultyName: string | null
       researchInterests: string[]
@@ -21127,6 +21469,31 @@ export namespace Prisma {
     readonly userId: FieldRef<"Lecturer", 'String'>
     readonly staffId: FieldRef<"Lecturer", 'String'>
     readonly academicRank: FieldRef<"Lecturer", 'AcademicRank'>
+    readonly positionTitle: FieldRef<"Lecturer", 'String'>
+    readonly workStartDate: FieldRef<"Lecturer", 'DateTime'>
+    readonly yearsOfService: FieldRef<"Lecturer", 'Int'>
+    readonly teachingExperience: FieldRef<"Lecturer", 'String'>
+    readonly coursesTaught: FieldRef<"Lecturer", 'String'>
+    readonly teachingYears: FieldRef<"Lecturer", 'Int'>
+    readonly trainingSystem: FieldRef<"Lecturer", 'String'>
+    readonly pedagogyCertificate: FieldRef<"Lecturer", 'String'>
+    readonly workHistory: FieldRef<"Lecturer", 'String'>
+    readonly degreeName: FieldRef<"Lecturer", 'String'>
+    readonly degreeMajor: FieldRef<"Lecturer", 'String'>
+    readonly degreeInstitution: FieldRef<"Lecturer", 'String'>
+    readonly degreeCountry: FieldRef<"Lecturer", 'String'>
+    readonly degreeYear: FieldRef<"Lecturer", 'Int'>
+    readonly degreeScanUrl: FieldRef<"Lecturer", 'String'>
+    readonly academicTitleYear: FieldRef<"Lecturer", 'Int'>
+    readonly academicTitleDecision: FieldRef<"Lecturer", 'String'>
+    readonly academicTitleProofUrl: FieldRef<"Lecturer", 'String'>
+    readonly organizationMajor: FieldRef<"Lecturer", 'String'>
+    readonly positionRole: FieldRef<"Lecturer", 'String'>
+    readonly lecturerType: FieldRef<"Lecturer", 'LecturerEmploymentType'>
+    readonly civilServantCode: FieldRef<"Lecturer", 'String'>
+    readonly civilServantGrade: FieldRef<"Lecturer", 'String'>
+    readonly workingStatus: FieldRef<"Lecturer", 'LecturerWorkingStatus'>
+    readonly joinedAt: FieldRef<"Lecturer", 'DateTime'>
     readonly departmentName: FieldRef<"Lecturer", 'String'>
     readonly facultyName: FieldRef<"Lecturer", 'String'>
     readonly researchInterests: FieldRef<"Lecturer", 'String[]'>
@@ -42675,6 +43042,31 @@ export namespace Prisma {
     userId: 'userId',
     staffId: 'staffId',
     academicRank: 'academicRank',
+    positionTitle: 'positionTitle',
+    workStartDate: 'workStartDate',
+    yearsOfService: 'yearsOfService',
+    teachingExperience: 'teachingExperience',
+    coursesTaught: 'coursesTaught',
+    teachingYears: 'teachingYears',
+    trainingSystem: 'trainingSystem',
+    pedagogyCertificate: 'pedagogyCertificate',
+    workHistory: 'workHistory',
+    degreeName: 'degreeName',
+    degreeMajor: 'degreeMajor',
+    degreeInstitution: 'degreeInstitution',
+    degreeCountry: 'degreeCountry',
+    degreeYear: 'degreeYear',
+    degreeScanUrl: 'degreeScanUrl',
+    academicTitleYear: 'academicTitleYear',
+    academicTitleDecision: 'academicTitleDecision',
+    academicTitleProofUrl: 'academicTitleProofUrl',
+    organizationMajor: 'organizationMajor',
+    positionRole: 'positionRole',
+    lecturerType: 'lecturerType',
+    civilServantCode: 'civilServantCode',
+    civilServantGrade: 'civilServantGrade',
+    workingStatus: 'workingStatus',
+    joinedAt: 'joinedAt',
     departmentName: 'departmentName',
     facultyName: 'facultyName',
     researchInterests: 'researchInterests',
@@ -43232,6 +43624,34 @@ export namespace Prisma {
    * Reference to a field of type 'AcademicRank[]'
    */
   export type ListEnumAcademicRankFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AcademicRank[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'LecturerEmploymentType'
+   */
+  export type EnumLecturerEmploymentTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'LecturerEmploymentType'>
+    
+
+
+  /**
+   * Reference to a field of type 'LecturerEmploymentType[]'
+   */
+  export type ListEnumLecturerEmploymentTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'LecturerEmploymentType[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'LecturerWorkingStatus'
+   */
+  export type EnumLecturerWorkingStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'LecturerWorkingStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'LecturerWorkingStatus[]'
+   */
+  export type ListEnumLecturerWorkingStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'LecturerWorkingStatus[]'>
     
 
 
@@ -44680,6 +45100,31 @@ export namespace Prisma {
     userId?: StringFilter<"Lecturer"> | string
     staffId?: StringNullableFilter<"Lecturer"> | string | null
     academicRank?: EnumAcademicRankNullableFilter<"Lecturer"> | $Enums.AcademicRank | null
+    positionTitle?: StringNullableFilter<"Lecturer"> | string | null
+    workStartDate?: DateTimeNullableFilter<"Lecturer"> | Date | string | null
+    yearsOfService?: IntNullableFilter<"Lecturer"> | number | null
+    teachingExperience?: StringNullableFilter<"Lecturer"> | string | null
+    coursesTaught?: StringNullableFilter<"Lecturer"> | string | null
+    teachingYears?: IntNullableFilter<"Lecturer"> | number | null
+    trainingSystem?: StringNullableFilter<"Lecturer"> | string | null
+    pedagogyCertificate?: StringNullableFilter<"Lecturer"> | string | null
+    workHistory?: StringNullableFilter<"Lecturer"> | string | null
+    degreeName?: StringNullableFilter<"Lecturer"> | string | null
+    degreeMajor?: StringNullableFilter<"Lecturer"> | string | null
+    degreeInstitution?: StringNullableFilter<"Lecturer"> | string | null
+    degreeCountry?: StringNullableFilter<"Lecturer"> | string | null
+    degreeYear?: IntNullableFilter<"Lecturer"> | number | null
+    degreeScanUrl?: StringNullableFilter<"Lecturer"> | string | null
+    academicTitleYear?: IntNullableFilter<"Lecturer"> | number | null
+    academicTitleDecision?: StringNullableFilter<"Lecturer"> | string | null
+    academicTitleProofUrl?: StringNullableFilter<"Lecturer"> | string | null
+    organizationMajor?: StringNullableFilter<"Lecturer"> | string | null
+    positionRole?: StringNullableFilter<"Lecturer"> | string | null
+    lecturerType?: EnumLecturerEmploymentTypeNullableFilter<"Lecturer"> | $Enums.LecturerEmploymentType | null
+    civilServantCode?: StringNullableFilter<"Lecturer"> | string | null
+    civilServantGrade?: StringNullableFilter<"Lecturer"> | string | null
+    workingStatus?: EnumLecturerWorkingStatusNullableFilter<"Lecturer"> | $Enums.LecturerWorkingStatus | null
+    joinedAt?: DateTimeNullableFilter<"Lecturer"> | Date | string | null
     departmentName?: StringNullableFilter<"Lecturer"> | string | null
     facultyName?: StringNullableFilter<"Lecturer"> | string | null
     researchInterests?: StringNullableListFilter<"Lecturer">
@@ -44706,6 +45151,31 @@ export namespace Prisma {
     userId?: SortOrder
     staffId?: SortOrderInput | SortOrder
     academicRank?: SortOrderInput | SortOrder
+    positionTitle?: SortOrderInput | SortOrder
+    workStartDate?: SortOrderInput | SortOrder
+    yearsOfService?: SortOrderInput | SortOrder
+    teachingExperience?: SortOrderInput | SortOrder
+    coursesTaught?: SortOrderInput | SortOrder
+    teachingYears?: SortOrderInput | SortOrder
+    trainingSystem?: SortOrderInput | SortOrder
+    pedagogyCertificate?: SortOrderInput | SortOrder
+    workHistory?: SortOrderInput | SortOrder
+    degreeName?: SortOrderInput | SortOrder
+    degreeMajor?: SortOrderInput | SortOrder
+    degreeInstitution?: SortOrderInput | SortOrder
+    degreeCountry?: SortOrderInput | SortOrder
+    degreeYear?: SortOrderInput | SortOrder
+    degreeScanUrl?: SortOrderInput | SortOrder
+    academicTitleYear?: SortOrderInput | SortOrder
+    academicTitleDecision?: SortOrderInput | SortOrder
+    academicTitleProofUrl?: SortOrderInput | SortOrder
+    organizationMajor?: SortOrderInput | SortOrder
+    positionRole?: SortOrderInput | SortOrder
+    lecturerType?: SortOrderInput | SortOrder
+    civilServantCode?: SortOrderInput | SortOrder
+    civilServantGrade?: SortOrderInput | SortOrder
+    workingStatus?: SortOrderInput | SortOrder
+    joinedAt?: SortOrderInput | SortOrder
     departmentName?: SortOrderInput | SortOrder
     facultyName?: SortOrderInput | SortOrder
     researchInterests?: SortOrder
@@ -44735,6 +45205,31 @@ export namespace Prisma {
     OR?: LecturerWhereInput[]
     NOT?: LecturerWhereInput | LecturerWhereInput[]
     academicRank?: EnumAcademicRankNullableFilter<"Lecturer"> | $Enums.AcademicRank | null
+    positionTitle?: StringNullableFilter<"Lecturer"> | string | null
+    workStartDate?: DateTimeNullableFilter<"Lecturer"> | Date | string | null
+    yearsOfService?: IntNullableFilter<"Lecturer"> | number | null
+    teachingExperience?: StringNullableFilter<"Lecturer"> | string | null
+    coursesTaught?: StringNullableFilter<"Lecturer"> | string | null
+    teachingYears?: IntNullableFilter<"Lecturer"> | number | null
+    trainingSystem?: StringNullableFilter<"Lecturer"> | string | null
+    pedagogyCertificate?: StringNullableFilter<"Lecturer"> | string | null
+    workHistory?: StringNullableFilter<"Lecturer"> | string | null
+    degreeName?: StringNullableFilter<"Lecturer"> | string | null
+    degreeMajor?: StringNullableFilter<"Lecturer"> | string | null
+    degreeInstitution?: StringNullableFilter<"Lecturer"> | string | null
+    degreeCountry?: StringNullableFilter<"Lecturer"> | string | null
+    degreeYear?: IntNullableFilter<"Lecturer"> | number | null
+    degreeScanUrl?: StringNullableFilter<"Lecturer"> | string | null
+    academicTitleYear?: IntNullableFilter<"Lecturer"> | number | null
+    academicTitleDecision?: StringNullableFilter<"Lecturer"> | string | null
+    academicTitleProofUrl?: StringNullableFilter<"Lecturer"> | string | null
+    organizationMajor?: StringNullableFilter<"Lecturer"> | string | null
+    positionRole?: StringNullableFilter<"Lecturer"> | string | null
+    lecturerType?: EnumLecturerEmploymentTypeNullableFilter<"Lecturer"> | $Enums.LecturerEmploymentType | null
+    civilServantCode?: StringNullableFilter<"Lecturer"> | string | null
+    civilServantGrade?: StringNullableFilter<"Lecturer"> | string | null
+    workingStatus?: EnumLecturerWorkingStatusNullableFilter<"Lecturer"> | $Enums.LecturerWorkingStatus | null
+    joinedAt?: DateTimeNullableFilter<"Lecturer"> | Date | string | null
     departmentName?: StringNullableFilter<"Lecturer"> | string | null
     facultyName?: StringNullableFilter<"Lecturer"> | string | null
     researchInterests?: StringNullableListFilter<"Lecturer">
@@ -44761,6 +45256,31 @@ export namespace Prisma {
     userId?: SortOrder
     staffId?: SortOrderInput | SortOrder
     academicRank?: SortOrderInput | SortOrder
+    positionTitle?: SortOrderInput | SortOrder
+    workStartDate?: SortOrderInput | SortOrder
+    yearsOfService?: SortOrderInput | SortOrder
+    teachingExperience?: SortOrderInput | SortOrder
+    coursesTaught?: SortOrderInput | SortOrder
+    teachingYears?: SortOrderInput | SortOrder
+    trainingSystem?: SortOrderInput | SortOrder
+    pedagogyCertificate?: SortOrderInput | SortOrder
+    workHistory?: SortOrderInput | SortOrder
+    degreeName?: SortOrderInput | SortOrder
+    degreeMajor?: SortOrderInput | SortOrder
+    degreeInstitution?: SortOrderInput | SortOrder
+    degreeCountry?: SortOrderInput | SortOrder
+    degreeYear?: SortOrderInput | SortOrder
+    degreeScanUrl?: SortOrderInput | SortOrder
+    academicTitleYear?: SortOrderInput | SortOrder
+    academicTitleDecision?: SortOrderInput | SortOrder
+    academicTitleProofUrl?: SortOrderInput | SortOrder
+    organizationMajor?: SortOrderInput | SortOrder
+    positionRole?: SortOrderInput | SortOrder
+    lecturerType?: SortOrderInput | SortOrder
+    civilServantCode?: SortOrderInput | SortOrder
+    civilServantGrade?: SortOrderInput | SortOrder
+    workingStatus?: SortOrderInput | SortOrder
+    joinedAt?: SortOrderInput | SortOrder
     departmentName?: SortOrderInput | SortOrder
     facultyName?: SortOrderInput | SortOrder
     researchInterests?: SortOrder
@@ -44793,6 +45313,31 @@ export namespace Prisma {
     userId?: StringWithAggregatesFilter<"Lecturer"> | string
     staffId?: StringNullableWithAggregatesFilter<"Lecturer"> | string | null
     academicRank?: EnumAcademicRankNullableWithAggregatesFilter<"Lecturer"> | $Enums.AcademicRank | null
+    positionTitle?: StringNullableWithAggregatesFilter<"Lecturer"> | string | null
+    workStartDate?: DateTimeNullableWithAggregatesFilter<"Lecturer"> | Date | string | null
+    yearsOfService?: IntNullableWithAggregatesFilter<"Lecturer"> | number | null
+    teachingExperience?: StringNullableWithAggregatesFilter<"Lecturer"> | string | null
+    coursesTaught?: StringNullableWithAggregatesFilter<"Lecturer"> | string | null
+    teachingYears?: IntNullableWithAggregatesFilter<"Lecturer"> | number | null
+    trainingSystem?: StringNullableWithAggregatesFilter<"Lecturer"> | string | null
+    pedagogyCertificate?: StringNullableWithAggregatesFilter<"Lecturer"> | string | null
+    workHistory?: StringNullableWithAggregatesFilter<"Lecturer"> | string | null
+    degreeName?: StringNullableWithAggregatesFilter<"Lecturer"> | string | null
+    degreeMajor?: StringNullableWithAggregatesFilter<"Lecturer"> | string | null
+    degreeInstitution?: StringNullableWithAggregatesFilter<"Lecturer"> | string | null
+    degreeCountry?: StringNullableWithAggregatesFilter<"Lecturer"> | string | null
+    degreeYear?: IntNullableWithAggregatesFilter<"Lecturer"> | number | null
+    degreeScanUrl?: StringNullableWithAggregatesFilter<"Lecturer"> | string | null
+    academicTitleYear?: IntNullableWithAggregatesFilter<"Lecturer"> | number | null
+    academicTitleDecision?: StringNullableWithAggregatesFilter<"Lecturer"> | string | null
+    academicTitleProofUrl?: StringNullableWithAggregatesFilter<"Lecturer"> | string | null
+    organizationMajor?: StringNullableWithAggregatesFilter<"Lecturer"> | string | null
+    positionRole?: StringNullableWithAggregatesFilter<"Lecturer"> | string | null
+    lecturerType?: EnumLecturerEmploymentTypeNullableWithAggregatesFilter<"Lecturer"> | $Enums.LecturerEmploymentType | null
+    civilServantCode?: StringNullableWithAggregatesFilter<"Lecturer"> | string | null
+    civilServantGrade?: StringNullableWithAggregatesFilter<"Lecturer"> | string | null
+    workingStatus?: EnumLecturerWorkingStatusNullableWithAggregatesFilter<"Lecturer"> | $Enums.LecturerWorkingStatus | null
+    joinedAt?: DateTimeNullableWithAggregatesFilter<"Lecturer"> | Date | string | null
     departmentName?: StringNullableWithAggregatesFilter<"Lecturer"> | string | null
     facultyName?: StringNullableWithAggregatesFilter<"Lecturer"> | string | null
     researchInterests?: StringNullableListFilter<"Lecturer">
@@ -47762,6 +48307,31 @@ export namespace Prisma {
     id?: string
     staffId?: string | null
     academicRank?: $Enums.AcademicRank | null
+    positionTitle?: string | null
+    workStartDate?: Date | string | null
+    yearsOfService?: number | null
+    teachingExperience?: string | null
+    coursesTaught?: string | null
+    teachingYears?: number | null
+    trainingSystem?: string | null
+    pedagogyCertificate?: string | null
+    workHistory?: string | null
+    degreeName?: string | null
+    degreeMajor?: string | null
+    degreeInstitution?: string | null
+    degreeCountry?: string | null
+    degreeYear?: number | null
+    degreeScanUrl?: string | null
+    academicTitleYear?: number | null
+    academicTitleDecision?: string | null
+    academicTitleProofUrl?: string | null
+    organizationMajor?: string | null
+    positionRole?: string | null
+    lecturerType?: $Enums.LecturerEmploymentType | null
+    civilServantCode?: string | null
+    civilServantGrade?: string | null
+    workingStatus?: $Enums.LecturerWorkingStatus | null
+    joinedAt?: Date | string | null
     departmentName?: string | null
     facultyName?: string | null
     researchInterests?: LecturerCreateresearchInterestsInput | string[]
@@ -47788,6 +48358,31 @@ export namespace Prisma {
     userId: string
     staffId?: string | null
     academicRank?: $Enums.AcademicRank | null
+    positionTitle?: string | null
+    workStartDate?: Date | string | null
+    yearsOfService?: number | null
+    teachingExperience?: string | null
+    coursesTaught?: string | null
+    teachingYears?: number | null
+    trainingSystem?: string | null
+    pedagogyCertificate?: string | null
+    workHistory?: string | null
+    degreeName?: string | null
+    degreeMajor?: string | null
+    degreeInstitution?: string | null
+    degreeCountry?: string | null
+    degreeYear?: number | null
+    degreeScanUrl?: string | null
+    academicTitleYear?: number | null
+    academicTitleDecision?: string | null
+    academicTitleProofUrl?: string | null
+    organizationMajor?: string | null
+    positionRole?: string | null
+    lecturerType?: $Enums.LecturerEmploymentType | null
+    civilServantCode?: string | null
+    civilServantGrade?: string | null
+    workingStatus?: $Enums.LecturerWorkingStatus | null
+    joinedAt?: Date | string | null
     departmentName?: string | null
     facultyName?: string | null
     researchInterests?: LecturerCreateresearchInterestsInput | string[]
@@ -47812,6 +48407,31 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     staffId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRank?: NullableEnumAcademicRankFieldUpdateOperationsInput | $Enums.AcademicRank | null
+    positionTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    workStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    yearsOfService?: NullableIntFieldUpdateOperationsInput | number | null
+    teachingExperience?: NullableStringFieldUpdateOperationsInput | string | null
+    coursesTaught?: NullableStringFieldUpdateOperationsInput | string | null
+    teachingYears?: NullableIntFieldUpdateOperationsInput | number | null
+    trainingSystem?: NullableStringFieldUpdateOperationsInput | string | null
+    pedagogyCertificate?: NullableStringFieldUpdateOperationsInput | string | null
+    workHistory?: NullableStringFieldUpdateOperationsInput | string | null
+    degreeName?: NullableStringFieldUpdateOperationsInput | string | null
+    degreeMajor?: NullableStringFieldUpdateOperationsInput | string | null
+    degreeInstitution?: NullableStringFieldUpdateOperationsInput | string | null
+    degreeCountry?: NullableStringFieldUpdateOperationsInput | string | null
+    degreeYear?: NullableIntFieldUpdateOperationsInput | number | null
+    degreeScanUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    academicTitleYear?: NullableIntFieldUpdateOperationsInput | number | null
+    academicTitleDecision?: NullableStringFieldUpdateOperationsInput | string | null
+    academicTitleProofUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    organizationMajor?: NullableStringFieldUpdateOperationsInput | string | null
+    positionRole?: NullableStringFieldUpdateOperationsInput | string | null
+    lecturerType?: NullableEnumLecturerEmploymentTypeFieldUpdateOperationsInput | $Enums.LecturerEmploymentType | null
+    civilServantCode?: NullableStringFieldUpdateOperationsInput | string | null
+    civilServantGrade?: NullableStringFieldUpdateOperationsInput | string | null
+    workingStatus?: NullableEnumLecturerWorkingStatusFieldUpdateOperationsInput | $Enums.LecturerWorkingStatus | null
+    joinedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     departmentName?: NullableStringFieldUpdateOperationsInput | string | null
     facultyName?: NullableStringFieldUpdateOperationsInput | string | null
     researchInterests?: LecturerUpdateresearchInterestsInput | string[]
@@ -47838,6 +48458,31 @@ export namespace Prisma {
     userId?: StringFieldUpdateOperationsInput | string
     staffId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRank?: NullableEnumAcademicRankFieldUpdateOperationsInput | $Enums.AcademicRank | null
+    positionTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    workStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    yearsOfService?: NullableIntFieldUpdateOperationsInput | number | null
+    teachingExperience?: NullableStringFieldUpdateOperationsInput | string | null
+    coursesTaught?: NullableStringFieldUpdateOperationsInput | string | null
+    teachingYears?: NullableIntFieldUpdateOperationsInput | number | null
+    trainingSystem?: NullableStringFieldUpdateOperationsInput | string | null
+    pedagogyCertificate?: NullableStringFieldUpdateOperationsInput | string | null
+    workHistory?: NullableStringFieldUpdateOperationsInput | string | null
+    degreeName?: NullableStringFieldUpdateOperationsInput | string | null
+    degreeMajor?: NullableStringFieldUpdateOperationsInput | string | null
+    degreeInstitution?: NullableStringFieldUpdateOperationsInput | string | null
+    degreeCountry?: NullableStringFieldUpdateOperationsInput | string | null
+    degreeYear?: NullableIntFieldUpdateOperationsInput | number | null
+    degreeScanUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    academicTitleYear?: NullableIntFieldUpdateOperationsInput | number | null
+    academicTitleDecision?: NullableStringFieldUpdateOperationsInput | string | null
+    academicTitleProofUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    organizationMajor?: NullableStringFieldUpdateOperationsInput | string | null
+    positionRole?: NullableStringFieldUpdateOperationsInput | string | null
+    lecturerType?: NullableEnumLecturerEmploymentTypeFieldUpdateOperationsInput | $Enums.LecturerEmploymentType | null
+    civilServantCode?: NullableStringFieldUpdateOperationsInput | string | null
+    civilServantGrade?: NullableStringFieldUpdateOperationsInput | string | null
+    workingStatus?: NullableEnumLecturerWorkingStatusFieldUpdateOperationsInput | $Enums.LecturerWorkingStatus | null
+    joinedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     departmentName?: NullableStringFieldUpdateOperationsInput | string | null
     facultyName?: NullableStringFieldUpdateOperationsInput | string | null
     researchInterests?: LecturerUpdateresearchInterestsInput | string[]
@@ -47863,6 +48508,31 @@ export namespace Prisma {
     userId: string
     staffId?: string | null
     academicRank?: $Enums.AcademicRank | null
+    positionTitle?: string | null
+    workStartDate?: Date | string | null
+    yearsOfService?: number | null
+    teachingExperience?: string | null
+    coursesTaught?: string | null
+    teachingYears?: number | null
+    trainingSystem?: string | null
+    pedagogyCertificate?: string | null
+    workHistory?: string | null
+    degreeName?: string | null
+    degreeMajor?: string | null
+    degreeInstitution?: string | null
+    degreeCountry?: string | null
+    degreeYear?: number | null
+    degreeScanUrl?: string | null
+    academicTitleYear?: number | null
+    academicTitleDecision?: string | null
+    academicTitleProofUrl?: string | null
+    organizationMajor?: string | null
+    positionRole?: string | null
+    lecturerType?: $Enums.LecturerEmploymentType | null
+    civilServantCode?: string | null
+    civilServantGrade?: string | null
+    workingStatus?: $Enums.LecturerWorkingStatus | null
+    joinedAt?: Date | string | null
     departmentName?: string | null
     facultyName?: string | null
     researchInterests?: LecturerCreateresearchInterestsInput | string[]
@@ -47886,6 +48556,31 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     staffId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRank?: NullableEnumAcademicRankFieldUpdateOperationsInput | $Enums.AcademicRank | null
+    positionTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    workStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    yearsOfService?: NullableIntFieldUpdateOperationsInput | number | null
+    teachingExperience?: NullableStringFieldUpdateOperationsInput | string | null
+    coursesTaught?: NullableStringFieldUpdateOperationsInput | string | null
+    teachingYears?: NullableIntFieldUpdateOperationsInput | number | null
+    trainingSystem?: NullableStringFieldUpdateOperationsInput | string | null
+    pedagogyCertificate?: NullableStringFieldUpdateOperationsInput | string | null
+    workHistory?: NullableStringFieldUpdateOperationsInput | string | null
+    degreeName?: NullableStringFieldUpdateOperationsInput | string | null
+    degreeMajor?: NullableStringFieldUpdateOperationsInput | string | null
+    degreeInstitution?: NullableStringFieldUpdateOperationsInput | string | null
+    degreeCountry?: NullableStringFieldUpdateOperationsInput | string | null
+    degreeYear?: NullableIntFieldUpdateOperationsInput | number | null
+    degreeScanUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    academicTitleYear?: NullableIntFieldUpdateOperationsInput | number | null
+    academicTitleDecision?: NullableStringFieldUpdateOperationsInput | string | null
+    academicTitleProofUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    organizationMajor?: NullableStringFieldUpdateOperationsInput | string | null
+    positionRole?: NullableStringFieldUpdateOperationsInput | string | null
+    lecturerType?: NullableEnumLecturerEmploymentTypeFieldUpdateOperationsInput | $Enums.LecturerEmploymentType | null
+    civilServantCode?: NullableStringFieldUpdateOperationsInput | string | null
+    civilServantGrade?: NullableStringFieldUpdateOperationsInput | string | null
+    workingStatus?: NullableEnumLecturerWorkingStatusFieldUpdateOperationsInput | $Enums.LecturerWorkingStatus | null
+    joinedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     departmentName?: NullableStringFieldUpdateOperationsInput | string | null
     facultyName?: NullableStringFieldUpdateOperationsInput | string | null
     researchInterests?: LecturerUpdateresearchInterestsInput | string[]
@@ -47910,6 +48605,31 @@ export namespace Prisma {
     userId?: StringFieldUpdateOperationsInput | string
     staffId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRank?: NullableEnumAcademicRankFieldUpdateOperationsInput | $Enums.AcademicRank | null
+    positionTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    workStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    yearsOfService?: NullableIntFieldUpdateOperationsInput | number | null
+    teachingExperience?: NullableStringFieldUpdateOperationsInput | string | null
+    coursesTaught?: NullableStringFieldUpdateOperationsInput | string | null
+    teachingYears?: NullableIntFieldUpdateOperationsInput | number | null
+    trainingSystem?: NullableStringFieldUpdateOperationsInput | string | null
+    pedagogyCertificate?: NullableStringFieldUpdateOperationsInput | string | null
+    workHistory?: NullableStringFieldUpdateOperationsInput | string | null
+    degreeName?: NullableStringFieldUpdateOperationsInput | string | null
+    degreeMajor?: NullableStringFieldUpdateOperationsInput | string | null
+    degreeInstitution?: NullableStringFieldUpdateOperationsInput | string | null
+    degreeCountry?: NullableStringFieldUpdateOperationsInput | string | null
+    degreeYear?: NullableIntFieldUpdateOperationsInput | number | null
+    degreeScanUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    academicTitleYear?: NullableIntFieldUpdateOperationsInput | number | null
+    academicTitleDecision?: NullableStringFieldUpdateOperationsInput | string | null
+    academicTitleProofUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    organizationMajor?: NullableStringFieldUpdateOperationsInput | string | null
+    positionRole?: NullableStringFieldUpdateOperationsInput | string | null
+    lecturerType?: NullableEnumLecturerEmploymentTypeFieldUpdateOperationsInput | $Enums.LecturerEmploymentType | null
+    civilServantCode?: NullableStringFieldUpdateOperationsInput | string | null
+    civilServantGrade?: NullableStringFieldUpdateOperationsInput | string | null
+    workingStatus?: NullableEnumLecturerWorkingStatusFieldUpdateOperationsInput | $Enums.LecturerWorkingStatus | null
+    joinedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     departmentName?: NullableStringFieldUpdateOperationsInput | string | null
     facultyName?: NullableStringFieldUpdateOperationsInput | string | null
     researchInterests?: LecturerUpdateresearchInterestsInput | string[]
@@ -50878,6 +51598,20 @@ export namespace Prisma {
     not?: NestedEnumAcademicRankNullableFilter<$PrismaModel> | $Enums.AcademicRank | null
   }
 
+  export type EnumLecturerEmploymentTypeNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.LecturerEmploymentType | EnumLecturerEmploymentTypeFieldRefInput<$PrismaModel> | null
+    in?: $Enums.LecturerEmploymentType[] | ListEnumLecturerEmploymentTypeFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.LecturerEmploymentType[] | ListEnumLecturerEmploymentTypeFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumLecturerEmploymentTypeNullableFilter<$PrismaModel> | $Enums.LecturerEmploymentType | null
+  }
+
+  export type EnumLecturerWorkingStatusNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.LecturerWorkingStatus | EnumLecturerWorkingStatusFieldRefInput<$PrismaModel> | null
+    in?: $Enums.LecturerWorkingStatus[] | ListEnumLecturerWorkingStatusFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.LecturerWorkingStatus[] | ListEnumLecturerWorkingStatusFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumLecturerWorkingStatusNullableFilter<$PrismaModel> | $Enums.LecturerWorkingStatus | null
+  }
+
   export type StringNullableListFilter<$PrismaModel = never> = {
     equals?: string[] | ListStringFieldRefInput<$PrismaModel> | null
     has?: string | StringFieldRefInput<$PrismaModel> | null
@@ -50901,6 +51635,31 @@ export namespace Prisma {
     userId?: SortOrder
     staffId?: SortOrder
     academicRank?: SortOrder
+    positionTitle?: SortOrder
+    workStartDate?: SortOrder
+    yearsOfService?: SortOrder
+    teachingExperience?: SortOrder
+    coursesTaught?: SortOrder
+    teachingYears?: SortOrder
+    trainingSystem?: SortOrder
+    pedagogyCertificate?: SortOrder
+    workHistory?: SortOrder
+    degreeName?: SortOrder
+    degreeMajor?: SortOrder
+    degreeInstitution?: SortOrder
+    degreeCountry?: SortOrder
+    degreeYear?: SortOrder
+    degreeScanUrl?: SortOrder
+    academicTitleYear?: SortOrder
+    academicTitleDecision?: SortOrder
+    academicTitleProofUrl?: SortOrder
+    organizationMajor?: SortOrder
+    positionRole?: SortOrder
+    lecturerType?: SortOrder
+    civilServantCode?: SortOrder
+    civilServantGrade?: SortOrder
+    workingStatus?: SortOrder
+    joinedAt?: SortOrder
     departmentName?: SortOrder
     facultyName?: SortOrder
     researchInterests?: SortOrder
@@ -50921,6 +51680,10 @@ export namespace Prisma {
   }
 
   export type LecturerAvgOrderByAggregateInput = {
+    yearsOfService?: SortOrder
+    teachingYears?: SortOrder
+    degreeYear?: SortOrder
+    academicTitleYear?: SortOrder
     totalProjectsSchoolLevel?: SortOrder
     totalProjectsMinistryLevel?: SortOrder
     totalProjectsStateLevel?: SortOrder
@@ -50936,6 +51699,31 @@ export namespace Prisma {
     userId?: SortOrder
     staffId?: SortOrder
     academicRank?: SortOrder
+    positionTitle?: SortOrder
+    workStartDate?: SortOrder
+    yearsOfService?: SortOrder
+    teachingExperience?: SortOrder
+    coursesTaught?: SortOrder
+    teachingYears?: SortOrder
+    trainingSystem?: SortOrder
+    pedagogyCertificate?: SortOrder
+    workHistory?: SortOrder
+    degreeName?: SortOrder
+    degreeMajor?: SortOrder
+    degreeInstitution?: SortOrder
+    degreeCountry?: SortOrder
+    degreeYear?: SortOrder
+    degreeScanUrl?: SortOrder
+    academicTitleYear?: SortOrder
+    academicTitleDecision?: SortOrder
+    academicTitleProofUrl?: SortOrder
+    organizationMajor?: SortOrder
+    positionRole?: SortOrder
+    lecturerType?: SortOrder
+    civilServantCode?: SortOrder
+    civilServantGrade?: SortOrder
+    workingStatus?: SortOrder
+    joinedAt?: SortOrder
     departmentName?: SortOrder
     facultyName?: SortOrder
     googleScholarUrl?: SortOrder
@@ -50959,6 +51747,31 @@ export namespace Prisma {
     userId?: SortOrder
     staffId?: SortOrder
     academicRank?: SortOrder
+    positionTitle?: SortOrder
+    workStartDate?: SortOrder
+    yearsOfService?: SortOrder
+    teachingExperience?: SortOrder
+    coursesTaught?: SortOrder
+    teachingYears?: SortOrder
+    trainingSystem?: SortOrder
+    pedagogyCertificate?: SortOrder
+    workHistory?: SortOrder
+    degreeName?: SortOrder
+    degreeMajor?: SortOrder
+    degreeInstitution?: SortOrder
+    degreeCountry?: SortOrder
+    degreeYear?: SortOrder
+    degreeScanUrl?: SortOrder
+    academicTitleYear?: SortOrder
+    academicTitleDecision?: SortOrder
+    academicTitleProofUrl?: SortOrder
+    organizationMajor?: SortOrder
+    positionRole?: SortOrder
+    lecturerType?: SortOrder
+    civilServantCode?: SortOrder
+    civilServantGrade?: SortOrder
+    workingStatus?: SortOrder
+    joinedAt?: SortOrder
     departmentName?: SortOrder
     facultyName?: SortOrder
     googleScholarUrl?: SortOrder
@@ -50978,6 +51791,10 @@ export namespace Prisma {
   }
 
   export type LecturerSumOrderByAggregateInput = {
+    yearsOfService?: SortOrder
+    teachingYears?: SortOrder
+    degreeYear?: SortOrder
+    academicTitleYear?: SortOrder
     totalProjectsSchoolLevel?: SortOrder
     totalProjectsMinistryLevel?: SortOrder
     totalProjectsStateLevel?: SortOrder
@@ -50996,6 +51813,26 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedEnumAcademicRankNullableFilter<$PrismaModel>
     _max?: NestedEnumAcademicRankNullableFilter<$PrismaModel>
+  }
+
+  export type EnumLecturerEmploymentTypeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.LecturerEmploymentType | EnumLecturerEmploymentTypeFieldRefInput<$PrismaModel> | null
+    in?: $Enums.LecturerEmploymentType[] | ListEnumLecturerEmploymentTypeFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.LecturerEmploymentType[] | ListEnumLecturerEmploymentTypeFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumLecturerEmploymentTypeNullableWithAggregatesFilter<$PrismaModel> | $Enums.LecturerEmploymentType | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumLecturerEmploymentTypeNullableFilter<$PrismaModel>
+    _max?: NestedEnumLecturerEmploymentTypeNullableFilter<$PrismaModel>
+  }
+
+  export type EnumLecturerWorkingStatusNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.LecturerWorkingStatus | EnumLecturerWorkingStatusFieldRefInput<$PrismaModel> | null
+    in?: $Enums.LecturerWorkingStatus[] | ListEnumLecturerWorkingStatusFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.LecturerWorkingStatus[] | ListEnumLecturerWorkingStatusFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumLecturerWorkingStatusNullableWithAggregatesFilter<$PrismaModel> | $Enums.LecturerWorkingStatus | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumLecturerWorkingStatusNullableFilter<$PrismaModel>
+    _max?: NestedEnumLecturerWorkingStatusNullableFilter<$PrismaModel>
   }
 
   export type EnumPublicationTypeFilter<$PrismaModel = never> = {
@@ -54377,6 +55214,14 @@ export namespace Prisma {
     set?: $Enums.AcademicRank | null
   }
 
+  export type NullableEnumLecturerEmploymentTypeFieldUpdateOperationsInput = {
+    set?: $Enums.LecturerEmploymentType | null
+  }
+
+  export type NullableEnumLecturerWorkingStatusFieldUpdateOperationsInput = {
+    set?: $Enums.LecturerWorkingStatus | null
+  }
+
   export type LecturerUpdateresearchInterestsInput = {
     set?: string[]
     push?: string | string[]
@@ -55601,6 +56446,20 @@ export namespace Prisma {
     not?: NestedEnumAcademicRankNullableFilter<$PrismaModel> | $Enums.AcademicRank | null
   }
 
+  export type NestedEnumLecturerEmploymentTypeNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.LecturerEmploymentType | EnumLecturerEmploymentTypeFieldRefInput<$PrismaModel> | null
+    in?: $Enums.LecturerEmploymentType[] | ListEnumLecturerEmploymentTypeFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.LecturerEmploymentType[] | ListEnumLecturerEmploymentTypeFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumLecturerEmploymentTypeNullableFilter<$PrismaModel> | $Enums.LecturerEmploymentType | null
+  }
+
+  export type NestedEnumLecturerWorkingStatusNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.LecturerWorkingStatus | EnumLecturerWorkingStatusFieldRefInput<$PrismaModel> | null
+    in?: $Enums.LecturerWorkingStatus[] | ListEnumLecturerWorkingStatusFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.LecturerWorkingStatus[] | ListEnumLecturerWorkingStatusFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumLecturerWorkingStatusNullableFilter<$PrismaModel> | $Enums.LecturerWorkingStatus | null
+  }
+
   export type NestedEnumAcademicRankNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.AcademicRank | EnumAcademicRankFieldRefInput<$PrismaModel> | null
     in?: $Enums.AcademicRank[] | ListEnumAcademicRankFieldRefInput<$PrismaModel> | null
@@ -55609,6 +56468,26 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedEnumAcademicRankNullableFilter<$PrismaModel>
     _max?: NestedEnumAcademicRankNullableFilter<$PrismaModel>
+  }
+
+  export type NestedEnumLecturerEmploymentTypeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.LecturerEmploymentType | EnumLecturerEmploymentTypeFieldRefInput<$PrismaModel> | null
+    in?: $Enums.LecturerEmploymentType[] | ListEnumLecturerEmploymentTypeFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.LecturerEmploymentType[] | ListEnumLecturerEmploymentTypeFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumLecturerEmploymentTypeNullableWithAggregatesFilter<$PrismaModel> | $Enums.LecturerEmploymentType | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumLecturerEmploymentTypeNullableFilter<$PrismaModel>
+    _max?: NestedEnumLecturerEmploymentTypeNullableFilter<$PrismaModel>
+  }
+
+  export type NestedEnumLecturerWorkingStatusNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.LecturerWorkingStatus | EnumLecturerWorkingStatusFieldRefInput<$PrismaModel> | null
+    in?: $Enums.LecturerWorkingStatus[] | ListEnumLecturerWorkingStatusFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.LecturerWorkingStatus[] | ListEnumLecturerWorkingStatusFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumLecturerWorkingStatusNullableWithAggregatesFilter<$PrismaModel> | $Enums.LecturerWorkingStatus | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumLecturerWorkingStatusNullableFilter<$PrismaModel>
+    _max?: NestedEnumLecturerWorkingStatusNullableFilter<$PrismaModel>
   }
 
   export type NestedEnumPublicationTypeFilter<$PrismaModel = never> = {
@@ -57764,6 +58643,31 @@ export namespace Prisma {
     id?: string
     staffId?: string | null
     academicRank?: $Enums.AcademicRank | null
+    positionTitle?: string | null
+    workStartDate?: Date | string | null
+    yearsOfService?: number | null
+    teachingExperience?: string | null
+    coursesTaught?: string | null
+    teachingYears?: number | null
+    trainingSystem?: string | null
+    pedagogyCertificate?: string | null
+    workHistory?: string | null
+    degreeName?: string | null
+    degreeMajor?: string | null
+    degreeInstitution?: string | null
+    degreeCountry?: string | null
+    degreeYear?: number | null
+    degreeScanUrl?: string | null
+    academicTitleYear?: number | null
+    academicTitleDecision?: string | null
+    academicTitleProofUrl?: string | null
+    organizationMajor?: string | null
+    positionRole?: string | null
+    lecturerType?: $Enums.LecturerEmploymentType | null
+    civilServantCode?: string | null
+    civilServantGrade?: string | null
+    workingStatus?: $Enums.LecturerWorkingStatus | null
+    joinedAt?: Date | string | null
     departmentName?: string | null
     facultyName?: string | null
     researchInterests?: LecturerCreateresearchInterestsInput | string[]
@@ -57788,6 +58692,31 @@ export namespace Prisma {
     id?: string
     staffId?: string | null
     academicRank?: $Enums.AcademicRank | null
+    positionTitle?: string | null
+    workStartDate?: Date | string | null
+    yearsOfService?: number | null
+    teachingExperience?: string | null
+    coursesTaught?: string | null
+    teachingYears?: number | null
+    trainingSystem?: string | null
+    pedagogyCertificate?: string | null
+    workHistory?: string | null
+    degreeName?: string | null
+    degreeMajor?: string | null
+    degreeInstitution?: string | null
+    degreeCountry?: string | null
+    degreeYear?: number | null
+    degreeScanUrl?: string | null
+    academicTitleYear?: number | null
+    academicTitleDecision?: string | null
+    academicTitleProofUrl?: string | null
+    organizationMajor?: string | null
+    positionRole?: string | null
+    lecturerType?: $Enums.LecturerEmploymentType | null
+    civilServantCode?: string | null
+    civilServantGrade?: string | null
+    workingStatus?: $Enums.LecturerWorkingStatus | null
+    joinedAt?: Date | string | null
     departmentName?: string | null
     facultyName?: string | null
     researchInterests?: LecturerCreateresearchInterestsInput | string[]
@@ -58397,6 +59326,31 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     staffId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRank?: NullableEnumAcademicRankFieldUpdateOperationsInput | $Enums.AcademicRank | null
+    positionTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    workStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    yearsOfService?: NullableIntFieldUpdateOperationsInput | number | null
+    teachingExperience?: NullableStringFieldUpdateOperationsInput | string | null
+    coursesTaught?: NullableStringFieldUpdateOperationsInput | string | null
+    teachingYears?: NullableIntFieldUpdateOperationsInput | number | null
+    trainingSystem?: NullableStringFieldUpdateOperationsInput | string | null
+    pedagogyCertificate?: NullableStringFieldUpdateOperationsInput | string | null
+    workHistory?: NullableStringFieldUpdateOperationsInput | string | null
+    degreeName?: NullableStringFieldUpdateOperationsInput | string | null
+    degreeMajor?: NullableStringFieldUpdateOperationsInput | string | null
+    degreeInstitution?: NullableStringFieldUpdateOperationsInput | string | null
+    degreeCountry?: NullableStringFieldUpdateOperationsInput | string | null
+    degreeYear?: NullableIntFieldUpdateOperationsInput | number | null
+    degreeScanUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    academicTitleYear?: NullableIntFieldUpdateOperationsInput | number | null
+    academicTitleDecision?: NullableStringFieldUpdateOperationsInput | string | null
+    academicTitleProofUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    organizationMajor?: NullableStringFieldUpdateOperationsInput | string | null
+    positionRole?: NullableStringFieldUpdateOperationsInput | string | null
+    lecturerType?: NullableEnumLecturerEmploymentTypeFieldUpdateOperationsInput | $Enums.LecturerEmploymentType | null
+    civilServantCode?: NullableStringFieldUpdateOperationsInput | string | null
+    civilServantGrade?: NullableStringFieldUpdateOperationsInput | string | null
+    workingStatus?: NullableEnumLecturerWorkingStatusFieldUpdateOperationsInput | $Enums.LecturerWorkingStatus | null
+    joinedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     departmentName?: NullableStringFieldUpdateOperationsInput | string | null
     facultyName?: NullableStringFieldUpdateOperationsInput | string | null
     researchInterests?: LecturerUpdateresearchInterestsInput | string[]
@@ -58421,6 +59375,31 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     staffId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRank?: NullableEnumAcademicRankFieldUpdateOperationsInput | $Enums.AcademicRank | null
+    positionTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    workStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    yearsOfService?: NullableIntFieldUpdateOperationsInput | number | null
+    teachingExperience?: NullableStringFieldUpdateOperationsInput | string | null
+    coursesTaught?: NullableStringFieldUpdateOperationsInput | string | null
+    teachingYears?: NullableIntFieldUpdateOperationsInput | number | null
+    trainingSystem?: NullableStringFieldUpdateOperationsInput | string | null
+    pedagogyCertificate?: NullableStringFieldUpdateOperationsInput | string | null
+    workHistory?: NullableStringFieldUpdateOperationsInput | string | null
+    degreeName?: NullableStringFieldUpdateOperationsInput | string | null
+    degreeMajor?: NullableStringFieldUpdateOperationsInput | string | null
+    degreeInstitution?: NullableStringFieldUpdateOperationsInput | string | null
+    degreeCountry?: NullableStringFieldUpdateOperationsInput | string | null
+    degreeYear?: NullableIntFieldUpdateOperationsInput | number | null
+    degreeScanUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    academicTitleYear?: NullableIntFieldUpdateOperationsInput | number | null
+    academicTitleDecision?: NullableStringFieldUpdateOperationsInput | string | null
+    academicTitleProofUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    organizationMajor?: NullableStringFieldUpdateOperationsInput | string | null
+    positionRole?: NullableStringFieldUpdateOperationsInput | string | null
+    lecturerType?: NullableEnumLecturerEmploymentTypeFieldUpdateOperationsInput | $Enums.LecturerEmploymentType | null
+    civilServantCode?: NullableStringFieldUpdateOperationsInput | string | null
+    civilServantGrade?: NullableStringFieldUpdateOperationsInput | string | null
+    workingStatus?: NullableEnumLecturerWorkingStatusFieldUpdateOperationsInput | $Enums.LecturerWorkingStatus | null
+    joinedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     departmentName?: NullableStringFieldUpdateOperationsInput | string | null
     facultyName?: NullableStringFieldUpdateOperationsInput | string | null
     researchInterests?: LecturerUpdateresearchInterestsInput | string[]
@@ -61209,6 +62188,31 @@ export namespace Prisma {
     id?: string
     staffId?: string | null
     academicRank?: $Enums.AcademicRank | null
+    positionTitle?: string | null
+    workStartDate?: Date | string | null
+    yearsOfService?: number | null
+    teachingExperience?: string | null
+    coursesTaught?: string | null
+    teachingYears?: number | null
+    trainingSystem?: string | null
+    pedagogyCertificate?: string | null
+    workHistory?: string | null
+    degreeName?: string | null
+    degreeMajor?: string | null
+    degreeInstitution?: string | null
+    degreeCountry?: string | null
+    degreeYear?: number | null
+    degreeScanUrl?: string | null
+    academicTitleYear?: number | null
+    academicTitleDecision?: string | null
+    academicTitleProofUrl?: string | null
+    organizationMajor?: string | null
+    positionRole?: string | null
+    lecturerType?: $Enums.LecturerEmploymentType | null
+    civilServantCode?: string | null
+    civilServantGrade?: string | null
+    workingStatus?: $Enums.LecturerWorkingStatus | null
+    joinedAt?: Date | string | null
     departmentName?: string | null
     facultyName?: string | null
     researchInterests?: LecturerCreateresearchInterestsInput | string[]
@@ -61234,6 +62238,31 @@ export namespace Prisma {
     userId: string
     staffId?: string | null
     academicRank?: $Enums.AcademicRank | null
+    positionTitle?: string | null
+    workStartDate?: Date | string | null
+    yearsOfService?: number | null
+    teachingExperience?: string | null
+    coursesTaught?: string | null
+    teachingYears?: number | null
+    trainingSystem?: string | null
+    pedagogyCertificate?: string | null
+    workHistory?: string | null
+    degreeName?: string | null
+    degreeMajor?: string | null
+    degreeInstitution?: string | null
+    degreeCountry?: string | null
+    degreeYear?: number | null
+    degreeScanUrl?: string | null
+    academicTitleYear?: number | null
+    academicTitleDecision?: string | null
+    academicTitleProofUrl?: string | null
+    organizationMajor?: string | null
+    positionRole?: string | null
+    lecturerType?: $Enums.LecturerEmploymentType | null
+    civilServantCode?: string | null
+    civilServantGrade?: string | null
+    workingStatus?: $Enums.LecturerWorkingStatus | null
+    joinedAt?: Date | string | null
     departmentName?: string | null
     facultyName?: string | null
     researchInterests?: LecturerCreateresearchInterestsInput | string[]
@@ -61273,6 +62302,31 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     staffId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRank?: NullableEnumAcademicRankFieldUpdateOperationsInput | $Enums.AcademicRank | null
+    positionTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    workStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    yearsOfService?: NullableIntFieldUpdateOperationsInput | number | null
+    teachingExperience?: NullableStringFieldUpdateOperationsInput | string | null
+    coursesTaught?: NullableStringFieldUpdateOperationsInput | string | null
+    teachingYears?: NullableIntFieldUpdateOperationsInput | number | null
+    trainingSystem?: NullableStringFieldUpdateOperationsInput | string | null
+    pedagogyCertificate?: NullableStringFieldUpdateOperationsInput | string | null
+    workHistory?: NullableStringFieldUpdateOperationsInput | string | null
+    degreeName?: NullableStringFieldUpdateOperationsInput | string | null
+    degreeMajor?: NullableStringFieldUpdateOperationsInput | string | null
+    degreeInstitution?: NullableStringFieldUpdateOperationsInput | string | null
+    degreeCountry?: NullableStringFieldUpdateOperationsInput | string | null
+    degreeYear?: NullableIntFieldUpdateOperationsInput | number | null
+    degreeScanUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    academicTitleYear?: NullableIntFieldUpdateOperationsInput | number | null
+    academicTitleDecision?: NullableStringFieldUpdateOperationsInput | string | null
+    academicTitleProofUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    organizationMajor?: NullableStringFieldUpdateOperationsInput | string | null
+    positionRole?: NullableStringFieldUpdateOperationsInput | string | null
+    lecturerType?: NullableEnumLecturerEmploymentTypeFieldUpdateOperationsInput | $Enums.LecturerEmploymentType | null
+    civilServantCode?: NullableStringFieldUpdateOperationsInput | string | null
+    civilServantGrade?: NullableStringFieldUpdateOperationsInput | string | null
+    workingStatus?: NullableEnumLecturerWorkingStatusFieldUpdateOperationsInput | $Enums.LecturerWorkingStatus | null
+    joinedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     departmentName?: NullableStringFieldUpdateOperationsInput | string | null
     facultyName?: NullableStringFieldUpdateOperationsInput | string | null
     researchInterests?: LecturerUpdateresearchInterestsInput | string[]
@@ -61298,6 +62352,31 @@ export namespace Prisma {
     userId?: StringFieldUpdateOperationsInput | string
     staffId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRank?: NullableEnumAcademicRankFieldUpdateOperationsInput | $Enums.AcademicRank | null
+    positionTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    workStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    yearsOfService?: NullableIntFieldUpdateOperationsInput | number | null
+    teachingExperience?: NullableStringFieldUpdateOperationsInput | string | null
+    coursesTaught?: NullableStringFieldUpdateOperationsInput | string | null
+    teachingYears?: NullableIntFieldUpdateOperationsInput | number | null
+    trainingSystem?: NullableStringFieldUpdateOperationsInput | string | null
+    pedagogyCertificate?: NullableStringFieldUpdateOperationsInput | string | null
+    workHistory?: NullableStringFieldUpdateOperationsInput | string | null
+    degreeName?: NullableStringFieldUpdateOperationsInput | string | null
+    degreeMajor?: NullableStringFieldUpdateOperationsInput | string | null
+    degreeInstitution?: NullableStringFieldUpdateOperationsInput | string | null
+    degreeCountry?: NullableStringFieldUpdateOperationsInput | string | null
+    degreeYear?: NullableIntFieldUpdateOperationsInput | number | null
+    degreeScanUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    academicTitleYear?: NullableIntFieldUpdateOperationsInput | number | null
+    academicTitleDecision?: NullableStringFieldUpdateOperationsInput | string | null
+    academicTitleProofUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    organizationMajor?: NullableStringFieldUpdateOperationsInput | string | null
+    positionRole?: NullableStringFieldUpdateOperationsInput | string | null
+    lecturerType?: NullableEnumLecturerEmploymentTypeFieldUpdateOperationsInput | $Enums.LecturerEmploymentType | null
+    civilServantCode?: NullableStringFieldUpdateOperationsInput | string | null
+    civilServantGrade?: NullableStringFieldUpdateOperationsInput | string | null
+    workingStatus?: NullableEnumLecturerWorkingStatusFieldUpdateOperationsInput | $Enums.LecturerWorkingStatus | null
+    joinedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     departmentName?: NullableStringFieldUpdateOperationsInput | string | null
     facultyName?: NullableStringFieldUpdateOperationsInput | string | null
     researchInterests?: LecturerUpdateresearchInterestsInput | string[]

@@ -65,6 +65,12 @@ interface Registration {
         name: string;
         projectLockDate?: string | null;
     } | null;
+    teamMembers?: Array<{
+        id?: string;
+        name?: string;
+        role?: string;
+        code?: string;
+    }> | null;
     instructorStatus: string;
     facultyStatus: string;
 }
@@ -373,6 +379,7 @@ export function DeanApprovalClient() {
                                     <TableHead className="w-12">#</TableHead>
                                     <TableHead>Tên đề tài</TableHead>
                                     <TableHead>Chủ nhiệm</TableHead>
+                                    <TableHead>SL thành viên</TableHead>
                                     <TableHead>GV Hướng dẫn</TableHead>
                                     <TableHead>Trạng thái Khoa</TableHead>
                                     <TableHead className="text-right">Hành động</TableHead>
@@ -389,6 +396,7 @@ export function DeanApprovalClient() {
                                         </TableCell>
                                         <TableCell className="font-medium max-w-75 truncate">{req.title}</TableCell>
                                         <TableCell>{req.user.name}</TableCell>
+                                        <TableCell>{(req.teamMembers || []).length + 1}</TableCell>
                                         <TableCell>
                                             {req.instructor ? (
                                                 <div className="flex flex-col gap-1">
@@ -522,6 +530,27 @@ export function DeanApprovalClient() {
                                                                               : 'Chờ xác nhận'}
                                                                     </Badge>
                                                                 </div>
+                                                            </div>
+                                                            <div>
+                                                                <h4 className="text-sm font-medium text-muted-foreground mb-2">Thành viên tham gia</h4>
+                                                                {(req.teamMembers || []).length > 0 ? (
+                                                                    <div className="space-y-2">
+                                                                        {(req.teamMembers || []).map((member, memberIndex) => (
+                                                                            <div
+                                                                                key={`${member.id || member.name || 'member'}-${memberIndex}`}
+                                                                                className="rounded-md border bg-muted/20 px-3 py-2"
+                                                                            >
+                                                                                <p className="text-sm font-medium">{member.name || 'N/A'}</p>
+                                                                                <p className="text-xs text-muted-foreground">
+                                                                                    {member.code ? `${member.code} • ` : ''}
+                                                                                    Vai trò: {member.role || 'Thành viên'}
+                                                                                </p>
+                                                                            </div>
+                                                                        ))}
+                                                                    </div>
+                                                                ) : (
+                                                                    <p className="text-sm text-muted-foreground">Không có thành viên tham gia.</p>
+                                                                )}
                                                             </div>
                                                             <div>
                                                                 <h4 className="text-sm font-medium text-muted-foreground mb-1">Mục tiêu nghiên cứu</h4>

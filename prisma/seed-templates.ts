@@ -211,3 +211,16 @@ export async function seedTemplates() {
   console.log(`   - ${template3.name} (${template3.items.length} items)`);
   console.log("\n🎉 Seed completed successfully!");
 }
+
+async function main() {
+  await seedTemplates();
+}
+
+main()
+  .catch((error) => {
+    console.error('❌ Seed templates failed:', error);
+    process.exit(1);
+  })
+  .finally(async () => {
+    await prisma.$disconnect();
+  });

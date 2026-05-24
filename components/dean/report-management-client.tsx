@@ -2,7 +2,7 @@
 "use client"
 
 import { useState } from "react"
-import { useReportJobs } from "@/hooks/useReports"
+import { useDeleteReportJob, useReportJobs } from "@/hooks/useReports"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -18,7 +18,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog"
 import { Label } from "@/components/ui/label"
-import { FileText, Download, RefreshCw, Plus } from "lucide-react"
+import { FileText, Download, RefreshCw, Plus, Trash2 } from "lucide-react"
 import { ReportTemplateDialog } from "@/components/projects/report-template-dialog"
 import { useCallRounds } from "@/hooks/useCallRounds"
 import type { ReportJob } from "@/api/reports"
@@ -52,6 +52,7 @@ export function ReportManagement() {
 
   const { data: callRounds = [] } = useCallRounds()
   const { data, isLoading, refetch } = useReportJobs()
+  const deleteMutation = useDeleteReportJob()
   const jobs = data?.data || []
 
   const pendingJobs = jobs.filter((j: ReportJob) => j.status === "QUEUED" || j.status === "PROCESSING")
@@ -76,6 +77,13 @@ export function ReportManagement() {
   const handleDownload = async (job: ReportJob) => {
     if (!job.resultUrl) return
     window.open(job.resultUrl, "_blank")
+  }
+
+  const handleDelete = async (job: ReportJob) => {
+    const ok = window.confirm("Xóa báo cáo này? Hành động sẽ xóa cả file đã sinh.")
+    if (!ok) return
+    await deleteMutation.mutateAsync(job.id)
+    refetch()
   }
 
   const JobCard = ({ job }: { job: ReportJob }) => (
@@ -108,17 +116,29 @@ export function ReportManagement() {
         )}
         
         {job.status === "COMPLETED" && (
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between gap-2">
             <p className="text-sm text-green-600">Báo cáo đã sẵn sàng</p>
-            <Button size="sm" onClick={() => handleDownload(job)}>
-              <Download className="w-4 h-4 mr-2" />
-              Tải xuống
-            </Button>
+            <div className="flex items-center gap-2">
+              <Button size="sm" onClick={() => handleDownload(job)}>
+                <Download className="w-4 h-4 mr-2" />
+                Tải xuống
+              </Button>
+              <Button variant="destructive" size="sm" onClick={() => handleDelete(job)} disabled={deleteMutation.isPending}>
+                <Trash2 className="w-4 h-4 mr-2" />
+                Xóa
+              </Button>
+            </div>
           </div>
         )}
         
         {job.status === "FAILED" && (
-          <p className="text-sm text-red-600">{job.error || "Đã xảy ra lỗi"}</p>
+          <div className="flex items-center justify-between gap-2">
+            <p className="text-sm text-red-600">{job.error || "Đã xảy ra lỗi"}</p>
+            <Button variant="destructive" size="sm" onClick={() => handleDelete(job)} disabled={deleteMutation.isPending}>
+              <Trash2 className="w-4 h-4 mr-2" />
+              Xóa
+            </Button>
+          </div>
         )}
       </CardContent>
     </Card>

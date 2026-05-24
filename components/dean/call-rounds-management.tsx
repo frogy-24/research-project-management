@@ -43,6 +43,7 @@ import { Separator } from '@/components/ui/separator';
 import { toast } from 'sonner';
 import { useQuery } from '@tanstack/react-query';
 import { useCallRounds, useCreateCallRound, useUpdateCallRound, useDeleteCallRound } from '@/hooks/useCallRounds';
+import { useDeanApprovals } from '@/hooks/useDeanApprovals';
 import { useAuthSession } from '@/hooks/useAuth';
 import { useMe } from '@/hooks/useMe';
 import { useProgressTemplates } from '@/hooks/useProgressTemplates';
@@ -96,6 +97,12 @@ export function DeanCallRoundsManagement() {
     const [editingCallRound, setEditingCallRound] = React.useState<CallRound | null>(null);
     const [viewingCallRound, setViewingCallRound] = React.useState<CallRound | null>(null);
     const [deletingCallRound, setDeletingCallRound] = React.useState<CallRound | null>(null);
+    const [registrationStatusFilter, setRegistrationStatusFilter] = React.useState<'ALL' | 'PENDING' | 'APPROVED' | 'REJECTED'>('ALL');
+
+    const { data: deanApprovalsData, isLoading: loadingRegistrations } = useDeanApprovals(1, 500, {
+        callRoundId: viewingCallRound?.id,
+        facultyStatus: registrationStatusFilter === 'ALL' ? undefined : registrationStatusFilter,
+    });
 
     // API đã filter sẵn: DEAN chỉ thấy đợt mình tạo, ADMIN thấy tất cả
     const deanCallRounds = callRounds || [];
@@ -396,7 +403,7 @@ export function DeanCallRoundsManagement() {
 
                     {viewingCallRound && (
                         <Tabs defaultValue="overview" className="mt-2 flex flex-col">
-                            <TabsList className="grid w-full grid-cols-4">
+                            <TabsList className="grid w-full grid-cols-5">
                                 <TabsTrigger value="overview">
                                     <Info className="mr-1.5 h-3.5 w-3.5" />
                                     Tổng quan
@@ -412,6 +419,10 @@ export function DeanCallRoundsManagement() {
                                 <TabsTrigger value="personnel">
                                     <Users className="mr-1.5 h-3.5 w-3.5" />
                                     Nhân sự
+                                </TabsTrigger>
+                                <TabsTrigger value="registrations">
+                                    <FileText className="mr-1.5 h-3.5 w-3.5" />
+                                    Đề tài đã đăng ký
                                 </TabsTrigger>
                             </TabsList>
 
@@ -759,6 +770,15 @@ export function DeanCallRoundsManagement() {
                                     </TabsContent>
                                 </Tabs>
                             </TabsContent>
+
+                            <TabsContent value="registrations" className="space-y-4">
+                                <RegistrationsTab
+                                    registrations={deanApprovalsData?.data || []}
+                                    isLoading={loadingRegistrations}
+                                    statusFilter={registrationStatusFilter}
+                                    onStatusFilterChange={setRegistrationStatusFilter}
+                                />
+                            </TabsContent>
                         </Tabs>
                     )}
 
@@ -769,6 +789,78 @@ export function DeanCallRoundsManagement() {
                     </DialogFooter>
                 </DialogContent>
             </Dialog>
+        </div>
+    );
+}
+
+function RegistrationsTab({
+    registrations,
+    isLoading,
+    statusFilter,
+    onStatusFilterChange,
+}: {
+    registrations: any[];
+    isLoading: boolean;
+    statusFilter: 'ALL' | 'PENDING' | 'APPROVED' | 'REJECTED';
+    onStatusFilterChange: (v: 'ALL' | 'PENDING' | 'APPROVED' | 'REJECTED') => void;
+}) {
+    return (
+        <div className="rounded-lg border bg-card p-4 space-y-4">
+            <div className="flex items-center justify-between gap-3">
+                <div className="text-sm font-medium">Danh sách đề tài đã đăng ký</div>
+                <div className="flex items-center gap-2">
+                    <Label className="text-xs text-muted-foreground">Lọc phê duyệt</Label>
+                    <select
+                        className="h-9 rounded-md border bg-background px-3 text-sm"
+                        value={statusFilter}
+                        onChange={(e) => onStatusFilterChange(e.target.value as 'ALL' | 'PENDING' | 'APPROVED' | 'REJECTED')}
+                    >
+                        <option value="ALL">Tất cả</option>
+                        <option value="PENDING">Chờ duyệt</option>
+                        <option value="APPROVED">Đã duyệt</option>
+                        <option value="REJECTED">Từ chối</option>
+                    </select>
+                </div>
+            </div>
+
+            {isLoading ? (
+                <p className="text-sm text-muted-foreground">Đang tải...</p>
+            ) : registrations.length === 0 ? (
+                <p className="text-sm text-muted-foreground italic">Chưa có đề tài đăng ký</p>
+            ) : (
+                <div className="space-y-2">
+                    {registrations.map((item, idx) => (
+                        <details key={item.id} className="rounded-md border bg-muted/30 p-3">
+                            <summary className="cursor-pointer list-none flex items-center justify-between gap-3">
+                                <div className="min-w-0">
+                                    <p className="text-sm font-medium truncate">{idx + 1}. {item.title}</p>
+                                    <p className="text-xs text-muted-foreground truncate">
+                                        Chủ nhiệm: {item.user?.name || 'N/A'} • GVHD: {item.instructor?.name || 'Chưa phân công'}
+                                    </p>
+                                </div>
+                                <Badge variant={item.facultyStatus === 'APPROVED' ? 'default' : item.facultyStatus === 'REJECTED' ? 'destructive' : 'outline'}>
+                                    {item.facultyStatus}
+                                </Badge>
+                            </summary>
+                            <div className="mt-3 space-y-2">
+                                <div className="rounded-md border bg-background p-3">
+                                    <p className="text-xs font-medium mb-2">Thành viên tham gia</p>
+                                    <ul className="space-y-1 text-sm">
+                                        <li>
+                                            <span className="font-medium">{item.user?.name || 'N/A'}</span> — Vai trò: Trưởng nhóm
+                                        </li>
+                                        {(item.teamMembers || []).map((m: any, i: number) => (
+                                            <li key={`${m.name}-${i}`}>
+                                                <span className="font-medium">{m.name}</span> — Vai trò: {m.role || 'Thành viên'}
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
+                            </div>
+                        </details>
+                    ))}
+                </div>
+            )}
         </div>
     );
 }

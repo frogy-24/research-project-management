@@ -10,5 +10,8 @@ export function useDeanCouncilEvaluations(callRoundId?: string, options?: UseDea
         queryKey: ['dean-council-evaluations', callRoundId ?? 'all'],
         queryFn: () => deanCouncilEvaluationsApi.getAll(callRoundId),
         enabled: options?.enabled ?? true,
+        refetchOnMount: false,
+        refetchOnWindowFocus: false,
+        refetchOnReconnect: false,
     });
 }

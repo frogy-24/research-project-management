@@ -19,6 +19,7 @@ export const reportsApi = {
     const res = await api.post<{ success: boolean; data: ReportJob }>("/dean/reports", data)
     return res.data
   },
+  
 
   list: async (params?: { status?: string; limit?: number; offset?: number }) => {
     const searchParams = new URLSearchParams()
@@ -40,5 +41,10 @@ export const reportsApi = {
   download: async (id: string) => {
     const res = await api.get(`/dean/reports/${id}/download`, { responseType: "blob" })
     return res
+  },
+
+  remove: async (id: string) => {
+    const res = await api.delete<{ success: boolean }>(`/dean/reports?id=${encodeURIComponent(id)}`)
+    return res.data
   },
 }

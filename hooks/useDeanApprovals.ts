@@ -5,12 +5,21 @@ import type { RegistrationProposalFile } from '@/types/project-registration.sche
 
 type DeanApprovalStatus = 'PENDING' | 'APPROVED' | 'REJECTED';
 
+type DeanApprovalTeamMember = {
+    id?: string;
+    name: string;
+    role: string;
+    code?: string | null;
+    studentId?: string | null;
+};
+
 interface DeanApproval {
     id: string;
     title: string;
     objective?: string | null;
     expectedOutput?: string | null;
     proposalFiles?: RegistrationProposalFile[] | null;
+    teamMembers?: DeanApprovalTeamMember[] | null;
     createdAt: string;
     user: {
         name: string;

@@ -1,532 +1,407 @@
-import { Role, ProjectStatus, Gender } from './generated/prisma';
+import {
+  ApplicableFor,
+  CallRoundApprovalStatus,
+  FacultyStatus,
+  Gender,
+  InstructorStatus,
+  InvitationStatus,
+  ProjectClosingStatus,
+  ProjectStatus,
+  RegistrationStatus,
+  ReviewDecision,
+  Role,
+} from './generated/prisma';
 import prisma from '../lib/prisma';
-import { seedTemplates } from './seed-templates';
 
-/**
- * Xóa toàn bộ dữ liệu trong database
- * Thứ tự xóa phải tuân theo foreign key constraints
- */
+const randInt = (min: number, max: number) => Math.floor(Math.random() * (max - min + 1)) + min;
+const pick = <T>(arr: T[]): T | undefined => (arr.length ? arr[Math.floor(Math.random() * arr.length)] : undefined);
+const pickN = <T>(arr: T[], n: number) => [...arr].sort(() => Math.random() - 0.5).slice(0, Math.min(n, arr.length));
+
 async function clearDatabase() {
-    console.log('🗑️  Clearing database...\n');
-
-    // Xóa theo thứ tự ngược với foreign key dependencies
-    await prisma.progressReport.deleteMany();
-    await prisma.progressReportTemplateItem.deleteMany();
-    await prisma.progressReportTemplate.deleteMany();
-    await prisma.councilEvaluation.deleteMany();
-    await prisma.fundingDisbursement.deleteMany();
-    await prisma.extensionRequest.deleteMany();
-    await prisma.projectRegistration.deleteMany();
-    await prisma.project.deleteMany();
-    await prisma.projectType.deleteMany();
-    await prisma.callRound.deleteMany();
-    await prisma.user.deleteMany();
-    await prisma.class.deleteMany();
-    await prisma.major.deleteMany();
-    await prisma.department.deleteMany();
-
-    console.log('✅ Database cleared successfully!\n');
+  await prisma.officeMeetingView.deleteMany();
+  await prisma.officeMeeting.deleteMany();
+  await prisma.callRoundAttachment.deleteMany();
+  await prisma.projectCouncilAssignment.deleteMany();
+  await prisma.councilMemberAssignment.deleteMany();
+  await prisma.council.deleteMany();
+  await prisma.callRoundCouncilMember.deleteMany();
+  await prisma.callRoundInstructor.deleteMany();
+  await prisma.notification.deleteMany();
+  await prisma.post.deleteMany();
+  await prisma.projectClosingSubmission.deleteMany();
+  await prisma.progressReport.deleteMany();
+  await prisma.progressReportTemplateItem.deleteMany();
+  await prisma.progressReportTemplate.deleteMany();
+  await prisma.councilEvaluation.deleteMany();
+  await prisma.fundingDisbursement.deleteMany();
+  await prisma.extensionRequest.deleteMany();
+  await prisma.projectRegistration.deleteMany();
+  await prisma.project.deleteMany();
+  await prisma.projectType.deleteMany();
+  await prisma.callRound.deleteMany();
+  await prisma.reportJob.deleteMany();
+  await prisma.reportTemplate.deleteMany();
+  await prisma.autoApprovalJob.deleteMany();
+  await prisma.lecturerPublication.deleteMany();
+  await prisma.lecturer.deleteMany();
+  await prisma.room.deleteMany();
+  await prisma.user.deleteMany();
+  await prisma.class.deleteMany();
+  await prisma.major.deleteMany();
+  await prisma.department.deleteMany();
 }
 
-/**
- * Seed Organization data - 5 khoa
- */
-async function seedOrganization() {
-    console.log('🏢 Seeding Organization data (5 Departments)...');
+async function seedOrg() {
+  const deptSeeds = [
+    { code: 'IT', name: 'Khoa Công nghệ thông tin' },
+    { code: 'BUS', name: 'Khoa Kinh tế' },
+    { code: 'ENG', name: 'Khoa Kỹ thuật' },
+    { code: 'SCI', name: 'Khoa Khoa học tự nhiên' },
+    { code: 'LAN', name: 'Khoa Ngoại ngữ' },
+  ];
 
-    // Tạo 5 khoa
-    const departments = await Promise.all([
-        prisma.department.create({
-            data: {
-                code: 'IT',
-                name: 'Khoa Công nghệ thông tin',
-                description: 'Khoa đào tạo về CNTT, Phần mềm, Mạng máy tính',
-            },
-        }),
-        prisma.department.create({
-            data: {
-                code: 'BUS',
-                name: 'Khoa Kinh tế',
-                description: 'Khoa đào tạo về Quản trị kinh doanh, Kế toán',
-            },
-        }),
-        prisma.department.create({
-            data: {
-                code: 'ENG',
-                name: 'Khoa Kỹ thuật',
-                description: 'Khoa đào tạo về Cơ khí, Điện, Tự động hóa',
-            },
-        }),
-        prisma.department.create({
-            data: {
-                code: 'SCI',
-                name: 'Khoa Khoa học tự nhiên',
-                description: 'Khoa đào tạo về Toán, Lý, Hóa',
-            },
-        }),
-        prisma.department.create({
-            data: {
-                code: 'LAN',
-                name: 'Khoa Ngoại ngữ',
-                description: 'Khoa đào tạo về Tiếng Anh, Tiếng Nhật, Tiếng Trung',
-            },
-        }),
-    ]);
+  const majorMap: Record<string, string[]> = {
+    IT: ['SE', 'NET', 'AI'],
+    BUS: ['BA', 'ACC', 'MKT'],
+    ENG: ['ME', 'EE', 'AUTO'],
+    SCI: ['MATH', 'PHY', 'CHEM'],
+    LAN: ['ENG_L', 'JAP', 'CHI'],
+  };
 
-    console.log(`✅ Created ${departments.length} departments`);
+  const departments = [] as any[];
+  const majors = [] as any[];
+  const classes = [] as any[];
 
-    // Tạo ngành cho mỗi khoa
-    const majors = [];
+  for (const d of deptSeeds) {
+    const dept = await prisma.department.create({ data: { code: d.code, name: d.name } });
+    departments.push(dept);
 
-    // Khoa CNTT - 3 ngành
-    majors.push(
-        await prisma.major.create({
-            data: { code: 'SE', name: 'Kỹ thuật phần mềm', departmentId: departments[0].id },
-        }),
-        await prisma.major.create({
-            data: { code: 'NET', name: 'Mạng máy tính và truyền thông', departmentId: departments[0].id },
-        }),
-        await prisma.major.create({
-            data: { code: 'AI', name: 'Trí tuệ nhân tạo', departmentId: departments[0].id },
-        }),
-    );
-
-    // Khoa Kinh tế - 2 ngành
-    majors.push(
-        await prisma.major.create({
-            data: { code: 'BA', name: 'Quản trị kinh doanh', departmentId: departments[1].id },
-        }),
-        await prisma.major.create({
-            data: { code: 'ACC', name: 'Kế toán', departmentId: departments[1].id },
-        }),
-    );
-
-    // Khoa Kỹ thuật - 2 ngành
-    majors.push(
-        await prisma.major.create({
-            data: { code: 'ME', name: 'Kỹ thuật cơ khí', departmentId: departments[2].id },
-        }),
-        await prisma.major.create({
-            data: { code: 'EE', name: 'Kỹ thuật điện', departmentId: departments[2].id },
-        }),
-    );
-
-    // Khoa Khoa học tự nhiên - 2 ngành
-    majors.push(
-        await prisma.major.create({
-            data: { code: 'MATH', name: 'Toán học', departmentId: departments[3].id },
-        }),
-        await prisma.major.create({
-            data: { code: 'PHY', name: 'Vật lý', departmentId: departments[3].id },
-        }),
-    );
-
-    // Khoa Ngoại ngữ - 2 ngành
-    majors.push(
-        await prisma.major.create({
-            data: { code: 'ENG', name: 'Ngôn ngữ Anh', departmentId: departments[4].id },
-        }),
-        await prisma.major.create({
-            data: { code: 'JAP', name: 'Ngôn ngữ Nhật', departmentId: departments[4].id },
-        }),
-    );
-
-    console.log(`✅ Created ${majors.length} majors`);
-
-    // Tạo 5 lớp cho mỗi khoa (mỗi ngành có vài lớp)
-    const classes = [];
-    let classCounter = 1;
-
-    for (const major of majors) {
-        // Mỗi ngành tạo 2-3 lớp
-        const numClasses = Math.random() > 0.5 ? 2 : 3;
-        for (let i = 0; i < numClasses; i++) {
-            const year = 20 + Math.floor(Math.random() * 5); // 2020-2024
-            classes.push(
-                await prisma.class.create({
-                    data: {
-                        code: `${major.code}${String(classCounter).padStart(2, '0')}`,
-                        name: `Lớp ${major.name} ${String(classCounter).padStart(2, '0')}`,
-                        majorId: major.id,
-                    },
-                }),
-            );
-            classCounter++;
-        }
-    }
-
-    console.log(`✅ Created ${classes.length} classes\n`);
-
-    return { departments, majors, classes };
-}
-
-/**
- * Seed Users - Mỗi khoa 10 giảng viên, mỗi lớp 15-20 sinh viên
- */
-async function seedUsers(orgData: { departments: any[]; majors: any[]; classes: any[] }) {
-    console.log('👥 Seeding Users...');
-
-    const { departments, majors, classes } = orgData;
-    const allUsers = [];
-
-    // Tạo Admin
-    const admin = await prisma.user.create({
+    for (const mCode of majorMap[d.code]) {
+      const major = await prisma.major.create({
         data: {
-            email: 'admin@university.edu',
-            password: '123456',
-            name: 'Quản trị viên hệ thống',
-            role: Role.ADMIN,
-            code: 'ADMIN001',
-            gender: Gender.MALE,
+          code: `${mCode}_${d.code}`.slice(0, 20),
+          name: `Ngành ${mCode}`,
+          departmentId: dept.id,
         },
-    });
-    allUsers.push(admin);
-    console.log('✅ Created 1 ADMIN');
+      });
+      majors.push(major);
 
-    // Tạo Dean cho mỗi khoa (5 Dean)
-    const deans = [];
-    for (let i = 0; i < departments.length; i++) {
-        const dean = await prisma.user.create({
-            data: {
-                email: `dean.${departments[i].code.toLowerCase()}@university.edu`,
-                password: '123456',
-                name: `Trưởng khoa ${departments[i].name}`,
-                role: Role.DEAN,
-                code: `DEAN${String(i + 1).padStart(3, '0')}`,
-                departmentId: departments[i].id,
-                majorId: majors.find((m) => m.departmentId === departments[i].id)?.id || null,
-                gender: i % 2 === 0 ? Gender.MALE : Gender.FEMALE,
-                phone: `090${String(1000000 + i).substring(1)}`,
-            },
+      const classCount = 3;
+      for (let i = 1; i <= classCount; i++) {
+        const cls = await prisma.class.create({
+          data: {
+            code: `${mCode}${d.code}${String(i).padStart(2, '0')}`.slice(0, 20),
+            name: `Lớp ${mCode} ${i}`,
+            majorId: major.id,
+          },
         });
-        deans.push(dean);
-        allUsers.push(dean);
+        classes.push(cls);
+      }
     }
-    console.log(`✅ Created ${deans.length} DEANs`);
+  }
 
-    // Tạo 10 giảng viên cho mỗi khoa
-    const lecturers = [];
-    const firstNames = ['Nguyễn', 'Trần', 'Lê', 'Phạm', 'Hoàng', 'Phan', 'Vũ', 'Đặng', 'Bùi', 'Đỗ'];
-    const middleNames = ['Văn', 'Thị', 'Hữu', 'Minh', 'Thanh', 'Đức', 'Quốc', 'Anh', 'Hồng', 'Mai'];
-    const lastNames = ['An', 'Bình', 'Chi', 'Dũng', 'Hà', 'Kiên', 'Linh', 'Nam', 'Phương', 'Sơn'];
-
-    for (let deptIdx = 0; deptIdx < departments.length; deptIdx++) {
-        for (let i = 0; i < 10; i++) {
-            const lecturerNum = deptIdx * 10 + i + 1;
-            const lecturer = await prisma.user.create({
-                data: {
-                    email: `gv${String(lecturerNum).padStart(3, '0')}@university.edu`,
-                    password: '123456',
-                    name: `${firstNames[i]} ${middleNames[i % 10]} ${lastNames[i % 10]}`,
-                    role: Role.LECTURER,
-                    code: `GV${String(lecturerNum).padStart(3, '0')}`,
-                    departmentId: departments[deptIdx].id,
-                    majorId: majors.find((m) => m.departmentId === departments[deptIdx].id)?.id || null,
-                    gender: i % 2 === 0 ? Gender.MALE : Gender.FEMALE,
-                    phone: `091${String(1000000 + lecturerNum).substring(1)}`,
-                    address: `${i + 1} Nguyễn Văn Cừ, Q.5, TP.HCM`,
-                },
-            });
-            lecturers.push(lecturer);
-            allUsers.push(lecturer);
-        }
-    }
-    console.log(`✅ Created ${lecturers.length} LECTURERs (10 per department)`);
-
-    // Tạo thành viên Hội đồng (3-5 người cho mỗi khoa)
-    const councilMembers = [];
-    const councilTitles = ['PGS.TS', 'TS', 'ThS', 'GS.TS'];
-
-    for (let deptIdx = 0; deptIdx < departments.length; deptIdx++) {
-        const numCouncil = 3 + Math.floor(Math.random() * 3); // 3-5 thành viên/khoa
-        for (let i = 0; i < numCouncil; i++) {
-            const councilNum = deptIdx * 5 + i + 1;
-            const title = councilTitles[i % councilTitles.length];
-            const council = await prisma.user.create({
-                data: {
-                    email: `hd${String(councilNum).padStart(3, '0')}@university.edu`,
-                    password: '123456',
-                    name: `${title}. ${firstNames[(i + 3) % 10]} ${middleNames[(i + 5) % 10]} ${lastNames[(i + 7) % 10]}`,
-                    role: Role.COUNCIL,
-                    code: `HD${String(councilNum).padStart(3, '0')}`,
-                    departmentId: departments[deptIdx].id,
-                    majorId: majors.find((m) => m.departmentId === departments[deptIdx].id)?.id || null,
-                    gender: i % 3 === 0 ? Gender.FEMALE : Gender.MALE,
-                    phone: `093${String(1000000 + councilNum).substring(1)}`,
-                    address: `Phòng ${100 + councilNum}, Nhà A, Trường Đại học`,
-                },
-            });
-            councilMembers.push(council);
-            allUsers.push(council);
-        }
-    }
-    console.log(`✅ Created ${councilMembers.length} COUNCIL members (3-5 per department)`);
-
-    // Tạo sinh viên cho mỗi lớp (15-20 sinh viên/lớp)
-    const students = [];
-    const studentFirstNames = [
-        'Nguyễn',
-        'Trần',
-        'Lê',
-        'Phạm',
-        'Hoàng',
-        'Phan',
-        'Vũ',
-        'Đặng',
-        'Bùi',
-        'Đỗ',
-        'Lý',
-        'Dương',
-        'Võ',
-        'Hồ',
-        'Đinh',
-    ];
-    const studentLastNames = [
-        'An',
-        'Bảo',
-        'Chi',
-        'Dung',
-        'Hà',
-        'Khoa',
-        'Linh',
-        'Minh',
-        'Nam',
-        'Phong',
-        'Quân',
-        'Trang',
-        'Uyên',
-        'Vân',
-        'Yến',
-    ];
-
-    let studentCounter = 1;
-    for (const classObj of classes) {
-        // Lấy major để biết department
-        const major = majors.find((m) => m.id === classObj.majorId);
-        const numStudents = 15 + Math.floor(Math.random() * 6); // 15-20 sinh viên
-
-        for (let i = 0; i < numStudents; i++) {
-            const firstName = studentFirstNames[Math.floor(Math.random() * studentFirstNames.length)];
-            const lastName = studentLastNames[Math.floor(Math.random() * studentLastNames.length)];
-
-            const student = await prisma.user.create({
-                data: {
-                    email: `sv${String(studentCounter).padStart(4, '0')}@university.edu`,
-                    password: '123456',
-                    name: `${firstName} Văn ${lastName}`,
-                    role: Role.STUDENT,
-                    code: `SV${String(studentCounter).padStart(4, '0')}`,
-                    departmentId: major.departmentId,
-                    majorId: major.id,
-                    classId: classObj.id,
-                    gender: i % 2 === 0 ? Gender.MALE : Gender.FEMALE,
-                    phone: `092${String(1000000 + studentCounter).substring(1)}`,
-                },
-            });
-            students.push(student);
-            allUsers.push(student);
-            studentCounter++;
-        }
-    }
-    console.log(`✅ Created ${students.length} STUDENTs (15-20 per class)\n`);
-
-    // Đảm bảo có sẵn 2 tài khoản sinh viên test cùng khoa CNTT
-    const itDepartmentId = departments.find((dept) => dept.code === 'IT')?.id;
-    const itMajorId = majors.find((major) => major.code === 'SE')?.id;
-    const itClassId = classes.find((cls) => cls.code.startsWith('SE'))?.id;
-
-    if (itDepartmentId && itMajorId && itClassId) {
-        const studentTestAccounts = [
-            {
-                email: 'sv0002@university.edu',
-                code: 'SV0002',
-                name: 'Sinh viên Test 02',
-            },
-            {
-                email: 'sv0003@university.edu',
-                code: 'SV0003',
-                name: 'Sinh viên Test 03',
-            },
-        ];
-
-        for (const account of studentTestAccounts) {
-            const existing = await prisma.user.findUnique({ where: { email: account.email } });
-            if (!existing) {
-                const created = await prisma.user.create({
-                    data: {
-                        email: account.email,
-                        password: '123456',
-                        name: account.name,
-                        role: Role.STUDENT,
-                        code: account.code,
-                        departmentId: itDepartmentId,
-                        majorId: itMajorId,
-                        classId: itClassId,
-                        gender: Gender.MALE,
-                    },
-                });
-                students.push(created);
-                allUsers.push(created);
-            }
-        }
-    }
-
-    return { admin, deans, lecturers, councilMembers, students, allUsers };
+  return { departments, majors, classes };
 }
 
-/**
- * Seed 50 ProjectRegistrations cho khoa CNTT
- */
-async function seedProjectRegistrationsForIT(orgData: { departments: any[]; majors: any[]; classes: any[] }) {
-    console.log('📝 Seeding Project Registrations for IT Department (50 records)...');
+async function seedUsers(org: { departments: any[]; majors: any[]; classes: any[] }) {
+  const firstNames = ['Nguyễn', 'Trần', 'Lê', 'Phạm', 'Hoàng', 'Phan', 'Vũ', 'Đặng', 'Bùi', 'Đỗ'];
+  const middles = ['Văn', 'Thị', 'Hữu', 'Minh', 'Thanh', 'Đức', 'Quốc', 'Anh'];
+  const lasts = ['An', 'Bình', 'Chi', 'Dũng', 'Hà', 'Kiên', 'Linh', 'Nam', 'Phương', 'Sơn'];
 
-    const { departments } = orgData;
+  const admin = await prisma.user.create({
+    data: { email: 'admin@university.edu', password: '123456', name: 'Admin', role: Role.ADMIN, code: 'ADMIN001' },
+  });
 
-    // Tìm khoa CNTT
-    const itDept = departments.find((d) => d.code === 'IT');
-    if (!itDept) {
-        console.log('❌ IT Department not found, skipping registrations seed');
-        return;
-    }
+  const deans: any[] = [];
+  const lecturers: any[] = [];
+  const councils: any[] = [];
+  const students: any[] = [];
+  let gSeq = 1;
+  let sSeq = 1;
 
-    // Lấy sinh viên thuộc khoa CNTT
-    const itStudents = await prisma.user.findMany({
-        where: {
-            role: 'STUDENT',
-            departmentId: itDept.id,
-        },
-        take: 60, // Lấy tối đa 60 sinh viên
+  for (const dept of org.departments) {
+    const deptMajors = org.majors.filter((m) => m.departmentId === dept.id);
+    const deptClasses = org.classes.filter((c) => deptMajors.some((m) => m.id === c.majorId));
+
+    const dean = await prisma.user.create({
+      data: {
+        email: `dean.${dept.code.toLowerCase()}@university.edu`,
+        password: '123456',
+        name: `Trưởng khoa ${dept.name}`,
+        role: Role.DEAN,
+        code: `DEAN_${dept.code}`,
+        departmentId: dept.id,
+        majorId: deptMajors[0]?.id,
+      },
     });
+    deans.push(dean);
 
-    // Lấy giảng viên thuộc khoa CNTT
-    const itLecturers = await prisma.user.findMany({
-        where: {
-            role: 'LECTURER',
-            departmentId: itDept.id,
+    const lecturerCount = randInt(40, 60);
+    for (let i = 0; i < lecturerCount; i++) {
+      const major = pick(deptMajors);
+      const u = await prisma.user.create({
+        data: {
+          email: `gv${String(gSeq).padStart(5, '0')}@university.edu`,
+          password: '123456',
+          name: `${pick(firstNames)} ${pick(middles)} ${pick(lasts)}`,
+          role: Role.LECTURER,
+          code: `GV${String(gSeq).padStart(5, '0')}`,
+          departmentId: dept.id,
+          majorId: major.id,
+          gender: i % 2 === 0 ? Gender.MALE : Gender.FEMALE,
         },
-    });
-
-    if (itStudents.length === 0) {
-        console.log('❌ No IT students found, skipping registrations seed');
-        return;
+      });
+      lecturers.push(u);
+      gSeq++;
     }
 
-    // Danh sách đề tài mẫu CNTT
-    const projectTopics = [
-        'Xây dựng hệ thống quản lý thư viện trực tuyến',
-        'Phát triển ứng dụng di động hỗ trợ học tập',
-        'Thiết kế hệ thống IoT giám sát môi trường',
-        'Xây dựng chatbot hỗ trợ tư vấn học đường',
-        'Phát triển website thương mại điện tử',
-        'Ứng dụng Machine Learning trong nhận diện khuôn mặt',
-        'Xây dựng hệ thống quản lý bệnh viện',
-        'Phát triển game 2D giáo dục cho trẻ em',
-        'Thiết kế hệ thống điểm danh bằng mã QR',
-        'Xây dựng ứng dụng đặt lịch khám bệnh online',
-        'Phát triển hệ thống quản lý kho hàng',
-        'Ứng dụng AI trong phân loại rác thải',
-        'Xây dựng platform học trực tuyến',
-        'Phát triển ứng dụng quản lý tài chính cá nhân',
-        'Thiết kế hệ thống giám sát giao thông thông minh',
-        'Xây dựng mạng xã hội cho sinh viên',
-        'Phát triển ứng dụng đọc sách điện tử',
-        'Ứng dụng Blockchain trong quản lý chứng chỉ',
-        'Xây dựng hệ thống bán vé sự kiện online',
-        'Phát triển robot tự động phục vụ',
-        'Thiết kế hệ thống smart home',
-        'Xây dựng ứng dụng tìm việc làm',
-        'Phát triển hệ thống quản lý sinh viên',
-        'Ứng dụng AR trong giáo dục lịch sử',
-        'Xây dựng website tin tức tự động',
-    ];
-
-    const objectives = [
-        'Nghiên cứu và phát triển giải pháp công nghệ nhằm tối ưu hóa quy trình',
-        'Ứng dụng các công nghệ mới để giải quyết vấn đề thực tế',
-        'Phát triển sản phẩm phần mềm đáp ứng nhu cầu người dùng',
-        'Nghiên cứu các thuật toán và phương pháp tiên tiến',
-        'Xây dựng giải pháp tích hợp đa nền tảng',
-    ];
-
-    const expectedOutputs = [
-        'Sản phẩm phần mềm hoàn chỉnh có thể đưa vào sử dụng',
-        'Hệ thống đáp ứng các tiêu chí kỹ thuật đề ra',
-        'Ứng dụng được triển khai thực tế tại đơn vị',
-        'Tài liệu kỹ thuật và hướng dẫn sử dụng đầy đủ',
-        'Prototype sản phẩm kèm báo cáo nghiên cứu',
-    ];
-
-    const statuses: Array<'PENDING' | 'APPROVED' | 'REJECTED'> = ['PENDING', 'APPROVED', 'REJECTED'];
-    const instructorStatuses: Array<'PENDING' | 'ACCEPTED' | 'REJECTED'> = ['PENDING', 'ACCEPTED', 'REJECTED'];
-    const facultyStatuses: Array<'PENDING' | 'APPROVED' | 'REJECTED'> = ['PENDING', 'APPROVED', 'REJECTED'];
-
-    const registrations = [];
-
-    for (let i = 0; i < 50; i++) {
-        const student = itStudents[i % itStudents.length];
-        const instructor = itLecturers[i % itLecturers.length];
-        const topic = projectTopics[i % projectTopics.length];
-        const objective = objectives[i % objectives.length];
-        const expectedOutput = expectedOutputs[i % expectedOutputs.length];
-
-        // Tạo các trạng thái ngẫu nhiên nhưng hợp lý
-        const instructorStatus = instructorStatuses[Math.floor(Math.random() * instructorStatuses.length)];
-        // Nếu instructor đã duyệt, faculty có thể duyệt; ngược lại faculty chờ
-        const facultyStatus =
-            instructorStatus === 'ACCEPTED'
-                ? facultyStatuses[Math.floor(Math.random() * facultyStatuses.length)]
-                : 'PENDING';
-
-        const registration = await prisma.projectRegistration.create({
-            data: {
-                userId: student.id,
-                title: `${topic} - Phiên bản ${i + 1}`,
-                objective: `${objective}. Đề tài số ${i + 1} trong lĩnh vực CNTT.`,
-                expectedOutput: expectedOutput,
-                status: 'PENDING',
-                instructorId: instructor.id,
-                instructorStatus: instructorStatus,
-                facultyStatus: facultyStatus,
-            },
-        });
-        registrations.push(registration);
+    const councilCount = randInt(12, 20);
+    for (let i = 0; i < councilCount; i++) {
+      const major = pick(deptMajors);
+      const u = await prisma.user.create({
+        data: {
+          email: `hd${dept.code.toLowerCase()}${String(i + 1).padStart(3, '0')}@university.edu`,
+          password: '123456',
+          name: `${pick(firstNames)} ${pick(middles)} ${pick(lasts)}`,
+          role: Role.COUNCIL,
+          code: `HD${dept.code}${String(i + 1).padStart(3, '0')}`,
+          departmentId: dept.id,
+          majorId: major.id,
+        },
+      });
+      councils.push(u);
     }
 
-    console.log(`✅ Created ${registrations.length} Project Registrations for IT Department\n`);
-    return registrations;
+    const studentCount = randInt(200, 300);
+    for (let i = 0; i < studentCount; i++) {
+      const cls = pick(deptClasses);
+      const major = deptMajors.find((m) => m.id === cls.majorId)!;
+      const u = await prisma.user.create({
+        data: {
+          email: `sv${String(sSeq).padStart(6, '0')}@university.edu`,
+          password: '123456',
+          name: `${pick(firstNames)} ${pick(middles)} ${pick(lasts)}`,
+          role: Role.STUDENT,
+          code: `SV${String(sSeq).padStart(6, '0')}`,
+          departmentId: dept.id,
+          majorId: major.id,
+          classId: cls.id,
+          gender: i % 2 === 0 ? Gender.MALE : Gender.FEMALE,
+        },
+      });
+      students.push(u);
+      sSeq++;
+    }
+  }
+
+  return { admin, deans, lecturers, councils, students };
 }
 
-/**
- * Main seed function
- */
+async function seedFlow(org: any, users: any) {
+  await prisma.projectType.createMany({ data: [{ name: 'Đề tài sinh viên' }, { name: 'Đề tài giảng viên' }] });
+  const projectType = await prisma.projectType.findFirst({ where: { name: 'Đề tài sinh viên' } });
+
+  for (const dept of org.departments) {
+    const dean = users.deans.find((d: any) => d.departmentId === dept.id);
+    const deptStudents = users.students.filter((s: any) => s.departmentId === dept.id);
+    const deptLecturers = users.lecturers.filter((l: any) => l.departmentId === dept.id);
+    const deptCouncils = users.councils.filter((c: any) => c.departmentId === dept.id);
+    const deptMajors = org.majors.filter((m: any) => m.departmentId === dept.id);
+
+    const roundCount = randInt(3, 4);
+    for (let r = 1; r <= roundCount; r++) {
+      const start = new Date(2026, randInt(0, 7), randInt(1, 15));
+      const end = new Date(start.getTime() + 15 * 86400000);
+      const pStart = new Date(end.getTime() + 2 * 86400000);
+      const pEnd = new Date(pStart.getTime() + 90 * 86400000);
+
+      const callRound = await prisma.callRound.create({
+        data: {
+          name: `Đợt NCKH ${dept.code}-${r}`,
+          description: `Seed full flow ${dept.name}`,
+          registrationStartDate: start,
+          registrationEndDate: end,
+          projectStartDate: pStart,
+          projectEndDate: pEnd,
+          reviewDeadline: new Date(end.getTime() + 5 * 86400000),
+          reportingStartDate: new Date(pStart.getTime() + 30 * 86400000),
+          defenseDate: new Date(pEnd.getTime() + 7 * 86400000),
+          projectLockDate: end,
+          startDate: start,
+          endDate: end,
+          applicableFor: ApplicableFor.STUDENT,
+          approvalStatus: CallRoundApprovalStatus.APPROVED,
+          createdById: dean.id,
+          createdByRole: Role.DEAN,
+          approvedById: users.admin.id,
+          approvedAt: new Date(),
+          departments: { connect: [{ id: dept.id }] },
+          majors: { connect: deptMajors.map((m: any) => ({ id: m.id })) },
+        },
+      });
+
+      const invitedInstructors = pickN(deptLecturers, randInt(20, Math.min(35, deptLecturers.length)));
+      await prisma.callRoundInstructor.createMany({
+        data: invitedInstructors.map((i: any) => ({
+          callRoundId: callRound.id,
+          instructorId: i.id,
+          invitationStatus: InvitationStatus.ACCEPTED,
+          respondedAt: new Date(),
+        })),
+      });
+
+      const invitedCouncilPool = pickN(deptCouncils, randInt(9, Math.min(15, deptCouncils.length)));
+      await prisma.callRoundCouncilMember.createMany({
+        data: invitedCouncilPool.map((i: any) => ({
+          callRoundId: callRound.id,
+          councilMemberId: i.id,
+          invitationStatus: InvitationStatus.ACCEPTED,
+          respondedAt: new Date(),
+        })),
+      });
+
+      const regsPerRound = randInt(25, 40);
+      const registrations: any[] = [];
+      const usedLeaderIds = new Set<string>();
+
+      for (let i = 0; i < regsPerRound; i++) {
+        const leader = pick<any>(deptStudents.filter((s: any) => !usedLeaderIds.has(s.id)));
+        if (!leader) break;
+        usedLeaderIds.add(leader.id);
+
+        const teamSize = randInt(2, 5);
+        const mates = pickN(deptStudents.filter((s: any) => s.id !== leader.id), teamSize - 1);
+        const instructor = pick<any>(invitedInstructors);
+        if (!instructor) continue;
+
+        const reg = await prisma.projectRegistration.create({
+          data: {
+            userId: leader.id,
+            callRoundId: callRound.id,
+            title: `Đề tài ${dept.code}-${r}-${String(i + 1).padStart(3, '0')}`,
+            objective: 'Mục tiêu nghiên cứu mô phỏng dữ liệu thật.',
+            expectedOutput: 'Báo cáo + sản phẩm mẫu.',
+            teamMembers: mates.map((m: any) => ({ id: m.id, name: m.name, code: m.code })),
+            status: RegistrationStatus.APPROVED,
+            instructorId: instructor.id,
+            instructorStatus: InstructorStatus.ACCEPTED,
+            facultyStatus: FacultyStatus.APPROVED,
+            facultyReviewerId: dean.id,
+          },
+        });
+        registrations.push(reg);
+
+        const project = await prisma.project.create({
+          data: {
+            code: `PRJ-${dept.code}-${r}-${String(i + 1).padStart(3, '0')}`,
+            title: reg.title,
+            objective: reg.objective,
+            expectedOutput: reg.expectedOutput,
+            status: ProjectStatus.COMPLETED,
+            leaderId: leader.id,
+            deanReviewerId: dean.id,
+            callRoundId: callRound.id,
+            projectTypeId: projectType?.id,
+            instructorId: instructor.id,
+            budgetRequested: randInt(10000000, 30000000),
+            budgetApproved: randInt(8000000, 25000000),
+          },
+        });
+
+        await prisma.projectClosingSubmission.create({
+          data: {
+            projectId: project.id,
+            submittedById: leader.id,
+            status: ProjectClosingStatus.APPROVED,
+            note: 'Nghiệm thu đạt',
+            reportFiles: [{ name: 'bao-cao.pdf', url: '/seed/reports/bao-cao.pdf' }],
+            presentationSlideFiles: [{ name: 'slide.pptx', url: '/seed/slides/slide.pptx' }],
+          },
+        });
+
+        const disbursementAmount = randInt(1000000, 5000000);
+        const disbursedAt = new Date(pStart.getTime() + randInt(5, 45) * 86400000);
+        const dStatusPick = randInt(1, 100);
+        const dStatus = dStatusPick <= 60 ? 'APPROVED' : dStatusPick <= 85 ? 'PENDING' : 'REJECTED';
+
+        await prisma.fundingDisbursement.create({
+          data: {
+            projectId: project.id,
+            amount: disbursementAmount,
+            disbursedAt,
+            voucherNo: `VC-${dept.code}-${r}-${String(i + 1).padStart(3, '0')}`,
+            reason: 'Giải ngân theo tiến độ thực hiện đề tài.',
+            status: dStatus as any,
+            createdById: dean.id,
+            approvedById: dStatus === 'APPROVED' ? users.admin.id : null,
+            approvedAt: dStatus === 'APPROVED' ? new Date(disbursedAt.getTime() + 86400000) : null,
+            rejectionNote: dStatus === 'REJECTED' ? 'Hồ sơ chứng từ chưa hợp lệ.' : null,
+          },
+        });
+      }
+
+      const councilCount = randInt(2, 3);
+      const councils: any[] = [];
+      for (let c = 1; c <= councilCount; c++) {
+        const council = await prisma.council.create({
+          data: {
+            callRoundId: callRound.id,
+            name: `Hội đồng ${dept.code}-${r}-${c}`,
+            defenseDate: new Date(pEnd.getTime() + c * 86400000),
+            defenseLocation: `Phòng A${100 + c}`,
+          },
+        });
+        councils.push(council);
+
+        const members = pickN(invitedCouncilPool, randInt(3, 5));
+        const roles = ['Chủ tịch', 'Thư ký', 'Ủy viên 1', 'Ủy viên 2', 'Ủy viên 3'];
+        await prisma.councilMemberAssignment.createMany({
+          data: members.map((m: any, idx: number) => ({ councilId: council.id, councilMemberId: m.id, role: roles[idx] })),
+        });
+      }
+
+      for (let i = 0; i < registrations.length; i++) {
+        const reg = registrations[i];
+        const council = councils[i % councils.length];
+        await prisma.projectCouncilAssignment.create({
+          data: { councilId: council.id, projectRegistrationId: reg.id },
+        });
+
+        const project = await prisma.project.findFirst({ where: { title: reg.title, callRoundId: callRound.id } });
+        if (!project) continue;
+        const cMembers = await prisma.councilMemberAssignment.findMany({ where: { councilId: council.id } });
+
+        for (const cm of cMembers) {
+          const score = randInt(65, 98);
+          await prisma.councilEvaluation.create({
+            data: {
+              projectId: project.id,
+              councilMemberId: cm.councilMemberId,
+              score,
+              decision: score >= 80 ? ReviewDecision.PASS : score >= 70 ? ReviewDecision.NEED_REVISION : ReviewDecision.FAIL,
+              comment: 'Đánh giá seed tự động',
+            },
+          });
+        }
+      }
+    }
+  }
+}
+
 async function main() {
-    console.log('🌱 Starting database seed...\n');
-    console.log('='.repeat(60));
-    console.log('\n');
-
-    // Step 1: Clear all existing data
-    await clearDatabase();
-
-    // Step 2: Seed organization structure (5 khoa, nhiều ngành, nhiều lớp)
-    const orgData = await seedOrganization();
-
-    // Step 3: Seed users (mỗi khoa 10 GV, mỗi lớp 15-20 SV)
-    const users = await seedUsers(orgData);
-
-    // Step 4: Seed progress report templates
-    seedTemplates();
-
-    // Step 5: Seed project registrations for IT Department (50 records)
-    await seedProjectRegistrationsForIT(orgData);
-
-    console.log('\n🎉 Seed completed successfully!\n');
+  console.log('🌱 Seed full NCKH flow...');
+  await clearDatabase();
+  const org = await seedOrg();
+  const users = await seedUsers(org);
+  await seedFlow(org, users);
+  console.log('✅ Done');
 }
 
 main()
-    .catch((e) => {
-        console.error('\n❌ Seed failed:', e);
-        process.exit(1);
-    })
-    .finally(async () => {
-        await prisma.$disconnect();
-    });
+  .catch((e) => {
+    console.error(e);
+    process.exit(1);
+  })
+  .finally(async () => {
+    await prisma.$disconnect();
+  });

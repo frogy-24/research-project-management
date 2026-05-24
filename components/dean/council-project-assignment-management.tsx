@@ -129,6 +129,9 @@ export function CouncilProjectAssignmentManagement({
     const callRoundDefenseDate = data?.callRound?.defenseDate;
     const callRoundDefenseLocation = data?.callRound?.defenseLocation ?? '';
 
+    useEffect(() => {
+        console.log('Evaluation data updated:', evaluationData);
+    }, [ evaluationData]);
     const unassignedProjects = useMemo(() => {
         const keyword = search.trim().toLowerCase();
         return approvedProjects
@@ -557,7 +560,7 @@ export function CouncilProjectAssignmentManagement({
         link.click();
         document.body.removeChild(link);
 
-        toast.success('Đang xuất file dữ liệu chi tiết...');
+        toast.success('Đang xuất file Excel...');
     };
 
     const handleOpenDetail = (item: ProjectEvaluationDetail) => {
@@ -741,7 +744,8 @@ export function CouncilProjectAssignmentManagement({
                 </Card>
             )}
 
-            <Card id="council-evaluations" className="scroll-mt-20">
+            {isEvaluationsOnly && (
+                <Card id="council-evaluations" className="scroll-mt-20">
                 <CardHeader>
                     <CardTitle>Kết quả chấm điểm theo đợt đề tài</CardTitle>
                     <CardDescription>
@@ -797,7 +801,7 @@ export function CouncilProjectAssignmentManagement({
                             disabled={isWaitingForEvaluationFilter}
                         >
                             <Download className="h-4 w-4 mr-2" />
-                            Xuất file chi tiết (CSV)
+                            Xuất file chi tiết (Excel)
                         </Button>
                     </div>
 
@@ -1063,6 +1067,21 @@ export function CouncilProjectAssignmentManagement({
                                                             </TableCell>
                                                         </TableRow>
                                                     ))}
+                                                    <TableRow className="bg-muted/20 font-medium">
+                                                        <TableCell colSpan={groupedEvaluationItems.hasCallRoundFilter ? 4 : 5}>
+                                                            Điểm trung bình đề tài
+                                                        </TableCell>
+                                                        <TableCell>
+                                                            {(
+                                                                projectGroup.items.reduce(
+                                                                    (sum, evaluationItem) => sum + evaluationItem.score,
+                                                                    0,
+                                                                ) / projectGroup.items.length
+                                                            ).toFixed(2)}
+                                                            /10
+                                                        </TableCell>
+                                                        <TableCell colSpan={2}></TableCell>
+                                                    </TableRow>
                                                 </TableBody>
                                             </Table>
                                         </div>
@@ -1072,7 +1091,8 @@ export function CouncilProjectAssignmentManagement({
                         </div>
                     )}
                 </CardContent>
-            </Card>
+                </Card>
+            )}
 
             {!isEvaluationsOnly && selectedCallRoundId && (
                 <div className="grid gap-6 lg:grid-cols-2">

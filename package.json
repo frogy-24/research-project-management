@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "seed": "tsx prisma/seed.ts",
+    "seed:templates": "tsx prisma/seed-templates.ts"
   },
   "dependencies": {
     "@fullcalendar/core": "^6.1.20",

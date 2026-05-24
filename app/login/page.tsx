@@ -145,7 +145,7 @@ export default function LoginPage() {
                     className="justify-start text-left h-auto py-2"
                   >
                     <div className="flex flex-col items-start">
-                      <span className="font-semibold text-xs text-purple-600">👔 DEAN - Khoa CNTT</span>
+                      <span className="font-semibold text-xs text-purple-600">👔 Trưởng khoa CNTT</span>
                       <span className="text-xs text-muted-foreground">dean.it@university.edu</span>
                     </div>
                   </Button>
@@ -161,7 +161,7 @@ export default function LoginPage() {
                     className="justify-start text-left h-auto py-2"
                   >
                     <div className="flex flex-col items-start">
-                      <span className="font-semibold text-xs text-purple-600">👔 DEAN - Khoa Kinh tế</span>
+                      <span className="font-semibold text-xs text-purple-600">👔 Trưởng khoa Kinh tế</span>
                       <span className="text-xs text-muted-foreground">dean.bus@university.edu</span>
                     </div>
                   </Button>
@@ -171,14 +171,14 @@ export default function LoginPage() {
                     variant="outline"
                     size="sm"
                     onClick={() => {
-                      fillDemoAccount("gv001@university.edu", "123456");
+                      fillDemoAccount("gv00001@university.edu", "123456");
                       handleSubmit(onSubmit)();
                     }}
                     className="justify-start text-left h-auto py-2"
                   >
                     <div className="flex flex-col items-start">
-                      <span className="font-semibold text-xs text-green-600">👨‍🏫 Giảng viên</span>
-                      <span className="text-xs text-muted-foreground">gv001@university.edu</span>
+                      <span className="font-semibold text-xs text-green-600">👨‍🏫 Giảng viên - Khoa CNTT</span>
+                      <span className="text-xs text-muted-foreground">gv00001@university.edu</span>
                     </div>
                   </Button>
 
@@ -187,14 +187,14 @@ export default function LoginPage() {
                     variant="outline"
                     size="sm"
                     onClick={() => {
-                      fillDemoAccount("sv0001@university.edu", "123456");
+                      fillDemoAccount("gv00061@university.edu", "123456");
                       handleSubmit(onSubmit)();
                     }}
                     className="justify-start text-left h-auto py-2"
                   >
                     <div className="flex flex-col items-start">
-                      <span className="font-semibold text-xs text-orange-600">🎓 Sinh viên</span>
-                      <span className="text-xs text-muted-foreground">sv0001@university.edu</span>
+                      <span className="font-semibold text-xs text-green-600">👨‍🏫 Giảng viên - Khoa Kinh tế</span>
+                      <span className="text-xs text-muted-foreground">gv00061@university.edu</span>
                     </div>
                   </Button>
 
@@ -203,14 +203,14 @@ export default function LoginPage() {
                     variant="outline"
                     size="sm"
                     onClick={() => {
-                      fillDemoAccount("sv0002@university.edu", "123456");
+                      fillDemoAccount("sv000001@university.edu", "123456");
                       handleSubmit(onSubmit)();
                     }}
                     className="justify-start text-left h-auto py-2"
                   >
                     <div className="flex flex-col items-start">
-                      <span className="font-semibold text-xs text-orange-600">🎓 Sinh viên (test 2)</span>
-                      <span className="text-xs text-muted-foreground">sv0002@university.edu</span>
+                      <span className="font-semibold text-xs text-orange-600">🎓 Sinh viên - Khoa CNTT</span>
+                      <span className="text-xs text-muted-foreground">sv000001@university.edu</span>
                     </div>
                   </Button>
 
@@ -219,16 +219,17 @@ export default function LoginPage() {
                     variant="outline"
                     size="sm"
                     onClick={() => {
-                      fillDemoAccount("sv0003@university.edu", "123456");
+                      fillDemoAccount("sv000301@university.edu", "123456");
                       handleSubmit(onSubmit)();
                     }}
                     className="justify-start text-left h-auto py-2"
                   >
                     <div className="flex flex-col items-start">
-                      <span className="font-semibold text-xs text-orange-600">🎓 Sinh viên (test 3)</span>
-                      <span className="text-xs text-muted-foreground">sv0003@university.edu</span>
+                      <span className="font-semibold text-xs text-orange-600">🎓 Sinh viên - Khoa Kinh tế</span>
+                      <span className="text-xs text-muted-foreground">sv000301@university.edu</span>
                     </div>
                   </Button>
+
                 </div>
                 <p className="text-xs text-muted-foreground mt-2 italic">
                   Mật khẩu tất cả tài khoản: <strong>123456</strong>

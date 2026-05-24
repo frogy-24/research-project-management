@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from "next/server"
 import prisma from "@/lib/prisma"
 import { getActorUserId, getActorRole } from "@/lib/project-permissions"
+import { unlink } from "fs/promises"
+import { existsSync } from "fs"
+import { join } from "path"
 
 export async function POST(req: NextRequest) {
   const userId = getActorUserId(req)
@@ -107,6 +110,40 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ success: true, data: jobs, total })
   } catch (error) {
     console.error("List report jobs error:", error)
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 })
+  }
+}
+
+export async function DELETE(req: NextRequest) {
+  const userId = getActorUserId(req)
+  if (!userId) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+  }
+
+  try {
+    const { searchParams } = new URL(req.url)
+    const id = searchParams.get("id")
+    if (!id) {
+      return NextResponse.json({ error: "Missing id" }, { status: 400 })
+    }
+
+    const job = await prisma.reportJob.findFirst({ where: { id, deanId: userId } })
+    if (!job) {
+      return NextResponse.json({ error: "Report job not found" }, { status: 404 })
+    }
+
+    if (job.resultUrl && job.resultUrl.startsWith("/uploads/reports/")) {
+      const filename = job.resultUrl.replace("/uploads/reports/", "")
+      const filePath = join(process.cwd(), "public", "uploads", "reports", filename)
+      if (existsSync(filePath)) {
+        await unlink(filePath)
+      }
+    }
+
+    await prisma.reportJob.delete({ where: { id: job.id } })
+    return NextResponse.json({ success: true })
+  } catch (error) {
+    console.error("Delete report job error:", error)
     return NextResponse.json({ error: "Internal server error" }, { status: 500 })
   }
 }

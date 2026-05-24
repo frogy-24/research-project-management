@@ -28,7 +28,7 @@ export function ProjectTimelineChart({ data }: { data: Array<{ month: string; co
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="month" tick={{ fontSize: 12 }} />
             <YAxis allowDecimals={false} tick={{ fontSize: 12 }} />
-            <Tooltip formatter={(value: number) => `${value} đề tài`} />
+            <Tooltip formatter={(value) => `${Number(value ?? 0)} đề tài`} />
             <Legend />
             <Line
               type="monotone"

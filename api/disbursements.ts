@@ -18,7 +18,7 @@ export const disbursementsApi = {
   async getDisbursements(
     filters?: DisbursementFilters & { page?: number; limit?: number }
   ): Promise<PaginatedResponse<FundingDisbursementWithRelations>> {
-    const { data } = await api.get('/api/disbursements', {
+    const { data } = await api.get('/disbursements', {
       params: filters,
     });
     return data;
@@ -28,7 +28,7 @@ export const disbursementsApi = {
    * Lấy chi tiết một giải ngân
    */
   async getDisbursementById(id: string): Promise<ApiResponse<FundingDisbursementWithRelations>> {
-    const { data } = await api.get(`/api/disbursements/${id}`);
+    const { data } = await api.get(`/disbursements/${id}`);
     return data;
   },
 
@@ -36,7 +36,7 @@ export const disbursementsApi = {
    * Lấy danh sách giải ngân theo projectId
    */
   async getDisbursementsByProject(projectId: string): Promise<ApiResponse<FundingDisbursementWithRelations[]>> {
-    const { data } = await api.get(`/api/projects/${projectId}/disbursements`);
+    const { data } = await api.get(`/projects/${projectId}/disbursements`);
     return data;
   },
 
@@ -44,7 +44,7 @@ export const disbursementsApi = {
    * Tạo mới giải ngân (Dean/Admin)
    */
   async createDisbursement(input: CreateDisbursementInput): Promise<ApiResponse<FundingDisbursement>> {
-    const { data } = await api.post('/api/disbursements', input);
+    const { data } = await api.post('/disbursements', input);
     return data;
   },
 
@@ -55,7 +55,7 @@ export const disbursementsApi = {
     id: string,
     input: UpdateDisbursementInput
   ): Promise<ApiResponse<FundingDisbursement>> {
-    const { data } = await api.patch(`/api/disbursements/${id}`, input);
+    const { data } = await api.patch(`/disbursements/${id}`, input);
     return data;
   },
 
@@ -66,7 +66,7 @@ export const disbursementsApi = {
     id: string,
     input?: ApproveDisbursementInput
   ): Promise<ApiResponse<FundingDisbursement>> {
-    const { data } = await api.post(`/api/disbursements/${id}/approve`, input);
+    const { data } = await api.post(`/disbursements/${id}/approve`, input);
     return data;
   },
 
@@ -77,7 +77,7 @@ export const disbursementsApi = {
     id: string,
     input: RejectDisbursementInput
   ): Promise<ApiResponse<FundingDisbursement>> {
-    const { data } = await api.post(`/api/disbursements/${id}/reject`, input);
+    const { data } = await api.post(`/disbursements/${id}/reject`, input);
     return data;
   },
 
@@ -85,7 +85,7 @@ export const disbursementsApi = {
    * Xóa giải ngân (chỉ PENDING)
    */
   async deleteDisbursement(id: string): Promise<ApiResponse<void>> {
-    const { data } = await api.delete(`/api/disbursements/${id}`);
+    const { data } = await api.delete(`/disbursements/${id}`);
     return data;
   },
 
@@ -103,7 +103,7 @@ export const disbursementsApi = {
     totalAmount: number;
     approvedAmount: number;
   }>> {
-    const { data } = await api.get('/api/disbursements/stats', {
+    const { data } = await api.get('/disbursements/stats', {
       params: filters,
     });
     return data;
@@ -116,7 +116,7 @@ export const disbursementsApi = {
     page?: number;
     limit?: number;
   }): Promise<PaginatedResponse<FundingDisbursementWithRelations>> {
-    const { data } = await api.get('/api/disbursements/pending', {
+    const { data } = await api.get('/disbursements/pending', {
       params,
     });
     return data;
@@ -130,7 +130,7 @@ export const disbursementsApi = {
     reason?: string;
     remainingBudget?: number;
   }>> {
-    const { data } = await api.get(`/api/projects/${projectId}/can-create-disbursement`);
+    const { data } = await api.get(`/projects/${projectId}/can-create-disbursement`);
     return data;
   },
 };

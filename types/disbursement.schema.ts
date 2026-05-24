@@ -25,9 +25,7 @@ export const disbursementSchema = z.object({
 export const createDisbursementSchema = z.object({
   projectId: z.string().cuid("ID đề tài không hợp lệ"),
   amount: z.coerce.number().positive("Số tiền phải lớn hơn 0"),
-  disbursedAt: z.coerce.date({
-    required_error: "Vui lòng chọn ngày giải ngân",
-  }),
+  disbursedAt: z.coerce.date(),
   voucherNo: z.string().optional(),
   voucherFileUrl: z.string().url("URL file không hợp lệ").optional(),
   reason: z.string().min(10, "Lý do giải ngân phải có ít nhất 10 ký tự").optional(),

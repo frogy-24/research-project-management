@@ -309,6 +309,31 @@ exports.Prisma.LecturerScalarFieldEnum = {
   userId: 'userId',
   staffId: 'staffId',
   academicRank: 'academicRank',
+  positionTitle: 'positionTitle',
+  workStartDate: 'workStartDate',
+  yearsOfService: 'yearsOfService',
+  teachingExperience: 'teachingExperience',
+  coursesTaught: 'coursesTaught',
+  teachingYears: 'teachingYears',
+  trainingSystem: 'trainingSystem',
+  pedagogyCertificate: 'pedagogyCertificate',
+  workHistory: 'workHistory',
+  degreeName: 'degreeName',
+  degreeMajor: 'degreeMajor',
+  degreeInstitution: 'degreeInstitution',
+  degreeCountry: 'degreeCountry',
+  degreeYear: 'degreeYear',
+  degreeScanUrl: 'degreeScanUrl',
+  academicTitleYear: 'academicTitleYear',
+  academicTitleDecision: 'academicTitleDecision',
+  academicTitleProofUrl: 'academicTitleProofUrl',
+  organizationMajor: 'organizationMajor',
+  positionRole: 'positionRole',
+  lecturerType: 'lecturerType',
+  civilServantCode: 'civilServantCode',
+  civilServantGrade: 'civilServantGrade',
+  workingStatus: 'workingStatus',
+  joinedAt: 'joinedAt',
   departmentName: 'departmentName',
   facultyName: 'facultyName',
   researchInterests: 'researchInterests',
@@ -642,8 +667,20 @@ exports.AcademicRank = exports.$Enums.AcademicRank = {
   BACHELOR: 'BACHELOR',
   MASTER: 'MASTER',
   DOCTOR: 'DOCTOR',
+  DOCTOR_OF_SCIENCE: 'DOCTOR_OF_SCIENCE',
   ASSOCIATE_PROFESSOR: 'ASSOCIATE_PROFESSOR',
   PROFESSOR: 'PROFESSOR'
+};
+
+exports.LecturerEmploymentType = exports.$Enums.LecturerEmploymentType = {
+  FULL_TIME: 'FULL_TIME',
+  ADJUNCT: 'ADJUNCT'
+};
+
+exports.LecturerWorkingStatus = exports.$Enums.LecturerWorkingStatus = {
+  ACTIVE: 'ACTIVE',
+  RETIRED: 'RETIRED',
+  RESIGNED: 'RESIGNED'
 };
 
 exports.PublicationType = exports.$Enums.PublicationType = {

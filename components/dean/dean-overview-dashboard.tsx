@@ -48,7 +48,7 @@ export function DeanOverviewDashboard() {
         budgetRequested: p.budgetRequested ?? null,
         budgetApproved: p.budgetApproved ?? null,
         leaderName: p.leader?.name ?? '—',
-        createdAt: p.createdAt,
+        createdAt: p.createdAt instanceof Date ? p.createdAt.toISOString() : String(p.createdAt),
       })),
     [projects]
   );

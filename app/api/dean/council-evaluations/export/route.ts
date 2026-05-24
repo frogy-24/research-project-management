@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 import { getAuthUser } from '@/lib/auth-helpers';
 import { registrationTeamMemberSchema } from '@/types/project-registration.schema';
+import * as XLSX from 'xlsx';
 
 const teamMemberArraySchema = registrationTeamMemberSchema.array();
 
@@ -125,10 +126,7 @@ const formatDate = (value: Date | null | undefined): string => {
 
 const safeText = (value: string | null | undefined): string => value?.trim() || '';
 
-const escapeCsvCell = (value: string): string => {
-    const escaped = value.replaceAll('"', '""');
-    return `"${escaped}"`;
-};
+const getDecisionLabel = (decision: string): string => decisionLabelMap[decision] || decision;
 
 export async function GET(request: NextRequest) {
     try {
@@ -153,52 +151,21 @@ export async function GET(request: NextRequest) {
 
         const callRoundIds = callRounds.map((round) => round.id);
         if (callRoundIds.length === 0) {
-            const csv = '\uFEFF' + [
-                [
-                    'Dot dang ky',
-                    'Thoi gian dang ky',
-                    'Hoi dong',
-                    'Ngay bao ve',
-                    'Noi bao ve',
-                    'Ten de tai',
-                    'Muc tieu de tai',
-                    'Ten de tai dang ky',
-                    'Muc tieu dang ky',
-                    'Ma dang ky',
-                    'Trang thai dang ky',
-                    'Trang thai GVHD',
-                    'Trang thai khoa',
-                    'Giang vien huong dan',
-                    'Ma GVHD',
-                    'Email GVHD',
-                    'Khoa GVHD',
-                    'Nganh GVHD',
-                    'Truong nhom',
-                    'Ma truong nhom',
-                    'Email truong nhom',
-                    'Khoa truong nhom',
-                    'Nganh truong nhom',
-                    'Lop truong nhom',
-                    'Thanh vien nhom',
-                    'Nguoi cham',
-                    'Ma nguoi cham',
-                    'Email nguoi cham',
-                    'Khoa nguoi cham',
-                    'Nganh nguoi cham',
-                    'Diem',
-                    'Quyet dinh',
-                    'Nhan xet',
-                    'Thoi gian cham',
-                ]
-                    .map(escapeCsvCell)
-                    .join(','),
-            ].join('\n');
+            const wb = XLSX.utils.book_new();
+            const ws = XLSX.utils.aoa_to_sheet([
+                ['BÁO CÁO KẾT QUẢ CHẤM ĐIỂM HỘI ĐỒNG'],
+                ['Không có dữ liệu theo bộ lọc hiện tại.'],
+            ]);
+            ws['!cols'] = [{ wch: 60 }];
+            ws['!merges'] = [{ s: { r: 0, c: 0 }, e: { r: 0, c: 8 } }];
+            XLSX.utils.book_append_sheet(wb, ws, 'Ket qua cham diem');
+            const buffer = XLSX.write(wb, { type: 'buffer', bookType: 'xlsx' });
 
-            return new NextResponse(csv, {
+            return new NextResponse(buffer, {
                 status: 200,
                 headers: {
-                    'Content-Type': 'text/csv; charset=utf-8',
-                    'Content-Disposition': 'attachment; filename="dean-council-evaluations-empty.csv"',
+                    'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                    'Content-Disposition': 'attachment; filename="dean-council-evaluations-empty.xlsx"',
                     'Cache-Control': 'no-store',
                 },
             });
@@ -452,7 +419,7 @@ export async function GET(request: NextRequest) {
                     evaluatorDepartment: safeText(evaluation.councilMember.departmentRef?.name),
                     evaluatorMajor: safeText(evaluation.councilMember.major?.name),
                     score: String(evaluation.score),
-                    decision: decisionLabelMap[evaluation.decision] || evaluation.decision,
+                    decision: getDecisionLabel(evaluation.decision),
                     comment: safeText(evaluation.comment),
                     evaluatedAt: formatDateTime(evaluation.evaluatedAt),
                 };
@@ -479,94 +446,111 @@ export async function GET(request: NextRequest) {
               })
             : exportRows;
 
-        const header = [
-            'Dot dang ky',
-            'Thoi gian dang ky',
-            'Hoi dong',
-            'Ngay bao ve',
-            'Noi bao ve',
-            'Ten de tai',
-            'Muc tieu de tai',
-            'Ten de tai dang ky',
-            'Muc tieu dang ky',
-            'Ma dang ky',
-            'Trang thai dang ky',
-            'Trang thai GVHD',
-            'Trang thai khoa',
-            'Giang vien huong dan',
-            'Ma GVHD',
-            'Email GVHD',
-            'Khoa GVHD',
-            'Nganh GVHD',
-            'Truong nhom',
-            'Ma truong nhom',
-            'Email truong nhom',
-            'Khoa truong nhom',
-            'Nganh truong nhom',
-            'Lop truong nhom',
-            'Thanh vien nhom',
-            'Nguoi cham',
-            'Ma nguoi cham',
-            'Email nguoi cham',
-            'Khoa nguoi cham',
-            'Nganh nguoi cham',
-            'Diem',
-            'Quyet dinh',
-            'Nhan xet',
-            'Thoi gian cham',
+        const isFilteredByCallRound = Boolean(callRoundId);
+        const header = isFilteredByCallRound
+            ? ['STT', 'Đề tài', 'Hội đồng', 'Người chấm', 'Điểm', 'Quyết định', 'Thời gian chấm', 'Nhận xét']
+            : ['STT', 'Đợt đề tài', 'Đề tài', 'Hội đồng', 'Người chấm', 'Điểm', 'Quyết định', 'Thời gian chấm', 'Nhận xét'];
+
+        const sortedRows = [...filteredRows].sort((a, b) => {
+            if (!isFilteredByCallRound) {
+                const callRoundCompare = a.callRoundName.localeCompare(b.callRoundName, 'vi');
+                if (callRoundCompare !== 0) return callRoundCompare;
+            }
+            const councilCompare = a.councilName.localeCompare(b.councilName, 'vi');
+            if (councilCompare !== 0) return councilCompare;
+            const projectCompare = a.projectTitle.localeCompare(b.projectTitle, 'vi');
+            if (projectCompare !== 0) return projectCompare;
+            return a.evaluatorName.localeCompare(b.evaluatorName, 'vi');
+        });
+
+        const emptyRow = () => new Array(header.length).fill('');
+        const sheetRows: Array<(string | number)[]> = [];
+        let stt = 1;
+        let currentCallRound = '';
+        let currentCouncil = '';
+        let currentProject = '';
+
+        for (const row of sortedRows) {
+            if (!isFilteredByCallRound && row.callRoundName !== currentCallRound) {
+                if (sheetRows.length > 0) sheetRows.push(emptyRow());
+                currentCallRound = row.callRoundName;
+                currentCouncil = '';
+                currentProject = '';
+                const groupRow = emptyRow();
+                groupRow[1] = `ĐỢT ĐỀ TÀI: ${row.callRoundName}`;
+                sheetRows.push(groupRow);
+            }
+
+            if (row.councilName !== currentCouncil) {
+                if (sheetRows.length > 0) sheetRows.push(emptyRow());
+                currentCouncil = row.councilName;
+                currentProject = '';
+                const councilCol = isFilteredByCallRound ? 2 : 3;
+                const groupRow = emptyRow();
+                groupRow[councilCol] = `HỘI ĐỒNG: ${row.councilName}`;
+                sheetRows.push(groupRow);
+            }
+
+            if (row.projectTitle !== currentProject) {
+                currentProject = row.projectTitle;
+                const projectCol = isFilteredByCallRound ? 1 : 2;
+                const groupRow = emptyRow();
+                groupRow[projectCol] = `ĐỀ TÀI: ${row.projectTitle}`;
+                sheetRows.push(groupRow);
+            }
+
+            sheetRows.push(
+                isFilteredByCallRound
+                    ? [
+                          stt++,
+                          row.projectTitle,
+                          row.councilName,
+                          row.evaluatorName,
+                          Number(row.score),
+                          row.decision,
+                          row.evaluatedAt,
+                          row.comment,
+                      ]
+                    : [
+                          stt++,
+                          row.callRoundName,
+                          row.projectTitle,
+                          row.councilName,
+                          row.evaluatorName,
+                          Number(row.score),
+                          row.decision,
+                          row.evaluatedAt,
+                          row.comment,
+                      ],
+            );
+        }
+
+        const wb = XLSX.utils.book_new();
+        const title = 'BÁO CÁO KẾT QUẢ CHẤM ĐIỂM HỘI ĐỒNG';
+        const filterLabel = callRoundId ? `Bộ lọc đợt đề tài: ${callRounds.find((r) => r.id === callRoundId)?.name || callRoundId}` : 'Bộ lọc đợt đề tài: Tất cả';
+        const wsData = [[title], [filterLabel], [], header, ...sheetRows];
+        const ws = XLSX.utils.aoa_to_sheet(wsData);
+        ws['!cols'] = isFilteredByCallRound
+            ? [{ wch: 6 }, { wch: 40 }, { wch: 24 }, { wch: 24 }, { wch: 10 }, { wch: 16 }, { wch: 20 }, { wch: 52 }]
+            : [{ wch: 6 }, { wch: 24 }, { wch: 40 }, { wch: 24 }, { wch: 24 }, { wch: 10 }, { wch: 16 }, { wch: 20 }, { wch: 48 }];
+        ws['!merges'] = [
+            { s: { r: 0, c: 0 }, e: { r: 0, c: header.length - 1 } },
+            { s: { r: 1, c: 0 }, e: { r: 1, c: header.length - 1 } },
         ];
 
-        const csvRows = filteredRows.map((row) => [
-            row.callRoundName,
-            row.callRoundRegistrationPeriod,
-            row.councilName,
-            row.defenseDate,
-            row.defenseLocation,
-            row.projectTitle,
-            row.projectObjective,
-            row.projectRegistrationTitle,
-            row.projectRegistrationObjective,
-            row.projectRegistrationId,
-            row.registrationStatus,
-            row.instructorStatus,
-            row.facultyStatus,
-            row.advisorName,
-            row.advisorCode,
-            row.advisorEmail,
-            row.advisorDepartment,
-            row.advisorMajor,
-            row.leaderName,
-            row.leaderCode,
-            row.leaderEmail,
-            row.leaderDepartment,
-            row.leaderMajor,
-            row.leaderClass,
-            row.teamMembersText,
-            row.evaluatorName,
-            row.evaluatorCode,
-            row.evaluatorEmail,
-            row.evaluatorDepartment,
-            row.evaluatorMajor,
-            row.score,
-            row.decision,
-            row.comment,
-            row.evaluatedAt,
-        ]);
-
-        const csvContent = [header, ...csvRows]
-            .map((row) => row.map((cell) => escapeCsvCell(cell)).join(','))
-            .join('\n');
+        XLSX.utils.book_append_sheet(wb, ws, 'Ket qua cham diem');
+        const buffer = XLSX.write(wb, { type: 'buffer', bookType: 'xlsx' });
 
         const now = new Date();
         const timeStamp = `${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, '0')}${String(now.getDate()).padStart(2, '0')}-${String(now.getHours()).padStart(2, '0')}${String(now.getMinutes()).padStart(2, '0')}`;
         const fileName = callRoundId
-            ? `dean-council-evaluations-${callRoundId}-${timeStamp}.csv`
-            : `dean-council-evaluations-all-${timeStamp}.csv`;
+            ? `dean-council-evaluations-${callRoundId}-${timeStamp}.xlsx`
+            : `dean-council-evaluations-all-${timeStamp}.xlsx`;
 
-        return new NextResponse(`\uFEFF${csvContent}`, {
+        return new NextResponse(buffer, {
             status: 200,
             headers: {
-                'Content-Type': 'text/csv; charset=utf-8',
+                'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
                 'Content-Disposition': `attachment; filename="${fileName}"`,
                 'Cache-Control': 'no-store',
             },

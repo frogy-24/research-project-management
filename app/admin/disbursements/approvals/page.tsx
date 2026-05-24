@@ -1,5 +1,6 @@
 // app/admin/disbursements/approvals/page.tsx
 import { Metadata } from 'next';
+import { DeanDisbursementManagement } from '@/components/disbursements/dean-disbursement-management';
 
 export const metadata: Metadata = {
   title: 'Phê duyệt Giải ngân | Admin',
@@ -16,14 +17,7 @@ export default function AdminDisbursementApprovalsPage() {
         </p>
       </div>
 
-      <div className="rounded-lg border bg-card p-8 text-center">
-        <p className="text-muted-foreground">
-          Trang phê duyệt giải ngân đang được phát triển...
-        </p>
-        <p className="text-sm text-muted-foreground mt-2">
-          Chức năng: Danh sách yêu cầu chờ duyệt, phê duyệt/từ chối giải ngân
-        </p>
-      </div>
+      <DeanDisbursementManagement approvalOnly actorRole="ADMIN" />
     </div>
   );
 }

@@ -133,6 +133,7 @@ async def _process_payload(payload: dict[str, Any]) -> dict[str, Any]:
     report_type = payload.get("reportType")
     template_url = payload.get("templateUrl")
     job_id = payload.get("jobId")
+    call_round_id = payload.get("callRoundId")
 
     if not report_type:
         return {"error": "Missing reportType"}
@@ -148,7 +149,11 @@ async def _process_payload(payload: dict[str, Any]) -> dict[str, Any]:
         await _update_job_status(job_id, "PROCESSING", progress=30)
 
     filler = get_file_data_filler()
-    fill_result = await filler.analyze_and_fill(template_path, REPORT_OUTPUT_DIR)
+    fill_result = await filler.analyze_and_fill(
+        template_path,
+        REPORT_OUTPUT_DIR,
+        call_round_id=call_round_id,
+    )
 
     if not fill_result.get("success"):
         return {"error": fill_result.get("error", "Fill report failed")}

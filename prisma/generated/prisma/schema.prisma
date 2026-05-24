@@ -103,8 +103,20 @@ enum AcademicRank {
   BACHELOR
   MASTER
   DOCTOR
+  DOCTOR_OF_SCIENCE
   ASSOCIATE_PROFESSOR
   PROFESSOR
+}
+
+enum LecturerEmploymentType {
+  FULL_TIME
+  ADJUNCT
+}
+
+enum LecturerWorkingStatus {
+  ACTIVE
+  RETIRED
+  RESIGNED
 }
 
 enum ProjectParticipationLevel {
@@ -402,28 +414,53 @@ model CouncilEvaluation {
 }
 
 model Lecturer {
-  id                              String                @id @default(cuid())
-  userId                          String                @unique
-  user                            User                  @relation(fields: [userId], references: [id], onDelete: Cascade)
-  staffId                         String?               @unique
+  id                              String                  @id @default(cuid())
+  userId                          String                  @unique
+  user                            User                    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  staffId                         String?                 @unique
   academicRank                    AcademicRank?
+  positionTitle                   String?
+  workStartDate                   DateTime?
+  yearsOfService                  Int?
+  teachingExperience              String?
+  coursesTaught                   String?
+  teachingYears                   Int?
+  trainingSystem                  String?
+  pedagogyCertificate             String?
+  workHistory                     String?
+  degreeName                      String?
+  degreeMajor                     String?
+  degreeInstitution               String?
+  degreeCountry                   String?
+  degreeYear                      Int?
+  degreeScanUrl                   String?
+  academicTitleYear               Int?
+  academicTitleDecision           String?
+  academicTitleProofUrl           String?
+  organizationMajor               String?
+  positionRole                    String?
+  lecturerType                    LecturerEmploymentType?
+  civilServantCode                String?
+  civilServantGrade               String?
+  workingStatus                   LecturerWorkingStatus?
+  joinedAt                        DateTime?
   departmentName                  String?
   facultyName                     String?
-  researchInterests               String[]              @default([])
+  researchInterests               String[]                @default([])
   googleScholarUrl                String?
   orcidId                         String?
   researchGateUrl                 String?
-  totalProjectsSchoolLevel        Int                   @default(0)
-  totalProjectsMinistryLevel      Int                   @default(0)
-  totalProjectsStateLevel         Int                   @default(0)
-  totalPrincipalInvestigatorRoles Int                   @default(0)
-  totalSupervisorRoles            Int                   @default(0)
-  totalResearchMemberRoles        Int                   @default(0)
-  totalSecretaryRoles             Int                   @default(0)
-  totalCouncilMemberRoles         Int                   @default(0)
+  totalProjectsSchoolLevel        Int                     @default(0)
+  totalProjectsMinistryLevel      Int                     @default(0)
+  totalProjectsStateLevel         Int                     @default(0)
+  totalPrincipalInvestigatorRoles Int                     @default(0)
+  totalSupervisorRoles            Int                     @default(0)
+  totalResearchMemberRoles        Int                     @default(0)
+  totalSecretaryRoles             Int                     @default(0)
+  totalCouncilMemberRoles         Int                     @default(0)
   profileNote                     String?
-  createdAt                       DateTime              @default(now())
-  updatedAt                       DateTime              @updatedAt
+  createdAt                       DateTime                @default(now())
+  updatedAt                       DateTime                @updatedAt
   publications                    LecturerPublication[]
 }
 

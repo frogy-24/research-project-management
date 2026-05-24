@@ -260,6 +260,7 @@ export async function PATCH(request: Request) {
             },
             select: {
                 id: true,
+                projectId: true,
                 note: true,
             },
         });
@@ -271,32 +272,72 @@ export async function PATCH(request: Request) {
         const normalizedNote =
             typeof parsed.data.note === 'string' && parsed.data.note.trim().length > 0 ? parsed.data.note.trim() : null;
 
-        const updatedSubmission = await prisma.projectClosingSubmission.update({
-            where: {
-                id: existing.id,
-            },
-            data: {
-                status: parsed.data.status,
-                note: normalizedNote ?? existing.note,
-            },
-            select: {
-                id: true,
-                projectId: true,
-                submittedById: true,
-                status: true,
-                note: true,
-                reportFiles: true,
-                researchSourceCodeFiles: true,
-                researchGuideFiles: true,
-                administrativeDefenseApplicationFiles: true,
-                administrativeAchievementEvidenceFiles: true,
-                administrativeAdvisorReviewFiles: true,
-                presentationSlideFiles: true,
-                presentationVideoFiles: true,
-                submittedAt: true,
-                createdAt: true,
-                updatedAt: true,
-            },
+        const updatedSubmission = await prisma.$transaction(async (tx) => {
+            const updated = await tx.projectClosingSubmission.update({
+                where: {
+                    id: existing.id,
+                },
+                data: {
+                    status: parsed.data.status,
+                    note: normalizedNote ?? existing.note,
+                },
+                select: {
+                    id: true,
+                    projectId: true,
+                    submittedById: true,
+                    status: true,
+                    note: true,
+                    reportFiles: true,
+                    researchSourceCodeFiles: true,
+                    researchGuideFiles: true,
+                    administrativeDefenseApplicationFiles: true,
+                    administrativeAchievementEvidenceFiles: true,
+                    administrativeAdvisorReviewFiles: true,
+                    presentationSlideFiles: true,
+                    presentationVideoFiles: true,
+                    submittedAt: true,
+                    createdAt: true,
+                    updatedAt: true,
+                },
+            });
+
+            if (parsed.data.status === 'APPROVED') {
+                const project = await tx.project.findUnique({
+                    where: { id: existing.projectId },
+                    select: {
+                        id: true,
+                        status: true,
+                        budgetApproved: true,
+                    },
+                });
+
+                if (project && ['APPROVED', 'IN_PROGRESS', 'COMPLETED'].includes(project.status)) {
+                    const hasPendingDisbursement = await tx.fundingDisbursement.findFirst({
+                        where: {
+                            projectId: project.id,
+                            status: 'PENDING',
+                        },
+                        select: { id: true },
+                    });
+
+                    if (!hasPendingDisbursement) {
+                        const defaultAmount = project.budgetApproved ? Number(project.budgetApproved) : 1;
+
+                        await tx.fundingDisbursement.create({
+                            data: {
+                                projectId: project.id,
+                                amount: defaultAmount > 0 ? defaultAmount : 1,
+                                disbursedAt: new Date(),
+                                reason: 'Tự động tạo khi Trưởng khoa chấp nhận hồ sơ nghiệm thu đề tài',
+                                status: 'PENDING',
+                                createdById: session.userId,
+                            },
+                        });
+                    }
+                }
+            }
+
+            return updated;
         });
 
         return NextResponse.json({ success: true, data: toSubmissionResponse(updatedSubmission) });

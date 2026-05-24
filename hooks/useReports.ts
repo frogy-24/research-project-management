@@ -27,6 +27,17 @@ export const useCreateReportJob = () => {
   })
 }
 
+export const useDeleteReportJob = () => {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: (id: string) => reportsApi.remove(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["report-jobs"] })
+    },
+  })
+}
+
 export const useReportJob = (id: string) => {
   return useQuery({
     queryKey: ["report-job", id],

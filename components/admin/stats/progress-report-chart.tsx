@@ -38,7 +38,7 @@ export function ProgressReportChart({ data }: { data: { byWeek: Array<{ week: nu
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="week" tick={{ fontSize: 11 }} label={{ value: 'Tuần', position: 'insideBottom', offset: -5 }} />
               <YAxis allowDecimals={false} tick={{ fontSize: 12 }} />
-              <Tooltip formatter={(value: number) => `${value} báo cáo`} />
+              <Tooltip formatter={(value) => `${Number(value ?? 0)} báo cáo`} />
               <Legend />
               <Bar dataKey="count" name="Số báo cáo" fill="#f59e0b" radius={[4, 4, 0, 0]} />
             </BarChart>
