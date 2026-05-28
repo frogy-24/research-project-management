@@ -1,0 +1,121 @@
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: urms-web
+    restart: always
+    env_file:
+      - .env
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+    expose:
+      - "3000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+      qdrant:
+        condition: service_healthy
+
+  postgres:
+    image: postgres:16-alpine
+    container_name: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d postgres"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  rabbitmq:
+    image: rabbitmq:3.13-management-alpine
+    container_name: rabbitmq
+    restart: always
+    hostname: rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: admin
+      RABBITMQ_DEFAULT_PASS: admin123
+      RABBITMQ_DEFAULT_VHOST: /
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+      - rabbitmq_logs:/var/log/rabbitmq
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 40s
+
+  qdrant:
+    image: qdrant/qdrant:latest
+    container_name: qdrant
+    restart: always
+    volumes:
+      - qdrant_data:/qdrant/storage
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:6333/healthz"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  reports:
+    image: alpine:latest
+    container_name: reports
+    restart: always
+    volumes:
+      - reports_shared:/tmp/reports
+
+  bot:
+    build:
+      context: ./bot
+      dockerfile: Dockerfile
+    container_name: urms-bot
+    restart: always
+    environment:
+      DATABASE_URL: postgresql://postgres:postgres@postgres:5432/postgres
+      RABBITMQ_URL: amqp://admin:admin123@rabbitmq:5672/
+      NEXTJS_BASE_URL: http://web:3000
+    volumes:
+      - reports_shared:/tmp/reports
+    depends_on:
+      postgres:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+
+  nginx:
+    image: nginx:1.27-alpine
+    container_name: urms-nginx
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./infra/nginx/conf.d:/etc/nginx/conf.d
+      - ./infra/certbot/www:/var/www/certbot
+      - ./infra/certbot/conf:/etc/letsencrypt
+    depends_on:
+      - web
+
+  certbot:
+    image: certbot/certbot:latest
+    container_name: urms-certbot
+    volumes:
+      - ./infra/certbot/www:/var/www/certbot
+      - ./infra/certbot/conf:/etc/letsencrypt
+
+volumes:
+  postgres_data:
+  rabbitmq_data:
+  rabbitmq_logs:
+  qdrant_data:
+  reports_shared:
