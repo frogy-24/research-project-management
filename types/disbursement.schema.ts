@@ -27,7 +27,11 @@ export const createDisbursementSchema = z.object({
   amount: z.coerce.number().positive("Số tiền phải lớn hơn 0"),
   disbursedAt: z.coerce.date(),
   voucherNo: z.string().optional(),
-  voucherFileUrl: z.string().url("URL file không hợp lệ").optional(),
+  voucherFileUrl: z
+    .string()
+    .url("URL file không hợp lệ")
+    .refine((url) => /\.pdf(?:$|[?#])/i.test(url), 'Chứng từ phải là file PDF')
+    .optional(),
   reason: z.string().min(10, "Lý do giải ngân phải có ít nhất 10 ký tự").optional(),
 });
 

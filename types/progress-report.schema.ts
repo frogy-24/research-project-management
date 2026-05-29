@@ -49,6 +49,9 @@ export const createProgressReportSchema = progressReportSchema.omit({
 export type ProgressReport = z.infer<typeof progressReportSchema>;
 export type CreateProgressReportInput = z.infer<typeof createProgressReportSchema>;
 
+export const updateProgressReportSchema = createProgressReportSchema.partial();
+export type UpdateProgressReportInput = z.infer<typeof updateProgressReportSchema>;
+
 export const reviewProgressReportSchema = z.object({
   mentorReview: z.string().min(1, "Vui lòng nhập nhận xét"),
   mentorScore: z.number().min(0).max(10, "Điểm tối đa là 10"),

@@ -61,6 +61,11 @@ type TeamMemberInput = {
     respondedAt?: Date | null;
 };
 
+type TeamMemberRaw = Partial<TeamMemberInput> & {
+    id?: string;
+    code?: string;
+};
+
 type TeamMemberPickerMode = 'create' | 'edit';
 
 const MEMBER_PICKER_LIMIT = 7;
@@ -104,7 +109,10 @@ const invitationStatusLabel: Record<'PENDING' | 'ACCEPTED' | 'REJECTED' | 'CANCE
     CANCELED: 'Đã hủy',
 };
 
-const invitationStatusVariant: Record<'PENDING' | 'ACCEPTED' | 'REJECTED' | 'CANCELED', 'secondary' | 'default' | 'destructive' | 'outline'> = {
+const invitationStatusVariant: Record<
+    'PENDING' | 'ACCEPTED' | 'REJECTED' | 'CANCELED',
+    'secondary' | 'default' | 'destructive' | 'outline'
+> = {
     PENDING: 'secondary',
     ACCEPTED: 'default',
     REJECTED: 'destructive',
@@ -168,6 +176,28 @@ const formatFileSize = (sizeInBytes?: number | null): string => {
     }
 
     return `${(kb / 1024).toFixed(1)} MB`;
+};
+
+const normalizeTeamMemberFromApi = (member: TeamMemberRaw): TeamMemberInput => {
+    const normalizedName = typeof member.name === 'string' ? member.name : '';
+    const normalizedRole = typeof member.role === 'string' && member.role.trim().length > 0 ? member.role : 'Thành viên';
+
+    return {
+        name: normalizedName,
+        role: normalizedRole,
+        studentId: typeof member.studentId === 'string' ? member.studentId : undefined,
+        invitationStatus: member.invitationStatus,
+        invitedAt: member.invitedAt,
+        respondedAt: member.respondedAt,
+    };
+};
+
+const normalizeTeamMembersFromApi = (members: unknown): TeamMemberInput[] => {
+    if (!Array.isArray(members)) return [];
+
+    return members
+        .filter((member): member is TeamMemberRaw => Boolean(member) && typeof member === 'object')
+        .map((member) => normalizeTeamMemberFromApi(member));
 };
 
 export function ProjectRegistrationPage({ title }: ProjectRegistrationPageProps) {
@@ -416,7 +446,7 @@ export function ProjectRegistrationPage({ title }: ProjectRegistrationPageProps)
                 return true;
             }
 
-            const teamMembers = (registration.teamMembers as TeamMemberInput[] | null | undefined) ?? [];
+            const teamMembers = normalizeTeamMembersFromApi(registration.teamMembers);
             const textPool = [
                 registration.title,
                 registration.objective,
@@ -776,7 +806,7 @@ export function ProjectRegistrationPage({ title }: ProjectRegistrationPageProps)
         setEditTitle(item.title);
         setEditObjective(item.objective);
         setEditExpectedOutput(item.expectedOutput ?? '');
-        setEditTeamMembers((item.teamMembers as TeamMemberInput[] | null | undefined) ?? []);
+        setEditTeamMembers(normalizeTeamMembersFromApi(item.teamMembers));
         setEditProposalFiles(item.proposalFiles ?? []);
     };
 
@@ -842,8 +872,8 @@ export function ProjectRegistrationPage({ title }: ProjectRegistrationPageProps)
                     <AlertCircle className="h-4 w-4" />
                     <AlertTitle>Chưa mở đợt đăng ký</AlertTitle>
                     <AlertDescription>
-                        Hiện tại chưa có đợt đăng ký phù hợp (đã duyệt, đúng đối tượng và chưa bị khóa) đang mở. Vui lòng liên hệ quản
-                        trị viên để biết thêm chi tiết.
+                        Hiện tại chưa có đợt đăng ký phù hợp (đã duyệt, đúng đối tượng và chưa bị khóa) đang mở. Vui
+                        lòng liên hệ quản trị viên để biết thêm chi tiết.
                     </AlertDescription>
                 </Alert>
             ) : availableCallRounds.length > 1 ? (
@@ -977,7 +1007,12 @@ export function ProjectRegistrationPage({ title }: ProjectRegistrationPageProps)
                                             Tài liệu đợt đăng ký
                                         </div>
 
-                                        <Button type="button" variant="outline" size="sm" onClick={() => setIsAttachmentGuideOpen(true)}>
+                                        <Button
+                                            type="button"
+                                            variant="outline"
+                                            size="sm"
+                                            onClick={() => setIsAttachmentGuideOpen(true)}
+                                        >
                                             Xem file đi kèm
                                         </Button>
                                     </div>
@@ -1047,7 +1082,12 @@ export function ProjectRegistrationPage({ title }: ProjectRegistrationPageProps)
                                                                         </div>
 
                                                                         <div className="flex items-center gap-1">
-                                                                            <Button variant="ghost" size="sm" className="h-8 w-8 p-0" asChild>
+                                                                            <Button
+                                                                                variant="ghost"
+                                                                                size="sm"
+                                                                                className="h-8 w-8 p-0"
+                                                                                asChild
+                                                                            >
                                                                                 <a
                                                                                     href={attachment.fileUrl}
                                                                                     download
@@ -1056,7 +1096,12 @@ export function ProjectRegistrationPage({ title }: ProjectRegistrationPageProps)
                                                                                     <Download className="h-4 w-4" />
                                                                                 </a>
                                                                             </Button>
-                                                                            <Button variant="ghost" size="sm" className="h-8 w-8 p-0" asChild>
+                                                                            <Button
+                                                                                variant="ghost"
+                                                                                size="sm"
+                                                                                className="h-8 w-8 p-0"
+                                                                                asChild
+                                                                            >
                                                                                 <a
                                                                                     href={attachment.fileUrl}
                                                                                     target="_blank"
@@ -1093,7 +1138,9 @@ export function ProjectRegistrationPage({ title }: ProjectRegistrationPageProps)
                                                                 className="flex items-center justify-between gap-2 rounded-md border bg-background p-2"
                                                             >
                                                                 <div className="min-w-0 flex-1">
-                                                                    <p className="truncate text-sm font-medium">{attachment.fileName}</p>
+                                                                    <p className="truncate text-sm font-medium">
+                                                                        {attachment.fileName}
+                                                                    </p>
                                                                     <p className="text-xs text-muted-foreground">
                                                                         {formatFileSize(attachment.fileSize)}{' '}
                                                                         {attachment.createdAt
@@ -1108,7 +1155,12 @@ export function ProjectRegistrationPage({ title }: ProjectRegistrationPageProps)
                                                                 </div>
 
                                                                 <div className="flex items-center gap-1">
-                                                                    <Button variant="ghost" size="sm" className="h-8 w-8 p-0" asChild>
+                                                                    <Button
+                                                                        variant="ghost"
+                                                                        size="sm"
+                                                                        className="h-8 w-8 p-0"
+                                                                        asChild
+                                                                    >
                                                                         <a
                                                                             href={attachment.fileUrl}
                                                                             download
@@ -1117,7 +1169,12 @@ export function ProjectRegistrationPage({ title }: ProjectRegistrationPageProps)
                                                                             <Download className="h-4 w-4" />
                                                                         </a>
                                                                     </Button>
-                                                                    <Button variant="ghost" size="sm" className="h-8 w-8 p-0" asChild>
+                                                                    <Button
+                                                                        variant="ghost"
+                                                                        size="sm"
+                                                                        className="h-8 w-8 p-0"
+                                                                        asChild
+                                                                    >
                                                                         <a
                                                                             href={attachment.fileUrl}
                                                                             target="_blank"
@@ -1136,7 +1193,11 @@ export function ProjectRegistrationPage({ title }: ProjectRegistrationPageProps)
                                         </div>
 
                                         <div className="flex justify-end">
-                                            <Button type="button" variant="outline" onClick={() => setIsAttachmentGuideOpen(false)}>
+                                            <Button
+                                                type="button"
+                                                variant="outline"
+                                                onClick={() => setIsAttachmentGuideOpen(false)}
+                                            >
                                                 Đóng
                                             </Button>
                                         </div>
@@ -1323,25 +1384,25 @@ export function ProjectRegistrationPage({ title }: ProjectRegistrationPageProps)
                                         <SelectValue placeholder="Chọn người hướng dẫn" />
                                     </SelectTrigger>
                                     <SelectContent>
-                                        {acceptedInstructorsInActiveCallRound.length > 0
-                                            ? acceptedInstructorsInActiveCallRound.map((item) => (
-                                                  <SelectItem key={item.instructor.id} value={item.instructor.id}>
-                                                      {item.instructor.name} - {item.instructor.email}
-                                                  </SelectItem>
-                                              ))
-                                            : (
-                                                  <SelectItem value="__no-accepted-instructor__" disabled>
-                                                      Chưa có giảng viên chấp nhận lời mời
-                                                  </SelectItem>
-                                              )}
+                                        {acceptedInstructorsInActiveCallRound.length > 0 ? (
+                                            acceptedInstructorsInActiveCallRound.map((item) => (
+                                                <SelectItem key={item.instructor.id} value={item.instructor.id}>
+                                                    {item.instructor.name} - {item.instructor.email}
+                                                </SelectItem>
+                                            ))
+                                        ) : (
+                                            <SelectItem value="__no-accepted-instructor__" disabled>
+                                                Chưa có giảng viên chấp nhận lời mời
+                                            </SelectItem>
+                                        )}
                                     </SelectContent>
                                 </Select>
                                 {activeCallRound && acceptedInstructorsInActiveCallRound.length > 0 && (
-                                        <p className="text-xs text-muted-foreground">
-                                            Chỉ hiển thị {acceptedInstructorsInActiveCallRound.length} giảng viên đã
-                                            chấp nhận lời mời trong đợt này
-                                        </p>
-                                    )}
+                                    <p className="text-xs text-muted-foreground">
+                                        Chỉ hiển thị {acceptedInstructorsInActiveCallRound.length} giảng viên đã chấp
+                                        nhận lời mời trong đợt này
+                                    </p>
+                                )}
                                 {activeCallRound && acceptedInstructorsInActiveCallRound.length === 0 && (
                                     <p className="text-xs text-amber-600">
                                         Chưa có giảng viên nào chấp nhận lời mời hướng dẫn cho đợt này.
@@ -1665,38 +1726,56 @@ export function ProjectRegistrationPage({ title }: ProjectRegistrationPageProps)
                                                                                         <h4 className="font-medium text-sm text-muted-foreground mb-1">
                                                                                             File đính kèm hồ sơ đăng ký
                                                                                         </h4>
-                                                                                        {item.proposalFiles && item.proposalFiles.length > 0 ? (
+                                                                                        {item.proposalFiles &&
+                                                                                        item.proposalFiles.length >
+                                                                                            0 ? (
                                                                                             <div className="space-y-2">
-                                                                                                {item.proposalFiles.map((file, fileIndex) => (
-                                                                                                    <div
-                                                                                                        key={`${file.url}-${fileIndex}`}
-                                                                                                        className="flex items-center justify-between gap-2 rounded-md border bg-muted/20 p-2"
-                                                                                                    >
-                                                                                                        <div className="min-w-0 flex-1">
-                                                                                                            <p className="truncate text-sm font-medium">{file.name}</p>
-                                                                                                            <p className="text-xs text-muted-foreground">
-                                                                                                                {formatFileSize(file.size ?? null)}
-                                                                                                            </p>
-                                                                                                        </div>
-                                                                                                        <Button
-                                                                                                            variant="ghost"
-                                                                                                            size="sm"
-                                                                                                            className="h-8 w-8 p-0"
-                                                                                                            asChild
+                                                                                                {item.proposalFiles.map(
+                                                                                                    (
+                                                                                                        file,
+                                                                                                        fileIndex,
+                                                                                                    ) => (
+                                                                                                        <div
+                                                                                                            key={`${file.url}-${fileIndex}`}
+                                                                                                            className="flex items-center justify-between gap-2 rounded-md border bg-muted/20 p-2"
                                                                                                         >
-                                                                                                            <a
-                                                                                                                href={file.url}
-                                                                                                                target="_blank"
-                                                                                                                rel="noopener noreferrer"
+                                                                                                            <div className="min-w-0 flex-1">
+                                                                                                                <p className="truncate text-sm font-medium">
+                                                                                                                    {
+                                                                                                                        file.name
+                                                                                                                    }
+                                                                                                                </p>
+                                                                                                                <p className="text-xs text-muted-foreground">
+                                                                                                                    {formatFileSize(
+                                                                                                                        file.size ??
+                                                                                                                            null,
+                                                                                                                    )}
+                                                                                                                </p>
+                                                                                                            </div>
+                                                                                                            <Button
+                                                                                                                variant="ghost"
+                                                                                                                size="sm"
+                                                                                                                className="h-8 w-8 p-0"
+                                                                                                                asChild
                                                                                                             >
-                                                                                                                <ExternalLink className="h-4 w-4" />
-                                                                                                            </a>
-                                                                                                        </Button>
-                                                                                                    </div>
-                                                                                                ))}
+                                                                                                                <a
+                                                                                                                    href={
+                                                                                                                        file.url
+                                                                                                                    }
+                                                                                                                    target="_blank"
+                                                                                                                    rel="noopener noreferrer"
+                                                                                                                >
+                                                                                                                    <ExternalLink className="h-4 w-4" />
+                                                                                                                </a>
+                                                                                                            </Button>
+                                                                                                        </div>
+                                                                                                    ),
+                                                                                                )}
                                                                                             </div>
                                                                                         ) : (
-                                                                                            <p className="text-sm text-muted-foreground">Không có file đính kèm</p>
+                                                                                            <p className="text-sm text-muted-foreground">
+                                                                                                Không có file đính kèm
+                                                                                            </p>
                                                                                         )}
                                                                                     </div>
                                                                                     <div>
@@ -1725,15 +1804,11 @@ export function ProjectRegistrationPage({ title }: ProjectRegistrationPageProps)
                                                                                         <h4 className="font-medium text-sm text-muted-foreground mb-1">
                                                                                             Thành viên nhóm
                                                                                         </h4>
-                                                                                        {(
-                                                                                            item.teamMembers as
-                                                                                                | TeamMemberInput[]
-                                                                                                | null
-                                                                                                | undefined
-                                                                                        )?.length ? (
+                                                                                        {normalizeTeamMembersFromApi(item.teamMembers)
+                                                                                            .length ? (
                                                                                             <div className="space-y-2">
-                                                                                                {(
-                                                                                                    item.teamMembers as TeamMemberInput[]
+                                                                                                {normalizeTeamMembersFromApi(
+                                                                                                    item.teamMembers,
                                                                                                 ).map(
                                                                                                     (member, index) => (
                                                                                                         <div

@@ -5,7 +5,12 @@ import { toast } from 'sonner';
 import axios from 'axios';
 import { useAuthSession } from '@/hooks/useAuth';
 import { useProjects } from '@/hooks/useProjects';
-import { useProgressReports, useCreateProgressReport, useReviewProgressReport } from '@/hooks/useProjectOperations';
+import {
+    useProgressReports,
+    useCreateProgressReport,
+    useReviewProgressReport,
+    useUpdateProgressReport,
+} from '@/hooks/useProjectOperations';
 import type { Project } from '@/types/project.schema';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -130,6 +135,7 @@ export function ProgressReportPanel({ projectId }: ProgressReportPanelProps) {
     const { data: reports = [], isLoading } = useProgressReports(projectId);
     const createMutation = useCreateProgressReport();
     const reviewMutation = useReviewProgressReport(projectId);
+    const updateMutation = useUpdateProgressReport(projectId);
 
     // Get template items from project's callRound
     const templateItems: TemplateItem[] = useMemo(
@@ -200,6 +206,7 @@ export function ProgressReportPanel({ projectId }: ProgressReportPanelProps) {
 
     // Show/hide template guide
     const [showGuide, setShowGuide] = useState(true);
+    const [editingReportId, setEditingReportId] = useState<string | null>(null);
 
     // Detail view dialog
     const [selectedReport, setSelectedReport] = useState<ProgressReport | null>(null);
@@ -275,6 +282,7 @@ export function ProgressReportPanel({ projectId }: ProgressReportPanelProps) {
     const isSelectedTemplatePastDeadline =
         selectedTemplateRange !== null ? isDatePassed(today, selectedTemplateRange.toDate) : false;
     const isFormReadOnly = isGlobalSubmissionLocked || hasSubmittedInNonTemplateMode || isSelectedTemplatePastDeadline;
+    const isEditing = Boolean(editingReportId);
 
     const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
@@ -347,63 +355,88 @@ export function ProgressReportPanel({ projectId }: ProgressReportPanelProps) {
         const weekNumber = hasTemplate && selectedTemplateItem ? selectedTemplateItem.weekNumber : 1;
         const periodLabel = hasTemplate && selectedTemplateItem ? selectedTemplateItem.weekLabel : `Tuần ${weekNumber}`;
 
+        const payload = {
+            periodLabel,
+            summary: tasks.substring(0, 100),
+            week: weekNumber,
+            fromDate: new Date(fromDate),
+            toDate: new Date(toDate),
+            tasks,
+            performedContent,
+            results,
+            reportContent,
+            fileUrl: fileUrl || undefined,
+        };
+
+        const onSuccess = () => {
+            toast.success(isEditing ? 'Cập nhật báo cáo thành công' : 'Nộp báo cáo thành công');
+            setSelectedTemplateItem(null);
+            setEditingReportId(null);
+            setTasks('');
+            setPerformedContent('');
+            setResults('');
+            setReportContent('');
+            setFileUrl('');
+            setFromDate('');
+            setToDate('');
+        };
+
+        const onError = (error: unknown) => {
+            if (axios.isAxiosError(error)) {
+                const serverMessage =
+                    (error.response?.data as { error?: string; message?: string; fields?: Record<string, string[]> } | undefined)
+                        ?.error ||
+                    (error.response?.data as { error?: string; message?: string; fields?: Record<string, string[]> } | undefined)
+                        ?.message;
+
+                if (serverMessage) {
+                    toast.error(serverMessage);
+                    return;
+                }
+            }
+
+            if (error instanceof Error) {
+                toast.error(error.message);
+                return;
+            }
+
+            toast.error(isEditing ? 'Có lỗi xảy ra khi cập nhật' : 'Có lỗi xảy ra khi nộp');
+        };
+
+        if (editingReportId) {
+            updateMutation.mutate(
+                { reportId: editingReportId, payload },
+                { onSuccess, onError },
+            );
+            return;
+        }
+
         createMutation.mutate(
+            { projectId, payload },
             {
-                projectId,
-                payload: {
-                    periodLabel,
-                    summary: tasks.substring(0, 100),
-                    week: weekNumber,
-                    fromDate: new Date(fromDate),
-                    toDate: new Date(toDate),
-                    tasks,
-                    performedContent,
-                    results,
-                    reportContent,
-                    fileUrl: fileUrl || undefined,
-                },
-            },
-            {
-                onSuccess: () => {
-                    toast.success('Nộp báo cáo thành công');
-                    setSelectedTemplateItem(null);
-                    setTasks('');
-                    setPerformedContent('');
-                    setResults('');
-                    setReportContent('');
-                    setFileUrl('');
-                    setFromDate('');
-                    setToDate('');
-                },
-                onError: (error: unknown) => {
-                    if (axios.isAxiosError(error)) {
-                        const serverMessage =
-                            (
-                                error.response?.data as
-                                    | { error?: string; message?: string; fields?: Record<string, string[]> }
-                                    | undefined
-                            )?.error ||
-                            (
-                                error.response?.data as
-                                    | { error?: string; message?: string; fields?: Record<string, string[]> }
-                                    | undefined
-                            )?.message;
-
-                        if (serverMessage) {
-                            toast.error(serverMessage);
-                            return;
-                        }
-                    }
-
-                    if (error instanceof Error) {
-                        toast.error(error.message);
-                        return;
-                    }
-
-                    toast.error('Có lỗi xảy ra khi nộp');
-                },
+                onSuccess,
+                onError,
             },
         );
+    };
+
+    const canEditReport = (report: ProgressReport) => !isGlobalSubmissionLocked && !isDatePassed(today, report.toDate ?? null);
+
+    const handleEditReport = (report: ProgressReport) => {
+        if (!canEditReport(report)) {
+            toast.error('Đã quá thời gian tuần báo cáo, không thể sửa.');
+            return;
+        }
+
+        setEditingReportId(report.id);
+        setSelectedTemplateItem(null);
+        setFromDate(report.fromDate ? formatDateInput(new Date(report.fromDate)) : '');
+        setToDate(report.toDate ? formatDateInput(new Date(report.toDate)) : '');
+        setTasks(report.tasks ?? '');
+        setPerformedContent(report.performedContent ?? '');
+        setResults(report.results ?? '');
+        setReportContent(report.reportContent ?? '');
+        setFileUrl(report.fileUrl ?? '');
     };
 
     const handleViewReport = (report: ProgressReport) => {
@@ -646,7 +679,7 @@ export function ProgressReportPanel({ projectId }: ProgressReportPanelProps) {
                         ) : null}
 
                         {/* Date Range */}
-                        {(selectedTemplateItem || !hasTemplate) && (
+                        {(selectedTemplateItem || !hasTemplate || isEditing) && (
                             <>
                                 <div className="grid grid-cols-2 gap-4">
                                     <div className="space-y-2">
@@ -738,6 +771,7 @@ export function ProgressReportPanel({ projectId }: ProgressReportPanelProps) {
                                     onClick={handleCreate}
                                     disabled={
                                         createMutation.isPending ||
+                                        updateMutation.isPending ||
                                         isUploading ||
                                         !fromDate ||
                                         !toDate ||
@@ -747,9 +781,13 @@ export function ProgressReportPanel({ projectId }: ProgressReportPanelProps) {
                                 >
                                     {createMutation.isPending
                                         ? 'Đang gửi...'
+                                        : updateMutation.isPending
+                                          ? 'Đang cập nhật...'
                                         : isFormReadOnly
                                           ? 'Chỉ xem - Không thể chỉnh sửa'
-                                          : 'Nộp báo cáo tuần'}
+                                          : isEditing
+                                            ? 'Lưu chỉnh sửa'
+                                            : 'Nộp báo cáo tuần'}
                                 </Button>
                             </>
                         )}
@@ -848,6 +886,19 @@ export function ProgressReportPanel({ projectId }: ProgressReportPanelProps) {
                                                         <Eye className="h-4 w-4 mr-1" />
                                                         Xem
                                                     </Button>
+                                                    {isLeader && (
+                                                        <Button
+                                                            size="sm"
+                                                            variant="secondary"
+                                                            disabled={!canEditReport(report)}
+                                                            onClick={(e) => {
+                                                                e.stopPropagation();
+                                                                handleEditReport(report);
+                                                            }}
+                                                        >
+                                                            Sửa
+                                                        </Button>
+                                                    )}
                                                 </div>
                                             </TableCell>
                                         </TableRow>

@@ -1,6 +1,10 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { projectOperationsApi } from "@/api/project-operations";
-import type { CreateProgressReportInput, ReviewProgressReportInput } from "@/types/progress-report.schema";
+import type {
+  CreateProgressReportInput,
+  ReviewProgressReportInput,
+  UpdateProgressReportInput,
+} from "@/types/progress-report.schema";
 import type {
   CreateExtensionRequestInput,
   ReviewExtensionRequestInput,
@@ -41,6 +45,18 @@ export const useReviewProgressReport = (projectId: string) => {
   return useMutation({
     mutationFn: ({ reportId, payload }: { reportId: string; payload: ReviewProgressReportInput }) =>
       projectOperationsApi.reviewProgressReport(reportId, payload),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: operationKeys.progressReports(projectId) });
+    },
+  });
+};
+
+export const useUpdateProgressReport = (projectId: string) => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ reportId, payload }: { reportId: string; payload: UpdateProgressReportInput }) =>
+      projectOperationsApi.updateProgressReport(reportId, payload),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: operationKeys.progressReports(projectId) });
     },

@@ -338,7 +338,9 @@ export function GuidancePageClient() {
                                             <TableCell className="text-muted-foreground">
                                                 {((pagination?.page ?? 1) - 1) * (pagination?.limit ?? 10) + index + 1}
                                             </TableCell>
-                                            <TableCell className="font-medium">{req.title}</TableCell>
+                                            <TableCell className="font-medium max-w-[320px] whitespace-normal break-words">
+                                                {req.title}
+                                            </TableCell>
                                             <TableCell>
                                                 <div className="flex flex-col">
                                                     <span>{req.user.name}</span>

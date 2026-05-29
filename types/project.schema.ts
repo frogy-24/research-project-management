@@ -59,7 +59,8 @@ export const projectSchema = z.object({
   title: z.string().min(1, "Title is required"),
   objective: z.string().min(1, "Objective is required"),
   expectedOutput: z.string().nullable().optional(),
-  proposalFileUrl: z.string().url().nullable().optional(),
+  // API trả path tương đối: "/uploads/..." (không phải absolute URL)
+  proposalFileUrl: z.string().min(1).nullable().optional(),
   code: z.string().nullable().optional(),
   status: ProjectStatusEnum.default("DRAFT"),
   budgetRequested: z.coerce.number().min(0).nullable().optional(),

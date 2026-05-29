@@ -21,6 +21,7 @@ export function ProgressPageClient({ filterType }: { filterType?: 'LEADER' | 'IN
         return true;
     });
 
+
     return (
         <div className="space-y-6">
             <div className="space-y-2 max-w-md">

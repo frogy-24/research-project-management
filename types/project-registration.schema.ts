@@ -7,7 +7,7 @@ export const TeamMemberInvitationStatusEnum = z.enum(["PENDING", "ACCEPTED", "RE
 
 export const registrationTeamMemberSchema = z.object({
   name: z.string().min(1, "Tên thành viên không được để trống"),
-  role: z.string().min(1, "Vai trò thành viên không được để trống"),
+  role: z.string().min(1, "Vai trò thành viên không được để trống").optional().default("Thành viên"),
   studentId: z.string().cuid().optional(),
   invitationStatus: TeamMemberInvitationStatusEnum.optional(),
   invitedAt: z.coerce.date().optional(),

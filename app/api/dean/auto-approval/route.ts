@@ -23,6 +23,16 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    const job = await prisma.autoApprovalJob.create({
+      data: {
+        deanId: userId,
+        filters,
+        criteria,
+        status: 'QUEUED',
+        progress: 0,
+      },
+    });
+
     const botBaseUrl = process.env.AI_API_URL || process.env.BOT_API_URL || 'http://localhost:8000';
     const response = await fetch(`${botBaseUrl}/api/dean/evaluate-with-ai`, {
       method: 'POST',
@@ -32,21 +42,33 @@ export async function POST(request: NextRequest) {
       body: JSON.stringify({
         filters,
         criteria,
-        wait: true,
-        timeoutSeconds: 600,
+        jobId: job.id,
+        wait: false,
       }),
       cache: 'no-store',
     });
 
     const responseData = await response.json();
     if (!response.ok) {
+      await prisma.autoApprovalJob.update({
+        where: { id: job.id },
+        data: {
+          status: 'FAILED',
+          error: `Queue publish failed: ${response.status}`,
+        },
+      });
       return NextResponse.json(
         { error: 'Evaluate-with-ai failed', details: responseData },
         { status: response.status },
       );
     }
 
-    return NextResponse.json(responseData);
+    return NextResponse.json({
+      success: true,
+      status: 'QUEUED',
+      job,
+      queue: responseData,
+    });
   } catch (error) {
     console.error('Error creating auto-approval job:', error);
     return NextResponse.json(

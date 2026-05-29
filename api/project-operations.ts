@@ -4,6 +4,8 @@ import {
   progressReportSchema,
   type CreateProgressReportInput,
   type ProgressReport,
+  updateProgressReportSchema,
+  type UpdateProgressReportInput,
   reviewProgressReportSchema,
   type ReviewProgressReportInput,
 } from "@/types/progress-report.schema";
@@ -48,6 +50,18 @@ export const projectOperationsApi = {
     const validated = createProgressReportSchema.parse(payload);
     const response = await api.post<ApiSuccess<ProgressReport>>(
       `/projects/${projectId}/progress-reports`,
+      validated
+    );
+    return progressReportSchema.parse(response.data.data);
+  },
+
+  updateProgressReport: async (
+    reportId: string,
+    payload: UpdateProgressReportInput
+  ): Promise<ProgressReport> => {
+    const validated = updateProgressReportSchema.parse(payload);
+    const response = await api.patch<ApiSuccess<ProgressReport>>(
+      `/progress-reports/${reportId}/update`,
       validated
     );
     return progressReportSchema.parse(response.data.data);
