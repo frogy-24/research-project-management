@@ -28,6 +28,7 @@ import {
     BarChart3,
     DollarSign,
     ChevronRight,
+    FolderOpen,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAuthSession, useLogout } from '@/hooks/useAuth';
@@ -368,6 +369,11 @@ function AppSidebar({ session }: { session: AuthSession }) {
                 title: 'Thống kê',
                 url: '/admin/statistics',
                 icon: BarChart3,
+            },
+            {
+                title: 'Đề tài NCKH toàn khoa',
+                url: '/admin/projects-overview',
+                icon: FolderOpen,
             },
         );
     }

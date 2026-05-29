@@ -68,9 +68,13 @@ export async function POST(request: Request) {
         },
       });
 
+      const forwardedProto = request.headers.get("x-forwarded-proto");
+      const requestProto = new URL(request.url).protocol.replace(":", "");
+      const isHttps = (forwardedProto ?? requestProto) === "https";
+
       response.cookies.set(AUTH_COOKIE_NAME, token, {
         httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
+        secure: isHttps,
         sameSite: "lax",
         path: "/",
         maxAge: 60 * 60 * 24 * 7, // 7 days
@@ -117,9 +121,13 @@ export async function POST(request: Request) {
       },
     });
 
+    const forwardedProto = request.headers.get("x-forwarded-proto");
+    const requestProto = new URL(request.url).protocol.replace(":", "");
+    const isHttps = (forwardedProto ?? requestProto) === "https";
+
     response.cookies.set(AUTH_COOKIE_NAME, token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
+      secure: isHttps,
       sameSite: "lax",
       path: "/",
       maxAge: 60 * 60 * 24 * 7,
