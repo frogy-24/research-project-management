@@ -55,4 +55,12 @@ export const deanProjectClosingsApi = {
         const response = await api.patch<ApiSuccess<ProjectClosingSubmission>>('/dean/project-closings', validated);
         return projectClosingSubmissionSchema.parse(response.data.data);
     },
+
+    exportExcel: async (filters?: DeanProjectClosingFilters): Promise<Blob> => {
+        const query = buildDeanProjectClosingQuery(filters);
+        const response = await api.get(`/dean/project-closings/export${query}`, {
+            responseType: 'blob',
+        });
+        return response.data as Blob;
+    },
 };

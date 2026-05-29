@@ -563,6 +563,38 @@ export function CouncilProjectAssignmentManagement({
         toast.success('Đang xuất file Excel...');
     };
 
+    const handleExportRanking = () => {
+        if (isWaitingForEvaluationFilter) {
+            toast.error('Vui lòng chọn đợt đề tài trước khi xuất dữ liệu.');
+            return;
+        }
+
+        const params = new URLSearchParams();
+
+        if (selectedEvaluationCallRoundId !== 'all') {
+            params.set('callRoundId', selectedEvaluationCallRoundId);
+        }
+
+        const keyword = evaluationSearch.trim();
+        if (keyword) {
+            params.set('search', keyword);
+        }
+
+        params.set('mode', 'ranking');
+
+        const query = params.toString();
+        const url = query ? `/api/dean/council-evaluations/export?${query}` : '/api/dean/council-evaluations/export?mode=ranking';
+
+        const link = document.createElement('a');
+        link.href = url;
+        link.rel = 'noopener';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+
+        toast.success('Đang xuất file xếp hạng...');
+    };
+
     const handleOpenDetail = (item: ProjectEvaluationDetail) => {
         setSelectedEvaluationDetail(item);
         setIsEvaluationDetailDialogOpen(true);
@@ -802,6 +834,15 @@ export function CouncilProjectAssignmentManagement({
                         >
                             <Download className="h-4 w-4 mr-2" />
                             Xuất file chi tiết (Excel)
+                        </Button>
+                        <Button
+                            type="button"
+                            variant="outline"
+                            onClick={handleExportRanking}
+                            disabled={isWaitingForEvaluationFilter}
+                        >
+                            <Download className="h-4 w-4 mr-2" />
+                            Xuất xếp hạng theo hội đồng
                         </Button>
                     </div>
 

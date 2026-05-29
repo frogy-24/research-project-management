@@ -26,7 +26,7 @@ RABBITMQ_URL = os.getenv("RABBITMQ_URL", "amqp://admin:admin123@localhost:5672/"
 QUEUE_NAME = os.getenv("REPORT_QUEUE", "report_generation_queue")
 PREFETCH_COUNT = int(os.getenv("REPORT_PREFETCH", "1"))
 REPORT_OUTPUT_DIR = os.getenv("REPORT_OUTPUT_DIR", "/home/caoviet/Documents/reports_shared")
-NEXTJS_BASE_URL = os.getenv("NEXTJS_BASE_URL", "http://localhost:3000")
+NEXTJS_BASE_URL = os.getenv("NEXTJS_BASE_URL", os.getenv("APP_URL", "http://localhost:3000")).rstrip("/")
 
 
 async def _update_job_status(

@@ -4,6 +4,7 @@ import { useMemo, useState } from 'react';
 import { toast } from 'sonner';
 import { Download, Search } from 'lucide-react';
 import { useDeanProjectClosings, useDeanReviewProjectClosing } from '@/hooks/useDeanProjectClosings';
+import { deanProjectClosingsApi } from '@/api/dean-project-closings';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
@@ -87,6 +88,9 @@ export function DeanProjectClosingReviewManagement() {
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [selectedItem, setSelectedItem] = useState<DeanProjectClosingItem | null>(null);
     const [reviewNote, setReviewNote] = useState('');
+    const [isExporting, setIsExporting] = useState(false);
+    const [currentPage, setCurrentPage] = useState(1);
+    const pageSize = 10;
 
     const callRoundOptions = useMemo(() => {
         const map = new Map<string, string>();
@@ -132,6 +136,15 @@ export function DeanProjectClosingReviewManagement() {
         });
     }, [callRoundFilter, closingItems, searchKeyword, statusFilter]);
 
+    const totalPages = Math.max(1, Math.ceil(filteredItems.length / pageSize));
+    const paginatedItems = useMemo(() => {
+        const start = (currentPage - 1) * pageSize;
+        return filteredItems.slice(start, start + pageSize);
+    }, [currentPage, filteredItems]);
+
+    const startItem = filteredItems.length === 0 ? 0 : (currentPage - 1) * pageSize + 1;
+    const endItem = Math.min(currentPage * pageSize, filteredItems.length);
+
     const openReviewDialog = (item: DeanProjectClosingItem) => {
         setSelectedItem(item);
         setReviewNote('');
@@ -167,6 +180,36 @@ export function DeanProjectClosingReviewManagement() {
                 },
             },
         );
+    };
+
+    const handleExportExcel = async () => {
+        try {
+            setIsExporting(true);
+            const blob = await deanProjectClosingsApi.exportExcel({
+                search: searchKeyword,
+                callRoundId: callRoundFilter !== 'all' ? callRoundFilter : undefined,
+                status: statusFilter,
+            });
+
+            const url = window.URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            const now = new Date();
+            const stamp = `${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, '0')}${String(now.getDate()).padStart(2, '0')}-${String(
+                now.getHours(),
+            ).padStart(2, '0')}${String(now.getMinutes()).padStart(2, '0')}`;
+            link.href = url;
+            link.download = `dean-project-closings-${stamp}.xlsx`;
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+            window.URL.revokeObjectURL(url);
+            toast.success('Đã xuất file Excel nghiệm thu đề tài');
+        } catch (error) {
+            console.error(error);
+            toast.error('Không thể xuất file Excel');
+        } finally {
+            setIsExporting(false);
+        }
     };
 
     const renderFileList = (files: UploadedEvidenceFile[]) => {
@@ -213,6 +256,11 @@ export function DeanProjectClosingReviewManagement() {
                         Chọn hồ sơ để xem chi tiết tệp đính kèm và cập nhật quyết định duyệt.
                     </CardDescription>
                     <div className="flex w-full flex-col gap-3 sm:flex-row sm:flex-wrap">
+                        <Button type="button" variant="outline" onClick={handleExportExcel} disabled={isExporting}>
+                            <Download className="h-4 w-4 mr-2" />
+                            {isExporting ? 'Đang xuất...' : 'Xuất Excel'}
+                        </Button>
+
                         <Select value={callRoundFilter} onValueChange={setCallRoundFilter}>
                             <SelectTrigger className="w-full sm:w-64">
                                 <SelectValue placeholder="Lọc theo đợt đề tài" />
@@ -262,8 +310,9 @@ export function DeanProjectClosingReviewManagement() {
                             Không có hồ sơ nghiệm thu phù hợp với bộ lọc hiện tại.
                         </p>
                     ) : (
-                        <div className="rounded-md border overflow-hidden">
-                            <Table>
+                        <div className="space-y-3">
+                            <div className="rounded-md border overflow-hidden">
+                                <Table>
                                 <TableHeader>
                                     <TableRow>
                                         <TableHead>STT</TableHead>
@@ -278,9 +327,9 @@ export function DeanProjectClosingReviewManagement() {
                                     </TableRow>
                                 </TableHeader>
                                 <TableBody>
-                                    {filteredItems.map((item, index) => (
+                                    {paginatedItems.map((item, index) => (
                                         <TableRow key={item.submission.id}>
-                                            <TableCell>{index + 1}</TableCell>
+                                            <TableCell>{(currentPage - 1) * pageSize + index + 1}</TableCell>
                                             <TableCell className="max-w-xs">
                                                 <p className="line-clamp-2 font-medium">{item.project.title}</p>
                                             </TableCell>
@@ -315,7 +364,37 @@ export function DeanProjectClosingReviewManagement() {
                                         </TableRow>
                                     ))}
                                 </TableBody>
-                            </Table>
+                                </Table>
+                            </div>
+
+                            <div className="flex items-center justify-between">
+                                <p className="text-sm text-muted-foreground">
+                                    Hiển thị {startItem}-{endItem} / {filteredItems.length}
+                                </p>
+                                <div className="flex items-center gap-2">
+                                    <Button
+                                        type="button"
+                                        variant="outline"
+                                        size="sm"
+                                        onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
+                                        disabled={currentPage === 1}
+                                    >
+                                        Trước
+                                    </Button>
+                                    <span className="text-sm">
+                                        Trang {currentPage}/{totalPages}
+                                    </span>
+                                    <Button
+                                        type="button"
+                                        variant="outline"
+                                        size="sm"
+                                        onClick={() => setCurrentPage((prev) => Math.min(totalPages, prev + 1))}
+                                        disabled={currentPage >= totalPages}
+                                    >
+                                        Sau
+                                    </Button>
+                                </div>
+                            </div>
                         </div>
                     )}
                 </CardContent>
