@@ -1,27 +1,18 @@
-
 "use client"
 
-import { useState } from "react"
-import { useDeleteReportJob, useReportJobs } from "@/hooks/useReports"
+import { useMemo, useState } from "react"
+import { useCreateReportJob, useDeanReportStats, useDeleteReportJob, useReportJobs } from "@/hooks/useReports"
+import { useCallRounds } from "@/hooks/useCallRounds"
+import type { ReportJob } from "@/api/reports"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog"
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Label } from "@/components/ui/label"
-import { FileText, Download, RefreshCw, Plus, Trash2 } from "lucide-react"
-import { ReportTemplateDialog } from "@/components/projects/report-template-dialog"
-import { useCallRounds } from "@/hooks/useCallRounds"
-import type { ReportJob } from "@/api/reports"
+import { BarChart3, Download, FileText, GraduationCap, Plus, RefreshCw, ShieldCheck, Trash2, Users } from "lucide-react"
 
 const REPORT_TYPES = [
   { value: "PROJECT_SUMMARY", label: "Tổng hợp đề tài" },
@@ -31,13 +22,6 @@ const REPORT_TYPES = [
   { value: "CUSTOM", label: "Tùy chỉnh" },
 ]
 
-const statusColors: Record<string, string> = {
-  QUEUED: "bg-yellow-500",
-  PROCESSING: "bg-blue-500",
-  COMPLETED: "bg-green-500",
-  FAILED: "bg-red-500",
-}
-
 const statusLabels: Record<string, string> = {
   QUEUED: "Đang chờ",
   PROCESSING: "Đang xử lý",
@@ -45,38 +29,49 @@ const statusLabels: Record<string, string> = {
   FAILED: "Thất bại",
 }
 
+const statusVariant: Record<string, "default" | "secondary" | "destructive"> = {
+  QUEUED: "secondary",
+  PROCESSING: "secondary",
+  COMPLETED: "default",
+  FAILED: "destructive",
+}
+
 export function ReportManagement() {
   const [isCreateOpen, setIsCreateOpen] = useState(false)
-  const [selectedCallRoundId, setSelectedCallRoundId] = useState<string>("")
-  const [showTemplateDialog, setShowTemplateDialog] = useState(false)
+  const [selectedCallRoundId, setSelectedCallRoundId] = useState("")
+  const [selectedReportType, setSelectedReportType] = useState(REPORT_TYPES[0].value)
+  const [selectedYear, setSelectedYear] = useState(new Date().getFullYear())
 
   const { data: callRounds = [] } = useCallRounds()
   const { data, isLoading, refetch } = useReportJobs()
+  const { data: statsData, isLoading: statsLoading } = useDeanReportStats(selectedYear)
+  const createMutation = useCreateReportJob()
   const deleteMutation = useDeleteReportJob()
-  const jobs = data?.data || []
 
+  const jobs = data?.data || []
+  const stats = statsData?.data
   const pendingJobs = jobs.filter((j: ReportJob) => j.status === "QUEUED" || j.status === "PROCESSING")
   const completedJobs = jobs.filter((j: ReportJob) => j.status === "COMPLETED" || j.status === "FAILED")
 
-  const selectedCallRound = callRounds.find((cr: { id: string; name: string }) => cr.id === selectedCallRoundId)
+  const years = useMemo(() => {
+    const now = new Date().getFullYear()
+    return [now, now - 1, now - 2, now - 3]
+  }, [])
 
   const handleOpenCreateDialog = () => {
-    if (callRounds.length > 0 && !selectedCallRoundId) {
-      setSelectedCallRoundId(callRounds[0].id)
-    }
+    if (!selectedCallRoundId && callRounds[0]?.id) setSelectedCallRoundId(callRounds[0].id)
     setIsCreateOpen(true)
   }
 
-  const handleProceedToTemplate = () => {
-    if (selectedCallRoundId) {
-      setIsCreateOpen(false)
-      setShowTemplateDialog(true)
-    }
-  }
-
-  const handleDownload = async (job: ReportJob) => {
-    if (!job.resultUrl) return
-    window.open(job.resultUrl, "_blank")
+  const handleCreateReport = async () => {
+    if (!selectedCallRoundId) return
+    await createMutation.mutateAsync({
+      reportType: selectedReportType,
+      callRoundId: selectedCallRoundId,
+      parameters: { year: selectedYear },
+    } as any)
+    setIsCreateOpen(false)
+    refetch()
   }
 
   const handleDelete = async (job: ReportJob) => {
@@ -86,172 +81,99 @@ export function ReportManagement() {
     refetch()
   }
 
-  const JobCard = ({ job }: { job: ReportJob }) => (
-    <Card key={job.id}>
-      <CardHeader className="pb-2">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <FileText className="w-5 h-5" />
-            <CardTitle className="text-lg">
-              {REPORT_TYPES.find((t) => t.value === job.reportType)?.label || job.reportType}
-            </CardTitle>
-          </div>
-          <Badge className={statusColors[job.status]}>
-            {statusLabels[job.status]}
-          </Badge>
-        </div>
-        <CardDescription>
-          {new Date(job.createdAt).toLocaleString("vi-VN")}
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        {(job.status === "QUEUED" || job.status === "PROCESSING") && (
-          <div className="space-y-2">
-            <div className="flex justify-between text-sm">
-              <span>Đang xử lý...</span>
-              <span>{job.progress}%</span>
-            </div>
-            <Progress value={job.progress} />
-          </div>
-        )}
-        
-        {job.status === "COMPLETED" && (
-          <div className="flex items-center justify-between gap-2">
-            <p className="text-sm text-green-600">Báo cáo đã sẵn sàng</p>
-            <div className="flex items-center gap-2">
-              <Button size="sm" onClick={() => handleDownload(job)}>
-                <Download className="w-4 h-4 mr-2" />
-                Tải xuống
-              </Button>
-              <Button variant="destructive" size="sm" onClick={() => handleDelete(job)} disabled={deleteMutation.isPending}>
-                <Trash2 className="w-4 h-4 mr-2" />
-                Xóa
-              </Button>
-            </div>
-          </div>
-        )}
-        
-        {job.status === "FAILED" && (
-          <div className="flex items-center justify-between gap-2">
-            <p className="text-sm text-red-600">{job.error || "Đã xảy ra lỗi"}</p>
-            <Button variant="destructive" size="sm" onClick={() => handleDelete(job)} disabled={deleteMutation.isPending}>
-              <Trash2 className="w-4 h-4 mr-2" />
-              Xóa
-            </Button>
-          </div>
-        )}
-      </CardContent>
-    </Card>
-  )
-
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold">Quản lý Báo cáo</h1>
-          <p className="text-muted-foreground">Tạo và theo dõi báo cáo tự động</p>
-        </div>
-        
-        <div className="flex gap-2">
-          <Button variant="outline" onClick={() => refetch()}>
-            <RefreshCw className="w-4 h-4 mr-2" />
-            Làm mới
-          </Button>
+    <div className="space-y-6 p-1">
+      <Card className="border-0 shadow-sm bg-gradient-to-r from-slate-900 to-slate-700 text-white">
+        <CardHeader>
+          <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+            <div>
+              <CardTitle className="text-2xl md:text-3xl">Báo cáo điều hành khoa</CardTitle>
+              <CardDescription className="text-slate-200 mt-1">Theo dõi chỉ số năm học • Xuất báo cáo theo nhu cầu</CardDescription>
+            </div>
+            <div className="flex gap-2">
+              <Button variant="secondary" onClick={() => refetch()}>
+                <RefreshCw className="w-4 h-4 mr-2" /> Làm mới
+              </Button>
+              <Button className="bg-blue-600 hover:bg-blue-700" onClick={handleOpenCreateDialog}>
+                <Plus className="w-4 h-4 mr-2" /> Xuất báo cáo
+              </Button>
+            </div>
+          </div>
+        </CardHeader>
+      </Card>
 
-          <Button onClick={handleOpenCreateDialog}>
-            <Plus className="w-4 h-4 mr-2" />
-            Tạo báo cáo
-          </Button>
-
-          <Dialog open={isCreateOpen} onOpenChange={setIsCreateOpen}>
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle>Tạo báo cáo mới</DialogTitle>
-                <DialogDescription>
-                  Chọn đợt đăng ký để tạo báo cáo
-                </DialogDescription>
-              </DialogHeader>
-              
-              <div className="space-y-4 py-4">
-                <div className="space-y-2">
-                  <Label>Đợt đăng ký</Label>
-                  <Select value={selectedCallRoundId} onValueChange={setSelectedCallRoundId}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Chọn đợt đăng ký" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {callRounds.map((cr: { id: string; name: string }) => (
-                        <SelectItem key={cr.id} value={cr.id}>
-                          {cr.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+      <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 xl:grid-cols-3">
+        {[
+          { label: `Tổng đề tài ${selectedYear}`, value: stats?.totalProjects ?? 0, icon: BarChart3 },
+          { label: "Đề tài được duyệt", value: stats?.approvedRegistrations ?? 0, icon: ShieldCheck },
+          { label: "Lượt chấm hội đồng", value: stats?.evaluations ?? 0, icon: FileText },
+          { label: "Hội đồng", value: stats?.councils ?? 0, icon: Users },
+          { label: "Giảng viên", value: stats?.lecturers ?? 0, icon: GraduationCap },
+          { label: "Sinh viên", value: stats?.students ?? 0, icon: Users },
+        ].map((kpi) => (
+          <Card key={kpi.label} className="shadow-sm">
+            <CardContent className="pt-6">
+              <div className="flex items-start justify-between">
+                <div>
+                  <p className="text-sm text-muted-foreground">{kpi.label}</p>
+                  <p className="text-3xl font-bold mt-1">{statsLoading ? "..." : kpi.value}</p>
                 </div>
-
-                <Button 
-                  className="w-full" 
-                  onClick={handleProceedToTemplate}
-                  disabled={!selectedCallRoundId}
-                >
-                  Tiếp tục
-                </Button>
+                <kpi.icon className="w-5 h-5 text-slate-500" />
               </div>
-            </DialogContent>
-          </Dialog>
-        </div>
+            </CardContent>
+          </Card>
+        ))}
       </div>
 
-      <ReportTemplateDialog
-        open={showTemplateDialog}
-        onOpenChange={setShowTemplateDialog}
-        callRoundId={selectedCallRoundId}
-        callRoundName={selectedCallRound?.name}
-        onReportCreated={() => refetch()}
-      />
+      <Card className="shadow-sm">
+        <CardHeader><CardTitle className="text-lg">Lịch sử xuất báo cáo</CardTitle></CardHeader>
+        <CardContent>
+          {isLoading ? (
+            <div className="h-40 flex items-center justify-center"><RefreshCw className="w-6 h-6 animate-spin" /></div>
+          ) : (
+            <Tabs defaultValue="pending">
+              <TabsList className="grid w-full grid-cols-2">
+                <TabsTrigger value="pending">Đang chạy ({pendingJobs.length})</TabsTrigger>
+                <TabsTrigger value="completed">Hoàn tất ({completedJobs.length})</TabsTrigger>
+              </TabsList>
+              <TabsContent value="pending" className="mt-4 space-y-3">
+                {pendingJobs.length === 0 ? <div className="text-sm text-muted-foreground p-6 text-center border rounded-md">Không có tác vụ đang chạy</div> : pendingJobs.map((j) => (
+                  <Card key={j.id}><CardContent className="pt-5 space-y-3"><div className="flex justify-between"><div className="font-medium">{REPORT_TYPES.find((t) => t.value === j.reportType)?.label || j.reportType}</div><Badge variant={statusVariant[j.status]}>{statusLabels[j.status]}</Badge></div><Progress value={j.progress} /></CardContent></Card>
+                ))}
+              </TabsContent>
+              <TabsContent value="completed" className="mt-4 space-y-3">
+                {completedJobs.length === 0 ? <div className="text-sm text-muted-foreground p-6 text-center border rounded-md">Chưa có báo cáo đã xuất</div> : completedJobs.map((j) => (
+                  <Card key={j.id}><CardContent className="pt-5"><div className="flex flex-wrap items-center justify-between gap-3"><div><div className="font-medium">{REPORT_TYPES.find((t) => t.value === j.reportType)?.label || j.reportType}</div><div className="text-xs text-muted-foreground mt-1">{new Date(j.createdAt).toLocaleString("vi-VN")}</div></div><div className="flex items-center gap-2"><Badge variant={statusVariant[j.status]}>{statusLabels[j.status]}</Badge>{j.status === "COMPLETED" && j.resultUrl && <Button size="sm" onClick={() => window.open(j.resultUrl, "_blank")}><Download className="w-4 h-4 mr-1" />Tải</Button>}<Button size="sm" variant="destructive" onClick={() => handleDelete(j)} disabled={deleteMutation.isPending}><Trash2 className="w-4 h-4 mr-1" />Xóa</Button></div></div></CardContent></Card>
+                ))}
+              </TabsContent>
+            </Tabs>
+          )}
+        </CardContent>
+      </Card>
 
-      {isLoading ? (
-        <div className="flex items-center justify-center h-64">
-          <RefreshCw className="w-8 h-8 animate-spin" />
-        </div>
-      ) : (
-        <Tabs defaultValue="pending" className="w-full">
-          <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="pending">
-              Chờ in ({pendingJobs.length})
-            </TabsTrigger>
-            <TabsTrigger value="completed">
-              Đã in ({completedJobs.length})
-            </TabsTrigger>
-          </TabsList>
-
-          <TabsContent value="pending" className="space-y-4 mt-4">
-            {pendingJobs.length === 0 ? (
-              <Card>
-                <CardContent className="flex flex-col items-center justify-center h-32 text-muted-foreground">
-                  <FileText className="w-10 h-10 mb-2" />
-                  <p>Không có báo cáo đang chờ</p>
-                </CardContent>
-              </Card>
-            ) : (
-              pendingJobs.map((job: ReportJob) => <JobCard key={job.id} job={job} />)
-            )}
-          </TabsContent>
-
-          <TabsContent value="completed" className="space-y-4 mt-4">
-            {completedJobs.length === 0 ? (
-              <Card>
-                <CardContent className="flex flex-col items-center justify-center h-32 text-muted-foreground">
-                  <FileText className="w-10 h-10 mb-2" />
-                  <p>Chưa có báo cáo nào đã in</p>
-                </CardContent>
-              </Card>
-            ) : (
-              completedJobs.map((job: ReportJob) => <JobCard key={job.id} job={job} />)
-            )}
-          </TabsContent>
-        </Tabs>
-      )}
+      <Dialog open={isCreateOpen} onOpenChange={setIsCreateOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Xuất báo cáo thống kê</DialogTitle>
+            <DialogDescription>Chọn tham số trước khi tạo lệnh xuất file</DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 py-2">
+            <div className="space-y-2">
+              <Label>Năm</Label>
+              <Select value={String(selectedYear)} onValueChange={(v) => setSelectedYear(Number(v))}><SelectTrigger><SelectValue /></SelectTrigger><SelectContent>{years.map((y) => <SelectItem key={y} value={String(y)}>{y}</SelectItem>)}</SelectContent></Select>
+            </div>
+            <div className="space-y-2">
+              <Label>Đợt đăng ký</Label>
+              <Select value={selectedCallRoundId} onValueChange={setSelectedCallRoundId}><SelectTrigger><SelectValue placeholder="Chọn đợt" /></SelectTrigger><SelectContent>{callRounds.map((cr: { id: string; name: string }) => <SelectItem key={cr.id} value={cr.id}>{cr.name}</SelectItem>)}</SelectContent></Select>
+            </div>
+            <div className="space-y-2">
+              <Label>Loại báo cáo</Label>
+              <Select value={selectedReportType} onValueChange={setSelectedReportType}><SelectTrigger><SelectValue /></SelectTrigger><SelectContent>{REPORT_TYPES.map((t) => <SelectItem key={t.value} value={t.value}>{t.label}</SelectItem>)}</SelectContent></Select>
+            </div>
+            <Button className="w-full" onClick={handleCreateReport} disabled={!selectedCallRoundId || createMutation.isPending}>{createMutation.isPending ? "Đang tạo..." : "Tạo lệnh xuất"}</Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }

@@ -3,7 +3,7 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 import { reportsApi, ReportJob } from "@/api/reports"
 
-export const useReportJobs = (params?: { status?: string }) => {
+export const useReportJobs = (params?: { status?: string; callRoundId?: string }) => {
   return useQuery({
     queryKey: ["report-jobs", params],
     queryFn: () => reportsApi.list(params),
@@ -50,5 +50,12 @@ export const useReportJob = (id: string) => {
       }
       return false
     },
+  })
+}
+
+export const useDeanReportStats = (year: number) => {
+  return useQuery({
+    queryKey: ["dean-report-stats", year],
+    queryFn: () => reportsApi.stats(year),
   })
 }

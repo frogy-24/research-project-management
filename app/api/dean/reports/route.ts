@@ -88,13 +88,69 @@ export async function GET(req: NextRequest) {
 
   try {
     const { searchParams } = new URL(req.url)
+    const mode = searchParams.get("mode")
+
+    if (mode === "stats") {
+      const year = Number(searchParams.get("year") || new Date().getFullYear())
+      const start = new Date(`${year}-01-01T00:00:00.000Z`)
+      const end = new Date(`${year + 1}-01-01T00:00:00.000Z`)
+
+      const [
+        totalProjects,
+        approvedRegistrations,
+        councils,
+        evaluations,
+        lecturers,
+        students,
+      ] = await Promise.all([
+        prisma.project.count({
+          where: {
+            createdAt: { gte: start, lt: end },
+          },
+        }),
+        prisma.projectRegistration.count({
+          where: {
+            createdAt: { gte: start, lt: end },
+            status: "APPROVED",
+          },
+        }),
+        prisma.council.count({
+          where: {
+            createdAt: { gte: start, lt: end },
+          },
+        }),
+        prisma.councilEvaluation.count({
+          where: {
+            evaluatedAt: { gte: start, lt: end },
+          },
+        }),
+        prisma.user.count({ where: { role: "LECTURER" } }),
+        prisma.user.count({ where: { role: "STUDENT" } }),
+      ])
+
+      return NextResponse.json({
+        success: true,
+        data: {
+          year,
+          totalProjects,
+          approvedRegistrations,
+          councils,
+          evaluations,
+          lecturers,
+          students,
+        },
+      })
+    }
+
     const status = searchParams.get("status")
+    const callRoundId = searchParams.get("callRoundId")
     const limit = parseInt(searchParams.get("limit") || "20")
     const offset = parseInt(searchParams.get("offset") || "0")
 
     const where = {
       deanId: userId,
       ...(status ? { status: status as "QUEUED" | "PROCESSING" | "COMPLETED" | "FAILED" } : {}),
+      ...(callRoundId ? { callRoundId } : {}),
     }
 
     const [jobs, total] = await Promise.all([
@@ -132,8 +188,18 @@ export async function DELETE(req: NextRequest) {
       return NextResponse.json({ error: "Report job not found" }, { status: 404 })
     }
 
-    if (job.resultUrl && job.resultUrl.startsWith("/uploads/reports/")) {
-      const filename = job.resultUrl.replace("/uploads/reports/", "")
+    const getReportFilename = (url?: string | null) => {
+      if (!url) return null
+      const marker = "/uploads/reports/"
+      const idx = url.indexOf(marker)
+      if (idx === -1) return null
+      const tail = url.slice(idx + marker.length)
+      const clean = tail.split("?")[0].split("#")[0]
+      return clean || null
+    }
+
+    const filename = getReportFilename(job.resultUrl)
+    if (filename) {
       const filePath = join(process.cwd(), "public", "uploads", "reports", filename)
       if (existsSync(filePath)) {
         await unlink(filePath)

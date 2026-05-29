@@ -3,7 +3,7 @@
 import { useState, useMemo } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
-import { Download, ExternalLink, FileText, Search, X, RefreshCw, Plus, FileSpreadsheet } from 'lucide-react';
+import { Download, ExternalLink, FileText, Search, X, RefreshCw, Plus, FileSpreadsheet, Trash2 } from 'lucide-react';
 import { useDeanApprovals, useUpdateDeanApprovalStatus, type DeanApprovalsFilters } from '@/hooks/useDeanApprovals';
 import { useCallRounds } from '@/hooks/useCallRounds';
 import { useDebounce } from '@/hooks/useDebounce';
@@ -28,6 +28,7 @@ import {
 import { AutoApprovalDialog } from '@/components/projects/auto-approval-dialog';
 import { ReportTemplateDialog } from '@/components/projects/report-template-dialog';
 import { useReportJobs } from '@/hooks/useReports';
+import { useDeleteReportJob } from '@/hooks/useReports';
 import type { ReportJob } from '@/api/reports';
 
 interface Registration {
@@ -850,8 +851,11 @@ function ExportDialog({ open, onOpenChange, onExport }: { open: boolean; onOpenC
     );
 }
 
-function ReportHistoryDialog({ open, onOpenChange }: { open: boolean; onOpenChange: (v: boolean) => void }) {
-    const { data, isLoading, refetch } = useReportJobs();
+function ReportHistoryDialog({ open, onOpenChange, callRoundId }: { open: boolean; onOpenChange: (v: boolean) => void; callRoundId?: string }) {
+    const { data, isLoading, refetch } = useReportJobs({
+        callRoundId: callRoundId && callRoundId !== 'ALL' ? callRoundId : undefined,
+    });
+    const deleteMutation = useDeleteReportJob();
     const jobs = data?.data || [];
 
     const statusColors: Record<string, string> = {
@@ -879,6 +883,14 @@ function ReportHistoryDialog({ open, onOpenChange }: { open: boolean; onOpenChan
     const handleDownload = (job: ReportJob) => {
         if (!job.resultUrl) return;
         window.open(job.resultUrl, '_blank');
+    };
+
+    const handleDelete = async (job: ReportJob) => {
+        const ok = window.confirm('Xóa báo cáo này? Hành động sẽ xóa cả file đã sinh.');
+        if (!ok) return;
+        await deleteMutation.mutateAsync(job.id);
+        await refetch();
+        toast.success('Đã xóa báo cáo');
     };
 
     return (
@@ -944,12 +956,25 @@ function ReportHistoryDialog({ open, onOpenChange }: { open: boolean; onOpenChan
                                         )}
                                     </div>
 
-                                    {job.status === 'COMPLETED' && job.resultUrl && (
-                                        <Button size="sm" onClick={() => handleDownload(job)}>
-                                            <Download className="h-4 w-4 mr-1" />
-                                            Tải xuống
-                                        </Button>
-                                    )}
+                                    <div className="flex items-center gap-2">
+                                        {job.status === 'COMPLETED' && job.resultUrl && (
+                                            <Button size="sm" onClick={() => handleDownload(job)}>
+                                                <Download className="h-4 w-4 mr-1" />
+                                                Tải xuống
+                                            </Button>
+                                        )}
+                                        {(job.status === 'COMPLETED' || job.status === 'FAILED') && (
+                                            <Button
+                                                variant="destructive"
+                                                size="sm"
+                                                disabled={deleteMutation.isPending}
+                                                onClick={() => handleDelete(job)}
+                                            >
+                                                <Trash2 className="h-4 w-4 mr-1" />
+                                                Xóa
+                                            </Button>
+                                        )}
+                                    </div>
                                 </div>
                             </Card>
                         ))

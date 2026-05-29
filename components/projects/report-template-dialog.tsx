@@ -3,7 +3,7 @@
 import { useState, useRef } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
-import { Upload, FileText, Trash2, X, Plus, Loader2 } from 'lucide-react';
+import { Upload, FileText, Trash2, X, Plus, Loader2, ExternalLink } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -287,11 +287,12 @@ export function ReportTemplateDialog({
               ) : templates && templates.length > 0 ? (
                 <Table>
                   <TableHeader>
-                    <TableRow>
+                      <TableRow>
                       <TableHead>Tên mẫu</TableHead>
                       <TableHead>Loại file</TableHead>
                       <TableHead>Kích thước</TableHead>
-                      <TableHead className="w-16">Xóa</TableHead>
+                        <TableHead className="w-24">Xem</TableHead>
+                        <TableHead className="w-16">Xóa</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -307,6 +308,13 @@ export function ReportTemplateDialog({
                           <Badge variant="secondary">{template.fileType.toUpperCase()}</Badge>
                         </TableCell>
                         <TableCell>{(template.fileSize / 1024).toFixed(1)} KB</TableCell>
+                        <TableCell>
+                          <Button variant="ghost" size="sm" asChild>
+                            <a href={template.fileUrl} target="_blank" rel="noopener noreferrer" aria-label={`Xem mẫu ${template.name}`}>
+                              <ExternalLink className="h-4 w-4" />
+                            </a>
+                          </Button>
+                        </TableCell>
                         <TableCell>
                           <Button
                             variant="ghost"

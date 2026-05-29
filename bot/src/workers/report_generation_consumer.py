@@ -10,6 +10,7 @@ import tempfile
 from datetime import datetime
 from pathlib import Path
 from typing import Any
+from urllib.parse import urlparse
 
 import aio_pika
 
@@ -100,8 +101,10 @@ async def _upload_report_to_nextjs(filepath: str, report_type: str | None = None
 async def _download_template_from_nextjs(template_url: str) -> tuple[str, str]:
     import aiohttp
 
-    template_filename = os.path.basename(template_url)
-    full_url = f"{NEXTJS_BASE_URL}{template_url}"
+    parsed = urlparse(template_url)
+    is_absolute_url = parsed.scheme in {"http", "https"} and bool(parsed.netloc)
+    template_filename = os.path.basename(parsed.path or template_url)
+    full_url = template_url if is_absolute_url else f"{NEXTJS_BASE_URL}{template_url}"
     logger.info(f"Downloading template from: {full_url}")
 
     temp_dir = os.getenv("TEMP_UPLOAD_DIR", tempfile.gettempdir())

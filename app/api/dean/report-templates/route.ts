@@ -5,6 +5,33 @@ import { writeFile, mkdir } from "fs/promises"
 import { existsSync } from "fs"
 import { join } from "path"
 
+function getBaseUrl(req: NextRequest): string {
+  const envBase = process.env.APP_BASE_URL?.trim()
+  if (envBase) return envBase.replace(/\/$/, "")
+
+  const forwardedProto = req.headers.get("x-forwarded-proto")
+  const forwardedHost = req.headers.get("x-forwarded-host")
+
+  const proto = (forwardedProto?.split(",")[0]?.trim() || "http")
+  const host =
+    forwardedHost?.split(",")[0]?.trim() ||
+    req.headers.get("host") ||
+    "localhost:3000"
+
+  if (process.env.NODE_ENV === "production" && host.includes("localhost")) {
+    return "https://urms.io.vn"
+  }
+
+  return `${proto}://${host}`
+}
+
+function toAbsoluteFileUrl(req: NextRequest, fileUrl: string): string {
+  if (!fileUrl) return fileUrl
+  if (/^https?:\/\//i.test(fileUrl)) return fileUrl
+  const normalized = fileUrl.startsWith("/") ? fileUrl : `/${fileUrl}`
+  return `${getBaseUrl(req)}${normalized}`
+}
+
 // List templates
 export async function GET(req: NextRequest) {
   const userId = getActorUserId(req)
@@ -22,7 +49,13 @@ export async function GET(req: NextRequest) {
     const templates = await prisma.reportTemplate.findMany({
       orderBy: { createdAt: "desc" },
     })
-    return NextResponse.json({ success: true, data: templates })
+
+    const data = templates.map((t) => ({
+      ...t,
+      fileUrl: toAbsoluteFileUrl(req, t.fileUrl),
+    }))
+
+    return NextResponse.json({ success: true, data })
   } catch (error) {
     console.error("List templates error:", error)
     return NextResponse.json({ error: "Internal server error" }, { status: 500 })
@@ -68,7 +101,8 @@ export async function POST(req: NextRequest) {
     }
     await writeFile(filePath, buffer)
 
-    const fileUrl = `/uploads/templates/${fileName}`
+    const relativeFileUrl = `/uploads/templates/${fileName}`
+    const fileUrl = toAbsoluteFileUrl(req, relativeFileUrl)
     const fileType = file.type || "application/octet-stream"
     const fileSize = file.size
 

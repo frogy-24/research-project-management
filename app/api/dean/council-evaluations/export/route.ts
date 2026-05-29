@@ -9,7 +9,9 @@ const teamMemberArraySchema = registrationTeamMemberSchema.array();
 type TeamMember = {
     name: string;
     role: string;
-    studentId: string | null;
+    studentUserId: string | null;
+    studentCode: string | null;
+    className: string | null;
 };
 
 type ProjectCouncilContext = {
@@ -39,10 +41,12 @@ type ProjectCouncilContext = {
     leaderMajor: string;
     leaderClass: string;
     teamMembersText: string;
+    teamMembers: TeamMember[];
 };
 
 type ExportRow = {
     projectId: string;
+    projectRegistrationId: string;
     callRoundName: string;
     callRoundRegistrationPeriod: string;
     councilName: string;
@@ -52,7 +56,6 @@ type ExportRow = {
     projectObjective: string;
     projectRegistrationTitle: string;
     projectRegistrationObjective: string;
-    projectRegistrationId: string;
     registrationStatus: string;
     instructorStatus: string;
     facultyStatus: string;
@@ -68,6 +71,10 @@ type ExportRow = {
     leaderMajor: string;
     leaderClass: string;
     teamMembersText: string;
+    memberName: string;
+    memberStudentId: string;
+    memberClass: string;
+    memberRole: string;
     evaluatorName: string;
     evaluatorCode: string;
     evaluatorEmail: string;
@@ -94,7 +101,9 @@ const parseTeamMembers = (raw: unknown): TeamMember[] => {
     return parsed.data.map((member) => ({
         name: member.name,
         role: member.role,
-        studentId: member.studentId ?? null,
+        studentUserId: member.studentId ?? null,
+        studentCode: (member as { studentCode?: string | null }).studentCode ?? null,
+        className: (member as { className?: string | null }).className ?? null,
     }));
 };
 
@@ -265,7 +274,7 @@ export async function GET(request: NextRequest) {
             const teamMembersText = parsedMembers
                 .map((member, index) => {
                     const rolePart = member.role ? ` - ${member.role}` : '';
-                    const idPart = member.studentId ? ` [${member.studentId}]` : '';
+                    const idPart = member.studentCode ? ` [${member.studentCode}]` : '';
                     return `${index + 1}. ${member.name}${rolePart}${idPart}`;
                 })
                 .join(' | ');
@@ -297,7 +306,82 @@ export async function GET(request: NextRequest) {
                 leaderMajor: safeText(assignment.projectRegistration.user.major?.name),
                 leaderClass: safeText(assignment.projectRegistration.user.class?.name),
                 teamMembersText,
+                teamMembers: parsedMembers,
             });
+        });
+
+        const teamMemberUserIds = Array.from(
+            new Set(
+                Array.from(registrationContextMap.values())
+                    .flatMap((ctx) => ctx.teamMembers)
+                    .map((m) => m.studentUserId)
+                    .filter((id): id is string => Boolean(id)),
+            ),
+        );
+
+        const teamMemberUsers = teamMemberUserIds.length
+            ? await prisma.user.findMany({
+                  where: { id: { in: teamMemberUserIds } },
+                  select: {
+                      id: true,
+                      code: true,
+                      class: { select: { name: true } },
+                  },
+              })
+            : [];
+        const teamMemberUserMap = new Map(teamMemberUsers.map((u) => [u.id, u]));
+
+        const unresolvedMemberNames = Array.from(
+            new Set(
+                Array.from(registrationContextMap.values())
+                    .flatMap((ctx) => ctx.teamMembers)
+                    .filter((m) => !m.studentUserId)
+                    .map((m) => safeText(m.name))
+                    .filter(Boolean),
+            ),
+        );
+
+        const fallbackUsersByName = unresolvedMemberNames.length
+            ? await prisma.user.findMany({
+                  where: {
+                      name: {
+                          in: unresolvedMemberNames,
+                      },
+                  },
+                  select: {
+                      name: true,
+                      code: true,
+                      class: { select: { name: true } },
+                  },
+              })
+            : [];
+        const fallbackMemberByNameMap = new Map<string, { code: string | null; className: string | null }>();
+        fallbackUsersByName.forEach((u) => {
+            const key = safeText(u.name);
+            if (!key || fallbackMemberByNameMap.has(key)) return;
+            fallbackMemberByNameMap.set(key, {
+                code: u.code ?? null,
+                className: u.class?.name ?? null,
+            });
+        });
+
+        registrationContextMap.forEach((ctx, key) => {
+            const resolvedMembers = ctx.teamMembers.map((m) => {
+                const u = m.studentUserId ? teamMemberUserMap.get(m.studentUserId) : undefined;
+                return {
+                    ...m,
+                    studentCode: u?.code ?? m.studentCode ?? fallbackMemberByNameMap.get(safeText(m.name))?.code ?? m.studentUserId ?? null,
+                    className: u?.class?.name ?? m.className ?? fallbackMemberByNameMap.get(safeText(m.name))?.className ?? null,
+                };
+            });
+            const teamMembersText = resolvedMembers
+                .map((member, index) => {
+                    const rolePart = member.role ? ` - ${member.role}` : '';
+                    const idPart = member.studentCode ? ` [${member.studentCode}]` : '';
+                    return `${index + 1}. ${member.name}${rolePart}${idPart}`;
+                })
+                .join(' | ');
+            registrationContextMap.set(key, { ...ctx, teamMembers: resolvedMembers, teamMembersText });
         });
 
         const registrationIds = Array.from(registrationContextMap.keys());
@@ -386,17 +470,29 @@ export async function GET(request: NextRequest) {
         });
 
         const exportRows: ExportRow[] = evaluations
-            .map((evaluation) => {
+            .flatMap((evaluation) => {
                 const context = projectContextMap.get(evaluation.projectId);
                 if (!context) {
-                    return null;
+                    return [];
                 }
 
                 const periodStart = formatDate(context.callRoundRegistrationStartDate);
                 const periodEnd = formatDate(context.callRoundRegistrationEndDate);
+                const members = context.teamMembers.length
+                    ? context.teamMembers
+                    : [
+                          {
+                              name: context.leaderName,
+                              studentUserId: null,
+                              studentCode: context.leaderCode || null,
+                              className: context.leaderClass || null,
+                              role: 'Nhóm trưởng',
+                          },
+                      ];
 
-                return {
+                return members.map((member) => ({
                     projectId: evaluation.projectId,
+                    projectRegistrationId: context.projectRegistrationId,
                     callRoundName: context.callRoundName,
                     callRoundRegistrationPeriod: periodStart && periodEnd ? `${periodStart} - ${periodEnd}` : '',
                     councilName: context.councilName,
@@ -406,7 +502,6 @@ export async function GET(request: NextRequest) {
                     projectObjective: context.projectObjective,
                     projectRegistrationTitle: context.projectRegistrationTitle,
                     projectRegistrationObjective: context.projectRegistrationObjective,
-                    projectRegistrationId: context.projectRegistrationId,
                     registrationStatus: context.registrationStatus,
                     instructorStatus: context.instructorStatus,
                     facultyStatus: context.facultyStatus,
@@ -422,6 +517,10 @@ export async function GET(request: NextRequest) {
                     leaderMajor: context.leaderMajor,
                     leaderClass: context.leaderClass,
                     teamMembersText: context.teamMembersText,
+                    memberName: safeText(member.name),
+                    memberStudentId: safeText(member.studentCode ?? ''),
+                    memberClass: safeText(member.className ?? ''),
+                    memberRole: safeText(member.role),
                     evaluatorName: safeText(evaluation.councilMember.name),
                     evaluatorCode: safeText(evaluation.councilMember.code),
                     evaluatorEmail: safeText(evaluation.councilMember.email),
@@ -431,7 +530,7 @@ export async function GET(request: NextRequest) {
                     decision: getDecisionLabel(evaluation.decision),
                     comment: safeText(evaluation.comment),
                     evaluatedAt: formatDateTime(evaluation.evaluatedAt),
-                };
+                }));
             })
             .filter((row): row is ExportRow => row !== null);
 
@@ -549,6 +648,62 @@ export async function GET(request: NextRequest) {
                             rankLabel: rankIndex === 0 ? 'Nhất' : rankIndex === 1 ? 'Nhì' : rankIndex === 2 ? 'Ba' : '',
                         }));
 
+                    const rankingRows: Array<Array<string | number>> = [];
+                    const merges: XLSX.Range[] = [
+                        { s: { r: 0, c: 0 }, e: { r: 0, c: 11 } },
+                        { s: { r: 1, c: 0 }, e: { r: 1, c: 11 } },
+                    ];
+
+                    let currentRow = 4;
+                    ranking.forEach((item) => {
+                        const members = filteredRows
+                            .filter((r) => r.councilName === councilName && r.projectTitle === item.projectTitle)
+                            .map((m) => ({
+                                memberName: m.memberName || '-',
+                                memberStudentId: m.memberStudentId || '-',
+                                memberClass: m.memberClass || '-',
+                                memberRole: m.memberRole || '-',
+                            }))
+                            .filter(
+                                (m, i, arr) =>
+                                    arr.findIndex(
+                                        (x) =>
+                                            x.memberName === m.memberName &&
+                                            x.memberStudentId === m.memberStudentId &&
+                                            x.memberClass === m.memberClass &&
+                                            x.memberRole === m.memberRole,
+                                    ) === i,
+                            );
+
+                        const sampleRow = filteredRows.find((r) => r.councilName === councilName && r.projectTitle === item.projectTitle);
+                        const memberRows = members.length ? members : [{ memberName: '-', memberStudentId: '-', memberClass: '-', memberRole: '-' }];
+
+                        memberRows.forEach((m, idx) => {
+                            rankingRows.push([
+                                idx === 0 ? item.rankLabel : '',
+                                idx === 0 ? item.projectTitle : '',
+                                idx === 0 ? item.callRoundName : '',
+                                m.memberName,
+                                m.memberStudentId,
+                                m.memberClass,
+                                m.memberRole,
+                                idx === 0 ? sampleRow?.advisorName || '' : '',
+                                idx === 0 ? sampleRow?.defenseDate || '' : '',
+                                idx === 0 ? sampleRow?.defenseLocation || '' : '',
+                                idx === 0 ? item.averageScore : '',
+                                idx === 0 ? item.totalEvaluations : '',
+                            ]);
+                        });
+
+                        if (memberRows.length > 1) {
+                            const endRow = currentRow + memberRows.length - 1;
+                            [0, 1, 2, 7, 8, 9, 10, 11].forEach((col) => {
+                                merges.push({ s: { r: currentRow, c: col }, e: { r: endRow, c: col } });
+                            });
+                        }
+                        currentRow += memberRows.length;
+                    });
+
                     const wsData: Array<Array<string | number>> = [
                         ['BẢNG XẾP HẠNG TOP 3 ĐỀ TÀI'],
                         [`Hội đồng: ${councilName}`],
@@ -558,27 +713,16 @@ export async function GET(request: NextRequest) {
                             'Đề tài',
                             'Đợt đề tài',
                             'Thành viên',
+                            'Mã sinh viên',
+                            'Lớp',
+                            'Chức vụ',
                             'Người hướng dẫn',
                             'Ngày bảo vệ',
                             'Nơi bảo vệ',
                             'Điểm trung bình',
                             'Số lượt chấm',
                         ],
-                        ...ranking.map((item) => [
-                            item.rankLabel,
-                            item.projectTitle,
-                            item.callRoundName,
-                            filteredRows.find((r) => r.councilName === councilName && r.projectTitle === item.projectTitle)
-                                ?.teamMembersText || '',
-                            filteredRows.find((r) => r.councilName === councilName && r.projectTitle === item.projectTitle)
-                                ?.advisorName || '',
-                            filteredRows.find((r) => r.councilName === councilName && r.projectTitle === item.projectTitle)
-                                ?.defenseDate || '',
-                            filteredRows.find((r) => r.councilName === councilName && r.projectTitle === item.projectTitle)
-                                ?.defenseLocation || '',
-                            item.averageScore,
-                            item.totalEvaluations,
-                        ]),
+                        ...rankingRows,
                     ];
 
                     const ws = XLSX.utils.aoa_to_sheet(wsData);
@@ -586,17 +730,17 @@ export async function GET(request: NextRequest) {
                         { wch: 8 },
                         { wch: 50 },
                         { wch: 26 },
-                        { wch: 46 },
+                        { wch: 24 },
+                        { wch: 16 },
+                        { wch: 14 },
+                        { wch: 14 },
                         { wch: 28 },
                         { wch: 18 },
                         { wch: 28 },
                         { wch: 18 },
                         { wch: 14 },
                     ];
-                    ws['!merges'] = [
-                        { s: { r: 0, c: 0 }, e: { r: 0, c: 8 } },
-                        { s: { r: 1, c: 0 }, e: { r: 1, c: 8 } },
-                    ];
+                    ws['!merges'] = merges;
 
                     XLSX.utils.book_append_sheet(wb, ws, normalizeSheetName(councilName, index));
                 });
@@ -626,6 +770,9 @@ export async function GET(request: NextRequest) {
                   'Đề tài',
                   'Hội đồng',
                   'Thành viên',
+                  'Mã sinh viên',
+                  'Lớp',
+                  'Chức vụ',
                   'Người hướng dẫn',
                   'Ngày bảo vệ',
                   'Nơi bảo vệ',
@@ -642,6 +789,9 @@ export async function GET(request: NextRequest) {
                   'Đề tài',
                   'Hội đồng',
                   'Thành viên',
+                  'Mã sinh viên',
+                  'Lớp',
+                  'Chức vụ',
                   'Người hướng dẫn',
                   'Ngày bảo vệ',
                   'Nơi bảo vệ',
@@ -665,77 +815,53 @@ export async function GET(request: NextRequest) {
             return a.evaluatorName.localeCompare(b.evaluatorName, 'vi');
         });
 
-        const emptyRow = () => new Array(header.length).fill('');
-        const sheetRows: Array<(string | number)[]> = [];
-        let stt = 1;
-        let currentCallRound = '';
-        let currentCouncil = '';
-        let currentProject = '';
-
-        for (const row of sortedRows) {
-            if (!isFilteredByCallRound && row.callRoundName !== currentCallRound) {
-                if (sheetRows.length > 0) sheetRows.push(emptyRow());
-                currentCallRound = row.callRoundName;
-                currentCouncil = '';
-                currentProject = '';
-                const groupRow = emptyRow();
-                groupRow[1] = `ĐỢT ĐỀ TÀI: ${row.callRoundName}`;
-                sheetRows.push(groupRow);
+        let sttCounter = 0;
+        let lastProjectSttKey = '';
+        const sheetRows: Array<(string | number)[]> = sortedRows.map((row) => {
+            const projectSttKey = `${row.callRoundName}__${row.councilName}__${row.projectId}`;
+            if (projectSttKey !== lastProjectSttKey) {
+                sttCounter += 1;
+                lastProjectSttKey = projectSttKey;
             }
-
-            if (row.councilName !== currentCouncil) {
-                if (sheetRows.length > 0) sheetRows.push(emptyRow());
-                currentCouncil = row.councilName;
-                currentProject = '';
-                const councilCol = isFilteredByCallRound ? 2 : 3;
-                const groupRow = emptyRow();
-                groupRow[councilCol] = `HỘI ĐỒNG: ${row.councilName}`;
-                sheetRows.push(groupRow);
-            }
-
-            if (row.projectTitle !== currentProject) {
-                currentProject = row.projectTitle;
-                const projectCol = isFilteredByCallRound ? 1 : 2;
-                const groupRow = emptyRow();
-                groupRow[projectCol] = `ĐỀ TÀI: ${row.projectTitle}`;
-                sheetRows.push(groupRow);
-            }
-
-            sheetRows.push(
-                isFilteredByCallRound
-                    ? [
-                          stt++,
-                          row.projectTitle,
-                          row.councilName,
-                          row.teamMembersText,
-                          row.advisorName,
-                          row.defenseDate,
-                          row.defenseLocation,
-                          row.evaluatorName,
-                          Number(row.score),
-                          row.decision,
-                          row.evaluatedAt,
-                          row.comment,
-                          councilProjectRankMap.get(row.councilName)?.get(row.projectId) || '',
-                      ]
-                    : [
-                          stt++,
-                          row.callRoundName,
-                          row.projectTitle,
-                          row.councilName,
-                          row.teamMembersText,
-                          row.advisorName,
-                          row.defenseDate,
-                          row.defenseLocation,
-                          row.evaluatorName,
-                          Number(row.score),
-                          row.decision,
-                          row.evaluatedAt,
-                          row.comment,
-                          councilProjectRankMap.get(row.councilName)?.get(row.projectId) || '',
-                      ],
-            );
-        }
+            return isFilteredByCallRound
+                ? [
+                      sttCounter,
+                      row.projectTitle,
+                      row.councilName,
+                      row.memberName,
+                      row.memberStudentId,
+                      row.memberClass,
+                      row.memberRole,
+                      row.advisorName,
+                      row.defenseDate,
+                      row.defenseLocation,
+                      row.evaluatorName,
+                      Number(row.score),
+                      row.decision,
+                      row.evaluatedAt,
+                      row.comment,
+                      councilProjectRankMap.get(row.councilName)?.get(row.projectId) || '',
+                  ]
+                : [
+                      sttCounter,
+                      row.callRoundName,
+                      row.projectTitle,
+                      row.councilName,
+                      row.memberName,
+                      row.memberStudentId,
+                      row.memberClass,
+                      row.memberRole,
+                      row.advisorName,
+                      row.defenseDate,
+                      row.defenseLocation,
+                      row.evaluatorName,
+                      Number(row.score),
+                      row.decision,
+                      row.evaluatedAt,
+                      row.comment,
+                      councilProjectRankMap.get(row.councilName)?.get(row.projectId) || '',
+                  ];
+        });
 
         const wb = XLSX.utils.book_new();
         const title = 'BÁO CÁO KẾT QUẢ CHẤM ĐIỂM HỘI ĐỒNG';
@@ -747,7 +873,10 @@ export async function GET(request: NextRequest) {
                   { wch: 6 },
                   { wch: 40 },
                   { wch: 24 },
-                  { wch: 46 },
+                  { wch: 24 },
+                  { wch: 16 },
+                  { wch: 14 },
+                  { wch: 14 },
                   { wch: 28 },
                   { wch: 18 },
                   { wch: 28 },
@@ -763,7 +892,10 @@ export async function GET(request: NextRequest) {
                   { wch: 24 },
                   { wch: 40 },
                   { wch: 24 },
-                  { wch: 46 },
+                  { wch: 24 },
+                  { wch: 16 },
+                  { wch: 14 },
+                  { wch: 14 },
                   { wch: 28 },
                   { wch: 18 },
                   { wch: 28 },
@@ -778,6 +910,46 @@ export async function GET(request: NextRequest) {
             { s: { r: 0, c: 0 }, e: { r: 0, c: header.length - 1 } },
             { s: { r: 1, c: 0 }, e: { r: 1, c: header.length - 1 } },
         ];
+
+        const dataStartRow = 4;
+        const mergeColumns = isFilteredByCallRound ? [0, 1, 2, 7, 8, 9, 10, 11, 12, 13, 14, 15] : [0, 1, 2, 3, 8, 9, 10, 11, 12, 13, 14, 15, 16];
+        let mergeStart = -1;
+        let mergeKey = '';
+        for (let i = 0; i < sortedRows.length; i++) {
+            const key = `${sortedRows[i].councilName}__${sortedRows[i].projectId}`;
+            const excelRow = dataStartRow + i;
+            if (key !== mergeKey) {
+                if (mergeStart >= 0 && excelRow - 1 > mergeStart) {
+                    for (const col of mergeColumns) {
+                        ws['!merges'].push({ s: { r: mergeStart, c: col }, e: { r: excelRow - 1, c: col } });
+                    }
+                }
+                mergeKey = key;
+                mergeStart = excelRow;
+            }
+            if (i === sortedRows.length - 1 && mergeStart >= 0 && excelRow > mergeStart) {
+                for (const col of mergeColumns) {
+                    ws['!merges'].push({ s: { r: mergeStart, c: col }, e: { r: excelRow, c: col } });
+                }
+            }
+        }
+
+        const centerCols = isFilteredByCallRound ? [0, 4, 5, 15] : [0, 5, 6, 16];
+        for (let i = 0; i < sortedRows.length; i++) {
+            const excelRow = dataStartRow + i;
+            for (const col of centerCols) {
+                const cellRef = XLSX.utils.encode_cell({ r: excelRow, c: col });
+                if (ws[cellRef]) {
+                    ws[cellRef].s = {
+                        ...(ws[cellRef].s || {}),
+                        alignment: {
+                            horizontal: 'center',
+                            vertical: 'center',
+                        },
+                    };
+                }
+            }
+        }
 
         XLSX.utils.book_append_sheet(wb, ws, 'Ket qua cham diem');
         const buffer = XLSX.write(wb, { type: 'buffer', bookType: 'xlsx' });

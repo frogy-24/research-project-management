@@ -34,10 +34,23 @@ import {
 } from "@/components/ui/select";
 import { toast } from "sonner";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Pagination, PaginationContent, PaginationItem, PaginationLink } from "@/components/ui/pagination";
 
 export function MajorManagement() {
-  const { data: majorsData, isLoading: isLoadingMajors } = useMajors({ limit: 1000 });
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 10;
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedDepartment, setSelectedDepartment] = useState<string>("all");
+  const debouncedSearchTerm = useDebounce(searchTerm, 300);
+
+  const { data: majorsData, isLoading: isLoadingMajors } = useMajors({
+    search: debouncedSearchTerm || undefined,
+    departmentId: selectedDepartment === "all" ? undefined : selectedDepartment,
+    page: currentPage,
+    limit: pageSize,
+  });
   const majors = majorsData?.data ?? [];
+  const pagination = majorsData?.pagination;
   
   const { data: departments = [], isLoading: isLoadingDepts } = useDepartments();
   
@@ -53,9 +66,6 @@ export function MajorManagement() {
     description: "",
     departmentId: "",
   });
-  const [searchTerm, setSearchTerm] = useState("");
-  const [selectedDepartment, setSelectedDepartment] = useState<string>("all");
-  const debouncedSearchTerm = useDebounce(searchTerm, 300);
 
   const handleOpenDialog = (major?: any) => {
     if (major) {
@@ -104,19 +114,21 @@ export function MajorManagement() {
     }
   };
 
-  const filteredMajors = useMemo(() => {
-    return majors.filter((m: any) => {
-      const matchesSearch =
-        m.name.toLowerCase().includes(debouncedSearchTerm.toLowerCase()) ||
-        m.code.toLowerCase().includes(debouncedSearchTerm.toLowerCase()) ||
-        m.department?.name.toLowerCase().includes(debouncedSearchTerm.toLowerCase());
-      
-      const matchesDepartment =
-        selectedDepartment === "all" || m.departmentId === selectedDepartment;
-      
-      return matchesSearch && matchesDepartment;
-    });
-  }, [majors, debouncedSearchTerm, selectedDepartment]);
+  const getPageNumbers = useMemo(() => {
+    if (!pagination) return [] as (number | string)[];
+    const { page, totalPages } = pagination;
+    const pages: (number | string)[] = [];
+    if (totalPages <= 7) {
+      for (let i = 1; i <= totalPages; i++) pages.push(i);
+    } else {
+      pages.push(1);
+      if (page > 3) pages.push("...");
+      for (let i = Math.max(2, page - 1); i <= Math.min(totalPages - 1, page + 1); i++) pages.push(i);
+      if (page < totalPages - 2) pages.push("...");
+      pages.push(totalPages);
+    }
+    return pages;
+  }, [pagination]);
 
   return (
     <Card>
@@ -199,12 +211,21 @@ export function MajorManagement() {
             <Input
               placeholder="Tìm kiếm theo tên, mã ngành hoặc khoa..."
               value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              onChange={(e) => {
+                setSearchTerm(e.target.value);
+                setCurrentPage(1);
+              }}
               className="pl-10"
             />
           </div>
           <div className="w-[240px]">
-            <Select value={selectedDepartment} onValueChange={setSelectedDepartment}>
+            <Select
+              value={selectedDepartment}
+              onValueChange={(value) => {
+                setSelectedDepartment(value);
+                setCurrentPage(1);
+              }}
+            >
               <SelectTrigger>
                 <Filter className="mr-2 h-4 w-4" />
                 <SelectValue placeholder="Lọc theo khoa" />
@@ -238,14 +259,14 @@ export function MajorManagement() {
                     Đang tải dữ liệu...
                   </TableCell>
                 </TableRow>
-              ) : filteredMajors.length === 0 ? (
+              ) : majors.length === 0 ? (
                 <TableRow>
                   <TableCell colSpan={4} className="text-center py-8 text-muted-foreground">
                     Không tìm thấy ngành nào.
                   </TableCell>
                 </TableRow>
               ) : (
-                filteredMajors.map((major: any) => (
+                majors.map((major: any) => (
                   <TableRow key={major.id}>
                     <TableCell className="font-medium">{major.code}</TableCell>
                     <TableCell>{major.name}</TableCell>
@@ -275,6 +296,50 @@ export function MajorManagement() {
             </TableBody>
           </Table>
         </div>
+        {pagination && pagination.totalPages > 1 && (
+          <div className="mt-4">
+            <Pagination>
+              <PaginationContent>
+                <PaginationItem>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                    disabled={currentPage === 1}
+                  >
+                    Trước
+                  </Button>
+                </PaginationItem>
+
+                {getPageNumbers.map((pageNum, idx) => (
+                  <PaginationItem key={idx}>
+                    {pageNum === "..." ? (
+                      <span className="px-2 text-muted-foreground">...</span>
+                    ) : (
+                      <PaginationLink
+                        isActive={currentPage === pageNum}
+                        onClick={() => setCurrentPage(pageNum as number)}
+                      >
+                        {pageNum}
+                      </PaginationLink>
+                    )}
+                  </PaginationItem>
+                ))}
+
+                <PaginationItem>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setCurrentPage((p) => Math.min(pagination.totalPages, p + 1))}
+                    disabled={currentPage === pagination.totalPages}
+                  >
+                    Sau
+                  </Button>
+                </PaginationItem>
+              </PaginationContent>
+            </Pagination>
+          </div>
+        )}
       </CardContent>
     </Card>
   );

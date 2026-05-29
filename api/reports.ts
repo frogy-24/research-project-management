@@ -14,6 +14,16 @@ export interface ReportJob {
   completedAt?: string
 }
 
+export interface DeanReportStats {
+  year: number
+  totalProjects: number
+  approvedRegistrations: number
+  councils: number
+  evaluations: number
+  lecturers: number
+  students: number
+}
+
 export const reportsApi = {
   create: async (data: { reportType: string; parameters?: Record<string, any>; templateUrl?: string }) => {
     const res = await api.post<{ success: boolean; data: ReportJob }>("/dean/reports", data)
@@ -21,9 +31,10 @@ export const reportsApi = {
   },
   
 
-  list: async (params?: { status?: string; limit?: number; offset?: number }) => {
+  list: async (params?: { status?: string; limit?: number; offset?: number; callRoundId?: string }) => {
     const searchParams = new URLSearchParams()
     if (params?.status) searchParams.set("status", params.status)
+    if (params?.callRoundId) searchParams.set("callRoundId", params.callRoundId)
     if (params?.limit) searchParams.set("limit", String(params.limit))
     if (params?.offset) searchParams.set("offset", String(params.offset))
     
@@ -45,6 +56,11 @@ export const reportsApi = {
 
   remove: async (id: string) => {
     const res = await api.delete<{ success: boolean }>(`/dean/reports?id=${encodeURIComponent(id)}`)
+    return res.data
+  },
+
+  stats: async (year: number) => {
+    const res = await api.get<{ success: boolean; data: DeanReportStats }>(`/dean/reports?mode=stats&year=${year}`)
     return res.data
   },
 }

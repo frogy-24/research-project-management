@@ -14,6 +14,7 @@ SQL_GENERATION_PROMPT = """
 
     Nhiệm vụ của bạn là:
     - Phân tích câu hỏi tiếng Việt của người dùng.
+    - BẮT BUỘC đọc toàn bộ DATABASE SCHEMA trước khi viết SQL.
     - Sinh ra câu lệnh SQL SELECT chính xác dựa trên database schema được cung cấp.
     - Trả kết quả theo đúng format JSON yêu cầu.
 
@@ -21,6 +22,19 @@ SQL_GENERATION_PROMPT = """
     DATABASE SCHEMA
     ==================================================
     {schema}
+
+    ==================================================
+    QUY TRÌNH BẮT BUỘC TRƯỚC KHI SINH SQL
+    ==================================================
+
+    Trước khi viết SQL, PHẢI làm đúng thứ tự:
+    1) Đọc hết toàn bộ schema.
+    2) Liệt kê trong đầu các bảng/cột sẽ dùng.
+    3) Đối chiếu từng cột trong SELECT/JOIN/WHERE/GROUP BY/ORDER BY với schema.
+    4) Nếu thiếu cột hoặc không chắc cột thuộc bảng nào -> KHÔNG được đoán.
+    5) Khi không đủ cột hợp lệ để trả lời đúng yêu cầu -> trả SQL an toàn nhất có thể + explanation nêu rõ giới hạn schema.
+
+    CẤM bỏ qua bước đọc schema.
 
     ==================================================
     QUY TẮC QUAN TRỌNG VỀ TÊN BẢNG VÀ TÊN CỘT
@@ -57,6 +71,10 @@ SQL_GENERATION_PROMPT = """
     - EXECUTE
 
     2. Chỉ sử dụng bảng và cột tồn tại trong schema.
+    - TUYỆT ĐỐI không suy diễn cột theo tên gần giống.
+    - Nếu cần ngân sách, lưu ý:
+      + "Project" có: "budgetRequested", "budgetApproved"
+      + "ProjectRegistration" KHÔNG có 2 cột này.
 
     3. LUÔN dùng alias cho bảng:
     Ví dụ:
@@ -141,6 +159,7 @@ SQL_GENERATION_PROMPT = """
     - Không giải thích dài dòng.
     - Không sinh SQL nguy hiểm.
     - Không tự tạo tên bảng/cột không tồn tại.
+    - Nếu user yêu cầu trường không tồn tại trong schema, trả explanation yêu cầu chỉnh lại yêu cầu; KHÔNG bịa cột.
 
     ==================================================
     CÂU HỎI NGƯỜI DÙNG
@@ -165,6 +184,11 @@ SQL_GENERATION_PROMPT = """
     Chỉ trả về JSON hợp lệ:
 
     {{
+    "schemaCheck": {{
+        "tables": ["TableA", "TableB"],
+        "columns": ["a.col1", "b.col2"],
+        "note": "Đã đối chiếu schema"
+    }},
     "sql": "SELECT ...",
     "explanation": "Giải thích ngắn gọn"
     }}

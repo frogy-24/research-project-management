@@ -58,6 +58,13 @@ const formatYear = (value: Date | null | undefined): string => {
     }).format(value);
 };
 
+const formatCurrency = (value: unknown): string => {
+    if (value === null || value === undefined) return '';
+    const num = Number(value);
+    if (Number.isNaN(num)) return '';
+    return new Intl.NumberFormat('vi-VN').format(num);
+};
+
 export async function GET(req: NextRequest) {
     try {
         const userId = getActorUserId(req);
@@ -160,6 +167,7 @@ export async function GET(req: NextRequest) {
                 callRound: {
                     select: {
                         name: true,
+                        budgetLimit: true,
                         projectStartDate: true,
                         projectEndDate: true,
                         registrationStartDate: true,
@@ -216,12 +224,32 @@ export async function GET(req: NextRequest) {
 
         const teamMemberUserMap = new Map(teamMemberUsers.map((u) => [u.id, u]));
 
-        // Build export data
-        const exportData = registrations.map((reg, index) => {
-            const teamMembers = parseTeamMembers(reg.teamMembers);
+        const unresolvedMemberNames = Array.from(
+            new Set(
+                registrations
+                    .flatMap((reg) => parseTeamMembers(reg.teamMembers))
+                    .filter((m) => !m.studentId)
+                    .map((m) => m.name?.trim())
+                    .filter((name): name is string => Boolean(name)),
+            ),
+        );
 
-            // Tên các sinh viên tham gia
-            const memberNames = teamMembers.map((m) => m.name).join(', ');
+        const fallbackUsersByName = unresolvedMemberNames.length
+            ? await prisma.user.findMany({
+                  where: { name: { in: unresolvedMemberNames } },
+                  select: { name: true, code: true },
+              })
+            : [];
+        const fallbackCodeByName = new Map<string, string>();
+        fallbackUsersByName.forEach((u) => {
+            const key = u.name?.trim();
+            if (!key || fallbackCodeByName.has(key) || !u.code) return;
+            fallbackCodeByName.set(key, u.code);
+        });
+
+        // Build export data: 1 thành viên = 1 dòng
+        const exportData = registrations.flatMap((reg, index) => {
+            const teamMembers = parseTeamMembers(reg.teamMembers);
 
             // Số lượng thành viên (không tính chủ nhiệm)
             const memberCount = teamMembers.length;
@@ -249,56 +277,75 @@ export async function GET(req: NextRequest) {
                     result = reg.facultyStatus;
             }
 
-            return {
+            const members = teamMembers.length
+                ? teamMembers
+                : [{ name: '', role: 'Thành viên', studentId: null } as TeamMember];
+
+            return members.map((m) => ({
                 'STT': index + 1,
                 'Tên đề tài': reg.title,
                 'Đề tài NCKH cấp': projectLevel,
                 'Đợt đăng ký': reg.callRound?.name || '',
+                'Khoa': reg.user.departmentRef?.name || '',
+                'Mã lớp': reg.user.class?.code || '',
                 'Số lượng thành viên': memberCount,
-                'Các sinh viên tham gia': memberNames,
+                'Các sinh viên tham gia': (m.studentId ? teamMemberUserMap.get(m.studentId)?.name : undefined) || m.name || '',
+                'Mã sinh viên tham gia':
+                    (m.studentId ? teamMemberUserMap.get(m.studentId)?.code : undefined) ||
+                    m.studentId ||
+                    fallbackCodeByName.get(m.name?.trim() || '') ||
+                    '',
+                'Vai trò': m.role || 'Thành viên',
                 'Năm bắt đầu': startYear,
                 'Năm kết thúc': endYear,
                 'Chủ nhiệm đề tài': reg.user.name,
                 'Giảng viên hướng dẫn': reg.instructor?.name || '',
+                'Kinh phí đề xuất': formatCurrency(reg.callRound?.budgetLimit),
                 'Kết quả': result,
-            };
+            }));
         });
 
         // Create workbook and worksheet
         const wb = XLSX.utils.book_new();
 
-        // Title row
-        const titleRow = ['DANH SÁCH THỐNG KÊ ĐỀ TÀI NGHIÊN CỨU KHOA HỌC CẤP KHOA'];
         const headerRow = [
             'STT',
             'Tên đề tài',
             'Đề tài NCKH cấp',
             'Đợt đăng ký',
+            'Khoa',
+            'Mã lớp',
             'Số lượng thành viên',
             'Các sinh viên tham gia',
+            'Mã sinh viên tham gia',
+            'Vai trò',
             'Năm bắt đầu',
             'Năm kết thúc',
             'Chủ nhiệm đề tài',
             'Giảng viên hướng dẫn',
+            'Kinh phí đề xuất',
             'Kết quả',
         ];
 
-        // Create data array with title, empty row, headers, then data
+        // Create data array: headers then data (tránh lệch/đè header)
         const wsData = [
-            titleRow,
-            [],
             headerRow,
             ...exportData.map(row => [
                 row.STT,
                 row['Tên đề tài'],
                 row['Đề tài NCKH cấp'],
                 row['Đợt đăng ký'],
+                row['Khoa'],
+                row['Mã lớp'],
                 row['Số lượng thành viên'],
                 row['Các sinh viên tham gia'],
+                row['Mã sinh viên tham gia'],
+                row['Vai trò'],
                 row['Năm bắt đầu'],
                 row['Năm kết thúc'],
                 row['Chủ nhiệm đề tài'],
                 row['Giảng viên hướng dẫn'],
+                row['Kinh phí đề xuất'],
                 row['Kết quả'],
             ]),
         ];
@@ -311,16 +358,19 @@ export async function GET(req: NextRequest) {
             { wch: 40 },  // Tên đề tài
             { wch: 16 },  // Đề tài NCKH cấp
             { wch: 24 },  // Đợt đăng ký
+            { wch: 18 },  // Khoa
+            { wch: 12 },  // Mã lớp
             { wch: 16 },  // Số lượng thành viên
-            { wch: 36 },  // Các sinh viên tham gia
+            { wch: 24 },  // Các sinh viên tham gia
+            { wch: 20 },  // Mã sinh viên tham gia
+            { wch: 14 },  // Vai trò
             { wch: 12 },  // Năm bắt đầu
             { wch: 12 },  // Năm kết thúc
             { wch: 20 },  // Chủ nhiệm đề tài
             { wch: 20 },  // Giảng viên hướng dẫn
+            { wch: 16 },  // Kinh phí đề xuất
             { wch: 10 },  // Kết quả
         ];
-
-        ws['!merges'] = [{ s: { r: 0, c: 0 }, e: { r: 0, c: headerRow.length - 1 } }];
 
         XLSX.utils.book_append_sheet(wb, ws, 'Thống kê Đề tài NCKH');
 
@@ -417,6 +467,45 @@ export async function GET(req: NextRequest) {
         ];
 
         const wsStudents = XLSX.utils.aoa_to_sheet(studentSheetData);
+
+        // Merge cột thông tin đề tài khi 1 đề tài có nhiều thành viên
+        const mainMerges: XLSX.Range[] = [];
+        let mainStartRow = 1; // header row = 0
+        registrations.forEach((reg) => {
+            const span = Math.max(parseTeamMembers(reg.teamMembers).length, 1);
+            const mainEndRow = mainStartRow + span - 1;
+            if (mainEndRow > mainStartRow) {
+                // STT..Số lượng thành viên
+                [0, 1, 2, 3, 4, 5, 6].forEach((c) => mainMerges.push({ s: { r: mainStartRow, c }, e: { r: mainEndRow, c } }));
+                // Năm bắt đầu..Kết quả
+                [10, 11, 12, 13, 14, 15].forEach((c) => mainMerges.push({ s: { r: mainStartRow, c }, e: { r: mainEndRow, c } }));
+            }
+            mainStartRow = mainEndRow + 1;
+        });
+        ws['!merges'] = mainMerges;
+
+        // Merge các cột thông tin đề tài cho nhiều dòng thành viên (giống export điểm chi tiết)
+        // Cột merge: STT đề tài, Tên đề tài, Đợt đăng ký
+        const studentMerges: XLSX.Range[] = [];
+        let startRow = 1; // row 0 là header
+        registrations.forEach((reg) => {
+            const memberCount = parseTeamMembers(reg.teamMembers).length;
+            const rowSpan = 1 + memberCount; // 1 chủ nhiệm + n thành viên
+            const endRow = startRow + rowSpan - 1;
+
+            if (endRow > startRow) {
+                // A: STT đề tài
+                studentMerges.push({ s: { r: startRow, c: 0 }, e: { r: endRow, c: 0 } });
+                // B: Tên đề tài
+                studentMerges.push({ s: { r: startRow, c: 1 }, e: { r: endRow, c: 1 } });
+                // C: Đợt đăng ký
+                studentMerges.push({ s: { r: startRow, c: 2 }, e: { r: endRow, c: 2 } });
+            }
+
+            startRow = endRow + 1;
+        });
+
+        wsStudents['!merges'] = studentMerges;
         wsStudents['!cols'] = [
             { wch: 10 }, { wch: 40 }, { wch: 24 }, { wch: 14 }, { wch: 24 }, { wch: 16 }, { wch: 28 },
             { wch: 16 }, { wch: 10 }, { wch: 10 }, { wch: 16 }, { wch: 12 }, { wch: 20 }, { wch: 12 },

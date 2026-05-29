@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Plus, Pencil, Trash2, Search } from "lucide-react";
 import { useClasses, useCreateClass, useUpdateClass, useDeleteClass } from "@/hooks/useClasses";
 import { useMajors } from "@/hooks/useMajors";
+import { useDebounce } from "@/hooks/useDebounce";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -32,9 +33,14 @@ import {
 } from "@/components/ui/select";
 import { toast } from "sonner";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Pagination, PaginationContent, PaginationItem, PaginationLink } from "@/components/ui/pagination";
 
 export function ClassManagement() {
   const [searchTerm, setSearchTerm] = useState("");
+  const [selectedMajor, setSelectedMajor] = useState<string>("all");
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 10;
+  const debouncedSearchTerm = useDebounce(searchTerm, 300);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [formData, setFormData] = useState({
@@ -44,9 +50,13 @@ export function ClassManagement() {
   });
   
   const { data: classesData, isLoading: isLoadingClasses } = useClasses({
-    limit: 1000, // Admin loads all
+    search: debouncedSearchTerm || undefined,
+    majorId: selectedMajor === "all" ? undefined : selectedMajor,
+    page: currentPage,
+    limit: pageSize,
   });
   const classes = classesData?.data ?? [];
+  const pagination = classesData?.pagination;
   
   const { data: majorsData } = useMajors();
   const majors = majorsData?.data ?? [];
@@ -101,12 +111,21 @@ export function ClassManagement() {
     }
   };
 
-  const filteredClasses = classes.filter(
-    (c: any) =>
-      c.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      c.code.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      c.major?.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const getPageNumbers = useMemo(() => {
+    if (!pagination) return [] as (number | string)[];
+    const { page, totalPages } = pagination;
+    const pages: (number | string)[] = [];
+    if (totalPages <= 7) {
+      for (let i = 1; i <= totalPages; i++) pages.push(i);
+    } else {
+      pages.push(1);
+      if (page > 3) pages.push("...");
+      for (let i = Math.max(2, page - 1); i <= Math.min(totalPages - 1, page + 1); i++) pages.push(i);
+      if (page < totalPages - 2) pages.push("...");
+      pages.push(totalPages);
+    }
+    return pages;
+  }, [pagination]);
 
   return (
     <Card>
@@ -174,14 +193,40 @@ export function ClassManagement() {
         </Dialog>
       </CardHeader>
       <CardContent>
-        <div className="mb-4 relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-          <Input
-            placeholder="Tìm kiếm theo tên, mã lớp hoặc ngành..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="pl-10"
-          />
+        <div className="mb-4 flex gap-3">
+          <div className="relative flex-1">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <Input
+              placeholder="Tìm kiếm theo tên, mã lớp hoặc ngành..."
+              value={searchTerm}
+              onChange={(e) => {
+                setSearchTerm(e.target.value);
+                setCurrentPage(1);
+              }}
+              className="pl-10"
+            />
+          </div>
+          <div className="w-[260px]">
+            <Select
+              value={selectedMajor}
+              onValueChange={(value) => {
+                setSelectedMajor(value);
+                setCurrentPage(1);
+              }}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Lọc theo ngành" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">Tất cả ngành</SelectItem>
+                {majors.map((major: any) => (
+                  <SelectItem key={major.id} value={major.id}>
+                    {major.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
         </div>
 
         <div className="rounded-md border">
@@ -202,14 +247,14 @@ export function ClassManagement() {
                     Đang tải dữ liệu...
                   </TableCell>
                 </TableRow>
-              ) : filteredClasses.length === 0 ? (
+              ) : classes.length === 0 ? (
                 <TableRow>
                   <TableCell colSpan={5} className="text-center py-8 text-muted-foreground">
                     Không tìm thấy lớp nào.
                   </TableCell>
                 </TableRow>
               ) : (
-                filteredClasses.map((classObj: any) => (
+                classes.map((classObj: any) => (
                   <TableRow key={classObj.id}>
                     <TableCell className="font-medium">{classObj.code}</TableCell>
                     <TableCell>{classObj.name}</TableCell>
@@ -240,6 +285,50 @@ export function ClassManagement() {
             </TableBody>
           </Table>
         </div>
+        {pagination && pagination.totalPages > 1 && (
+          <div className="mt-4">
+            <Pagination>
+              <PaginationContent>
+                <PaginationItem>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                    disabled={currentPage === 1}
+                  >
+                    Trước
+                  </Button>
+                </PaginationItem>
+
+                {getPageNumbers.map((pageNum, idx) => (
+                  <PaginationItem key={idx}>
+                    {pageNum === "..." ? (
+                      <span className="px-2 text-muted-foreground">...</span>
+                    ) : (
+                      <PaginationLink
+                        isActive={currentPage === pageNum}
+                        onClick={() => setCurrentPage(pageNum as number)}
+                      >
+                        {pageNum}
+                      </PaginationLink>
+                    )}
+                  </PaginationItem>
+                ))}
+
+                <PaginationItem>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setCurrentPage((p) => Math.min(pagination.totalPages, p + 1))}
+                    disabled={currentPage === pagination.totalPages}
+                  >
+                    Sau
+                  </Button>
+                </PaginationItem>
+              </PaginationContent>
+            </Pagination>
+          </div>
+        )}
       </CardContent>
     </Card>
   );
