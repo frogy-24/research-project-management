@@ -100,6 +100,8 @@ export function CouncilProjectAssignmentManagement({
     const [selectedEvaluationDetail, setSelectedEvaluationDetail] = useState<ProjectEvaluationDetail | null>(null);
     const [evaluationSortField, setEvaluationSortField] = useState<EvaluationSortField>('evaluatedAt');
     const [evaluationSortOrder, setEvaluationSortOrder] = useState<EvaluationSortOrder>('desc');
+    const [evaluationCurrentPage, setEvaluationCurrentPage] = useState(1);
+    const evaluationPageSize = 10;
     const [defenseLocationInput, setDefenseLocationInput] = useState('');
     const [reportDateInput, setReportDateInput] = useState('');
 
@@ -273,6 +275,16 @@ export function CouncilProjectAssignmentManagement({
         return sortedItems;
     }, [filteredEvaluationItems, evaluationSortField, evaluationSortOrder]);
 
+    const evaluationTotalPages = Math.max(1, Math.ceil(sortedEvaluationItems.length / evaluationPageSize));
+
+    const paginatedEvaluationItems = useMemo(() => {
+        const start = (evaluationCurrentPage - 1) * evaluationPageSize;
+        return sortedEvaluationItems.slice(start, start + evaluationPageSize);
+    }, [evaluationCurrentPage, sortedEvaluationItems]);
+
+    const evaluationStartItem = sortedEvaluationItems.length === 0 ? 0 : (evaluationCurrentPage - 1) * evaluationPageSize + 1;
+    const evaluationEndItem = Math.min(evaluationCurrentPage * evaluationPageSize, sortedEvaluationItems.length);
+
     const selectedEvaluationItemsByProject = useMemo(() => {
         if (!selectedEvaluationDetail) {
             return [];
@@ -289,7 +301,7 @@ export function CouncilProjectAssignmentManagement({
         if (hasCallRoundFilter) {
             const projectMap = new Map<string, { projectTitle: string; items: typeof sortedEvaluationItems }>();
 
-            sortedEvaluationItems.forEach((item) => {
+            paginatedEvaluationItems.forEach((item) => {
                 const existing = projectMap.get(item.projectId);
                 if (!existing) {
                     projectMap.set(item.projectId, { projectTitle: item.projectTitle, items: [item] });
@@ -317,7 +329,7 @@ export function CouncilProjectAssignmentManagement({
             }
         >();
 
-        sortedEvaluationItems.forEach((item) => {
+        paginatedEvaluationItems.forEach((item) => {
             const callRoundEntry = callRoundMap.get(item.callRoundId);
             if (!callRoundEntry) {
                 const projectMap = new Map<string, { projectTitle: string; items: typeof sortedEvaluationItems }>();
@@ -341,7 +353,15 @@ export function CouncilProjectAssignmentManagement({
                 projectGroups: Array.from(entry.projectMap.values()),
             })),
         };
-    }, [sortedEvaluationItems, selectedEvaluationCallRoundId]);
+    }, [paginatedEvaluationItems, selectedEvaluationCallRoundId]);
+
+    useEffect(() => {
+        setEvaluationCurrentPage(1);
+    }, [selectedEvaluationCallRoundId, evaluationSearch, evaluationSortField, evaluationSortOrder]);
+
+    useEffect(() => {
+        setEvaluationCurrentPage((prev) => Math.min(prev, evaluationTotalPages));
+    }, [evaluationTotalPages]);
 
     const assignedProjects = useMemo(() => {
         if (!selectedCouncilId) return [];
@@ -1043,6 +1063,37 @@ export function CouncilProjectAssignmentManagement({
                         </p>
                     ) : (
                         <div className="space-y-4">
+                            <div className="flex items-center justify-between">
+                                <p className="text-sm text-muted-foreground">
+                                    Hiển thị {evaluationStartItem}-{evaluationEndItem} / {sortedEvaluationItems.length}
+                                </p>
+                                <div className="flex items-center gap-2">
+                                    <Button
+                                        type="button"
+                                        variant="outline"
+                                        size="sm"
+                                        onClick={() => setEvaluationCurrentPage((prev) => Math.max(1, prev - 1))}
+                                        disabled={evaluationCurrentPage === 1}
+                                    >
+                                        Trước
+                                    </Button>
+                                    <span className="text-sm">
+                                        Trang {evaluationCurrentPage}/{evaluationTotalPages}
+                                    </span>
+                                    <Button
+                                        type="button"
+                                        variant="outline"
+                                        size="sm"
+                                        onClick={() =>
+                                            setEvaluationCurrentPage((prev) => Math.min(evaluationTotalPages, prev + 1))
+                                        }
+                                        disabled={evaluationCurrentPage >= evaluationTotalPages}
+                                    >
+                                        Sau
+                                    </Button>
+                                </div>
+                            </div>
+
                             {groupedEvaluationItems.groups.map((callRoundGroup, callRoundIndex) => (
                                 <div
                                     key={`${callRoundGroup.callRoundName || 'filtered'}-${callRoundIndex}`}

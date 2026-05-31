@@ -67,5 +67,6 @@ export const config = {
     "/dean/:path*",
     "/council/:path*",
     "/leader/:path*",
+    "/disburser/:path*",
   ],
 };

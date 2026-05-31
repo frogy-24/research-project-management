@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "eslint",
     "seed": "tsx prisma/seed.ts",
-    "seed:templates": "tsx prisma/seed-templates.ts"
+    "seed:templates": "tsx prisma/seed-templates.ts",
+    "seed:disburser": "tsx prisma/seed-disburser.ts"
   },
   "dependencies": {
     "@fullcalendar/core": "^6.1.20",

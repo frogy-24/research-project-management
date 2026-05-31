@@ -22,6 +22,7 @@ const transitionRules: TransitionRule = {
     ADMIN_REVIEW: ["COUNCIL_EVALUATING"],
   },
   LEADER: {},
+  DISBURSER: {},
 };
 
 export const getActorRole = (request: Request): Role | null => {
@@ -65,3 +66,5 @@ export const canReviewExtensionRequest = (role: Role) => role === "ADMIN";
 export const canCreateCouncilEvaluation = (role: Role) => role === "COUNCIL" || role === "LECTURER";
 
 export const canCreateDisbursement = (role: Role) => role === "ADMIN";
+
+export const canPayDisbursement = (role: Role) => role === "DISBURSER";

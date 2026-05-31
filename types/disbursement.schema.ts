@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 // Enum cho trạng thái giải ngân
-export const disbursementStatusSchema = z.enum(["PENDING", "APPROVED", "REJECTED"]);
+export const disbursementStatusSchema = z.enum(["PENDING", "APPROVED", "REJECTED", "PAID"]);
 
 // Schema đầy đủ cho FundingDisbursement
 export const disbursementSchema = z.object({
@@ -17,6 +17,10 @@ export const disbursementSchema = z.object({
   approvedById: z.string().cuid().nullable().optional(),
   approvedAt: z.coerce.date().nullable().optional(),
   rejectionNote: z.string().nullable().optional(),
+  paymentVoucherUrl: z.string().url().nullable().optional(),
+  paidById: z.string().cuid().nullable().optional(),
+  paidAt: z.coerce.date().nullable().optional(),
+  paymentNote: z.string().nullable().optional(),
   createdAt: z.coerce.date(),
   updatedAt: z.coerce.date(),
 });
@@ -45,6 +49,16 @@ export const rejectDisbursementSchema = z.object({
   rejectionNote: z.string().min(10, "Ghi chú từ chối phải có ít nhất 10 ký tự"),
 });
 
+// Schema cho thanh toán giải ngân (Người giải ngân) — bắt buộc upload chứng từ PDF
+export const payDisbursementSchema = z.object({
+  paymentVoucherUrl: z
+    .string()
+    .url("URL chứng từ không hợp lệ")
+    .refine((url) => /\.pdf(?:$|[?#])/i.test(url), "Chứng từ phải là file PDF"),
+  paidAt: z.coerce.date().optional(),
+  paymentNote: z.string().optional(),
+});
+
 // Schema cho cập nhật giải ngân (chỉ PENDING)
 export const updateDisbursementSchema = createDisbursementSchema.partial();
 
@@ -64,6 +78,7 @@ export type FundingDisbursement = z.infer<typeof disbursementSchema>;
 export type CreateDisbursementInput = z.infer<typeof createDisbursementSchema>;
 export type ApproveDisbursementInput = z.infer<typeof approveDisbursementSchema>;
 export type RejectDisbursementInput = z.infer<typeof rejectDisbursementSchema>;
+export type PayDisbursementInput = z.infer<typeof payDisbursementSchema>;
 export type UpdateDisbursementInput = z.infer<typeof updateDisbursementSchema>;
 export type DisbursementFilters = z.infer<typeof disbursementFiltersSchema>;
 
@@ -88,6 +103,11 @@ export type FundingDisbursementWithRelations = FundingDisbursement & {
     role: string;
   };
   approvedBy?: {
+    id: string;
+    name: string;
+    email: string;
+  } | null;
+  paidBy?: {
     id: string;
     name: string;
     email: string;

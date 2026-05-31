@@ -36,7 +36,7 @@ export async function GET(request: NextRequest) {
         const where: Prisma.FundingDisbursementWhereInput = {};
 
         if (filters.projectId) where.projectId = filters.projectId;
-        if (filters.status) where.status = filters.status as 'PENDING' | 'APPROVED' | 'REJECTED';
+        if (filters.status) where.status = filters.status as 'PENDING' | 'APPROVED' | 'REJECTED' | 'PAID';
         if (filters.createdById) where.createdById = filters.createdById;
 
         if (filters.fromDate || filters.toDate) {
@@ -58,6 +58,11 @@ export async function GET(request: NextRequest) {
             projectWhere.callRound = {
                 createdById: actorUserId,
             };
+        }
+
+        // Người giải ngân chỉ thấy các khoản đã được phê duyệt hoặc đã thanh toán
+        if (actorRole === 'DISBURSER' && !filters.status) {
+            where.status = { in: ['APPROVED', 'PAID'] };
         }
 
         if (Object.keys(projectWhere).length > 0) {

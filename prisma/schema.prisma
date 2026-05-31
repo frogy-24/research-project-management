@@ -14,6 +14,7 @@ enum Role {
   ADMIN
   COUNCIL
   LEADER
+  DISBURSER
 }
 
 enum Gender {
@@ -77,6 +78,7 @@ enum DisbursementStatus {
   PENDING
   APPROVED
   REJECTED
+  PAID
 }
 
 enum ProjectClosingStatus {
@@ -217,6 +219,7 @@ model User {
   approvedPosts              Post[]                    @relation("PostApprover")
   createdDisbursements       FundingDisbursement[]     @relation("DisbursementCreator")
   approvedDisbursements      FundingDisbursement[]     @relation("DisbursementApprover")
+  paidDisbursements          FundingDisbursement[]     @relation("DisbursementPayer")
   autoApprovalJobs           AutoApprovalJob[]         @relation("DeanAutoApprovalJobs")
   lecturerProfile            Lecturer?
 }
@@ -491,21 +494,27 @@ model FundingDisbursement {
   voucherNo       String?
   voucherFileUrl  String?
   reason          String? // Lý do giải ngân
-  status          DisbursementStatus  @default(PENDING)
-  createdById     String // Người tạo yêu cầu (Dean hoặc Admin)
-  approvedById    String? // Người phê duyệt (Admin)
-  approvedAt      DateTime? // Ngày phê duyệt
-  rejectionNote   String? // Ghi chú khi từ chối
-  createdAt       DateTime            @default(now())
-  updatedAt       DateTime            @updatedAt
-  project         Project             @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  createdBy       User                @relation("DisbursementCreator", fields: [createdById], references: [id])
-  approvedBy      User?               @relation("DisbursementApprover", fields: [approvedById], references: [id])
+  status            DisbursementStatus  @default(PENDING)
+  createdById       String // Người tạo yêu cầu (Dean hoặc Admin)
+  approvedById      String? // Người phê duyệt (Admin)
+  approvedAt        DateTime? // Ngày phê duyệt
+  rejectionNote     String? // Ghi chú khi từ chối
+  paymentVoucherUrl String? // Chứng từ giải ngân khi thanh toán (PDF lưu trên R2)
+  paidById          String? // Người giải ngân thực hiện thanh toán (DISBURSER)
+  paidAt            DateTime? // Thời điểm thanh toán
+  paymentNote       String? // Ghi chú khi thanh toán
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt
+  project           Project             @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  createdBy         User                @relation("DisbursementCreator", fields: [createdById], references: [id])
+  approvedBy        User?               @relation("DisbursementApprover", fields: [approvedById], references: [id])
+  paidBy            User?               @relation("DisbursementPayer", fields: [paidById], references: [id])
 
   @@index([projectId])
   @@index([status])
   @@index([createdById])
   @@index([approvedById])
+  @@index([paidById])
 }
 
 model ExtensionRequest {

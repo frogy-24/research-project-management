@@ -7,6 +7,7 @@ export const RoleEnum = z.enum([
   "ADMIN",
   "COUNCIL",
   "LEADER",
+  "DISBURSER",
 ]);
 
 export const GenderEnum = z.enum(["MALE", "FEMALE", "OTHER"]);
