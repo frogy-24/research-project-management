@@ -61,7 +61,7 @@ async function seedOrg() {
   ];
 
   const majorMap: Record<string, string[]> = {
-    IT: ['SE', 'NET', 'AI'],
+    IT: ['AI', 'SE', 'DE', 'IOT'],
     BUS: ['BA', 'ACC', 'MKT'],
     ENG: ['ME', 'EE', 'AUTO'],
     SCI: ['MATH', 'PHY', 'CHEM'],

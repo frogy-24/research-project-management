@@ -145,7 +145,7 @@ export async function POST(request: Request) {
       },
     });
 
-    return NextResponse.json(classObj, { status: 201 });
+    return NextResponse.json({ success: true, data: classObj }, { status: 201 });
   } catch (error) {
     console.error("Error creating class:", error);
     if (error instanceof Error && "fieldErrors" in error) {

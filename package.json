@@ -9,7 +9,10 @@
     "lint": "eslint",
     "seed": "tsx prisma/seed.ts",
     "seed:templates": "tsx prisma/seed-templates.ts",
-    "seed:disburser": "tsx prisma/seed-disburser.ts"
+    "seed:disburser": "tsx prisma/seed-disburser.ts",
+    "seed:students": "tsx prisma/seed-students.ts",
+    "seed:classes": "tsx prisma/seed-classes.ts",
+    "seed:lecturers": "tsx prisma/seed-lecturers.ts"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1061.0",

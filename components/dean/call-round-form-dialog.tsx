@@ -569,7 +569,7 @@ export function CallRoundFormDialog({
 
                     <div className="grid grid-cols-2 gap-4">
                         <div className="space-y-2">
-                            <Label htmlFor="defenseDate">Ngày giờ bảo vệ đề tài</Label>
+                            <Label htmlFor="defenseDate">Ngày giờ bảo vệ đề tài (dự kiến)</Label>
                             <Input
                                 id="defenseDate"
                                 type="datetime-local"
@@ -592,7 +592,7 @@ export function CallRoundFormDialog({
                     </div>
 
                     <div className="space-y-2">
-                        <Label>Mức hỗ trợ tối đa</Label>
+                        <Label>Mức hỗ trợ tối đa trên 1 đề tài</Label>
                         <MoneyInput
                             value={formData.budgetLimit}
                             onChange={(value) => setFormData({ ...formData, budgetLimit: value })}

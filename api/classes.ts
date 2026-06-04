@@ -16,6 +16,14 @@ const classItemSchema = z.object({
       name: z.string(),
       code: z.string(),
       departmentId: z.string(),
+      department: z
+        .object({
+          id: z.string(),
+          name: z.string(),
+          code: z.string(),
+        })
+        .optional()
+        .nullable(),
     })
     .optional()
     .nullable(),

@@ -104,7 +104,7 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
             },
         });
 
-        return NextResponse.json(classObj);
+        return NextResponse.json({ success: true, data: classObj });
     } catch (error) {
         console.error('Error updating class:', error);
         return NextResponse.json({ error: 'Failed to update class' }, { status: 500 });

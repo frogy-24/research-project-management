@@ -2159,7 +2159,7 @@ export function ProjectRegistrationPage({ title }: ProjectRegistrationPageProps)
             </Dialog>
 
             <Dialog open={Boolean(editingRegistration)} onOpenChange={(open) => !open && closeEditDialog()}>
-                <DialogContent className="sm:max-w-xl max-h-[90vh] overflow-y-auto">
+                <DialogContent className="sm:max-w-1/2 max-h-[90vh] overflow-y-auto">
                     <DialogHeader>
                         <DialogTitle>Chỉnh sửa thông tin đề tài</DialogTitle>
                     </DialogHeader>

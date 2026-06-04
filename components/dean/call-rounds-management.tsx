@@ -418,7 +418,7 @@ export function DeanCallRoundsManagement() {
                                 </TabsTrigger>
                                 <TabsTrigger value="personnel">
                                     <Users className="mr-1.5 h-3.5 w-3.5" />
-                                    Nhân sự
+                                    Giảng viên
                                 </TabsTrigger>
                                 <TabsTrigger value="registrations">
                                     <FileText className="mr-1.5 h-3.5 w-3.5" />
