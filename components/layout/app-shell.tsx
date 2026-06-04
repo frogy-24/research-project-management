@@ -73,6 +73,7 @@ const roleLabelMap: Record<string, string> = {
     ADMIN: 'Phòng QLKH',
     COUNCIL: 'Hội đồng',
     LEADER: 'Ban giám hiệu',
+    DISBURSER: 'Thủ quỹ',
 };
 
 export function AppShell({ children }: { children: React.ReactNode }) {
@@ -101,7 +102,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                 <main className="flex-1">{children}</main>
                 <footer className="border-t bg-card/50">
                     <div className="container mx-auto flex flex-col gap-2 px-4 py-8 text-sm text-muted-foreground md:flex-row md:items-center md:justify-between">
-                        <p>© {new Date().getFullYear()} URMS · Tối giản học thuật</p>
+                        <p>© {new Date().getFullYear()} URMS</p>
                     </div>
                 </footer>
             </div>
@@ -375,6 +376,22 @@ function AppSidebar({ session }: { session: AuthSession }) {
                 url: '/admin/projects-overview',
                 icon: FolderOpen,
             },
+        );
+    } else if (session.role === 'DISBURSER') {
+        navItems.push(
+            {
+                title: 'Giải ngân',
+                icon: DollarSign,
+                items: [
+                    { title: 'Quản lý giải ngân', url: '/disburser/disbursements' },
+                    { title: 'Xử lý giải ngân', url: '/disburser/disbursement-processing' },
+                ],
+            },
+            {
+                title: 'Báo cáo giải ngân',
+                url: '/disburser/reports',
+                icon: BarChart3,
+            }
         );
     }
 

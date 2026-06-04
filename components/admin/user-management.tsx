@@ -157,6 +157,7 @@ export function UserManagement() {
             STUDENT: 'outline',
             COUNCIL: 'default',
             LEADER: 'default',
+            DISBURSER: 'secondary',
         };
         return <Badge variant={variants[role] as any}>{role}</Badge>;
     };

@@ -49,12 +49,8 @@ export const rejectDisbursementSchema = z.object({
   rejectionNote: z.string().min(10, "Ghi chú từ chối phải có ít nhất 10 ký tự"),
 });
 
-// Schema cho thanh toán giải ngân (Người giải ngân) — bắt buộc upload chứng từ PDF
+// Schema cho thanh toán giải ngân (Người giải ngân). File được gửi bằng multipart/form-data và validate ở route API.
 export const payDisbursementSchema = z.object({
-  paymentVoucherUrl: z
-    .string()
-    .url("URL chứng từ không hợp lệ")
-    .refine((url) => /\.pdf(?:$|[?#])/i.test(url), "Chứng từ phải là file PDF"),
   paidAt: z.coerce.date().optional(),
   paymentNote: z.string().optional(),
 });
@@ -78,7 +74,11 @@ export type FundingDisbursement = z.infer<typeof disbursementSchema>;
 export type CreateDisbursementInput = z.infer<typeof createDisbursementSchema>;
 export type ApproveDisbursementInput = z.infer<typeof approveDisbursementSchema>;
 export type RejectDisbursementInput = z.infer<typeof rejectDisbursementSchema>;
-export type PayDisbursementInput = z.infer<typeof payDisbursementSchema>;
+export type PayDisbursementInput = {
+  file: File;
+  paidAt?: string;
+  paymentNote?: string;
+};
 export type UpdateDisbursementInput = z.infer<typeof updateDisbursementSchema>;
 export type DisbursementFilters = z.infer<typeof disbursementFiltersSchema>;
 

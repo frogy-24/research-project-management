@@ -17,7 +17,7 @@ const roleDefaultRoute: Record<Role, string> = {
   DEAN: "/dean",
   COUNCIL: "/council",
   LEADER: "/leader",
-  DISBURSER: "/disburser/disbursements",
+  DISBURSER: "/disburser/profile",
 };
 
 export const getDashboardRoute = (role: Role) => roleDefaultRoute[role];

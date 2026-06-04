@@ -1,4 +1,4 @@
-import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
+import { GetObjectCommand, PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
 
 let cachedClient: S3Client | null = null;
 
@@ -55,3 +55,16 @@ export const uploadToR2 = async (params: {
 
   return buildPublicUrl(bucket, params.key);
 };
+
+export const getObjectFromR2 = async (key: string) => {
+  const bucket = getEnv('R2_BUCKET');
+
+  return getClient().send(
+    new GetObjectCommand({
+      Bucket: bucket,
+      Key: key,
+    })
+  );
+};
+
+export const getR2Bucket = () => getEnv('R2_BUCKET');

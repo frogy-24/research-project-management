@@ -4,6 +4,23 @@ import prisma from '@/lib/prisma';
 import { getActorRole, getActorUserId, canPayDisbursement } from '@/lib/project-permissions';
 import { uploadToR2 } from '@/lib/r2';
 
+const MAX_PAYMENT_FILE_SIZE = 20 * 1024 * 1024;
+const ALLOWED_PAYMENT_EXTENSIONS = new Set([
+  'pdf',
+  'png',
+  'jpg',
+  'jpeg',
+  'webp',
+  'gif',
+  'doc',
+  'docx',
+  'xls',
+  'xlsx',
+  'csv',
+  'txt',
+  'zip',
+]);
+
 /**
  * POST /api/disbursements/[id]/pay
  * Thanh toán giải ngân + upload chứng từ (Người giải ngân - DISBURSER only)
@@ -57,16 +74,29 @@ export async function POST(
 
     if (!file) {
       return NextResponse.json(
-        { success: false, message: 'Vui lòng upload chứng từ giải ngân (PDF)' },
+        { success: false, message: 'Vui lòng upload tài liệu liên quan đến thanh toán' },
         { status: 400 }
       );
     }
 
-    const isPdfByType = file.type === 'application/pdf';
-    const isPdfByName = /\.pdf$/i.test(file.name);
-    if (!isPdfByType && !isPdfByName) {
+    if (file.size <= 0) {
       return NextResponse.json(
-        { success: false, message: 'Chứng từ phải là file PDF' },
+        { success: false, message: 'File tải lên không hợp lệ' },
+        { status: 400 }
+      );
+    }
+
+    if (file.size > MAX_PAYMENT_FILE_SIZE) {
+      return NextResponse.json(
+        { success: false, message: 'File thanh toán không được vượt quá 20MB' },
+        { status: 400 }
+      );
+    }
+
+    const extension = file.name.split('.').pop()?.toLowerCase() ?? '';
+    if (!ALLOWED_PAYMENT_EXTENSIONS.has(extension)) {
+      return NextResponse.json(
+        { success: false, message: 'Định dạng file thanh toán không được hỗ trợ' },
         { status: 400 }
       );
     }
@@ -80,13 +110,13 @@ export async function POST(
     }
 
     const buffer = Buffer.from(await file.arrayBuffer());
-    const safeName = file.name.replace(/[^a-zA-Z0-9.-]/g, '');
-    const key = `disbursements/${id}/${Date.now()}-${safeName}`;
+    const safeName = file.name.replace(/[^a-zA-Z0-9.-]/g, '') || `payment-voucher.${extension}`;
+    const key = `disbursements/${id}/payments/${Date.now()}-${safeName}`;
 
     const paymentVoucherUrl = await uploadToR2({
       key,
       body: buffer,
-      contentType: 'application/pdf',
+      contentType: file.type || 'application/octet-stream',
     });
 
     const updated = await prisma.fundingDisbursement.update({

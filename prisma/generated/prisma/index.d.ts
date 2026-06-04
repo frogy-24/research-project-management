@@ -179,7 +179,8 @@ export namespace $Enums {
   DEAN: 'DEAN',
   ADMIN: 'ADMIN',
   COUNCIL: 'COUNCIL',
-  LEADER: 'LEADER'
+  LEADER: 'LEADER',
+  DISBURSER: 'DISBURSER'
 };
 
 export type Role = (typeof Role)[keyof typeof Role]
@@ -269,7 +270,8 @@ export type RegistrationStatus = (typeof RegistrationStatus)[keyof typeof Regist
 export const DisbursementStatus: {
   PENDING: 'PENDING',
   APPROVED: 'APPROVED',
-  REJECTED: 'REJECTED'
+  REJECTED: 'REJECTED',
+  PAID: 'PAID'
 };
 
 export type DisbursementStatus = (typeof DisbursementStatus)[keyof typeof DisbursementStatus]
@@ -4115,6 +4117,7 @@ export namespace Prisma {
     approvedPosts: number
     createdDisbursements: number
     approvedDisbursements: number
+    paidDisbursements: number
     autoApprovalJobs: number
   }
 
@@ -4136,6 +4139,7 @@ export namespace Prisma {
     approvedPosts?: boolean | UserCountOutputTypeCountApprovedPostsArgs
     createdDisbursements?: boolean | UserCountOutputTypeCountCreatedDisbursementsArgs
     approvedDisbursements?: boolean | UserCountOutputTypeCountApprovedDisbursementsArgs
+    paidDisbursements?: boolean | UserCountOutputTypeCountPaidDisbursementsArgs
     autoApprovalJobs?: boolean | UserCountOutputTypeCountAutoApprovalJobsArgs
   }
 
@@ -4266,6 +4270,13 @@ export namespace Prisma {
    * UserCountOutputType without action
    */
   export type UserCountOutputTypeCountApprovedDisbursementsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: FundingDisbursementWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountPaidDisbursementsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: FundingDisbursementWhereInput
   }
 
@@ -8467,6 +8478,7 @@ export namespace Prisma {
     approvedPosts?: boolean | User$approvedPostsArgs<ExtArgs>
     createdDisbursements?: boolean | User$createdDisbursementsArgs<ExtArgs>
     approvedDisbursements?: boolean | User$approvedDisbursementsArgs<ExtArgs>
+    paidDisbursements?: boolean | User$paidDisbursementsArgs<ExtArgs>
     autoApprovalJobs?: boolean | User$autoApprovalJobsArgs<ExtArgs>
     lecturerProfile?: boolean | User$lecturerProfileArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
@@ -8557,6 +8569,7 @@ export namespace Prisma {
     approvedPosts?: boolean | User$approvedPostsArgs<ExtArgs>
     createdDisbursements?: boolean | User$createdDisbursementsArgs<ExtArgs>
     approvedDisbursements?: boolean | User$approvedDisbursementsArgs<ExtArgs>
+    paidDisbursements?: boolean | User$paidDisbursementsArgs<ExtArgs>
     autoApprovalJobs?: boolean | User$autoApprovalJobsArgs<ExtArgs>
     lecturerProfile?: boolean | User$lecturerProfileArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
@@ -8595,6 +8608,7 @@ export namespace Prisma {
       approvedPosts: Prisma.$PostPayload<ExtArgs>[]
       createdDisbursements: Prisma.$FundingDisbursementPayload<ExtArgs>[]
       approvedDisbursements: Prisma.$FundingDisbursementPayload<ExtArgs>[]
+      paidDisbursements: Prisma.$FundingDisbursementPayload<ExtArgs>[]
       autoApprovalJobs: Prisma.$AutoApprovalJobPayload<ExtArgs>[]
       lecturerProfile: Prisma.$LecturerPayload<ExtArgs> | null
     }
@@ -9029,6 +9043,7 @@ export namespace Prisma {
     approvedPosts<T extends User$approvedPostsArgs<ExtArgs> = {}>(args?: Subset<T, User$approvedPostsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PostPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     createdDisbursements<T extends User$createdDisbursementsArgs<ExtArgs> = {}>(args?: Subset<T, User$createdDisbursementsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FundingDisbursementPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     approvedDisbursements<T extends User$approvedDisbursementsArgs<ExtArgs> = {}>(args?: Subset<T, User$approvedDisbursementsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FundingDisbursementPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    paidDisbursements<T extends User$paidDisbursementsArgs<ExtArgs> = {}>(args?: Subset<T, User$paidDisbursementsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FundingDisbursementPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     autoApprovalJobs<T extends User$autoApprovalJobsArgs<ExtArgs> = {}>(args?: Subset<T, User$autoApprovalJobsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AutoApprovalJobPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     lecturerProfile<T extends User$lecturerProfileArgs<ExtArgs> = {}>(args?: Subset<T, User$lecturerProfileArgs<ExtArgs>>): Prisma__LecturerClient<$Result.GetResult<Prisma.$LecturerPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
@@ -9921,6 +9936,30 @@ export namespace Prisma {
    * User.approvedDisbursements
    */
   export type User$approvedDisbursementsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FundingDisbursement
+     */
+    select?: FundingDisbursementSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FundingDisbursement
+     */
+    omit?: FundingDisbursementOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FundingDisbursementInclude<ExtArgs> | null
+    where?: FundingDisbursementWhereInput
+    orderBy?: FundingDisbursementOrderByWithRelationInput | FundingDisbursementOrderByWithRelationInput[]
+    cursor?: FundingDisbursementWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: FundingDisbursementScalarFieldEnum | FundingDisbursementScalarFieldEnum[]
+  }
+
+  /**
+   * User.paidDisbursements
+   */
+  export type User$paidDisbursementsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the FundingDisbursement
      */
@@ -23154,6 +23193,10 @@ export namespace Prisma {
     approvedById: string | null
     approvedAt: Date | null
     rejectionNote: string | null
+    paymentVoucherUrl: string | null
+    paidById: string | null
+    paidAt: Date | null
+    paymentNote: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -23171,6 +23214,10 @@ export namespace Prisma {
     approvedById: string | null
     approvedAt: Date | null
     rejectionNote: string | null
+    paymentVoucherUrl: string | null
+    paidById: string | null
+    paidAt: Date | null
+    paymentNote: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -23188,6 +23235,10 @@ export namespace Prisma {
     approvedById: number
     approvedAt: number
     rejectionNote: number
+    paymentVoucherUrl: number
+    paidById: number
+    paidAt: number
+    paymentNote: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -23215,6 +23266,10 @@ export namespace Prisma {
     approvedById?: true
     approvedAt?: true
     rejectionNote?: true
+    paymentVoucherUrl?: true
+    paidById?: true
+    paidAt?: true
+    paymentNote?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -23232,6 +23287,10 @@ export namespace Prisma {
     approvedById?: true
     approvedAt?: true
     rejectionNote?: true
+    paymentVoucherUrl?: true
+    paidById?: true
+    paidAt?: true
+    paymentNote?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -23249,6 +23308,10 @@ export namespace Prisma {
     approvedById?: true
     approvedAt?: true
     rejectionNote?: true
+    paymentVoucherUrl?: true
+    paidById?: true
+    paidAt?: true
+    paymentNote?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -23353,6 +23416,10 @@ export namespace Prisma {
     approvedById: string | null
     approvedAt: Date | null
     rejectionNote: string | null
+    paymentVoucherUrl: string | null
+    paidById: string | null
+    paidAt: Date | null
+    paymentNote: string | null
     createdAt: Date
     updatedAt: Date
     _count: FundingDisbursementCountAggregateOutputType | null
@@ -23389,11 +23456,16 @@ export namespace Prisma {
     approvedById?: boolean
     approvedAt?: boolean
     rejectionNote?: boolean
+    paymentVoucherUrl?: boolean
+    paidById?: boolean
+    paidAt?: boolean
+    paymentNote?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     project?: boolean | ProjectDefaultArgs<ExtArgs>
     createdBy?: boolean | UserDefaultArgs<ExtArgs>
     approvedBy?: boolean | FundingDisbursement$approvedByArgs<ExtArgs>
+    paidBy?: boolean | FundingDisbursement$paidByArgs<ExtArgs>
   }, ExtArgs["result"]["fundingDisbursement"]>
 
   export type FundingDisbursementSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -23409,11 +23481,16 @@ export namespace Prisma {
     approvedById?: boolean
     approvedAt?: boolean
     rejectionNote?: boolean
+    paymentVoucherUrl?: boolean
+    paidById?: boolean
+    paidAt?: boolean
+    paymentNote?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     project?: boolean | ProjectDefaultArgs<ExtArgs>
     createdBy?: boolean | UserDefaultArgs<ExtArgs>
     approvedBy?: boolean | FundingDisbursement$approvedByArgs<ExtArgs>
+    paidBy?: boolean | FundingDisbursement$paidByArgs<ExtArgs>
   }, ExtArgs["result"]["fundingDisbursement"]>
 
   export type FundingDisbursementSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -23429,11 +23506,16 @@ export namespace Prisma {
     approvedById?: boolean
     approvedAt?: boolean
     rejectionNote?: boolean
+    paymentVoucherUrl?: boolean
+    paidById?: boolean
+    paidAt?: boolean
+    paymentNote?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     project?: boolean | ProjectDefaultArgs<ExtArgs>
     createdBy?: boolean | UserDefaultArgs<ExtArgs>
     approvedBy?: boolean | FundingDisbursement$approvedByArgs<ExtArgs>
+    paidBy?: boolean | FundingDisbursement$paidByArgs<ExtArgs>
   }, ExtArgs["result"]["fundingDisbursement"]>
 
   export type FundingDisbursementSelectScalar = {
@@ -23449,25 +23531,32 @@ export namespace Prisma {
     approvedById?: boolean
     approvedAt?: boolean
     rejectionNote?: boolean
+    paymentVoucherUrl?: boolean
+    paidById?: boolean
+    paidAt?: boolean
+    paymentNote?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type FundingDisbursementOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "projectId" | "amount" | "disbursedAt" | "voucherNo" | "voucherFileUrl" | "reason" | "status" | "createdById" | "approvedById" | "approvedAt" | "rejectionNote" | "createdAt" | "updatedAt", ExtArgs["result"]["fundingDisbursement"]>
+  export type FundingDisbursementOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "projectId" | "amount" | "disbursedAt" | "voucherNo" | "voucherFileUrl" | "reason" | "status" | "createdById" | "approvedById" | "approvedAt" | "rejectionNote" | "paymentVoucherUrl" | "paidById" | "paidAt" | "paymentNote" | "createdAt" | "updatedAt", ExtArgs["result"]["fundingDisbursement"]>
   export type FundingDisbursementInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     project?: boolean | ProjectDefaultArgs<ExtArgs>
     createdBy?: boolean | UserDefaultArgs<ExtArgs>
     approvedBy?: boolean | FundingDisbursement$approvedByArgs<ExtArgs>
+    paidBy?: boolean | FundingDisbursement$paidByArgs<ExtArgs>
   }
   export type FundingDisbursementIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     project?: boolean | ProjectDefaultArgs<ExtArgs>
     createdBy?: boolean | UserDefaultArgs<ExtArgs>
     approvedBy?: boolean | FundingDisbursement$approvedByArgs<ExtArgs>
+    paidBy?: boolean | FundingDisbursement$paidByArgs<ExtArgs>
   }
   export type FundingDisbursementIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     project?: boolean | ProjectDefaultArgs<ExtArgs>
     createdBy?: boolean | UserDefaultArgs<ExtArgs>
     approvedBy?: boolean | FundingDisbursement$approvedByArgs<ExtArgs>
+    paidBy?: boolean | FundingDisbursement$paidByArgs<ExtArgs>
   }
 
   export type $FundingDisbursementPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -23476,6 +23565,7 @@ export namespace Prisma {
       project: Prisma.$ProjectPayload<ExtArgs>
       createdBy: Prisma.$UserPayload<ExtArgs>
       approvedBy: Prisma.$UserPayload<ExtArgs> | null
+      paidBy: Prisma.$UserPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -23490,6 +23580,10 @@ export namespace Prisma {
       approvedById: string | null
       approvedAt: Date | null
       rejectionNote: string | null
+      paymentVoucherUrl: string | null
+      paidById: string | null
+      paidAt: Date | null
+      paymentNote: string | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["fundingDisbursement"]>
@@ -23889,6 +23983,7 @@ export namespace Prisma {
     project<T extends ProjectDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ProjectDefaultArgs<ExtArgs>>): Prisma__ProjectClient<$Result.GetResult<Prisma.$ProjectPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     createdBy<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     approvedBy<T extends FundingDisbursement$approvedByArgs<ExtArgs> = {}>(args?: Subset<T, FundingDisbursement$approvedByArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    paidBy<T extends FundingDisbursement$paidByArgs<ExtArgs> = {}>(args?: Subset<T, FundingDisbursement$paidByArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -23930,6 +24025,10 @@ export namespace Prisma {
     readonly approvedById: FieldRef<"FundingDisbursement", 'String'>
     readonly approvedAt: FieldRef<"FundingDisbursement", 'DateTime'>
     readonly rejectionNote: FieldRef<"FundingDisbursement", 'String'>
+    readonly paymentVoucherUrl: FieldRef<"FundingDisbursement", 'String'>
+    readonly paidById: FieldRef<"FundingDisbursement", 'String'>
+    readonly paidAt: FieldRef<"FundingDisbursement", 'DateTime'>
+    readonly paymentNote: FieldRef<"FundingDisbursement", 'String'>
     readonly createdAt: FieldRef<"FundingDisbursement", 'DateTime'>
     readonly updatedAt: FieldRef<"FundingDisbursement", 'DateTime'>
   }
@@ -24336,6 +24435,25 @@ export namespace Prisma {
    * FundingDisbursement.approvedBy
    */
   export type FundingDisbursement$approvedByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
+  }
+
+  /**
+   * FundingDisbursement.paidBy
+   */
+  export type FundingDisbursement$paidByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the User
      */
@@ -43121,6 +43239,10 @@ export namespace Prisma {
     approvedById: 'approvedById',
     approvedAt: 'approvedAt',
     rejectionNote: 'rejectionNote',
+    paymentVoucherUrl: 'paymentVoucherUrl',
+    paidById: 'paidById',
+    paidAt: 'paidAt',
+    paymentNote: 'paymentNote',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -44078,6 +44200,7 @@ export namespace Prisma {
     approvedPosts?: PostListRelationFilter
     createdDisbursements?: FundingDisbursementListRelationFilter
     approvedDisbursements?: FundingDisbursementListRelationFilter
+    paidDisbursements?: FundingDisbursementListRelationFilter
     autoApprovalJobs?: AutoApprovalJobListRelationFilter
     lecturerProfile?: XOR<LecturerNullableScalarRelationFilter, LecturerWhereInput> | null
   }
@@ -44119,6 +44242,7 @@ export namespace Prisma {
     approvedPosts?: PostOrderByRelationAggregateInput
     createdDisbursements?: FundingDisbursementOrderByRelationAggregateInput
     approvedDisbursements?: FundingDisbursementOrderByRelationAggregateInput
+    paidDisbursements?: FundingDisbursementOrderByRelationAggregateInput
     autoApprovalJobs?: AutoApprovalJobOrderByRelationAggregateInput
     lecturerProfile?: LecturerOrderByWithRelationInput
   }
@@ -44163,6 +44287,7 @@ export namespace Prisma {
     approvedPosts?: PostListRelationFilter
     createdDisbursements?: FundingDisbursementListRelationFilter
     approvedDisbursements?: FundingDisbursementListRelationFilter
+    paidDisbursements?: FundingDisbursementListRelationFilter
     autoApprovalJobs?: AutoApprovalJobListRelationFilter
     lecturerProfile?: XOR<LecturerNullableScalarRelationFilter, LecturerWhereInput> | null
   }, "id" | "code" | "email">
@@ -45468,11 +45593,16 @@ export namespace Prisma {
     approvedById?: StringNullableFilter<"FundingDisbursement"> | string | null
     approvedAt?: DateTimeNullableFilter<"FundingDisbursement"> | Date | string | null
     rejectionNote?: StringNullableFilter<"FundingDisbursement"> | string | null
+    paymentVoucherUrl?: StringNullableFilter<"FundingDisbursement"> | string | null
+    paidById?: StringNullableFilter<"FundingDisbursement"> | string | null
+    paidAt?: DateTimeNullableFilter<"FundingDisbursement"> | Date | string | null
+    paymentNote?: StringNullableFilter<"FundingDisbursement"> | string | null
     createdAt?: DateTimeFilter<"FundingDisbursement"> | Date | string
     updatedAt?: DateTimeFilter<"FundingDisbursement"> | Date | string
     project?: XOR<ProjectScalarRelationFilter, ProjectWhereInput>
     createdBy?: XOR<UserScalarRelationFilter, UserWhereInput>
     approvedBy?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+    paidBy?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
   }
 
   export type FundingDisbursementOrderByWithRelationInput = {
@@ -45488,11 +45618,16 @@ export namespace Prisma {
     approvedById?: SortOrderInput | SortOrder
     approvedAt?: SortOrderInput | SortOrder
     rejectionNote?: SortOrderInput | SortOrder
+    paymentVoucherUrl?: SortOrderInput | SortOrder
+    paidById?: SortOrderInput | SortOrder
+    paidAt?: SortOrderInput | SortOrder
+    paymentNote?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     project?: ProjectOrderByWithRelationInput
     createdBy?: UserOrderByWithRelationInput
     approvedBy?: UserOrderByWithRelationInput
+    paidBy?: UserOrderByWithRelationInput
   }
 
   export type FundingDisbursementWhereUniqueInput = Prisma.AtLeast<{
@@ -45511,11 +45646,16 @@ export namespace Prisma {
     approvedById?: StringNullableFilter<"FundingDisbursement"> | string | null
     approvedAt?: DateTimeNullableFilter<"FundingDisbursement"> | Date | string | null
     rejectionNote?: StringNullableFilter<"FundingDisbursement"> | string | null
+    paymentVoucherUrl?: StringNullableFilter<"FundingDisbursement"> | string | null
+    paidById?: StringNullableFilter<"FundingDisbursement"> | string | null
+    paidAt?: DateTimeNullableFilter<"FundingDisbursement"> | Date | string | null
+    paymentNote?: StringNullableFilter<"FundingDisbursement"> | string | null
     createdAt?: DateTimeFilter<"FundingDisbursement"> | Date | string
     updatedAt?: DateTimeFilter<"FundingDisbursement"> | Date | string
     project?: XOR<ProjectScalarRelationFilter, ProjectWhereInput>
     createdBy?: XOR<UserScalarRelationFilter, UserWhereInput>
     approvedBy?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+    paidBy?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
   }, "id">
 
   export type FundingDisbursementOrderByWithAggregationInput = {
@@ -45531,6 +45671,10 @@ export namespace Prisma {
     approvedById?: SortOrderInput | SortOrder
     approvedAt?: SortOrderInput | SortOrder
     rejectionNote?: SortOrderInput | SortOrder
+    paymentVoucherUrl?: SortOrderInput | SortOrder
+    paidById?: SortOrderInput | SortOrder
+    paidAt?: SortOrderInput | SortOrder
+    paymentNote?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: FundingDisbursementCountOrderByAggregateInput
@@ -45556,6 +45700,10 @@ export namespace Prisma {
     approvedById?: StringNullableWithAggregatesFilter<"FundingDisbursement"> | string | null
     approvedAt?: DateTimeNullableWithAggregatesFilter<"FundingDisbursement"> | Date | string | null
     rejectionNote?: StringNullableWithAggregatesFilter<"FundingDisbursement"> | string | null
+    paymentVoucherUrl?: StringNullableWithAggregatesFilter<"FundingDisbursement"> | string | null
+    paidById?: StringNullableWithAggregatesFilter<"FundingDisbursement"> | string | null
+    paidAt?: DateTimeNullableWithAggregatesFilter<"FundingDisbursement"> | Date | string | null
+    paymentNote?: StringNullableWithAggregatesFilter<"FundingDisbursement"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"FundingDisbursement"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"FundingDisbursement"> | Date | string
   }
@@ -47111,6 +47259,7 @@ export namespace Prisma {
     approvedPosts?: PostCreateNestedManyWithoutApprovedByInput
     createdDisbursements?: FundingDisbursementCreateNestedManyWithoutCreatedByInput
     approvedDisbursements?: FundingDisbursementCreateNestedManyWithoutApprovedByInput
+    paidDisbursements?: FundingDisbursementCreateNestedManyWithoutPaidByInput
     autoApprovalJobs?: AutoApprovalJobCreateNestedManyWithoutDeanInput
     lecturerProfile?: LecturerCreateNestedOneWithoutUserInput
   }
@@ -47149,6 +47298,7 @@ export namespace Prisma {
     approvedPosts?: PostUncheckedCreateNestedManyWithoutApprovedByInput
     createdDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutCreatedByInput
     approvedDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutApprovedByInput
+    paidDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutPaidByInput
     autoApprovalJobs?: AutoApprovalJobUncheckedCreateNestedManyWithoutDeanInput
     lecturerProfile?: LecturerUncheckedCreateNestedOneWithoutUserInput
   }
@@ -47187,6 +47337,7 @@ export namespace Prisma {
     approvedPosts?: PostUpdateManyWithoutApprovedByNestedInput
     createdDisbursements?: FundingDisbursementUpdateManyWithoutCreatedByNestedInput
     approvedDisbursements?: FundingDisbursementUpdateManyWithoutApprovedByNestedInput
+    paidDisbursements?: FundingDisbursementUpdateManyWithoutPaidByNestedInput
     autoApprovalJobs?: AutoApprovalJobUpdateManyWithoutDeanNestedInput
     lecturerProfile?: LecturerUpdateOneWithoutUserNestedInput
   }
@@ -47225,6 +47376,7 @@ export namespace Prisma {
     approvedPosts?: PostUncheckedUpdateManyWithoutApprovedByNestedInput
     createdDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutCreatedByNestedInput
     approvedDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutApprovedByNestedInput
+    paidDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutPaidByNestedInput
     autoApprovalJobs?: AutoApprovalJobUncheckedUpdateManyWithoutDeanNestedInput
     lecturerProfile?: LecturerUncheckedUpdateOneWithoutUserNestedInput
   }
@@ -48770,11 +48922,15 @@ export namespace Prisma {
     status?: $Enums.DisbursementStatus
     approvedAt?: Date | string | null
     rejectionNote?: string | null
+    paymentVoucherUrl?: string | null
+    paidAt?: Date | string | null
+    paymentNote?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     project: ProjectCreateNestedOneWithoutDisbursementsInput
     createdBy: UserCreateNestedOneWithoutCreatedDisbursementsInput
     approvedBy?: UserCreateNestedOneWithoutApprovedDisbursementsInput
+    paidBy?: UserCreateNestedOneWithoutPaidDisbursementsInput
   }
 
   export type FundingDisbursementUncheckedCreateInput = {
@@ -48790,6 +48946,10 @@ export namespace Prisma {
     approvedById?: string | null
     approvedAt?: Date | string | null
     rejectionNote?: string | null
+    paymentVoucherUrl?: string | null
+    paidById?: string | null
+    paidAt?: Date | string | null
+    paymentNote?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -48804,11 +48964,15 @@ export namespace Prisma {
     status?: EnumDisbursementStatusFieldUpdateOperationsInput | $Enums.DisbursementStatus
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     rejectionNote?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentVoucherUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    paymentNote?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     project?: ProjectUpdateOneRequiredWithoutDisbursementsNestedInput
     createdBy?: UserUpdateOneRequiredWithoutCreatedDisbursementsNestedInput
     approvedBy?: UserUpdateOneWithoutApprovedDisbursementsNestedInput
+    paidBy?: UserUpdateOneWithoutPaidDisbursementsNestedInput
   }
 
   export type FundingDisbursementUncheckedUpdateInput = {
@@ -48824,6 +48988,10 @@ export namespace Prisma {
     approvedById?: NullableStringFieldUpdateOperationsInput | string | null
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     rejectionNote?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentVoucherUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    paidById?: NullableStringFieldUpdateOperationsInput | string | null
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    paymentNote?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -48841,6 +49009,10 @@ export namespace Prisma {
     approvedById?: string | null
     approvedAt?: Date | string | null
     rejectionNote?: string | null
+    paymentVoucherUrl?: string | null
+    paidById?: string | null
+    paidAt?: Date | string | null
+    paymentNote?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -48855,6 +49027,9 @@ export namespace Prisma {
     status?: EnumDisbursementStatusFieldUpdateOperationsInput | $Enums.DisbursementStatus
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     rejectionNote?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentVoucherUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    paymentNote?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -48872,6 +49047,10 @@ export namespace Prisma {
     approvedById?: NullableStringFieldUpdateOperationsInput | string | null
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     rejectionNote?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentVoucherUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    paidById?: NullableStringFieldUpdateOperationsInput | string | null
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    paymentNote?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -51936,6 +52115,10 @@ export namespace Prisma {
     approvedById?: SortOrder
     approvedAt?: SortOrder
     rejectionNote?: SortOrder
+    paymentVoucherUrl?: SortOrder
+    paidById?: SortOrder
+    paidAt?: SortOrder
+    paymentNote?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -51957,6 +52140,10 @@ export namespace Prisma {
     approvedById?: SortOrder
     approvedAt?: SortOrder
     rejectionNote?: SortOrder
+    paymentVoucherUrl?: SortOrder
+    paidById?: SortOrder
+    paidAt?: SortOrder
+    paymentNote?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -51974,6 +52161,10 @@ export namespace Prisma {
     approvedById?: SortOrder
     approvedAt?: SortOrder
     rejectionNote?: SortOrder
+    paymentVoucherUrl?: SortOrder
+    paidById?: SortOrder
+    paidAt?: SortOrder
+    paymentNote?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -53509,6 +53700,13 @@ export namespace Prisma {
     connect?: FundingDisbursementWhereUniqueInput | FundingDisbursementWhereUniqueInput[]
   }
 
+  export type FundingDisbursementCreateNestedManyWithoutPaidByInput = {
+    create?: XOR<FundingDisbursementCreateWithoutPaidByInput, FundingDisbursementUncheckedCreateWithoutPaidByInput> | FundingDisbursementCreateWithoutPaidByInput[] | FundingDisbursementUncheckedCreateWithoutPaidByInput[]
+    connectOrCreate?: FundingDisbursementCreateOrConnectWithoutPaidByInput | FundingDisbursementCreateOrConnectWithoutPaidByInput[]
+    createMany?: FundingDisbursementCreateManyPaidByInputEnvelope
+    connect?: FundingDisbursementWhereUniqueInput | FundingDisbursementWhereUniqueInput[]
+  }
+
   export type AutoApprovalJobCreateNestedManyWithoutDeanInput = {
     create?: XOR<AutoApprovalJobCreateWithoutDeanInput, AutoApprovalJobUncheckedCreateWithoutDeanInput> | AutoApprovalJobCreateWithoutDeanInput[] | AutoApprovalJobUncheckedCreateWithoutDeanInput[]
     connectOrCreate?: AutoApprovalJobCreateOrConnectWithoutDeanInput | AutoApprovalJobCreateOrConnectWithoutDeanInput[]
@@ -53638,6 +53836,13 @@ export namespace Prisma {
     create?: XOR<FundingDisbursementCreateWithoutApprovedByInput, FundingDisbursementUncheckedCreateWithoutApprovedByInput> | FundingDisbursementCreateWithoutApprovedByInput[] | FundingDisbursementUncheckedCreateWithoutApprovedByInput[]
     connectOrCreate?: FundingDisbursementCreateOrConnectWithoutApprovedByInput | FundingDisbursementCreateOrConnectWithoutApprovedByInput[]
     createMany?: FundingDisbursementCreateManyApprovedByInputEnvelope
+    connect?: FundingDisbursementWhereUniqueInput | FundingDisbursementWhereUniqueInput[]
+  }
+
+  export type FundingDisbursementUncheckedCreateNestedManyWithoutPaidByInput = {
+    create?: XOR<FundingDisbursementCreateWithoutPaidByInput, FundingDisbursementUncheckedCreateWithoutPaidByInput> | FundingDisbursementCreateWithoutPaidByInput[] | FundingDisbursementUncheckedCreateWithoutPaidByInput[]
+    connectOrCreate?: FundingDisbursementCreateOrConnectWithoutPaidByInput | FundingDisbursementCreateOrConnectWithoutPaidByInput[]
+    createMany?: FundingDisbursementCreateManyPaidByInputEnvelope
     connect?: FundingDisbursementWhereUniqueInput | FundingDisbursementWhereUniqueInput[]
   }
 
@@ -53934,6 +54139,20 @@ export namespace Prisma {
     deleteMany?: FundingDisbursementScalarWhereInput | FundingDisbursementScalarWhereInput[]
   }
 
+  export type FundingDisbursementUpdateManyWithoutPaidByNestedInput = {
+    create?: XOR<FundingDisbursementCreateWithoutPaidByInput, FundingDisbursementUncheckedCreateWithoutPaidByInput> | FundingDisbursementCreateWithoutPaidByInput[] | FundingDisbursementUncheckedCreateWithoutPaidByInput[]
+    connectOrCreate?: FundingDisbursementCreateOrConnectWithoutPaidByInput | FundingDisbursementCreateOrConnectWithoutPaidByInput[]
+    upsert?: FundingDisbursementUpsertWithWhereUniqueWithoutPaidByInput | FundingDisbursementUpsertWithWhereUniqueWithoutPaidByInput[]
+    createMany?: FundingDisbursementCreateManyPaidByInputEnvelope
+    set?: FundingDisbursementWhereUniqueInput | FundingDisbursementWhereUniqueInput[]
+    disconnect?: FundingDisbursementWhereUniqueInput | FundingDisbursementWhereUniqueInput[]
+    delete?: FundingDisbursementWhereUniqueInput | FundingDisbursementWhereUniqueInput[]
+    connect?: FundingDisbursementWhereUniqueInput | FundingDisbursementWhereUniqueInput[]
+    update?: FundingDisbursementUpdateWithWhereUniqueWithoutPaidByInput | FundingDisbursementUpdateWithWhereUniqueWithoutPaidByInput[]
+    updateMany?: FundingDisbursementUpdateManyWithWhereWithoutPaidByInput | FundingDisbursementUpdateManyWithWhereWithoutPaidByInput[]
+    deleteMany?: FundingDisbursementScalarWhereInput | FundingDisbursementScalarWhereInput[]
+  }
+
   export type AutoApprovalJobUpdateManyWithoutDeanNestedInput = {
     create?: XOR<AutoApprovalJobCreateWithoutDeanInput, AutoApprovalJobUncheckedCreateWithoutDeanInput> | AutoApprovalJobCreateWithoutDeanInput[] | AutoApprovalJobUncheckedCreateWithoutDeanInput[]
     connectOrCreate?: AutoApprovalJobCreateOrConnectWithoutDeanInput | AutoApprovalJobCreateOrConnectWithoutDeanInput[]
@@ -54193,6 +54412,20 @@ export namespace Prisma {
     connect?: FundingDisbursementWhereUniqueInput | FundingDisbursementWhereUniqueInput[]
     update?: FundingDisbursementUpdateWithWhereUniqueWithoutApprovedByInput | FundingDisbursementUpdateWithWhereUniqueWithoutApprovedByInput[]
     updateMany?: FundingDisbursementUpdateManyWithWhereWithoutApprovedByInput | FundingDisbursementUpdateManyWithWhereWithoutApprovedByInput[]
+    deleteMany?: FundingDisbursementScalarWhereInput | FundingDisbursementScalarWhereInput[]
+  }
+
+  export type FundingDisbursementUncheckedUpdateManyWithoutPaidByNestedInput = {
+    create?: XOR<FundingDisbursementCreateWithoutPaidByInput, FundingDisbursementUncheckedCreateWithoutPaidByInput> | FundingDisbursementCreateWithoutPaidByInput[] | FundingDisbursementUncheckedCreateWithoutPaidByInput[]
+    connectOrCreate?: FundingDisbursementCreateOrConnectWithoutPaidByInput | FundingDisbursementCreateOrConnectWithoutPaidByInput[]
+    upsert?: FundingDisbursementUpsertWithWhereUniqueWithoutPaidByInput | FundingDisbursementUpsertWithWhereUniqueWithoutPaidByInput[]
+    createMany?: FundingDisbursementCreateManyPaidByInputEnvelope
+    set?: FundingDisbursementWhereUniqueInput | FundingDisbursementWhereUniqueInput[]
+    disconnect?: FundingDisbursementWhereUniqueInput | FundingDisbursementWhereUniqueInput[]
+    delete?: FundingDisbursementWhereUniqueInput | FundingDisbursementWhereUniqueInput[]
+    connect?: FundingDisbursementWhereUniqueInput | FundingDisbursementWhereUniqueInput[]
+    update?: FundingDisbursementUpdateWithWhereUniqueWithoutPaidByInput | FundingDisbursementUpdateWithWhereUniqueWithoutPaidByInput[]
+    updateMany?: FundingDisbursementUpdateManyWithWhereWithoutPaidByInput | FundingDisbursementUpdateManyWithWhereWithoutPaidByInput[]
     deleteMany?: FundingDisbursementScalarWhereInput | FundingDisbursementScalarWhereInput[]
   }
 
@@ -55299,6 +55532,12 @@ export namespace Prisma {
     connect?: UserWhereUniqueInput
   }
 
+  export type UserCreateNestedOneWithoutPaidDisbursementsInput = {
+    create?: XOR<UserCreateWithoutPaidDisbursementsInput, UserUncheckedCreateWithoutPaidDisbursementsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutPaidDisbursementsInput
+    connect?: UserWhereUniqueInput
+  }
+
   export type DecimalFieldUpdateOperationsInput = {
     set?: Decimal | DecimalJsLike | number | string
     increment?: Decimal | DecimalJsLike | number | string
@@ -55335,6 +55574,16 @@ export namespace Prisma {
     delete?: UserWhereInput | boolean
     connect?: UserWhereUniqueInput
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutApprovedDisbursementsInput, UserUpdateWithoutApprovedDisbursementsInput>, UserUncheckedUpdateWithoutApprovedDisbursementsInput>
+  }
+
+  export type UserUpdateOneWithoutPaidDisbursementsNestedInput = {
+    create?: XOR<UserCreateWithoutPaidDisbursementsInput, UserUncheckedCreateWithoutPaidDisbursementsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutPaidDisbursementsInput
+    upsert?: UserUpsertWithoutPaidDisbursementsInput
+    disconnect?: UserWhereInput | boolean
+    delete?: UserWhereInput | boolean
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutPaidDisbursementsInput, UserUpdateWithoutPaidDisbursementsInput>, UserUncheckedUpdateWithoutPaidDisbursementsInput>
   }
 
   export type ProjectCreateNestedOneWithoutExtensionRequestsInput = {
@@ -56811,6 +57060,7 @@ export namespace Prisma {
     approvedPosts?: PostCreateNestedManyWithoutApprovedByInput
     createdDisbursements?: FundingDisbursementCreateNestedManyWithoutCreatedByInput
     approvedDisbursements?: FundingDisbursementCreateNestedManyWithoutApprovedByInput
+    paidDisbursements?: FundingDisbursementCreateNestedManyWithoutPaidByInput
     autoApprovalJobs?: AutoApprovalJobCreateNestedManyWithoutDeanInput
     lecturerProfile?: LecturerCreateNestedOneWithoutUserInput
   }
@@ -56848,6 +57098,7 @@ export namespace Prisma {
     approvedPosts?: PostUncheckedCreateNestedManyWithoutApprovedByInput
     createdDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutCreatedByInput
     approvedDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutApprovedByInput
+    paidDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutPaidByInput
     autoApprovalJobs?: AutoApprovalJobUncheckedCreateNestedManyWithoutDeanInput
     lecturerProfile?: LecturerUncheckedCreateNestedOneWithoutUserInput
   }
@@ -57308,6 +57559,7 @@ export namespace Prisma {
     approvedPosts?: PostCreateNestedManyWithoutApprovedByInput
     createdDisbursements?: FundingDisbursementCreateNestedManyWithoutCreatedByInput
     approvedDisbursements?: FundingDisbursementCreateNestedManyWithoutApprovedByInput
+    paidDisbursements?: FundingDisbursementCreateNestedManyWithoutPaidByInput
     autoApprovalJobs?: AutoApprovalJobCreateNestedManyWithoutDeanInput
     lecturerProfile?: LecturerCreateNestedOneWithoutUserInput
   }
@@ -57345,6 +57597,7 @@ export namespace Prisma {
     approvedPosts?: PostUncheckedCreateNestedManyWithoutApprovedByInput
     createdDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutCreatedByInput
     approvedDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutApprovedByInput
+    paidDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutPaidByInput
     autoApprovalJobs?: AutoApprovalJobUncheckedCreateNestedManyWithoutDeanInput
     lecturerProfile?: LecturerUncheckedCreateNestedOneWithoutUserInput
   }
@@ -57607,6 +57860,7 @@ export namespace Prisma {
     approvedPosts?: PostCreateNestedManyWithoutApprovedByInput
     createdDisbursements?: FundingDisbursementCreateNestedManyWithoutCreatedByInput
     approvedDisbursements?: FundingDisbursementCreateNestedManyWithoutApprovedByInput
+    paidDisbursements?: FundingDisbursementCreateNestedManyWithoutPaidByInput
     autoApprovalJobs?: AutoApprovalJobCreateNestedManyWithoutDeanInput
     lecturerProfile?: LecturerCreateNestedOneWithoutUserInput
   }
@@ -57644,6 +57898,7 @@ export namespace Prisma {
     approvedPosts?: PostUncheckedCreateNestedManyWithoutApprovedByInput
     createdDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutCreatedByInput
     approvedDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutApprovedByInput
+    paidDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutPaidByInput
     autoApprovalJobs?: AutoApprovalJobUncheckedCreateNestedManyWithoutDeanInput
     lecturerProfile?: LecturerUncheckedCreateNestedOneWithoutUserInput
   }
@@ -58529,10 +58784,14 @@ export namespace Prisma {
     status?: $Enums.DisbursementStatus
     approvedAt?: Date | string | null
     rejectionNote?: string | null
+    paymentVoucherUrl?: string | null
+    paidAt?: Date | string | null
+    paymentNote?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     project: ProjectCreateNestedOneWithoutDisbursementsInput
     approvedBy?: UserCreateNestedOneWithoutApprovedDisbursementsInput
+    paidBy?: UserCreateNestedOneWithoutPaidDisbursementsInput
   }
 
   export type FundingDisbursementUncheckedCreateWithoutCreatedByInput = {
@@ -58547,6 +58806,10 @@ export namespace Prisma {
     approvedById?: string | null
     approvedAt?: Date | string | null
     rejectionNote?: string | null
+    paymentVoucherUrl?: string | null
+    paidById?: string | null
+    paidAt?: Date | string | null
+    paymentNote?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -58571,10 +58834,14 @@ export namespace Prisma {
     status?: $Enums.DisbursementStatus
     approvedAt?: Date | string | null
     rejectionNote?: string | null
+    paymentVoucherUrl?: string | null
+    paidAt?: Date | string | null
+    paymentNote?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     project: ProjectCreateNestedOneWithoutDisbursementsInput
     createdBy: UserCreateNestedOneWithoutCreatedDisbursementsInput
+    paidBy?: UserCreateNestedOneWithoutPaidDisbursementsInput
   }
 
   export type FundingDisbursementUncheckedCreateWithoutApprovedByInput = {
@@ -58589,6 +58856,10 @@ export namespace Prisma {
     createdById: string
     approvedAt?: Date | string | null
     rejectionNote?: string | null
+    paymentVoucherUrl?: string | null
+    paidById?: string | null
+    paidAt?: Date | string | null
+    paymentNote?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -58600,6 +58871,56 @@ export namespace Prisma {
 
   export type FundingDisbursementCreateManyApprovedByInputEnvelope = {
     data: FundingDisbursementCreateManyApprovedByInput | FundingDisbursementCreateManyApprovedByInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type FundingDisbursementCreateWithoutPaidByInput = {
+    id?: string
+    amount: Decimal | DecimalJsLike | number | string
+    disbursedAt: Date | string
+    voucherNo?: string | null
+    voucherFileUrl?: string | null
+    reason?: string | null
+    status?: $Enums.DisbursementStatus
+    approvedAt?: Date | string | null
+    rejectionNote?: string | null
+    paymentVoucherUrl?: string | null
+    paidAt?: Date | string | null
+    paymentNote?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    project: ProjectCreateNestedOneWithoutDisbursementsInput
+    createdBy: UserCreateNestedOneWithoutCreatedDisbursementsInput
+    approvedBy?: UserCreateNestedOneWithoutApprovedDisbursementsInput
+  }
+
+  export type FundingDisbursementUncheckedCreateWithoutPaidByInput = {
+    id?: string
+    projectId: string
+    amount: Decimal | DecimalJsLike | number | string
+    disbursedAt: Date | string
+    voucherNo?: string | null
+    voucherFileUrl?: string | null
+    reason?: string | null
+    status?: $Enums.DisbursementStatus
+    createdById: string
+    approvedById?: string | null
+    approvedAt?: Date | string | null
+    rejectionNote?: string | null
+    paymentVoucherUrl?: string | null
+    paidAt?: Date | string | null
+    paymentNote?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type FundingDisbursementCreateOrConnectWithoutPaidByInput = {
+    where: FundingDisbursementWhereUniqueInput
+    create: XOR<FundingDisbursementCreateWithoutPaidByInput, FundingDisbursementUncheckedCreateWithoutPaidByInput>
+  }
+
+  export type FundingDisbursementCreateManyPaidByInputEnvelope = {
+    data: FundingDisbursementCreateManyPaidByInput | FundingDisbursementCreateManyPaidByInput[]
     skipDuplicates?: boolean
   }
 
@@ -59258,6 +59579,10 @@ export namespace Prisma {
     approvedById?: StringNullableFilter<"FundingDisbursement"> | string | null
     approvedAt?: DateTimeNullableFilter<"FundingDisbursement"> | Date | string | null
     rejectionNote?: StringNullableFilter<"FundingDisbursement"> | string | null
+    paymentVoucherUrl?: StringNullableFilter<"FundingDisbursement"> | string | null
+    paidById?: StringNullableFilter<"FundingDisbursement"> | string | null
+    paidAt?: DateTimeNullableFilter<"FundingDisbursement"> | Date | string | null
+    paymentNote?: StringNullableFilter<"FundingDisbursement"> | string | null
     createdAt?: DateTimeFilter<"FundingDisbursement"> | Date | string
     updatedAt?: DateTimeFilter<"FundingDisbursement"> | Date | string
   }
@@ -59276,6 +59601,22 @@ export namespace Prisma {
   export type FundingDisbursementUpdateManyWithWhereWithoutApprovedByInput = {
     where: FundingDisbursementScalarWhereInput
     data: XOR<FundingDisbursementUpdateManyMutationInput, FundingDisbursementUncheckedUpdateManyWithoutApprovedByInput>
+  }
+
+  export type FundingDisbursementUpsertWithWhereUniqueWithoutPaidByInput = {
+    where: FundingDisbursementWhereUniqueInput
+    update: XOR<FundingDisbursementUpdateWithoutPaidByInput, FundingDisbursementUncheckedUpdateWithoutPaidByInput>
+    create: XOR<FundingDisbursementCreateWithoutPaidByInput, FundingDisbursementUncheckedCreateWithoutPaidByInput>
+  }
+
+  export type FundingDisbursementUpdateWithWhereUniqueWithoutPaidByInput = {
+    where: FundingDisbursementWhereUniqueInput
+    data: XOR<FundingDisbursementUpdateWithoutPaidByInput, FundingDisbursementUncheckedUpdateWithoutPaidByInput>
+  }
+
+  export type FundingDisbursementUpdateManyWithWhereWithoutPaidByInput = {
+    where: FundingDisbursementScalarWhereInput
+    data: XOR<FundingDisbursementUpdateManyMutationInput, FundingDisbursementUncheckedUpdateManyWithoutPaidByInput>
   }
 
   export type AutoApprovalJobUpsertWithWhereUniqueWithoutDeanInput = {
@@ -60094,6 +60435,7 @@ export namespace Prisma {
     approvedPosts?: PostCreateNestedManyWithoutApprovedByInput
     createdDisbursements?: FundingDisbursementCreateNestedManyWithoutCreatedByInput
     approvedDisbursements?: FundingDisbursementCreateNestedManyWithoutApprovedByInput
+    paidDisbursements?: FundingDisbursementCreateNestedManyWithoutPaidByInput
     autoApprovalJobs?: AutoApprovalJobCreateNestedManyWithoutDeanInput
     lecturerProfile?: LecturerCreateNestedOneWithoutUserInput
   }
@@ -60131,6 +60473,7 @@ export namespace Prisma {
     approvedPosts?: PostUncheckedCreateNestedManyWithoutApprovedByInput
     createdDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutCreatedByInput
     approvedDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutApprovedByInput
+    paidDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutPaidByInput
     autoApprovalJobs?: AutoApprovalJobUncheckedCreateNestedManyWithoutDeanInput
     lecturerProfile?: LecturerUncheckedCreateNestedOneWithoutUserInput
   }
@@ -60173,6 +60516,7 @@ export namespace Prisma {
     approvedPosts?: PostCreateNestedManyWithoutApprovedByInput
     createdDisbursements?: FundingDisbursementCreateNestedManyWithoutCreatedByInput
     approvedDisbursements?: FundingDisbursementCreateNestedManyWithoutApprovedByInput
+    paidDisbursements?: FundingDisbursementCreateNestedManyWithoutPaidByInput
     autoApprovalJobs?: AutoApprovalJobCreateNestedManyWithoutDeanInput
     lecturerProfile?: LecturerCreateNestedOneWithoutUserInput
   }
@@ -60210,6 +60554,7 @@ export namespace Prisma {
     approvedPosts?: PostUncheckedCreateNestedManyWithoutApprovedByInput
     createdDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutCreatedByInput
     approvedDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutApprovedByInput
+    paidDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutPaidByInput
     autoApprovalJobs?: AutoApprovalJobUncheckedCreateNestedManyWithoutDeanInput
     lecturerProfile?: LecturerUncheckedCreateNestedOneWithoutUserInput
   }
@@ -60417,10 +60762,14 @@ export namespace Prisma {
     status?: $Enums.DisbursementStatus
     approvedAt?: Date | string | null
     rejectionNote?: string | null
+    paymentVoucherUrl?: string | null
+    paidAt?: Date | string | null
+    paymentNote?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy: UserCreateNestedOneWithoutCreatedDisbursementsInput
     approvedBy?: UserCreateNestedOneWithoutApprovedDisbursementsInput
+    paidBy?: UserCreateNestedOneWithoutPaidDisbursementsInput
   }
 
   export type FundingDisbursementUncheckedCreateWithoutProjectInput = {
@@ -60435,6 +60784,10 @@ export namespace Prisma {
     approvedById?: string | null
     approvedAt?: Date | string | null
     rejectionNote?: string | null
+    paymentVoucherUrl?: string | null
+    paidById?: string | null
+    paidAt?: Date | string | null
+    paymentNote?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -60555,6 +60908,7 @@ export namespace Prisma {
     approvedPosts?: PostCreateNestedManyWithoutApprovedByInput
     createdDisbursements?: FundingDisbursementCreateNestedManyWithoutCreatedByInput
     approvedDisbursements?: FundingDisbursementCreateNestedManyWithoutApprovedByInput
+    paidDisbursements?: FundingDisbursementCreateNestedManyWithoutPaidByInput
     autoApprovalJobs?: AutoApprovalJobCreateNestedManyWithoutDeanInput
     lecturerProfile?: LecturerCreateNestedOneWithoutUserInput
   }
@@ -60592,6 +60946,7 @@ export namespace Prisma {
     approvedPosts?: PostUncheckedCreateNestedManyWithoutApprovedByInput
     createdDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutCreatedByInput
     approvedDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutApprovedByInput
+    paidDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutPaidByInput
     autoApprovalJobs?: AutoApprovalJobUncheckedCreateNestedManyWithoutDeanInput
     lecturerProfile?: LecturerUncheckedCreateNestedOneWithoutUserInput
   }
@@ -60683,6 +61038,7 @@ export namespace Prisma {
     approvedPosts?: PostUpdateManyWithoutApprovedByNestedInput
     createdDisbursements?: FundingDisbursementUpdateManyWithoutCreatedByNestedInput
     approvedDisbursements?: FundingDisbursementUpdateManyWithoutApprovedByNestedInput
+    paidDisbursements?: FundingDisbursementUpdateManyWithoutPaidByNestedInput
     autoApprovalJobs?: AutoApprovalJobUpdateManyWithoutDeanNestedInput
     lecturerProfile?: LecturerUpdateOneWithoutUserNestedInput
   }
@@ -60720,6 +61076,7 @@ export namespace Prisma {
     approvedPosts?: PostUncheckedUpdateManyWithoutApprovedByNestedInput
     createdDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutCreatedByNestedInput
     approvedDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutApprovedByNestedInput
+    paidDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutPaidByNestedInput
     autoApprovalJobs?: AutoApprovalJobUncheckedUpdateManyWithoutDeanNestedInput
     lecturerProfile?: LecturerUncheckedUpdateOneWithoutUserNestedInput
   }
@@ -60768,6 +61125,7 @@ export namespace Prisma {
     approvedPosts?: PostUpdateManyWithoutApprovedByNestedInput
     createdDisbursements?: FundingDisbursementUpdateManyWithoutCreatedByNestedInput
     approvedDisbursements?: FundingDisbursementUpdateManyWithoutApprovedByNestedInput
+    paidDisbursements?: FundingDisbursementUpdateManyWithoutPaidByNestedInput
     autoApprovalJobs?: AutoApprovalJobUpdateManyWithoutDeanNestedInput
     lecturerProfile?: LecturerUpdateOneWithoutUserNestedInput
   }
@@ -60805,6 +61163,7 @@ export namespace Prisma {
     approvedPosts?: PostUncheckedUpdateManyWithoutApprovedByNestedInput
     createdDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutCreatedByNestedInput
     approvedDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutApprovedByNestedInput
+    paidDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutPaidByNestedInput
     autoApprovalJobs?: AutoApprovalJobUncheckedUpdateManyWithoutDeanNestedInput
     lecturerProfile?: LecturerUncheckedUpdateOneWithoutUserNestedInput
   }
@@ -61124,6 +61483,7 @@ export namespace Prisma {
     approvedPosts?: PostUpdateManyWithoutApprovedByNestedInput
     createdDisbursements?: FundingDisbursementUpdateManyWithoutCreatedByNestedInput
     approvedDisbursements?: FundingDisbursementUpdateManyWithoutApprovedByNestedInput
+    paidDisbursements?: FundingDisbursementUpdateManyWithoutPaidByNestedInput
     autoApprovalJobs?: AutoApprovalJobUpdateManyWithoutDeanNestedInput
     lecturerProfile?: LecturerUpdateOneWithoutUserNestedInput
   }
@@ -61161,6 +61521,7 @@ export namespace Prisma {
     approvedPosts?: PostUncheckedUpdateManyWithoutApprovedByNestedInput
     createdDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutCreatedByNestedInput
     approvedDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutApprovedByNestedInput
+    paidDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutPaidByNestedInput
     autoApprovalJobs?: AutoApprovalJobUncheckedUpdateManyWithoutDeanNestedInput
     lecturerProfile?: LecturerUncheckedUpdateOneWithoutUserNestedInput
   }
@@ -61751,6 +62112,7 @@ export namespace Prisma {
     approvedPosts?: PostCreateNestedManyWithoutApprovedByInput
     createdDisbursements?: FundingDisbursementCreateNestedManyWithoutCreatedByInput
     approvedDisbursements?: FundingDisbursementCreateNestedManyWithoutApprovedByInput
+    paidDisbursements?: FundingDisbursementCreateNestedManyWithoutPaidByInput
     autoApprovalJobs?: AutoApprovalJobCreateNestedManyWithoutDeanInput
     lecturerProfile?: LecturerCreateNestedOneWithoutUserInput
   }
@@ -61788,6 +62150,7 @@ export namespace Prisma {
     approvedPosts?: PostUncheckedCreateNestedManyWithoutApprovedByInput
     createdDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutCreatedByInput
     approvedDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutApprovedByInput
+    paidDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutPaidByInput
     autoApprovalJobs?: AutoApprovalJobUncheckedCreateNestedManyWithoutDeanInput
     lecturerProfile?: LecturerUncheckedCreateNestedOneWithoutUserInput
   }
@@ -61904,6 +62267,7 @@ export namespace Prisma {
     approvedPosts?: PostUpdateManyWithoutApprovedByNestedInput
     createdDisbursements?: FundingDisbursementUpdateManyWithoutCreatedByNestedInput
     approvedDisbursements?: FundingDisbursementUpdateManyWithoutApprovedByNestedInput
+    paidDisbursements?: FundingDisbursementUpdateManyWithoutPaidByNestedInput
     autoApprovalJobs?: AutoApprovalJobUpdateManyWithoutDeanNestedInput
     lecturerProfile?: LecturerUpdateOneWithoutUserNestedInput
   }
@@ -61941,6 +62305,7 @@ export namespace Prisma {
     approvedPosts?: PostUncheckedUpdateManyWithoutApprovedByNestedInput
     createdDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutCreatedByNestedInput
     approvedDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutApprovedByNestedInput
+    paidDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutPaidByNestedInput
     autoApprovalJobs?: AutoApprovalJobUncheckedUpdateManyWithoutDeanNestedInput
     lecturerProfile?: LecturerUncheckedUpdateOneWithoutUserNestedInput
   }
@@ -61979,6 +62344,7 @@ export namespace Prisma {
     approvedPosts?: PostCreateNestedManyWithoutApprovedByInput
     createdDisbursements?: FundingDisbursementCreateNestedManyWithoutCreatedByInput
     approvedDisbursements?: FundingDisbursementCreateNestedManyWithoutApprovedByInput
+    paidDisbursements?: FundingDisbursementCreateNestedManyWithoutPaidByInput
     autoApprovalJobs?: AutoApprovalJobCreateNestedManyWithoutDeanInput
   }
 
@@ -62016,6 +62382,7 @@ export namespace Prisma {
     approvedPosts?: PostUncheckedCreateNestedManyWithoutApprovedByInput
     createdDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutCreatedByInput
     approvedDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutApprovedByInput
+    paidDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutPaidByInput
     autoApprovalJobs?: AutoApprovalJobUncheckedCreateNestedManyWithoutDeanInput
   }
 
@@ -62109,6 +62476,7 @@ export namespace Prisma {
     approvedPosts?: PostUpdateManyWithoutApprovedByNestedInput
     createdDisbursements?: FundingDisbursementUpdateManyWithoutCreatedByNestedInput
     approvedDisbursements?: FundingDisbursementUpdateManyWithoutApprovedByNestedInput
+    paidDisbursements?: FundingDisbursementUpdateManyWithoutPaidByNestedInput
     autoApprovalJobs?: AutoApprovalJobUpdateManyWithoutDeanNestedInput
   }
 
@@ -62146,6 +62514,7 @@ export namespace Prisma {
     approvedPosts?: PostUncheckedUpdateManyWithoutApprovedByNestedInput
     createdDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutCreatedByNestedInput
     approvedDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutApprovedByNestedInput
+    paidDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutPaidByNestedInput
     autoApprovalJobs?: AutoApprovalJobUncheckedUpdateManyWithoutDeanNestedInput
   }
 
@@ -62486,6 +62855,7 @@ export namespace Prisma {
     posts?: PostCreateNestedManyWithoutAuthorInput
     approvedPosts?: PostCreateNestedManyWithoutApprovedByInput
     approvedDisbursements?: FundingDisbursementCreateNestedManyWithoutApprovedByInput
+    paidDisbursements?: FundingDisbursementCreateNestedManyWithoutPaidByInput
     autoApprovalJobs?: AutoApprovalJobCreateNestedManyWithoutDeanInput
     lecturerProfile?: LecturerCreateNestedOneWithoutUserInput
   }
@@ -62523,6 +62893,7 @@ export namespace Prisma {
     posts?: PostUncheckedCreateNestedManyWithoutAuthorInput
     approvedPosts?: PostUncheckedCreateNestedManyWithoutApprovedByInput
     approvedDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutApprovedByInput
+    paidDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutPaidByInput
     autoApprovalJobs?: AutoApprovalJobUncheckedCreateNestedManyWithoutDeanInput
     lecturerProfile?: LecturerUncheckedCreateNestedOneWithoutUserInput
   }
@@ -62565,6 +62936,7 @@ export namespace Prisma {
     posts?: PostCreateNestedManyWithoutAuthorInput
     approvedPosts?: PostCreateNestedManyWithoutApprovedByInput
     createdDisbursements?: FundingDisbursementCreateNestedManyWithoutCreatedByInput
+    paidDisbursements?: FundingDisbursementCreateNestedManyWithoutPaidByInput
     autoApprovalJobs?: AutoApprovalJobCreateNestedManyWithoutDeanInput
     lecturerProfile?: LecturerCreateNestedOneWithoutUserInput
   }
@@ -62602,6 +62974,7 @@ export namespace Prisma {
     posts?: PostUncheckedCreateNestedManyWithoutAuthorInput
     approvedPosts?: PostUncheckedCreateNestedManyWithoutApprovedByInput
     createdDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutCreatedByInput
+    paidDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutPaidByInput
     autoApprovalJobs?: AutoApprovalJobUncheckedCreateNestedManyWithoutDeanInput
     lecturerProfile?: LecturerUncheckedCreateNestedOneWithoutUserInput
   }
@@ -62609,6 +62982,87 @@ export namespace Prisma {
   export type UserCreateOrConnectWithoutApprovedDisbursementsInput = {
     where: UserWhereUniqueInput
     create: XOR<UserCreateWithoutApprovedDisbursementsInput, UserUncheckedCreateWithoutApprovedDisbursementsInput>
+  }
+
+  export type UserCreateWithoutPaidDisbursementsInput = {
+    id?: string
+    code?: string | null
+    name: string
+    email: string
+    password?: string | null
+    dateOfBirth?: Date | string | null
+    gender?: $Enums.Gender | null
+    phone?: string | null
+    address?: string | null
+    role?: $Enums.Role
+    department?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    departmentRef?: DepartmentCreateNestedOneWithoutUsersInput
+    major?: MajorCreateNestedOneWithoutUsersInput
+    class?: ClassCreateNestedOneWithoutUsersInput
+    leadProjects?: ProjectCreateNestedManyWithoutLeaderInput
+    deanReviews?: ProjectCreateNestedManyWithoutDeanReviewerInput
+    councilEvaluations?: CouncilEvaluationCreateNestedManyWithoutCouncilMemberInput
+    registrations?: ProjectRegistrationCreateNestedManyWithoutUserInput
+    instructedRegistrations?: ProjectRegistrationCreateNestedManyWithoutInstructorInput
+    instructedProjects?: ProjectCreateNestedManyWithoutInstructorInput
+    facultyReviews?: ProjectRegistrationCreateNestedManyWithoutFacultyReviewerInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    callRoundInstructors?: CallRoundInstructorCreateNestedManyWithoutInstructorInput
+    callRoundCouncilMembers?: CallRoundCouncilMemberCreateNestedManyWithoutCouncilMemberInput
+    councilAssignments?: CouncilMemberAssignmentCreateNestedManyWithoutCouncilMemberInput
+    officeMeetingsAsInstructor?: OfficeMeetingCreateNestedManyWithoutInstructorInput
+    officeMeetingViews?: OfficeMeetingViewCreateNestedManyWithoutUserInput
+    posts?: PostCreateNestedManyWithoutAuthorInput
+    approvedPosts?: PostCreateNestedManyWithoutApprovedByInput
+    createdDisbursements?: FundingDisbursementCreateNestedManyWithoutCreatedByInput
+    approvedDisbursements?: FundingDisbursementCreateNestedManyWithoutApprovedByInput
+    autoApprovalJobs?: AutoApprovalJobCreateNestedManyWithoutDeanInput
+    lecturerProfile?: LecturerCreateNestedOneWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutPaidDisbursementsInput = {
+    id?: string
+    code?: string | null
+    name: string
+    email: string
+    password?: string | null
+    dateOfBirth?: Date | string | null
+    gender?: $Enums.Gender | null
+    phone?: string | null
+    address?: string | null
+    role?: $Enums.Role
+    department?: string | null
+    departmentId?: string | null
+    majorId?: string | null
+    classId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    leadProjects?: ProjectUncheckedCreateNestedManyWithoutLeaderInput
+    deanReviews?: ProjectUncheckedCreateNestedManyWithoutDeanReviewerInput
+    councilEvaluations?: CouncilEvaluationUncheckedCreateNestedManyWithoutCouncilMemberInput
+    registrations?: ProjectRegistrationUncheckedCreateNestedManyWithoutUserInput
+    instructedRegistrations?: ProjectRegistrationUncheckedCreateNestedManyWithoutInstructorInput
+    instructedProjects?: ProjectUncheckedCreateNestedManyWithoutInstructorInput
+    facultyReviews?: ProjectRegistrationUncheckedCreateNestedManyWithoutFacultyReviewerInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    callRoundInstructors?: CallRoundInstructorUncheckedCreateNestedManyWithoutInstructorInput
+    callRoundCouncilMembers?: CallRoundCouncilMemberUncheckedCreateNestedManyWithoutCouncilMemberInput
+    councilAssignments?: CouncilMemberAssignmentUncheckedCreateNestedManyWithoutCouncilMemberInput
+    officeMeetingsAsInstructor?: OfficeMeetingUncheckedCreateNestedManyWithoutInstructorInput
+    officeMeetingViews?: OfficeMeetingViewUncheckedCreateNestedManyWithoutUserInput
+    posts?: PostUncheckedCreateNestedManyWithoutAuthorInput
+    approvedPosts?: PostUncheckedCreateNestedManyWithoutApprovedByInput
+    createdDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutCreatedByInput
+    approvedDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutApprovedByInput
+    autoApprovalJobs?: AutoApprovalJobUncheckedCreateNestedManyWithoutDeanInput
+    lecturerProfile?: LecturerUncheckedCreateNestedOneWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutPaidDisbursementsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutPaidDisbursementsInput, UserUncheckedCreateWithoutPaidDisbursementsInput>
   }
 
   export type ProjectUpsertWithoutDisbursementsInput = {
@@ -62718,6 +63172,7 @@ export namespace Prisma {
     posts?: PostUpdateManyWithoutAuthorNestedInput
     approvedPosts?: PostUpdateManyWithoutApprovedByNestedInput
     approvedDisbursements?: FundingDisbursementUpdateManyWithoutApprovedByNestedInput
+    paidDisbursements?: FundingDisbursementUpdateManyWithoutPaidByNestedInput
     autoApprovalJobs?: AutoApprovalJobUpdateManyWithoutDeanNestedInput
     lecturerProfile?: LecturerUpdateOneWithoutUserNestedInput
   }
@@ -62755,6 +63210,7 @@ export namespace Prisma {
     posts?: PostUncheckedUpdateManyWithoutAuthorNestedInput
     approvedPosts?: PostUncheckedUpdateManyWithoutApprovedByNestedInput
     approvedDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutApprovedByNestedInput
+    paidDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutPaidByNestedInput
     autoApprovalJobs?: AutoApprovalJobUncheckedUpdateManyWithoutDeanNestedInput
     lecturerProfile?: LecturerUncheckedUpdateOneWithoutUserNestedInput
   }
@@ -62803,6 +63259,7 @@ export namespace Prisma {
     posts?: PostUpdateManyWithoutAuthorNestedInput
     approvedPosts?: PostUpdateManyWithoutApprovedByNestedInput
     createdDisbursements?: FundingDisbursementUpdateManyWithoutCreatedByNestedInput
+    paidDisbursements?: FundingDisbursementUpdateManyWithoutPaidByNestedInput
     autoApprovalJobs?: AutoApprovalJobUpdateManyWithoutDeanNestedInput
     lecturerProfile?: LecturerUpdateOneWithoutUserNestedInput
   }
@@ -62840,6 +63297,94 @@ export namespace Prisma {
     posts?: PostUncheckedUpdateManyWithoutAuthorNestedInput
     approvedPosts?: PostUncheckedUpdateManyWithoutApprovedByNestedInput
     createdDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutCreatedByNestedInput
+    paidDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutPaidByNestedInput
+    autoApprovalJobs?: AutoApprovalJobUncheckedUpdateManyWithoutDeanNestedInput
+    lecturerProfile?: LecturerUncheckedUpdateOneWithoutUserNestedInput
+  }
+
+  export type UserUpsertWithoutPaidDisbursementsInput = {
+    update: XOR<UserUpdateWithoutPaidDisbursementsInput, UserUncheckedUpdateWithoutPaidDisbursementsInput>
+    create: XOR<UserCreateWithoutPaidDisbursementsInput, UserUncheckedCreateWithoutPaidDisbursementsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutPaidDisbursementsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutPaidDisbursementsInput, UserUncheckedUpdateWithoutPaidDisbursementsInput>
+  }
+
+  export type UserUpdateWithoutPaidDisbursementsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    departmentRef?: DepartmentUpdateOneWithoutUsersNestedInput
+    major?: MajorUpdateOneWithoutUsersNestedInput
+    class?: ClassUpdateOneWithoutUsersNestedInput
+    leadProjects?: ProjectUpdateManyWithoutLeaderNestedInput
+    deanReviews?: ProjectUpdateManyWithoutDeanReviewerNestedInput
+    councilEvaluations?: CouncilEvaluationUpdateManyWithoutCouncilMemberNestedInput
+    registrations?: ProjectRegistrationUpdateManyWithoutUserNestedInput
+    instructedRegistrations?: ProjectRegistrationUpdateManyWithoutInstructorNestedInput
+    instructedProjects?: ProjectUpdateManyWithoutInstructorNestedInput
+    facultyReviews?: ProjectRegistrationUpdateManyWithoutFacultyReviewerNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    callRoundInstructors?: CallRoundInstructorUpdateManyWithoutInstructorNestedInput
+    callRoundCouncilMembers?: CallRoundCouncilMemberUpdateManyWithoutCouncilMemberNestedInput
+    councilAssignments?: CouncilMemberAssignmentUpdateManyWithoutCouncilMemberNestedInput
+    officeMeetingsAsInstructor?: OfficeMeetingUpdateManyWithoutInstructorNestedInput
+    officeMeetingViews?: OfficeMeetingViewUpdateManyWithoutUserNestedInput
+    posts?: PostUpdateManyWithoutAuthorNestedInput
+    approvedPosts?: PostUpdateManyWithoutApprovedByNestedInput
+    createdDisbursements?: FundingDisbursementUpdateManyWithoutCreatedByNestedInput
+    approvedDisbursements?: FundingDisbursementUpdateManyWithoutApprovedByNestedInput
+    autoApprovalJobs?: AutoApprovalJobUpdateManyWithoutDeanNestedInput
+    lecturerProfile?: LecturerUpdateOneWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutPaidDisbursementsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    departmentId?: NullableStringFieldUpdateOperationsInput | string | null
+    majorId?: NullableStringFieldUpdateOperationsInput | string | null
+    classId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    leadProjects?: ProjectUncheckedUpdateManyWithoutLeaderNestedInput
+    deanReviews?: ProjectUncheckedUpdateManyWithoutDeanReviewerNestedInput
+    councilEvaluations?: CouncilEvaluationUncheckedUpdateManyWithoutCouncilMemberNestedInput
+    registrations?: ProjectRegistrationUncheckedUpdateManyWithoutUserNestedInput
+    instructedRegistrations?: ProjectRegistrationUncheckedUpdateManyWithoutInstructorNestedInput
+    instructedProjects?: ProjectUncheckedUpdateManyWithoutInstructorNestedInput
+    facultyReviews?: ProjectRegistrationUncheckedUpdateManyWithoutFacultyReviewerNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    callRoundInstructors?: CallRoundInstructorUncheckedUpdateManyWithoutInstructorNestedInput
+    callRoundCouncilMembers?: CallRoundCouncilMemberUncheckedUpdateManyWithoutCouncilMemberNestedInput
+    councilAssignments?: CouncilMemberAssignmentUncheckedUpdateManyWithoutCouncilMemberNestedInput
+    officeMeetingsAsInstructor?: OfficeMeetingUncheckedUpdateManyWithoutInstructorNestedInput
+    officeMeetingViews?: OfficeMeetingViewUncheckedUpdateManyWithoutUserNestedInput
+    posts?: PostUncheckedUpdateManyWithoutAuthorNestedInput
+    approvedPosts?: PostUncheckedUpdateManyWithoutApprovedByNestedInput
+    createdDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutCreatedByNestedInput
+    approvedDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutApprovedByNestedInput
     autoApprovalJobs?: AutoApprovalJobUncheckedUpdateManyWithoutDeanNestedInput
     lecturerProfile?: LecturerUncheckedUpdateOneWithoutUserNestedInput
   }
@@ -62997,6 +63542,7 @@ export namespace Prisma {
     approvedPosts?: PostCreateNestedManyWithoutApprovedByInput
     createdDisbursements?: FundingDisbursementCreateNestedManyWithoutCreatedByInput
     approvedDisbursements?: FundingDisbursementCreateNestedManyWithoutApprovedByInput
+    paidDisbursements?: FundingDisbursementCreateNestedManyWithoutPaidByInput
     autoApprovalJobs?: AutoApprovalJobCreateNestedManyWithoutDeanInput
     lecturerProfile?: LecturerCreateNestedOneWithoutUserInput
   }
@@ -63034,6 +63580,7 @@ export namespace Prisma {
     approvedPosts?: PostUncheckedCreateNestedManyWithoutApprovedByInput
     createdDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutCreatedByInput
     approvedDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutApprovedByInput
+    paidDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutPaidByInput
     autoApprovalJobs?: AutoApprovalJobUncheckedCreateNestedManyWithoutDeanInput
     lecturerProfile?: LecturerUncheckedCreateNestedOneWithoutUserInput
   }
@@ -63076,6 +63623,7 @@ export namespace Prisma {
     approvedPosts?: PostCreateNestedManyWithoutApprovedByInput
     createdDisbursements?: FundingDisbursementCreateNestedManyWithoutCreatedByInput
     approvedDisbursements?: FundingDisbursementCreateNestedManyWithoutApprovedByInput
+    paidDisbursements?: FundingDisbursementCreateNestedManyWithoutPaidByInput
     autoApprovalJobs?: AutoApprovalJobCreateNestedManyWithoutDeanInput
     lecturerProfile?: LecturerCreateNestedOneWithoutUserInput
   }
@@ -63113,6 +63661,7 @@ export namespace Prisma {
     approvedPosts?: PostUncheckedCreateNestedManyWithoutApprovedByInput
     createdDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutCreatedByInput
     approvedDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutApprovedByInput
+    paidDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutPaidByInput
     autoApprovalJobs?: AutoApprovalJobUncheckedCreateNestedManyWithoutDeanInput
     lecturerProfile?: LecturerUncheckedCreateNestedOneWithoutUserInput
   }
@@ -63244,6 +63793,7 @@ export namespace Prisma {
     approvedPosts?: PostCreateNestedManyWithoutApprovedByInput
     createdDisbursements?: FundingDisbursementCreateNestedManyWithoutCreatedByInput
     approvedDisbursements?: FundingDisbursementCreateNestedManyWithoutApprovedByInput
+    paidDisbursements?: FundingDisbursementCreateNestedManyWithoutPaidByInput
     autoApprovalJobs?: AutoApprovalJobCreateNestedManyWithoutDeanInput
     lecturerProfile?: LecturerCreateNestedOneWithoutUserInput
   }
@@ -63281,6 +63831,7 @@ export namespace Prisma {
     approvedPosts?: PostUncheckedCreateNestedManyWithoutApprovedByInput
     createdDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutCreatedByInput
     approvedDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutApprovedByInput
+    paidDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutPaidByInput
     autoApprovalJobs?: AutoApprovalJobUncheckedCreateNestedManyWithoutDeanInput
     lecturerProfile?: LecturerUncheckedCreateNestedOneWithoutUserInput
   }
@@ -63351,6 +63902,7 @@ export namespace Prisma {
     approvedPosts?: PostUpdateManyWithoutApprovedByNestedInput
     createdDisbursements?: FundingDisbursementUpdateManyWithoutCreatedByNestedInput
     approvedDisbursements?: FundingDisbursementUpdateManyWithoutApprovedByNestedInput
+    paidDisbursements?: FundingDisbursementUpdateManyWithoutPaidByNestedInput
     autoApprovalJobs?: AutoApprovalJobUpdateManyWithoutDeanNestedInput
     lecturerProfile?: LecturerUpdateOneWithoutUserNestedInput
   }
@@ -63388,6 +63940,7 @@ export namespace Prisma {
     approvedPosts?: PostUncheckedUpdateManyWithoutApprovedByNestedInput
     createdDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutCreatedByNestedInput
     approvedDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutApprovedByNestedInput
+    paidDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutPaidByNestedInput
     autoApprovalJobs?: AutoApprovalJobUncheckedUpdateManyWithoutDeanNestedInput
     lecturerProfile?: LecturerUncheckedUpdateOneWithoutUserNestedInput
   }
@@ -63436,6 +63989,7 @@ export namespace Prisma {
     approvedPosts?: PostUpdateManyWithoutApprovedByNestedInput
     createdDisbursements?: FundingDisbursementUpdateManyWithoutCreatedByNestedInput
     approvedDisbursements?: FundingDisbursementUpdateManyWithoutApprovedByNestedInput
+    paidDisbursements?: FundingDisbursementUpdateManyWithoutPaidByNestedInput
     autoApprovalJobs?: AutoApprovalJobUpdateManyWithoutDeanNestedInput
     lecturerProfile?: LecturerUpdateOneWithoutUserNestedInput
   }
@@ -63473,6 +64027,7 @@ export namespace Prisma {
     approvedPosts?: PostUncheckedUpdateManyWithoutApprovedByNestedInput
     createdDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutCreatedByNestedInput
     approvedDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutApprovedByNestedInput
+    paidDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutPaidByNestedInput
     autoApprovalJobs?: AutoApprovalJobUncheckedUpdateManyWithoutDeanNestedInput
     lecturerProfile?: LecturerUncheckedUpdateOneWithoutUserNestedInput
   }
@@ -63616,6 +64171,7 @@ export namespace Prisma {
     approvedPosts?: PostUpdateManyWithoutApprovedByNestedInput
     createdDisbursements?: FundingDisbursementUpdateManyWithoutCreatedByNestedInput
     approvedDisbursements?: FundingDisbursementUpdateManyWithoutApprovedByNestedInput
+    paidDisbursements?: FundingDisbursementUpdateManyWithoutPaidByNestedInput
     autoApprovalJobs?: AutoApprovalJobUpdateManyWithoutDeanNestedInput
     lecturerProfile?: LecturerUpdateOneWithoutUserNestedInput
   }
@@ -63653,6 +64209,7 @@ export namespace Prisma {
     approvedPosts?: PostUncheckedUpdateManyWithoutApprovedByNestedInput
     createdDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutCreatedByNestedInput
     approvedDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutApprovedByNestedInput
+    paidDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutPaidByNestedInput
     autoApprovalJobs?: AutoApprovalJobUncheckedUpdateManyWithoutDeanNestedInput
     lecturerProfile?: LecturerUncheckedUpdateOneWithoutUserNestedInput
   }
@@ -63713,6 +64270,7 @@ export namespace Prisma {
     approvedPosts?: PostCreateNestedManyWithoutApprovedByInput
     createdDisbursements?: FundingDisbursementCreateNestedManyWithoutCreatedByInput
     approvedDisbursements?: FundingDisbursementCreateNestedManyWithoutApprovedByInput
+    paidDisbursements?: FundingDisbursementCreateNestedManyWithoutPaidByInput
     autoApprovalJobs?: AutoApprovalJobCreateNestedManyWithoutDeanInput
     lecturerProfile?: LecturerCreateNestedOneWithoutUserInput
   }
@@ -63750,6 +64308,7 @@ export namespace Prisma {
     approvedPosts?: PostUncheckedCreateNestedManyWithoutApprovedByInput
     createdDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutCreatedByInput
     approvedDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutApprovedByInput
+    paidDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutPaidByInput
     autoApprovalJobs?: AutoApprovalJobUncheckedCreateNestedManyWithoutDeanInput
     lecturerProfile?: LecturerUncheckedCreateNestedOneWithoutUserInput
   }
@@ -63803,6 +64362,7 @@ export namespace Prisma {
     approvedPosts?: PostUpdateManyWithoutApprovedByNestedInput
     createdDisbursements?: FundingDisbursementUpdateManyWithoutCreatedByNestedInput
     approvedDisbursements?: FundingDisbursementUpdateManyWithoutApprovedByNestedInput
+    paidDisbursements?: FundingDisbursementUpdateManyWithoutPaidByNestedInput
     autoApprovalJobs?: AutoApprovalJobUpdateManyWithoutDeanNestedInput
     lecturerProfile?: LecturerUpdateOneWithoutUserNestedInput
   }
@@ -63840,6 +64400,7 @@ export namespace Prisma {
     approvedPosts?: PostUncheckedUpdateManyWithoutApprovedByNestedInput
     createdDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutCreatedByNestedInput
     approvedDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutApprovedByNestedInput
+    paidDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutPaidByNestedInput
     autoApprovalJobs?: AutoApprovalJobUncheckedUpdateManyWithoutDeanNestedInput
     lecturerProfile?: LecturerUncheckedUpdateOneWithoutUserNestedInput
   }
@@ -63877,6 +64438,7 @@ export namespace Prisma {
     approvedPosts?: PostCreateNestedManyWithoutApprovedByInput
     createdDisbursements?: FundingDisbursementCreateNestedManyWithoutCreatedByInput
     approvedDisbursements?: FundingDisbursementCreateNestedManyWithoutApprovedByInput
+    paidDisbursements?: FundingDisbursementCreateNestedManyWithoutPaidByInput
     autoApprovalJobs?: AutoApprovalJobCreateNestedManyWithoutDeanInput
     lecturerProfile?: LecturerCreateNestedOneWithoutUserInput
   }
@@ -63914,6 +64476,7 @@ export namespace Prisma {
     approvedPosts?: PostUncheckedCreateNestedManyWithoutApprovedByInput
     createdDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutCreatedByInput
     approvedDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutApprovedByInput
+    paidDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutPaidByInput
     autoApprovalJobs?: AutoApprovalJobUncheckedCreateNestedManyWithoutDeanInput
     lecturerProfile?: LecturerUncheckedCreateNestedOneWithoutUserInput
   }
@@ -63987,6 +64550,7 @@ export namespace Prisma {
     posts?: PostCreateNestedManyWithoutAuthorInput
     createdDisbursements?: FundingDisbursementCreateNestedManyWithoutCreatedByInput
     approvedDisbursements?: FundingDisbursementCreateNestedManyWithoutApprovedByInput
+    paidDisbursements?: FundingDisbursementCreateNestedManyWithoutPaidByInput
     autoApprovalJobs?: AutoApprovalJobCreateNestedManyWithoutDeanInput
     lecturerProfile?: LecturerCreateNestedOneWithoutUserInput
   }
@@ -64024,6 +64588,7 @@ export namespace Prisma {
     posts?: PostUncheckedCreateNestedManyWithoutAuthorInput
     createdDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutCreatedByInput
     approvedDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutApprovedByInput
+    paidDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutPaidByInput
     autoApprovalJobs?: AutoApprovalJobUncheckedCreateNestedManyWithoutDeanInput
     lecturerProfile?: LecturerUncheckedCreateNestedOneWithoutUserInput
   }
@@ -64077,6 +64642,7 @@ export namespace Prisma {
     approvedPosts?: PostUpdateManyWithoutApprovedByNestedInput
     createdDisbursements?: FundingDisbursementUpdateManyWithoutCreatedByNestedInput
     approvedDisbursements?: FundingDisbursementUpdateManyWithoutApprovedByNestedInput
+    paidDisbursements?: FundingDisbursementUpdateManyWithoutPaidByNestedInput
     autoApprovalJobs?: AutoApprovalJobUpdateManyWithoutDeanNestedInput
     lecturerProfile?: LecturerUpdateOneWithoutUserNestedInput
   }
@@ -64114,6 +64680,7 @@ export namespace Prisma {
     approvedPosts?: PostUncheckedUpdateManyWithoutApprovedByNestedInput
     createdDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutCreatedByNestedInput
     approvedDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutApprovedByNestedInput
+    paidDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutPaidByNestedInput
     autoApprovalJobs?: AutoApprovalJobUncheckedUpdateManyWithoutDeanNestedInput
     lecturerProfile?: LecturerUncheckedUpdateOneWithoutUserNestedInput
   }
@@ -64199,6 +64766,7 @@ export namespace Prisma {
     posts?: PostUpdateManyWithoutAuthorNestedInput
     createdDisbursements?: FundingDisbursementUpdateManyWithoutCreatedByNestedInput
     approvedDisbursements?: FundingDisbursementUpdateManyWithoutApprovedByNestedInput
+    paidDisbursements?: FundingDisbursementUpdateManyWithoutPaidByNestedInput
     autoApprovalJobs?: AutoApprovalJobUpdateManyWithoutDeanNestedInput
     lecturerProfile?: LecturerUpdateOneWithoutUserNestedInput
   }
@@ -64236,6 +64804,7 @@ export namespace Prisma {
     posts?: PostUncheckedUpdateManyWithoutAuthorNestedInput
     createdDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutCreatedByNestedInput
     approvedDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutApprovedByNestedInput
+    paidDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutPaidByNestedInput
     autoApprovalJobs?: AutoApprovalJobUncheckedUpdateManyWithoutDeanNestedInput
     lecturerProfile?: LecturerUncheckedUpdateOneWithoutUserNestedInput
   }
@@ -64452,6 +65021,7 @@ export namespace Prisma {
     approvedPosts?: PostCreateNestedManyWithoutApprovedByInput
     createdDisbursements?: FundingDisbursementCreateNestedManyWithoutCreatedByInput
     approvedDisbursements?: FundingDisbursementCreateNestedManyWithoutApprovedByInput
+    paidDisbursements?: FundingDisbursementCreateNestedManyWithoutPaidByInput
     autoApprovalJobs?: AutoApprovalJobCreateNestedManyWithoutDeanInput
     lecturerProfile?: LecturerCreateNestedOneWithoutUserInput
   }
@@ -64489,6 +65059,7 @@ export namespace Prisma {
     approvedPosts?: PostUncheckedCreateNestedManyWithoutApprovedByInput
     createdDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutCreatedByInput
     approvedDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutApprovedByInput
+    paidDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutPaidByInput
     autoApprovalJobs?: AutoApprovalJobUncheckedCreateNestedManyWithoutDeanInput
     lecturerProfile?: LecturerUncheckedCreateNestedOneWithoutUserInput
   }
@@ -64658,6 +65229,7 @@ export namespace Prisma {
     approvedPosts?: PostUpdateManyWithoutApprovedByNestedInput
     createdDisbursements?: FundingDisbursementUpdateManyWithoutCreatedByNestedInput
     approvedDisbursements?: FundingDisbursementUpdateManyWithoutApprovedByNestedInput
+    paidDisbursements?: FundingDisbursementUpdateManyWithoutPaidByNestedInput
     autoApprovalJobs?: AutoApprovalJobUpdateManyWithoutDeanNestedInput
     lecturerProfile?: LecturerUpdateOneWithoutUserNestedInput
   }
@@ -64695,6 +65267,7 @@ export namespace Prisma {
     approvedPosts?: PostUncheckedUpdateManyWithoutApprovedByNestedInput
     createdDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutCreatedByNestedInput
     approvedDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutApprovedByNestedInput
+    paidDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutPaidByNestedInput
     autoApprovalJobs?: AutoApprovalJobUncheckedUpdateManyWithoutDeanNestedInput
     lecturerProfile?: LecturerUncheckedUpdateOneWithoutUserNestedInput
   }
@@ -64816,6 +65389,7 @@ export namespace Prisma {
     approvedPosts?: PostCreateNestedManyWithoutApprovedByInput
     createdDisbursements?: FundingDisbursementCreateNestedManyWithoutCreatedByInput
     approvedDisbursements?: FundingDisbursementCreateNestedManyWithoutApprovedByInput
+    paidDisbursements?: FundingDisbursementCreateNestedManyWithoutPaidByInput
     autoApprovalJobs?: AutoApprovalJobCreateNestedManyWithoutDeanInput
     lecturerProfile?: LecturerCreateNestedOneWithoutUserInput
   }
@@ -64853,6 +65427,7 @@ export namespace Prisma {
     approvedPosts?: PostUncheckedCreateNestedManyWithoutApprovedByInput
     createdDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutCreatedByInput
     approvedDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutApprovedByInput
+    paidDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutPaidByInput
     autoApprovalJobs?: AutoApprovalJobUncheckedCreateNestedManyWithoutDeanInput
     lecturerProfile?: LecturerUncheckedCreateNestedOneWithoutUserInput
   }
@@ -64945,6 +65520,7 @@ export namespace Prisma {
     approvedPosts?: PostUpdateManyWithoutApprovedByNestedInput
     createdDisbursements?: FundingDisbursementUpdateManyWithoutCreatedByNestedInput
     approvedDisbursements?: FundingDisbursementUpdateManyWithoutApprovedByNestedInput
+    paidDisbursements?: FundingDisbursementUpdateManyWithoutPaidByNestedInput
     autoApprovalJobs?: AutoApprovalJobUpdateManyWithoutDeanNestedInput
     lecturerProfile?: LecturerUpdateOneWithoutUserNestedInput
   }
@@ -64982,6 +65558,7 @@ export namespace Prisma {
     approvedPosts?: PostUncheckedUpdateManyWithoutApprovedByNestedInput
     createdDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutCreatedByNestedInput
     approvedDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutApprovedByNestedInput
+    paidDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutPaidByNestedInput
     autoApprovalJobs?: AutoApprovalJobUncheckedUpdateManyWithoutDeanNestedInput
     lecturerProfile?: LecturerUncheckedUpdateOneWithoutUserNestedInput
   }
@@ -65108,6 +65685,7 @@ export namespace Prisma {
     approvedPosts?: PostCreateNestedManyWithoutApprovedByInput
     createdDisbursements?: FundingDisbursementCreateNestedManyWithoutCreatedByInput
     approvedDisbursements?: FundingDisbursementCreateNestedManyWithoutApprovedByInput
+    paidDisbursements?: FundingDisbursementCreateNestedManyWithoutPaidByInput
     autoApprovalJobs?: AutoApprovalJobCreateNestedManyWithoutDeanInput
     lecturerProfile?: LecturerCreateNestedOneWithoutUserInput
   }
@@ -65145,6 +65723,7 @@ export namespace Prisma {
     approvedPosts?: PostUncheckedCreateNestedManyWithoutApprovedByInput
     createdDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutCreatedByInput
     approvedDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutApprovedByInput
+    paidDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutPaidByInput
     autoApprovalJobs?: AutoApprovalJobUncheckedCreateNestedManyWithoutDeanInput
     lecturerProfile?: LecturerUncheckedCreateNestedOneWithoutUserInput
   }
@@ -65293,6 +65872,7 @@ export namespace Prisma {
     approvedPosts?: PostUpdateManyWithoutApprovedByNestedInput
     createdDisbursements?: FundingDisbursementUpdateManyWithoutCreatedByNestedInput
     approvedDisbursements?: FundingDisbursementUpdateManyWithoutApprovedByNestedInput
+    paidDisbursements?: FundingDisbursementUpdateManyWithoutPaidByNestedInput
     autoApprovalJobs?: AutoApprovalJobUpdateManyWithoutDeanNestedInput
     lecturerProfile?: LecturerUpdateOneWithoutUserNestedInput
   }
@@ -65330,6 +65910,7 @@ export namespace Prisma {
     approvedPosts?: PostUncheckedUpdateManyWithoutApprovedByNestedInput
     createdDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutCreatedByNestedInput
     approvedDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutApprovedByNestedInput
+    paidDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutPaidByNestedInput
     autoApprovalJobs?: AutoApprovalJobUncheckedUpdateManyWithoutDeanNestedInput
     lecturerProfile?: LecturerUncheckedUpdateOneWithoutUserNestedInput
   }
@@ -65456,6 +66037,7 @@ export namespace Prisma {
     approvedPosts?: PostCreateNestedManyWithoutApprovedByInput
     createdDisbursements?: FundingDisbursementCreateNestedManyWithoutCreatedByInput
     approvedDisbursements?: FundingDisbursementCreateNestedManyWithoutApprovedByInput
+    paidDisbursements?: FundingDisbursementCreateNestedManyWithoutPaidByInput
     autoApprovalJobs?: AutoApprovalJobCreateNestedManyWithoutDeanInput
     lecturerProfile?: LecturerCreateNestedOneWithoutUserInput
   }
@@ -65493,6 +66075,7 @@ export namespace Prisma {
     approvedPosts?: PostUncheckedCreateNestedManyWithoutApprovedByInput
     createdDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutCreatedByInput
     approvedDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutApprovedByInput
+    paidDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutPaidByInput
     autoApprovalJobs?: AutoApprovalJobUncheckedCreateNestedManyWithoutDeanInput
     lecturerProfile?: LecturerUncheckedCreateNestedOneWithoutUserInput
   }
@@ -65641,6 +66224,7 @@ export namespace Prisma {
     approvedPosts?: PostUpdateManyWithoutApprovedByNestedInput
     createdDisbursements?: FundingDisbursementUpdateManyWithoutCreatedByNestedInput
     approvedDisbursements?: FundingDisbursementUpdateManyWithoutApprovedByNestedInput
+    paidDisbursements?: FundingDisbursementUpdateManyWithoutPaidByNestedInput
     autoApprovalJobs?: AutoApprovalJobUpdateManyWithoutDeanNestedInput
     lecturerProfile?: LecturerUpdateOneWithoutUserNestedInput
   }
@@ -65678,6 +66262,7 @@ export namespace Prisma {
     approvedPosts?: PostUncheckedUpdateManyWithoutApprovedByNestedInput
     createdDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutCreatedByNestedInput
     approvedDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutApprovedByNestedInput
+    paidDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutPaidByNestedInput
     autoApprovalJobs?: AutoApprovalJobUncheckedUpdateManyWithoutDeanNestedInput
     lecturerProfile?: LecturerUncheckedUpdateOneWithoutUserNestedInput
   }
@@ -65988,6 +66573,7 @@ export namespace Prisma {
     approvedPosts?: PostCreateNestedManyWithoutApprovedByInput
     createdDisbursements?: FundingDisbursementCreateNestedManyWithoutCreatedByInput
     approvedDisbursements?: FundingDisbursementCreateNestedManyWithoutApprovedByInput
+    paidDisbursements?: FundingDisbursementCreateNestedManyWithoutPaidByInput
     lecturerProfile?: LecturerCreateNestedOneWithoutUserInput
   }
 
@@ -66025,6 +66611,7 @@ export namespace Prisma {
     approvedPosts?: PostUncheckedCreateNestedManyWithoutApprovedByInput
     createdDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutCreatedByInput
     approvedDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutApprovedByInput
+    paidDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutPaidByInput
     lecturerProfile?: LecturerUncheckedCreateNestedOneWithoutUserInput
   }
 
@@ -66078,6 +66665,7 @@ export namespace Prisma {
     approvedPosts?: PostUpdateManyWithoutApprovedByNestedInput
     createdDisbursements?: FundingDisbursementUpdateManyWithoutCreatedByNestedInput
     approvedDisbursements?: FundingDisbursementUpdateManyWithoutApprovedByNestedInput
+    paidDisbursements?: FundingDisbursementUpdateManyWithoutPaidByNestedInput
     lecturerProfile?: LecturerUpdateOneWithoutUserNestedInput
   }
 
@@ -66115,6 +66703,7 @@ export namespace Prisma {
     approvedPosts?: PostUncheckedUpdateManyWithoutApprovedByNestedInput
     createdDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutCreatedByNestedInput
     approvedDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutApprovedByNestedInput
+    paidDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutPaidByNestedInput
     lecturerProfile?: LecturerUncheckedUpdateOneWithoutUserNestedInput
   }
 
@@ -66321,6 +66910,7 @@ export namespace Prisma {
     approvedPosts?: PostCreateNestedManyWithoutApprovedByInput
     createdDisbursements?: FundingDisbursementCreateNestedManyWithoutCreatedByInput
     approvedDisbursements?: FundingDisbursementCreateNestedManyWithoutApprovedByInput
+    paidDisbursements?: FundingDisbursementCreateNestedManyWithoutPaidByInput
     autoApprovalJobs?: AutoApprovalJobCreateNestedManyWithoutDeanInput
     lecturerProfile?: LecturerCreateNestedOneWithoutUserInput
   }
@@ -66358,6 +66948,7 @@ export namespace Prisma {
     approvedPosts?: PostUncheckedCreateNestedManyWithoutApprovedByInput
     createdDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutCreatedByInput
     approvedDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutApprovedByInput
+    paidDisbursements?: FundingDisbursementUncheckedCreateNestedManyWithoutPaidByInput
     autoApprovalJobs?: AutoApprovalJobUncheckedCreateNestedManyWithoutDeanInput
     lecturerProfile?: LecturerUncheckedCreateNestedOneWithoutUserInput
   }
@@ -66446,6 +67037,7 @@ export namespace Prisma {
     approvedPosts?: PostUpdateManyWithoutApprovedByNestedInput
     createdDisbursements?: FundingDisbursementUpdateManyWithoutCreatedByNestedInput
     approvedDisbursements?: FundingDisbursementUpdateManyWithoutApprovedByNestedInput
+    paidDisbursements?: FundingDisbursementUpdateManyWithoutPaidByNestedInput
     autoApprovalJobs?: AutoApprovalJobUpdateManyWithoutDeanNestedInput
     lecturerProfile?: LecturerUpdateOneWithoutUserNestedInput
   }
@@ -66483,6 +67075,7 @@ export namespace Prisma {
     approvedPosts?: PostUncheckedUpdateManyWithoutApprovedByNestedInput
     createdDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutCreatedByNestedInput
     approvedDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutApprovedByNestedInput
+    paidDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutPaidByNestedInput
     autoApprovalJobs?: AutoApprovalJobUncheckedUpdateManyWithoutDeanNestedInput
     lecturerProfile?: LecturerUncheckedUpdateOneWithoutUserNestedInput
   }
@@ -66947,6 +67540,7 @@ export namespace Prisma {
     approvedPosts?: PostUpdateManyWithoutApprovedByNestedInput
     createdDisbursements?: FundingDisbursementUpdateManyWithoutCreatedByNestedInput
     approvedDisbursements?: FundingDisbursementUpdateManyWithoutApprovedByNestedInput
+    paidDisbursements?: FundingDisbursementUpdateManyWithoutPaidByNestedInput
     autoApprovalJobs?: AutoApprovalJobUpdateManyWithoutDeanNestedInput
     lecturerProfile?: LecturerUpdateOneWithoutUserNestedInput
   }
@@ -66984,6 +67578,7 @@ export namespace Prisma {
     approvedPosts?: PostUncheckedUpdateManyWithoutApprovedByNestedInput
     createdDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutCreatedByNestedInput
     approvedDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutApprovedByNestedInput
+    paidDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutPaidByNestedInput
     autoApprovalJobs?: AutoApprovalJobUncheckedUpdateManyWithoutDeanNestedInput
     lecturerProfile?: LecturerUncheckedUpdateOneWithoutUserNestedInput
   }
@@ -67294,6 +67889,7 @@ export namespace Prisma {
     approvedPosts?: PostUpdateManyWithoutApprovedByNestedInput
     createdDisbursements?: FundingDisbursementUpdateManyWithoutCreatedByNestedInput
     approvedDisbursements?: FundingDisbursementUpdateManyWithoutApprovedByNestedInput
+    paidDisbursements?: FundingDisbursementUpdateManyWithoutPaidByNestedInput
     autoApprovalJobs?: AutoApprovalJobUpdateManyWithoutDeanNestedInput
     lecturerProfile?: LecturerUpdateOneWithoutUserNestedInput
   }
@@ -67331,6 +67927,7 @@ export namespace Prisma {
     approvedPosts?: PostUncheckedUpdateManyWithoutApprovedByNestedInput
     createdDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutCreatedByNestedInput
     approvedDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutApprovedByNestedInput
+    paidDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutPaidByNestedInput
     autoApprovalJobs?: AutoApprovalJobUncheckedUpdateManyWithoutDeanNestedInput
     lecturerProfile?: LecturerUncheckedUpdateOneWithoutUserNestedInput
   }
@@ -67522,6 +68119,7 @@ export namespace Prisma {
     approvedPosts?: PostUpdateManyWithoutApprovedByNestedInput
     createdDisbursements?: FundingDisbursementUpdateManyWithoutCreatedByNestedInput
     approvedDisbursements?: FundingDisbursementUpdateManyWithoutApprovedByNestedInput
+    paidDisbursements?: FundingDisbursementUpdateManyWithoutPaidByNestedInput
     autoApprovalJobs?: AutoApprovalJobUpdateManyWithoutDeanNestedInput
     lecturerProfile?: LecturerUpdateOneWithoutUserNestedInput
   }
@@ -67559,6 +68157,7 @@ export namespace Prisma {
     approvedPosts?: PostUncheckedUpdateManyWithoutApprovedByNestedInput
     createdDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutCreatedByNestedInput
     approvedDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutApprovedByNestedInput
+    paidDisbursements?: FundingDisbursementUncheckedUpdateManyWithoutPaidByNestedInput
     autoApprovalJobs?: AutoApprovalJobUncheckedUpdateManyWithoutDeanNestedInput
     lecturerProfile?: LecturerUncheckedUpdateOneWithoutUserNestedInput
   }
@@ -67924,6 +68523,10 @@ export namespace Prisma {
     approvedById?: string | null
     approvedAt?: Date | string | null
     rejectionNote?: string | null
+    paymentVoucherUrl?: string | null
+    paidById?: string | null
+    paidAt?: Date | string | null
+    paymentNote?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -67940,6 +68543,30 @@ export namespace Prisma {
     createdById: string
     approvedAt?: Date | string | null
     rejectionNote?: string | null
+    paymentVoucherUrl?: string | null
+    paidById?: string | null
+    paidAt?: Date | string | null
+    paymentNote?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type FundingDisbursementCreateManyPaidByInput = {
+    id?: string
+    projectId: string
+    amount: Decimal | DecimalJsLike | number | string
+    disbursedAt: Date | string
+    voucherNo?: string | null
+    voucherFileUrl?: string | null
+    reason?: string | null
+    status?: $Enums.DisbursementStatus
+    createdById: string
+    approvedById?: string | null
+    approvedAt?: Date | string | null
+    rejectionNote?: string | null
+    paymentVoucherUrl?: string | null
+    paidAt?: Date | string | null
+    paymentNote?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -68650,10 +69277,14 @@ export namespace Prisma {
     status?: EnumDisbursementStatusFieldUpdateOperationsInput | $Enums.DisbursementStatus
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     rejectionNote?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentVoucherUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    paymentNote?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     project?: ProjectUpdateOneRequiredWithoutDisbursementsNestedInput
     approvedBy?: UserUpdateOneWithoutApprovedDisbursementsNestedInput
+    paidBy?: UserUpdateOneWithoutPaidDisbursementsNestedInput
   }
 
   export type FundingDisbursementUncheckedUpdateWithoutCreatedByInput = {
@@ -68668,6 +69299,10 @@ export namespace Prisma {
     approvedById?: NullableStringFieldUpdateOperationsInput | string | null
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     rejectionNote?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentVoucherUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    paidById?: NullableStringFieldUpdateOperationsInput | string | null
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    paymentNote?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -68684,6 +69319,10 @@ export namespace Prisma {
     approvedById?: NullableStringFieldUpdateOperationsInput | string | null
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     rejectionNote?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentVoucherUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    paidById?: NullableStringFieldUpdateOperationsInput | string | null
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    paymentNote?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -68698,10 +69337,14 @@ export namespace Prisma {
     status?: EnumDisbursementStatusFieldUpdateOperationsInput | $Enums.DisbursementStatus
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     rejectionNote?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentVoucherUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    paymentNote?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     project?: ProjectUpdateOneRequiredWithoutDisbursementsNestedInput
     createdBy?: UserUpdateOneRequiredWithoutCreatedDisbursementsNestedInput
+    paidBy?: UserUpdateOneWithoutPaidDisbursementsNestedInput
   }
 
   export type FundingDisbursementUncheckedUpdateWithoutApprovedByInput = {
@@ -68716,6 +69359,10 @@ export namespace Prisma {
     createdById?: StringFieldUpdateOperationsInput | string
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     rejectionNote?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentVoucherUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    paidById?: NullableStringFieldUpdateOperationsInput | string | null
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    paymentNote?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -68732,6 +69379,70 @@ export namespace Prisma {
     createdById?: StringFieldUpdateOperationsInput | string
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     rejectionNote?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentVoucherUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    paidById?: NullableStringFieldUpdateOperationsInput | string | null
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    paymentNote?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FundingDisbursementUpdateWithoutPaidByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    disbursedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    voucherNo?: NullableStringFieldUpdateOperationsInput | string | null
+    voucherFileUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumDisbursementStatusFieldUpdateOperationsInput | $Enums.DisbursementStatus
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rejectionNote?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentVoucherUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    paymentNote?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    project?: ProjectUpdateOneRequiredWithoutDisbursementsNestedInput
+    createdBy?: UserUpdateOneRequiredWithoutCreatedDisbursementsNestedInput
+    approvedBy?: UserUpdateOneWithoutApprovedDisbursementsNestedInput
+  }
+
+  export type FundingDisbursementUncheckedUpdateWithoutPaidByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    projectId?: StringFieldUpdateOperationsInput | string
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    disbursedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    voucherNo?: NullableStringFieldUpdateOperationsInput | string | null
+    voucherFileUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumDisbursementStatusFieldUpdateOperationsInput | $Enums.DisbursementStatus
+    createdById?: StringFieldUpdateOperationsInput | string
+    approvedById?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rejectionNote?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentVoucherUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    paymentNote?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FundingDisbursementUncheckedUpdateManyWithoutPaidByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    projectId?: StringFieldUpdateOperationsInput | string
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    disbursedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    voucherNo?: NullableStringFieldUpdateOperationsInput | string | null
+    voucherFileUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumDisbursementStatusFieldUpdateOperationsInput | $Enums.DisbursementStatus
+    createdById?: StringFieldUpdateOperationsInput | string
+    approvedById?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rejectionNote?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentVoucherUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    paymentNote?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -69328,6 +70039,10 @@ export namespace Prisma {
     approvedById?: string | null
     approvedAt?: Date | string | null
     rejectionNote?: string | null
+    paymentVoucherUrl?: string | null
+    paidById?: string | null
+    paidAt?: Date | string | null
+    paymentNote?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -69453,10 +70168,14 @@ export namespace Prisma {
     status?: EnumDisbursementStatusFieldUpdateOperationsInput | $Enums.DisbursementStatus
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     rejectionNote?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentVoucherUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    paymentNote?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: UserUpdateOneRequiredWithoutCreatedDisbursementsNestedInput
     approvedBy?: UserUpdateOneWithoutApprovedDisbursementsNestedInput
+    paidBy?: UserUpdateOneWithoutPaidDisbursementsNestedInput
   }
 
   export type FundingDisbursementUncheckedUpdateWithoutProjectInput = {
@@ -69471,6 +70190,10 @@ export namespace Prisma {
     approvedById?: NullableStringFieldUpdateOperationsInput | string | null
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     rejectionNote?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentVoucherUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    paidById?: NullableStringFieldUpdateOperationsInput | string | null
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    paymentNote?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -69487,6 +70210,10 @@ export namespace Prisma {
     approvedById?: NullableStringFieldUpdateOperationsInput | string | null
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     rejectionNote?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentVoucherUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    paidById?: NullableStringFieldUpdateOperationsInput | string | null
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    paymentNote?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

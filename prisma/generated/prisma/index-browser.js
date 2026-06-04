@@ -382,6 +382,10 @@ exports.Prisma.FundingDisbursementScalarFieldEnum = {
   approvedById: 'approvedById',
   approvedAt: 'approvedAt',
   rejectionNote: 'rejectionNote',
+  paymentVoucherUrl: 'paymentVoucherUrl',
+  paidById: 'paidById',
+  paidAt: 'paidAt',
+  paymentNote: 'paymentNote',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -622,7 +626,8 @@ exports.Role = exports.$Enums.Role = {
   DEAN: 'DEAN',
   ADMIN: 'ADMIN',
   COUNCIL: 'COUNCIL',
-  LEADER: 'LEADER'
+  LEADER: 'LEADER',
+  DISBURSER: 'DISBURSER'
 };
 
 exports.ApplicableFor = exports.$Enums.ApplicableFor = {
@@ -693,7 +698,8 @@ exports.PublicationType = exports.$Enums.PublicationType = {
 exports.DisbursementStatus = exports.$Enums.DisbursementStatus = {
   PENDING: 'PENDING',
   APPROVED: 'APPROVED',
-  REJECTED: 'REJECTED'
+  REJECTED: 'REJECTED',
+  PAID: 'PAID'
 };
 
 exports.RequestStatus = exports.$Enums.RequestStatus = {

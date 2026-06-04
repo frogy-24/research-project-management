@@ -1,6 +1,6 @@
 // components/disbursements/disbursement-status-badge.tsx
 import { Badge } from '@/components/ui/badge';
-import { CheckCircle, Clock, XCircle } from 'lucide-react';
+import { Banknote, CheckCircle, Clock, XCircle } from 'lucide-react';
 import type { DisbursementStatus } from '@/types/disbursement.schema';
 
 interface DisbursementStatusBadgeProps {
@@ -27,6 +27,12 @@ export function DisbursementStatusBadge({ status, className }: DisbursementStatu
       variant: 'destructive' as const,
       icon: XCircle,
       className: 'bg-rose-100 text-rose-800 border-rose-300',
+    },
+    PAID: {
+      label: 'Đã thanh toán',
+      variant: 'default' as const,
+      icon: Banknote,
+      className: 'bg-blue-100 text-blue-800 border-blue-300',
     },
   };
 

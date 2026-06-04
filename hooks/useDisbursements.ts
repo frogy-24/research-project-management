@@ -7,6 +7,7 @@ import type {
   UpdateDisbursementInput,
   ApproveDisbursementInput,
   RejectDisbursementInput,
+  PayDisbursementInput,
 } from '@/types/disbursement.schema';
 import { toast } from 'sonner';
 
@@ -109,6 +110,23 @@ export function useRejectDisbursement() {
     },
     onError: (error: any) => {
       toast.error(error.response?.data?.message || 'Lỗi khi từ chối giải ngân');
+    },
+  });
+}
+
+export function usePayDisbursement() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ id, data }: { id: string; data: PayDisbursementInput }) =>
+      disbursementsApi.payDisbursement(id, data),
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({ queryKey: ['disbursements'] });
+      queryClient.invalidateQueries({ queryKey: ['disbursements', variables.id] });
+      toast.success('Xác nhận thanh toán giải ngân thành công');
+    },
+    onError: (error: any) => {
+      toast.error(error.response?.data?.message || 'Lỗi khi xác nhận thanh toán giải ngân');
     },
   });
 }

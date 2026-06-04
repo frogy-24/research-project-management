@@ -61,6 +61,8 @@ export function DisbursementListTable({ data, isLoading, pagination, onPageChang
         return 'Đã duyệt';
       case 'REJECTED':
         return 'Từ chối';
+      case 'PAID':
+        return 'Đã thanh toán';
       default:
         return status;
     }
@@ -94,6 +96,7 @@ export function DisbursementListTable({ data, isLoading, pagination, onPageChang
     ngayTao: formatDateTime(d.createdAt),
     ngayCapNhat: formatDateTime(d.updatedAt),
     tepChungTu: d.voucherFileUrl ?? '',
+    chungTuThanhToan: d.paymentVoucherUrl ?? '',
   }));
 
   const rows = toRows(data);
@@ -123,10 +126,10 @@ export function DisbursementListTable({ data, isLoading, pagination, onPageChang
     exportRows.forEach((r, i) => {
       r.stt = i + 1;
     });
-    const header = ['STT', 'Mã giải ngân', 'Mã đề tài', 'Tên đề tài', 'Đợt đăng ký', 'Ngân sách được duyệt (VNĐ)', 'Số tiền giải ngân (VNĐ)', 'Ngày giải ngân', 'Số chứng từ', 'Trạng thái', 'Lý do giải ngân', 'Người tạo', 'Email người tạo', 'Người duyệt', 'Email người duyệt', 'Thời gian duyệt', 'Ghi chú từ chối', 'Ngày tạo', 'Ngày cập nhật', 'Tệp chứng từ'];
+    const header = ['STT', 'Mã giải ngân', 'Mã đề tài', 'Tên đề tài', 'Đợt đăng ký', 'Ngân sách được duyệt (VNĐ)', 'Số tiền giải ngân (VNĐ)', 'Ngày giải ngân', 'Số chứng từ', 'Trạng thái', 'Lý do giải ngân', 'Người tạo', 'Email người tạo', 'Người duyệt', 'Email người duyệt', 'Thời gian duyệt', 'Ghi chú từ chối', 'Ngày tạo', 'Ngày cập nhật', 'Tệp chứng từ', 'Chứng từ thanh toán'];
     const csvRows = [
       header,
-      ...exportRows.map((r) => [r.stt, r.maGiaiNgan, r.maDeTai, r.tenDeTai, r.dotDangKy, r.nganSachDuocDuyet, r.soTienGiaiNgan, r.ngayGiaiNgan, r.soChungTu, r.trangThai, r.lyDoGiaiNgan, r.nguoiTao, r.emailNguoiTao, r.nguoiDuyet, r.emailNguoiDuyet, r.thoiGianDuyet, r.ghiChuTuChoi, r.ngayTao, r.ngayCapNhat, r.tepChungTu]),
+      ...exportRows.map((r) => [r.stt, r.maGiaiNgan, r.maDeTai, r.tenDeTai, r.dotDangKy, r.nganSachDuocDuyet, r.soTienGiaiNgan, r.ngayGiaiNgan, r.soChungTu, r.trangThai, r.lyDoGiaiNgan, r.nguoiTao, r.emailNguoiTao, r.nguoiDuyet, r.emailNguoiDuyet, r.thoiGianDuyet, r.ghiChuTuChoi, r.ngayTao, r.ngayCapNhat, r.tepChungTu, r.chungTuThanhToan]),
     ];
     const csv = csvRows.map((r) => r.map((c) => `"${String(c).replaceAll('"', '""')}"`).join(',')).join('\n');
     downloadBlob(csv, `giai-ngan-${new Date().toISOString().slice(0, 10)}.csv`, 'text/csv;charset=utf-8;');
@@ -141,12 +144,12 @@ export function DisbursementListTable({ data, isLoading, pagination, onPageChang
     });
     const wb = XLSX.utils.book_new();
     const title = ['BÁO CÁO GIẢI NGÂN ĐỀ TÀI'];
-    const header = ['STT', 'Mã giải ngân', 'Mã đề tài', 'Tên đề tài', 'Đợt đăng ký', 'Ngân sách được duyệt (VNĐ)', 'Số tiền giải ngân (VNĐ)', 'Ngày giải ngân', 'Số chứng từ', 'Trạng thái', 'Lý do giải ngân', 'Người tạo', 'Email người tạo', 'Người duyệt', 'Email người duyệt', 'Thời gian duyệt', 'Ghi chú từ chối', 'Ngày tạo', 'Ngày cập nhật', 'Tệp chứng từ'];
+    const header = ['STT', 'Mã giải ngân', 'Mã đề tài', 'Tên đề tài', 'Đợt đăng ký', 'Ngân sách được duyệt (VNĐ)', 'Số tiền giải ngân (VNĐ)', 'Ngày giải ngân', 'Số chứng từ', 'Trạng thái', 'Lý do giải ngân', 'Người tạo', 'Email người tạo', 'Người duyệt', 'Email người duyệt', 'Thời gian duyệt', 'Ghi chú từ chối', 'Ngày tạo', 'Ngày cập nhật', 'Tệp chứng từ', 'Chứng từ thanh toán'];
     const wsData = [
       title,
       [],
       header,
-      ...exportRows.map((r) => [r.stt, r.maGiaiNgan, r.maDeTai, r.tenDeTai, r.dotDangKy, r.nganSachDuocDuyet, r.soTienGiaiNgan, r.ngayGiaiNgan, r.soChungTu, r.trangThai, r.lyDoGiaiNgan, r.nguoiTao, r.emailNguoiTao, r.nguoiDuyet, r.emailNguoiDuyet, r.thoiGianDuyet, r.ghiChuTuChoi, r.ngayTao, r.ngayCapNhat, r.tepChungTu]),
+      ...exportRows.map((r) => [r.stt, r.maGiaiNgan, r.maDeTai, r.tenDeTai, r.dotDangKy, r.nganSachDuocDuyet, r.soTienGiaiNgan, r.ngayGiaiNgan, r.soChungTu, r.trangThai, r.lyDoGiaiNgan, r.nguoiTao, r.emailNguoiTao, r.nguoiDuyet, r.emailNguoiDuyet, r.thoiGianDuyet, r.ghiChuTuChoi, r.ngayTao, r.ngayCapNhat, r.tepChungTu, r.chungTuThanhToan]),
     ];
     const ws = XLSX.utils.aoa_to_sheet(wsData);
     ws['!cols'] = [
@@ -218,7 +221,7 @@ export function DisbursementListTable({ data, isLoading, pagination, onPageChang
                   <TableCell>{d.voucherNo ?? '—'}</TableCell>
                   <TableCell><DisbursementStatusBadge status={d.status} /></TableCell>
                   <TableCell>
-                    {d.status === 'APPROVED' ? (
+                    {d.status === 'PAID' ? (
                       <span className="text-emerald-600 font-medium">Đã thanh toán</span>
                     ) : (
                       <span className="text-amber-600 font-medium">Chưa thanh toán</span>

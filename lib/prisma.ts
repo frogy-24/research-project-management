@@ -36,6 +36,7 @@ function hasRoomDelegate(client: PrismaClient): boolean {
   return typeof candidate.room?.findMany === 'function';
 }
 
+
 const cachedPrisma = globalForPrisma.prisma;
 const shouldReuseCachedClient = cachedPrisma ? hasRoomDelegate(cachedPrisma) : false;
 

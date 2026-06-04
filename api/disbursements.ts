@@ -6,6 +6,7 @@ import type {
   CreateDisbursementInput,
   ApproveDisbursementInput,
   RejectDisbursementInput,
+  PayDisbursementInput,
   UpdateDisbursementInput,
   DisbursementFilters,
 } from '@/types/disbursement.schema';
@@ -78,6 +79,24 @@ export const disbursementsApi = {
     input: RejectDisbursementInput
   ): Promise<ApiResponse<FundingDisbursement>> {
     const { data } = await api.post(`/disbursements/${id}/reject`, input);
+    return data;
+  },
+
+  /**
+   * Xác nhận thanh toán giải ngân (DISBURSER only)
+   */
+  async payDisbursement(
+    id: string,
+    input: PayDisbursementInput
+  ): Promise<ApiResponse<FundingDisbursementWithRelations>> {
+    const formData = new FormData();
+    formData.append('file', input.file);
+    if (input.paymentNote) formData.append('paymentNote', input.paymentNote);
+    if (input.paidAt) formData.append('paidAt', input.paidAt);
+
+    const { data } = await api.post(`/disbursements/${id}/pay`, formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    });
     return data;
   },
 

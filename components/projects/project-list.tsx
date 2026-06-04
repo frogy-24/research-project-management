@@ -69,6 +69,7 @@ const roleLabel: Record<Role, string> = {
   ADMIN: "Phòng QLKH",
   COUNCIL: "Hội đồng",
   LEADER: "Ban giám hiệu",
+  DISBURSER: "Thủ quỹ",
 };
 
 const roleActions: Record<Role, Partial<Record<ProjectStatus, RoleAction[]>>> = {
@@ -96,6 +97,7 @@ const roleActions: Record<Role, Partial<Record<ProjectStatus, RoleAction[]>>> = 
     ADMIN_REVIEW: [{ label: "Bắt đầu chấm hội đồng", nextStatus: "COUNCIL_EVALUATING" }],
   },
   LEADER: {},
+  DISBURSER: {},
 };
 
 const getRoleMetrics = (role: Role, statuses: ProjectStatus[]): DashboardMetric[] => {

@@ -61,10 +61,6 @@ export async function GET(request: NextRequest) {
         }
 
         // Người giải ngân chỉ thấy các khoản đã được phê duyệt hoặc đã thanh toán
-        if (actorRole === 'DISBURSER' && !filters.status) {
-            where.status = { in: ['APPROVED', 'PAID'] };
-        }
-
         if (Object.keys(projectWhere).length > 0) {
             where.project = {
                 is: projectWhere,
@@ -103,6 +99,13 @@ export async function GET(request: NextRequest) {
                         },
                     },
                     approvedBy: {
+                        select: {
+                            id: true,
+                            name: true,
+                            email: true,
+                        },
+                    },
+                    paidBy: {
                         select: {
                             id: true,
                             name: true,
