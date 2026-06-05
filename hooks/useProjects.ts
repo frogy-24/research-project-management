@@ -1,4 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { api } from "@/lib/axios";
 import { projectApi } from "@/api/projects";
 import { CreateProjectInput, UpdateProjectInput } from "@/types/project.schema";
 
@@ -6,6 +7,20 @@ export const useProjects = () => {
   return useQuery({
     queryKey: ["projects"],
     queryFn: projectApi.getAll,
+  });
+};
+
+// Danh sách đề tài dành cho Dean khi tạo giải ngân
+// (lấy tất cả đề tài trong khoa, không giới hạn theo deanReviewerId)
+export const useDeanProjects = () => {
+  return useQuery({
+    queryKey: ["dean-projects"],
+    queryFn: async () => {
+      const res = await api.get<{ success: boolean; data: any[] }>(
+        "/dean/projects"
+      );
+      return res.data.data;
+    },
   });
 };
 

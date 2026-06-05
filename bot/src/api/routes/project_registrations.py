@@ -522,26 +522,91 @@ async def _evaluate_project_with_ocr(
     min_score = int(criteria.get("minScore", 70))
     require_instructor = bool(criteria.get("requireInstructor", True))
 
-    prompt = f"""Ban la chuyen gia danh gia de tai nghien cuu. Hay danh gia de tai dua tren thong tin nhap va text OCR.
+    prompt = f"""
+    Bạn là chuyên gia đánh giá đề tài nghiên cứu khoa học cấp trường.
 
-Thong tin dang ky:
-- Tieu de: {reg.get('title', 'N/A')}
-- Muc tieu: {reg.get('objective', 'N/A')}
-- Ket qua du kien: {reg.get('expectedOutput', 'N/A')}
-- Giang vien huong dan: {reg.get('instructorName', 'N/A')}
+    NHIỆM VỤ:
+    Đánh giá hồ sơ đăng ký đề tài dựa trên:
 
-Ket qua OCR (trich xuat tu file PDF):
-{(reg.get('ocrFullText') or '')[:6000]}
+    1. Thông tin đăng ký trên hệ thống.
+    2. Nội dung OCR trích xuất từ file PDF đính kèm.
+    3. Kết quả đối chiếu giữa dữ liệu hệ thống và tài liệu PDF.
 
-Ket qua doi chieu OCR (true la co khop): {ocr_matches}
-Tieu chi diem: min_score={min_score}
+    THÔNG TIN ĐĂNG KÝ
 
-Yeu cau:
-1. Danh gia diem 0-100
-2. Quyết dinh: APPROVE/REVISION/REJECT
-3. Neu OCR khong khop, can giam diem hoac yeu cau REVISION
-4. Tra ve JSON: {{"score": <int>, "decision": "<APPROVE|REVISION|REJECT>", "reason": "<ly do>"}}
-"""
+    * Tiêu đề: {reg.get('title', 'N/A')}
+    * Mục tiêu: {reg.get('objective', 'N/A')}
+    * Giảng viên hướng dẫn: {reg.get('instructorName', 'N/A')}
+
+    KẾT QUẢ OCR
+
+    {(reg.get('ocrFullText') or '')[:6000]}
+
+    KẾT QUẢ ĐỐI CHIẾU OCR
+
+    * OCR khớp với dữ liệu hệ thống: {ocr_matches}
+
+    NGƯỠNG ĐIỂM TỐI THIỂU
+
+    * min_score = {min_score}
+
+    TIÊU CHÍ ĐÁNH GIÁ
+
+    1. Tính phù hợp của tên đề tài.
+    2. Mục tiêu nghiên cứu rõ ràng, cụ thể.
+    3. Kết quả dự kiến hợp lý và khả thi.
+    4. Nội dung trong PDF có đầy đủ và nhất quán với dữ liệu đăng ký.
+    5. Không phát hiện dấu hiệu thiếu thông tin hoặc sai lệch nghiêm trọng.
+
+    QUY TẮC CHẤM ĐIỂM
+
+    * Điểm từ 0 đến 100.
+    * Nếu OCR không khớp:
+
+    * Giảm điểm đáng kể.
+    * Không được APPROVE nếu sai lệch nghiêm trọng.
+    * Nếu tài liệu thiếu nhiều thông tin:
+
+    * Quyết định REJECT.
+    * Nếu có một số vấn đề cần chỉnh sửa:
+
+    * Quyết định REVISION.
+    * Chỉ APPROVE khi:
+
+    * Hồ sơ đầy đủ.
+    * Nội dung hợp lý.
+    * OCR khớp hoặc chỉ có sai lệch nhỏ.
+
+    QUY TẮC RA QUYẾT ĐỊNH
+
+    * APPROVE:
+    score >= max(min_score, 80)
+    và không có lỗi nghiêm trọng.
+
+    * REVISION:
+    score >= 50
+    nhưng cần bổ sung/chỉnh sửa.
+
+    * REJECT:
+    score < 50
+    hoặc hồ sơ không hợp lệ
+    hoặc phát hiện sai lệch nghiêm trọng.
+
+    YÊU CẦU ĐẦU RA
+
+    Trả về DUY NHẤT một JSON hợp lệ.
+    Không sử dụng markdown.
+    Không giải thích thêm ngoài JSON.
+
+    Định dạng:
+
+    {{
+    "score": 85,
+    "decision": "APPROVE",
+    "reason": "Lý do ngắn gọn, súc tích."
+    }}
+    """
+
 
     try:
         response = await llm_service.chat_completion(

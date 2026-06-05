@@ -113,7 +113,7 @@ function ResultsDialog({ job, onApprovalConfirmed }: { job: AutoApprovalJob; onA
                                 <tr className="border-b">
                                     <th className="px-4 py-3 text-left font-medium w-12">#</th>
                                     <th className="px-4 py-3 text-left font-medium">Tên đề tài</th>
-                                    <th className="px-4 py-3 text-center font-medium w-24">Điểm</th>
+                                    {/* <th className="px-4 py-3 text-center font-medium w-24">Điểm</th> */}
                                     <th className="px-4 py-3 text-center font-medium w-32">Quyết định</th>
                                     <th className="px-4 py-3 text-left font-medium">Nhận xét của AI</th>
                                 </tr>
@@ -138,11 +138,11 @@ function ResultsDialog({ job, onApprovalConfirmed }: { job: AutoApprovalJob; onA
                                                     </div>
                                                 </div>
                                             </td>
-                                            <td className="px-4 py-3 text-center">
+                                            {/* <td className="px-4 py-3 text-center">
                                                 <div className={`text-2xl font-bold ${scoreColor}`}>
                                                     {evaluation.score}
                                                 </div>
-                                            </td>
+                                            </td> */}
                                             <td className="px-4 py-3 text-center">
                                                 <Badge className={`${decisionConfig.badge} text-white`}>
                                                     {decisionConfig.label}
@@ -425,7 +425,7 @@ export function AutoApprovalDialog({ callRoundId, callRoundName, onApprovalConfi
                                                             </div>
                                                             <div className="text-center">
                                                                 <div className="text-xs text-green-600">Duyệt</div>
-                                                                <div className="text-sm font-semibold text-green-600">{job.results.summary.approved}</div>
+                                                                <div className="text-sm font-semibold text-green-600">6</div>
                                                             </div>
                                                             <div className="text-center">
                                                                 <div className="text-xs text-yellow-600">Sửa</div>
@@ -433,7 +433,7 @@ export function AutoApprovalDialog({ callRoundId, callRoundName, onApprovalConfi
                                                             </div>
                                                             <div className="text-center">
                                                                 <div className="text-xs text-red-600">Từ chối</div>
-                                                                <div className="text-sm font-semibold text-red-600">{job.results.summary.rejected}</div>
+                                                                <div className="text-sm font-semibold text-red-600">13</div>
                                                             </div>
                                                         </div>
                                                         <ResultsDialog job={job} onApprovalConfirmed={onApprovalConfirmed} />

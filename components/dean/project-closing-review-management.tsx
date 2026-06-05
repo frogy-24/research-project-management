@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from 'react';
 import { toast } from 'sonner';
-import { Download, Search } from 'lucide-react';
+import { Download, FileSpreadsheet, Search } from 'lucide-react';
 import { useDeanProjectClosings, useDeanReviewProjectClosing } from '@/hooks/useDeanProjectClosings';
 import { deanProjectClosingsApi } from '@/api/dean-project-closings';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -89,6 +89,7 @@ export function DeanProjectClosingReviewManagement() {
     const [selectedItem, setSelectedItem] = useState<DeanProjectClosingItem | null>(null);
     const [reviewNote, setReviewNote] = useState('');
     const [isExporting, setIsExporting] = useState(false);
+    const [isExportingStyled, setIsExportingStyled] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
     const pageSize = 10;
 
@@ -164,7 +165,9 @@ export function DeanProjectClosingReviewManagement() {
             },
             {
                 onSuccess: () => {
-                    toast.success(status === 'APPROVED' ? 'Đã chấp nhận hồ sơ nghiệm thu' : 'Đã từ chối hồ sơ nghiệm thu');
+                    toast.success(
+                        status === 'APPROVED' ? 'Đã chấp nhận hồ sơ nghiệm thu' : 'Đã từ chối hồ sơ nghiệm thu',
+                    );
                     setIsDialogOpen(false);
                 },
                 onError: (error: unknown) => {
@@ -212,6 +215,29 @@ export function DeanProjectClosingReviewManagement() {
         }
     };
 
+    const handleExportStyledExcel = async () => {
+        try {
+            setIsExportingStyled(true);
+            const params = new URLSearchParams();
+            params.set('search', searchKeyword.trim());
+            if (callRoundFilter !== 'all') {
+                params.set('callRoundId', callRoundFilter);
+            }
+            if (statusFilter && statusFilter !== 'all') {
+                params.set('status', statusFilter);
+            }
+            const queryString = params.toString();
+            const url = `/api/dean/project-closings/export-styled${queryString ? `?${queryString}` : ''}`;
+            window.open(url, '_blank');
+            toast.success('Đang xuất file Excel với định dạng đẹp...');
+        } catch (error) {
+            console.error(error);
+            toast.error('Không thể xuất file Excel');
+        } finally {
+            setIsExportingStyled(false);
+        }
+    };
+
     const renderFileList = (files: UploadedEvidenceFile[]) => {
         if (files.length === 0) {
             return <p className="text-xs text-muted-foreground">Không có tệp.</p>;
@@ -220,7 +246,10 @@ export function DeanProjectClosingReviewManagement() {
         return (
             <div className="space-y-2">
                 {files.map((file, index) => (
-                    <div key={`${file.url}-${index}`} className="flex items-center justify-between gap-2 rounded-md border px-3 py-2">
+                    <div
+                        key={`${file.url}-${index}`}
+                        className="flex items-center justify-between gap-2 rounded-md border px-3 py-2"
+                    >
                         <a
                             href={file.url}
                             target="_blank"
@@ -256,9 +285,20 @@ export function DeanProjectClosingReviewManagement() {
                         Chọn hồ sơ để xem chi tiết tệp đính kèm và cập nhật quyết định duyệt.
                     </CardDescription>
                     <div className="flex w-full flex-col gap-3 sm:flex-row sm:flex-wrap">
-                        <Button type="button" variant="outline" onClick={handleExportExcel} disabled={isExporting}>
+                        {/* <Button type="button" variant="outline" onClick={handleExportExcel} disabled={isExporting}>
                             <Download className="h-4 w-4 mr-2" />
                             {isExporting ? 'Đang xuất...' : 'Xuất Excel'}
+                        </Button> */}
+
+                        <Button
+                            type="button"
+                            size="sm"
+                            className="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white shadow-md"
+                            onClick={handleExportStyledExcel}
+                            disabled={isExportingStyled}
+                        >
+                            <FileSpreadsheet className="h-4 w-4 mr-1" />
+                            {isExportingStyled ? 'Đang xuất...' : 'Xuất Excel'}
                         </Button>
 
                         <Select value={callRoundFilter} onValueChange={setCallRoundFilter}>
@@ -275,7 +315,10 @@ export function DeanProjectClosingReviewManagement() {
                             </SelectContent>
                         </Select>
 
-                        <Select value={statusFilter} onValueChange={(value) => setStatusFilter(value as typeof statusFilter)}>
+                        <Select
+                            value={statusFilter}
+                            onValueChange={(value) => setStatusFilter(value as typeof statusFilter)}
+                        >
                             <SelectTrigger className="w-full sm:w-64">
                                 <SelectValue placeholder="Lọc theo trạng thái" />
                             </SelectTrigger>
@@ -313,57 +356,66 @@ export function DeanProjectClosingReviewManagement() {
                         <div className="space-y-3">
                             <div className="rounded-md border overflow-hidden">
                                 <Table>
-                                <TableHeader>
-                                    <TableRow>
-                                        <TableHead>STT</TableHead>
-                                        <TableHead>Đề tài</TableHead>
-                                        <TableHead>Sinh viên</TableHead>
-                                        <TableHead>Giảng viên hướng dẫn</TableHead>
-                                        <TableHead>Đợt đề tài</TableHead>
-                                        <TableHead>Trạng thái đề tài</TableHead>
-                                        <TableHead>Trạng thái nghiệm thu</TableHead>
-                                        <TableHead>Ngày nộp</TableHead>
-                                        <TableHead className="text-right">Thao tác</TableHead>
-                                    </TableRow>
-                                </TableHeader>
-                                <TableBody>
-                                    {paginatedItems.map((item, index) => (
-                                        <TableRow key={item.submission.id}>
-                                            <TableCell>{(currentPage - 1) * pageSize + index + 1}</TableCell>
-                                            <TableCell className="max-w-xs">
-                                                <p className="line-clamp-2 font-medium">{item.project.title}</p>
-                                            </TableCell>
-                                            <TableCell>
-                                                <div className="space-y-0.5">
-                                                    <p className="font-medium">{item.project.student.name}</p>
-                                                    <p className="text-xs text-muted-foreground">
-                                                        {item.project.student.code || item.project.student.email}
-                                                    </p>
-                                                </div>
-                                            </TableCell>
-                                            <TableCell>
-                                                <p className="text-sm">{item.project.instructor?.name || 'N/A'}</p>
-                                            </TableCell>
-                                            <TableCell>{item.project.callRound?.name || 'N/A'}</TableCell>
-                                            <TableCell>
-                                                <Badge variant="outline">
-                                                    {projectStatusLabel[item.project.status] || item.project.status}
-                                                </Badge>
-                                            </TableCell>
-                                            <TableCell>
-                                                <Badge variant={closingStatusVariant[item.submission.status] || 'secondary'}>
-                                                    {closingStatusLabel[item.submission.status] || item.submission.status}
-                                                </Badge>
-                                            </TableCell>
-                                            <TableCell>{formatDateTime(item.submission.submittedAt)}</TableCell>
-                                            <TableCell className="text-right">
-                                                <Button type="button" variant="outline" onClick={() => openReviewDialog(item)}>
-                                                    Xem & duyệt
-                                                </Button>
-                                            </TableCell>
+                                    <TableHeader>
+                                        <TableRow>
+                                            <TableHead>STT</TableHead>
+                                            <TableHead>Đề tài</TableHead>
+                                            <TableHead>Sinh viên</TableHead>
+                                            <TableHead>Giảng viên hướng dẫn</TableHead>
+                                            <TableHead>Đợt đề tài</TableHead>
+                                            <TableHead>Trạng thái đề tài</TableHead>
+                                            <TableHead>Trạng thái nghiệm thu</TableHead>
+                                            <TableHead>Ngày nộp</TableHead>
+                                            <TableHead className="text-right">Thao tác</TableHead>
                                         </TableRow>
-                                    ))}
-                                </TableBody>
+                                    </TableHeader>
+                                    <TableBody>
+                                        {paginatedItems.map((item, index) => (
+                                            <TableRow key={item.submission.id}>
+                                                <TableCell>{(currentPage - 1) * pageSize + index + 1}</TableCell>
+                                                <TableCell className="max-w-xs">
+                                                    <p className="line-clamp-2 font-medium">{item.project.title}</p>
+                                                </TableCell>
+                                                <TableCell>
+                                                    <div className="space-y-0.5">
+                                                        <p className="font-medium">{item.project.student.name}</p>
+                                                        <p className="text-xs text-muted-foreground">
+                                                            {item.project.student.code || item.project.student.email}
+                                                        </p>
+                                                    </div>
+                                                </TableCell>
+                                                <TableCell>
+                                                    <p className="text-sm">{item.project.instructor?.name || 'N/A'}</p>
+                                                </TableCell>
+                                                <TableCell>{item.project.callRound?.name || 'N/A'}</TableCell>
+                                                <TableCell>
+                                                    <Badge variant="outline">
+                                                        {projectStatusLabel[item.project.status] || item.project.status}
+                                                    </Badge>
+                                                </TableCell>
+                                                <TableCell>
+                                                    <Badge
+                                                        variant={
+                                                            closingStatusVariant[item.submission.status] || 'secondary'
+                                                        }
+                                                    >
+                                                        {closingStatusLabel[item.submission.status] ||
+                                                            item.submission.status}
+                                                    </Badge>
+                                                </TableCell>
+                                                <TableCell>{formatDateTime(item.submission.submittedAt)}</TableCell>
+                                                <TableCell className="text-right">
+                                                    <Button
+                                                        type="button"
+                                                        variant="outline"
+                                                        onClick={() => openReviewDialog(item)}
+                                                    >
+                                                        Xem & duyệt
+                                                    </Button>
+                                                </TableCell>
+                                            </TableRow>
+                                        ))}
+                                    </TableBody>
                                 </Table>
                             </div>
 
@@ -442,7 +494,9 @@ export function DeanProjectClosingReviewManagement() {
                                         <CardHeader className="pb-2">
                                             <CardTitle className="text-base">{category.label}</CardTitle>
                                         </CardHeader>
-                                        <CardContent>{renderFileList(selectedItem.submission[category.key])}</CardContent>
+                                        <CardContent>
+                                            {renderFileList(selectedItem.submission[category.key])}
+                                        </CardContent>
                                     </Card>
                                 ))}
                             </div>

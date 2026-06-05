@@ -54,13 +54,33 @@ def pdf_to_page_data_urls(file_bytes: bytes) -> list[str]:
         document.close()
 
 
-@log_execution
 def build_ocr_prompt(custom_prompt: str | None) -> str:
     if custom_prompt and custom_prompt.strip():
         return custom_prompt.strip()
-    return (
-        "Ban la cong cu OCR chuyen nghiep. "
-        "Hay trich xuat TOAN BO van ban tu anh nay, "
-        "giu nguyen cau truc dong va doan van, "
-        "khong them bat ky nhan xet hay giai thich nao."
-    )
+
+    return """
+Bạn là công cụ OCR chuyên dùng cho tài liệu học thuật, biểu mẫu và hồ sơ nghiên cứu khoa học.
+
+Hãy trích xuất toàn bộ nội dung có trong ảnh với độ chính xác cao nhất.
+
+YÊU CẦU:
+- Giữ nguyên 100% nội dung gốc.
+- Giữ nguyên cấu trúc tiêu đề, đề mục, bảng biểu và danh sách.
+- Giữ nguyên các thông tin như:
+  + Tên đề tài
+  + Mục tiêu nghiên cứu
+  + Nội dung nghiên cứu
+  + Thông tin sinh viên
+  + Thông tin giảng viên hướng dẫn
+  + Kinh phí
+  + Tiến độ thực hiện
+  + Các chữ ký, mã số, ngày tháng (nếu có)
+- Nếu có bảng biểu, xuất dưới dạng bảng Markdown.
+- Không được tự ý sửa nội dung.
+- Không được diễn giải hay tóm tắt.
+- Không được bỏ sót nội dung.
+- Nếu không đọc được một phần, ghi [KHÔNG ĐỌC ĐƯỢC] tại đúng vị trí đó.
+
+ĐẦU RA:
+Chỉ trả về nội dung OCR đã trích xuất, không kèm bất kỳ lời giải thích nào.
+"""

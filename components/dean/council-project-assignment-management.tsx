@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import { toast } from 'sonner';
-import { CheckCircle2, Download, Link2, Search, Trash2 } from 'lucide-react';
+import { CheckCircle2, Download, FileSpreadsheet, Link2, Search, Trash2 } from 'lucide-react';
 import { useCallRounds } from '@/hooks/useCallRounds';
 import {
     useAssignProjectsToCouncil,
@@ -131,9 +131,6 @@ export function CouncilProjectAssignmentManagement({
     const callRoundDefenseDate = data?.callRound?.defenseDate;
     const callRoundDefenseLocation = data?.callRound?.defenseLocation ?? '';
 
-    useEffect(() => {
-        console.log('Evaluation data updated:', evaluationData);
-    }, [ evaluationData]);
     const unassignedProjects = useMemo(() => {
         const keyword = search.trim().toLowerCase();
         return approvedProjects
@@ -282,7 +279,8 @@ export function CouncilProjectAssignmentManagement({
         return sortedEvaluationItems.slice(start, start + evaluationPageSize);
     }, [evaluationCurrentPage, sortedEvaluationItems]);
 
-    const evaluationStartItem = sortedEvaluationItems.length === 0 ? 0 : (evaluationCurrentPage - 1) * evaluationPageSize + 1;
+    const evaluationStartItem =
+        sortedEvaluationItems.length === 0 ? 0 : (evaluationCurrentPage - 1) * evaluationPageSize + 1;
     const evaluationEndItem = Math.min(evaluationCurrentPage * evaluationPageSize, sortedEvaluationItems.length);
 
     const selectedEvaluationItemsByProject = useMemo(() => {
@@ -603,7 +601,9 @@ export function CouncilProjectAssignmentManagement({
         params.set('mode', 'ranking');
 
         const query = params.toString();
-        const url = query ? `/api/dean/council-evaluations/export?${query}` : '/api/dean/council-evaluations/export?mode=ranking';
+        const url = query
+            ? `/api/dean/council-evaluations/export?${query}`
+            : '/api/dean/council-evaluations/export?mode=ranking';
 
         const link = document.createElement('a');
         link.href = url;
@@ -613,6 +613,60 @@ export function CouncilProjectAssignmentManagement({
         document.body.removeChild(link);
 
         toast.success('Đang xuất file xếp hạng...');
+    };
+
+    const handleExportEvaluationsStyled = () => {
+        if (isWaitingForEvaluationFilter) {
+            toast.error('Vui lòng chọn đợt đề tài trước khi xuất dữ liệu.');
+            return;
+        }
+
+        const params = new URLSearchParams();
+
+        if (selectedEvaluationCallRoundId !== 'all') {
+            params.set('callRoundId', selectedEvaluationCallRoundId);
+        }
+
+        const keyword = evaluationSearch.trim();
+        if (keyword) {
+            params.set('search', keyword);
+        }
+
+        const query = params.toString();
+        const url = query ? `/api/dean/council-evaluations/export-styled?${query}` : '/api/dean/council-evaluations/export-styled';
+
+        window.open(url, '_blank');
+
+        toast.success('Đang xuất file Excel với định dạng đẹp...');
+    };
+
+    const handleExportRankingStyled = () => {
+        if (isWaitingForEvaluationFilter) {
+            toast.error('Vui lòng chọn đợt đề tài trước khi xuất dữ liệu.');
+            return;
+        }
+
+        const params = new URLSearchParams();
+
+        if (selectedEvaluationCallRoundId !== 'all') {
+            params.set('callRoundId', selectedEvaluationCallRoundId);
+        }
+
+        const keyword = evaluationSearch.trim();
+        if (keyword) {
+            params.set('search', keyword);
+        }
+
+        params.set('mode', 'ranking');
+
+        const query = params.toString();
+        const url = query
+            ? `/api/dean/council-evaluations/export-styled?${query}`
+            : '/api/dean/council-evaluations/export-styled?mode=ranking';
+
+        window.open(url, '_blank');
+
+        toast.success('Đang xuất file Excel với định dạng đẹp...');
     };
 
     const handleOpenDetail = (item: ProjectEvaluationDetail) => {
@@ -798,325 +852,221 @@ export function CouncilProjectAssignmentManagement({
 
             {isEvaluationsOnly && (
                 <Card id="council-evaluations" className="scroll-mt-20">
-                <CardHeader>
-                    <CardTitle>Kết quả chấm điểm theo đợt đề tài</CardTitle>
-                    <CardDescription>
-                        Xem điểm đã chấm của hội đồng theo từng đợt đề tài, có thể lọc theo đợt và từ khóa.
-                    </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                    <div className="grid gap-3 md:grid-cols-2">
-                        <Select
-                            value={selectedEvaluationCallRoundId}
-                            onValueChange={(value) => {
-                                setSelectedEvaluationCallRoundId(value);
-                            }}
-                        >
-                            <SelectTrigger className="w-full">
-                                <SelectValue placeholder="Lọc theo đợt đề tài" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectItem value="all">Tất cả đợt đề tài</SelectItem>
-                                {approvedCallRounds.map((round) => (
-                                    <SelectItem key={round.id} value={round.id}>
-                                        {round.name}
-                                    </SelectItem>
-                                ))}
-                            </SelectContent>
-                        </Select>
+                    <CardHeader>
+                        <CardTitle>Kết quả chấm điểm theo đợt đề tài</CardTitle>
+                        <CardDescription>
+                            Xem điểm đã chấm của hội đồng theo từng đợt đề tài, có thể lọc theo đợt và từ khóa.
+                        </CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                        <div className="grid gap-3 md:grid-cols-2">
+                            <Select
+                                value={selectedEvaluationCallRoundId}
+                                onValueChange={(value) => {
+                                    setSelectedEvaluationCallRoundId(value);
+                                }}
+                            >
+                                <SelectTrigger className="w-full">
+                                    <SelectValue placeholder="Lọc theo đợt đề tài" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="all">Tất cả đợt đề tài</SelectItem>
+                                    {approvedCallRounds.map((round) => (
+                                        <SelectItem key={round.id} value={round.id}>
+                                            {round.name}
+                                        </SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
 
-                        <div className="relative">
-                            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                            <Input
-                                value={evaluationSearch}
-                                onChange={(event) => setEvaluationSearch(event.target.value)}
-                                placeholder="Tìm theo đề tài, hội đồng, người chấm..."
-                                className="pl-10"
+                            <div className="relative">
+                                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                                <Input
+                                    value={evaluationSearch}
+                                    onChange={(event) => setEvaluationSearch(event.target.value)}
+                                    placeholder="Tìm theo đề tài, hội đồng, người chấm..."
+                                    className="pl-10"
+                                    disabled={isWaitingForEvaluationFilter}
+                                />
+                            </div>
+                        </div>
+
+                        <div className="flex justify-end gap-2 flex-wrap">
+                            <Button
+                                type="button"
+                                variant="secondary"
+                                onClick={() => setIsSortDialogOpen(true)}
+                                disabled={isWaitingForEvaluationFilter || filteredEvaluationItems.length === 0}
+                            >
+                                Sắp xếp
+                            </Button>
+                            {/* <Button
+                                type="button"
+                                variant="outline"
+                                onClick={handleExportEvaluations}
                                 disabled={isWaitingForEvaluationFilter}
-                            />
+                            >
+                                <Download className="h-4 w-4 mr-2" />
+                                Xuất file chi tiết
+                            </Button>
+                            <Button
+                                type="button"
+                                variant="outline"
+                                onClick={handleExportRanking}
+                                disabled={isWaitingForEvaluationFilter}
+                            >
+                                <Download className="h-4 w-4 mr-2" />
+                                Xuất xếp hạng
+                            </Button> */}
+                            <Button
+                                type="button"
+                                variant="default"
+                                size="sm"
+                                className="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white shadow-md"
+                                onClick={handleExportEvaluationsStyled}
+                                disabled={isWaitingForEvaluationFilter}
+                            >
+                                <FileSpreadsheet className="h-4 w-4 mr-1" />
+                                Xuất file chi tiết
+                            </Button>
+                            <Button
+                                type="button"
+                                variant="default"
+                                size="sm"
+                                className="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white shadow-md"
+                                onClick={handleExportRankingStyled}
+                                disabled={isWaitingForEvaluationFilter}
+                            >
+                                <FileSpreadsheet className="h-4 w-4 mr-1" />
+                                   Xuất xếp hạng
+                            </Button>
                         </div>
-                    </div>
 
-                    <div className="flex justify-end gap-2">
-                        <Button
-                            type="button"
-                            variant="secondary"
-                            onClick={() => setIsSortDialogOpen(true)}
-                            disabled={isWaitingForEvaluationFilter || filteredEvaluationItems.length === 0}
-                        >
-                            Sắp xếp
-                        </Button>
-                        <Button
-                            type="button"
-                            variant="outline"
-                            onClick={handleExportEvaluations}
-                            disabled={isWaitingForEvaluationFilter}
-                        >
-                            <Download className="h-4 w-4 mr-2" />
-                            Xuất file chi tiết (Excel)
-                        </Button>
-                        <Button
-                            type="button"
-                            variant="outline"
-                            onClick={handleExportRanking}
-                            disabled={isWaitingForEvaluationFilter}
-                        >
-                            <Download className="h-4 w-4 mr-2" />
-                            Xuất xếp hạng theo hội đồng
-                        </Button>
-                    </div>
-
-                    <Dialog open={isSortDialogOpen} onOpenChange={setIsSortDialogOpen}>
-                        <DialogContent className="sm:max-w-md">
-                            <DialogHeader>
-                                <DialogTitle>Sắp xếp kết quả chấm điểm</DialogTitle>
-                                <DialogDescription>
-                                    Chọn tiêu chí và thứ tự hiển thị cho bảng kết quả.
-                                </DialogDescription>
-                            </DialogHeader>
-                            <div className="space-y-3">
-                                <div className="space-y-1.5">
-                                    <p className="text-sm text-muted-foreground">Tiêu chí</p>
-                                    <Select
-                                        value={evaluationSortField}
-                                        onValueChange={(value) => setEvaluationSortField(value as EvaluationSortField)}
-                                    >
-                                        <SelectTrigger>
-                                            <SelectValue placeholder="Chọn tiêu chí" />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            <SelectItem value="evaluatedAt">Thời gian chấm</SelectItem>
-                                            <SelectItem value="score">Điểm</SelectItem>
-                                            <SelectItem value="projectTitle">Tên đề tài</SelectItem>
-                                            <SelectItem value="councilName">Hội đồng</SelectItem>
-                                            <SelectItem value="evaluatorName">Người chấm</SelectItem>
-                                        </SelectContent>
-                                    </Select>
-                                </div>
-                                <div className="space-y-1.5">
-                                    <p className="text-sm text-muted-foreground">Thứ tự</p>
-                                    <Select
-                                        value={evaluationSortOrder}
-                                        onValueChange={(value) => setEvaluationSortOrder(value as EvaluationSortOrder)}
-                                    >
-                                        <SelectTrigger>
-                                            <SelectValue placeholder="Chọn thứ tự" />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            <SelectItem value="desc">Giảm dần</SelectItem>
-                                            <SelectItem value="asc">Tăng dần</SelectItem>
-                                        </SelectContent>
-                                    </Select>
-                                </div>
-                            </div>
-                        </DialogContent>
-                    </Dialog>
-
-                    <Dialog open={isEvaluationDetailDialogOpen} onOpenChange={setIsEvaluationDetailDialogOpen}>
-                        <DialogContent className="w-[min(95vw,760px)] max-h-[85vh] overflow-y-auto sm:max-w-1/2">
-                            <DialogHeader>
-                                <DialogTitle>Chi tiết đề tài</DialogTitle>
-                                <DialogDescription>
-                                    Thông tin chi tiết của đề tài được chọn trong danh sách kết quả chấm điểm.
-                                </DialogDescription>
-                            </DialogHeader>
-
-                            {!selectedEvaluationDetail ? (
-                                <p className="text-sm text-muted-foreground">Chưa có đề tài được chọn.</p>
-                            ) : (
-                                <div className="space-y-3 text-sm">
-                                    <div className="rounded-md border p-3">
-                                        <p className="text-xs text-muted-foreground">Đề tài</p>
-                                        <p className="mt-1 font-medium">{selectedEvaluationDetail.projectTitle}</p>
-                                        <p className="mt-1 text-xs text-muted-foreground">
-                                            Điểm TB {selectedEvaluationDetail.averageScore}/10 | Lượt chấm{' '}
-                                            {selectedEvaluationDetail.totalEvaluations}
-                                        </p>
+                        <Dialog open={isSortDialogOpen} onOpenChange={setIsSortDialogOpen}>
+                            <DialogContent className="sm:max-w-md">
+                                <DialogHeader>
+                                    <DialogTitle>Sắp xếp kết quả chấm điểm</DialogTitle>
+                                    <DialogDescription>
+                                        Chọn tiêu chí và thứ tự hiển thị cho bảng kết quả.
+                                    </DialogDescription>
+                                </DialogHeader>
+                                <div className="space-y-3">
+                                    <div className="space-y-1.5">
+                                        <p className="text-sm text-muted-foreground">Tiêu chí</p>
+                                        <Select
+                                            value={evaluationSortField}
+                                            onValueChange={(value) =>
+                                                setEvaluationSortField(value as EvaluationSortField)
+                                            }
+                                        >
+                                            <SelectTrigger>
+                                                <SelectValue placeholder="Chọn tiêu chí" />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                <SelectItem value="evaluatedAt">Thời gian chấm</SelectItem>
+                                                <SelectItem value="score">Điểm</SelectItem>
+                                                <SelectItem value="projectTitle">Tên đề tài</SelectItem>
+                                                <SelectItem value="councilName">Hội đồng</SelectItem>
+                                                <SelectItem value="evaluatorName">Người chấm</SelectItem>
+                                            </SelectContent>
+                                        </Select>
                                     </div>
-
-                                    <div className="grid gap-3 md:grid-cols-2">
-                                        <div className="rounded-md border p-3">
-                                            <p className="text-xs text-muted-foreground">Sinh viên</p>
-                                            <p className="mt-1 font-medium">{selectedEvaluationDetail.studentName}</p>
-                                            <p className="mt-1 text-xs text-muted-foreground">
-                                                MSSV: {selectedEvaluationDetail.studentCode || 'N/A'}
-                                            </p>
-                                            <p className="mt-1 text-xs text-muted-foreground">
-                                                Email: {selectedEvaluationDetail.studentEmail}
-                                            </p>
-                                            <p className="mt-1 text-xs text-muted-foreground">
-                                                Lớp: {selectedEvaluationDetail.studentClassName || 'N/A'}
-                                            </p>
-                                        </div>
-
-                                        <div className="rounded-md border p-3">
-                                            <p className="text-xs text-muted-foreground">Giảng viên hướng dẫn</p>
-                                            <p className="mt-1 font-medium">
-                                                {selectedEvaluationDetail.advisorName || 'Chưa cập nhật'}
-                                            </p>
-                                            <p className="mt-1 text-xs text-muted-foreground">
-                                                Mã GV: {selectedEvaluationDetail.advisorCode || 'N/A'}
-                                            </p>
-                                            <p className="mt-1 text-xs text-muted-foreground">
-                                                Email: {selectedEvaluationDetail.advisorEmail || 'N/A'}
-                                            </p>
-                                        </div>
-                                    </div>
-
-                                    <div className="grid gap-3 md:grid-cols-2">
-                                        <div className="rounded-md border p-3">
-                                            <p className="text-xs text-muted-foreground">Hội đồng</p>
-                                            <p className="mt-1 font-medium">{selectedEvaluationDetail.councils}</p>
-                                        </div>
-
-                                        <div className="rounded-md border p-3">
-                                            <p className="text-xs text-muted-foreground">Ngày báo cáo</p>
-                                            <p className="mt-1 font-medium">
-                                                {formatDetailDateTime(selectedEvaluationDetail.defenseDate)}
-                                            </p>
-                                            <p className="mt-1 text-xs text-muted-foreground">
-                                                Nơi bảo vệ:{' '}
-                                                {selectedEvaluationDetail.defenseLocation || 'Chưa cập nhật'}
-                                            </p>
-                                        </div>
-                                    </div>
-
-                                    <div className="rounded-md border overflow-hidden">
-                                        <Table>
-                                            <TableHeader>
-                                                <TableRow>
-                                                    <TableHead>Hội đồng</TableHead>
-                                                    <TableHead>Người chấm</TableHead>
-                                                    <TableHead>Điểm</TableHead>
-                                                    <TableHead>Quyết định</TableHead>
-                                                    <TableHead>Thời gian chấm</TableHead>
-                                                </TableRow>
-                                            </TableHeader>
-                                            <TableBody>
-                                                {selectedEvaluationItemsByProject.length === 0 ? (
-                                                    <TableRow>
-                                                        <TableCell
-                                                            colSpan={5}
-                                                            className="text-center text-muted-foreground"
-                                                        >
-                                                            Chưa có dữ liệu chấm điểm chi tiết.
-                                                        </TableCell>
-                                                    </TableRow>
-                                                ) : (
-                                                    selectedEvaluationItemsByProject.map((item) => (
-                                                        <TableRow key={item.id}>
-                                                            <TableCell>{item.councilName}</TableCell>
-                                                            <TableCell>{item.evaluator.name}</TableCell>
-                                                            <TableCell>
-                                                                <span className="font-semibold text-emerald-700">
-                                                                    {item.score}/10
-                                                                </span>
-                                                            </TableCell>
-                                                            <TableCell>{getDecisionBadge(item.decision)}</TableCell>
-                                                            <TableCell>
-                                                                {item.evaluatedAt.toLocaleString('vi-VN')}
-                                                            </TableCell>
-                                                        </TableRow>
-                                                    ))
-                                                )}
-                                            </TableBody>
-                                        </Table>
+                                    <div className="space-y-1.5">
+                                        <p className="text-sm text-muted-foreground">Thứ tự</p>
+                                        <Select
+                                            value={evaluationSortOrder}
+                                            onValueChange={(value) =>
+                                                setEvaluationSortOrder(value as EvaluationSortOrder)
+                                            }
+                                        >
+                                            <SelectTrigger>
+                                                <SelectValue placeholder="Chọn thứ tự" />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                <SelectItem value="desc">Giảm dần</SelectItem>
+                                                <SelectItem value="asc">Tăng dần</SelectItem>
+                                            </SelectContent>
+                                        </Select>
                                     </div>
                                 </div>
-                            )}
-                        </DialogContent>
-                    </Dialog>
+                            </DialogContent>
+                        </Dialog>
 
-                    <div className="grid gap-3 sm:grid-cols-3">
-                        <div className="rounded-md border bg-muted/20 p-3">
-                            <p className="text-xs text-muted-foreground">Tổng lượt chấm</p>
-                            <p className="mt-1 text-lg font-semibold">{evaluationSummary?.totalEvaluations ?? 0}</p>
-                        </div>
-                        <div className="rounded-md border bg-muted/20 p-3">
-                            <p className="text-xs text-muted-foreground">Số đề tài đã được chấm</p>
-                            <p className="mt-1 text-lg font-semibold">{evaluationSummary?.totalProjects ?? 0}</p>
-                        </div>
-                        <div className="rounded-md border bg-muted/20 p-3">
-                            <p className="text-xs text-muted-foreground">Điểm trung bình</p>
-                            <p className="mt-1 text-lg font-semibold">
-                                {evaluationSummary?.averageScore !== null &&
-                                evaluationSummary?.averageScore !== undefined
-                                    ? `${evaluationSummary.averageScore}/10`
-                                    : 'Chưa có'}
-                            </p>
-                        </div>
-                    </div>
+                        <Dialog open={isEvaluationDetailDialogOpen} onOpenChange={setIsEvaluationDetailDialogOpen}>
+                            <DialogContent className="w-[min(95vw,760px)] max-h-[85vh] overflow-y-auto sm:max-w-1/2">
+                                <DialogHeader>
+                                    <DialogTitle>Chi tiết đề tài</DialogTitle>
+                                    <DialogDescription>
+                                        Thông tin chi tiết của đề tài được chọn trong danh sách kết quả chấm điểm.
+                                    </DialogDescription>
+                                </DialogHeader>
 
-                    {isWaitingForEvaluationFilter ? (
-                        <p className="text-sm text-muted-foreground text-center py-8 border rounded-md border-dashed">
-                            Vui lòng chọn đợt đề tài để tải dữ liệu chấm điểm.
-                        </p>
-                    ) : loadingEvaluations ? (
-                        <div className="space-y-2">
-                            {[1, 2, 3, 4].map((item) => (
-                                <Skeleton key={item} className="h-11 w-full" />
-                            ))}
-                        </div>
-                    ) : filteredEvaluationItems.length === 0 ? (
-                        <p className="text-sm text-muted-foreground text-center py-8 border rounded-md border-dashed">
-                            Chưa có dữ liệu điểm chấm cho bộ lọc hiện tại.
-                        </p>
-                    ) : (
-                        <div className="space-y-4">
-                            <div className="flex items-center justify-between">
-                                <p className="text-sm text-muted-foreground">
-                                    Hiển thị {evaluationStartItem}-{evaluationEndItem} / {sortedEvaluationItems.length}
-                                </p>
-                                <div className="flex items-center gap-2">
-                                    <Button
-                                        type="button"
-                                        variant="outline"
-                                        size="sm"
-                                        onClick={() => setEvaluationCurrentPage((prev) => Math.max(1, prev - 1))}
-                                        disabled={evaluationCurrentPage === 1}
-                                    >
-                                        Trước
-                                    </Button>
-                                    <span className="text-sm">
-                                        Trang {evaluationCurrentPage}/{evaluationTotalPages}
-                                    </span>
-                                    <Button
-                                        type="button"
-                                        variant="outline"
-                                        size="sm"
-                                        onClick={() =>
-                                            setEvaluationCurrentPage((prev) => Math.min(evaluationTotalPages, prev + 1))
-                                        }
-                                        disabled={evaluationCurrentPage >= evaluationTotalPages}
-                                    >
-                                        Sau
-                                    </Button>
-                                </div>
-                            </div>
-
-                            {groupedEvaluationItems.groups.map((callRoundGroup, callRoundIndex) => (
-                                <div
-                                    key={`${callRoundGroup.callRoundName || 'filtered'}-${callRoundIndex}`}
-                                    className="rounded-md border overflow-hidden"
-                                >
-                                    {!groupedEvaluationItems.hasCallRoundFilter && (
-                                        <div className="px-4 py-2 border-b bg-muted/30 font-semibold">
-                                            Đợt đề tài: {callRoundGroup.callRoundName}
+                                {!selectedEvaluationDetail ? (
+                                    <p className="text-sm text-muted-foreground">Chưa có đề tài được chọn.</p>
+                                ) : (
+                                    <div className="space-y-3 text-sm">
+                                        <div className="rounded-md border p-3">
+                                            <p className="text-xs text-muted-foreground">Đề tài</p>
+                                            <p className="mt-1 font-medium">{selectedEvaluationDetail.projectTitle}</p>
+                                            <p className="mt-1 text-xs text-muted-foreground">
+                                                Điểm TB {selectedEvaluationDetail.averageScore}/10 | Lượt chấm{' '}
+                                                {selectedEvaluationDetail.totalEvaluations}
+                                            </p>
                                         </div>
-                                    )}
 
-                                    {callRoundGroup.projectGroups.map((projectGroup, projectIndex) => (
-                                        <div key={`${projectGroup.projectTitle}-${projectIndex}`}>
-                                            <div className="px-4 py-2 border-b bg-muted/10 font-medium">
-                                                Đề tài: {projectGroup.projectTitle}
+                                        <div className="grid gap-3 md:grid-cols-2">
+                                            <div className="rounded-md border p-3">
+                                                <p className="text-xs text-muted-foreground">Sinh viên</p>
+                                                <p className="mt-1 font-medium">
+                                                    {selectedEvaluationDetail.studentName}
+                                                </p>
+                                                <p className="mt-1 text-xs text-muted-foreground">
+                                                    MSSV: {selectedEvaluationDetail.studentCode || 'N/A'}
+                                                </p>
+                                                <p className="mt-1 text-xs text-muted-foreground">
+                                                    Email: {selectedEvaluationDetail.studentEmail}
+                                                </p>
+                                                <p className="mt-1 text-xs text-muted-foreground">
+                                                    Lớp: {selectedEvaluationDetail.studentClassName || 'N/A'}
+                                                </p>
                                             </div>
+
+                                            <div className="rounded-md border p-3">
+                                                <p className="text-xs text-muted-foreground">Giảng viên hướng dẫn</p>
+                                                <p className="mt-1 font-medium">
+                                                    {selectedEvaluationDetail.advisorName || 'Chưa cập nhật'}
+                                                </p>
+                                                <p className="mt-1 text-xs text-muted-foreground">
+                                                    Mã GV: {selectedEvaluationDetail.advisorCode || 'N/A'}
+                                                </p>
+                                                <p className="mt-1 text-xs text-muted-foreground">
+                                                    Email: {selectedEvaluationDetail.advisorEmail || 'N/A'}
+                                                </p>
+                                            </div>
+                                        </div>
+
+                                        <div className="grid gap-3 md:grid-cols-2">
+                                            <div className="rounded-md border p-3">
+                                                <p className="text-xs text-muted-foreground">Hội đồng</p>
+                                                <p className="mt-1 font-medium">{selectedEvaluationDetail.councils}</p>
+                                            </div>
+
+                                            <div className="rounded-md border p-3">
+                                                <p className="text-xs text-muted-foreground">Ngày báo cáo</p>
+                                                <p className="mt-1 font-medium">
+                                                    {formatDetailDateTime(selectedEvaluationDetail.defenseDate)}
+                                                </p>
+                                                <p className="mt-1 text-xs text-muted-foreground">
+                                                    Nơi bảo vệ:{' '}
+                                                    {selectedEvaluationDetail.defenseLocation || 'Chưa cập nhật'}
+                                                </p>
+                                            </div>
+                                        </div>
+
+                                        <div className="rounded-md border overflow-hidden">
                                             <Table>
                                                 <TableHeader>
                                                     <TableRow>
-                                                        <TableHead>STT</TableHead>
-                                                        {!groupedEvaluationItems.hasCallRoundFilter && (
-                                                            <TableHead>Đợt đề tài</TableHead>
-                                                        )}
                                                         <TableHead>Hội đồng</TableHead>
                                                         <TableHead>Người chấm</TableHead>
                                                         <TableHead>Điểm</TableHead>
@@ -1125,64 +1075,206 @@ export function CouncilProjectAssignmentManagement({
                                                     </TableRow>
                                                 </TableHeader>
                                                 <TableBody>
-                                                    {projectGroup.items.map((item, index) => (
-                                                        <TableRow
-                                                            key={item.id}
-                                                            className="cursor-pointer hover:bg-muted/40"
-                                                            onClick={() =>
-                                                                handleOpenDetailFromEvaluationRow(item.projectId)
-                                                            }
-                                                        >
-                                                            <TableCell>{index + 1}</TableCell>
-                                                            {!groupedEvaluationItems.hasCallRoundFilter && (
-                                                                <TableCell>{item.callRoundName}</TableCell>
-                                                            )}
-                                                            <TableCell>{item.councilName}</TableCell>
-                                                            <TableCell>
-                                                                <div className="space-y-0.5">
-                                                                    <p className="font-medium">{item.evaluator.name}</p>
-                                                                    <p className="text-xs text-muted-foreground">
-                                                                        {item.evaluator.code ||
-                                                                            item.evaluator.email ||
-                                                                            'N/A'}
-                                                                    </p>
-                                                                </div>
-                                                            </TableCell>
-                                                            <TableCell>
-                                                                <span className="font-semibold text-emerald-700">
-                                                                    {item.score}/10
-                                                                </span>
-                                                            </TableCell>
-                                                            <TableCell>{getDecisionBadge(item.decision)}</TableCell>
-                                                            <TableCell>
-                                                                {new Date(item.evaluatedAt).toLocaleString('vi-VN')}
+                                                    {selectedEvaluationItemsByProject.length === 0 ? (
+                                                        <TableRow>
+                                                            <TableCell
+                                                                colSpan={5}
+                                                                className="text-center text-muted-foreground"
+                                                            >
+                                                                Chưa có dữ liệu chấm điểm chi tiết.
                                                             </TableCell>
                                                         </TableRow>
-                                                    ))}
-                                                    <TableRow className="bg-muted/20 font-medium">
-                                                        <TableCell colSpan={groupedEvaluationItems.hasCallRoundFilter ? 4 : 5}>
-                                                            Điểm trung bình đề tài
-                                                        </TableCell>
-                                                        <TableCell>
-                                                            {(
-                                                                projectGroup.items.reduce(
-                                                                    (sum, evaluationItem) => sum + evaluationItem.score,
-                                                                    0,
-                                                                ) / projectGroup.items.length
-                                                            ).toFixed(2)}
-                                                            /10
-                                                        </TableCell>
-                                                        <TableCell colSpan={2}></TableCell>
-                                                    </TableRow>
+                                                    ) : (
+                                                        selectedEvaluationItemsByProject.map((item) => (
+                                                            <TableRow key={item.id}>
+                                                                <TableCell>{item.councilName}</TableCell>
+                                                                <TableCell>{item.evaluator.name}</TableCell>
+                                                                <TableCell>
+                                                                    <span className="font-semibold text-emerald-700">
+                                                                        {item.score}/10
+                                                                    </span>
+                                                                </TableCell>
+                                                                <TableCell>{getDecisionBadge(item.decision)}</TableCell>
+                                                                <TableCell>
+                                                                    {item.evaluatedAt.toLocaleString('vi-VN')}
+                                                                </TableCell>
+                                                            </TableRow>
+                                                        ))
+                                                    )}
                                                 </TableBody>
                                             </Table>
                                         </div>
-                                    ))}
-                                </div>
-                            ))}
+                                    </div>
+                                )}
+                            </DialogContent>
+                        </Dialog>
+
+                        <div className="grid gap-3 sm:grid-cols-3">
+                            <div className="rounded-md border bg-muted/20 p-3">
+                                <p className="text-xs text-muted-foreground">Tổng lượt chấm</p>
+                                <p className="mt-1 text-lg font-semibold">{evaluationSummary?.totalEvaluations ?? 0}</p>
+                            </div>
+                            <div className="rounded-md border bg-muted/20 p-3">
+                                <p className="text-xs text-muted-foreground">Số đề tài đã được chấm</p>
+                                <p className="mt-1 text-lg font-semibold">{evaluationSummary?.totalProjects ?? 0}</p>
+                            </div>
+                            <div className="rounded-md border bg-muted/20 p-3">
+                                <p className="text-xs text-muted-foreground">Điểm trung bình</p>
+                                <p className="mt-1 text-lg font-semibold">
+                                    {evaluationSummary?.averageScore !== null &&
+                                    evaluationSummary?.averageScore !== undefined
+                                        ? `${evaluationSummary.averageScore}/10`
+                                        : 'Chưa có'}
+                                </p>
+                            </div>
                         </div>
-                    )}
-                </CardContent>
+
+                        {isWaitingForEvaluationFilter ? (
+                            <p className="text-sm text-muted-foreground text-center py-8 border rounded-md border-dashed">
+                                Vui lòng chọn đợt đề tài để tải dữ liệu chấm điểm.
+                            </p>
+                        ) : loadingEvaluations ? (
+                            <div className="space-y-2">
+                                {[1, 2, 3, 4].map((item) => (
+                                    <Skeleton key={item} className="h-11 w-full" />
+                                ))}
+                            </div>
+                        ) : filteredEvaluationItems.length === 0 ? (
+                            <p className="text-sm text-muted-foreground text-center py-8 border rounded-md border-dashed">
+                                Chưa có dữ liệu điểm chấm cho bộ lọc hiện tại.
+                            </p>
+                        ) : (
+                            <div className="space-y-4">
+                                <div className="flex items-center justify-between">
+                                    <p className="text-sm text-muted-foreground">
+                                        Hiển thị {evaluationStartItem}-{evaluationEndItem} /{' '}
+                                        {sortedEvaluationItems.length}
+                                    </p>
+                                    <div className="flex items-center gap-2">
+                                        <Button
+                                            type="button"
+                                            variant="outline"
+                                            size="sm"
+                                            onClick={() => setEvaluationCurrentPage((prev) => Math.max(1, prev - 1))}
+                                            disabled={evaluationCurrentPage === 1}
+                                        >
+                                            Trước
+                                        </Button>
+                                        <span className="text-sm">
+                                            Trang {evaluationCurrentPage}/{evaluationTotalPages}
+                                        </span>
+                                        <Button
+                                            type="button"
+                                            variant="outline"
+                                            size="sm"
+                                            onClick={() =>
+                                                setEvaluationCurrentPage((prev) =>
+                                                    Math.min(evaluationTotalPages, prev + 1),
+                                                )
+                                            }
+                                            disabled={evaluationCurrentPage >= evaluationTotalPages}
+                                        >
+                                            Sau
+                                        </Button>
+                                    </div>
+                                </div>
+
+                                {groupedEvaluationItems.groups.map((callRoundGroup, callRoundIndex) => (
+                                    <div
+                                        key={`${callRoundGroup.callRoundName || 'filtered'}-${callRoundIndex}`}
+                                        className="rounded-md border overflow-hidden"
+                                    >
+                                        {!groupedEvaluationItems.hasCallRoundFilter && (
+                                            <div className="px-4 py-2 border-b bg-muted/30 font-semibold">
+                                                Đợt đề tài: {callRoundGroup.callRoundName}
+                                            </div>
+                                        )}
+
+                                        {callRoundGroup.projectGroups.map((projectGroup, projectIndex) => (
+                                            <div key={`${projectGroup.projectTitle}-${projectIndex}`}>
+                                                <div className="px-4 py-2 border-b bg-muted/10 font-medium">
+                                                    Đề tài: {projectGroup.projectTitle}
+                                                </div>
+                                                <Table>
+                                                    <TableHeader>
+                                                        <TableRow>
+                                                            <TableHead>STT</TableHead>
+                                                            {!groupedEvaluationItems.hasCallRoundFilter && (
+                                                                <TableHead>Đợt đề tài</TableHead>
+                                                            )}
+                                                            <TableHead>Hội đồng</TableHead>
+                                                            <TableHead>Người chấm</TableHead>
+                                                            <TableHead>Điểm</TableHead>
+                                                            <TableHead>Quyết định</TableHead>
+                                                            <TableHead>Thời gian chấm</TableHead>
+                                                        </TableRow>
+                                                    </TableHeader>
+                                                    <TableBody>
+                                                        {projectGroup.items.map((item, index) => (
+                                                            <TableRow
+                                                                key={item.id}
+                                                                className="cursor-pointer hover:bg-muted/40"
+                                                                onClick={() =>
+                                                                    handleOpenDetailFromEvaluationRow(item.projectId)
+                                                                }
+                                                            >
+                                                                <TableCell>{index + 1}</TableCell>
+                                                                {!groupedEvaluationItems.hasCallRoundFilter && (
+                                                                    <TableCell>{item.callRoundName}</TableCell>
+                                                                )}
+                                                                <TableCell>{item.councilName}</TableCell>
+                                                                <TableCell>
+                                                                    <div className="space-y-0.5">
+                                                                        <p className="font-medium">
+                                                                            {item.evaluator.name}
+                                                                        </p>
+                                                                        <p className="text-xs text-muted-foreground">
+                                                                            {item.evaluator.code ||
+                                                                                item.evaluator.email ||
+                                                                                'N/A'}
+                                                                        </p>
+                                                                    </div>
+                                                                </TableCell>
+                                                                <TableCell>
+                                                                    <span className="font-semibold text-emerald-700">
+                                                                        {item.score}/10
+                                                                    </span>
+                                                                </TableCell>
+                                                                <TableCell>{getDecisionBadge(item.decision)}</TableCell>
+                                                                <TableCell>
+                                                                    {new Date(item.evaluatedAt).toLocaleString('vi-VN')}
+                                                                </TableCell>
+                                                            </TableRow>
+                                                        ))}
+                                                        <TableRow className="bg-muted/20 font-medium">
+                                                            <TableCell
+                                                                colSpan={
+                                                                    groupedEvaluationItems.hasCallRoundFilter ? 4 : 5
+                                                                }
+                                                            >
+                                                                Điểm trung bình đề tài
+                                                            </TableCell>
+                                                            <TableCell>
+                                                                {(
+                                                                    projectGroup.items.reduce(
+                                                                        (sum, evaluationItem) =>
+                                                                            sum + evaluationItem.score,
+                                                                        0,
+                                                                    ) / projectGroup.items.length
+                                                                ).toFixed(2)}
+                                                                /10
+                                                            </TableCell>
+                                                            <TableCell colSpan={2}></TableCell>
+                                                        </TableRow>
+                                                    </TableBody>
+                                                </Table>
+                                            </div>
+                                        ))}
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+                    </CardContent>
                 </Card>
             )}
 
@@ -1194,14 +1286,34 @@ export function CouncilProjectAssignmentManagement({
                             <CardDescription>Chọn các đề tài để gán vào hội đồng đã chọn.</CardDescription>
                         </CardHeader>
                         <CardContent className="space-y-4">
-                            <div className="relative">
-                                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                                <Input
-                                    value={search}
-                                    onChange={(e) => setSearch(e.target.value)}
-                                    placeholder="Tìm theo tên đề tài, sinh viên..."
-                                    className="pl-10"
-                                />
+                            <div className='flex justify-between gap-2'>
+                                <div className="relative flex-1">
+                                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                                    <Input
+                                        value={search}
+                                        onChange={(e) => setSearch(e.target.value)}
+                                        placeholder="Tìm theo tên đề tài, sinh viên..."
+                                        className="pl-10"
+                                    />
+                                </div>
+
+                                <div className="flex items-center justify-between gap-2">
+
+                                    <Button
+                                        onClick={handleAssign}
+                                        disabled={
+                                            assignMutation.isPending ||
+                                            !selectedCouncilId ||
+                                            selectedProjectIds.length === 0 ||
+                                            isFinalized
+                                        }
+                                    >
+                                        {assignMutation.isPending ? 'Đang gán...' : 'Gán vào hội đồng'}
+                                    </Button>
+                                                                        <p className="text-sm text-muted-foreground">
+                                        Đã chọn {selectedProjectIds.length} đề tài
+                                    </p>
+                                </div>
                             </div>
 
                             {isLoading ? (
@@ -1236,23 +1348,6 @@ export function CouncilProjectAssignmentManagement({
                                     ))}
                                 </div>
                             )}
-
-                            <div className="flex items-center justify-between">
-                                <p className="text-sm text-muted-foreground">
-                                    Đã chọn {selectedProjectIds.length} đề tài
-                                </p>
-                                <Button
-                                    onClick={handleAssign}
-                                    disabled={
-                                        assignMutation.isPending ||
-                                        !selectedCouncilId ||
-                                        selectedProjectIds.length === 0 ||
-                                        isFinalized
-                                    }
-                                >
-                                    {assignMutation.isPending ? 'Đang gán...' : 'Gán vào hội đồng'}
-                                </Button>
-                            </div>
                         </CardContent>
                     </Card>
 

@@ -3,7 +3,7 @@
 import { useState, useMemo } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
-import { Download, ExternalLink, FileText, Search, X, RefreshCw, Plus, FileSpreadsheet, Trash2 } from 'lucide-react';
+import { Download, ExternalLink, FileText, Search, X, RefreshCw, Plus, FileSpreadsheet, Trash2, Sparkles } from 'lucide-react';
 import { useDeanApprovals, useUpdateDeanApprovalStatus, type DeanApprovalsFilters } from '@/hooks/useDeanApprovals';
 import { useCallRounds } from '@/hooks/useCallRounds';
 import { useDebounce } from '@/hooks/useDebounce';
@@ -247,10 +247,35 @@ export function DeanApprovalClient() {
                     )}
 
                     {/* Export Report Button */}
-                    <Button
+                    {/* <Button
                         variant="default"
                         size="sm"
                         onClick={handleExportReport}
+                    >
+                        <FileSpreadsheet className="h-4 w-4 mr-1" />
+                        Xuất Excel
+                    </Button> */}
+
+                    {/* Styled Export Button (ExcelJS) */}
+                    <Button
+                        variant="default"
+                        size="sm"
+                        className="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white shadow-md"
+                        onClick={() => {
+                            const params = new URLSearchParams();
+                            if (callRoundId && callRoundId !== 'ALL') {
+                                params.set('callRoundId', callRoundId);
+                            }
+                            if (facultyStatus && facultyStatus !== 'ALL') {
+                                params.set('facultyStatus', facultyStatus);
+                            } else {
+                                params.set('facultyStatus', 'ALL');
+                            }
+                            const queryString = params.toString();
+                            const url = `/api/dean/approvals/export-styled${queryString ? `?${queryString}` : ''}`;
+                            window.open(url, '_blank');
+                            toast.success('Đang xuất file Excel với định dạng đẹp...');
+                        }}
                     >
                         <FileSpreadsheet className="h-4 w-4 mr-1" />
                         Xuất Excel

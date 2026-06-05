@@ -189,17 +189,37 @@ export default function LoginPage() {
                                         variant="outline"
                                         size="sm"
                                         onClick={() => {
-                                            fillDemoAccount('gv00001@university.edu', '123456');
+                                            fillDemoAccount('nguyen.van.quyet.017@university.edu', '123456');
                                             handleSubmit(onSubmit)();
                                         }}
                                         className="justify-start text-left h-auto py-2"
                                     >
                                         <div className="flex flex-col items-start">
                                             <span className="font-semibold text-xs text-green-600">
-                                                👨‍🏫 Giảng viên - Khoa CNTT
+                                                👨‍🏫 Giảng viên 1 - Khoa CNTT
                                             </span>
                                             <span className="text-xs text-muted-foreground">
-                                                gv00001@university.edu
+                                                nguyen.van.quyet.017@university.edu
+                                            </span>
+                                        </div>
+                                    </Button>
+
+                                    <Button
+                                        type="button"
+                                        variant="outline"
+                                        size="sm"
+                                        onClick={() => {
+                                            fillDemoAccount('tran.thi.phuong.006@university.edu', '123456');
+                                            handleSubmit(onSubmit)();
+                                        }}
+                                        className="justify-start text-left h-auto py-2"
+                                    >
+                                        <div className="flex flex-col items-start">
+                                            <span className="font-semibold text-xs text-green-600">
+                                                👨‍🏫 Giảng viên 2 - Khoa CNTT
+                                            </span>
+                                            <span className="text-xs text-muted-foreground">
+                                                tran.thi.phuong.006@university.edu
                                             </span>
                                         </div>
                                     </Button>
@@ -229,17 +249,37 @@ export default function LoginPage() {
                                         variant="outline"
                                         size="sm"
                                         onClick={() => {
-                                            fillDemoAccount('sv000001@university.edu', '123456');
+                                            fillDemoAccount('12422001@student.university.edu', '123456');
                                             handleSubmit(onSubmit)();
                                         }}
                                         className="justify-start text-left h-auto py-2"
                                     >
                                         <div className="flex flex-col items-start">
                                             <span className="font-semibold text-xs text-orange-600">
-                                                🎓 Sinh viên - Khoa CNTT
+                                                🎓 Sinh viên 1 - Khoa CNTT
                                             </span>
                                             <span className="text-xs text-muted-foreground">
-                                                sv000001@university.edu
+                                                12422001@student.university.edu
+                                            </span>
+                                        </div>
+                                    </Button>
+
+                                    <Button
+                                        type="button"
+                                        variant="outline"
+                                        size="sm"
+                                        onClick={() => {
+                                            fillDemoAccount('12423036@student.university.edu', '123456');
+                                            handleSubmit(onSubmit)();
+                                        }}
+                                        className="justify-start text-left h-auto py-2"
+                                    >
+                                        <div className="flex flex-col items-start">
+                                            <span className="font-semibold text-xs text-orange-600">
+                                                🎓 Sinh viên 2 - Khoa CNTT
+                                            </span>
+                                            <span className="text-xs text-muted-foreground">
+                                                12423036@student.university.edu
                                             </span>
                                         </div>
                                     </Button>

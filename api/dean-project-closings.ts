@@ -63,4 +63,12 @@ export const deanProjectClosingsApi = {
         });
         return response.data as Blob;
     },
+
+    exportStyledExcel: async (filters?: DeanProjectClosingFilters): Promise<Blob> => {
+        const query = buildDeanProjectClosingQuery(filters);
+        const response = await api.get(`/dean/project-closings/export-styled${query}`, {
+            responseType: 'blob',
+        });
+        return response.data as Blob;
+    },
 };
